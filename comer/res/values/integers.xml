@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="upload_image_width">800</integer>
+    <integer name="upload_image_height">600</integer>
+    <integer name="camera_zoom">16</integer>
+    <integer name="camera_zoom_tracking">12</integer>
+</resources>

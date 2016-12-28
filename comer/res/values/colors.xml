@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    100% — FF
+    95% — F2
+    90% — E6
+    85% — D9
+    80% — CC
+    75% — BF
+    70% — B3
+    65% — A6
+    60% — 99
+    55% — 8C
+    50% — 80
+    45% — 73
+    40% — 66
+    35% — 59
+    30% — 4D
+    25% — 40
+    20% — 33
+    15% — 26
+    10% — 1A
+    5% — 0D
+    0% — 00-->
+    <color name="sent_row_bg">#ff96d93b</color>
+    <color name="not_sent_row_bg">#E6E6E6</color>
+    <color name="light_orange">#fff69436</color>
+    <color name="dark_blue">#ff2d6b9e</color>
+    <color name="dark_gray">#ff727174</color>
+    <color name="light_gray">#ffdbdcde</color>
+    <color name="wight">#ffffff</color>
+    <color name="white30">#deffffff</color>
+    <color name="light_blue">#ff0092ff</color>
+    <color name="red">#ffdf2c42</color>
+    <color name="green">#2dcb74</color>
+    <color name="green_darker">#24ab61</color>
+    <color name="gray">#a0a0a0</color>
+    <color name="violet">#8576ca</color>
+    <color name="orange">#ffae22</color>
+    <color name="orange_darker">#f39301</color>
+    <color name="blue">#00b4ea</color>
+    <color name="red_darker">#d93c41</color>
+    <color name="gray_light">#c1bfbf</color>
+    <color name="gray_light_more">#dfdddd</color>
+    <color name="splash_background">#E0EEF0</color>
+</resources>

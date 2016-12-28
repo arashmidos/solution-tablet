@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="5dp"
+              android:paddingLeft="29dp"
+              android:paddingRight="29dp"
+              android:paddingTop="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/dateTv"
+            style="@style/TextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="94/06/03"/>
+
+        <TextView
+            android:id="@+id/orderDateLabel"
+            style="@style/TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_x"/>
+
+        <TextView
+            android:id="@+id/orderNumberTv"
+            style="@style/TextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="112"/>
+
+        <TextView
+            android:id="@+id/orderNumberLabel"
+            style="@style/TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/number_x"/>
+
+        <TextView
+            android:id="@+id/customerNameTv"
+            style="@style/TextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="مهیار سفیدی"/>
+
+        <TextView
+            android:id="@+id/textView45"
+            style="@style/TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":نام مشتری"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/statusTv"
+            style="@style/TextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="قابل تحویل"/>
+
+        <TextView
+            android:id="@+id/textView63"
+            style="@style/TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="وضعیت سفارش:"/>
+
+        <TextView
+            android:id="@+id/paymentTypeTitleTv"
+            style="@style/TextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="چک 90 روز"/>
+
+        <TextView
+            android:id="@+id/rejectOrPaymentLabel"
+            style="@style/TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="نوع پرداخت:"/>
+
+        <TextView
+            android:id="@+id/amountTv"
+            style="@style/TextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="125,000 تومان"/>
+
+        <TextView
+            android:id="@+id/amountLabel"
+            style="@style/TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amount_x"/>
+    </LinearLayout>
+
+</LinearLayout>

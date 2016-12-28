@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- When selected -->
+    <item android:drawable="@drawable/ic_sidebar_new_customer_active" android:state_hovered="true"/>
+    <!-- When not selected -->
+    <item android:drawable="@drawable/ic_sidebar_new_customer" android:state_hovered="false"/>
+</selector>

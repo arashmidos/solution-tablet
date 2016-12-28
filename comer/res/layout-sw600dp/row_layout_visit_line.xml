@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_visitline"/>
+
+    <TextView
+        android:id="@+id/textView35"
+        style="@style/TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_toLeftOf="@+id/imageView3"
+        android:layout_toStartOf="@+id/imageView3"
+        android:text="نام گروه:"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/nameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="33dp"
+        android:layout_marginRight="33dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/textView35"
+        android:layout_toStartOf="@+id/textView35"
+        android:text="مهیار"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/textView38"
+        style="@style/TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="34dp"
+        android:layout_marginRight="34dp"
+        android:layout_toLeftOf="@+id/nameTxt"
+        android:layout_toStartOf="@+id/nameTxt"
+        android:text="کد گروه:"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/codeTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="34dp"
+        android:layout_marginRight="34dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/textView38"
+        android:layout_toStartOf="@+id/textView38"
+        android:text="111"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/textView40"
+        style="@style/TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="30dp"
+        android:layout_toLeftOf="@+id/codeTxt"
+        android:layout_toStartOf="@+id/codeTxt"
+        android:text="تعداد مشتری:"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/countTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="34dp"
+        android:layout_marginRight="34dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/textView40"
+        android:layout_toStartOf="@+id/textView40"
+        android:text="12"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="کد گروه:"-->
+    <!--android:id="@+id/textView22" android:layout_alignParentTop="false" android:layout_alignParentRight="false"-->
+    <!--android:layout_alignParentEnd="false"-->
+    <!--style="@style/TextView.Caption" android:layout_toLeftOf="@+id/imageView3"-->
+    <!--android:layout_marginRight="10dp"/>-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+    <!--android:text="108"-->
+    <!--android:id="@+id/codeTxt" android:layout_alignTop="@+id/textView22"-->
+    <!--android:layout_toLeftOf="@+id/textView22" android:layout_toStartOf="@+id/codeTxt"/>-->
+    <!--<TextView style="@style/TextView.Caption" android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+    <!--android:text="نام گروه:" android:id="@+id/textView24"-->
+    <!--android:layout_marginRight="15dp"-->
+    <!--android:layout_toLeftOf="@+id/codeTxt"-->
+    <!--android:layout_toStartOf="@+id/codeTxt"/>-->
+    <!--<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+    <!--android:textAppearance="?android:attr/textAppearanceMedium" android:text="منطقه 1 مسیر 1" android:id="@+id/nameTxt"-->
+    <!--android:layout_alignTop="@+id/textView24" android:layout_toLeftOf="@+id/textView24"-->
+    <!--android:layout_toStartOf="@+id/textView24"/>-->
+    <!--<TextView style="@style/TextView.Caption" android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+    <!--android:text="تعداد مشتری:" android:id="@+id/textView23" android:layout_marginRight="10dp"-->
+    <!--android:layout_toLeftOf="@+id/nameTxt"-->
+    <!--android:layout_toStartOf="@+id/nameTxt"/>-->
+    <!--<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+    <!--android:textAppearance="?android:attr/textAppearanceMedium" android:text="48"-->
+    <!--android:id="@+id/countTxt"-->
+    <!--android:layout_alignTop="@+id/textView23" android:layout_toLeftOf="@+id/textView23"-->
+    <!--android:layout_toStartOf="@+id/textView23"/>-->
+</RelativeLayout>

@@ -1,0 +1,58 @@
+package com.conta.comer.data.model;
+
+import com.conta.comer.data.entity.Customer;
+
+import java.util.List;
+
+/**
+ * Created by Mahyar on 7/5/2015.
+ */
+public class VisitLineDto extends BaseModel
+{
+
+    private Long backendId;
+    private Integer code;
+    private String title;
+
+    private List<Customer> customerList;
+
+    public Long getBackendId()
+    {
+        return backendId;
+    }
+
+    public void setBackendId(Long backendId)
+    {
+        this.backendId = backendId;
+    }
+
+    public Integer getCode()
+    {
+        return code;
+    }
+
+    public void setCode(Integer code)
+    {
+        this.code = code;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public List<Customer> getCustomerList()
+    {
+        return customerList;
+    }
+
+    public void setCustomerList(List<Customer> customerList)
+    {
+        this.customerList = customerList;
+    }
+}
