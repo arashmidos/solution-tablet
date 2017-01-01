@@ -60,7 +60,7 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
             }
             if (Empty.isEmpty(saleOrderSO.getStatusId()))
             {
-                if (saleType.equals(ApplicationKeys.COLD_SALE))
+                if (ApplicationKeys.COLD_SALE.equals(saleType))
                 {
                     saleOrderSO.setStatusId(SaleOrderStatus.READY_TO_SEND.getId());
                 } else
@@ -75,7 +75,7 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         setupGeneralTabs();
-        if (saleType.equals(ApplicationKeys.COLD_SALE))
+        if (ApplicationKeys.COLD_SALE.equals(saleType))
         {
             setupColdSaleTabs();
         }

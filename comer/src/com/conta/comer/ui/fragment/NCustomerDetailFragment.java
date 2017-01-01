@@ -156,7 +156,7 @@ public class NCustomerDetailFragment extends BaseContaFragment
         municipalityCodeTxt.setText(customer.getMunicipalityCode());
         postalCodeTxt.setText(customer.getPostalCode());
 
-        if (customer.getStoreSurface() != 0)
+        if (Empty.isNotEmpty(customer.getStoreSurface()) && customer.getStoreSurface() != 0)
         {
             storeSurfaceTxt.setText(String.valueOf(customer.getStoreSurface()));
         }

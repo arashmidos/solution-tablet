@@ -68,7 +68,7 @@ public class Customer extends BaseEntity<Long>
     private Long cityBackendId;
     private String address;
     private Long activityBackendId;
-    private int storeSurface;
+    private Integer storeSurface;
     private Long storeLocationTypeBackendId;
     private Long classBackendId;
     private Long status;
@@ -212,13 +212,11 @@ public class Customer extends BaseEntity<Long>
         this.activityBackendId = activityBackendId;
     }
 
-    public int getStoreSurface()
-    {
+    public Integer getStoreSurface() {
         return storeSurface;
     }
 
-    public void setStoreSurface(int storeSurface)
-    {
+    public void setStoreSurface(Integer storeSurface) {
         this.storeSurface = storeSurface;
     }
 
@@ -335,6 +333,14 @@ public class Customer extends BaseEntity<Long>
         sb.append(Empty.isNotEmpty(this.yLocation) ? this.yLocation : "NULL");
         sb.append("&");
         sb.append(Empty.isNotEmpty(this.classBackendId) ? this.classBackendId : "NULL");
+        sb.append("&");
+        sb.append(Empty.isNotEmpty(this.shopName) ? this.shopName : "NULL");
+        sb.append("&");
+        sb.append(Empty.isNotEmpty(this.postalCode) ? this.postalCode : "NULL");
+        sb.append("&");
+        sb.append(Empty.isNotEmpty(this.nationalCode) ? this.nationalCode : "NULL");
+        sb.append("&");
+        sb.append(Empty.isNotEmpty(this.municipalityCode) ? this.municipalityCode : "NULL");
         return sb.toString();
     }
 
