@@ -15,5 +15,5 @@ public interface VisitInformationDao extends BaseDao<VisitInformation, Long>
 
     void updateLocation(Long visitInformationId, Location location);
 
-    List<VisitInformation> retrieveForNewCustomer(Long customerId);
+    VisitInformation retrieveForNewCustomer(Long customerId);
 }

@@ -352,7 +352,8 @@ public class MainActivity extends BaseContaFragmentActivity
                 break;
             case DASHBOARD_FRAGMENT_ID:
 //                fragment = new DashBoardFragment();
-                fragment = new TrackingBaseFragment();
+//                fragment = new TrackingBaseFragment();
+                fragment = new UserTrackingFragment();
                 changeSidebarItem(DASHBOARD_FRAGMENT_ID);
                 break;
             case ABOUT_US_FRAGMENT_ID:

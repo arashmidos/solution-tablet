@@ -106,7 +106,7 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends AbstractDataTransf
     @Override
     public String getMethod()
     {
-        return "order/createDeliverable";
+        return "order/deliverable";
     }
 
     @Override

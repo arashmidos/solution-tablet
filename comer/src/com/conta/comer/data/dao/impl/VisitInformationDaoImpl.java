@@ -126,17 +126,17 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     }
 
     @Override
-    public List<VisitInformation> retrieveForNewCustomer(Long customerId)
+    public VisitInformation retrieveForNewCustomer(Long customerId)
     {
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         String selection = VisitInformation.COL_CUSTOMER_ID + " = ? AND " + VisitInformation.COL_RESULT + " = -1 ";
         String[] args = {String.valueOf(customerId)};
         Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
-        List<VisitInformation> visitInformationList = new ArrayList<>();
-        while (cursor.moveToNext())
+        VisitInformation visitInformationList=null;// = new VisitInformation();
+        if (cursor.moveToNext())
         {
-            visitInformationList.add(createEntityFromCursor(cursor));
+            visitInformationList=createEntityFromCursor(cursor);
         }
         cursor.close();
         db.close();

@@ -68,8 +68,6 @@ public class TrackingBaseFragment extends BaseContaFragment
                 break;
             case R.id.customer_tracking_btn:
                 context.changeFragment(MainActivity.CUSTOMER_TRACKING_FRAGMENT_ID, null, false);
-                //TODO: Disable again before rlease
-//                Toast.makeText(context, "در این نسخه غیر فعال است", Toast.LENGTH_LONG).show();
                 break;
         }
     }

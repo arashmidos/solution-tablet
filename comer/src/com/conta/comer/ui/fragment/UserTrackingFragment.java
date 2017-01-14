@@ -224,7 +224,7 @@ public class UserTrackingFragment extends BaseContaFragment implements
         List<LatLng> route = positionService.getAllPositionLatLng();
 
         Log.d(TAG, "Route size: " + route.size());
-        Toast.makeText(getActivity(), "Route size: " + route.size(), Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity(), "Route size: " + route.size(), Toast.LENGTH_LONG).show();
 
         PolylineOptions polyOptions = new PolylineOptions();
         polyOptions.color(getResources().getColor(colors[3]));
@@ -303,7 +303,7 @@ public class UserTrackingFragment extends BaseContaFragment implements
             List<LatLng> route = positionService.getAllPositionLatLngByDate(from, to);
 
             Log.d(TAG, "Route size: " + route.size());
-            Toast.makeText(getActivity(), "Route size: " + route.size(), Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), "Route size: " + route.size(), Toast.LENGTH_LONG).show();
 
             PolylineOptions polyOptions = new PolylineOptions();
             polyOptions.color(getResources().getColor(colors[3]));

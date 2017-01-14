@@ -63,7 +63,7 @@ public interface CustomerService
 
     VisitInformation getVisitInformationById(Long visitId);
 
-    List<VisitInformation> getVisitInformationForNewCustomer(Long customerId);
+    VisitInformation getVisitInformationForNewCustomer(Long customerId);
 
     Long saveVisit(VisitInformation visit);
 

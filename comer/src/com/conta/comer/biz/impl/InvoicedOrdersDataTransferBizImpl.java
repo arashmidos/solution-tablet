@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.conta.comer.R;
 import com.conta.comer.biz.AbstractDataTransferBizImpl;
+import com.conta.comer.biz.KeyValueBiz;
 import com.conta.comer.constants.SaleOrderStatus;
 import com.conta.comer.data.dao.SaleOrderDao;
 import com.conta.comer.data.dao.SaleOrderItemDao;
@@ -15,6 +16,7 @@ import com.conta.comer.data.model.SaleOrderDto;
 import com.conta.comer.ui.observer.ResultObserver;
 import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
+import com.conta.comer.util.constants.ApplicationKeys;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +33,7 @@ import java.util.List;
 public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizImpl<String>
 {
 
+    private final KeyValueBiz keyValueBiz;
     protected ResultObserver resultObserver;
     protected SaleOrderDao saleOrderDao;
     protected SaleOrderItemDao saleOrderItemDao;
@@ -42,6 +45,7 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
         this.resultObserver = resultObserver;
         this.saleOrderDao = new SaleOrderDaoImpl(context);
         this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
+        this.keyValueBiz = new KeyValueBizImpl(context);
     }
 
     public List<SaleOrderDto> getOrders()
@@ -145,10 +149,13 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
     @Override
     protected HttpEntity getHttpEntity(HttpHeaders headers)
     {
+        headers.add("branchSn", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_SERIAL).getValue());
+        headers.add("stockSn", keyValueBiz.findByKey(ApplicationKeys.SETTING_STOCK_SERIAL).getValue());
+
         String invoicesStr = getInvoicesString(orders);
         Log.d(TAG, "INVOICE SENDING:" + invoicesStr);
         headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN));
-        return new HttpEntity<String>(invoicesStr, headers);
+        return new HttpEntity<>(invoicesStr, headers);
     }
 
     protected String getInvoicesString(List<SaleOrderDto> orders)

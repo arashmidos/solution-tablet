@@ -84,11 +84,12 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
                         customerDao.update(customer);
 
                         //Update Visits
-                        List<VisitInformation> visitList = visitInformationDao.retrieveForNewCustomer(customerId);
-                        for (VisitInformation visit : visitList)
-                        {
-                            visit.setCustomerBackendId(backendId);
-                            visitInformationDao.update(visit);
+                        VisitInformation visitList = visitInformationDao.retrieveForNewCustomer(customerId);
+//                        for (VisitInformation visit : visitList)
+//                        {
+                        if( visitList!=null){
+                            visitList.setCustomerBackendId(backendId);
+                            visitInformationDao.update(visitList);
                         }
 
                         //update answers

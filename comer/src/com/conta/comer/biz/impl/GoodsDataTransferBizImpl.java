@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.conta.comer.R;
 import com.conta.comer.biz.AbstractDataTransferBizImpl;
+import com.conta.comer.biz.KeyValueBiz;
 import com.conta.comer.data.dao.GoodsDao;
 import com.conta.comer.data.dao.impl.GoodsDaoImpl;
 import com.conta.comer.data.entity.Goods;
@@ -12,6 +13,7 @@ import com.conta.comer.data.model.GoodsDtoList;
 import com.conta.comer.ui.observer.ResultObserver;
 import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
+import com.conta.comer.util.constants.ApplicationKeys;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +27,7 @@ public class GoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<GoodsD
 {
 
     public static final String TAG = GoodsDataTransferBizImpl.class.getSimpleName();
+    private final KeyValueBiz keyValueBiz;
 
     private Context context;
     private ResultObserver resultObserver;
@@ -36,6 +39,7 @@ public class GoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<GoodsD
         this.context = context;
         this.resultObserver = resultObserver;
         this.goodsDao = new GoodsDaoImpl(context);
+        this.keyValueBiz = new KeyValueBizImpl(context);
     }
 
     @Override
@@ -105,6 +109,9 @@ public class GoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<GoodsD
     @Override
     protected HttpEntity getHttpEntity(HttpHeaders headers)
     {
+        headers.add("branchSn", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_SERIAL).getValue());
+        headers.add("stockSn", keyValueBiz.findByKey(ApplicationKeys.SETTING_STOCK_SERIAL).getValue());
+
         HttpEntity<String> entity = new HttpEntity<>("No Params", headers);
         return entity;
     }

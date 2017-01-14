@@ -141,7 +141,8 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
                         );
                     }
                 });
-                List<VisitInformation> visitInformations = null;
+                //TODO: 1
+                VisitInformation visitInformations = null;
                 try
                 {
                     visitInformations = customerService.getVisitInformationForNewCustomer(model.getPrimaryKey());
@@ -149,11 +150,12 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
                 {
 
                 }
-                if (visitInformations != null && visitInformations.size() > 0)
+                if (visitInformations != null /*&& visitInformations.size() > 0*/)
                 {
                     holder.researchBtn.setImageResource(R.drawable.ic_action_document_active);
                 }
 
+                final VisitInformation finalVisitInformations = visitInformations;
                 holder.researchBtn.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
@@ -170,7 +172,14 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
                                     {
                                         Bundle args = new Bundle();
                                         args.putLong(Constants.CUSTOMER_ID, model.getPrimaryKey());
-                                        long visitId = customerService.startVisitingNewCustomer(model.getPrimaryKey());
+                                        long visitId;
+                                        if (finalVisitInformations == null)
+                                        {
+                                            visitId = customerService.startVisitingNewCustomer(model.getPrimaryKey());
+                                        } else
+                                        {
+                                            visitId = finalVisitInformations.getId();
+                                        }
                                         args.putLong(Constants.VISIT_ID, visitId);
                                         mainActivity.changeFragment(which == 0 ? MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID :
                                                 MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);

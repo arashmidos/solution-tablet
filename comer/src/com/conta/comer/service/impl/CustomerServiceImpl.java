@@ -179,6 +179,7 @@ public class CustomerServiceImpl implements CustomerService
     @Override
     public Long startVisitingNewCustomer(Long customerId)
     {
+
         VisitInformation visitInformation = new VisitInformation();
         visitInformation.setCustomerId(customerId);
         visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
@@ -186,8 +187,7 @@ public class CustomerServiceImpl implements CustomerService
         visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
         // -1 Means new customer without backendId
         visitInformation.setResult(-1L);
-        Long visitId = saveVisit(visitInformation);
-        return visitId;
+        return saveVisit(visitInformation);
     }
 
     @Override
@@ -212,9 +212,9 @@ public class CustomerServiceImpl implements CustomerService
     }
 
     @Override
-    public List<VisitInformation> getVisitInformationForNewCustomer(Long customerId)
+    public VisitInformation getVisitInformationForNewCustomer(Long customerId)
     {
-        return visitInformationDao.retrieveForNewCustomer(customerId);
+        return  visitInformationDao.retrieveForNewCustomer(customerId);
     }
 
     public Long saveVisit(VisitInformation visitInformation)
