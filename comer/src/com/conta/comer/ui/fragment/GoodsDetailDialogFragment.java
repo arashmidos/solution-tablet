@@ -33,8 +33,8 @@ import java.util.List;
  */
 public class GoodsDetailDialogFragment extends DialogFragment
 {
-    public static final int WIDTH = 700;
-    public static final int HEIGHT = 400;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
 
     public static final String TAG = GoodsDetailDialogFragment.class.getSimpleName();
 

@@ -94,8 +94,8 @@ public class UserInformationDataTransferBizImpl extends AbstractDataTransferBizI
     @Override
     protected HttpEntity getHttpEntity(HttpHeaders headers)
     {
-        headers.add("branchSn", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_SERIAL).getValue());
-        headers.add("stockSn", keyValueBiz.findByKey(ApplicationKeys.SETTING_STOCK_SERIAL).getValue());
+        headers.add("branchCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_CODE).getValue());
+        headers.add("stockCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_STOCK_CODE).getValue());
 
         HttpEntity<String> entity = new HttpEntity<String>(userCode.getValue(), headers);
         return entity;

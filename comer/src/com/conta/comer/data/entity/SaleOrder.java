@@ -59,6 +59,7 @@ public class SaleOrder extends BaseEntity<Long>
     private Long backendId;
     private Long invoiceBackendId;
     private String exportDate;
+    private Long rejectBackendId;
 
     private List<SaleOrderItem> orderItems;
 
@@ -239,6 +240,14 @@ public class SaleOrder extends BaseEntity<Long>
     public void setExportDate(String exportDate)
     {
         this.exportDate = exportDate;
+    }
+
+    public Long getRejectBackendId() {
+        return rejectBackendId;
+    }
+
+    public void setRejectBackendId(Long rejectBackendId) {
+        this.rejectBackendId = rejectBackendId;
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.conta.comer.R;
 import com.conta.comer.biz.AbstractDataTransferBizImpl;
+import com.conta.comer.biz.KeyValueBiz;
 import com.conta.comer.data.dao.CustomerDao;
 import com.conta.comer.data.dao.KeyValueDao;
 import com.conta.comer.data.dao.QAnswerDao;
@@ -20,6 +21,7 @@ import com.conta.comer.service.impl.CustomerServiceImpl;
 import com.conta.comer.ui.observer.ResultObserver;
 import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
+import com.conta.comer.util.constants.ApplicationKeys;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -45,7 +47,7 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
     private VisitInformationDao visitInformationDao;
     private QAnswerDao qAnswerDao;
     private ResultObserver observer;
-    private KeyValueDao keyValueDao;
+    private KeyValueBiz keyValueBiz;
 
     public NewCustomerDataTransferBizImpl(Context context, ResultObserver resultObserver)
     {
@@ -56,7 +58,7 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
         this.qAnswerDao = new QAnswerDaoImpl(context);
         this.customerService = new CustomerServiceImpl(context);
         this.observer = resultObserver;
-        this.keyValueDao = new KeyValueDaoImpl(context);
+        this.keyValueBiz = new KeyValueBizImpl(context);
     }
 
     @Override
@@ -148,6 +150,8 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
     @Override
     protected HttpEntity getHttpEntity(HttpHeaders headers)
     {
+        headers.add("branchCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_CODE).getValue());
+
         List<Customer> allNewCustomersForSend = customerService.getAllNewCustomersForSend();
         String customersString = getCustomersString(allNewCustomersForSend);
         headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN));

@@ -50,6 +50,8 @@ public class SaleOrderItem extends BaseEntity<Long>
     private Long backendId;
     private Long invoiceItemBackendId;
     private Long invoiceBackendId;
+    private Long rejectBackendId;
+    private Long rejectItemBackendId;
 
     public static String createString(SaleOrderItemDto saleOrderItemDto, Long status)
     {
@@ -212,6 +214,22 @@ public class SaleOrderItem extends BaseEntity<Long>
     public void setInvoiceItemBackendId(Long invoiceItemBackendId)
     {
         this.invoiceItemBackendId = invoiceItemBackendId;
+    }
+
+    public Long getRejectBackendId() {
+        return rejectBackendId;
+    }
+
+    public void setRejectBackendId(Long rejectBackendId) {
+        this.rejectBackendId = rejectBackendId;
+    }
+
+    public Long getRejectItemBackendId() {
+        return rejectItemBackendId;
+    }
+
+    public void setRejectItemBackendId(Long rejectItemBackendId) {
+        this.rejectItemBackendId = rejectItemBackendId;
     }
 
     @Override

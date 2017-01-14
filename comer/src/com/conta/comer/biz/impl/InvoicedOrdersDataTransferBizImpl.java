@@ -33,7 +33,7 @@ import java.util.List;
 public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizImpl<String>
 {
 
-    private final KeyValueBiz keyValueBiz;
+    private KeyValueBiz keyValueBiz;
     protected ResultObserver resultObserver;
     protected SaleOrderDao saleOrderDao;
     protected SaleOrderItemDao saleOrderItemDao;
@@ -149,8 +149,8 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
     @Override
     protected HttpEntity getHttpEntity(HttpHeaders headers)
     {
-        headers.add("branchSn", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_SERIAL).getValue());
-        headers.add("stockSn", keyValueBiz.findByKey(ApplicationKeys.SETTING_STOCK_SERIAL).getValue());
+        headers.add("branchCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_CODE).getValue());
+        headers.add("stockCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_STOCK_CODE).getValue());
 
         String invoicesStr = getInvoicesString(orders);
         Log.d(TAG, "INVOICE SENDING:" + invoicesStr);

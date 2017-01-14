@@ -197,7 +197,7 @@
                     style="@style/TextView.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/branch_serial"/>
+                    android:text="@string/branch_code"/>
             </TableRow>
 
             <TableRow
@@ -220,7 +220,7 @@
                     style="@style/TextView.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/stock_serial"/>
+                    android:text="@string/stock_code"/>
             </TableRow>
 
             <TableRow

@@ -76,8 +76,8 @@ public class SettingFragment extends BaseContaFragment implements ResultObserver
         String saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
         String gpsIntervalValue = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_INTERVAL);
         String gpsEnabled = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_ENABLE);
-        String branchSerial = settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_SERIAL);
-        String stockSerial = settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_SERIAL);
+        String branchSerial = settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE);
+        String stockSerial = settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE);
 
         serverAddress1Txt.setText(Empty.isNotEmpty(address1) ? address1 : "");
         serverAddress2Txt.setText(Empty.isNotEmpty(address2) ? address2 : "");
@@ -175,8 +175,8 @@ public class SettingFragment extends BaseContaFragment implements ResultObserver
             settingService.saveSetting(ApplicationKeys.SETTING_SALE_TYPE, saleType);
             settingService.saveSetting(ApplicationKeys.SETTING_GPS_INTERVAL, gpsIntervalValue);
             settingService.saveSetting(ApplicationKeys.SETTING_GPS_ENABLE, gpsEnabled);
-            settingService.saveSetting(ApplicationKeys.SETTING_STOCK_SERIAL, stockSerial);
-            settingService.saveSetting(ApplicationKeys.SETTING_BRANCH_SERIAL, branchSerial);
+            settingService.saveSetting(ApplicationKeys.SETTING_STOCK_CODE, stockSerial);
+            settingService.saveSetting(ApplicationKeys.SETTING_BRANCH_CODE, branchSerial);
         }
     }
 
