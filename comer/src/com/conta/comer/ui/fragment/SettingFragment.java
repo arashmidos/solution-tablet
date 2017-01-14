@@ -1,6 +1,5 @@
 package com.conta.comer.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.conta.comer.R;
-import com.conta.comer.constants.Constants;
 import com.conta.comer.exception.ContaBusinessException;
 import com.conta.comer.exception.UnknownSystemException;
 import com.conta.comer.receiver.TrackerAlarmReceiver;
@@ -55,6 +53,10 @@ public class SettingFragment extends BaseContaFragment implements ResultObserver
     EditText gpsInterval;
     @BindView(R.id.enableTrackingCb)
     CheckBox enableTrackingCb;
+    @BindView(R.id.branchSerialTxt)
+    EditText branchSerialTxt;
+    @BindView(R.id.stockSerialTxt)
+    EditText stockSerialTxt;
 
     private SettingService settingService;
 
@@ -74,6 +76,8 @@ public class SettingFragment extends BaseContaFragment implements ResultObserver
         String saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
         String gpsIntervalValue = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_INTERVAL);
         String gpsEnabled = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_ENABLE);
+        String branchSerial = settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_SERIAL);
+        String stockSerial = settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_SERIAL);
 
         serverAddress1Txt.setText(Empty.isNotEmpty(address1) ? address1 : "");
         serverAddress2Txt.setText(Empty.isNotEmpty(address2) ? address2 : "");
@@ -83,6 +87,8 @@ public class SettingFragment extends BaseContaFragment implements ResultObserver
         saleTypeSp.setSelection(Empty.isNotEmpty(saleType) ? Integer.parseInt(saleType) - 1 : 1);
         gpsInterval.setText(Empty.isNotEmpty(gpsIntervalValue) ? gpsIntervalValue : "");
         enableTrackingCb.setChecked(Empty.isNotEmpty(gpsEnabled) && gpsEnabled.equals("1"));
+        branchSerialTxt.setText(Empty.isNotEmpty(branchSerial) ? branchSerial : "");
+        stockSerialTxt.setText(Empty.isNotEmpty(stockSerial) ? stockSerial : "");
 
         serverAddress1Txt.requestFocus();
 
@@ -158,6 +164,8 @@ public class SettingFragment extends BaseContaFragment implements ResultObserver
             String saleType = String.valueOf(saleTypeSp.getSelectedItemPosition() + 1);
             String gpsIntervalValue = gpsInterval.getText().toString();
             String gpsEnabled = enableTrackingCb.isChecked() ? "1" : "0";
+            String stockSerial = stockSerialTxt.getText().toString();
+            String branchSerial = branchSerialTxt.getText().toString();
 
             settingService.saveSetting(ApplicationKeys.SETTING_SERVER_ADDRESS_1, serverAddress1);
             settingService.saveSetting(ApplicationKeys.SETTING_SERVER_ADDRESS_2, serverAddress2);
@@ -165,9 +173,10 @@ public class SettingFragment extends BaseContaFragment implements ResultObserver
             settingService.saveSetting(ApplicationKeys.SETTING_USER_CODE, userCode);
             settingService.saveSetting(ApplicationKeys.SETTING_PASSWORD, password);
             settingService.saveSetting(ApplicationKeys.SETTING_SALE_TYPE, saleType);
-            settingService.saveSetting(ApplicationKeys.SETTING_GPS_INTERVAL,gpsIntervalValue);
-            settingService.saveSetting(ApplicationKeys.SETTING_GPS_ENABLE,gpsEnabled);
-
+            settingService.saveSetting(ApplicationKeys.SETTING_GPS_INTERVAL, gpsIntervalValue);
+            settingService.saveSetting(ApplicationKeys.SETTING_GPS_ENABLE, gpsEnabled);
+            settingService.saveSetting(ApplicationKeys.SETTING_STOCK_SERIAL, stockSerial);
+            settingService.saveSetting(ApplicationKeys.SETTING_BRANCH_SERIAL, branchSerial);
         }
     }
 
@@ -249,6 +258,61 @@ public class SettingFragment extends BaseContaFragment implements ResultObserver
                 {
                     toastError(R.string.error_gps_interval_is_required);
                     gpsInterval.requestFocus();
+                }
+            });
+            return false;
+        } else if (Empty.isEmpty(branchSerialTxt.getText().toString()))
+        {
+            runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    toastError(R.string.error_branch_serial_is_required);
+                    branchSerialTxt.requestFocus();
+                }
+            });
+            return false;
+        }else if (Empty.isEmpty(stockSerialTxt.getText().toString()))
+        {
+            runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    toastError(R.string.error_stock_serial_is_required);
+                    stockSerialTxt.requestFocus();
+                }
+            });
+            return false;
+        }
+        try
+        {
+            long serialBranch = Long.parseLong(branchSerialTxt.getText().toString());
+        } catch (Exception ignore)
+        {
+            runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    toastError(R.string.error_branch_serial_is_not_valid);
+                    branchSerialTxt.requestFocus();
+                }
+            });
+            return false;
+        }try
+        {
+            long stockSerial = Long.parseLong(stockSerialTxt.getText().toString());
+        } catch (Exception ignore)
+        {
+            runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    toastError(R.string.error_stock_serial_is_not_valid);
+                    stockSerialTxt.requestFocus();
                 }
             });
             return false;

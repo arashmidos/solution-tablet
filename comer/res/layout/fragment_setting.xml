@@ -184,6 +184,52 @@
                 android:layout_marginTop="10dp"
                 android:gravity="right">
 
+                <EditText
+                    android:id="@+id/branchSerialTxt"
+                    style="@style/EditBox"
+                    android:layout_width="300dp"
+                    android:inputType="number"
+                    android:layout_height="wrap_content"
+                    android:nextFocusDown="@+id/saleTypeSp"/>
+
+                <TextView
+                    android:id="@+id/textView48"
+                    style="@style/TextView.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/branch_serial"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="right">
+
+                <EditText
+                    android:id="@+id/stockSerialTxt"
+                    style="@style/EditBox"
+                    android:layout_width="300dp"
+                    android:inputType="number"
+                    android:layout_height="wrap_content"
+                    android:nextFocusDown="@+id/saleTypeSp"/>
+
+                <TextView
+                    android:id="@+id/textView49"
+                    style="@style/TextView.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stock_serial"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="right">
+
                 <Spinner
                     android:id="@+id/saleTypeSp"
                     android:layout_width="300dp"

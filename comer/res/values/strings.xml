@@ -23,6 +23,10 @@
     <string name="error_password_is_required">مقدار رمز عبور اجباری است.</string>
     <string name="error_user_code_is_required">مقدار کد کاربری ضروری است</string>
     <string name="error_gps_interval_is_required">مقدار زمان ارسال موقعیت یاب ضروری است</string>
+    <string name="error_branch_serial_is_required">مقدار سریال شعبه ضروری است</string>
+    <string name="error_branch_serial_is_not_valid">مقدار سریال شعبه صحیح نیست</string>
+    <string name="error_stock_serial_is_required">مقدار سریال انبار ضروری است</string>
+    <string name="error_stock_serial_is_not_valid">مقدار سریال انبار صحیح نیست</string>
     <string name="error_unknown_system_exception">خطای سیستمی ناشناس</string>
     <string name="message_setting_saved_successfully">اطلاعات تنظیمات با موفقیت ذخیره شد</string>
     <string name="message_connecting_to_server_please_wait">در حال اتصال به سرور، لطفا صبر کنید...</string>
@@ -321,6 +325,8 @@
     <string name="postal_code">کد پستی</string>
     <string name="your_version">شما از نسخه %1$s با امکانات کامل استفاده می کنید</string>
     <string name="select_questionary">انتخاب پرسشنامه</string>
+    <string name="branch_serial">سریال شعبه</string>
+    <string name="stock_serial">سریال انبار</string>
     <string-array name="sale_type">
         <item>فروش سرد</item>
         <item>فروش گرم</item>

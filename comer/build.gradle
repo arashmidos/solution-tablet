@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 
@@ -26,8 +26,8 @@ android {
         applicationId "com.conta.comer"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 20
-        versionName "2.5.5"
+        versionCode 22
+        versionName "2.5.7"
     }
     sourceSets {
         main {
