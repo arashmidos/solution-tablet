@@ -41,12 +41,12 @@
 
     <LinearLayout
         android:id="@+id/filter_layout"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white30"
         android:gravity="right|center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/cancel_btn"
@@ -59,12 +59,30 @@
             android:text="@string/cancel_btn"/>
 
         <Button
-            android:paddingRight="35dp"
-            android:paddingLeft="35dp"
             android:id="@+id/filter_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp"
             android:text="@string/filter"/>
+
+        <CheckBox
+            android:id="@+id/show_customers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="مشتریان"/>
+
+        <CheckBox
+            android:id="@+id/show_track"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="گزارش"/>
 
         <View
             android:layout_width="0dp"
@@ -108,6 +126,7 @@
             style="@style/TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="10dp"
             android:text="@string/sinse_date"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 

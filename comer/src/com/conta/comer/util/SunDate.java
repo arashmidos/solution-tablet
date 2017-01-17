@@ -10,6 +10,16 @@ import java.util.Locale;
  */
 public class SunDate extends DateItem
 {
+    public SunDate(int day, int month, int year)
+    {
+        super(day,month,year);
+    }
+
+    public SunDate()
+    {
+        super();
+    }
+
     String getDate()
     {
         Calendar calendar = getCalendar();

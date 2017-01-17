@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -19,14 +21,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alirezaafkar.sundatepicker.DatePicker;
+import com.alirezaafkar.sundatepicker.components.JDF;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.conta.comer.R;
+import com.conta.comer.biz.KeyValueBiz;
+import com.conta.comer.biz.impl.KeyValueBizImpl;
+import com.conta.comer.data.entity.KeyValue;
+import com.conta.comer.data.model.PositionModel;
+import com.conta.comer.service.CustomerService;
 import com.conta.comer.service.PositionService;
+import com.conta.comer.service.impl.CustomerServiceImpl;
 import com.conta.comer.service.impl.PositionServiceImpl;
 import com.conta.comer.ui.MainActivity;
 import com.conta.comer.util.DateUtil;
+import com.conta.comer.util.Empty;
+import com.conta.comer.util.NotificationUtil;
 import com.conta.comer.util.SunDate;
 import com.conta.comer.util.ToastUtil;
+import com.conta.comer.util.constants.ApplicationKeys;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,6 +51,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -72,6 +85,10 @@ public class UserTrackingFragment extends BaseContaFragment implements
     EditText fromDate;
     @BindView(R.id.filter_layout)
     LinearLayout filterLayout;
+    @BindView(R.id.show_customers)
+    CheckBox showCustomers;
+    @BindView(R.id.show_track)
+    CheckBox showTrack;
 
     private double lat, lng = 0.0;
     private long customerId;
@@ -82,6 +99,7 @@ public class UserTrackingFragment extends BaseContaFragment implements
     private PositionService positionService;
     private SunDate startDate = new SunDate();
     private SunDate endDate = new SunDate();
+    private KeyValueBiz keyValueBiz;
 
     private ArrayList<Polyline> polylines = new ArrayList<>();
     private int[] colors = new int[]{R.color.green,
@@ -90,16 +108,62 @@ public class UserTrackingFragment extends BaseContaFragment implements
             R.color.blue,
             R.color.orange};
     private boolean mResolvingError = false;
+    private KeyValue salesmanId;
+    private CustomerService customerService;
+    private ClusterManager<PositionModel> clusterManager;
+    private Polyline polyline;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        keyValueBiz = new KeyValueBizImpl(getActivity());
+        salesmanId = keyValueBiz.findByKey(ApplicationKeys.SALESMAN_ID);
+        if (Empty.isEmpty(salesmanId))
+        {
+            View view = inflater.inflate((R.layout.view_error_page), null);
+            TextView errorView = (TextView) view.findViewById(R.id.error_msg);
+            errorView.setText(errorView.getText() + "\n\n" + "به قسمت تنظیمات مراجعه کنید");
+            return view;
+        }
+
         View view = inflater.inflate(R.layout.fragment_user_tracking, null);
         ButterKnife.bind(this, view);
+        showCustomers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                if (isChecked)
+                {
+                    showCustomers();
+                } else
+                {
+                    clusterManager.clearItems();
+                    clusterManager.cluster();
+                }
+            }
+        });
 
-//        Bundle arguments = getArguments();
+        showTrack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                if (isChecked)
+                {
+                    doFilter();
+                } else
+                {
+                    polylines.remove(polyline);
+                    polyline.remove();
+                }
+            }
+        });
 
         positionService = new PositionServiceImpl(getActivity());
+        customerService = new CustomerServiceImpl(getActivity());
+
+        loadCalendars();
 
         googleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
@@ -109,20 +173,34 @@ public class UserTrackingFragment extends BaseContaFragment implements
         return view;
     }
 
+    private void loadCalendars()
+    {
+        toDate.setHint(endDate.getYear() % 100 + "/" + endDate.getMonth() + "/" + endDate.getDay());
+        Calendar calendar = endDate.getCalendar();
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        startDate.setDate(new JDF(calendar));
+        fromDate.setHint(startDate.getYear() % 100 + "/" + startDate.getMonth() + "/" + startDate.getDay());
+    }
+
     @Override
     public void onStart()
     {
         super.onStart();
-
-        showProgressDialog(getString(R.string.message_loading_map));
-        googleApiClient.connect();
+        if (Empty.isNotEmpty(salesmanId))
+        {
+            showProgressDialog(getString(R.string.message_loading_map));
+            if (googleApiClient != null)
+            {
+                googleApiClient.connect();
+            }
+        }
     }
 
     @Override
     public void onStop()
     {
         super.onStop();
-        if (googleApiClient.isConnected())
+        if (googleApiClient != null && googleApiClient.isConnected())
         {
             googleApiClient.disconnect();
         }
@@ -206,8 +284,7 @@ public class UserTrackingFragment extends BaseContaFragment implements
 
         if (currentLocation == null)
         {
-            //If user location is not available in the rare situation, point it to center of Tehran
-            currentLatlng = new LatLng(35.6961, 51.4231);
+            NotificationUtil.showGPSDisabled(getActivity());
         } else
         {
             currentLatlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
@@ -221,17 +298,26 @@ public class UserTrackingFragment extends BaseContaFragment implements
 
         map.setOnCameraChangeListener(this);
 
-        List<LatLng> route = positionService.getAllPositionLatLng();
+        doFilter();
+        showCustomers();
+    }
 
-        Log.d(TAG, "Route size: " + route.size());
-//        Toast.makeText(getActivity(), "Route size: " + route.size(), Toast.LENGTH_LONG).show();
+    private void showCustomers()
+    {
+        clusterManager = new ClusterManager<>(getActivity(), map);
+//        clusterManager.setRenderer(new CustomerRenderer());
+        map.setOnCameraIdleListener(clusterManager);
+        map.setOnMarkerClickListener(clusterManager);
+        map.setOnInfoWindowClickListener(clusterManager);
+        addItems();
+        clusterManager.cluster();
+    }
 
-        PolylineOptions polyOptions = new PolylineOptions();
-        polyOptions.color(getResources().getColor(colors[3]));
-        polyOptions.width(10);
-        polyOptions.addAll(route);
-        Polyline polyline = map.addPolyline(polyOptions);
-        polylines.add(polyline);
+    private void addItems()
+    {
+        List<PositionModel> customerPositionList = /*sampleData();*/customerService.getCustomerPositions(null);
+        clusterManager.addItems(customerPositionList);
+        Toast.makeText(getActivity(), "Position Size:" + customerPositionList.size(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -294,22 +380,21 @@ public class UserTrackingFragment extends BaseContaFragment implements
         if (days + 1 > 5)
         {
             ToastUtil.toastMessage(getActivity(), getString(R.string.error_report_is_huge));
+        } else if (days < 0)
+        {
+            ToastUtil.toastMessage(getActivity(), getString(R.string.error_report_date_invalid));
         } else
         {
             Date from = DateUtil.startOfDay(c1);
             Date to = DateUtil.endOfDay(c2);
 
-            map.clear();
             List<LatLng> route = positionService.getAllPositionLatLngByDate(from, to);
-
-            Log.d(TAG, "Route size: " + route.size());
-//            Toast.makeText(getActivity(), "Route size: " + route.size(), Toast.LENGTH_LONG).show();
 
             PolylineOptions polyOptions = new PolylineOptions();
             polyOptions.color(getResources().getColor(colors[3]));
-            polyOptions.width(10);
+            polyOptions.width(4);
             polyOptions.addAll(route);
-            Polyline polyline = map.addPolyline(polyOptions);
+            polyline = map.addPolyline(polyOptions);
             polylines.add(polyline);
         }
     }

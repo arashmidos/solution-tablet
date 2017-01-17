@@ -32,7 +32,6 @@ import com.conta.comer.ui.adapter.DrawerArrayAdapter;
 import com.conta.comer.ui.fragment.AboutUsFragment;
 import com.conta.comer.ui.fragment.BaseContaFragment;
 import com.conta.comer.ui.fragment.CustomerDetailFragment;
-import com.conta.comer.ui.fragment.CustomerTrackingFragment;
 import com.conta.comer.ui.fragment.CustomersFragment;
 import com.conta.comer.ui.fragment.DataTransferFragment;
 import com.conta.comer.ui.fragment.GeneralQuestionnairesFragment;
@@ -404,10 +403,7 @@ public class MainActivity extends BaseContaFragmentActivity
                 fragment = new PaymentFragment();
                 changeSidebarItem(FUNDS_FRAGMENT_ID);
                 break;
-            case CUSTOMER_TRACKING_FRAGMENT_ID: //24:
-                fragment = new CustomerTrackingFragment();
-                changeSidebarItem(DASHBOARD_FRAGMENT_ID);
-                break;
+
         }
         return fragment;
     }

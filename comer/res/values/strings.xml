@@ -313,6 +313,7 @@
     <string name="filter">فیلتر</string>
     <string name="error_gps_is_disabled">موقعیت یاب دستگاه فعال نیست. آیا میخواهید GPS را روشن کنید؟</string>
     <string name="error_report_is_huge">زمان گزارش نمی تواند بیش از 5 روز باشد</string>
+    <string name="error_report_date_invalid">زمان گزارش را اشتباه وارد کرده اید</string>
     <string name="gps_tracking_disabled">موقعیت یاب غیر فعال شد</string>
     <string name="error_gps_is_off">GPS دستگاه را فعال کنید</string>
     <string name="error_tracking_cal1_empty">زمان شروع گزارش گیری را وارد نمایید</string>
