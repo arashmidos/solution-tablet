@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-
 import com.conta.comer.BuildConfig;
 import com.conta.comer.R;
 import com.conta.comer.receiver.TrackerAlarmReceiver;
@@ -48,7 +47,6 @@ import com.conta.comer.ui.fragment.PaymentFragment;
 import com.conta.comer.ui.fragment.QuestionnaireDetailFragment;
 import com.conta.comer.ui.fragment.SaveLocationFragment;
 import com.conta.comer.ui.fragment.SettingFragment;
-import com.conta.comer.ui.fragment.TrackingBaseFragment;
 import com.conta.comer.ui.fragment.UserTrackingFragment;
 import com.conta.comer.ui.fragment.VisitDetailFragment;
 import com.conta.comer.ui.fragment.VisitLinesFragment;
@@ -64,7 +62,6 @@ import com.conta.comer.util.constants.ApplicationKeys;
  */
 public class MainActivity extends BaseContaFragmentActivity
 {
-
     public static final String TAG = MainActivity.class.getSimpleName();
 
     public static final int CUSTOMER_LIST_FRAGMENT_ID = 0;
@@ -428,7 +425,6 @@ public class MainActivity extends BaseContaFragmentActivity
 
     private void setupDrawer()
     {
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         DrawerArrayAdapter adapter = new DrawerArrayAdapter(MainActivity.this, drawerItemTitles, drawerItemImages);
         drawerItemsList = (ListView) findViewById(R.id.left_drawer);
@@ -495,19 +491,8 @@ public class MainActivity extends BaseContaFragmentActivity
 
     private void showVersionDialog()
     {
-        Dialog dialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.version))
-                .setMessage(String.format(getString(R.string.your_version), BuildConfig.VERSION_NAME))
-                .setPositiveButton(getString(R.string.button_ok), new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        dialog.dismiss();
-                    }
-                })
-                .create();
-        dialog.show();
+        DialogUtil.showMessageDialog(this, getString(R.string.version),
+                String.format(getString(R.string.your_version), BuildConfig.VERSION_NAME));
     }
 
     private void settingLoginDialog()

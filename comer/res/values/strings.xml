@@ -326,6 +326,7 @@
     <string name="postal_code">کد پستی</string>
     <string name="your_version">شما از نسخه %1$s با امکانات کامل استفاده می کنید</string>
     <string name="select_questionary">انتخاب پرسشنامه</string>
+    <string name="error_no_questionary_found">هیچ پرسشنامه ای یافت نشد</string>
     <string name="branch_code">کد شعبه</string>
     <string name="stock_code">کد انبار</string>
     <string-array name="sale_type">

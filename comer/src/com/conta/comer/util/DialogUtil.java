@@ -1,9 +1,11 @@
 package com.conta.comer.util;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import com.conta.comer.BuildConfig;
 import com.conta.comer.R;
 
 /**
@@ -29,5 +31,26 @@ public class DialogUtil
         alertDialogBuilder.create().show();
     }
 
-
+    /**
+     * Show an Alert Dialog with Ok button
+     * @param context
+     * @param title
+     * @param message
+     */
+    public static void showMessageDialog(Context context, String title, String message)
+    {
+        Dialog dialog = new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
+    }
 }

@@ -10,16 +10,21 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.conta.comer.R;
 import com.conta.comer.constants.Constants;
 import com.conta.comer.data.entity.VisitInformation;
 import com.conta.comer.data.listmodel.NCustomerListModel;
+import com.conta.comer.data.model.QuestionnaireListModel;
 import com.conta.comer.data.searchobject.NCustomerSO;
+import com.conta.comer.data.searchobject.QuestionnaireSo;
 import com.conta.comer.exception.ContaBusinessException;
 import com.conta.comer.exception.UnknownSystemException;
 import com.conta.comer.service.CustomerService;
+import com.conta.comer.service.QuestionnaireService;
 import com.conta.comer.service.impl.CustomerServiceImpl;
+import com.conta.comer.service.impl.QuestionnaireServiceImpl;
 import com.conta.comer.ui.MainActivity;
 import com.conta.comer.ui.fragment.NCustomerDetailFragment;
 import com.conta.comer.util.CharacterFixUtil;
@@ -35,13 +40,15 @@ import java.util.List;
 public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
 {
 
+    private final QuestionnaireService questionnaireService;
     private MainActivity mainActivity;
     private CustomerService customerService;
 
     public NCustomersListAdapter(MainActivity mainActivity, List<NCustomerListModel> dataModel)
     {
         super(mainActivity, dataModel);
-        this.customerService = new CustomerServiceImpl(mainActivity);
+        customerService = new CustomerServiceImpl(mainActivity);
+        questionnaireService = new QuestionnaireServiceImpl(mainActivity);
         this.mainActivity = mainActivity;
     }
 
@@ -83,83 +90,116 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
 
             final NCustomerListModel model = dataModel.get(position);
 
-            {
-                holder.nameTxt.setText(model.getTitle());
-                holder.phoneTxt.setText(String.valueOf(model.getPhoneNumber()));
-                holder.cellPhoneTxt.setText(Empty.isNotEmpty(model.getCellPhone()) ? model.getCellPhone() : "--");
-            }
+            holder.nameTxt.setText(model.getTitle());
+            holder.phoneTxt.setText(String.valueOf(model.getPhoneNumber()));
+            holder.cellPhoneTxt.setText(Empty.isNotEmpty(model.getCellPhone()) ? model.getCellPhone() : "--");
 
+            holder.editBtn.setOnClickListener(new View.OnClickListener()
             {
-                holder.editBtn.setOnClickListener(new View.OnClickListener()
+                @Override
+                public void onClick(View v)
                 {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        Bundle args = new Bundle();
-                        args.putLong(NCustomerDetailFragment.CUSTOMER_ID_KEY, model.getPrimaryKey());
-                        mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, false);
-                    }
-                });
+                    Bundle args = new Bundle();
+                    args.putLong(NCustomerDetailFragment.CUSTOMER_ID_KEY, model.getPrimaryKey());
+                    mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, false);
+                }
+            });
 
-                holder.deleteBtn.setOnClickListener(new View.OnClickListener()
+            holder.deleteBtn.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
                 {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        DialogUtil.showConfirmDialog(mainActivity, mainActivity.getString(R.string.delete_customer),
-                                mainActivity.getString(R.string.message_customer_delete_confirm),
-                                new DialogInterface.OnClickListener()
+                    DialogUtil.showConfirmDialog(mainActivity, mainActivity.getString(R.string.delete_customer),
+                            mainActivity.getString(R.string.message_customer_delete_confirm),
+                            new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which)
                                 {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which)
+                                    try
                                     {
-                                        try
+                                        customerService.deleteCustomer(model.getPrimaryKey());
+                                        NCustomersListAdapter.this.dataModel.remove(model);
+                                        NCustomersListAdapter.this.notifyDataSetChanged();
+                                        NCustomersListAdapter.this.notifyDataSetInvalidated();
+                                        mainActivity.runOnUiThread(new Runnable()
                                         {
-                                            customerService.deleteCustomer(model.getPrimaryKey());
-                                            NCustomersListAdapter.this.dataModel.remove(model);
-                                            NCustomersListAdapter.this.notifyDataSetChanged();
-                                            NCustomersListAdapter.this.notifyDataSetInvalidated();
-                                            mainActivity.runOnUiThread(new Runnable()
+                                            @Override
+                                            public void run()
                                             {
-                                                @Override
-                                                public void run()
-                                                {
-                                                    ToastUtil.toastMessage(mainActivity, mainActivity.getString(R.string.message_customer_deleted_successfully));
-                                                }
-                                            });
-                                        } catch (ContaBusinessException ex)
-                                        {
-                                            Log.e(TAG, ex.getMessage(), ex);
-                                            ToastUtil.toastError(mainActivity, ex);
-                                        } catch (Exception ex)
-                                        {
-                                            Log.e(TAG, ex.getMessage(), ex);
-                                            ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
-                                        }
+                                                ToastUtil.toastMessage(mainActivity, mainActivity.getString(R.string.message_customer_deleted_successfully));
+                                            }
+                                        });
+                                    } catch (ContaBusinessException ex)
+                                    {
+                                        Log.e(TAG, ex.getMessage(), ex);
+                                        ToastUtil.toastError(mainActivity, ex);
+                                    } catch (Exception ex)
+                                    {
+                                        Log.e(TAG, ex.getMessage(), ex);
+                                        ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
                                     }
                                 }
-                        );
+                            }
+                    );
+                }
+            });
+
+            VisitInformation visitInformations = null;
+            try
+            {
+                visitInformations = customerService.getVisitInformationForNewCustomer(model.getPrimaryKey());
+            } catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+            if (visitInformations != null)
+            {
+                holder.researchBtn.setImageResource(R.drawable.ic_action_document_active);
+            }
+
+            final VisitInformation finalVisitInformations = visitInformations;
+            holder.researchBtn.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    List<QuestionnaireListModel> generalQmodel = questionnaireService.searchForQuestionnaires(new QuestionnaireSo(true));
+                    List<QuestionnaireListModel> goodsQmodel = questionnaireService.searchForQuestionnaires(new QuestionnaireSo(false));
+
+                    //Calculate count of questions is each category ( i.e: General and Goods )
+                    //There could be more than one questionary in each of them, or questionaries with no question.
+                    int generalQCount = 0;
+                    int goodsQCount = 0;
+                    for (int i = 0; i < goodsQmodel.size(); i++)
+                    {
+                        QuestionnaireListModel questionnaireListModel = goodsQmodel.get(i);
+                        goodsQCount += questionnaireListModel.getQuestionsCount();
                     }
-                });
-                //TODO: 1
-                VisitInformation visitInformations = null;
-                try
-                {
-                    visitInformations = customerService.getVisitInformationForNewCustomer(model.getPrimaryKey());
-                } catch (Exception ex)
-                {
+                    for (int i = 0; i < generalQmodel.size(); i++)
+                    {
+                        QuestionnaireListModel questionnaireListModel = generalQmodel.get(i);
+                        generalQCount += questionnaireListModel.getQuestionsCount();
+                    }
 
-                }
-                if (visitInformations != null /*&& visitInformations.size() > 0*/)
-                {
-                    holder.researchBtn.setImageResource(R.drawable.ic_action_document_active);
-                }
+                    //Initialize args
+                    final Bundle args = new Bundle();
+                    args.putLong(Constants.CUSTOMER_ID, model.getPrimaryKey());
+                    long visitId;
+                    if (finalVisitInformations == null)
+                    {
+                        visitId = customerService.startVisitingNewCustomer(model.getPrimaryKey());
+                    } else
+                    {
+                        visitId = finalVisitInformations.getId();
+                    }
+                    args.putLong(Constants.VISIT_ID, visitId);
+                    //
+                    Toast.makeText(mainActivity, "General:" + generalQCount + " GOods:" + goodsQCount, Toast.LENGTH_SHORT).show();
 
-                final VisitInformation finalVisitInformations = visitInformations;
-                holder.researchBtn.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
+                    //if question count > 0 is each category so we should display it to user.
+                    if (goodsQCount > 0 && generalQCount > 0)
                     {
                         CharSequence options[] = new CharSequence[]{"تحقیقات عمومی", "تحقیقات کالایی"};
 
@@ -170,35 +210,35 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
                                     @Override
                                     public void onClick(DialogInterface dialog, int which)
                                     {
-                                        Bundle args = new Bundle();
-                                        args.putLong(Constants.CUSTOMER_ID, model.getPrimaryKey());
-                                        long visitId;
-                                        if (finalVisitInformations == null)
-                                        {
-                                            visitId = customerService.startVisitingNewCustomer(model.getPrimaryKey());
-                                        } else
-                                        {
-                                            visitId = finalVisitInformations.getId();
-                                        }
-                                        args.putLong(Constants.VISIT_ID, visitId);
+
                                         mainActivity.changeFragment(which == 0 ? MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID :
                                                 MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
                                     }
                                 })
                                 .create();
                         dialog.show();
+                    } else if (generalQCount > 0)
+                    {
+                        mainActivity.changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+                    } else if (goodsQCount > 0)
+                    {
+                        mainActivity.changeFragment(MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+                    } else
+                    {
+                        DialogUtil.showMessageDialog(context, context.getString(R.string.select_questionary),
+                                context.getString(R.string.error_no_questionary_found));
                     }
-                });
-
-                if (Empty.isNotEmpty(model.getBackendId()) && !model.getBackendId().equals(0L))
-                {
-                    holder.editBtn.setVisibility(View.INVISIBLE);
-                    holder.deleteBtn.setVisibility(View.INVISIBLE);
-                } else
-                {
-                    holder.editBtn.setVisibility(View.VISIBLE);
-                    holder.deleteBtn.setVisibility(View.VISIBLE);
                 }
+            });
+
+            if (Empty.isNotEmpty(model.getBackendId()) && !model.getBackendId().equals(0L))
+            {
+                holder.editBtn.setVisibility(View.INVISIBLE);
+                holder.deleteBtn.setVisibility(View.INVISIBLE);
+            } else
+            {
+                holder.editBtn.setVisibility(View.VISIBLE);
+                holder.deleteBtn.setVisibility(View.VISIBLE);
             }
 
             return convertView;
