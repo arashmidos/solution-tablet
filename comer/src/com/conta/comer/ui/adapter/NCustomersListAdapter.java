@@ -196,7 +196,6 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
                     }
                     args.putLong(Constants.VISIT_ID, visitId);
                     //
-                    Toast.makeText(mainActivity, "General:" + generalQCount + " GOods:" + goodsQCount, Toast.LENGTH_SHORT).show();
 
                     //if question count > 0 is each category so we should display it to user.
                     if (goodsQCount > 0 && generalQCount > 0)
