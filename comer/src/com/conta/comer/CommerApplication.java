@@ -21,7 +21,7 @@ public class CommerApplication extends Application
         super.onCreate();
         try
         {
-            TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/Mj_Tunisia.ttf");
+            TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/IRANSansMobile.ttf");
             initACRABugReporter();
         } catch (Exception e)
         {
