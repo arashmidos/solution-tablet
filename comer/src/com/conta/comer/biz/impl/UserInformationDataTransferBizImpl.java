@@ -9,6 +9,7 @@ import com.conta.comer.data.model.User;
 import com.conta.comer.exception.GotNoResponseFromBackendException;
 import com.conta.comer.exception.InvalidUserCodeException;
 import com.conta.comer.ui.observer.ResultObserver;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.Empty;
 import com.conta.comer.util.constants.ApplicationKeys;
 
@@ -43,8 +44,8 @@ public class UserInformationDataTransferBizImpl extends AbstractDataTransferBizI
         if (Empty.isNotEmpty(data))
         {
             keyValueBiz.save(new KeyValue(ApplicationKeys.SALESMAN_ID, data.getSalesmanId()));
-            keyValueBiz.save(new KeyValue(ApplicationKeys.USER_FULL_NAME, data.getFullName()));
-            keyValueBiz.save(new KeyValue(ApplicationKeys.USER_COMPANY_NAME, data.getCompanyName()));
+            keyValueBiz.save(new KeyValue(ApplicationKeys.USER_FULL_NAME, CharacterFixUtil.fixString(data.getFullName())));
+            keyValueBiz.save(new KeyValue(ApplicationKeys.USER_COMPANY_NAME, CharacterFixUtil.fixString(data.getCompanyName())));
         } else
         {
             getObserver().publishResult(new GotNoResponseFromBackendException());

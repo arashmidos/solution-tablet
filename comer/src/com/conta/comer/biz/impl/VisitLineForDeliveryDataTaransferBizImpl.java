@@ -15,6 +15,7 @@ import com.conta.comer.data.entity.VisitLine;
 import com.conta.comer.data.model.VisitLineDto;
 import com.conta.comer.data.model.VisitLineDtoList;
 import com.conta.comer.ui.observer.ResultObserver;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
 import com.conta.comer.util.constants.ApplicationKeys;
@@ -52,12 +53,11 @@ public class VisitLineForDeliveryDataTaransferBizImpl extends AbstractDataTransf
     @Override
     public void receiveData(VisitLineDtoList data)
     {
-
         if (Empty.isNotEmpty(data))
         {
-
             for (VisitLineDto visitLineDto : data.getVisitLineDtoList())
             {
+                visitLineDto.setTitle(CharacterFixUtil.fixString(visitLineDto.getTitle()));
                 VisitLine visitLine = createVisitLineEntity(visitLineDto);
                 VisitLine oldVisitLine = visitLineDao.getVisitLineByBackendId(visitLine.getBackendId());
                 if (Empty.isEmpty(oldVisitLine))
@@ -65,6 +65,9 @@ public class VisitLineForDeliveryDataTaransferBizImpl extends AbstractDataTransf
                     visitLineDao.create(visitLine);
                     for (Customer customer : visitLineDto.getCustomerList())
                     {
+                        customer.setFullName(CharacterFixUtil.fixString(customer.getFullName()));
+                        customer.setShopName(CharacterFixUtil.fixString(customer.getShopName()));
+                        customer.setAddress(CharacterFixUtil.fixString(customer.getAddress()));
                         customer.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
                         customer.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
                         customerDao.create(customer);

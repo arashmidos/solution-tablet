@@ -68,7 +68,6 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
                 String[] rows = response.split("[\n]");
                 for (int i = 0; i < rows.length; i++)
                 {
-
                     String row = rows[i];
                     String[] columns = row.split("[&]");
                     Long orderId = Long.parseLong(columns[0]);
@@ -80,7 +79,6 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
                     {
                         updateOrderStatus(invoiceBackendId, saleOrder);
                     }
-
                 }
 
                 resultObserver.publishResult(getSuccessfulMessage());

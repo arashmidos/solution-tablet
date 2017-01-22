@@ -14,6 +14,7 @@ import com.conta.comer.data.entity.Questionnaire;
 import com.conta.comer.data.model.QuestionnaireDto;
 import com.conta.comer.data.model.QuestionnaireDtoList;
 import com.conta.comer.ui.observer.ResultObserver;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
 
@@ -63,6 +64,7 @@ public class QuestionnaireDataTransferBizImpl extends AbstractDataTransferBizImp
                     questionnaireDao.create(questionnaire);
                     for (Question question : questionnaireDto.getQuestions())
                     {
+                        question.setQuestion(CharacterFixUtil.fixString(question.getQuestion()));
                         question.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
                         question.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
                         questionDao.create(question);

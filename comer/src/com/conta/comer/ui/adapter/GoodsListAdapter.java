@@ -15,6 +15,7 @@ import com.conta.comer.data.searchobject.GoodsSo;
 import com.conta.comer.service.GoodsService;
 import com.conta.comer.service.impl.GoodsServiceImpl;
 import com.conta.comer.ui.MainActivity;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.Empty;
 import com.conta.comer.util.NumberUtil;
 
@@ -148,6 +149,7 @@ public class GoodsListAdapter extends BaseAdapter implements Filterable
                     {
                         goodsSo = new GoodsSo();
                     }
+                    constraint = CharacterFixUtil.fixString(constraint.toString());
                     goodsSo.setConstraint("%" + constraint.toString() + "%");
                     List<GoodsListModel> filteredData = findGoods();
                     results.count = filteredData.size();

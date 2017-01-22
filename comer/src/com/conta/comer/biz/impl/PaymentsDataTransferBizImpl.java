@@ -75,7 +75,7 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
                     }
                 }
                 getObserver().publishResult(String.format(context.getString(R.string.payments_data_transferred_successfully),
-                        success, failure));
+                        String.valueOf(success), String.valueOf(failure)));
             } catch (Exception ex)
             {
                 getObserver().publishResult(context.getString(R.string.error_payments_transfer));

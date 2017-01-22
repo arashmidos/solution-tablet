@@ -27,6 +27,7 @@ import com.conta.comer.service.impl.LocationServiceImpl;
 import com.conta.comer.ui.MainActivity;
 import com.conta.comer.ui.adapter.LabelValueArrayAdapter;
 import com.conta.comer.ui.observer.FindLocationListener;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.Empty;
 
 import java.util.Arrays;
@@ -291,7 +292,6 @@ public class NCustomerDetailFragment extends BaseContaFragment
 
     private void getLocation()
     {
-
         showProgressDialog(getString(R.string.message_finding_location));
 
         try
@@ -337,10 +337,10 @@ public class NCustomerDetailFragment extends BaseContaFragment
     {
         try
         {
-            customer.setFullName(fullNameTxt.getText().toString());
+            customer.setFullName(CharacterFixUtil.fixString(fullNameTxt.getText().toString()));
             customer.setPhoneNumber(phoneNumberTxt.getText().toString());
             customer.setCellPhone(cellPhoneTxt.getText().toString());
-            customer.setAddress(addressTxt.getText().toString());
+            customer.setAddress(CharacterFixUtil.fixString(addressTxt.getText().toString()));
             if (Empty.isNotEmpty(storeSurfaceTxt.getText()) && !storeSurfaceTxt.getText().toString().equals(""))
                 customer.setStoreSurface(Integer.parseInt(storeSurfaceTxt.getText().toString()));
             customer.setProvinceBackendId(provinceSp.getSelectedItemId());
@@ -348,7 +348,7 @@ public class NCustomerDetailFragment extends BaseContaFragment
             customer.setActivityBackendId(activitySp.getSelectedItemId());
             customer.setStoreLocationTypeBackendId(ownershipSp.getSelectedItemId());
             customer.setClassBackendId(classSp.getSelectedItemId());
-            customer.setShopName(shopNameTxt.getText().toString());
+            customer.setShopName(CharacterFixUtil.fixString(shopNameTxt.getText().toString()));
             customer.setNationalCode(nationalCodeTxt.getText().toString());
             customer.setMunicipalityCode(municipalityCodeTxt.getText().toString());
             customer.setPostalCode(postalCodeTxt.getText().toString());

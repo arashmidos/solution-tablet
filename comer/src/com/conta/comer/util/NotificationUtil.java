@@ -6,7 +6,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.NotificationCompat;
+import android.view.View;
 
 import com.conta.comer.R;
 
@@ -35,5 +37,19 @@ public class NotificationUtil
 
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         nm.notify(GPS_DISABLED_NF, notification);
+    }
+
+    public static void makeSnack(View view, String msg)
+    {
+        final Snackbar snack = Snackbar.make(view, msg, Snackbar.LENGTH_INDEFINITE);
+        snack.setAction("Ok", new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                snack.dismiss();
+            }
+        });
+        snack.show();
     }
 }

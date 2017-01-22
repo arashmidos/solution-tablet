@@ -47,7 +47,6 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
                 String[] rows = response.split("[\n]");
                 for (int i = 0; i < rows.length; i++)
                 {
-
                     String row = rows[i];
                     String[] columns = row.split("[&]");
                     Long answerId = Long.parseLong(columns[0]);
@@ -61,7 +60,6 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
                         qAnswer.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
                         qAnswerDao.update(qAnswer);
                     }
-
                 }
 
                 resultObserver.publishResult(context.getString(R.string.answers_data_transferred_successfully));

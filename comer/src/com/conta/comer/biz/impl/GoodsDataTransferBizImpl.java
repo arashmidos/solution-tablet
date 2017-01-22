@@ -11,6 +11,7 @@ import com.conta.comer.data.dao.impl.GoodsDaoImpl;
 import com.conta.comer.data.entity.Goods;
 import com.conta.comer.data.model.GoodsDtoList;
 import com.conta.comer.ui.observer.ResultObserver;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
 import com.conta.comer.util.constants.ApplicationKeys;
@@ -49,11 +50,11 @@ public class GoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<GoodsD
         {
             try
             {
-
                 goodsDao.deleteAll();
 
                 for (Goods goods : data.getGoodsDtoList())
                 {
+                    goods.setTitle(CharacterFixUtil.fixString(goods.getTitle()));
                     goods.setCreateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
                     goods.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
                     goodsDao.create(goods);

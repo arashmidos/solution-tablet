@@ -9,6 +9,7 @@ import com.conta.comer.data.dao.impl.ProvinceDaoImpl;
 import com.conta.comer.data.entity.Province;
 import com.conta.comer.data.model.ProvinceList;
 import com.conta.comer.ui.observer.ResultObserver;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.Empty;
 
 import org.springframework.http.HttpEntity;
@@ -43,6 +44,7 @@ public class ProvinceDataTransferBizImpl extends AbstractDataTransferBizImpl<Pro
             provinceDao.deleteAll();
             for (Province province : data.getProvinceList())
             {
+                province.setTitle(CharacterFixUtil.fixString(province.getTitle()));
                 provinceDao.create(province);
             }
         }

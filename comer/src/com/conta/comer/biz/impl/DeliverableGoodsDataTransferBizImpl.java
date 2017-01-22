@@ -12,6 +12,7 @@ import com.conta.comer.data.entity.Goods;
 import com.conta.comer.data.entity.KeyValue;
 import com.conta.comer.data.model.GoodsDtoList;
 import com.conta.comer.ui.observer.ResultObserver;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
 import com.conta.comer.util.constants.ApplicationKeys;
@@ -53,7 +54,7 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
 
                 for (Goods goods : data.getGoodsDtoList())
                 {
-
+                    goods.setTitle(CharacterFixUtil.fixString(goods.getTitle()));
                     Goods oldGoods = goodsDao.retrieveByBackendId(goods.getBackendId());
                     if (Empty.isNotEmpty(oldGoods))
                     {

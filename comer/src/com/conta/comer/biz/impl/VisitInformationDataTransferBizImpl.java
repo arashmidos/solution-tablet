@@ -51,7 +51,6 @@ public class VisitInformationDataTransferBizImpl extends AbstractDataTransferBiz
                 String[] rows = response.split("[\n]");
                 for (int i = 0; i < rows.length; i++)
                 {
-
                     String row = rows[i];
                     String[] columns = row.split("[&]");
                     Long visitId = Long.parseLong(columns[0]);
@@ -65,7 +64,6 @@ public class VisitInformationDataTransferBizImpl extends AbstractDataTransferBiz
                         visitInformation.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
                         visitInformationDao.update(visitInformation);
                     }
-
                 }
 
                 observer.publishResult(context.getString(R.string.visit_information_data_transferred_successfully));

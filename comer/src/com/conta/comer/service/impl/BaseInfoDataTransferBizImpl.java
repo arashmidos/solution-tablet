@@ -9,6 +9,7 @@ import com.conta.comer.data.dao.impl.BaseInfoDaoImpl;
 import com.conta.comer.data.entity.BaseInfo;
 import com.conta.comer.data.model.BaseInfoList;
 import com.conta.comer.ui.observer.ResultObserver;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.Empty;
 
 import org.springframework.http.HttpEntity;
@@ -42,6 +43,7 @@ public class BaseInfoDataTransferBizImpl extends AbstractDataTransferBizImpl<Bas
             baseInfoDao.deleteAll();
             for (BaseInfo baseInfo : data.getBaseInfoList())
             {
+                baseInfo.setTitle(CharacterFixUtil.fixString(baseInfo.getTitle()));
                 baseInfoDao.create(baseInfo);
             }
         }

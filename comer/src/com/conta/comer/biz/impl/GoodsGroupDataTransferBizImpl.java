@@ -10,6 +10,7 @@ import com.conta.comer.data.dao.impl.GoodsGroupDaoImpl;
 import com.conta.comer.data.entity.GoodsGroup;
 import com.conta.comer.data.model.GoodsGroupDtoList;
 import com.conta.comer.ui.observer.ResultObserver;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
 
@@ -44,12 +45,11 @@ public class GoodsGroupDataTransferBizImpl extends AbstractDataTransferBizImpl<G
 
         if (Empty.isNotEmpty(data) && Empty.isNotEmpty(data.getGoodsGroups()))
         {
-
             try
             {
-
                 for (GoodsGroup group : data.getGoodsGroups())
                 {
+                    group.setTitle(CharacterFixUtil.fixString(group.getTitle()));
                     group.setCreateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
                     group.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
                     goodsGroupDao.create(group);

@@ -19,7 +19,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+
 import com.conta.comer.BuildConfig;
 import com.conta.comer.R;
 import com.conta.comer.receiver.TrackerAlarmReceiver;
@@ -55,7 +57,11 @@ import com.conta.comer.util.DialogUtil;
 import com.conta.comer.util.Empty;
 import com.conta.comer.util.GPSUtil;
 import com.conta.comer.util.NetworkUtil;
+import com.conta.comer.util.NotificationUtil;
 import com.conta.comer.util.constants.ApplicationKeys;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Mahyar on 6/2/2015.
@@ -105,6 +111,8 @@ public class MainActivity extends BaseContaFragmentActivity
             R.drawable.version,
             R.drawable.exit,
     };
+    @BindView(R.id.mainLayout)
+    LinearLayout mainLayout;
     private DrawerLayout mDrawerLayout;
     private ListView drawerItemsList;
     private ImageView customerListTabIv;
@@ -139,6 +147,7 @@ public class MainActivity extends BaseContaFragmentActivity
         dataTransferService = new DataTransferServiceImpl(this);
         settingService = new SettingServiceImpl(this);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         setupSidebar();
         setupActionbar();
         setupDrawer();
@@ -615,6 +624,11 @@ public class MainActivity extends BaseContaFragmentActivity
                 })
                 .create();
         dialog.show();
+    }
+
+    public void showSnack(String message)
+    {
+        NotificationUtil.makeSnack(mainLayout, message);
     }
 }
 

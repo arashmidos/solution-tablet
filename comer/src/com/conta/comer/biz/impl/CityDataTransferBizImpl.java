@@ -9,6 +9,7 @@ import com.conta.comer.data.dao.impl.CityDaoImpl;
 import com.conta.comer.data.entity.City;
 import com.conta.comer.data.model.CityList;
 import com.conta.comer.ui.observer.ResultObserver;
+import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.Empty;
 
 import org.springframework.http.HttpEntity;
@@ -42,6 +43,7 @@ public class CityDataTransferBizImpl extends AbstractDataTransferBizImpl<CityLis
             cityDao.deleteAll();
             for (City city : data.getCityList())
             {
+                city.setTitle(CharacterFixUtil.fixString(city.getTitle()));
                 cityDao.create(city);
             }
         }

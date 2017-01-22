@@ -51,10 +51,8 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends AbstractDataTransf
     {
         try
         {
-
             if (Empty.isNotEmpty(data))
             {
-
                 List<SaleOrder> deliverableOrders = saleOrderDao.retrieveSaleOrderByStatus(SaleOrderStatus.DELIVERABLE.getId());
                 for (SaleOrder deliverableOrder : deliverableOrders)
                 {

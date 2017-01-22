@@ -9,11 +9,16 @@ package com.conta.comer.util;
  */
 public class CharacterFixUtil
 {
-    public static final char[] badChars = {1740, 1705};
-    public static final char[] goodChars = {1610, 1603};
+    public static final char[] goodChars = {1740, 1705};
+    public static final char[] badChars = {1610, 1603};
 
     public static String fixString(String value)
     {
+        if (value == null)
+        {
+            return "";
+        }
+
         String result = value;
         for (int i = 0; i < badChars.length; i++)
         {
