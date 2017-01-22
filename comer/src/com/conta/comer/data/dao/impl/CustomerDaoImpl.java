@@ -9,6 +9,7 @@ import com.conta.comer.constants.CustomerStatus;
 import com.conta.comer.data.dao.CustomerDao;
 import com.conta.comer.data.entity.BaseInfo;
 import com.conta.comer.data.entity.Customer;
+import com.conta.comer.data.entity.VisitInformation;
 import com.conta.comer.data.helper.CommerDatabaseHelper;
 import com.conta.comer.data.listmodel.CustomerListModel;
 import com.conta.comer.data.listmodel.NCustomerListModel;
@@ -16,6 +17,7 @@ import com.conta.comer.data.model.CustomerDto;
 import com.conta.comer.data.model.CustomerLocationDto;
 import com.conta.comer.data.model.PositionModel;
 import com.conta.comer.data.searchobject.NCustomerSO;
+import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
 
 import java.util.ArrayList;
@@ -213,21 +215,35 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     {
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        String[] projection = {Customer.COL_ID, Customer.COL_CODE, Customer.COL_FULL_NAME, Customer.COL_PHONE_NUMBER, Customer.COL_CELL_PHONE, Customer.COL_ADDRESS};
-        String selection = " " + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
+        String[] projection = {
+                "c." + Customer.COL_ID,
+                "c." + Customer.COL_CODE,
+                "c." + Customer.COL_FULL_NAME,
+                "c." + Customer.COL_PHONE_NUMBER,
+                "c." + Customer.COL_CELL_PHONE,
+                "c." + Customer.COL_ADDRESS,
+                "c." + Customer.COL_X_LOCATION,
+                "vi." + VisitInformation.COL_VISIT_DATE};
+
+        String selection = " c." + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
+        String table = getTableName() + " c " +
+                "LEFT OUTER JOIN COMMER_VISIT_INFORMATION vi on c." + Customer.COL_BACKEND_ID + " = vi." + VisitInformation.COL_CUSTOMER_BACKEND_ID + " ";
+
+        String groupBy = "c." + Customer.COL_BACKEND_ID + " ";
+
         String[] args = {String.valueOf(visitLineId)};
         Cursor cursor;
         if (Empty.isNotEmpty(constraint))
         {
             selection = selection + " and ( " +
-                    Customer.COL_FULL_NAME + " like ? or " + Customer.COL_ADDRESS + " like ? or " +
-                    Customer.COL_PHONE_NUMBER + " like ? or " + Customer.COL_CELL_PHONE + " like ? or " + Customer.COL_CODE + " like ? )";
+                    "c." + Customer.COL_FULL_NAME + " like ? or " + "c." + Customer.COL_ADDRESS + " like ? or " +
+                    "c." + Customer.COL_PHONE_NUMBER + " like ? or c." + Customer.COL_CELL_PHONE + " like ? or c." + Customer.COL_CODE + " like ? )";
             constraint = "%" + constraint + "%";
             String[] args2 = {String.valueOf(visitLineId), constraint, constraint, constraint, constraint, constraint};
-            cursor = db.query(getTableName(), projection, selection, args2, null, null, null);
+            cursor = db.query(table, projection, selection, args2, groupBy, null, null);
         } else
         {
-            cursor = db.query(getTableName(), projection, selection, args, null, null, null);
+            cursor = db.query(table, projection, selection, args, groupBy, null, null);
         }
 
         List<CustomerListModel> entities = new ArrayList<>();
@@ -249,6 +265,14 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         customerListModel.setPhoneNumber(cursor.getString(3));
         customerListModel.setCellPhone(cursor.getString(4));
         customerListModel.setAddress(cursor.getString(5));
+        String location = cursor.getString(6);
+        customerListModel.setHasLocation(Empty.isNotEmpty(location));
+        String visitDate = cursor.getString(7);
+
+        String today = DateUtil.getCurrentGregorianFullWithDate();
+
+        customerListModel.setVisited(visitDate != null && visitDate.contains(today));
+
         return customerListModel;
     }
 
@@ -264,7 +288,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
                 " cu." + Customer.COL_STORE_LOCATION_TYPE_BACKEND_ID,
                 " cu." + Customer.COL_STATUS, " cu." + Customer.COL_CODE, " cu." + Customer.COL_VISIT_LINE_BACKEND_ID, " cu." + Customer.COL_CREATE_DATE_TIME,
                 " cu." + Customer.COL_UPDATE_DATE_TIME, " cu." + Customer.COL_X_LOCATION, " cu." + Customer.COL_Y_LOCATION,
-                " bi." + BaseInfo.COL_TITLE + " activityTitle", " cu." + Customer.COL_SHOP_NAME, " cu."+ Customer.COL_NATIONAL_CODE,
+                " bi." + BaseInfo.COL_TITLE + " activityTitle", " cu." + Customer.COL_SHOP_NAME, " cu." + Customer.COL_NATIONAL_CODE,
                 " cu." + Customer.COL_MUNICIPALITY_CODE, " cu." + Customer.COL_POSTAL_CODE
         };
         String selection = " cu." + getPrimaryKeyColumnName() + " = ?";
@@ -408,7 +432,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         Cursor cursor = db.query(getTableName(), getProjection(), null, null, null, null, null);
         List<PositionModel> positionModelList = new ArrayList<>();
 
-        while(cursor.moveToNext())
+        while (cursor.moveToNext())
         {
             positionModelList.add(new PositionModel(createEntityFromCursor(cursor)));
         }

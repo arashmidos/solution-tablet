@@ -3,6 +3,7 @@ package com.conta.comer.ui.adapter;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,7 +25,6 @@ import java.util.List;
  */
 public class CustomerListAdapter extends BaseListAdapter<CustomerListModel>
 {
-
     private MainActivity context;
     private CustomerService customerService;
     private Long visitLineId;
@@ -80,6 +80,8 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel>
                 holder.phoneTxt = (TextView) convertView.findViewById(R.id.phoneTxt);
                 holder.cellPhoneTxt = (TextView) convertView.findViewById(R.id.cellPhoneTxt);
                 holder.addressTxt = (TextView) convertView.findViewById(R.id.addressTxt);
+                holder.locationImg = (ImageView) convertView.findViewById(R.id.has_location_img);
+                holder.visitImg = (ImageView) convertView.findViewById(R.id.visit_today_img);
                 convertView.setTag(holder);
             } else
             {
@@ -88,13 +90,29 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel>
 
             final CustomerListModel model = dataModel.get(position);
 
+            holder.nameTxt.setText(model.getTitle());
+            holder.codeTxt.setText(model.getCode());
+            holder.phoneTxt.setText(String.valueOf(model.getPhoneNumber()));
+            holder.cellPhoneTxt.setText(Empty.isNotEmpty(model.getCellPhone()) ? model.getCellPhone() : "--");
+            holder.addressTxt.setText(Empty.isNotEmpty(model.getAddress()) ? model.getAddress() : "--");
+
+            //set location icon
+            if (model.hasLocation())
             {
-                holder.nameTxt.setText(model.getTitle());
-                holder.codeTxt.setText(model.getCode());
-                holder.phoneTxt.setText(String.valueOf(model.getPhoneNumber()));
-                holder.cellPhoneTxt.setText(Empty.isNotEmpty(model.getCellPhone()) ? model.getCellPhone() : "--");
-                holder.addressTxt.setText(Empty.isNotEmpty(model.getAddress()) ? model.getAddress() : "--");
+                holder.locationImg.setImageResource(R.drawable.ic_location_on_light_green_700_24dp);
+            } else
+            {
+                holder.locationImg.setImageResource(R.drawable.ic_location_off_grey_700_24dp);
             }
+            //set visit icon
+            if (model.isVisited())
+            {
+                holder.visitImg.setImageResource(R.drawable.ic_visibility_light_green_700_24dp);
+            } else
+            {
+                holder.visitImg.setImageResource(R.drawable.ic_visibility_off_grey_700_24dp);
+            }
+
             return convertView;
         } catch (Exception e)
         {
@@ -111,5 +129,7 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel>
         public TextView phoneTxt;
         public TextView cellPhoneTxt;
         public TextView addressTxt;
+        public ImageView locationImg;
+        public ImageView visitImg;
     }
 }

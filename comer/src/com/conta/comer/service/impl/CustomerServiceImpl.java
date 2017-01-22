@@ -172,8 +172,7 @@ public class CustomerServiceImpl implements CustomerService
         visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
         visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
         visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-        Long visitId = saveVisit(visitInformation);
-        return visitId;
+        return saveVisit(visitInformation);
     }
 
     @Override

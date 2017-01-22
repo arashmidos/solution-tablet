@@ -409,6 +409,11 @@ public class DateUtil
         return convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     }
 
+    public static String getCurrentGregorianFullWithDate()
+    {
+        return convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN, "EN");
+    }
+
     /**
      *
      * @param date

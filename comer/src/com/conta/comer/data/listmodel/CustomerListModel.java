@@ -7,9 +7,31 @@ import com.conta.comer.data.model.BaseListModel;
  */
 public class CustomerListModel extends BaseListModel
 {
-    protected String address;
-    protected String phoneNumber;
-    protected String cellPhone;
+    private String address;
+    private String phoneNumber;
+    private String cellPhone;
+    private boolean hasLocation;
+    private boolean isVisited;
+
+    public boolean hasLocation()
+    {
+        return hasLocation;
+    }
+
+    public void setHasLocation(boolean hasLocation)
+    {
+        this.hasLocation = hasLocation;
+    }
+
+    public boolean isVisited()
+    {
+        return isVisited;
+    }
+
+    public void setVisited(boolean visited)
+    {
+        isVisited = visited;
+    }
 
     public String getAddress()
     {

@@ -34,7 +34,6 @@ import butterknife.OnClick;
  */
 public class CustomerDetailFragment extends BaseContaFragment
 {
-
     public static final String TAG = CustomerDetailFragment.class.getSimpleName();
     @BindView(R.id.phoneNumberTv)
     TextView phoneNumberTv;
@@ -109,7 +108,6 @@ public class CustomerDetailFragment extends BaseContaFragment
         try
         {
             final Long visitInformationId = customerService.startVisiting(customer.getBackendId());
-
 
             locationService.findCurrentLocation(new FindLocationListener()
             {

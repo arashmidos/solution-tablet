@@ -39,8 +39,7 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
     protected List<CustomerListModel> getDataModel()
     {
         visitLineId = getArguments().getLong("visitLineBackendId");
-        List<CustomerListModel> customers = customerService.getAllCustomersListModelByVisitLineBackendId(visitLineId);
-        return customers;
+        return customerService.getAllCustomersListModelByVisitLineBackendId(visitLineId);
     }
 
     @Override
