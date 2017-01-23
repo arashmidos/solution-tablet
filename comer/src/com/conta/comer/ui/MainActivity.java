@@ -105,11 +105,11 @@ public class MainActivity extends BaseContaFragmentActivity
             R.string.exit
     };
     private final Integer[] drawerItemImages = {
-            R.drawable.setting,
-            R.drawable.aboutus,
-            R.drawable.aboutus,
-            R.drawable.version,
-            R.drawable.exit,
+            R.drawable.ic_settings_43dp,
+            R.drawable.ic_transform_43dp,
+            R.drawable.ic_aboutus_43dp,
+            R.drawable.ic_version_43dp,
+            R.drawable.ic_exit_43dp,
     };
     @BindView(R.id.mainLayout)
     LinearLayout mainLayout;
