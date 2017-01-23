@@ -106,7 +106,7 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
     compile 'com.alirezaafkar:sundatepicker:2.0.4'
     compile 'com.google.maps.android:android-maps-utils:0.4.4'
-
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     //For debug purpose only
 //    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'

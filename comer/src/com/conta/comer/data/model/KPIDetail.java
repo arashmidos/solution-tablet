@@ -5,7 +5,6 @@ package com.conta.comer.data.model;
  */
 public class KPIDetail extends BaseModel
 {
-
     private String code;
     private String description;
     private Double value;

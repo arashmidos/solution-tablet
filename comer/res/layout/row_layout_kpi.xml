@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="left"
     android:orientation="horizontal"
-    android:id="@+id/kpi_row_layout"
-    android:padding="20dp">
+    android:id="@+id/kpi_row_layout">
 
     <TextView
         android:id="@+id/codeTv"
@@ -16,7 +15,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:text="کد"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <TextView
 
@@ -28,7 +27,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:text="توضیحات"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <TextView
         android:id="@+id/valueTv"
@@ -39,6 +38,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:text="مقدار"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 </LinearLayout>

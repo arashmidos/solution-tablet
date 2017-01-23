@@ -31,7 +31,6 @@ import butterknife.OnClick;
  */
 public class SettingFragment extends BaseContaFragment implements ResultObserver
 {
-
     public static final String TAG = SettingFragment.class.getSimpleName();
     @BindView(R.id.cancelBtn)
     Button cancelBtn;

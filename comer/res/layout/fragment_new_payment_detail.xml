@@ -55,7 +55,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
-
             android:hint="@string/payment_amount"/>
 
 
