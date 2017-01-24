@@ -33,7 +33,7 @@ public class KPIListAdapter extends ArrayAdapter<KPIDetail>
         super(context, R.layout.row_layout_kpi, dataModel);
         this.context = context;
         this.kpiService = new KPIServiceImpl(context);
-        mFormat = new DecimalFormat("###,###,###,##0.0");
+        mFormat = new DecimalFormat("###,###,###,##0");
 
     }
 
@@ -63,7 +63,7 @@ public class KPIListAdapter extends ArrayAdapter<KPIDetail>
             holder.code.setText(model.getCode());
             holder.description.setText(model.getDescription());
 
-            holder.value.setText(mFormat.format(model.getValue()));
+            holder.value.setText(mFormat.format(model.getValue().floatValue()));
             return convertView;
 
         } catch (Exception e)

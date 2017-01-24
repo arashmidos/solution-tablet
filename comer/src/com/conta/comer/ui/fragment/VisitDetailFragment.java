@@ -159,6 +159,7 @@ public class VisitDetailFragment extends BaseContaFragment implements ResultObse
                         break;
                     //Detail
                     case 4:
+                        openKPIFragment();
                         break;
                     //General Questionary
                     case 5:
@@ -187,7 +188,16 @@ public class VisitDetailFragment extends BaseContaFragment implements ResultObse
 
                 }
             }
+
+
         });
+    }
+
+    private void openKPIFragment()
+    {
+        Bundle args = new Bundle();
+        args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
+        mainActivity.changeFragment(MainActivity.KPI_CUSTOMER_FRAGMENT_ID, args, false);
     }
 
     private void startCameraActivity()
