@@ -1,6 +1,7 @@
 package com.conta.comer.ui.formatter;
 
 import com.conta.comer.data.model.KPIDetail;
+import com.conta.comer.util.Empty;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
@@ -23,6 +24,8 @@ public class XAxisValueFormatter implements IAxisValueFormatter
     @Override
     public String getFormattedValue(float value, AxisBase axis)
     {
-        return kpiDetails.get((int) value).getCode();
+
+        String description = kpiDetails.get((int) value).getDescription();
+        return (Empty.isNotEmpty(description) ? description : "--");
     }
 }

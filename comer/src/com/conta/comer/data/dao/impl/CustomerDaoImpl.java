@@ -266,7 +266,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         customerListModel.setCellPhone(cursor.getString(4));
         customerListModel.setAddress(cursor.getString(5));
         String location = cursor.getString(6);
-        customerListModel.setHasLocation(Empty.isNotEmpty(location));
+
+        customerListModel.setHasLocation(Empty.isNotEmpty(location) && !location.equals("0"));
         String visitDate = cursor.getString(7);
 
         String today = DateUtil.getCurrentGregorianFullWithDate();

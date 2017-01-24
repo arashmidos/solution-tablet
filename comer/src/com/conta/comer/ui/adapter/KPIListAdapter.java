@@ -14,6 +14,7 @@ import com.conta.comer.service.KPIService;
 import com.conta.comer.service.impl.KPIServiceImpl;
 import com.conta.comer.ui.MainActivity;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class KPIListAdapter extends ArrayAdapter<KPIDetail>
 {
 
     private static final String TAG = KPIListAdapter.class.getSimpleName();
+    private final DecimalFormat mFormat;
     private MainActivity context;
     private KPIService kpiService;
 
@@ -31,6 +33,8 @@ public class KPIListAdapter extends ArrayAdapter<KPIDetail>
         super(context, R.layout.row_layout_kpi, dataModel);
         this.context = context;
         this.kpiService = new KPIServiceImpl(context);
+        mFormat = new DecimalFormat("###,###,###,##0.0");
+
     }
 
     @Override
@@ -58,7 +62,8 @@ public class KPIListAdapter extends ArrayAdapter<KPIDetail>
 
             holder.code.setText(model.getCode());
             holder.description.setText(model.getDescription());
-            holder.value.setText(String.valueOf(model.getValue()));
+
+            holder.value.setText(mFormat.format(model.getValue()));
             return convertView;
 
         } catch (Exception e)
