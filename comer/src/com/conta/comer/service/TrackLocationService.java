@@ -156,6 +156,7 @@ public class TrackLocationService extends Service implements GoogleApiClient.Con
             position.setSalesmanId(salesmanId);
             long id = positionService.savePosition(position);
             position.setId(id);
+            instantUpdate = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_ENABLE).equals("1");
             if (instantUpdate)
             {
                 Thread sender = new Thread(new Runnable()
