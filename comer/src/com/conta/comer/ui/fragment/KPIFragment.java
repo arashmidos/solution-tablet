@@ -13,7 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.conta.comer.R;
+import com.conta.comer.biz.impl.KeyValueBizImpl;
 import com.conta.comer.constants.Constants;
+import com.conta.comer.data.entity.KeyValue;
 import com.conta.comer.data.model.KPIDetail;
 import com.conta.comer.data.model.KPIDto;
 import com.conta.comer.exception.ContaBusinessException;
@@ -31,6 +33,7 @@ import com.conta.comer.ui.formatter.YAxisValueFormatter;
 import com.conta.comer.ui.observer.ResultObserver;
 import com.conta.comer.util.Empty;
 import com.conta.comer.util.ToastUtil;
+import com.conta.comer.util.constants.ApplicationKeys;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -79,6 +82,7 @@ public class KPIFragment extends BaseContaFragment implements ResultObserver, On
     private ListAdapter adapter;
     private Typeface mTfLight;
     private List<KPIDetail> kpiDetails;
+    private KeyValueBizImpl keyValueBiz;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -93,6 +97,16 @@ public class KPIFragment extends BaseContaFragment implements ResultObserver, On
             customerBackendId = arguments.getLong(Constants.CUSTOMER_BACKEND_ID, -1);
         }
         isCustomerKPI = customerBackendId != -1;
+
+        keyValueBiz = new KeyValueBizImpl(getActivity());
+        KeyValue salesmanId = keyValueBiz.findByKey(ApplicationKeys.SALESMAN_ID);
+        if (Empty.isEmpty(salesmanId))
+        {
+            View view = inflater.inflate((R.layout.view_error_page), null);
+            TextView errorView = (TextView) view.findViewById(R.id.error_msg);
+            errorView.setText(errorView.getText() + "\n\n" + "به قسمت تنظیمات مراجعه کنید");
+            return view;
+        }
 
         View view = inflater.inflate(R.layout.fragment_kpi, null);
         ButterKnife.bind(this, view);
