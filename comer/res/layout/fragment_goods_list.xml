@@ -96,6 +96,7 @@
     </TableLayout>
 
     <ScrollView
+        android:background="@color/white"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1"
@@ -107,6 +108,7 @@
             android:orientation="vertical">
 
             <TableLayout
+                android:background="@color/white"
                 android:id="@+id/goodsDataTable"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
