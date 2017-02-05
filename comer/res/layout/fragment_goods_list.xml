@@ -26,21 +26,19 @@
             android:text="جستجو:"/>
     </LinearLayout>
 
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:id="@+id/goodsDataTableHeaders"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_gravity="center"
-                 android:layout_marginTop="15dp"
-                 android:gravity="right"
-        >
+    <TableLayout
+        android:id="@+id/goodsDataTableHeaders"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:gravity="right">
 
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            >
+            android:gravity="right">
 
             <TextView
                 android:id="@+id/operationsHeader"
@@ -94,9 +92,7 @@
                 android:layout_weight="0"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="نام کالا"/>
-
         </TableRow>
-
     </TableLayout>
 
     <ScrollView
@@ -116,14 +112,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="right"
-                android:showDividers="middle"
-                >
-
-
+                android:showDividers="middle">
             </TableLayout>
         </LinearLayout>
     </ScrollView>
-
 
     <!--<ListView-->
     <!--android:layout_width="fill_parent"-->
