@@ -96,7 +96,6 @@ public class DataTransferServiceImpl implements DataTransferService
     @Override
     public void getAllData(final ResultObserver uiObserver)
     {
-
         serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
         serverAddress2 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
         username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);

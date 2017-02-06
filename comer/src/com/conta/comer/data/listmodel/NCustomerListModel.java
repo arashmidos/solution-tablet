@@ -5,7 +5,6 @@ package com.conta.comer.data.listmodel;
  */
 public class NCustomerListModel extends CustomerListModel
 {
-
     private Long status;
     private Long backendId;
     private String phoneNumber;

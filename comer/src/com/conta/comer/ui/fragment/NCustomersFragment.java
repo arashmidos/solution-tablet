@@ -81,8 +81,14 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
             });
             tabContainer.addTab(tab);
         }
+    }
 
-
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        nCustomerSO.setSent(0);
+        updateList();
     }
 
     @Override

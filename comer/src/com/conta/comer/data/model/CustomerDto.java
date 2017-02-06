@@ -5,7 +5,6 @@ package com.conta.comer.data.model;
  */
 public class CustomerDto extends BaseModel
 {
-
     private Long id;
     private Long backendId;
     private String fullName;
@@ -31,6 +30,17 @@ public class CustomerDto extends BaseModel
     private String nationalCode;
     private String municipalityCode;
     private String postalCode;
+    private boolean isApproved;
+
+    public boolean isApproved()
+    {
+        return isApproved;
+    }
+
+    public void setApproved(boolean approved)
+    {
+        isApproved = approved;
+    }
 
     public Long getId()
     {
@@ -242,29 +252,14 @@ public class CustomerDto extends BaseModel
         this.classBackendId = classBackendId;
     }
 
-    public void setShopName(String shopName)
-    {
-        this.shopName = shopName;
-    }
-
-    public void setNationalCode(String nationalCode)
-    {
-        this.nationalCode = nationalCode;
-    }
-
-    public void setMunicipalityCode(String municipalityCode)
-    {
-        this.municipalityCode = municipalityCode;
-    }
-
-    public void setPostalCode(String postalCode)
-    {
-        this.postalCode = postalCode;
-    }
-
     public String getShopName()
     {
         return shopName;
+    }
+
+    public void setShopName(String shopName)
+    {
+        this.shopName = shopName;
     }
 
     public String getNationalCode()
@@ -272,13 +267,28 @@ public class CustomerDto extends BaseModel
         return nationalCode;
     }
 
+    public void setNationalCode(String nationalCode)
+    {
+        this.nationalCode = nationalCode;
+    }
+
     public String getMunicipalityCode()
     {
         return municipalityCode;
     }
 
+    public void setMunicipalityCode(String municipalityCode)
+    {
+        this.municipalityCode = municipalityCode;
+    }
+
     public String getPostalCode()
     {
         return postalCode;
+    }
+
+    public void setPostalCode(String postalCode)
+    {
+        this.postalCode = postalCode;
     }
 }

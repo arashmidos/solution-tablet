@@ -69,6 +69,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         contentValues.put(Customer.COL_NATIONAL_CODE, entity.getNationalCode());//20
         contentValues.put(Customer.COL_MUNICIPALITY_CODE, entity.getMunicipalityCode());//21
         contentValues.put(Customer.COL_POSTAL_CODE, entity.getPostalCode());//22
+        contentValues.put(Customer.COL_APPROVED, entity.isApproved() ? 1 : 0);
         return contentValues;
     }
 
@@ -110,7 +111,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
                 Customer.COL_SHOP_NAME,
                 Customer.COL_NATIONAL_CODE,
                 Customer.COL_MUNICIPALITY_CODE,
-                Customer.COL_POSTAL_CODE//22
+                Customer.COL_POSTAL_CODE,//22
+                Customer.COL_APPROVED
         };
         return projection;
     }
@@ -142,6 +144,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         customer.setNationalCode(cursor.getString(20));
         customer.setMunicipalityCode(cursor.getString(21));
         customer.setPostalCode(cursor.getString(22));
+        customer.setApproved(cursor.getInt(23) == 1);
         return customer;
     }
 
@@ -290,7 +293,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
                 " cu." + Customer.COL_STATUS, " cu." + Customer.COL_CODE, " cu." + Customer.COL_VISIT_LINE_BACKEND_ID, " cu." + Customer.COL_CREATE_DATE_TIME,
                 " cu." + Customer.COL_UPDATE_DATE_TIME, " cu." + Customer.COL_X_LOCATION, " cu." + Customer.COL_Y_LOCATION,
                 " bi." + BaseInfo.COL_TITLE + " activityTitle", " cu." + Customer.COL_SHOP_NAME, " cu." + Customer.COL_NATIONAL_CODE,
-                " cu." + Customer.COL_MUNICIPALITY_CODE, " cu." + Customer.COL_POSTAL_CODE
+                " cu." + Customer.COL_MUNICIPALITY_CODE, " cu." + Customer.COL_POSTAL_CODE, " cu." + Customer.COL_APPROVED
         };
         String selection = " cu." + getPrimaryKeyColumnName() + " = ?";
         String[] args = {String.valueOf(customerId)};
@@ -313,7 +316,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-        String[] projection = {Customer.COL_ID, Customer.COL_FULL_NAME, Customer.COL_PHONE_NUMBER, Customer.COL_CELL_PHONE, Customer.COL_STATUS, Customer.COL_CREATE_DATE_TIME, Customer.COL_BACKEND_ID};
+        String[] projection = {Customer.COL_ID, Customer.COL_FULL_NAME, Customer.COL_PHONE_NUMBER,
+                Customer.COL_CELL_PHONE, Customer.COL_STATUS, Customer.COL_CREATE_DATE_TIME, Customer.COL_BACKEND_ID};
         String selection = " 1 = 1";
         List<String> argList = new ArrayList<String>();
 
@@ -469,6 +473,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         customer.setNationalCode(cursor.getString(21));
         customer.setMunicipalityCode(cursor.getString(22));
         customer.setPostalCode(cursor.getString(23));
+        customer.setApproved(cursor.getInt(24) == 1);
         return customer;
     }
 

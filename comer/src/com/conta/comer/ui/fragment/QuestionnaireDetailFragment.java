@@ -51,6 +51,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
     private Long customerId;
     private Long goodsBackendId;
     private Long visitId;
+    private Customer customer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -66,6 +67,8 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             visitId = getArguments().getLong(Constants.VISIT_ID);
             customerId = getArguments().getLong(Constants.CUSTOMER_ID);
             goodsBackendId = getArguments().getLong("goodsBackendId");
+
+            customer = customerService.getCustomerById(customerId);
 
             View view = super.onCreateView(inflater, container, savedInstanceState);
             buttonPanel.setVisibility(View.VISIBLE);
@@ -111,6 +114,11 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
     @Override
     protected AdapterView.OnItemClickListener getOnItemClickListener()
     {
+        if (customer != null && customer.getBackendId() != 0 && !customer.isApproved())
+        {
+            return null;
+        }
+
         return new AdapterView.OnItemClickListener()
         {
             @Override
