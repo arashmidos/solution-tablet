@@ -83,16 +83,16 @@ public class Customer extends BaseEntity<Long>
     private String postalCode;
     private String nationalCode;
     private String municipalityCode;
-    private boolean isApproved = true;
+    private boolean approved = true;
 
     public boolean isApproved()
     {
-        return isApproved;
+        return approved;
     }
 
     public void setApproved(boolean approved)
     {
-        isApproved = approved;
+        this.approved = approved;
     }
 
     public String getShopName()
