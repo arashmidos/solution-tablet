@@ -30,6 +30,7 @@ public class Customer extends BaseEntity<Long>
     public static final String COL_NATIONAL_CODE = "NATIONAL_CODE";
     public static final String COL_MUNICIPALITY_CODE = "MUNICIPALITY_CODE";
     public static final String COL_POSTAL_CODE = "POSTAL_CODE";
+    public static final String COL_APPROVED = "APPROVED";
 
     public static final String TABLE_NAME = "COMMER_CUSTOMER";
 
@@ -56,7 +57,8 @@ public class Customer extends BaseEntity<Long>
             " " + Customer.COL_SHOP_NAME + " TEXT," +
             " " + Customer.COL_NATIONAL_CODE + " TEXT," +
             " " + Customer.COL_MUNICIPALITY_CODE + " TEXT," +
-            " " + Customer.COL_POSTAL_CODE + " TEXT" +
+            " " + Customer.COL_POSTAL_CODE + " TEXT," +
+            " " + Customer.COL_APPROVED + " INTEGER" +
             " );";
 
     private Long id;
@@ -81,6 +83,17 @@ public class Customer extends BaseEntity<Long>
     private String postalCode;
     private String nationalCode;
     private String municipalityCode;
+    private boolean isApproved = true;
+
+    public boolean isApproved()
+    {
+        return isApproved;
+    }
+
+    public void setApproved(boolean approved)
+    {
+        isApproved = approved;
+    }
 
     public String getShopName()
     {
@@ -344,7 +357,7 @@ public class Customer extends BaseEntity<Long>
         sb.append(Empty.isNotEmpty(this.nationalCode) ? this.nationalCode : "NULL");
         sb.append("&");
         sb.append(Empty.isNotEmpty(this.municipalityCode) ? this.municipalityCode
-        : "NULL");
+                : "NULL");
         return sb.toString();
     }
 

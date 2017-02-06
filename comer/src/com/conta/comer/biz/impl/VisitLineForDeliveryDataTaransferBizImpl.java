@@ -68,13 +68,13 @@ public class VisitLineForDeliveryDataTaransferBizImpl extends AbstractDataTransf
                         customer.setFullName(CharacterFixUtil.fixString(customer.getFullName()));
                         customer.setShopName(CharacterFixUtil.fixString(customer.getShopName()));
                         customer.setAddress(CharacterFixUtil.fixString(customer.getAddress()));
+                        customer.setApproved(true);
                         customer.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
                         customer.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
                         customerDao.create(customer);
                     }
                 } else
                 {
-
                     List<Customer> customers = customerDao.getCustomersVisitLineBackendId(visitLine.getBackendId());
                     for (Customer customer : visitLineDto.getCustomerList())
                     {
@@ -82,10 +82,10 @@ public class VisitLineForDeliveryDataTaransferBizImpl extends AbstractDataTransf
                         {
                             customer.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
                             customer.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+                            customer.setApproved(true);
                             customerDao.create(customer);
                         }
                     }
-
                 }
             }
         }

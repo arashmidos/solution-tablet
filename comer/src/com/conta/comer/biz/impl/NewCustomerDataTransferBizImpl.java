@@ -7,11 +7,9 @@ import com.conta.comer.R;
 import com.conta.comer.biz.AbstractDataTransferBizImpl;
 import com.conta.comer.biz.KeyValueBiz;
 import com.conta.comer.data.dao.CustomerDao;
-import com.conta.comer.data.dao.KeyValueDao;
 import com.conta.comer.data.dao.QAnswerDao;
 import com.conta.comer.data.dao.VisitInformationDao;
 import com.conta.comer.data.dao.impl.CustomerDaoImpl;
-import com.conta.comer.data.dao.impl.KeyValueDaoImpl;
 import com.conta.comer.data.dao.impl.QAnswerDaoImpl;
 import com.conta.comer.data.dao.impl.VisitInformationDaoImpl;
 import com.conta.comer.data.entity.Customer;
@@ -89,7 +87,8 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
                         VisitInformation visitList = visitInformationDao.retrieveForNewCustomer(customerId);
 //                        for (VisitInformation visit : visitList)
 //                        {
-                        if( visitList!=null){
+                        if (visitList != null)
+                        {
                             visitList.setCustomerBackendId(backendId);
                             visitInformationDao.update(visitList);
                         }

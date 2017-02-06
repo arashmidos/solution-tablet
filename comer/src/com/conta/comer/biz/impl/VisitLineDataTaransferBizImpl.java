@@ -62,6 +62,7 @@ public class VisitLineDataTaransferBizImpl extends AbstractDataTransferBizImpl<V
                     customer.setFullName(CharacterFixUtil.fixString(customer.getFullName()));
                     customer.setShopName(CharacterFixUtil.fixString(customer.getShopName()));
                     customer.setAddress(CharacterFixUtil.fixString(customer.getAddress()));
+                    customer.setApproved(true);
                     customer.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
                     customer.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
                     customerDao.create(customer);
