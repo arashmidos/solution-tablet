@@ -137,7 +137,7 @@ public class CustomerServiceImpl implements CustomerService
     @Override
     public List<CustomerListModel> getAllCustomersListModelByVisitLineBackendId(Long visitLineId)
     {
-        return customerDao.getAllCustomersListModelByVisitLineBackendId(visitLineId);
+        return  customerDao.getAllCustomersListModelByVisitLineBackendId(visitLineId);
     }
 
     @Override

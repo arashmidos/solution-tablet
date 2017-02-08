@@ -62,7 +62,7 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                CustomerListModel customerListModel = dataModel.get(position);
+                CustomerListModel customerListModel = (CustomerListModel) adapter.getItem(position);
                 Bundle bundle = new Bundle();
                 bundle.putLong("customerId", customerListModel.getPrimaryKey());
                 context.changeFragment(MainActivity.CUSTOMER_DETAIL_FRAGMENT_ID, bundle, false);
