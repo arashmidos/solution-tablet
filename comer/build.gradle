@@ -1,12 +1,15 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'android-apt'
 buildscript {
     repositories {
 //        mavenCentral()
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 
@@ -14,6 +17,7 @@ repositories {
     jcenter {
         url "http://jcenter.bintray.com/"
     }
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 android {
@@ -26,8 +30,8 @@ android {
         applicationId "com.conta.comer"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 24
-        versionName "2.6.1"
+        versionCode 25
+        versionName "2.6.2"
     }
     sourceSets {
         main {
@@ -110,6 +114,9 @@ dependencies {
     //For debug purpose only
 //    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+        transitive = true;
+    }
 }
 
 android {

@@ -5,6 +5,8 @@ import android.app.Application;
 import com.conta.comer.util.BugSender;
 import com.conta.comer.util.TypefaceUtil;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
@@ -19,6 +21,7 @@ public class CommerApplication extends Application
     public void onCreate()
     {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         try
         {
             TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/IRANSansMobile.ttf");
