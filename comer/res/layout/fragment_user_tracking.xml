@@ -91,7 +91,7 @@
 
         <EditText
             android:id="@+id/toDate"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
@@ -111,7 +111,7 @@
 
         <EditText
             android:id="@+id/fromDate"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
