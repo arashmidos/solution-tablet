@@ -405,19 +405,6 @@ public class NCustomerDetailFragment extends BaseContaFragment
             return false;
         }
 
-        /*if (Empty.isEmpty(customer.getMunicipalityCode()))
-        {
-            toastMessage(R.string.message_municipality_code_is_required);
-            municipalityCodeTxt.requestFocus();
-            return false;
-        }*/
-
-        /*if (Empty.isEmpty(customer.getPostalCode()))
-        {
-            toastMessage(R.string.message_postal_code_is_required);
-            postalCodeTxt.requestFocus();
-            return false;
-        }*/
         String nationalCode = customer.getNationalCode();
         if (!Empty.isEmpty(nationalCode) && (!isValidNationalCode(nationalCode)))
         {
