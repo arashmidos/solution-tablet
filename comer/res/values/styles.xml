@@ -12,12 +12,6 @@
         <item name="android:height">50dp</item>
     </style>
 
-    <style name="ContaTab">
-        <item name="android:background">@drawable/conta_tab_background</item>
-        <item name="android:textColor">@color/conta_tab_text_color</item>
-        <item name="android:gravity">center</item>
-    </style>
-
     <style name="TextView"></style>
 
     <style name="TextView.PageTitle">
@@ -53,19 +47,8 @@
         <item name="android:padding">2dp</item>
     </style>
 
-    <style name="Button">
-        <item name="android:paddingTop">30dp</item>
-        <item name="android:paddingBottom">30dp</item>
-        <item name="android:paddingRight">30dp</item>
-        <item name="android:paddingLeft">30dp</item>
-    </style>
-
     <style name="Spinner">
         <item name="android:layout_marginTop">5dp</item>
-    </style>
-
-    <style name="VisitDetailBtn">
-
     </style>
 
     <style name="TextView.Cell">
