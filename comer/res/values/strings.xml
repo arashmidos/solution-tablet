@@ -69,7 +69,7 @@
     <string name="message_transferring_base_info_data">در حال انتقال اطلاعات پایه..</string>
     <string name="customer_full_name">نام و نام خانوادگی مشتری</string>
     <string name="payment_amount">مبلغ ( ریال )</string>
-    <string name="phone_number">شماره تفن ثابت</string>
+    <string name="phone_number">شماره تلفن ثابت</string>
     <string name="cell_phone">تلفن همراه</string>
     <string name="address">آدرس</string>
 
@@ -83,7 +83,7 @@
     <string name="message_error_in_loading_or_creating_customer">خطا در ایجاد مشتری</string>
     <string name="message_found_location_successfully">مکان مشتری با موفقیت دریافت شد</string>
     <string name="message_finding_location_timeout">برنامه قادر به دریافت مکان مشتری در زمان مناسب نیست.</string>
-    <string name="message_customer_name_is_required">وارد نام مشتری اجباریست.</string>
+    <string name="message_customer_name_is_required">وارد کردن نام مشتری اجباریست.</string>
     <string name="message_address_is_required">وارد کردن آدرس مشتری اجباریست.</string>
     <string name="message_customer_save_successfully">مشتری با موفقیت ذخیره شد</string>
     <string name="message_payment_save_successfully">دریافت وجه با موفقیت ذخیره شد</string>

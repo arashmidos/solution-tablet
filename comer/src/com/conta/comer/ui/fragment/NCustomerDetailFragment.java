@@ -384,13 +384,6 @@ public class NCustomerDetailFragment extends BaseContaFragment
             return false;
         }
 
-        if (Empty.isEmpty(customer.getAddress()))
-        {
-            toastMessage(R.string.message_address_is_required);
-            addressTxt.requestFocus();
-            return false;
-        }
-
         if (Empty.isEmpty(customer.getPhoneNumber()))
         {
             toastMessage(R.string.message_phone_is_required);
@@ -412,32 +405,39 @@ public class NCustomerDetailFragment extends BaseContaFragment
             return false;
         }
 
-        if (Empty.isEmpty(customer.getMunicipalityCode()))
+        /*if (Empty.isEmpty(customer.getMunicipalityCode()))
         {
             toastMessage(R.string.message_municipality_code_is_required);
             municipalityCodeTxt.requestFocus();
             return false;
-        }
+        }*/
 
-        if (Empty.isEmpty(customer.getPostalCode()))
+        /*if (Empty.isEmpty(customer.getPostalCode()))
         {
             toastMessage(R.string.message_postal_code_is_required);
             postalCodeTxt.requestFocus();
             return false;
+        }*/
+        String nationalCode = customer.getNationalCode();
+        if (!Empty.isEmpty(nationalCode) && (!isValidNationalCode(nationalCode)))
+        {
+            toastMessage(R.string.message_national_code_is_not_valid);
+            nationalCodeTxt.requestFocus();
+            return false;
         }
 
-        if (customer.getPostalCode().length() != 10)
+        String postalCode = customer.getPostalCode().trim();
+        if (!Empty.isEmpty(postalCode) && postalCode.length() != 10)
         {
             toastMessage(R.string.message_postal_code_is_not_valid);
             postalCodeTxt.requestFocus();
             return false;
         }
 
-        String nationalCode = customer.getNationalCode();
-        if (!Empty.isEmpty(nationalCode) && (!isValidNationalCode(nationalCode)))
+        if (Empty.isEmpty(customer.getAddress()))
         {
-            toastMessage(R.string.message_national_code_is_not_valid);
-            nationalCodeTxt.requestFocus();
+            toastMessage(R.string.message_address_is_required);
+            addressTxt.requestFocus();
             return false;
         }
 
