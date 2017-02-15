@@ -319,7 +319,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         String[] projection = {Customer.COL_ID, Customer.COL_FULL_NAME, Customer.COL_PHONE_NUMBER,
                 Customer.COL_CELL_PHONE, Customer.COL_STATUS, Customer.COL_CREATE_DATE_TIME, Customer.COL_BACKEND_ID};
         String selection = " 1 = 1";
-        List<String> argList = new ArrayList<String>();
+        List<String> argList = new ArrayList<>();
 
         selection = selection.concat(" AND " + Customer.COL_STATUS + " = ?");
         argList.add(String.valueOf(CustomerStatus.NEW.getId()));

@@ -33,8 +33,8 @@ public abstract class BaseListFragment<T extends BaseListModel, AD extends BaseL
     protected BaseListAdapter adapter;
     protected ContaTabContainer tabContainer;
     protected LinearLayout headerViewLayout;
-    private MainActivity context;
     protected LinearLayout buttonPanel;
+    private MainActivity context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -107,7 +107,8 @@ public abstract class BaseListFragment<T extends BaseListModel, AD extends BaseL
 
     protected void updateList()
     {
-        dataModelLv.setAdapter(getAdapter());
+        adapter = getAdapter();
+        dataModelLv.setAdapter(adapter);
     }
 
     protected abstract List<T> getDataModel();

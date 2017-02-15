@@ -40,21 +40,23 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
 {
 
     private final QuestionnaireService questionnaireService;
+    private final NCustomerSO nCustomerSO;
     private MainActivity mainActivity;
     private CustomerService customerService;
 
-    public NCustomersListAdapter(MainActivity mainActivity, List<NCustomerListModel> dataModel)
+    public NCustomersListAdapter(MainActivity mainActivity, List<NCustomerListModel> dataModel, NCustomerSO nCustomerSO)
     {
         super(mainActivity, dataModel);
         customerService = new CustomerServiceImpl(mainActivity);
         questionnaireService = new QuestionnaireServiceImpl(mainActivity);
         this.mainActivity = mainActivity;
+        this.nCustomerSO = nCustomerSO;
     }
 
     @Override
     protected List<NCustomerListModel> getFilteredData(CharSequence constraint)
     {
-        NCustomerSO nCustomerSO = new NCustomerSO();
+        nCustomerSO.setConstraint(null);
         if (constraint.length() != 0 && Empty.isNotEmpty(constraint.toString()))
         {
             nCustomerSO.setConstraint("%" + CharacterFixUtil.fixString(constraint.toString()) + "%");
