@@ -114,7 +114,7 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
                     return;
                 }
                 MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, false);
+                mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
             }
         });
         return headerView;
@@ -129,7 +129,7 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
     @Override
     protected NCustomersListAdapter getAdapter()
     {
-        return new NCustomersListAdapter(context, getDataModel());
+        return new NCustomersListAdapter(context, getDataModel(), nCustomerSO);
     }
 
     @Override
