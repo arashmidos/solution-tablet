@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.conta.comer.constants.QuestionType;
 import com.conta.comer.data.dao.QuestionDao;
 import com.conta.comer.data.entity.Question;
 import com.conta.comer.data.helper.CommerDatabaseHelper;
@@ -48,6 +49,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         contentValues.put(Question.COL_ORDER, entity.getOrder());
         contentValues.put(Question.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
         contentValues.put(Question.COL_UPDATE_DATE_TIME, entity.getCreateDateTime());
+        contentValues.put(Question.COL_TYPE, entity.getType().getValue());
         return contentValues;
     }
 
@@ -76,6 +78,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
                 Question.COL_ORDER,
                 Question.COL_CREATE_DATE_TIME,
                 Question.COL_UPDATE_DATE_TIME,
+                Question.COL_TYPE
         };
         return projection;
     }
@@ -93,6 +96,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         question.setOrder(cursor.getInt(6));
         question.setCreateDateTime(cursor.getString(7));
         question.setUpdateDateTime(cursor.getString(8));
+        question.setType(QuestionType.getByValue(cursor.getInt(9)));
         return question;
     }
 
@@ -106,6 +110,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
                 "  q._id," +
                 "  q.QUESTION," +
                 "  q.qOrder," +
+                "  q.TYPE," +
                 "  a.ANSWER" +
                 " FROM COMMER_QUESTION q " +
                 "  LEFT OUTER JOIN COMMER_Q_ANSWER a ON a.QUESTION_BACKEND_ID = q.BACKEND_ID  " +
@@ -127,8 +132,9 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
             QuestionListModel questionListModel = new QuestionListModel();
             questionListModel.setPrimaryKey(cursor.getLong(0));
             questionListModel.setQuestion(cursor.getString(1));
-            questionListModel.setAnswer(cursor.getString(3));
             questionListModel.setqOrder(cursor.getInt(2));
+            questionListModel.setType(QuestionType.getByValue(cursor.getInt(3)));
+            questionListModel.setAnswer(cursor.getString(4));
             questions.add(questionListModel);
         }
 
@@ -144,20 +150,22 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         QuestionDto questionDto = null;
 
-        String sql = "SELECT  " +
-                "   q._id, " +
-                "   q.QUESTION, " +
-                "   q.ANSWER, " +
-                "   q.qORDER, " +
-                "   qn.DESCRIPTION," +
-                "  IFNULL(an._id, NULL)," +
-                "   IFNULL(an.ANSWER, NULL)," +
-                "   q.BACKEND_ID " +
-                " FROM COMMER_QUESTION q " +
-                " INNER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID= q.QUESTIONNAIRE_BACKEND_ID " +
+        String sql = "SELECT" +
+                " q._id," +//0
+                " q.QUESTION," +//1
+                " q.ANSWER," +//2
+                " q.qORDER," +//3
+                " qn.DESCRIPTION," +//4
+                " IFNULL(an._id, NULL)," +//5
+                " IFNULL(an.ANSWER, NULL)," +//6
+                " q.BACKEND_ID," +//7
+                " q.TYPE" +//8
+                " FROM COMMER_QUESTION q" +
+                " INNER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID= q.QUESTIONNAIRE_BACKEND_ID" +
                 " Left OUTER JOIN COMMER_Q_ANSWER an on an.QUESTION_BACKEND_ID = q.BACKEND_ID and an.VISIT_ID = ?" +
                 " and (an.GOODS_BACKEND_ID = ? or  '-1' = ?)" +
                 " where q._id = ?";
+
         String[] args = {String.valueOf(visitId),
                 Empty.isNotEmpty(goodsBackendId) ? String.valueOf(goodsBackendId) : "-1",
                 Empty.isNotEmpty(goodsBackendId) ? String.valueOf(goodsBackendId) : "-1",
@@ -169,12 +177,13 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
             questionDto = new QuestionDto();
             questionDto.setQuestionId(cursor.getLong(0));
             questionDto.setQuestion(cursor.getString(1));
-            questionDto.setDescription(cursor.getString(2));
+            questionDto.setqAnswers(cursor.getString(2));
             questionDto.setqOrder(cursor.getInt(3));
-            questionDto.setQuestionnaireTitle(cursor.getString(4));
+            questionDto.setDescription(cursor.getString(4));
             questionDto.setAnswerId(cursor.isNull(5) ? null : cursor.getLong(5));
             questionDto.setAnswer(cursor.getString(6));
             questionDto.setQuestionBackendId(cursor.getLong(7));
+            questionDto.setType(QuestionType.getByValue(cursor.getInt(8)));
         }
 
         cursor.close();
@@ -189,17 +198,18 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         QuestionDto questionDto = null;
 
-        String sql = "SELECT  " +
-                "   q._id, " +
-                "   q.QUESTION, " +
-                "   q.ANSWER, " +
-                "   q.qORDER, " +
-                "   qn.DESCRIPTION," +
-                "  IFNULL(an._id, NULL)," +
-                "   IFNULL(an.ANSWER, NULL)," +
-                "   q.BACKEND_ID " +
-                " FROM COMMER_QUESTION q " +
-                " INNER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID= q.QUESTIONNAIRE_BACKEND_ID " +
+        String sql = "SELECT" +
+                " q._id," +//0
+                " q.QUESTION," +//1
+                " q.ANSWER," +//2
+                " q.qORDER," +//3
+                " qn.DESCRIPTION," +//4
+                " IFNULL(an._id, NULL)," +//5
+                " IFNULL(an.ANSWER, NULL)," +//6
+                " q.BACKEND_ID," +//7
+                " q.TYPE" +//8
+                " FROM COMMER_QUESTION q" +
+                " INNER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID= q.QUESTIONNAIRE_BACKEND_ID" +
                 " Left OUTER JOIN COMMER_Q_ANSWER an on an.QUESTION_BACKEND_ID = q.BACKEND_ID" +
                 " and an.VISIT_ID = ? and (an.GOODS_BACKEND_ID = ? or  '-1' = ?)" +
                 " where qn.BACKEND_ID = ? AND q.qOrder = ?";
@@ -216,12 +226,13 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
             questionDto = new QuestionDto();
             questionDto.setQuestionId(cursor.getLong(0));
             questionDto.setQuestion(cursor.getString(1));
-            questionDto.setDescription(cursor.getString(2));
+            questionDto.setqAnswers(cursor.getString(2));
             questionDto.setqOrder(cursor.getInt(3));
-            questionDto.setQuestionnaireTitle(cursor.getString(4));
+            questionDto.setDescription(cursor.getString(4));
             questionDto.setAnswerId(cursor.isNull(5) ? null : cursor.getLong(5));
             questionDto.setAnswer(cursor.getString(6));
             questionDto.setQuestionBackendId(cursor.getLong(7));
+            questionDto.setType(QuestionType.getByValue(cursor.getInt(8)));
         }
 
         cursor.close();

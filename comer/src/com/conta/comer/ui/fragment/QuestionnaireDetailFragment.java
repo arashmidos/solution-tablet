@@ -2,15 +2,20 @@ package com.conta.comer.ui.fragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.conta.comer.R;
@@ -32,6 +37,7 @@ import com.conta.comer.ui.adapter.QuestionListAdapter;
 import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +58,9 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
     private Long goodsBackendId;
     private Long visitId;
     private Customer customer;
+    private RadioGroup radioGroup;
+    private EditText answerEt;
+    private LinearLayout answerLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -137,22 +146,36 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
 
         TextView questionnaireTitleTv = (TextView) view.findViewById(R.id.questionnaireTitleTv);
         TextView questionTv = (TextView) view.findViewById(R.id.questionTv);
-        TextView descriptionTv = (TextView) view.findViewById(R.id.descriptionTv);
-        final EditText answerEt = (EditText) view.findViewById(R.id.answerEt);
+        TextView answerTv = (TextView) view.findViewById(R.id.textView39);
+        answerLayout = (LinearLayout) view.findViewById(R.id.answerLayout);
+        answerEt = (EditText) view.findViewById(R.id.answerEt);
+        switch (questionDto.getType())
+        {
+            case SIMPLE:
+                answerEt.setInputType(InputType.TYPE_CLASS_TEXT);
+                break;
+            case SIMPLE_NUMERIC:
+                answerEt.setInputType(InputType.TYPE_CLASS_NUMBER);
+                break;
+            case CHOICE_SINGLE:
+                answerEt.setVisibility(View.GONE);
+                answerTv.setVisibility(View.GONE);
+                createRadioButtons(questionDto.getqAnswers(), questionDto.getAnswer());
+                break;
+            case CHOICE_MULTIPLE:
+                answerEt.setVisibility(View.GONE);
+                answerTv.setVisibility(View.GONE);
+                createCheckBox(questionDto.getqAnswers(), questionDto.getAnswer());
+        }
         final Button prvBtn = (Button) view.findViewById(R.id.prvBtn);
-        LinearLayout descriptionLayout = (LinearLayout) view.findViewById(R.id.descriptionLayout);
         Button nextBtn = (Button) view.findViewById(R.id.nextBtn);
         Button cancelBtn = (Button) view.findViewById(R.id.cancelBtn);
         Button saveBtn = (Button) view.findViewById(R.id.saveBtn);
 
         questionnaireTitleTv.setText(questionDto.getQuestionnaireTitle());
         questionTv.setText(questionDto.getQuestion());
-        descriptionTv.setText(questionDto.getDescription());
-        answerEt.setText(questionDto.getAnswer());
-        if (Empty.isEmpty(questionDto.getDescription()))
-        {
-            descriptionLayout.setVisibility(View.GONE);
-        }
+        answerEt.setText(Empty.isEmpty(questionDto.getAnswer()) ? "--" : questionDto.getAnswer().replaceAll("[*]", " - "));
+
         alertBuilder.setView(view);
 
         final AlertDialog alert = alertBuilder.create();
@@ -166,9 +189,10 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             {
                 try
                 {
-                    if (Empty.isNotEmpty(answerEt.getText().toString()))
+                    String answer = getAnswer(questionDto);
+                    if (Empty.isNotEmpty(answer))
                     {
-                        questionDto.setAnswerId(saveAnswer(questionDto, answerEt.getText().toString()));
+                        questionDto.setAnswerId(saveAnswer(questionDto, answer));
                     }
                     adapter.setDataModel(dataModel);
                     adapter.notifyDataSetChanged();
@@ -195,9 +219,10 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             {
                 try
                 {
-                    if (Empty.isNotEmpty(answerEt.getText().toString()))
+                    String answer = getAnswer(questionDto);
+                    if (Empty.isNotEmpty(answer))
                     {
-                        questionDto.setAnswerId(saveAnswer(questionDto, answerEt.getText().toString()));
+                        questionDto.setAnswerId(saveAnswer(questionDto, answer));
                     }
                     QuestionDto nextQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder() + 1, goodsBackendId);
                     adapter.setDataModel(dataModel);
@@ -236,7 +261,9 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             {
                 try
                 {
-                    questionDto.setAnswerId(saveAnswer(questionDto, answerEt.getText().toString()));
+                    String answer = getAnswer(questionDto);
+                    Long answerId = saveAnswer(questionDto, answer);
+                    questionDto.setAnswerId(answerId);
                     dataModel = getDataModel();
                     adapter.setDataModel(dataModel);
                     adapter.notifyDataSetChanged();
@@ -251,6 +278,80 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
         });
 
         alert.show();
+    }
+
+    private void createCheckBox(String answer, String selectedAnswer)
+    {
+        answerLayout.removeAllViews();
+        String[] answerList = answer.split("[*]");
+        List<String> selectedAnswers = null;
+        if (Empty.isNotEmpty(selectedAnswer))
+        {
+            selectedAnswers = Arrays.asList(selectedAnswer.split("[*]"));
+        }
+        for (int i = 0; i < answerList.length; i++)
+        {
+            CheckBox checkBox = new CheckBox(getActivity());
+            checkBox.setId(i);
+            checkBox.setPadding(5, 0, 5, 0);
+            checkBox.setGravity(Gravity.RIGHT);
+            checkBox.setText(answerList[i]);
+            if (selectedAnswers != null && selectedAnswers.contains(answerList[i]))
+            {
+                checkBox.setChecked(true);
+            }
+            answerLayout.addView(checkBox);
+        }
+    }
+
+    private String getAnswer(QuestionDto questionDto)
+    {
+        String answer = "";
+        switch (questionDto.getType())
+        {
+            case SIMPLE:
+            case SIMPLE_NUMERIC:
+                answer = answerEt.getText().toString();
+                break;
+            case CHOICE_SINGLE:
+                answer = radioGroup.getCheckedRadioButtonId() == -1 ? "" : questionDto.getqAnswers().split("[*]")[radioGroup.getCheckedRadioButtonId()];
+                break;
+            case CHOICE_MULTIPLE:
+                for (int i = 0; i < answerLayout.getChildCount(); i++)
+                {
+                    CheckBox checkBox = (CheckBox) answerLayout.getChildAt(i);
+                    if (checkBox.isChecked())
+                    {
+                        answer = answer.concat(checkBox.getText().toString() + "*");
+                    }
+                }
+                if (answer.endsWith("*"))
+                {
+                    answer = answer.substring(0, answer.length() - 1);
+                }
+        }
+        return answer;
+    }
+
+    private void createRadioButtons(String answer, String selectedAnswer)
+    {
+        answerLayout.removeAllViews();
+        radioGroup = new RadioGroup(getActivity());
+        radioGroup.setOrientation(LinearLayout.HORIZONTAL);
+        String[] answerList = answer.split("[*]");
+        for (int i = 0; i < answerList.length; i++)
+        {
+            RadioButton rdbtn = new RadioButton(getActivity());
+            rdbtn.setId(i);
+            rdbtn.setPadding(5, 0, 5, 0);
+            rdbtn.setText(answerList[i]);
+            if (answerList[i].equals(selectedAnswer))
+            {
+                rdbtn.setChecked(true);
+            }
+            radioGroup.addView(rdbtn);
+        }
+        answerLayout.addView(radioGroup);
     }
 
     private Long saveAnswer(QuestionDto questionDto, String answer)

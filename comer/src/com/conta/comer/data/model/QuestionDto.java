@@ -1,11 +1,12 @@
 package com.conta.comer.data.model;
 
+import com.conta.comer.constants.QuestionType;
+
 /**
  * Created by Mahyar on 7/26/2015.
  */
 public class QuestionDto extends BaseModel
 {
-
     private Long questionId;
     private Integer qOrder;
     private String questionnaireTitle;
@@ -13,8 +14,31 @@ public class QuestionDto extends BaseModel
     private String description;
     private Long answerId;
     private String answer;
+
+    public String getqAnswers()
+    {
+        return qAnswers;
+    }
+
+    public void setqAnswers(String qAnswers)
+    {
+        this.qAnswers = qAnswers;
+    }
+
+    private String qAnswers;
     private Long questionBackendId;
     private String createDateTime;
+    private QuestionType type;
+
+    public QuestionType getType()
+    {
+        return type;
+    }
+
+    public void setType(QuestionType type)
+    {
+        this.type = type;
+    }
 
     public Long getQuestionId()
     {
