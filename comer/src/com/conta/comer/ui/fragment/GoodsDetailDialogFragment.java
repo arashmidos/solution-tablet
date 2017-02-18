@@ -23,10 +23,12 @@ import com.conta.comer.service.impl.GoodsServiceImpl;
 import com.conta.comer.ui.MainActivity;
 import com.conta.comer.ui.adapter.LabelValueArrayAdapter;
 import com.conta.comer.util.Empty;
+import com.conta.comer.util.NumberUtil;
 import com.conta.comer.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Mahyar on 8/29/2015.
@@ -99,10 +101,10 @@ public class GoodsDetailDialogFragment extends DialogFragment
         {
             if (count == count.longValue())
             {
-                countTxt.setText(String.format("%d", count.longValue()));
+                countTxt.setText(String.format(Locale.US,"%d", count.longValue()));
             } else
             {
-                countTxt.setText(String.format("%s", count));
+                countTxt.setText(String.format(Locale.US,"%s", count));
             }
             countTxt.setSelection(countTxt.getText().length());
         }
@@ -139,7 +141,7 @@ public class GoodsDetailDialogFragment extends DialogFragment
                     {
                         if (validate())
                         {
-                            Double count = Double.valueOf(countTxt.getText().toString());
+                            Double count = Double.valueOf(NumberUtil.digitsToEnglish(countTxt.getText().toString()));
                             LabelValue selectedUnitLv = (LabelValue) goodsUnitSp.getSelectedItem();
                             Long selectedUnit = selectedUnitLv.getValue();
                             if (selectedUnit.equals(2L))
@@ -184,7 +186,8 @@ public class GoodsDetailDialogFragment extends DialogFragment
 
     private boolean validate()
     {
-        String countValue = countTxt.getText().toString();
+        String countValue = NumberUtil.digitsToEnglish(countTxt.getText().toString());
+
         if (Empty.isEmpty(countValue) || Double.valueOf(countValue).equals(0D))
         {
             ToastUtil.toastError(context, R.string.message_please_enter_count);

@@ -39,6 +39,7 @@ import com.conta.comer.util.Empty;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -191,7 +192,7 @@ public class PaymentDetailFragment extends BaseContaFragment implements DateSetL
                 try
                 {
                     amountValue = Long.parseLong(s.toString().replaceAll(",",""));
-                    String number = String.format("%,d", amountValue);
+                    String number = String.format(Locale.US,"%,d", amountValue);
                     s.replace(0, s.length(), number);
                 } catch (NumberFormatException e)
                 {
@@ -222,7 +223,7 @@ public class PaymentDetailFragment extends BaseContaFragment implements DateSetL
         try
         {
             amountValue = payment.getAmount() / 1000;
-            amount.setText(String.format("%,d", amountValue));
+            amount.setText(String.format(Locale.US,"%,d", amountValue));
             dateModified = true;
             int position = 0;
             for (LabelValue labelValue : paymentTypes)

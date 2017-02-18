@@ -33,6 +33,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Locale;
+
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -136,7 +138,7 @@ public class SaveLocationFragment extends BaseContaFragment implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
     {
-        errorMsg.setText(String.format(getString(R.string.error_google_play_not_available), connectionResult.getErrorCode()));
+        errorMsg.setText(String.format(Locale.US,getString(R.string.error_google_play_not_available), connectionResult.getErrorCode()));
     }
 
     @Override

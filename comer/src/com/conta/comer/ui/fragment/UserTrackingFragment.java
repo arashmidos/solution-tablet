@@ -57,6 +57,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindInt;
 import butterknife.BindView;
@@ -240,7 +241,7 @@ public class UserTrackingFragment extends BaseContaFragment implements
         dismissProgressDialog();
         if (mResolvingError)
         {
-            errorMsg.setText(String.format(getString(R.string.error_google_play_not_available), result.getErrorCode()));
+            errorMsg.setText(String.format(Locale.US,getString(R.string.error_google_play_not_available), result.getErrorCode()));
             // Already attempting to resolve an error.
             return;
         } else if (result.hasResolution())

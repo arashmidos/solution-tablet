@@ -35,6 +35,8 @@ import android.view.View;
 
 import com.conta.comer.R;
 
+import java.util.Locale;
+
 public class GaugeView extends View
 {
 
@@ -644,10 +646,6 @@ public class GaugeView extends View
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
     {
-        // Loggable.log.debug(String.format("widthMeasureSpec=%s, heightMeasureSpec=%s",
-        // View.MeasureSpec.toString(widthMeasureSpec),
-        // View.MeasureSpec.toString(heightMeasureSpec)));
-
         final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -772,7 +770,7 @@ public class GaugeView extends View
     private void drawText(final Canvas canvas)
     {
         String textValue = !TextUtils.isEmpty(mTextValue) ? mTextValue : valueString(mCurrentValue);
-        textValue = String.format("%.02f",mTargetValue);
+        textValue = String.format(Locale.US,"%.02f",mTargetValue);
         final float textValueWidth = mTextValuePaint.measureText(textValue);
         final float textUnitWidth = !TextUtils.isEmpty(mTextUnit) ? mTextUnitPaint.measureText(mTextUnit) : 0;
 
@@ -834,7 +832,7 @@ public class GaugeView extends View
 
     private String valueString(final float value)
     {
-        return String.format("%d", (int) value);
+        return String.format(Locale.US,"%d", (int) value);
     }
 
     private float getValueForTick(final int tick)
@@ -858,7 +856,6 @@ public class GaugeView extends View
         if (mNeedleInitialized)
         {
             final float angle = getAngleForValue(mCurrentValue);
-            // Logger.log.info(String.format("value=%f -> angle=%f", mCurrentValue, angle));
 
             canvas.save(Canvas.MATRIX_SAVE_FLAG);
             canvas.rotate(angle, 0.5f, 0.5f);
@@ -897,9 +894,6 @@ public class GaugeView extends View
 
     private void computeCurrentValue()
     {
-        // Logger.log.warn(String.format("velocity=%f, acceleration=%f", mNeedleVelocity,
-        // mNeedleAcceleration));
-
         if (!(Math.abs(mCurrentValue - mTargetValue) > 0.01f))
         {
             return;
