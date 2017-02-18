@@ -38,7 +38,8 @@
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
             android:hint="@string/phone_number"
-            android:inputType="phone"/>
+            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/cellPhoneTxt"
@@ -48,7 +49,8 @@
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
             android:hint="@string/cell_phone"
-            android:inputType="phone"/>
+            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/shopNameTxt"
@@ -67,6 +69,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
             android:hint="@string/national_code"
+            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
             android:inputType="number"/>
 
         <EditText
@@ -77,6 +80,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
             android:inputType="number"
+            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
             android:hint="@string/municipality_code"/>
 
         <EditText
@@ -87,6 +91,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
             android:inputType="number"
+            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
             android:hint="@string/postal_code"/>
 
         <EditText

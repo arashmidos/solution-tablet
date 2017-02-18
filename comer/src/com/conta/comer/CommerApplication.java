@@ -38,7 +38,7 @@ public class CommerApplication extends Application
         super.onCreate();
         sInstance = this;
 
-        if (BuildConfig.DEBUG)
+        if (!BuildConfig.DEBUG)
         {
             Fabric.with(this, new Crashlytics());
         }

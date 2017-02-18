@@ -49,7 +49,7 @@
         <EditText
             android:id="@+id/amount"
             android:inputType="numberDecimal"
-            android:digits="1234567890,"
+            android:digits="1234567890,۰۱۲۳۴۵۶۷۸۹"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -174,7 +174,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
 
         questionnaireTitleTv.setText(questionDto.getQuestionnaireTitle());
         questionTv.setText(questionDto.getQuestion());
-        answerEt.setText(Empty.isEmpty(questionDto.getAnswer()) ? "--" : questionDto.getAnswer().replaceAll("[*]", " - "));
+        answerEt.setText(Empty.isEmpty(questionDto.getAnswer()) ? "" : questionDto.getAnswer().replaceAll("[*]", " - "));
 
         alertBuilder.setView(view);
 

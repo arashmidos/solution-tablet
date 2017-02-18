@@ -36,6 +36,7 @@ import com.conta.comer.service.impl.PaymentServiceImpl;
 import com.conta.comer.ui.MainActivity;
 import com.conta.comer.ui.adapter.LabelValueArrayAdapter;
 import com.conta.comer.util.Empty;
+import com.conta.comer.util.NumberUtil;
 
 import java.util.Calendar;
 import java.util.List;
@@ -191,7 +192,7 @@ public class PaymentDetailFragment extends BaseContaFragment implements DateSetL
                 isEditing = true;
                 try
                 {
-                    amountValue = Long.parseLong(s.toString().replaceAll(",",""));
+                    amountValue = Long.parseLong(NumberUtil.digitsToEnglish(s.toString().replaceAll(",","")));
                     String number = String.format(Locale.US,"%,d", amountValue);
                     s.replace(0, s.length(), number);
                 } catch (NumberFormatException e)
