@@ -19,5 +19,4 @@ public class Constants
     public static final String VISIT_ID = "visitId";
     public static final String UPDATE_USER = "pvstore";
     public static final String UPDATE_PASS = "pvstore1234";
-    public static final String UPDATE_URL = "UPDATE_URL";
 }

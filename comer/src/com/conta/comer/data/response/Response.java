@@ -5,17 +5,12 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Arash on 2017-02-16.
  */
-public class GeneralResponse
+public class Response
 {
-    @SerializedName("timestamp")
     private Integer timestamp;
-    @SerializedName("status")
     private Integer status;
-    @SerializedName("error")
     private String error;
-    @SerializedName("message")
     private String message;
-    @SerializedName("path")
     private String path;
 
     public Integer getTimestamp()

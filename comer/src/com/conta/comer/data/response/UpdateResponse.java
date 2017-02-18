@@ -1,22 +1,15 @@
 package com.conta.comer.data.response;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by Arash on 2017-02-16.
  */
 
-public class UpdateResponse extends GeneralResponse
+public class UpdateResponse extends Response
 {
-    @SerializedName("id")
     private Integer id;
-    @SerializedName("applicationKey")
     private String applicationKey;
-    @SerializedName("downloadUrl")
     private String downloadUrl;
-    @SerializedName("version")
     private Integer version;
-    @SerializedName("published")
     private Boolean published;
 
     public Integer getId()
