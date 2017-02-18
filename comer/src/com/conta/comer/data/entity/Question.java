@@ -1,5 +1,7 @@
 package com.conta.comer.data.entity;
 
+import com.conta.comer.constants.QuestionType;
+
 /**
  * Created by Mahyar on 7/21/2015.
  */
@@ -15,6 +17,7 @@ public class Question extends BaseEntity<Long>
     public static final String COL_ANSWER = "ANSWER";
     public static final String COL_STATUS = "STATUS";
     public static final String COL_ORDER = "qORDER";
+    public static final String COL_TYPE = "TYPE";
 
     public static final String CREATE_TABLE_SQL = "CREATE TABLE " + Question.TABLE_NAME + " (" +
             " " + Question.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -25,7 +28,8 @@ public class Question extends BaseEntity<Long>
             " " + Question.COL_STATUS + " INTEGER," +
             " " + Question.COL_ORDER + " INTEGER," +
             " " + Question.COL_CREATE_DATE_TIME + " TEXT," +
-            " " + Question.COL_UPDATE_DATE_TIME + " TEXT" +
+            " " + Question.COL_UPDATE_DATE_TIME + " TEXT," +
+            " " + Question.COL_TYPE + " INTEGER" +
             " );";
 
     private Long id;
@@ -35,6 +39,17 @@ public class Question extends BaseEntity<Long>
     private String answer;
     private Long status;
     private Integer order;
+    private QuestionType type;
+
+    public QuestionType getType()
+    {
+        return type;
+    }
+
+    public void setType(QuestionType type)
+    {
+        this.type = type;
+    }
 
     public Long getId()
     {

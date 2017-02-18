@@ -73,7 +73,7 @@ public class QuestionListAdapter extends BaseListAdapter<QuestionListModel>
 
             QuestionListModel model = dataModel.get(position);
             holder.questionTv.setText(model.getQuestion());
-            holder.answerTv.setText(Empty.isEmpty(model.getAnswer()) ? "--" : model.getAnswer());
+            holder.answerTv.setText(Empty.isEmpty(model.getAnswer()) ? "--" : model.getAnswer().replaceAll("[*]", " - "));
 
             return convertView;
 

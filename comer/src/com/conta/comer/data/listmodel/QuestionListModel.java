@@ -1,5 +1,6 @@
 package com.conta.comer.data.listmodel;
 
+import com.conta.comer.constants.QuestionType;
 import com.conta.comer.data.model.BaseListModel;
 
 /**
@@ -7,10 +8,10 @@ import com.conta.comer.data.model.BaseListModel;
  */
 public class QuestionListModel extends BaseListModel
 {
-
     private String question;
     private String answer;
     private Integer qOrder;
+    private QuestionType type;
 
     public String getQuestion()
     {
@@ -40,5 +41,15 @@ public class QuestionListModel extends BaseListModel
     public void setqOrder(Integer qOrder)
     {
         this.qOrder = qOrder;
+    }
+
+    public QuestionType getType()
+    {
+        return type;
+    }
+
+    public void setType(QuestionType type)
+    {
+        this.type = type;
     }
 }
