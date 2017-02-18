@@ -38,7 +38,10 @@ public class CommerApplication extends Application
         super.onCreate();
         sInstance = this;
 
-        Fabric.with(this, new Crashlytics());
+        if (BuildConfig.DEBUG)
+        {
+            Fabric.with(this, new Crashlytics());
+        }
         try
         {
             TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/IRANSansMobile.ttf");
