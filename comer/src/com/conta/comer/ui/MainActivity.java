@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
@@ -24,6 +25,8 @@ import android.widget.ListView;
 
 import com.conta.comer.BuildConfig;
 import com.conta.comer.R;
+import com.conta.comer.data.event.Event;
+import com.conta.comer.data.event.UpdateEvent;
 import com.conta.comer.receiver.TrackerAlarmReceiver;
 import com.conta.comer.service.DataTransferService;
 import com.conta.comer.service.SettingService;
@@ -58,7 +61,12 @@ import com.conta.comer.util.Empty;
 import com.conta.comer.util.GPSUtil;
 import com.conta.comer.util.NetworkUtil;
 import com.conta.comer.util.NotificationUtil;
+import com.conta.comer.util.PreferenceHelper;
+import com.conta.comer.util.Updater;
 import com.conta.comer.util.constants.ApplicationKeys;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -516,6 +524,7 @@ public class MainActivity extends BaseContaFragmentActivity
         try
         {
             FragmentManager supportFragmentManager = getSupportFragmentManager();
+
             if (supportFragmentManager.getBackStackEntryCount() > 1)
             {
                 FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager.getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 2);
@@ -583,7 +592,6 @@ public class MainActivity extends BaseContaFragmentActivity
     protected void onResume()
     {
         super.onResume();
-
         if (!GPSUtil.isGpsAvailable(this))
         {
             showGpsOffDialog();
@@ -598,6 +606,49 @@ public class MainActivity extends BaseContaFragmentActivity
     {
         super.onPause();
         unregisterReceiver(gpsReceiver);
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        EventBus.getDefault().register(this);
+        if (Updater.updateExist())
+        {
+            installNewVersion(Uri.parse(PreferenceHelper.getUpdateUri()), true);
+        } else
+        {
+            Updater.checkAppUpdate(this);
+        }
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void getMessage(Event event)
+    {
+        if (event instanceof UpdateEvent)
+        {
+            UpdateEvent updateEvent = (UpdateEvent) event;
+            installNewVersion(updateEvent.getDownloadUri(), updateEvent.isForceUpdate());
+        }
+    }
+
+    private void installNewVersion(Uri downloadUri, boolean forceExit)
+    {
+        Intent installIntent = new Intent(Intent.ACTION_VIEW);
+        installIntent.setDataAndType(downloadUri, "application/vnd.android.package-archive");
+        installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(installIntent);
+        if (forceExit)
+        {
+            finish();
+        }
     }
 
     private void showGpsOffDialog()

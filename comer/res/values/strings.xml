@@ -330,6 +330,8 @@
     <string name="branch_code">کد شعبه</string>
     <string name="stock_code">کد انبار</string>
     <string name="message_postal_code_is_not_valid">کد پستی وارد شده صحیح نیست</string>
+    <string name="new_version">نسخه جدید</string>
+    <string name="updating_app">در حال بروز رسانی نرم افزار...</string>
     <string-array name="sale_type">
         <item>فروش سرد</item>
         <item>فروش گرم</item>
