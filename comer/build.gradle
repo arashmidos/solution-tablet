@@ -30,8 +30,8 @@ android {
         applicationId "com.conta.comer"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 26
-        versionName "2.6.4"
+        versionCode 28
+        versionName "2.6.5"
     }
     sourceSets {
         main {
