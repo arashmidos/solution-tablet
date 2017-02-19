@@ -93,7 +93,7 @@ public class OrderDetailFragment extends BaseContaFragment
             {
                 ContaTab tab = new ContaTab(context);
 
-                tab.setText(String.format(Locale.US,getString(R.string.title_items_x), getProperTitle()));
+                tab.setText(String.format(Locale.US, getString(R.string.title_items_x), getProperTitle()));
 
                 tab.setOnClickListener(new View.OnClickListener()
                 {
@@ -121,7 +121,7 @@ public class OrderDetailFragment extends BaseContaFragment
 
             {
                 ContaTab tab = new ContaTab(context);
-                tab.setText(String.format(Locale.US,getString(R.string.title_x_detail), getProperTitle()));
+                tab.setText(String.format(Locale.US, getString(R.string.title_x_detail), getProperTitle()));
                 tab.setActivated(true);
                 tab.setOnClickListener(new View.OnClickListener()
                 {
@@ -188,14 +188,14 @@ public class OrderDetailFragment extends BaseContaFragment
                 {
 
                     cancelOrderBtn = createActionButton(
-                            String.format(Locale.US,getString(R.string.title_cancel_sale_x), getProperTitle()),
+                            String.format(Locale.US, getString(R.string.title_cancel_sale_x), getProperTitle()),
                             new View.OnClickListener()
                             {
                                 @Override
                                 public void onClick(View v)
                                 {
                                     showSaveOrderConfirmDialog(
-                                            String.format(Locale.US,getString(R.string.title_cancel_sale_x),
+                                            String.format(Locale.US, getString(R.string.title_cancel_sale_x),
                                                     getProperTitle()), SaleOrderStatus.CANCELED.getId());
                                 }
                             });
@@ -406,7 +406,8 @@ public class OrderDetailFragment extends BaseContaFragment
         {
             try
             {
-
+                //Refresh order item
+                order = saleOrderService.findOrderDtoById(orderId);
                 if (Empty.isNotEmpty(order))
                 {
 
@@ -429,10 +430,10 @@ public class OrderDetailFragment extends BaseContaFragment
 
                     String title = getProperTitle();
 
-                    orderNumberLabel.setText(String.format(Locale.US,getString(R.string.number_x), title));
-                    orderDateLabel.setText(String.format(Locale.US,getString(R.string.date_x), title));
-                    orderAmountLabel.setText(String.format(Locale.US,getString(R.string.amount_x), title));
-                    orderDescriptionLabel.setText(String.format(Locale.US,getString(R.string.description_x), title));
+                    orderNumberLabel.setText(String.format(Locale.US, getString(R.string.number_x), title));
+                    orderDateLabel.setText(String.format(Locale.US, getString(R.string.date_x), title));
+                    orderAmountLabel.setText(String.format(Locale.US, getString(R.string.amount_x), title));
+                    orderDescriptionLabel.setText(String.format(Locale.US, getString(R.string.description_x), title));
 
                     if (isRejected())
                     {
@@ -449,7 +450,7 @@ public class OrderDetailFragment extends BaseContaFragment
                     }
 
                     Long number = order.getNumber();
-                    orderNumberTv.setText(Empty.isNotEmpty(number) ? String.valueOf(number) : "--");
+                    orderNumberTv.setText(Empty.isNotEmpty(number) && order.getNumber() != 0 ? String.valueOf(number) : "--");
 
                     String orderDate = order.getDate();
                     orderDateTv.setText(Empty.isNotEmpty(orderDate) ? orderDate : "--");

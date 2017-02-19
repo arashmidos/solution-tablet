@@ -29,6 +29,7 @@ import com.conta.comer.ui.adapter.LabelValueArrayAdapter;
 import com.conta.comer.ui.observer.FindLocationListener;
 import com.conta.comer.util.CharacterFixUtil;
 import com.conta.comer.util.Empty;
+import com.conta.comer.util.NumberUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -405,7 +406,7 @@ public class NCustomerDetailFragment extends BaseContaFragment
             return false;
         }
 
-        String nationalCode = customer.getNationalCode();
+        String nationalCode = NumberUtil.digitsToEnglish(customer.getNationalCode());
         if (!Empty.isEmpty(nationalCode) && (!isValidNationalCode(nationalCode)))
         {
             toastMessage(R.string.message_national_code_is_not_valid);

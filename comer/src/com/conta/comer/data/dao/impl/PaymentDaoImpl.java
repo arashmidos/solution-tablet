@@ -169,14 +169,14 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         List<PaymentListModel> entities = new ArrayList<>();
         while (cursor.moveToNext())
         {
-            entities.add(createListModelFromCursor(cursor));
+            entities.add(createListModelFromCursor(cursor, true));
         }
         cursor.close();
         db.close();
         return entities;
     }
 
-    private PaymentListModel createListModelFromCursor(Cursor cursor)
+    private PaymentListModel createListModelFromCursor(Cursor cursor, boolean simpleModel)
     {
         PaymentListModel paymentListModel = new PaymentListModel();
         paymentListModel.setPrimaryKey(cursor.getLong(0));
@@ -184,7 +184,10 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         paymentListModel.setDate(cursor.getString(2));
         paymentListModel.setType(cursor.getString(3));
         paymentListModel.setCustomerBackendId(cursor.getLong(4));
-        paymentListModel.setCustomerFullName(cursor.getString(5));
+        if (!simpleModel)
+        {
+            paymentListModel.setCustomerFullName(cursor.getString(5));
+        }
         return paymentListModel;
     }
 
@@ -263,7 +266,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         List<PaymentListModel> entities = new ArrayList<>();
         while (cursor.moveToNext())
         {
-            entities.add(createListModelFromCursor(cursor));
+            entities.add(createListModelFromCursor(cursor, false));
         }
         cursor.close();
         db.close();

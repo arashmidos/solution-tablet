@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:ems="10"
+            android:digits="1234567890.-۰۱۲۳۴۵۶۷۸۹"
             android:inputType="numberDecimal"/>
 
         <TextView
