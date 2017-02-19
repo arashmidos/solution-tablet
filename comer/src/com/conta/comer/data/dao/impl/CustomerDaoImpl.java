@@ -364,6 +364,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         }
 
         cursor.close();
+        db.close();
         return nCustomers;
     }
 
