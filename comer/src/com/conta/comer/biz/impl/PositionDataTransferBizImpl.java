@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Arash on 2016-08-21
@@ -78,8 +79,8 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
                 }
                 if (Empty.isNotEmpty(getObserver()))
                 {
-                    getObserver().publishResult(String.format(context.getString(R.string.payments_data_transferred_successfully),
-                            success, failure));
+                    getObserver().publishResult(String.format(Locale.US, context.getString(R.string.payments_data_transferred_successfully),
+                            String.valueOf(success), String.valueOf(failure)));
                 }
             } catch (Exception ex)
             {

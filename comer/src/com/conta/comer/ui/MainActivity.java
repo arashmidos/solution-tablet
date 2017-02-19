@@ -68,6 +68,8 @@ import com.conta.comer.util.constants.ApplicationKeys;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -509,7 +511,7 @@ public class MainActivity extends BaseContaFragmentActivity
     private void showVersionDialog()
     {
         DialogUtil.showMessageDialog(this, getString(R.string.version),
-                String.format(getString(R.string.your_version), BuildConfig.VERSION_NAME));
+                String.format(Locale.US,getString(R.string.your_version), BuildConfig.VERSION_NAME));
     }
 
     private void settingLoginDialog()

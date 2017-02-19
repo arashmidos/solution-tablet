@@ -19,6 +19,7 @@ import com.conta.comer.util.NumberUtil;
 import com.conta.comer.util.ToastUtil;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Mahyar on 8/25/2015.
@@ -97,15 +98,15 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel>
                 if (Empty.isNotEmpty(orderListModel))
                 {
                     String title = getProperTitle(orderListModel.getStatus());
-                    holder.saleOrderNumberLabel.setText(String.format(context.getString(R.string.number_x), title));
+                    holder.saleOrderNumberLabel.setText(String.format(Locale.US,context.getString(R.string.number_x), title));
                     holder.saleOrderNumberTv.setText(orderListModel.getSaleOrderNumber());
                     holder.dateTv.setText(orderListModel.getDate());
                     {
                         Double displayAmount = Double.valueOf(orderListModel.getAmount()) / 1000D;
                         holder.amountTv.setText(NumberUtil.getCommaSeparated(displayAmount) + context.getString(R.string.common_irr_currency));
                     }
-                    holder.orderDateLabel.setText(String.format(context.getString(R.string.date_x), title));
-                    holder.amountLabel.setText(String.format(context.getString(R.string.amount_x), title));
+                    holder.orderDateLabel.setText(String.format(Locale.US,context.getString(R.string.date_x), title));
+                    holder.amountLabel.setText(String.format(Locale.US,context.getString(R.string.amount_x), title));
                     if (isRejected(orderListModel.getStatus()))
                     {
                         holder.rejectOrPaymentLabel.setText(context.getString(R.string.reject_reason_title));

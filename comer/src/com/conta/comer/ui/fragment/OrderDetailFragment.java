@@ -40,6 +40,7 @@ import com.conta.comer.util.ToastUtil;
 import com.conta.comer.util.constants.ApplicationKeys;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Mahyar on 8/25/2015.
@@ -92,7 +93,7 @@ public class OrderDetailFragment extends BaseContaFragment
             {
                 ContaTab tab = new ContaTab(context);
 
-                tab.setText(String.format(getString(R.string.title_items_x), getProperTitle()));
+                tab.setText(String.format(Locale.US,getString(R.string.title_items_x), getProperTitle()));
 
                 tab.setOnClickListener(new View.OnClickListener()
                 {
@@ -120,7 +121,7 @@ public class OrderDetailFragment extends BaseContaFragment
 
             {
                 ContaTab tab = new ContaTab(context);
-                tab.setText(String.format(getString(R.string.title_x_detail), getProperTitle()));
+                tab.setText(String.format(Locale.US,getString(R.string.title_x_detail), getProperTitle()));
                 tab.setActivated(true);
                 tab.setOnClickListener(new View.OnClickListener()
                 {
@@ -187,14 +188,14 @@ public class OrderDetailFragment extends BaseContaFragment
                 {
 
                     cancelOrderBtn = createActionButton(
-                            String.format(getString(R.string.title_cancel_sale_x), getProperTitle()),
+                            String.format(Locale.US,getString(R.string.title_cancel_sale_x), getProperTitle()),
                             new View.OnClickListener()
                             {
                                 @Override
                                 public void onClick(View v)
                                 {
                                     showSaveOrderConfirmDialog(
-                                            String.format(getString(R.string.title_cancel_sale_x),
+                                            String.format(Locale.US,getString(R.string.title_cancel_sale_x),
                                                     getProperTitle()), SaleOrderStatus.CANCELED.getId());
                                 }
                             });
@@ -428,10 +429,10 @@ public class OrderDetailFragment extends BaseContaFragment
 
                     String title = getProperTitle();
 
-                    orderNumberLabel.setText(String.format(getString(R.string.number_x), title));
-                    orderDateLabel.setText(String.format(getString(R.string.date_x), title));
-                    orderAmountLabel.setText(String.format(getString(R.string.amount_x), title));
-                    orderDescriptionLabel.setText(String.format(getString(R.string.description_x), title));
+                    orderNumberLabel.setText(String.format(Locale.US,getString(R.string.number_x), title));
+                    orderDateLabel.setText(String.format(Locale.US,getString(R.string.date_x), title));
+                    orderAmountLabel.setText(String.format(Locale.US,getString(R.string.amount_x), title));
+                    orderDescriptionLabel.setText(String.format(Locale.US,getString(R.string.description_x), title));
 
                     if (isRejected())
                     {

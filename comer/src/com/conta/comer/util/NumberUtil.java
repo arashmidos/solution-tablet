@@ -36,6 +36,10 @@ public class NumberUtil
 
     public static String digitsToEnglish(String input)
     {
+        if (Empty.isEmpty(input))
+        {
+            return input;
+        }
         char[] persian = ("۰۱۲۳۴۵۶۷۸۹").toCharArray();
         char[] arabic = ("٠١٢٣٤٥٦٧٨٩").toCharArray();
 
