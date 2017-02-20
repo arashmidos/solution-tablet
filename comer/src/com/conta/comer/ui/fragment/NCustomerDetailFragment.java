@@ -339,20 +339,20 @@ public class NCustomerDetailFragment extends BaseContaFragment
         try
         {
             customer.setFullName(CharacterFixUtil.fixString(fullNameTxt.getText().toString()));
-            customer.setPhoneNumber(phoneNumberTxt.getText().toString());
-            customer.setCellPhone(cellPhoneTxt.getText().toString());
+            customer.setPhoneNumber(NumberUtil.digitsToEnglish(phoneNumberTxt.getText().toString()));
+            customer.setCellPhone(NumberUtil.digitsToEnglish(cellPhoneTxt.getText().toString()));
             customer.setAddress(CharacterFixUtil.fixString(addressTxt.getText().toString()));
             if (Empty.isNotEmpty(storeSurfaceTxt.getText()) && !storeSurfaceTxt.getText().toString().equals(""))
-                customer.setStoreSurface(Integer.parseInt(storeSurfaceTxt.getText().toString()));
+                customer.setStoreSurface(Integer.parseInt(NumberUtil.digitsToEnglish(storeSurfaceTxt.getText().toString())));
             customer.setProvinceBackendId(provinceSp.getSelectedItemId());
             customer.setCityBackendId(citySp.getSelectedItemId());
             customer.setActivityBackendId(activitySp.getSelectedItemId());
             customer.setStoreLocationTypeBackendId(ownershipSp.getSelectedItemId());
             customer.setClassBackendId(classSp.getSelectedItemId());
             customer.setShopName(CharacterFixUtil.fixString(shopNameTxt.getText().toString()));
-            customer.setNationalCode(nationalCodeTxt.getText().toString());
-            customer.setMunicipalityCode(municipalityCodeTxt.getText().toString());
-            customer.setPostalCode(postalCodeTxt.getText().toString());
+            customer.setNationalCode(NumberUtil.digitsToEnglish(nationalCodeTxt.getText().toString()));
+            customer.setMunicipalityCode(NumberUtil.digitsToEnglish(municipalityCodeTxt.getText().toString()));
+            customer.setPostalCode(NumberUtil.digitsToEnglish(postalCodeTxt.getText().toString()));
             customer.setApproved(false);
 
             if (validate())
