@@ -283,13 +283,15 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
     private void createCheckBox(String answer, String selectedAnswer)
     {
         answerLayout.removeAllViews();
+
         String[] answerList = answer.split("[*]");
+
         List<String> selectedAnswers = null;
         if (Empty.isNotEmpty(selectedAnswer))
         {
             selectedAnswers = Arrays.asList(selectedAnswer.split("[*]"));
         }
-        for (int i = 0; i < answerList.length; i++)
+        for (int i = answerList.length - 1; i >= 0; i--)
         {
             CheckBox checkBox = new CheckBox(getActivity());
             checkBox.setId(i);
@@ -339,7 +341,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
         radioGroup = new RadioGroup(getActivity());
         radioGroup.setOrientation(LinearLayout.HORIZONTAL);
         String[] answerList = answer.split("[*]");
-        for (int i = 0; i < answerList.length; i++)
+        for (int i = answerList.length - 1; i >= 0; i--)
         {
             RadioButton rdbtn = new RadioButton(getActivity());
             rdbtn.setId(i);
