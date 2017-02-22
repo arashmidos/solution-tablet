@@ -12,10 +12,10 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.conta.comer.R;
@@ -34,6 +34,7 @@ import com.conta.comer.service.impl.GoodsServiceImpl;
 import com.conta.comer.service.impl.QuestionnaireServiceImpl;
 import com.conta.comer.ui.MainActivity;
 import com.conta.comer.ui.adapter.QuestionListAdapter;
+import com.conta.comer.ui.component.FlowLayout;
 import com.conta.comer.util.DateUtil;
 import com.conta.comer.util.Empty;
 
@@ -44,7 +45,7 @@ import java.util.List;
 /**
  * Created by Mahyar on 7/25/2015.
  */
-public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListModel, QuestionListAdapter>
+public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListModel, QuestionListAdapter> implements CompoundButton.OnCheckedChangeListener
 {
 
     public static final String TAG = QuestionnaireDetailFragment.class.getSimpleName();
@@ -58,9 +59,10 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
     private Long goodsBackendId;
     private Long visitId;
     private Customer customer;
-    private RadioGroup radioGroup;
     private EditText answerEt;
-    private LinearLayout answerLayout;
+    private FlowLayout buttonAnswerLayout;
+    private LinearLayout textAnswerLayout;
+    private CompoundButton userChoice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -147,24 +149,25 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
         TextView questionnaireTitleTv = (TextView) view.findViewById(R.id.questionnaireTitleTv);
         TextView questionTv = (TextView) view.findViewById(R.id.questionTv);
         TextView answerTv = (TextView) view.findViewById(R.id.textView39);
-        answerLayout = (LinearLayout) view.findViewById(R.id.answerLayout);
+        buttonAnswerLayout = (FlowLayout) view.findViewById(R.id.buttonAnswerLayout);
+        textAnswerLayout = (LinearLayout) view.findViewById(R.id.textAnswerLayout);
         answerEt = (EditText) view.findViewById(R.id.answerEt);
         switch (questionDto.getType())
         {
             case SIMPLE:
-                answerEt.setInputType(InputType.TYPE_CLASS_TEXT);
+                answerEt.setInputType(InputType.TYPE_TEXT_VARIATION_FILTER);
+                buttonAnswerLayout.setVisibility(View.GONE);
                 break;
             case SIMPLE_NUMERIC:
                 answerEt.setInputType(InputType.TYPE_CLASS_NUMBER);
+                buttonAnswerLayout.setVisibility(View.GONE);
                 break;
             case CHOICE_SINGLE:
-                answerEt.setVisibility(View.GONE);
-                answerTv.setVisibility(View.GONE);
+                textAnswerLayout.setVisibility(View.GONE);
                 createRadioButtons(questionDto.getqAnswers(), questionDto.getAnswer());
                 break;
             case CHOICE_MULTIPLE:
-                answerEt.setVisibility(View.GONE);
-                answerTv.setVisibility(View.GONE);
+                textAnswerLayout.setVisibility(View.GONE);
                 createCheckBox(questionDto.getqAnswers(), questionDto.getAnswer());
         }
         final Button prvBtn = (Button) view.findViewById(R.id.prvBtn);
@@ -282,7 +285,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
 
     private void createCheckBox(String answer, String selectedAnswer)
     {
-        answerLayout.removeAllViews();
+        buttonAnswerLayout.removeAllViews();
 
         String[] answerList = answer.split("[*]");
 
@@ -294,6 +297,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
         for (int i = answerList.length - 1; i >= 0; i--)
         {
             CheckBox checkBox = new CheckBox(getActivity());
+            checkBox.setLayoutParams(new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT, FlowLayout.LayoutParams.WRAP_CONTENT));
             checkBox.setId(i);
             checkBox.setPadding(5, 0, 5, 0);
             checkBox.setGravity(Gravity.RIGHT);
@@ -302,7 +306,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             {
                 checkBox.setChecked(true);
             }
-            answerLayout.addView(checkBox);
+            buttonAnswerLayout.addView(checkBox);
         }
     }
 
@@ -316,12 +320,12 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
                 answer = answerEt.getText().toString();
                 break;
             case CHOICE_SINGLE:
-                answer = radioGroup.getCheckedRadioButtonId() == -1 ? "" : questionDto.getqAnswers().split("[*]")[radioGroup.getCheckedRadioButtonId()];
+                answer = userChoice == null ? "" : userChoice.getText().toString();
                 break;
             case CHOICE_MULTIPLE:
-                for (int i = 0; i < answerLayout.getChildCount(); i++)
+                for (int i = 0; i < buttonAnswerLayout.getChildCount(); i++)
                 {
-                    CheckBox checkBox = (CheckBox) answerLayout.getChildAt(i);
+                    CheckBox checkBox = (CheckBox) buttonAnswerLayout.getChildAt(i);
                     if (checkBox.isChecked())
                     {
                         answer = answer.concat(checkBox.getText().toString() + "*");
@@ -337,23 +341,22 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
 
     private void createRadioButtons(String answer, String selectedAnswer)
     {
-        answerLayout.removeAllViews();
-        radioGroup = new RadioGroup(getActivity());
-        radioGroup.setOrientation(LinearLayout.HORIZONTAL);
+        buttonAnswerLayout.removeAllViews();
         String[] answerList = answer.split("[*]");
         for (int i = answerList.length - 1; i >= 0; i--)
         {
             RadioButton rdbtn = new RadioButton(getActivity());
+            rdbtn.setLayoutParams(new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT, FlowLayout.LayoutParams.WRAP_CONTENT));
             rdbtn.setId(i);
             rdbtn.setPadding(5, 0, 5, 0);
             rdbtn.setText(answerList[i]);
+            rdbtn.setOnCheckedChangeListener(this);
             if (answerList[i].equals(selectedAnswer))
             {
                 rdbtn.setChecked(true);
             }
-            radioGroup.addView(rdbtn);
+            buttonAnswerLayout.addView(rdbtn);
         }
-        answerLayout.addView(radioGroup);
     }
 
     private Long saveAnswer(QuestionDto questionDto, String answer)
@@ -396,5 +399,25 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
     public int getFragmentId()
     {
         return MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID;
+    }
+
+    /**
+     * Called when the checked state of a compound button has changed.
+     *
+     * @param buttonView The compound button view whose state has changed.
+     * @param isChecked  The new checked state of buttonView.
+     */
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+    {
+        if (isChecked)
+        {
+            if (userChoice != null)
+            {
+                userChoice.setChecked(false);
+            }
+            buttonView.setChecked(true);
+            userChoice = buttonView;
+        }
     }
 }
