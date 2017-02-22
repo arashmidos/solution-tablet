@@ -41,7 +41,7 @@ public abstract class BaseListAdapter<T extends BaseListModel> extends BaseAdapt
     @Override
     public int getCount()
     {
-        return dataModel.size();
+        return dataModel == null ? 0 : dataModel.size();
     }
 
     @Override

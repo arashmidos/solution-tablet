@@ -96,7 +96,10 @@ public abstract class BaseContaFragment extends Fragment
 
     protected void runOnUiThread(Runnable action)
     {
-        getActivity().runOnUiThread(action);
+        if (getActivity() != null)
+        {
+            getActivity().runOnUiThread(action);
+        }
     }
 
     protected View getErrorPageView(LayoutInflater inflater)
