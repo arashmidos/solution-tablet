@@ -73,20 +73,6 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable>
         saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
         salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
         salesmanCode = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USER_CODE);
-        /*if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2))
-        {
-            getObserver().publishResult(new InvalidServerAddressException());
-        }
-
-        if (Empty.isEmpty(username))
-        {
-            getObserver().publishResult(new UsernameNotProvidedForConnectingToServerException());
-        }
-
-        if (Empty.isEmpty(password))
-        {
-            getObserver().publishResult(new PasswordNotProvidedForConnectingToServerException());
-        }*/
     }
 
     public void getAllData(KeyValue serverAddress1, KeyValue serverAddress2, KeyValue username, KeyValue password, KeyValue salesmanId)

@@ -41,7 +41,6 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
         this.context = context;
         this.paymentService = new PaymentServiceImpl(context);
         this.observer = resultObserver;
-        this.keyValueDao = new KeyValueDaoImpl(context);
     }
 
     @Override
