@@ -132,16 +132,22 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable>
         } catch (ResourceAccessException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            getObserver().publishResult(new TimeOutException());
+            if (Empty.isNotEmpty(getObserver()))
+            {
+                getObserver().publishResult(new TimeOutException());
+            }
         } catch (HttpServerErrorException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
             if (ex.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR))
             {
-                getObserver().publishResult(new InternalServerError());
+                if (Empty.isNotEmpty(getObserver()))
+                {
+                    getObserver().publishResult(new InternalServerError());
+                }
             } else
             {
-                if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND))
+                if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND) && Empty.isNotEmpty(getObserver()))
                 {
                     getObserver().publishResult(new URLNotFoundException());
                 }

@@ -12,6 +12,19 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -19,7 +32,6 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.model.KPIDetail;
 import com.parsroyal.solutiontablet.data.model.KPIDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
-import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.KPIService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
@@ -34,19 +46,6 @@ import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -282,11 +281,10 @@ public class KPIFragment extends BaseFragment implements ResultObserver, OnChart
             } catch (BusinessException ex)
             {
                 Log.e(TAG, ex.getMessage(), ex);
-                ToastUtil.toastError(getActivity(), ex);
+
             } catch (Exception ex)
             {
                 Log.e(TAG, ex.getMessage(), ex);
-                ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
             }
             return null;
         }
@@ -295,6 +293,7 @@ public class KPIFragment extends BaseFragment implements ResultObserver, OnChart
         protected void onPostExecute(Void aVoid)
         {
             dismissProgressDialog();
+
             if (Empty.isNotEmpty(kpiDto))
             {
                 gaugeView1.setTargetValue(kpiDto.getKpiGauge().floatValue());
@@ -308,6 +307,8 @@ public class KPIFragment extends BaseFragment implements ResultObserver, OnChart
                 customizeChart();
             } else
             {
+                ToastUtil.toastError(getActivity(),
+                        getString(R.string.com_parsroyal_solutiontablet_exception_UnknownSystemException));
                 mainActivity.removeFragment(KPIFragment.this);
             }
         }
