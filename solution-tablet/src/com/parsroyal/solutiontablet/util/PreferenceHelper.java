@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.util;
 
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.data.entity.KeyValue;
 
 public class PreferenceHelper
 {
@@ -27,4 +28,19 @@ public class PreferenceHelper
         SolutionTabletApplication.getPreference().edit().putString(UPDATE_URI, uri).apply();
     }
 
+    public static void saveKey(KeyValue entity)
+    {
+        SolutionTabletApplication.getPreference().edit().putString(entity.getKey(), entity.getValue()).apply();
+    }
+
+    public static KeyValue retrieveByKey(String settingKey)
+    {
+
+        String value = SolutionTabletApplication.getPreference().getString(settingKey, "");
+        if (value.equals(""))
+        {
+            return null;
+        }
+        return new KeyValue(0L, settingKey, value);
+    }
 }

@@ -1,21 +1,19 @@
 package com.parsroyal.solutiontablet.data.dao.impl;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
-import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
+
+import java.util.List;
 
 /**
- * Created by Mahyar on 6/4/2015.
+ * Created by Arash
  */
-public class KeyValueDaoImpl extends AbstractDao<KeyValue, Long> implements KeyValueDao
+public class KeyValueDaoImpl implements KeyValueDao
 {
-
-    private Context context;
+    private final Context context;
 
     public KeyValueDaoImpl(Context context)
     {
@@ -23,61 +21,45 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue, Long> implements KeyV
     }
 
     @Override
-    protected Context getContext()
-    {
-        return context;
-    }
-
-    @Override
     public KeyValue retrieveByKey(String settingKey)
     {
-        CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        String selection = KeyValue.COL_KEY + " = ?";
-        String[] args = {String.valueOf(settingKey)};
-        Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
-        if (cursor.moveToFirst())
-        {
-            KeyValue keyValue = createEntityFromCursor(cursor);
-            cursor.close();
-            return keyValue;
-        }
-        cursor.close();
-        return null;
+        return PreferenceHelper.retrieveByKey(settingKey);
     }
 
     @Override
-    protected ContentValues getContentValues(KeyValue entity)
+    public Long create(KeyValue entity)
     {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(KeyValue.COL_KEY, entity.getKey());
-        contentValues.put(KeyValue.COL_VALUE, entity.getValue());
-        return contentValues;
+        PreferenceHelper.saveKey(entity);
+        return 0L;
     }
 
     @Override
-    protected String getTableName()
+    public void update(KeyValue entity)
     {
-        return KeyValue.TABLE_NAME;
+        create(entity);
     }
 
     @Override
-    protected String getPrimaryKeyColumnName()
+    public void delete(Long aLong)
     {
-        return KeyValue.COL_ID;
+        throw new RuntimeException("Not implemented yet");
     }
 
     @Override
-    protected String[] getProjection()
+    public KeyValue retrieve(Long aLong)
     {
-        String[] projection = {KeyValue.COL_ID, KeyValue.COL_KEY, KeyValue.COL_VALUE};
-        return projection;
+        throw new RuntimeException("Not implemented yet");
     }
 
     @Override
-    protected KeyValue createEntityFromCursor(Cursor cursor)
+    public List<KeyValue> retrieveAll()
     {
-        return new KeyValue(cursor.getLong(0), cursor.getString(1), cursor.getString(2));
+        throw new RuntimeException("Not implemented yet");
     }
 
+    @Override
+    public void deleteAll()
+    {
+        throw new RuntimeException("Not implemented yet");
+    }
 }
