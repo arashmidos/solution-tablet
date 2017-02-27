@@ -23,22 +23,6 @@ import android.widget.Toast;
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.components.JDF;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
-import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.KeyValueBiz;
-import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
-import com.parsroyal.solutiontablet.data.entity.KeyValue;
-import com.parsroyal.solutiontablet.data.model.PositionModel;
-import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.PositionService;
-import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.util.DateUtil;
-import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.NotificationUtil;
-import com.parsroyal.solutiontablet.util.SunDate;
-import com.parsroyal.solutiontablet.util.ToastUtil;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -52,6 +36,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.clustering.ClusterManager;
+import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.biz.KeyValueBiz;
+import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
+import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.model.PositionModel;
+import com.parsroyal.solutiontablet.exception.GPSIsNotEnabledException;
+import com.parsroyal.solutiontablet.service.CustomerService;
+import com.parsroyal.solutiontablet.service.PositionService;
+import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
+import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
+import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NotificationUtil;
+import com.parsroyal.solutiontablet.util.SunDate;
+import com.parsroyal.solutiontablet.util.ToastUtil;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -241,7 +244,7 @@ public class UserTrackingFragment extends BaseFragment implements
         dismissProgressDialog();
         if (mResolvingError)
         {
-            errorMsg.setText(String.format(Locale.US,getString(R.string.error_google_play_not_available), result.getErrorCode()));
+            errorMsg.setText(String.format(Locale.US, getString(R.string.error_google_play_not_available), result.getErrorCode()));
             // Already attempting to resolve an error.
             return;
         } else if (result.hasResolution())
@@ -285,17 +288,40 @@ public class UserTrackingFragment extends BaseFragment implements
 
         if (currentLocation == null)
         {
-            NotificationUtil.showGPSDisabled(getActivity());
+            try
+            {
+                new LocationServiceImpl(getContext()).findCurrentLocation(new FindLocationListener()
+                {
+                    @Override
+                    public void foundLocation(Location location)
+                    {
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                new LatLng(location.getLatitude(), location.getLongitude())
+                                , cameraZoom), 4000, null);
+                    }
+
+                    @Override
+                    public void timeOut()
+                    {
+                    }
+                });
+            } catch (GPSIsNotEnabledException ignore)
+            {
+                NotificationUtil.showGPSDisabled(getActivity());
+            }
+
         } else
         {
             currentLatlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-
         }
 
         map.setMyLocationEnabled(true);
         map.getUiSettings().setAllGesturesEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatlng, cameraZoom), 4000, null);
+        if (Empty.isNotEmpty(currentLatlng))
+        {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatlng, cameraZoom), 4000, null);
+        }
 
         map.setOnCameraChangeListener(this);
 
@@ -318,7 +344,6 @@ public class UserTrackingFragment extends BaseFragment implements
     {
         List<PositionModel> customerPositionList = customerService.getCustomerPositions(null);
         clusterManager.addItems(customerPositionList);
-        Toast.makeText(getActivity(), "Position Size:" + customerPositionList.size(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

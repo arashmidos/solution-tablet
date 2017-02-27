@@ -425,9 +425,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-//            String selection = Customer.COL_BACKEND_ID + " = ?";
-//            String[] args = {String.valueOf(customerBackendId)};
-        Cursor cursor = db.query(getTableName(), getProjection(), null, null, null, null, null);
+        String selection = Customer.COL_X_LOCATION + " is not null AND " + Customer.COL_X_LOCATION + " != 0";
+        Cursor cursor = db.query(getTableName(), getProjection(), selection, null, null, null, null);
         List<PositionModel> positionModelList = new ArrayList<>();
 
         while (cursor.moveToNext())
