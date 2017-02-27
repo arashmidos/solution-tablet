@@ -139,7 +139,6 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         }
 
         cursor.close();
-        db.close();
         return questions;
     }
 
@@ -187,7 +186,6 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         }
 
         cursor.close();
-        db.close();
         return questionDto;
     }
 
@@ -236,7 +234,6 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         }
 
         cursor.close();
-        db.close();
         return questionDto;
     }
 }

@@ -110,7 +110,6 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
         db.rawQuery(sql, args);
         db.setTransactionSuccessful();
         db.endTransaction();
-        db.close();
     }
 
     @Override
@@ -127,7 +126,6 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
             items.add(createOrderItemDtoFromCursor(cursor));
         }
         cursor.close();
-        db.close();
         return items;
     }
 
@@ -147,7 +145,6 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
             entity = createEntityFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return entity;
     }
 

@@ -40,11 +40,9 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue, Long> implements KeyV
         {
             KeyValue keyValue = createEntityFromCursor(cursor);
             cursor.close();
-            db.close();
             return keyValue;
         }
         cursor.close();
-        db.close();
         return null;
     }
 

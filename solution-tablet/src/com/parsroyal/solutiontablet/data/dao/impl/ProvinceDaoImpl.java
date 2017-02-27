@@ -86,7 +86,6 @@ public class ProvinceDaoImpl extends AbstractDao<Province, Long> implements Prov
             labelValueModels.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
         }
         cursor.close();
-        db.close();
         return labelValueModels;
     }
 }

@@ -123,6 +123,5 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
         Log.d("QAnswer", "row updated " + rows);
         db.setTransactionSuccessful();
         db.endTransaction();
-        db.close();
     }
 }

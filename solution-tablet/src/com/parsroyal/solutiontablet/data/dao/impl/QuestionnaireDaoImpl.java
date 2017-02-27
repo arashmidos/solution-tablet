@@ -149,7 +149,6 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
         }
 
         cursor.close();
-        db.close();
         return questionnaires;
     }
 }

@@ -121,7 +121,6 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
             position = createEntityFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return position;
     }
 
@@ -142,7 +141,6 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
         }
 
         cursor.close();
-        db.close();
         return positionList;
     }
 
@@ -161,7 +159,6 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
             positionList.add(createEntityFromCursor(cursor));
         }
         cursor.close();
-        db.close();
         return positionList;
     }
 
@@ -183,7 +180,6 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
             positionList.add(new LatLng(cursor.getDouble(1), cursor.getDouble(2)));
         }
         cursor.close();
-        db.close();
         return positionList;
     }
 

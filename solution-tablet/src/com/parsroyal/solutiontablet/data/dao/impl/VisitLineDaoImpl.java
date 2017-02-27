@@ -90,7 +90,6 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
             entities.add(createListModelFromCursor(cursor));
         }
         cursor.close();
-        db.close();
         return entities;
     }
 
@@ -114,7 +113,6 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
             entities.add(createListModelFromCursor(cursor));
         }
         cursor.close();
-        db.close();
         return entities;
     }
 
@@ -132,7 +130,6 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
             entity = createEntityFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return entity;
     }
 

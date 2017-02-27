@@ -150,7 +150,6 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
             saleOrders.add(createEntityFromCursor(cursor));
         }
         cursor.close();
-        db.close();
 
         return saleOrders;
     }
@@ -213,7 +212,6 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         }
 
         cursor.close();
-        db.close();
         returnOrders.addAll(orders);
         return returnOrders;
     }
@@ -232,7 +230,6 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
             orderDto = createOrderDtoFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return orderDto;
     }
 
@@ -250,7 +247,6 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
             orderDto = createOrderDtoFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return orderDto;
     }
 
@@ -271,7 +267,6 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         }
 
         cursor.close();
-        db.close();
         return saleOrderDtoList;
     }
 
@@ -284,6 +279,5 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
                 " " + SaleOrder.COL_STATUS + " = ?";
         String[] args = {String.valueOf(customerBackendId), String.valueOf(statusId)};
         db.rawQuery(sql, args);
-        db.close();
     }
 }

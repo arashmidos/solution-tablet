@@ -151,7 +151,6 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao
         }
 
         cursor.close();
-        db.close();
 
         return goods;
     }
@@ -170,7 +169,6 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao
             goods = createEntityFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return goods;
     }
 
