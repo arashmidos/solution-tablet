@@ -316,7 +316,7 @@ public class UserTrackingFragment extends BaseFragment implements
 
     private void addItems()
     {
-        List<PositionModel> customerPositionList = /*sampleData();*/customerService.getCustomerPositions(null);
+        List<PositionModel> customerPositionList = customerService.getCustomerPositions(null);
         clusterManager.addItems(customerPositionList);
         Toast.makeText(getActivity(), "Position Size:" + customerPositionList.size(), Toast.LENGTH_SHORT).show();
     }
