@@ -31,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/textView25"
+        android:layout_marginRight="5dp"
         android:layout_toLeftOf="@+id/textView25"
         android:layout_toStartOf="@+id/textView25"
         android:text="مهیار سفیدی"
@@ -41,9 +42,9 @@
         style="@style/TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textView25"
-        android:layout_alignRight="@+id/textView25"
         android:layout_below="@+id/textView25"
+        android:layout_marginRight="30dp"
+        android:layout_toLeftOf="@+id/phoneTxt"
         android:text="موبایل:"/>
 
     <TextView
@@ -51,6 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/textView26"
+        android:layout_marginRight="5dp"
         android:layout_toLeftOf="@+id/textView26"
         android:layout_toStartOf="@+id/textView26"
         android:text="09126623027"
@@ -62,10 +64,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
         android:layout_toLeftOf="@+id/nameTxt"
-        android:layout_toStartOf="@+id/cellPhoneTxt"
         android:text="کد مشتری:"/>
 
     <TextView
@@ -73,6 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/textView27"
+        android:layout_marginRight="5dp"
         android:layout_toLeftOf="@+id/textView27"
         android:text="1123213"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
@@ -82,11 +84,8 @@
         style="@style/TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="71dp"
-        android:layout_marginRight="40dp"
-        android:layout_toLeftOf="@+id/codeTxt"
-        android:layout_toStartOf="@+id/codeTxt"
+        android:layout_alignRight="@+id/textView25"
+        android:layout_below="@+id/textView25"
         android:text="شماره تلفن:"/>
 
     <TextView
@@ -95,16 +94,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="false"
         android:layout_alignTop="@+id/textView28"
+        android:layout_marginRight="5dp"
         android:layout_toLeftOf="@+id/textView28"
         android:text="02144477159"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
+
     <TextView
         android:id="@+id/textView44"
         style="@style/TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView26"
-        android:layout_below="@+id/textView26"
+        android:layout_alignRight="@+id/textView28"
+        android:layout_below="@+id/textView28"
         android:text="آدرس:"/>
 
     <TextView
@@ -117,4 +118,25 @@
         android:layout_toStartOf="@+id/textView44"
         android:text="کرج - گرمدره"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <ImageView
+        android:id="@+id/visit_today_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/cellPhoneTxt"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/ic_visibility_off_grey_700_24dp"/>
+
+    <ImageView
+        android:id="@+id/has_location_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cellPhoneTxt"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_toRightOf="@+id/visit_today_img"
+        android:src="@drawable/ic_location_off_grey_700_24dp"/>
+
 </RelativeLayout>

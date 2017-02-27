@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/paymentRowLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="right"
     android:orientation="horizontal"
-    android:id="@+id/paymentRowLayout"
     android:padding="20dp">
+
+    <TextView
+        android:id="@+id/customerNameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text=""
+        android:visibility="gone"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/textView47"
+        style="@style/TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="29dp"
+        android:layout_marginRight="29dp"
+        android:visibility="gone"
+        android:text="مشتری:"/>
 
     <TextView
         android:id="@+id/dateTv"
