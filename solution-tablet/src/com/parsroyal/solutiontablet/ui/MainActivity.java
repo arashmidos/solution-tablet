@@ -511,7 +511,7 @@ public class MainActivity extends BaseFragmentActivity
     private void showVersionDialog()
     {
         DialogUtil.showMessageDialog(this, getString(R.string.version),
-                String.format(Locale.US,getString(R.string.your_version), BuildConfig.VERSION_NAME));
+                String.format(Locale.US, getString(R.string.your_version), BuildConfig.VERSION_NAME));
     }
 
     private void settingLoginDialog()
@@ -646,10 +646,16 @@ public class MainActivity extends BaseFragmentActivity
         Intent installIntent = new Intent(Intent.ACTION_VIEW);
         installIntent.setDataAndType(downloadUri, "application/vnd.android.package-archive");
         installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(installIntent);
-        if (forceExit)
+        try
         {
-            finish();
+            startActivity(installIntent);
+            if (forceExit)
+            {
+                finish();
+            }
+        } catch (Exception ex)
+        {
+            toastMessage(R.string.err_update_failed);
         }
     }
 

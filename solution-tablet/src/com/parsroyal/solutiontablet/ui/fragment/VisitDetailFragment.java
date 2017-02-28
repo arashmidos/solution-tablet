@@ -730,7 +730,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             ImageView imageView = new ImageView(mainActivity);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            if (position == 0 && saleType.equals(ApplicationKeys.HOT_SALE))
+            if (position == 0 && ApplicationKeys.HOT_SALE.equals(saleType))
             {
                 imageView.setImageDrawable(mainActivity.getResources().getDrawable(R.drawable.selector_add_factor));
             } else
