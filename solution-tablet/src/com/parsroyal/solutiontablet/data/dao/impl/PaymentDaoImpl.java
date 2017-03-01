@@ -139,7 +139,6 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
             payment = createEntityFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return payment;
     }
 
@@ -172,7 +171,6 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
             entities.add(createListModelFromCursor(cursor, true));
         }
         cursor.close();
-        db.close();
         return entities;
     }
 
@@ -208,7 +206,6 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         }
 
         cursor.close();
-        db.close();
         return paymentList;
     }
 
@@ -227,7 +224,6 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
             payments.add(createEntityFromCursor(cursor));
         }
         cursor.close();
-        db.close();
         return payments;
     }
 
@@ -269,7 +265,6 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
             entities.add(createListModelFromCursor(cursor, false));
         }
         cursor.close();
-        db.close();
         return entities;
     }
 }

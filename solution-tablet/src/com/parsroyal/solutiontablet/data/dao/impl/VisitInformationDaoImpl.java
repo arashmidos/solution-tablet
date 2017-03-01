@@ -121,7 +121,6 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
         db.update(getTableName(), contentValues, whereClause, args);
         db.setTransactionSuccessful();
         db.endTransaction();
-        db.close();
     }
 
     @Override
@@ -138,7 +137,6 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
             visitInformationList=createEntityFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return visitInformationList;
 
     }

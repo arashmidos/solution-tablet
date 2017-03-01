@@ -41,7 +41,7 @@ import butterknife.OnClick;
 /**
  * Created by Mahyar on 6/19/2015.
  */
-public class NCustomerDetailFragment extends BaseFragment
+public class NCustomerDetailFragment extends BaseFragment implements View.OnFocusChangeListener
 {
 
     public static final String TAG = NCustomerDetailFragment.class.getSimpleName();
@@ -129,7 +129,7 @@ public class NCustomerDetailFragment extends BaseFragment
         }
 
         initComponents();
-
+        fullNameTxt.requestFocus();
         return view;
     }
 
@@ -265,6 +265,16 @@ public class NCustomerDetailFragment extends BaseFragment
         LabelValue provinceLabelValue = (LabelValue) provinceSp.getSelectedItem();
         loadCitySpinnerData(provinceLabelValue.getValue());
 
+        provinceSp.setFocusableInTouchMode(true);
+        provinceSp.setOnFocusChangeListener(this);
+        citySp.setFocusableInTouchMode(true);
+        citySp.setOnFocusChangeListener(this);
+        activitySp.setFocusableInTouchMode(true);
+        activitySp.setOnFocusChangeListener(this);
+        classSp.setFocusableInTouchMode(true);
+        classSp.setOnFocusChangeListener(this);
+        ownershipSp.setFocusableInTouchMode(true);
+        ownershipSp.setOnFocusChangeListener(this);
 
     }
 
@@ -289,6 +299,7 @@ public class NCustomerDetailFragment extends BaseFragment
                 position++;
             }
         }
+
     }
 
     private void getLocation()
@@ -481,6 +492,21 @@ public class NCustomerDetailFragment extends BaseFragment
             case R.id.saveBtn:
                 save();
                 break;
+        }
+    }
+
+    /**
+     * Called when the focus state of a view has changed.
+     *
+     * @param v        The view whose state has changed.
+     * @param hasFocus The new focus state of v.
+     */
+    @Override
+    public void onFocusChange(View v, boolean hasFocus)
+    {
+        if (hasFocus)
+        {
+            v.performClick();
         }
     }
 }

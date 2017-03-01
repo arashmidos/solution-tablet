@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class CustomersFragment extends BaseListFragment<CustomerListModel, CustomerListAdapter>
 {
-
     public static final String TAG = VisitLinesFragment.class.getSimpleName();
 
     private Long visitLineId;

@@ -6,24 +6,25 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginBottom="23dp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="23dp"
+        android:layout_margin="14dp"
         android:background="@color/light_gray"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
         android:gravity="right"
         android:orientation="horizontal"
         android:paddingLeft="10dp">
+
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/button_panel"
-            android:orientation="horizontal"
+            android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginRight="20dp"
+            >
+
             <Button
                 android:id="@+id/cancelBtn"
                 android:layout_width="wrap_content"
@@ -32,6 +33,7 @@
                 android:paddingRight="35dp"
                 android:text="@string/cancel_btn"/>
         </LinearLayout>
+
         <EditText
             android:id="@+id/searchTxt"
             style="@style/EditBox.SearchBar"
@@ -45,26 +47,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginRight="6dp"
             android:text="جستجو"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ff727174"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="right">
 
-        <HorizontalScrollView
-            android:id="@+id/scroll"
+            <HorizontalScrollView
+                android:id="@+id/scroll"
 
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <com.parsroyal.solutiontablet.ui.component.TabContainer
-                android:id="@+id/tabContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="right"
-                custom:defaultPosition="0">
+                >
 
-            </com.parsroyal.solutiontablet.ui.component.TabContainer>
-        </HorizontalScrollView>
+                <com.parsroyal.solutiontablet.ui.component.TabContainer
+                    android:id="@+id/tabContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    custom:defaultPosition="0">
+
+                </com.parsroyal.solutiontablet.ui.component.TabContainer>
+            </HorizontalScrollView>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

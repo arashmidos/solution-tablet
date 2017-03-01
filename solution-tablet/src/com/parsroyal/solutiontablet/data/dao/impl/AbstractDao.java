@@ -27,7 +27,6 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long>
         Long id = db.insert(getTableName(), null, getContentValues(entity));
         db.setTransactionSuccessful();
         db.endTransaction();
-        db.close();
         return (PK) id;
     }
 
@@ -44,7 +43,6 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long>
             entity = createEntityFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return entity;
     }
 
@@ -58,7 +56,6 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long>
         db.update(getTableName(), getContentValues(entity), whereClause, args);
         db.setTransactionSuccessful();
         db.endTransaction();
-        db.close();
     }
 
     public void delete(PK id)
@@ -71,7 +68,6 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long>
         db.delete(getTableName(), whereClause, args);
         db.setTransactionSuccessful();
         db.endTransaction();
-        db.close();
     }
 
     public List<T> retrieveAll()
@@ -85,7 +81,6 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long>
             entities.add(createEntityFromCursor(cursor));
         }
         cursor.close();
-        db.close();
         return entities;
     }
 
@@ -100,7 +95,6 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long>
             entities.add(createEntityFromCursor(cursor));
         }
         cursor.close();
-        db.close();
         return entities;
     }
 
@@ -112,7 +106,6 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long>
         db.execSQL("DELETE FROM " + getTableName());
         db.setTransactionSuccessful();
         db.endTransaction();
-        db.close();
     }
 
     public void delete(String selection, String[] args)
@@ -123,7 +116,6 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long>
         db.delete(getTableName(), selection, args);
         db.setTransactionSuccessful();
         db.endTransaction();
-        db.close();
     }
 
     protected abstract Context getContext();

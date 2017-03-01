@@ -90,7 +90,6 @@ public class BaseInfoDaoImpl extends AbstractDao<BaseInfo, Long> implements Base
             entities.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
         }
         cursor.close();
-        db.close();
         return entities;
     }
 }

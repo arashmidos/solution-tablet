@@ -73,20 +73,6 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable>
         saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
         salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
         salesmanCode = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USER_CODE);
-        /*if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2))
-        {
-            getObserver().publishResult(new InvalidServerAddressException());
-        }
-
-        if (Empty.isEmpty(username))
-        {
-            getObserver().publishResult(new UsernameNotProvidedForConnectingToServerException());
-        }
-
-        if (Empty.isEmpty(password))
-        {
-            getObserver().publishResult(new PasswordNotProvidedForConnectingToServerException());
-        }*/
     }
 
     public void getAllData(KeyValue serverAddress1, KeyValue serverAddress2, KeyValue username, KeyValue password, KeyValue salesmanId)
@@ -146,16 +132,22 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable>
         } catch (ResourceAccessException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            getObserver().publishResult(new TimeOutException());
+            if (Empty.isNotEmpty(getObserver()))
+            {
+                getObserver().publishResult(new TimeOutException());
+            }
         } catch (HttpServerErrorException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
             if (ex.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR))
             {
-                getObserver().publishResult(new InternalServerError());
+                if (Empty.isNotEmpty(getObserver()))
+                {
+                    getObserver().publishResult(new InternalServerError());
+                }
             } else
             {
-                if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND))
+                if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND) && Empty.isNotEmpty(getObserver()))
                 {
                     getObserver().publishResult(new URLNotFoundException());
                 }

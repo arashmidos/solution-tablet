@@ -37,8 +37,8 @@
             android:layout_gravity="center"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
-            android:hint="@string/phone_number"
             android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+            android:hint="@string/phone_number"
             android:inputType="number"/>
 
         <EditText
@@ -48,8 +48,8 @@
             android:layout_gravity="center"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
-            android:hint="@string/cell_phone"
             android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+            android:hint="@string/cell_phone"
             android:inputType="number"/>
 
         <EditText
@@ -68,8 +68,8 @@
             android:layout_gravity="center"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
-            android:hint="@string/national_code"
             android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+            android:hint="@string/national_code"
             android:inputType="number"/>
 
         <EditText
@@ -79,9 +79,9 @@
             android:layout_gravity="center"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
-            android:inputType="number"
             android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
-            android:hint="@string/municipality_code"/>
+            android:hint="@string/municipality_code"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/postalCodeTxt"
@@ -90,9 +90,9 @@
             android:layout_gravity="center"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
-            android:inputType="number"
             android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
-            android:hint="@string/postal_code"/>
+            android:hint="@string/postal_code"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/addressTxt"
@@ -117,6 +117,8 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="20"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:prompt="@string/please_select_province"
                 android:spinnerMode="dropdown"/>
 
@@ -144,6 +146,8 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="20"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:prompt="@string/please_select_city"
                 android:spinnerMode="dropdown"/>
 
@@ -171,6 +175,8 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="20"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:prompt="@string/please_select_customer_activity_type"
                 android:spinnerMode="dropdown"/>
 
@@ -198,6 +204,8 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="20"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:prompt="@string/please_select_customer_ownership"
                 android:spinnerMode="dropdown"/>
 
@@ -225,6 +233,8 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="20"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:prompt="@string/please_select_customer_ownership"
                 android:spinnerMode="dropdown"/>
 

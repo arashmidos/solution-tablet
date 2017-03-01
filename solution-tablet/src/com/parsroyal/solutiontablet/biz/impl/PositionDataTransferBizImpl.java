@@ -42,7 +42,6 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
         this.context = context;
         this.positionService = new PositionServiceImpl(context);
         this.observer = resultObserver;
-        this.keyValueDao = new KeyValueDaoImpl(context);
     }
 
     @Override

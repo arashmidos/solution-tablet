@@ -88,7 +88,6 @@ public class CityDaoImpl extends AbstractDao<City, Long> implements CityDao
         {
             labelValueModels.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
         }
-        db.close();
         return labelValueModels;
     }
 }

@@ -23,24 +23,28 @@ public abstract class BaseFragment extends Fragment
 
     protected void toastMessage(int messageResource)
     {
-        String message = getActivity().getString(messageResource);
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        toastMessage(getString(messageResource));
     }
 
     protected void toastMessage(String message)
     {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        if (Empty.isNotEmpty(getActivity()))
+        {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     protected void toastError(int messageResource)
     {
-        String message = getActivity().getString(messageResource);
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        toastError(getString(messageResource));
     }
 
     protected void toastError(String message)
     {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        if (Empty.isNotEmpty(getActivity()))
+        {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     protected void toastError(BusinessException ex)
@@ -50,12 +54,12 @@ public abstract class BaseFragment extends Fragment
         {
             message = MessageFormat.format(message, ex.getArgs());
         }
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        toastError(message);
     }
 
     public String getErrorString(Exception ex)
     {
-        return ResourceUtil.getString(getActivity(), ex.getClass().getCanonicalName());
+        return ResourceUtil.getString(getContext(), ex.getClass().getCanonicalName());
     }
 
     public void showProgressDialog(CharSequence message)

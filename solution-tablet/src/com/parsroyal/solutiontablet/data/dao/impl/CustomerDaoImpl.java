@@ -188,7 +188,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
             locationDtoList.add(locationDto);
         }
         cursor.close();
-        db.close();
         return locationDtoList;
     }
 
@@ -255,7 +254,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
             entities.add(createListModelFromCursor(cursor));
         }
         cursor.close();
-        db.close();
         return entities;
     }
 
@@ -306,7 +304,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
             customerDto = createCustomerDtoFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return customerDto;
     }
 
@@ -364,7 +361,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         }
 
         cursor.close();
-        db.close();
         return nCustomers;
     }
 
@@ -384,7 +380,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
             entities.add(createEntityFromCursor(cursor));
         }
         cursor.close();
-        db.close();
         return entities;
     }
 
@@ -402,7 +397,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
             entity = createEntityFromCursor(cursor);
         }
         cursor.close();
-        db.close();
         return entity;
     }
 
@@ -419,7 +413,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         db.update(getTableName(), contentValues, whereClause, args);
         db.setTransactionSuccessful();
         db.endTransaction();
-        db.close();
     }
 
     @Override
@@ -432,9 +425,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-//            String selection = Customer.COL_BACKEND_ID + " = ?";
-//            String[] args = {String.valueOf(customerBackendId)};
-        Cursor cursor = db.query(getTableName(), getProjection(), null, null, null, null, null);
+        String selection = Customer.COL_X_LOCATION + " is not null AND " + Customer.COL_X_LOCATION + " != 0";
+        Cursor cursor = db.query(getTableName(), getProjection(), selection, null, null, null, null);
         List<PositionModel> positionModelList = new ArrayList<>();
 
         while (cursor.moveToNext())
@@ -442,7 +434,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
             positionModelList.add(new PositionModel(createEntityFromCursor(cursor)));
         }
         cursor.close();
-        db.close();
         return positionModelList;
     }
 
@@ -476,6 +467,4 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         customer.setApproved(cursor.getInt(24) == 1);
         return customer;
     }
-
-
 }

@@ -388,9 +388,7 @@ public class OrderDetailFragment extends BaseFragment
     @SuppressLint("ValidFragment")
     public class OrderInfoFragment extends BaseFragment
     {
-
         public final String TAG = OrderInfoFragment.class.getSimpleName();
-
         private TextView customerNameTv;
         private TextView orderNumberTv;
         private TextView orderNumberLabel;
@@ -400,6 +398,10 @@ public class OrderDetailFragment extends BaseFragment
         private TextView orderAmountLabel;
         private TextView orderDescriptionLabel;
         private TextView paymentTypeLabel;
+
+        public OrderInfoFragment()
+        {
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

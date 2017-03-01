@@ -23,7 +23,6 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 public class KPIServiceImpl implements KPIService
 {
     private Context context;
-    private KeyValueBiz keyValueBiz;
     private KeyValueDao keyValueDao;
 
     private KeyValue serverAddress1;
@@ -34,7 +33,6 @@ public class KPIServiceImpl implements KPIService
     public KPIServiceImpl(Context context)
     {
         this.context = context;
-        this.keyValueBiz = new KeyValueBizImpl(context);
         this.keyValueDao = new KeyValueDaoImpl(context);
     }
 

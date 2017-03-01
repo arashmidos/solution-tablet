@@ -26,16 +26,7 @@ public class KeyValueBizImpl implements KeyValueBiz
     @Override
     public void save(KeyValue keyValue)
     {
-        KeyValue loadedKeyValue = keyValueDao.retrieveByKey(keyValue.getKey());
-        if (Empty.isNotEmpty(loadedKeyValue))
-        {
-            loadedKeyValue.setKey(keyValue.getKey());
-            loadedKeyValue.setValue(keyValue.getValue());
-            keyValueDao.update(loadedKeyValue);
-        } else
-        {
-            keyValueDao.create(keyValue);
-        }
+        keyValueDao.create(keyValue);
     }
 
     @Override

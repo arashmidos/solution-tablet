@@ -167,7 +167,7 @@
                     style="@style/EditBox"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:nextFocusDown="@+id/saleTypeSp"/>
+                    android:nextFocusDown="@+id/branchSerialTxt"/>
 
                 <TextView
                     android:id="@+id/textView20"
@@ -190,7 +190,7 @@
                     android:layout_width="300dp"
                     android:inputType="number"
                     android:layout_height="wrap_content"
-                    android:nextFocusDown="@+id/saleTypeSp"/>
+                    android:nextFocusDown="@+id/stockSerialTxt"/>
 
                 <TextView
                     android:id="@+id/textView48"

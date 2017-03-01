@@ -53,18 +53,14 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
     private Context context;
     private CustomerPicDao customerPicDao;
-    private CustomerService customerService;
     private ResultObserver observer;
-    private KeyValueDao keyValueDao;
 
     public NewCustomerPicDataTransferBizImpl(Context context, ResultObserver resultObserver, File pics)
     {
         super(context);
         this.context = context;
         this.customerPicDao = new CustomerPicDaoImpl(context);
-        this.customerService = new CustomerServiceImpl(context);
         this.observer = resultObserver;
-        this.keyValueDao = new KeyValueDaoImpl(context);
         this.pics = pics;
     }
 
@@ -83,7 +79,6 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
             beforeTransfer();
 
             HttpHeaders httpHeaders = new HttpHeaders();
-//            httpHeaders.setContentType(getContentType());
             HttpBasicAuthentication authentication = new HttpBasicAuthentication(username.getValue(), password.getValue());
             httpHeaders.setAuthorization(authentication);
 

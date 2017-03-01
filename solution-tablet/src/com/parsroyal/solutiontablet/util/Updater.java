@@ -98,8 +98,11 @@ public class Updater
                     //start the installation of the latest version
                     PreferenceHelper.setLatestVersion(version);
                     Uri uriForDownloadedFile = downloadManager.getUriForDownloadedFile(downloadReference);
-                    PreferenceHelper.setUpdateUri(uriForDownloadedFile.toString());
-                    EventBus.getDefault().post(new UpdateEvent(uriForDownloadedFile, false));
+                    if (Empty.isNotEmpty(uriForDownloadedFile))
+                    {
+                        PreferenceHelper.setUpdateUri(uriForDownloadedFile.toString());
+                        EventBus.getDefault().post(new UpdateEvent(uriForDownloadedFile, false));
+                    }
                 }
             }
         };

@@ -44,7 +44,6 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends AbstractDataTran
         this.customerDao = new CustomerDaoImpl(context);
         this.customerService = new CustomerServiceImpl(context);
         this.observer = resultObserver;
-        this.keyValueDao = new KeyValueDaoImpl(context);
     }
 
     @Override
