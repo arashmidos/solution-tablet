@@ -24,9 +24,13 @@
             android:visibility="gone">
 
             <Button
+                android:background="@drawable/rounded_button_gray"
                 android:id="@+id/cancelBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"
                 android:paddingLeft="35dp"
                 android:paddingRight="35dp"
                 android:text="@string/cancel_btn"/>
