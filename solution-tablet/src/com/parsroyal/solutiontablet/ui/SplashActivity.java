@@ -11,8 +11,8 @@ import com.parsroyal.solutiontablet.R;
  */
 public class SplashActivity extends BaseActivity
 {
-
-    private static final int SPLASH_SCREEN_TIME = 2000;
+//TODO: Change this to 2000
+    private static final int SPLASH_SCREEN_TIME = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

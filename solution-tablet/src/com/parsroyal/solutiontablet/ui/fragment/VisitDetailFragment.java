@@ -299,9 +299,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
 
     private void invokeGetRejectedData()
     {
-
-        //TODO: Progress bar
-        //  dataTransferPB.setVisibility(View.VISIBLE);
+        showProgressDialog(getString(R.string.message_transferring_rejected_goods_data));
         Thread thread = new Thread(new Runnable()
         {
             @Override
@@ -323,6 +321,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                             @Override
                             public void run()
                             {
+                                dismissProgressDialog();
                                 mainActivity.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
                             }
                         });
@@ -333,6 +332,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                             @Override
                             public void run()
                             {
+                                dismissProgressDialog();
                                 toastError(getString(R.string.err_reject_order_not_possible));
                             }
                         });
@@ -651,20 +651,13 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     @Override
     public void publishResult(final String message)
     {
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                ToastUtil.toastMessage(mainActivity, message);
-            }
-        });
+
     }
 
     @Override
     public void finished(boolean result)
     {
-
+        dismissProgressDialog();
     }
 
     @Override
@@ -725,7 +718,6 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             LinearLayout layout = new LinearLayout(mainActivity);
             layout.setLayoutParams(new GridView.LayoutParams(100, 100));
             layout.setGravity(Gravity.CENTER);
-//            layout.setBackgroundResource(R.drawable.visit_row_layout_background);
 
             ImageView imageView = new ImageView(mainActivity);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
