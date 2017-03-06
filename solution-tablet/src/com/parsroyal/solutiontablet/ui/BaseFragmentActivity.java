@@ -1,9 +1,10 @@
 package com.parsroyal.solutiontablet.ui;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,7 +25,7 @@ import java.text.MessageFormat;
 /**
  * Created by Mahyar on 6/3/2015.
  */
-public class BaseFragmentActivity extends FragmentActivity
+public class BaseFragmentActivity extends AppCompatActivity
 {
 
     public static final String TAG = BaseFragmentActivity.class.getSimpleName();
@@ -43,16 +44,18 @@ public class BaseFragmentActivity extends FragmentActivity
 
     protected void setupActionbar()
     {
-
         View actionBarView = getLayoutInflater().inflate(R.layout.activity_main_custom_actionbar, null);
         userFullNameTxt = (TextView) actionBarView.findViewById(R.id.userFullNameTxt);
         companyNameTxt = (TextView) actionBarView.findViewById(R.id.companyNameTxt);
         menuIv = (ImageView) actionBarView.findViewById(R.id.menuIv);
 
-        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getActionBar().setCustomView(actionBarView);
-        getActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(actionBarView);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
 
+        /*Toolbar parent =(Toolbar) actionBarView.getParent();
+        parent.setPadding(0,0,0,0);//for tab otherwise give space in tab
+        parent.setContentInsetsAbsolute(0,0);*/
         updateActionbar();
     }
 
@@ -60,21 +63,18 @@ public class BaseFragmentActivity extends FragmentActivity
     {
         try
         {
+            KeyValue fullName = baseInfoService.getKeyValue(ApplicationKeys.USER_FULL_NAME);
+            if (Empty.isNotEmpty(fullName))
             {
-                KeyValue fullName = baseInfoService.getKeyValue(ApplicationKeys.USER_FULL_NAME);
-                if (Empty.isNotEmpty(fullName))
-                {
-                    userFullNameTxt.setText(fullName.getValue());
-                }
+                userFullNameTxt.setText(fullName.getValue());
             }
 
+            KeyValue userCompanyName = baseInfoService.getKeyValue(ApplicationKeys.USER_COMPANY_NAME);
+            if (Empty.isNotEmpty(userCompanyName))
             {
-                KeyValue userCompanyName = baseInfoService.getKeyValue(ApplicationKeys.USER_COMPANY_NAME);
-                if (Empty.isNotEmpty(userCompanyName))
-                {
-                    companyNameTxt.setText(userCompanyName.getValue());
-                }
+                companyNameTxt.setText(userCompanyName.getValue());
             }
+
         } catch (BusinessException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
@@ -115,7 +115,6 @@ public class BaseFragmentActivity extends FragmentActivity
 
     private String getStringResourceByName(String aString)
     {
-//        aString = aString.replace(".", "_");
         String packageName = this.getPackageName();
         int resId = getResources().getIdentifier(aString, "string", packageName);
         return getString(resId);
@@ -142,5 +141,4 @@ public class BaseFragmentActivity extends FragmentActivity
             this.progressDialog.dismiss();
         }
     }
-
 }

@@ -1,7 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;

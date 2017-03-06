@@ -4,6 +4,7 @@
             android:layout_height="match_parent"
             android:background="#ffffffff"
             android:paddingLeft="150dp"
+            android:id="@+id/root_view"
             android:paddingRight="150dp">
 
     <LinearLayout

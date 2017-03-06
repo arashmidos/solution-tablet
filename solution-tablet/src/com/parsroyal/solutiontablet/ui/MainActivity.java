@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -62,6 +62,7 @@ import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.NotificationUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
@@ -162,6 +163,7 @@ public class MainActivity extends BaseFragmentActivity
         setupActionbar();
         setupDrawer();
         initialize();
+
     }
 
     private void initialize()
