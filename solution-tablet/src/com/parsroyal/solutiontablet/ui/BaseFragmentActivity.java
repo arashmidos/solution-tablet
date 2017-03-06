@@ -53,9 +53,6 @@ public class BaseFragmentActivity extends AppCompatActivity
         getSupportActionBar().setCustomView(actionBarView);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
 
-        /*Toolbar parent =(Toolbar) actionBarView.getParent();
-        parent.setPadding(0,0,0,0);//for tab otherwise give space in tab
-        parent.setContentInsetsAbsolute(0,0);*/
         updateActionbar();
     }
 
