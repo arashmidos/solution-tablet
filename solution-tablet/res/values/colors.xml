@@ -37,4 +37,5 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="gray_light_more">#dfdddd</color>
     <color name="splash_background">#E0EEF0</color>
+    <color name="pink">#FF4081</color>
 </resources>

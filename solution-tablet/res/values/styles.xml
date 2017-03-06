@@ -9,6 +9,7 @@
         <item name="android:editTextColor">#000000</item>
     </style>
 
+
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"/>
 
     <style name="MyActionBar" parent="Theme.AppCompat.Light">
