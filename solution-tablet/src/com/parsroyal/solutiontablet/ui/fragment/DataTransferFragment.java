@@ -18,6 +18,7 @@ import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 
 /**
  * Created by Mahyar on 6/15/2015.
@@ -95,7 +96,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(ex);
+                            ToastUtil.toastError(getActivity(), ex);
                         }
                     });
                 } catch (final Exception ex)
@@ -106,7 +107,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(new UnknownSystemException(ex));
+                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
                         }
                     });
                 }
@@ -144,7 +145,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(ex);
+                            ToastUtil.toastError(getActivity(), ex);
                         }
                     });
                 } catch (final Exception ex)
@@ -155,7 +156,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(new UnknownSystemException(ex));
+                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
                         }
                     });
                 }

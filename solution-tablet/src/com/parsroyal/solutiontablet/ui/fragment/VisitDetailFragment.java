@@ -239,7 +239,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
 
                 if (Empty.isEmpty(cPic))
                 {
-                    toastError(R.string.message_error_in_loading_or_creating_customer);
+                    ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
                     mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
                 } else
                 {
@@ -333,7 +333,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                             public void run()
                             {
                                 dismissProgressDialog();
-                                toastError(getString(R.string.err_reject_order_not_possible));
+                                ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_not_possible));
                             }
                         });
                     }
@@ -345,7 +345,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(ex);
+                            ToastUtil.toastError(getActivity(), ex);
                         }
                     });
                 } catch (final Exception ex)
@@ -356,7 +356,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(new UnknownSystemException(ex));
+                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
                         }
                     });
                 }
@@ -446,7 +446,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
         } catch (Exception ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(new UnknownSystemException(ex));
+            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
         }
     }
 
@@ -524,7 +524,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastMessage(getString(R.string.visit_found_no_location));
+                            ToastUtil.toastError(getActivity(), getString(R.string.visit_found_no_location));
                             showDialogForEmptyLocation();
                         }
                     });
@@ -534,11 +534,11 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
         } catch (BusinessException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(ex);
+            ToastUtil.toastError(getActivity(), ex);
         } catch (Exception ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(new UnknownSystemException(ex));
+            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
         }
     }
 
@@ -589,7 +589,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
         List<LabelValue> wants = baseInfoService.getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.WANT_TYPE.getId());
         if (Empty.isEmpty(wants))
         {
-            ToastUtil.toastMessage(mainActivity, mainActivity.getString(R.string.message_found_no_wants_information));
+            ToastUtil.toastError(mainActivity, mainActivity.getString(R.string.message_found_no_wants_information));
             return;
         }
 

@@ -13,6 +13,7 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class QuestionListAdapter extends BaseListAdapter<QuestionListModel>
 
         } catch (Exception ex)
         {
-            context.toastError(new UnknownSystemException(ex));
+            ToastUtil.toastError(context, new UnknownSystemException(ex));
             return null;
         }
     }

@@ -19,6 +19,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
 import butterknife.BindView;
@@ -111,7 +112,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastMessage(R.string.message_setting_saved_successfully);
+                            ToastUtil.toastSuccess(getActivity(), R.string.message_setting_saved_successfully);
                         }
                     });
 
@@ -124,7 +125,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(ex);
+                            ToastUtil.toastError(getActivity(), ex);
                         }
                     });
                 } catch (final Exception ex)
@@ -135,7 +136,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(new UnknownSystemException(ex));
+                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
                         }
                     });
                 }
@@ -188,7 +189,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                 @Override
                 public void run()
                 {
-                    toastError(R.string.error_serverAddress1_is_required);
+                    ToastUtil.toastError(getActivity(), R.string.error_serverAddress1_is_required);
                     serverAddress1Txt.requestFocus();
                 }
             });
@@ -200,7 +201,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                 @Override
                 public void run()
                 {
-                    toastError(R.string.error_serverAddress2_is_required);
+                    ToastUtil.toastError(getActivity(), R.string.error_serverAddress2_is_required);
                     serverAddress2Txt.requestFocus();
                 }
             });
@@ -217,7 +218,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(R.string.error_serverAddress1_is_required);
+                            ToastUtil.toastError(getActivity(), R.string.error_serverAddress1_is_required);
                             serverAddress1Txt.requestFocus();
                         }
                     });
@@ -231,7 +232,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                 @Override
                 public void run()
                 {
-                    toastError(R.string.error_password_is_required);
+                    ToastUtil.toastError(getActivity(), R.string.error_password_is_required);
                     passwordTxt.requestFocus();
                 }
             });
@@ -243,7 +244,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                 @Override
                 public void run()
                 {
-                    toastError(R.string.error_user_code_is_required);
+                    ToastUtil.toastError(getActivity(), R.string.error_user_code_is_required);
                     userCodeTxt.requestFocus();
                 }
             });
@@ -255,7 +256,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                 @Override
                 public void run()
                 {
-                    toastError(R.string.error_gps_interval_is_required);
+                    ToastUtil.toastError(getActivity(), R.string.error_gps_interval_is_required);
                     gpsInterval.requestFocus();
                 }
             });
@@ -267,19 +268,19 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                 @Override
                 public void run()
                 {
-                    toastError(R.string.error_branch_serial_is_required);
+                    ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_required);
                     branchSerialTxt.requestFocus();
                 }
             });
             return false;
-        }else if (Empty.isEmpty(stockSerialTxt.getText().toString()))
+        } else if (Empty.isEmpty(stockSerialTxt.getText().toString()))
         {
             runOnUiThread(new Runnable()
             {
                 @Override
                 public void run()
                 {
-                    toastError(R.string.error_stock_serial_is_required);
+                    ToastUtil.toastError(getActivity(), R.string.error_stock_serial_is_required);
                     stockSerialTxt.requestFocus();
                 }
             });
@@ -295,12 +296,13 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                 @Override
                 public void run()
                 {
-                    toastError(R.string.error_branch_serial_is_not_valid);
+                    ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_not_valid);
                     branchSerialTxt.requestFocus();
                 }
             });
             return false;
-        }try
+        }
+        try
         {
             long stockSerial = Long.parseLong(stockSerialTxt.getText().toString());
         } catch (Exception ignore)
@@ -310,7 +312,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                 @Override
                 public void run()
                 {
-                    toastError(R.string.error_stock_serial_is_not_valid);
+                    ToastUtil.toastError(getActivity(), R.string.error_stock_serial_is_not_valid);
                     stockSerialTxt.requestFocus();
                 }
             });
@@ -327,7 +329,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
             @Override
             public void run()
             {
-                toastError(ex);
+                ToastUtil.toastError(getActivity(), ex);
             }
         });
     }
@@ -340,7 +342,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
             @Override
             public void run()
             {
-                toastMessage(message);
+                ToastUtil.toastMessage(getActivity(), message);
             }
         });
     }
@@ -386,11 +388,11 @@ public class SettingFragment extends BaseFragment implements ResultObserver
                 } catch (BusinessException ex)
                 {
                     Log.e(TAG, ex.getMessage(), ex);
-                    toastError(ex);
+                    ToastUtil.toastError(getActivity(), ex);
                 } catch (Exception ex)
                 {
                     Log.e(TAG, ex.getMessage(), ex);
-                    toastError(new UnknownSystemException(ex));
+                    ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
                 }
                 break;
         }

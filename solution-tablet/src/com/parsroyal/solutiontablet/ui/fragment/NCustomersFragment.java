@@ -20,6 +20,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NCustomersListAdapter;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.List;
 
@@ -105,12 +106,12 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
                 List<City> cityList = baseInfoService.getAllCities();
                 if (Empty.isEmpty(cityList))
                 {
-                    toastError(R.string.message_cities_information_not_found);
+                    ToastUtil.toastError(getActivity(),R.string.message_cities_information_not_found);
                     return;
                 }
                 if (Empty.isEmpty(provinceList))
                 {
-                    toastError(R.string.message_provinces_information_not_foun);
+                    ToastUtil.toastError(getActivity(),R.string.message_provinces_information_not_foun);
                     return;
                 }
                 MainActivity mainActivity = (MainActivity) getActivity();

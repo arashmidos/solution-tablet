@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.util;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +12,8 @@ import android.support.v7.app.NotificationCompat;
 import android.view.View;
 
 import com.parsroyal.solutiontablet.R;
+
+import de.mateware.snacky.Snacky;
 
 /**
  * Created by Arashmidos on 2016-11-07.
@@ -37,19 +40,5 @@ public class NotificationUtil
 
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         nm.notify(GPS_DISABLED_NF, notification);
-    }
-
-    public static void makeSnack(View view, String msg)
-    {
-        final Snackbar snack = Snackbar.make(view, msg, Snackbar.LENGTH_INDEFINITE);
-        snack.setAction("Ok", new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                snack.dismiss();
-            }
-        });
-        snack.show();
     }
 }

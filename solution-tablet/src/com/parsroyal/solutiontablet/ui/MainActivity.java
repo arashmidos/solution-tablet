@@ -60,7 +60,6 @@ import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
-import com.parsroyal.solutiontablet.util.NotificationUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
@@ -433,12 +432,12 @@ public class MainActivity extends BaseFragmentActivity
 
         if (!check1)
         {
-            toastMessage(R.string.message_required_setting_for_data_transfer_not_found);
+            ToastUtil.toastError(this, getString(R.string.message_required_setting_for_data_transfer_not_found));
         }
 
         if (!check2)
         {
-            toastMessage(R.string.message_device_does_not_have_active_internet_connection);
+            ToastUtil.toastError(this, getString(R.string.message_device_does_not_have_active_internet_connection));
         }
 
         return check1 && check2;
@@ -657,7 +656,7 @@ public class MainActivity extends BaseFragmentActivity
             }
         } catch (Exception ex)
         {
-            toastMessage(R.string.err_update_failed);
+            ToastUtil.toastError(this, getString(R.string.err_update_failed));
         }
     }
 
@@ -685,11 +684,6 @@ public class MainActivity extends BaseFragmentActivity
                 })
                 .create();
         dialog.show();
-    }
-
-    public void showSnack(String message)
-    {
-        NotificationUtil.makeSnack(mainLayout, message);
     }
 }
 

@@ -257,7 +257,7 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
                 if (orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
                         orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()))
                 {
-                    requestLiveData(selectedOrder.getId(),selectedOrder.getCustomerBackendId(),orderStatus,saleType);
+                    requestLiveData(selectedOrder.getId(), selectedOrder.getCustomerBackendId(), orderStatus, saleType);
                 } else
                 {
                     context.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
@@ -282,14 +282,14 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
                         final Bundle args = new Bundle();
                         args.putLong("orderId", id);
                         args.putLong("orderStatus", orderStatus);
-                        args.putString("saleType",saleType );
+                        args.putString("saleType", saleType);
                         args.putSerializable("rejectedList", rejectedGoodsList);
                         getActivity().runOnUiThread(new Runnable()
                         {
                             @Override
                             public void run()
                             {
-                                ((MainActivity)getActivity()).changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
+                                ((MainActivity) getActivity()).changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
                             }
                         });
                     } else
@@ -299,7 +299,7 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
                             @Override
                             public void run()
                             {
-                                toastError(getString(R.string.err_reject_order_detail_not_accessable));
+                                ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_detail_not_accessable));
                             }
                         });
                     }
@@ -311,7 +311,7 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
                         @Override
                         public void run()
                         {
-                            toastError(ex);
+                            ToastUtil.toastError(getActivity(), ex);
                         }
                     });
                 } catch (final Exception ex)
@@ -322,7 +322,7 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
                         @Override
                         public void run()
                         {
-                            toastError(new UnknownSystemException(ex));
+                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
                         }
                     });
                 }

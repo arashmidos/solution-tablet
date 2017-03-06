@@ -17,6 +17,7 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionnaireListAdapter;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class GeneralQuestionnairesFragment extends BaseListFragment<Questionnair
         } catch (Exception ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(new UnknownSystemException(ex));
+            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
             return inflater.inflate(R.layout.view_error_page, null);
         }
     }
