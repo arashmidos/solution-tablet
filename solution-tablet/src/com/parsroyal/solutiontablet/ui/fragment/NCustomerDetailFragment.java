@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 
 import com.parsroyal.solutiontablet.R;
@@ -80,6 +81,8 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
     EditText municipalityCodeTxt;
     @BindView(R.id.postalCodeTxt)
     EditText postalCodeTxt;
+    @BindView(R.id.root_view)
+    ScrollView rootView;
 
     private Context context;
     private MainActivity mainActivity;
