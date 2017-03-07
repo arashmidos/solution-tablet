@@ -243,7 +243,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                     mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
                 } else
                 {
-                    ToastUtil.toastMessage(mainActivity, mainActivity.getString(R.string.message_picutre_saved_successfully));
+                    ToastUtil.toastSuccess(mainActivity, mainActivity.getString(R.string.message_picutre_saved_successfully));
                     customerService.savePicture(cPic);
                 }
             } else if (resultCode == RESULT_CANCELED)
