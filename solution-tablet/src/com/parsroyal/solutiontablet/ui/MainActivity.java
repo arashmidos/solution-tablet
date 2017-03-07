@@ -427,20 +427,20 @@ public class MainActivity extends BaseFragmentActivity
 
     private boolean isDataTransferPossible()
     {
-        boolean check1 = dataTransferService.isDataTransferPossible();
-        boolean check2 = NetworkUtil.isNetworkAvailable(this);
+        boolean dataTransferPossible = dataTransferService.isDataTransferPossible();
+        boolean networkAvailable = NetworkUtil.isNetworkAvailable(this);
 
-        if (!check1)
+        if (!dataTransferPossible)
         {
             ToastUtil.toastError(this, getString(R.string.message_required_setting_for_data_transfer_not_found));
         }
 
-        if (!check2)
+        if (!networkAvailable)
         {
             ToastUtil.toastError(this, getString(R.string.message_device_does_not_have_active_internet_connection));
         }
 
-        return check1 && check2;
+        return dataTransferPossible && networkAvailable;
     }
 
     private void setupDrawer()
