@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -10,36 +9,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
-import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
-import com.parsroyal.solutiontablet.exception.SaleOrderNotFoundException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.order.SaleOrderService;
 import com.parsroyal.solutiontablet.service.order.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
 import com.parsroyal.solutiontablet.ui.component.TabContainer;
 import com.parsroyal.solutiontablet.util.DialogUtil;
-import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -51,7 +41,6 @@ public class OrderDetailFragment extends BaseFragment
     public static final String TAG = OrderDetailFragment.class.getSimpleName();
     private MainActivity context;
     private SaleOrderService saleOrderService;
-    private BaseInfoService baseInfoService;
     private SaleOrderDto order;
 
     private Long orderId;
@@ -63,10 +52,9 @@ public class OrderDetailFragment extends BaseFragment
     private Button cancelOrderBtn;
     private Button saveOrderBtn;
 
-    private Spinner paymentTypeSp;
-    private EditText orderDescriptionTxt;
     private Long orderStatus;
     private GoodsDtoList rejectedGoodsList;
+    private OrderInfoFragment orderInfoFrg;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -75,7 +63,6 @@ public class OrderDetailFragment extends BaseFragment
         {
             context = (MainActivity) getActivity();
             saleOrderService = new SaleOrderServiceImpl(context);
-            baseInfoService = new BaseInfoServiceImpl(context);
 
             orderId = getArguments().getLong("orderId");
             saleType = getArguments().getString("saleType");
@@ -130,7 +117,11 @@ public class OrderDetailFragment extends BaseFragment
                     {
                         FragmentManager childFragMan = getChildFragmentManager();
                         FragmentTransaction childFragTrans = childFragMan.beginTransaction();
-                        OrderInfoFragment orderInfoFrg = new OrderInfoFragment();
+                        orderInfoFrg = new OrderInfoFragment();
+                        Bundle args = new Bundle();
+                        args.putLong("orderId", orderId);
+                        args.putString("saleType", saleType);
+                        orderInfoFrg.setArguments(args);
                         childFragTrans.replace(R.id.orderDetailContentFrame, orderInfoFrg);
                         childFragTrans.commit();
 
@@ -328,7 +319,7 @@ public class OrderDetailFragment extends BaseFragment
         {
             order.setStatus(statusId);
 
-            LabelValue selectedPaymentItem = (LabelValue) paymentTypeSp.getSelectedItem();
+            long selectedPaymentType = orderInfoFrg.getSelectedPaymentType();
             if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())
                     || orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())
                     || orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())
@@ -337,10 +328,10 @@ public class OrderDetailFragment extends BaseFragment
                 //Add reason or reject to orders
             } else
             {
-                order.setPaymentTypeBackendId(selectedPaymentItem.getValue());
+                order.setPaymentTypeBackendId(selectedPaymentType);
             }
 
-            String description = orderDescriptionTxt.getText().toString();
+            String description = orderInfoFrg.getDescription();
             order.setDescription(description);
 
             saleOrderService.saveOrder(order);
@@ -353,7 +344,6 @@ public class OrderDetailFragment extends BaseFragment
             Log.e(TAG, ex.getMessage(), ex);
             ToastUtil.toastError(context, new UnknownSystemException(ex));
         }
-
     }
 
     private Button createActionButton(String buttonTitle, View.OnClickListener onClickListener)
@@ -383,131 +373,5 @@ public class OrderDetailFragment extends BaseFragment
             return true;
         }
         return false;
-    }
-
-    @SuppressLint("ValidFragment")
-    public class OrderInfoFragment extends BaseFragment
-    {
-        public final String TAG = OrderInfoFragment.class.getSimpleName();
-        private TextView customerNameTv;
-        private TextView orderNumberTv;
-        private TextView orderNumberLabel;
-        private TextView orderDateTv;
-        private TextView orderDateLabel;
-        private TextView orderAmountTv;
-        private TextView orderAmountLabel;
-        private TextView orderDescriptionLabel;
-        private TextView paymentTypeLabel;
-
-        public OrderInfoFragment()
-        {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            try
-            {
-                //Refresh order item
-                order = saleOrderService.findOrderDtoById(orderId);
-                if (Empty.isNotEmpty(order))
-                {
-
-                    View view = inflater.inflate(R.layout.fragment_order_info, null);
-
-                    customerNameTv = (TextView) view.findViewById(R.id.customerNameTv);
-                    paymentTypeLabel = (TextView) view.findViewById(R.id.paymentTypeLabel);
-                    orderNumberTv = (TextView) view.findViewById(R.id.orderNumberTv);
-                    orderNumberLabel = (TextView) view.findViewById(R.id.orderNoLabel);
-                    orderDateTv = (TextView) view.findViewById(R.id.orderDateTv);
-                    orderDateLabel = (TextView) view.findViewById(R.id.orderDateLabel);
-                    orderAmountTv = (TextView) view.findViewById(R.id.orderAmountTv);
-                    orderAmountLabel = (TextView) view.findViewById(R.id.orderAmountLabel);
-                    orderDescriptionLabel = (TextView) view.findViewById(R.id.orderDescriptionLabel);
-                    orderDescriptionTxt = (EditText) view.findViewById(R.id.orderDescriptionTxt);
-                    orderDescriptionTxt.setEnabled(!isDisable());
-                    paymentTypeSp = (Spinner) view.findViewById(R.id.paymentTypeSp);
-                    paymentTypeSp.setEnabled(!isDisable());
-                    tabContainer = (TabContainer) view.findViewById(R.id.tabContainer);
-
-                    String title = getProperTitle();
-
-                    orderNumberLabel.setText(String.format(Locale.US, getString(R.string.number_x), title));
-                    orderDateLabel.setText(String.format(Locale.US, getString(R.string.date_x), title));
-                    orderAmountLabel.setText(String.format(Locale.US, getString(R.string.amount_x), title));
-                    orderDescriptionLabel.setText(String.format(Locale.US, getString(R.string.description_x), title));
-
-                    if (isRejected())
-                    {
-                        paymentTypeLabel.setText(getString(R.string.reject_reason_title));
-                    } else
-                    {
-                        paymentTypeLabel.setText(getString(R.string.payment_type));
-                    }
-
-                    Customer customer = order.getCustomer();
-                    if (Empty.isNotEmpty(customer) && Empty.isNotEmpty(customer.getFullName()))
-                    {
-                        customerNameTv.setText(customer.getFullName());
-                    }
-
-                    Long number = order.getNumber();
-                    orderNumberTv.setText(Empty.isNotEmpty(number) && order.getNumber() != 0 ? String.valueOf(number) : "--");
-
-                    String orderDate = order.getDate();
-                    orderDateTv.setText(Empty.isNotEmpty(orderDate) ? orderDate : "--");
-
-                    Double orderAmount = Double.valueOf(order.getAmount()) / 1000D;
-                    orderAmountTv.setText(Empty.isNotEmpty(orderAmount) ? NumberUtil.getCommaSeparated(orderAmount) : "--");
-
-                    final List<LabelValue> paymentTypeList = baseInfoService.getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.PAYMENT_TYPE.getId());
-                    if (Empty.isNotEmpty(paymentTypeList))
-                    {
-                        if (isRejected())
-                        {
-                            List<LabelValue> rejectReason = baseInfoService.getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.REJECT_TYPE.getId());
-                            paymentTypeSp.setAdapter(new LabelValueArrayAdapter(context, rejectReason));
-                        } else
-                        {
-                            paymentTypeSp.setAdapter(new LabelValueArrayAdapter(context, paymentTypeList));
-                            if (Empty.isNotEmpty(order.getPaymentTypeBackendId()))
-                            {
-                                int position = 0;
-                                for (LabelValue labelValue : paymentTypeList)
-                                {
-                                    if (labelValue.getValue().equals(order.getPaymentTypeBackendId()))
-                                    {
-                                        paymentTypeSp.setSelection(position);
-                                        break;
-                                    }
-                                    position++;
-                                }
-                            }
-                        }
-                    }
-
-                    String description = order.getDescription();
-                    orderDescriptionTxt.setText(Empty.isNotEmpty(description) ? description : "--");
-
-                    return view;
-
-                } else
-                {
-                    throw new SaleOrderNotFoundException("orderId : " + orderId);
-                }
-
-            } catch (Exception e)
-            {
-                Log.e(TAG, e.getMessage(), e);
-                ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
-                return inflater.inflate(R.layout.view_error_page, null);
-            }
-        }
-
-        @Override
-        public int getFragmentId()
-        {
-            return 0;
-        }
     }
 }
