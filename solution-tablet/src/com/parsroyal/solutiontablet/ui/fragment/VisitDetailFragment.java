@@ -54,6 +54,7 @@ import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.MediaUtil;
@@ -437,7 +438,21 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     {
         try
         {
-            //TODO: Check for empty viisit
+            List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
+            if (detailList.size() == 0)
+            {
+                DialogUtil.showConfirmDialog(mainActivity,
+                        getString(R.string.title_attention),
+                        getString(R.string.message_error_no_visit_detail_found), new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i)
+                            {
+                                showWantsDialog();
+                            }
+                        });
+                return;
+            }
             VisitInformation visitInformation = visitService.getVisitInformationById(visitId);
             if (Empty.isEmpty(visitInformation.getxLocation()) || Empty.isEmpty(visitInformation.getyLocation()))
             {
