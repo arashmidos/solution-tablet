@@ -14,12 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.CustomerStatus;
-import com.parsroyal.solutiontablet.data.entity.Customer;
-import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -32,6 +26,17 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.CustomerStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
+import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
+import com.parsroyal.solutiontablet.service.CustomerService;
+import com.parsroyal.solutiontablet.service.VisitService;
+import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.Empty;
 
 import java.util.Locale;
 
@@ -59,11 +64,13 @@ public class SaveLocationFragment extends BaseFragment implements
     LinearLayout markerLayout;
     private double lat, lng = 0.0;
     private long customerId;
+    private long visitId;
     private GoogleApiClient googleApiClient;
     private Location currentLocation;
     private GoogleMap map;
     private LatLng currentLatlng;
     private CustomerService customerService;
+    private VisitService visitService;
     private Customer customer;
     private boolean isFirstTime = true;
 
@@ -76,7 +83,8 @@ public class SaveLocationFragment extends BaseFragment implements
         Bundle arguments = getArguments();
 
         customerService = new CustomerServiceImpl(getActivity());
-        customerId = arguments.getLong("customerId");
+        customerId = arguments.getLong(Constants.CUSTOMER_ID);
+        visitId = arguments.getLong(Constants.VISIT_ID);
         customer = customerService.getCustomerById(customerId);
 
         lat = customer.getxLocation();
@@ -138,7 +146,7 @@ public class SaveLocationFragment extends BaseFragment implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
     {
-        errorMsg.setText(String.format(Locale.US,getString(R.string.error_google_play_not_available), connectionResult.getErrorCode()));
+        errorMsg.setText(String.format(Locale.US, getString(R.string.error_google_play_not_available), connectionResult.getErrorCode()));
     }
 
     @Override
@@ -146,15 +154,6 @@ public class SaveLocationFragment extends BaseFragment implements
     {
         map = googleMap;
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-
-        if (currentLocation == null)
-        {
-            //If user location is not available in the rare situation, point it to center of Tehran
-            currentLatlng = new LatLng(35.6961, 51.4231);
-        } else
-        {
-            currentLatlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        }
 
         //If we've set it before
         if (lat != 0 && lng != 0)
@@ -167,7 +166,11 @@ public class SaveLocationFragment extends BaseFragment implements
         }
         map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatlng, cameraZoom), 4000, null);
+        if (Empty.isNotEmpty(currentLocation))
+        {
+            currentLatlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatlng, cameraZoom), 4000, null);
+        }
 
         map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener()
         {
@@ -198,6 +201,8 @@ public class SaveLocationFragment extends BaseFragment implements
                 customer.setStatus(CustomerStatus.UPDATED.getId());
                 customerService.saveCustomer(customer);
                 //
+                VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, VisitInformationDetailType.SAVE_LOCATION, 0);
+                visitService.saveVisitDetail(visitDetail);
 
                 Marker m = map.addMarker(new MarkerOptions()
                         .position(temp).title(getString(R.string.location_set)).snippet("").icon(BitmapDescriptorFactory

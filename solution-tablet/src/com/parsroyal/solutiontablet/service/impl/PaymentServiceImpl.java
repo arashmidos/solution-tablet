@@ -40,17 +40,18 @@ public class PaymentServiceImpl implements PaymentService
     }
 
     @Override
-    public void savePayment(Payment payment)
+    public long savePayment(Payment payment)
     {
         if (Empty.isEmpty(payment.getId()))
         {
             payment.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
             payment.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-            paymentDao.create(payment);
+            return paymentDao.create(payment);
         } else
         {
             payment.setUpdateDateTime(new Date().toString());
             paymentDao.update(payment);
+            return payment.getId();
         }
     }
 

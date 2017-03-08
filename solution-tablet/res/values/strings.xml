@@ -334,6 +334,7 @@
     <string name="updating_app">در حال بروز رسانی نرم افزار...</string>
     <string name="err_update_failed">خطا در بروز رسانی برنامه</string>
     <string name="search_hint">جستجو...</string>
+    <string name="message_error_wants_denied">امکان ثبت عدم برای این ویزیت وجود ندارد</string>
     <string-array name="sale_type">
         <item>فروش سرد</item>
         <item>فروش گرم</item>

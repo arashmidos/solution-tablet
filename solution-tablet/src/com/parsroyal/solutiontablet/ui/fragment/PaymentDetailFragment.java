@@ -22,17 +22,21 @@ import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.PaymentType;
 import com.parsroyal.solutiontablet.constants.SendStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.Payment;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.PaymentService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -87,6 +91,7 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
     private CustomerService customerService;
     private BaseInfoService baseInfoService;
     private PaymentService paymentService;
+    private VisitService visitService;
     private Customer customer;
     private boolean dateModified = false;
     private Payment payment;
@@ -94,6 +99,7 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
     private List<LabelValue> paymentTypes;
     private long amountValue;
     private int ref;
+    private long visitId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -106,6 +112,7 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
         customerService = new CustomerServiceImpl(context);
         baseInfoService = new BaseInfoServiceImpl(context);
         paymentService = new PaymentServiceImpl(context);
+        visitService = new VisitServiceImpl(context);
 
         try
         {
@@ -114,6 +121,7 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
             {
                 payment = paymentService.getPaymentById(arguments.getLong(Constants.PAYMENT_ID));
                 customer = customerService.getCustomerByBackendId(arguments.getLong(Constants.CUSTOMER_BACKEND_ID));
+                visitId = arguments.getLong(Constants.VISIT_ID);
                 ref = arguments.getInt(Constants.PARENT);
             } else
             {
@@ -364,48 +372,58 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
                 mainActivity.changeSidebarItem(ref);
                 break;
             case R.id.saveBtn:
-                try
-                {
-                    if (validate())
-                    {
-                        if (Empty.isEmpty(payment))
-                        {
-                            payment = new Payment();
-                        }
-                        payment.setCustomerBackendId(customer.getBackendId());
-                        payment.setAmount(amountValue * 1000);
-                        long paymentType = paymentsSp.getSelectedItemId();
-                        payment.setPaymentTypeId(paymentType);
-
-                        if (PaymentType.POS.getId().equals(paymentType))
-                        {
-                            payment.setTrackingNo(trackingNo.getText().toString());
-                        }
-
-                        if (PaymentType.CHEQUE.getId().equals(paymentType))
-                        {
-                            payment.setChequeOwner(chequeOwner.getText().toString());
-                            payment.setChequeAccountNumber(chequeAccNo.getText().toString());
-                            payment.setChequeBank(bankSp.getSelectedItemId());
-                            payment.setChequeBranch(chequeBranch.getText().toString());
-                            payment.setChequeDate(chequeDate.getHint().toString());
-                            payment.setChequeNumber(chequeNo.getText().toString());
-                        }
-                        payment.setStatus(SendStatus.NEW.getId());
-                        paymentService.savePayment(payment);
-                        ToastUtil.toastSuccess(getActivity(), R.string.message_payment_save_successfully);
-                        mainActivity.removeFragment(PaymentDetailFragment.this);
-                    }
-                } catch (BusinessException ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    ToastUtil.toastError(getActivity(), ex);
-                } catch (Exception e)
-                {
-                    Log.e(TAG, e.getMessage(), e);
-                    ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
-                }
+                save();
                 break;
+        }
+    }
+
+    private void save()
+    {
+        try
+        {
+            if (validate())
+            {
+                if (Empty.isEmpty(payment))
+                {
+                    payment = new Payment();
+                }
+                payment.setCustomerBackendId(customer.getBackendId());
+                payment.setAmount(amountValue * 1000);
+                long paymentType = paymentsSp.getSelectedItemId();
+                payment.setPaymentTypeId(paymentType);
+
+                if (PaymentType.POS.getId().equals(paymentType))
+                {
+                    payment.setTrackingNo(trackingNo.getText().toString());
+                }
+
+                if (PaymentType.CHEQUE.getId().equals(paymentType))
+                {
+                    payment.setChequeOwner(chequeOwner.getText().toString());
+                    payment.setChequeAccountNumber(chequeAccNo.getText().toString());
+                    payment.setChequeBank(bankSp.getSelectedItemId());
+                    payment.setChequeBranch(chequeBranch.getText().toString());
+                    payment.setChequeDate(chequeDate.getHint().toString());
+                    payment.setChequeNumber(chequeNo.getText().toString());
+                }
+                payment.setStatus(SendStatus.NEW.getId());
+                long paymentId = paymentService.savePayment(payment);
+
+                VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, VisitInformationDetailType.CASH, paymentId);
+
+                visitService.saveVisitDetail(visitDetail);
+
+                ToastUtil.toastSuccess(getActivity(), R.string.message_payment_save_successfully);
+                mainActivity.removeFragment(PaymentDetailFragment.this);
+            }
+        } catch (BusinessException ex)
+        {
+            Log.e(TAG, ex.getMessage(), ex);
+            ToastUtil.toastError(getActivity(), ex);
+        } catch (Exception e)
+        {
+            Log.e(TAG, e.getMessage(), e);
+            ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
         }
     }
 
