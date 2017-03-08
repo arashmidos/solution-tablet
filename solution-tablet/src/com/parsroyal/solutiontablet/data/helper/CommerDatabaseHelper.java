@@ -21,6 +21,7 @@ import com.parsroyal.solutiontablet.data.entity.Questionnaire;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 
 /**
@@ -31,19 +32,17 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper
 
     public static final String TAG = CommerDatabaseHelper.class.getSimpleName();
     public static final String DATABASE_NAME = "Commer";
-    public static final Integer DATABASE_VERSION = 2;
+    public static final Integer DATABASE_VERSION = 3;
 
     private static CommerDatabaseHelper sInstance;
 
     public CommerDatabaseHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
     }
 
     public static synchronized CommerDatabaseHelper getInstance(Context context)
     {
-
         if (sInstance == null)
         {
             sInstance = new CommerDatabaseHelper(context.getApplicationContext());
@@ -79,6 +78,9 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         Log.i(TAG, "on Database Upgrade");
-//        db.execSQL(Position.CREATE_TABLE_SCRIPT);
+        if (oldVersion < 3)
+        {
+            db.execSQL(VisitInformationDetail.CREATE_TABLE_SQL);
+        }
     }
 }
