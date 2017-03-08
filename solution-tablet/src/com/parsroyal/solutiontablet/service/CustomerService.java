@@ -41,7 +41,7 @@ public interface CustomerService
 
     List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
 
-    void savePicture(CustomerPic customerPic);
+    long savePicture(CustomerPic customerPic);
 
     File getAllCustomerPicForSend();
 

@@ -141,19 +141,20 @@ public class CustomerServiceImpl implements CustomerService
     }
 
     @Override
-    public void savePicture(CustomerPic customerPic)
+    public long savePicture(CustomerPic customerPic)
     {
         if (Empty.isEmpty(customerPic.getId()))
         {
             customerPic.setCreateDateTime(DateUtil.convertDate(new Date(),
                     DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
             customerPic.setStatus(CustomerStatus.NEW.getId());
-            customerPicDao.create(customerPic);
+            return customerPicDao.create(customerPic);
         } else
         {
             //            customer.setUpdateDateTime(new Date().toString());
             //            customerDao.update(customer);
             //There is no need for update yet. we'll delete all pic records after uploading
+            return 0;
         }
     }
 

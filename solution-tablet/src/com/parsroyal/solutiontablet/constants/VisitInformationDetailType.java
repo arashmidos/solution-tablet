@@ -9,7 +9,7 @@ public enum VisitInformationDetailType
     CREATE_ORDER(10L),
     CREATE_REJECT(20L),
     CREATE_INVOICE(30L),
-    TAKE_PICTURE(40L),
+    TAKE_PICTURE(40L),//Done
     FILL_QUESTIONNAIRE(50L),
     SAVE_LOCATION(60L),//Done
     CASH(70L),//Done

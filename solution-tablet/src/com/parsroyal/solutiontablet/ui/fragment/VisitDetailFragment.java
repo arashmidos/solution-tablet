@@ -240,15 +240,10 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                 cPic.setTitle(s);
                 cPic.setCustomer_backend_id(customer.getBackendId());
 
-                if (Empty.isEmpty(cPic))
-                {
-                    ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
-                    mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
-                } else
-                {
-                    ToastUtil.toastSuccess(mainActivity, mainActivity.getString(R.string.message_picutre_saved_successfully));
-                    customerService.savePicture(cPic);
-                }
+                long typeId = customerService.savePicture(cPic);
+                visitService.saveVisitDetail(new VisitInformationDetail(visitId, VisitInformationDetailType.TAKE_PICTURE, typeId));
+                ToastUtil.toastSuccess(mainActivity, mainActivity.getString(R.string.message_picutre_saved_successfully));
+
             } else if (resultCode == RESULT_CANCELED)
             {
                 // User cancelled the image capture
@@ -500,7 +495,6 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     {
         try
         {
-
             final ProgressDialog progressDialog = new ProgressDialog(mainActivity);
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(Boolean.FALSE);
@@ -584,7 +578,6 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             visitService.finishVisiting(visitId);
             Customer customer = customerService.getCustomerById(customerId);
             saleOrderService.deleteForAllCustomerOrdersByStatus(customer.getBackendId(), SaleOrderStatus.DRAFT.getId());
-//            mainActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
             mainActivity.removeFragment(this);
             mainActivity.setMenuEnabled(true);
         } catch (Exception ex)
