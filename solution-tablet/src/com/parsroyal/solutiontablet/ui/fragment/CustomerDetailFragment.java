@@ -16,8 +16,10 @@ import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.LocationService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.service.order.SaleOrderService;
 import com.parsroyal.solutiontablet.service.order.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -50,6 +52,7 @@ public class CustomerDetailFragment extends BaseFragment
 
     private MainActivity mainActivity;
     private CustomerService customerService;
+    private VisitService visitService;
 
     private SaleOrderService orderService;
     private LocationService locationService;
@@ -63,6 +66,7 @@ public class CustomerDetailFragment extends BaseFragment
         customerService = new CustomerServiceImpl(mainActivity);
         locationService = new LocationServiceImpl(mainActivity);
         orderService = new SaleOrderServiceImpl(mainActivity);
+        visitService = new VisitServiceImpl(mainActivity);
 
         Bundle arguments = getArguments();
         customerId = arguments.getLong("customerId");
@@ -107,7 +111,7 @@ public class CustomerDetailFragment extends BaseFragment
     {
         try
         {
-            final Long visitInformationId = customerService.startVisiting(customer.getBackendId());
+            final Long visitInformationId = visitService.startVisiting(customer.getBackendId());
 
             locationService.findCurrentLocation(new FindLocationListener()
             {
@@ -116,7 +120,7 @@ public class CustomerDetailFragment extends BaseFragment
                 {
                     try
                     {
-                        customerService.updateVisitLocation(visitInformationId, location);
+                        visitService.updateVisitLocation(visitInformationId, location);
                     } catch (Exception e)
                     {
                         Log.e(TAG, e.getMessage(), e);

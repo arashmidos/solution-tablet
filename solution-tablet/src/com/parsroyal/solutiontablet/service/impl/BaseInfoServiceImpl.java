@@ -63,14 +63,12 @@ public class BaseInfoServiceImpl implements BaseInfoService
     @Override
     public List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long typeId)
     {
-        //TODO: Static data
         if (typeId.equals(BaseInfoTypes.REJECT_TYPE.getId()))
         {
             String[] reasons = {"فاسد شده", "شکسته", "ناقص"};
             List<LabelValue> entities = new ArrayList<LabelValue>();
             for (int i = 0; i < 3; i++)
             {
-
                 entities.add(new LabelValue((long) i,reasons[i]));
             }
             return entities;

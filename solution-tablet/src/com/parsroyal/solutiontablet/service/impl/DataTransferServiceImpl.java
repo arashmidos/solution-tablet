@@ -58,7 +58,6 @@ import java.util.List;
 
 /**
  * Created by Mahyar on 6/15/2015.
- * Edited by Arash on 6/29/2016
  */
 public class DataTransferServiceImpl implements DataTransferService
 {
@@ -73,6 +72,7 @@ public class DataTransferServiceImpl implements DataTransferService
     private SaleOrderService saleOrderService;
     private PaymentService paymentService;
     private PositionService positionService;
+    private VisitServiceImpl visitService;
 
     private KeyValue serverAddress1;
     private KeyValue serverAddress2;
@@ -91,6 +91,7 @@ public class DataTransferServiceImpl implements DataTransferService
         this.saleOrderService = new SaleOrderServiceImpl(context);
         this.paymentService = new PaymentServiceImpl(context);
         this.positionService = new PositionServiceImpl(context);
+        this.visitService = new VisitServiceImpl(context);
     }
 
     @Override
@@ -332,7 +333,7 @@ public class DataTransferServiceImpl implements DataTransferService
     private void sendAllVisitInformation(ResultObserver resultObserver)
     {
 
-        List<VisitInformation> visitInformationList = customerService.getAllVisitInformationForSend();
+        List<VisitInformation> visitInformationList = visitService.getAllVisitInformationForSend();
         if (Empty.isEmpty(visitInformationList))
         {
             resultObserver.publishResult(context.getString(R.string.message_found_no_visit_information_for_send));

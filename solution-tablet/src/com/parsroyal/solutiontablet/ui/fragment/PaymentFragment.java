@@ -34,6 +34,7 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
     private MainActivity context;
     private PaymentService paymentService;
     private long customerId;
+    private long visitId;
     private CustomerService customerService;
     private Customer customer;
     private PaymentSO paymentSO;
@@ -48,7 +49,8 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
         Bundle arguments = getArguments();
         if (Empty.isNotEmpty(arguments))
         {
-            customerId = arguments.getLong("customerId");
+            customerId = arguments.getLong(Constants.CUSTOMER_ID);
+            visitId = arguments.getLong(Constants.VISIT_ID);
             customer = customerService.getCustomerById(customerId);
             paymentSO = new PaymentSO(customer.getBackendId(), SendStatus.NEW.getId());
         } else
@@ -80,6 +82,7 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
                     MainActivity mainActivity = (MainActivity) getActivity();
                     Bundle args = new Bundle();
                     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
+                    args.putLong(Constants.VISIT_ID,visitId);
                     mainActivity.changeFragment(MainActivity.PAYMENT_DETAIL_FRAGMENT_ID, args, false);
                 }
             });

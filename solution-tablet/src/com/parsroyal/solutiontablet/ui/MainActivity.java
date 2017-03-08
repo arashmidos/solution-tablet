@@ -405,7 +405,6 @@ public class MainActivity extends BaseFragmentActivity
                 break;
             case USER_TRACKING_FRAGMENT_ID://20
                 fragment = new UserTrackingFragment();
-                //TODO: need update
                 changeSidebarItem(-1);
                 break;
             case KPI_CUSTOMER_FRAGMENT_ID: //21

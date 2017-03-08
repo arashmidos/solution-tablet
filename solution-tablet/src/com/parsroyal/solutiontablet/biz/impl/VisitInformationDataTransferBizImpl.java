@@ -8,8 +8,8 @@ import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
-import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.VisitService;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -30,14 +30,14 @@ public class VisitInformationDataTransferBizImpl extends AbstractDataTransferBiz
 {
 
     private VisitInformationDao visitInformationDao;
-    private CustomerService customerService;
+    private VisitService visitService;
     private ResultObserver observer;
 
     public VisitInformationDataTransferBizImpl(Context context, ResultObserver resultObserver)
     {
         super(context);
         this.visitInformationDao = new VisitInformationDaoImpl(context);
-        this.customerService = new CustomerServiceImpl(context);
+        this.visitService = new VisitServiceImpl(context);
         this.observer = resultObserver;
     }
 
@@ -73,7 +73,6 @@ public class VisitInformationDataTransferBizImpl extends AbstractDataTransferBiz
                 observer.publishResult(context.getString(R.string.message_exception_in_sending_visit_information));
             }
         }
-
     }
 
     @Override
@@ -116,7 +115,7 @@ public class VisitInformationDataTransferBizImpl extends AbstractDataTransferBiz
     @Override
     protected HttpEntity getHttpEntity(HttpHeaders headers)
     {
-        List<VisitInformation> allVisitInformationForSend = customerService.getAllVisitInformationForSend();
+        List<VisitInformation> allVisitInformationForSend = visitService.getAllVisitInformationForSend();
         String visitsInformationString = getVisitInformationString(allVisitInformationForSend);
         headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN));
         HttpEntity<String> httpEntity = new HttpEntity<String>(visitsInformationString, headers);

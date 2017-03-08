@@ -9,7 +9,9 @@ import android.widget.AdapterView;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.service.CustomerService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.VisitLinesAdapter;
 
@@ -24,20 +26,20 @@ public class VisitLinesFragment extends BaseListFragment<VisitLineListModel, Vis
     public static final String TAG = VisitLinesFragment.class.getSimpleName();
 
     private MainActivity context;
-    private CustomerService customerService;
+    private VisitService visitService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         context = (MainActivity) getActivity();
-        customerService = new CustomerServiceImpl(context);
+        visitService = new VisitServiceImpl(context);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     protected List<VisitLineListModel> getDataModel()
     {
-        return customerService.getAllVisitLinesListModel();
+        return visitService.getAllVisitLinesListModel();
     }
 
     @Override
