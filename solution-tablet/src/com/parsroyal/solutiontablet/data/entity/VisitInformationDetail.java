@@ -22,7 +22,7 @@ public class VisitInformationDetail extends BaseEntity<Long>
             " " + VisitInformationDetail.COL_CREATE_DATE_TIME + " TEXT," +
             " " + VisitInformationDetail.COL_UPDATE_DATE_TIME + " TEXT" +
             " );";
-    private long id;
+    private Long id;
     private long type;
     private long typeId;
     private String extraData;
@@ -40,12 +40,12 @@ public class VisitInformationDetail extends BaseEntity<Long>
 
     }
 
-    public long getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(long id)
+    public void setId(Long id)
     {
         this.id = id;
     }

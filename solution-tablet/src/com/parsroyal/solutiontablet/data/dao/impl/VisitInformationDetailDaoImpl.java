@@ -78,8 +78,8 @@ public class VisitInformationDetailDaoImpl extends AbstractDao<VisitInformationD
         entity.setTypeId(cursor.getLong(2));
         entity.setExtraData(cursor.getString(3));
         entity.setVisitInformationId(cursor.getLong(4));
-        entity.setCreateDateTime(cursor.getString(9));
-        entity.setUpdateDateTime(cursor.getString(10));
+        entity.setCreateDateTime(cursor.getString(5));
+        entity.setUpdateDateTime(cursor.getString(6));
         return entity;
     }
 

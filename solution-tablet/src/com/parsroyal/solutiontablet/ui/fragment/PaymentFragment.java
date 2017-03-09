@@ -154,6 +154,7 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
                 Bundle bundle = new Bundle();
                 bundle.putLong(Constants.CUSTOMER_BACKEND_ID, listModel.getCustomerBackendId());
                 bundle.putLong(Constants.PAYMENT_ID, listModel.getPrimaryKey());
+                bundle.putLong(Constants.VISIT_ID,visitId);
                 bundle.putInt(Constants.PARENT,
                         (customer != null ? MainActivity.CUSTOMER_LIST_FRAGMENT_ID : MainActivity.FUNDS_FRAGMENT_ID));
                 context.changeFragment(MainActivity.PAYMENT_DETAIL_FRAGMENT_ID, bundle, true);

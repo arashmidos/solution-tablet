@@ -157,15 +157,21 @@ public class VisitServiceImpl implements VisitService
     @Override
     public void saveVisitDetail(VisitInformationDetail visitDetail)
     {
-        visitDetail.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-        visitDetail.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-        visitInformationDetailDao.create(visitDetail);
+        if (Empty.isEmpty(visitDetail.getId()))
+        {
+            visitDetail.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+            visitDetail.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+            visitInformationDetailDao.create(visitDetail);
+        } else
+        {
+            visitDetail.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+            visitInformationDetailDao.update(visitDetail);
+        }
     }
 
     @Override
     public List<VisitInformationDetail> getAllVisitDetailById(Long visitId)
     {
-        visitInformationDetailDao.getAllVisitDetail(visitId);
-        return null;
+        return visitInformationDetailDao.getAllVisitDetail(visitId);
     }
 }

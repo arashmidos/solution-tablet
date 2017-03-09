@@ -415,8 +415,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     private void openGeneralQuestionnairesFragment()
     {
         Bundle args = new Bundle();
-        args.putLong("customerId", customerId);
-        args.putLong("visitId", visitId);
+        args.putLong(Constants.CUSTOMER_ID, customerId);
+        args.putLong(Constants.VISIT_ID, visitId);
         mainActivity.changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
     }
 

@@ -20,8 +20,10 @@ import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
@@ -29,9 +31,11 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionListAdapter;
 import com.parsroyal.solutiontablet.ui.component.FlowLayout;
@@ -55,6 +59,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
     private QuestionnaireService questionnaireService;
     private CustomerService customerService;
     private GoodsService goodsService;
+    private VisitService visitService;
     private Long questionnaireBackendId;
     private Long customerId;
     private Long goodsBackendId;
@@ -74,6 +79,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             questionnaireService = new QuestionnaireServiceImpl(mainActivity);
             customerService = new CustomerServiceImpl(mainActivity);
             goodsService = new GoodsServiceImpl(mainActivity);
+            visitService = new VisitServiceImpl(mainActivity);
 
             questionnaireBackendId = getArguments().getLong("qnId");
             visitId = getArguments().getLong(Constants.VISIT_ID);
@@ -197,6 +203,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
                     if (Empty.isNotEmpty(answer))
                     {
                         questionDto.setAnswerId(saveAnswer(questionDto, answer));
+                        setVisitDetail();
                     }
                     adapter.setDataModel(dataModel);
                     adapter.notifyDataSetChanged();
@@ -227,6 +234,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
                     if (Empty.isNotEmpty(answer))
                     {
                         questionDto.setAnswerId(saveAnswer(questionDto, answer));
+                        setVisitDetail();
                     }
                     QuestionDto nextQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder() + 1, goodsBackendId);
                     adapter.setDataModel(dataModel);
@@ -267,6 +275,10 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
                 {
                     String answer = getAnswer(questionDto);
                     Long answerId = saveAnswer(questionDto, answer);
+                    if (Empty.isNotEmpty(answer))
+                    {
+                        setVisitDetail();
+                    }
                     questionDto.setAnswerId(answerId);
                     dataModel = getDataModel();
                     adapter.setDataModel(dataModel);
@@ -282,6 +294,13 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
         });
 
         alert.show();
+    }
+
+    private void setVisitDetail()
+    {
+        //TODO: Check for duplicate, if it's set before, just update it
+        visitService.saveVisitDetail(new VisitInformationDetail(visitId,
+                VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId));
     }
 
     private void createCheckBox(String answer, String selectedAnswer)

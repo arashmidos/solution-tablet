@@ -35,6 +35,7 @@ import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 
@@ -83,6 +84,7 @@ public class SaveLocationFragment extends BaseFragment implements
         Bundle arguments = getArguments();
 
         customerService = new CustomerServiceImpl(getActivity());
+        visitService = new VisitServiceImpl(getActivity());
         customerId = arguments.getLong(Constants.CUSTOMER_ID);
         visitId = arguments.getLong(Constants.VISIT_ID);
         customer = customerService.getCustomerById(customerId);
