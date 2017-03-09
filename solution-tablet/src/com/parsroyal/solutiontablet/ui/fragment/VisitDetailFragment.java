@@ -144,7 +144,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             {
                 switch (position)
                 {
-                    //Add Factor / Add Order
+                    //Add Invoice / Add Order
                     case 0:
                         openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
                         break;
@@ -257,7 +257,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     }
 
     /**
-     * @param statusID Could be DRAFT for both AddFactor/AddOrder or REJECTED_DRAFT for ReturnedOrder
+     * @param statusID Could be DRAFT for both AddInvoice/AddOrder or REJECTED_DRAFT for ReturnedOrder
      */
     private void openOrderDetailFragment(Long statusID)
     {
@@ -275,8 +275,9 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             } else
             {
                 Bundle args = new Bundle();
-                args.putLong("orderId", orderDto.getId());
-                args.putString("saleType", saleType);
+                args.putLong(Constants.ORDER_ID, orderDto.getId());
+                args.putString(Constants.SALE_TYPE, saleType);
+                args.putLong(Constants.VISIT_ID,visitId);
                 mainActivity.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
             }
 

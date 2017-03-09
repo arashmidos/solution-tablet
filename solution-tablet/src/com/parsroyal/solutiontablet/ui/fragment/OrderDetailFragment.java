@@ -10,17 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
-import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
-import com.parsroyal.solutiontablet.service.BaseInfoService;
-import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.service.order.SaleOrderService;
 import com.parsroyal.solutiontablet.service.order.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -34,16 +34,17 @@ import java.util.Locale;
 
 /**
  * Created by Mahyar on 8/25/2015.
- * Edited by Arash on 6/29/2016
  */
 public class OrderDetailFragment extends BaseFragment
 {
     public static final String TAG = OrderDetailFragment.class.getSimpleName();
     private MainActivity context;
     private SaleOrderService saleOrderService;
+    private VisitServiceImpl visitService;
     private SaleOrderDto order;
 
     private Long orderId;
+    private long visitId;
     private String saleType;
 
     private TabContainer tabContainer;
@@ -63,9 +64,12 @@ public class OrderDetailFragment extends BaseFragment
         {
             context = (MainActivity) getActivity();
             saleOrderService = new SaleOrderServiceImpl(context);
+            visitService = new VisitServiceImpl(context);
 
-            orderId = getArguments().getLong("orderId");
-            saleType = getArguments().getString("saleType");
+            Bundle arguments = getArguments();
+            orderId = arguments.getLong(Constants.ORDER_ID);
+            saleType = arguments.getString(Constants.SALE_TYPE);
+            visitId = arguments.getLong(Constants.VISIT_ID);
 
             order = saleOrderService.findOrderDtoById(orderId);
             orderStatus = order.getStatus();
@@ -75,7 +79,7 @@ public class OrderDetailFragment extends BaseFragment
 
             if (isRejected())
             {
-                rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable("rejectedList");
+                rejectedGoodsList = (GoodsDtoList) arguments.getSerializable("rejectedList");
             }
             {
                 ParsRoyalTab tab = new ParsRoyalTab(context);
@@ -92,10 +96,10 @@ public class OrderDetailFragment extends BaseFragment
                         OrderItemsFragment orderItemsFragment = new OrderItemsFragment();
 
                         Bundle args = new Bundle();
-                        args.putLong("orderId", order.getId());
-                        args.putBoolean("disabled", isDisable());
-                        args.putLong("orderStatus", orderStatus);
-                        args.putSerializable("rejectedList", rejectedGoodsList);
+                        args.putLong(Constants.ORDER_ID, order.getId());
+                        args.putBoolean(Constants.DISABLED, isDisable());
+                        args.putLong(Constants.ORDER_STATUS, orderStatus);
+                        args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
                         orderItemsFragment.setArguments(args);
 
                         childFragTrans.replace(R.id.orderDetailContentFrame, orderItemsFragment);
@@ -119,8 +123,8 @@ public class OrderDetailFragment extends BaseFragment
                         FragmentTransaction childFragTrans = childFragMan.beginTransaction();
                         orderInfoFrg = new OrderInfoFragment();
                         Bundle args = new Bundle();
-                        args.putLong("orderId", orderId);
-                        args.putString("saleType", saleType);
+                        args.putLong(Constants.ORDER_ID, orderId);
+                        args.putString(Constants.SALE_TYPE, saleType);
                         orderInfoFrg.setArguments(args);
                         childFragTrans.replace(R.id.orderDetailContentFrame, orderInfoFrg);
                         childFragTrans.commit();
@@ -151,8 +155,8 @@ public class OrderDetailFragment extends BaseFragment
 
                             GoodsListFragment goodsListFragment = new GoodsListFragment();
                             Bundle args = new Bundle();
-                            args.putLong("orderId", orderId);
-                            args.putSerializable("rejectedList", rejectedGoodsList);
+                            args.putLong(Constants.ORDER_ID, orderId);
+                            args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
                             goodsListFragment.setArguments(args);
 
                             childFragTrans.replace(R.id.orderDetailContentFrame, goodsListFragment);
@@ -165,83 +169,81 @@ public class OrderDetailFragment extends BaseFragment
                 }
             }
 
+            actionsLayout.addView(createActionButton(context.getString(R.string.title_cancel), new View.OnClickListener()
             {
-                actionsLayout.addView(createActionButton(context.getString(R.string.title_cancel), new View.OnClickListener()
+                @Override
+                public void onClick(View v)
+                {
+                    context.removeFragment(OrderDetailFragment.this);
+                }
+            }));
+
+            if (orderStatus.equals(SaleOrderStatus.DELIVERABLE.getId()))
+            {
+
+                cancelOrderBtn = createActionButton(
+                        String.format(Locale.US, getString(R.string.title_cancel_sale_x), getProperTitle()),
+                        new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                showSaveOrderConfirmDialog(
+                                        String.format(Locale.US, getString(R.string.title_cancel_sale_x),
+                                                getProperTitle()), SaleOrderStatus.CANCELED.getId());
+                            }
+                        });
+
+                deliverOrderBtn = createActionButton(getString(R.string.title_deliver_sale_x)
+                        + getProperTitle(), new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View v)
                     {
-                        context.removeFragment(OrderDetailFragment.this);
-                    }
-                }));
-
-                if (orderStatus.equals(SaleOrderStatus.DELIVERABLE.getId()))
-                {
-
-                    cancelOrderBtn = createActionButton(
-                            String.format(Locale.US, getString(R.string.title_cancel_sale_x), getProperTitle()),
-                            new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    showSaveOrderConfirmDialog(
-                                            String.format(Locale.US, getString(R.string.title_cancel_sale_x),
-                                                    getProperTitle()), SaleOrderStatus.CANCELED.getId());
-                                }
-                            });
-
-                    deliverOrderBtn = createActionButton(getString(R.string.title_deliver_sale_x)
-                            + getProperTitle(), new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
+                        if (validateOrderForDeliver())
                         {
-                            if (validateOrderForDeliver())
-                            {
-                                showSaveOrderConfirmDialog(getString(R.string.title_deliver_sale_x)
-                                        + getProperTitle(), SaleOrderStatus.INVOICED.getId());
-                            }
+                            showSaveOrderConfirmDialog(getString(R.string.title_deliver_sale_x)
+                                    + getProperTitle(), SaleOrderStatus.INVOICED.getId());
                         }
-                    });
+                    }
+                });
 
-                    actionsLayout.addView(cancelOrderBtn);
-                    actionsLayout.addView(deliverOrderBtn);
-                }
+                actionsLayout.addView(cancelOrderBtn);
+                actionsLayout.addView(deliverOrderBtn);
+            }
 
-                if (SaleOrderStatus.READY_TO_SEND.getId().equals(orderStatus)
-                        || SaleOrderStatus.DRAFT.getId().equals(orderStatus)
-                        || SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus))
+            if (SaleOrderStatus.READY_TO_SEND.getId().equals(orderStatus)
+                    || SaleOrderStatus.DRAFT.getId().equals(orderStatus)
+                    || SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus))
 
+            {
+                saveOrderBtn = createActionButton(context.getString(R.string.title_save_order), new View.OnClickListener()
                 {
-                    saveOrderBtn = createActionButton(context.getString(R.string.title_save_order), new View.OnClickListener()
+                    @Override
+                    public void onClick(View v)
                     {
-                        @Override
-                        public void onClick(View v)
+                        order = saleOrderService.findOrderDtoById(orderId);
+                        if (validateOrderForSave())
                         {
-                            order = saleOrderService.findOrderDtoById(orderId);
-                            if (validateOrderForSave())
+                            if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()))
                             {
-                                if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()))
+                                showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.REJECTED.getId());
+                            } else
+                            {
+                                if (isCold())
                                 {
-                                    showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.REJECTED.getId());
+                                    showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.READY_TO_SEND.getId());
                                 } else
                                 {
-                                    if (saleType.equals(ApplicationKeys.COLD_SALE))
-                                    {
-                                        showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.READY_TO_SEND.getId());
-                                    } else
-                                    {
-
-                                        showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.INVOICED.getId());
-                                    }
+                                    showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.INVOICED.getId());
                                 }
                             }
                         }
-                    });
-                    actionsLayout.addView(saveOrderBtn);
-                }
+                    }
+                });
+                actionsLayout.addView(saveOrderBtn);
             }
+
             return view;
         } catch (Exception e)
         {
@@ -249,6 +251,11 @@ public class OrderDetailFragment extends BaseFragment
             ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
             return inflater.inflate(R.layout.view_error_page, null);
         }
+    }
+
+    private boolean isCold()
+    {
+        return saleType.equals(ApplicationKeys.COLD_SALE);
     }
 
     /*
@@ -272,7 +279,7 @@ public class OrderDetailFragment extends BaseFragment
                 orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()))
         {
             return getString(R.string.title_reject);
-        } else if (saleType.equals(ApplicationKeys.COLD_SALE))
+        } else if (isCold())
         {
             return getString(R.string.title_order);
         } else
@@ -320,10 +327,7 @@ public class OrderDetailFragment extends BaseFragment
             order.setStatus(statusId);
 
             long selectedPaymentType = orderInfoFrg.getSelectedPaymentType();
-            if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())
-                    || orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())
-                    || orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())
-                    )
+            if (isRejected())
             {
                 //Add reason or reject to orders
             } else
@@ -334,7 +338,12 @@ public class OrderDetailFragment extends BaseFragment
             String description = orderInfoFrg.getDescription();
             order.setDescription(description);
 
-            saleOrderService.saveOrder(order);
+            long typeId = saleOrderService.saveOrder(order);
+            VisitInformationDetail visitDetail = new VisitInformationDetail(visitId,
+                    isRejected() ? VisitInformationDetailType.CREATE_REJECT :
+                            isCold() ? VisitInformationDetailType.CREATE_ORDER :
+                                    VisitInformationDetailType.CREATE_INVOICE, typeId);
+            visitService.saveVisitDetail(visitDetail);
         } catch (BusinessException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
