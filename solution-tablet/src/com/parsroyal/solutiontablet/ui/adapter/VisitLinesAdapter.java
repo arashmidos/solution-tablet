@@ -10,7 +10,9 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 
@@ -24,13 +26,13 @@ public class VisitLinesAdapter extends BaseListAdapter<VisitLineListModel>
 {
 
     private MainActivity context;
-    private CustomerService customerService;
+    private VisitService visitService;
 
     public VisitLinesAdapter(MainActivity context, List<VisitLineListModel> dataModel)
     {
         super(context, dataModel);
         this.context = context;
-        this.customerService = new CustomerServiceImpl(context);
+        this.visitService = new VisitServiceImpl(context);
     }
 
     @Override
@@ -40,10 +42,10 @@ public class VisitLinesAdapter extends BaseListAdapter<VisitLineListModel>
         {
             if (constraint.length() != 0 && !constraint.toString().equals(""))
             {
-                return customerService.getAllFilteredVisitLinesListModel(constraint.toString());
+                return visitService.getAllFilteredVisitLinesListModel(constraint.toString());
             } else
             {
-                return customerService.getAllVisitLinesListModel();
+                return visitService.getAllVisitLinesListModel();
             }
         } catch (final Exception ex)
         {

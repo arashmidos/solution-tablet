@@ -6,7 +6,6 @@
                 android:layout_margin="6dp"
                 tools:context=".ui.MainActivity">
 
-
     <TextView
         android:id="@+id/error_msg"
         android:layout_width="match_parent"

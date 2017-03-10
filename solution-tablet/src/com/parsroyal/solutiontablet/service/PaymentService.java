@@ -13,7 +13,7 @@ public interface PaymentService
 {
     Payment getPaymentById(Long paymentID);
 
-    void savePayment(Payment payment);
+    long savePayment(Payment payment);
 
     void updatePayment(Payment payment);
 

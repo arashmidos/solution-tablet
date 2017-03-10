@@ -22,8 +22,10 @@ import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
@@ -43,12 +45,14 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
     private final NCustomerSO nCustomerSO;
     private MainActivity mainActivity;
     private CustomerService customerService;
+    private VisitService visitService;
 
     public NCustomersListAdapter(MainActivity mainActivity, List<NCustomerListModel> dataModel, NCustomerSO nCustomerSO)
     {
         super(mainActivity, dataModel);
         customerService = new CustomerServiceImpl(mainActivity);
         questionnaireService = new QuestionnaireServiceImpl(mainActivity);
+        visitService = new VisitServiceImpl(context);
         this.mainActivity = mainActivity;
         this.nCustomerSO = nCustomerSO;
     }
@@ -150,7 +154,7 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
             VisitInformation visitInformations = null;
             try
             {
-                visitInformations = customerService.getVisitInformationForNewCustomer(model.getPrimaryKey());
+                visitInformations = visitService.getVisitInformationForNewCustomer(model.getPrimaryKey());
             } catch (Exception ex)
             {
                 ex.printStackTrace();
@@ -190,7 +194,7 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
                     long visitId;
                     if (finalVisitInformations == null)
                     {
-                        visitId = customerService.startVisitingNewCustomer(model.getPrimaryKey());
+                        visitId = visitService.startVisitingNewCustomer(model.getPrimaryKey());
                     } else
                     {
                         visitId = finalVisitInformations.getId();

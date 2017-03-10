@@ -7,12 +7,15 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderDao;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderItemDao;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderItemDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
+import com.parsroyal.solutiontablet.service.VisitService;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -32,12 +35,12 @@ import java.util.List;
  */
 public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizImpl<String>
 {
-
-    private KeyValueBiz keyValueBiz;
     protected ResultObserver resultObserver;
     protected SaleOrderDao saleOrderDao;
     protected SaleOrderItemDao saleOrderItemDao;
     protected List<SaleOrderDto> orders;
+    private VisitService visitService;
+    private KeyValueBiz keyValueBiz;
 
     public InvoicedOrdersDataTransferBizImpl(Context context, ResultObserver resultObserver)
     {
@@ -46,6 +49,7 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
         this.saleOrderDao = new SaleOrderDaoImpl(context);
         this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
         this.keyValueBiz = new KeyValueBizImpl(context);
+        visitService = new VisitServiceImpl(context);
     }
 
     public List<SaleOrderDto> getOrders()
@@ -106,6 +110,7 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
         saleOrder.setStatus(SaleOrderStatus.SENT_INVOICE.getId());
         saleOrder.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
         saleOrderDao.update(saleOrder);
+        visitService.updateVisitDetailId(getVisitDetailType(), saleOrder.getId(), invoiceBackendId);
     }
 
     @Override
@@ -174,7 +179,12 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
             sb.append("\n");
             sb.append(orderStr);
         }
-        Log.d(TAG, "ORDERS:"+sb.toString());
+        Log.d(TAG, "ORDERS:" + sb.toString());
         return sb.toString();
+    }
+
+    protected VisitInformationDetailType getVisitDetailType()
+    {
+        return VisitInformationDetailType.CREATE_INVOICE;
     }
 }

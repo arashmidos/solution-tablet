@@ -8,8 +8,9 @@ import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
-import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
+import com.parsroyal.solutiontablet.service.VisitService;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -19,67 +20,54 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Created by Mahyar on 8/2/2015.
  */
-public class VisitInformationDataTransferBizImpl extends AbstractDataTransferBizImpl<String>
+public class VisitInformationDataTransferBizImpl extends AbstractDataTransferBizImpl<VisitInformationDto>
 {
-
+    private static int success = 0;
     private VisitInformationDao visitInformationDao;
-    private CustomerService customerService;
+    private VisitService visitService;
     private ResultObserver observer;
+    private VisitInformationDto data;
 
     public VisitInformationDataTransferBizImpl(Context context, ResultObserver resultObserver)
     {
         super(context);
         this.visitInformationDao = new VisitInformationDaoImpl(context);
-        this.customerService = new CustomerServiceImpl(context);
+        this.visitService = new VisitServiceImpl(context);
         this.observer = resultObserver;
     }
 
     @Override
-    public void receiveData(String response)
+    public void receiveData(VisitInformationDto response)
     {
         if (Empty.isNotEmpty(response))
         {
             try
             {
-                String[] rows = response.split("[\n]");
-                for (int i = 0; i < rows.length; i++)
+                VisitInformation visitInformation = visitInformationDao.retrieve(data.getId());
+
+                if (Empty.isNotEmpty(visitInformation))
                 {
-                    String row = rows[i];
-                    String[] columns = row.split("[&]");
-                    Long visitId = Long.parseLong(columns[0]);
-                    Long backendId = Long.parseLong(columns[1]);
-
-                    VisitInformation visitInformation = visitInformationDao.retrieve(visitId);
-
-                    if (Empty.isNotEmpty(visitInformation))
-                    {
-                        visitInformation.setVisitBackendId(backendId);
-                        visitInformation.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
-                        visitInformationDao.update(visitInformation);
-                    }
+                    visitInformation.setVisitBackendId(response.getId());
+                    visitInformation.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
+                    visitInformationDao.update(visitInformation);
+                    success++;
                 }
 
-                observer.publishResult(context.getString(R.string.visit_information_data_transferred_successfully));
             } catch (Exception ex)
             {
                 Log.e(TAG, ex.getMessage(), ex);
                 observer.publishResult(context.getString(R.string.message_exception_in_sending_visit_information));
             }
         }
-
     }
 
     @Override
     public void beforeTransfer()
     {
-        observer.publishResult(context.getString(R.string.sending_visit_information_data));
+//        observer.publishResult(context.getString(R.string.sending_visit_information_data));
     }
 
     @Override
@@ -91,13 +79,13 @@ public class VisitInformationDataTransferBizImpl extends AbstractDataTransferBiz
     @Override
     public String getMethod()
     {
-        return "visit/detail";
+        return "visit";
     }
 
     @Override
     public Class getType()
     {
-        return String.class;
+        return VisitInformationDto.class;
     }
 
     @Override
@@ -109,39 +97,23 @@ public class VisitInformationDataTransferBizImpl extends AbstractDataTransferBiz
     @Override
     protected MediaType getContentType()
     {
-        MediaType contentType = new MediaType("TEXT", "PLAIN", Charset.forName("UTF-8"));
-        return contentType;
+        return MediaType.APPLICATION_JSON;
     }
 
     @Override
     protected HttpEntity getHttpEntity(HttpHeaders headers)
     {
-        List<VisitInformation> allVisitInformationForSend = customerService.getAllVisitInformationForSend();
-        String visitsInformationString = getVisitInformationString(allVisitInformationForSend);
-        headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN));
-        HttpEntity<String> httpEntity = new HttpEntity<String>(visitsInformationString, headers);
+        HttpEntity<VisitInformationDto> httpEntity = new HttpEntity<>(data, headers);
         return httpEntity;
     }
 
-    private String getVisitInformationString(List<VisitInformation> allVisitInformationForSend)
+    public void setData(VisitInformationDto data)
     {
-        StringBuilder sb = new StringBuilder();
-        boolean firstLine = true;
-        for (VisitInformation visitInformation : allVisitInformationForSend)
-        {
-            String visitInformationString = visitInformation.getString();
-            visitInformationString = visitInformationString.trim().replaceAll("[\n]", "");
-            visitInformationString = visitInformationString.trim().replace("\n", "");
-            if (firstLine)
-            {
-                sb.append(visitInformationString);
-                firstLine = false;
-                continue;
-            }
-            sb.append("\n");
-            sb.append(visitInformationString);
-        }
+        this.data = data;
+    }
 
-        return sb.toString();
+    public int getSuccess()
+    {
+        return success;
     }
 }

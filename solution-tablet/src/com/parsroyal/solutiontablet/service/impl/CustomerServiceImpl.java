@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteException;
-import android.location.Location;
 
 import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
@@ -15,11 +14,8 @@ import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
-import com.parsroyal.solutiontablet.data.entity.VisitInformation;
-import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
-import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionModel;
@@ -36,11 +32,9 @@ import java.util.List;
 
 /**
  * Created by Mahyar on 6/14/2015.
- * Edited by Arash on 6/29/2016
  */
 public class CustomerServiceImpl implements CustomerService
 {
-
     private Context context;
     private CustomerDao customerDao;
     private CustomerPicDao customerPicDao;
@@ -117,39 +111,21 @@ public class CustomerServiceImpl implements CustomerService
     }
 
     @Override
-    public List<VisitLine> getAllVisitLines()
-    {
-        return visitLineDao.retrieveAll();
-    }
-
-    @Override
     public List<Customer> getAllCustomersByVisitLineBackendId(Long visitLineId)
     {
         return customerDao.retrieveAllCustomersByVisitLineBackendId(visitLineId);
     }
 
     @Override
-    public List<VisitLineListModel> getAllVisitLinesListModel()
-    {
-        return visitLineDao.getAllVisitLineListModel();
-    }
-
-    @Override
     public List<CustomerListModel> getAllCustomersListModelByVisitLineBackendId(Long visitLineId)
     {
-        return  customerDao.getAllCustomersListModelByVisitLineBackendId(visitLineId);
+        return customerDao.getAllCustomersListModelByVisitLineBackendId(visitLineId);
     }
 
     @Override
     public List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint)
     {
         return customerDao.getAllCustomersListModelByVisitLineWithConstraint(visitLineId, constraint);
-    }
-
-    @Override
-    public List<VisitLineListModel> getAllFilteredVisitLinesListModel(String constraint)
-    {
-        return visitLineDao.getAllVisitLinesListModelByConstraint(constraint);
     }
 
     @Override
@@ -165,92 +141,20 @@ public class CustomerServiceImpl implements CustomerService
     }
 
     @Override
-    public Long startVisiting(Long customerBackendId)
-    {
-        VisitInformation visitInformation = new VisitInformation();
-        visitInformation.setCustomerBackendId(customerBackendId);
-        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-        visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
-        visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-        return saveVisit(visitInformation);
-    }
-
-    @Override
-    public Long startVisitingNewCustomer(Long customerId)
-    {
-
-        VisitInformation visitInformation = new VisitInformation();
-        visitInformation.setCustomerId(customerId);
-        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-        visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
-        visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-        // -1 Means new customer without backendId
-        visitInformation.setResult(-1L);
-        return saveVisit(visitInformation);
-    }
-
-    @Override
-    public void finishVisiting(Long visitId)
-    {
-        VisitInformation visitInformation = visitInformationDao.retrieve(visitId);
-        visitInformation.setEndTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
-        locationService.stopFindingLocation();
-        saveVisit(visitInformation);
-    }
-
-    @Override
-    public List<VisitInformation> getAllVisitInformationForSend()
-    {
-        return visitInformationDao.getAllVisitInformationForSend();
-    }
-
-    @Override
-    public VisitInformation getVisitInformationById(Long visitId)
-    {
-        return visitInformationDao.retrieve(visitId);
-    }
-
-    @Override
-    public VisitInformation getVisitInformationForNewCustomer(Long customerId)
-    {
-        return  visitInformationDao.retrieveForNewCustomer(customerId);
-    }
-
-    public Long saveVisit(VisitInformation visitInformation)
-    {
-        if (Empty.isEmpty(visitInformation.getId()))
-        {
-            visitInformation.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-            visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-            return visitInformationDao.create(visitInformation);
-        } else
-        {
-            visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-            visitInformationDao.update(visitInformation);
-            return visitInformation.getId();
-        }
-    }
-
-    @Override
-    public void updateVisitLocation(Long visitInformationId, Location location)
-    {
-        visitInformationDao.updateLocation(visitInformationId, location);
-    }
-
-    @Override
-    public void savePicture(CustomerPic customerPic)
+    public long savePicture(CustomerPic customerPic)
     {
         if (Empty.isEmpty(customerPic.getId()))
         {
             customerPic.setCreateDateTime(DateUtil.convertDate(new Date(),
                     DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
             customerPic.setStatus(CustomerStatus.NEW.getId());
-            customerPicDao.create(customerPic);
+            return customerPicDao.create(customerPic);
         } else
         {
             //            customer.setUpdateDateTime(new Date().toString());
             //            customerDao.update(customer);
             //There is no need for update yet. we'll delete all pic records after uploading
+            return 0;
         }
     }
 

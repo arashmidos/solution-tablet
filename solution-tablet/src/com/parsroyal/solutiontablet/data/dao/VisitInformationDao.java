@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.data.dao;
 import android.location.Location;
 
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
+import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface VisitInformationDao extends BaseDao<VisitInformation, Long>
     void updateLocation(Long visitInformationId, Location location);
 
     VisitInformation retrieveForNewCustomer(Long customerId);
+
+    List<VisitInformationDto> getAllVisitInformationDtoForSend();
 }

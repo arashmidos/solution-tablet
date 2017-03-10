@@ -26,9 +26,11 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
@@ -38,11 +40,13 @@ import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.service.order.SaleOrderService;
 import com.parsroyal.solutiontablet.service.order.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -50,23 +54,21 @@ import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Mahyar on 7/17/2015.
- * Edited by Arash on 6/29/2016
  */
 public class VisitDetailFragment extends BaseFragment implements ResultObserver
 {
-
     public static final String TAG = VisitDetailFragment.class.getSimpleName();
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -90,12 +92,12 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     private CustomerService customerService;
     private SaleOrderService saleOrderService;
     private LocationService locationService;
+    private VisitService visitService;
     private Long visitId;
     private Long customerId;
     private Customer customer;
     private SaleOrderDto orderDto;
     private BaseInfoService baseInfoService;
-    private File file;
     private SettingServiceImpl settingService;
     private String saleType;
     private Uri fileUri;
@@ -111,10 +113,11 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             saleOrderService = new SaleOrderServiceImpl(mainActivity);
             baseInfoService = new BaseInfoServiceImpl(mainActivity);
             locationService = new LocationServiceImpl(mainActivity);
-            settingService = new SettingServiceImpl(getActivity());
+            settingService = new SettingServiceImpl(mainActivity);
+            visitService = new VisitServiceImpl(mainActivity);
 
-            visitId = (Long) getArguments().get("visitId");
-            customerId = (Long) getArguments().get("customerId");
+            visitId = (Long) getArguments().get(Constants.VISIT_ID);
+            customerId = (Long) getArguments().get(Constants.CUSTOMER_ID);
 
             customer = customerService.getCustomerById(customerId);
             saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
@@ -141,7 +144,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             {
                 switch (position)
                 {
-                    //Add Factor / Add Order
+                    //Add Invoice / Add Order
                     case 0:
                         openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
                         break;
@@ -237,15 +240,10 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                 cPic.setTitle(s);
                 cPic.setCustomer_backend_id(customer.getBackendId());
 
-                if (Empty.isEmpty(cPic))
-                {
-                    ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
-                    mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
-                } else
-                {
-                    ToastUtil.toastSuccess(mainActivity, mainActivity.getString(R.string.message_picutre_saved_successfully));
-                    customerService.savePicture(cPic);
-                }
+                long typeId = customerService.savePicture(cPic);
+                visitService.saveVisitDetail(new VisitInformationDetail(visitId, VisitInformationDetailType.TAKE_PICTURE, typeId));
+                ToastUtil.toastSuccess(mainActivity, mainActivity.getString(R.string.message_picutre_saved_successfully));
+
             } else if (resultCode == RESULT_CANCELED)
             {
                 // User cancelled the image capture
@@ -259,7 +257,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     }
 
     /**
-     * @param statusID Could be DRAFT for both AddFactor/AddOrder or REJECTED_DRAFT for ReturnedOrder
+     * @param statusID Could be DRAFT for both AddInvoice/AddOrder or REJECTED_DRAFT for ReturnedOrder
      */
     private void openOrderDetailFragment(Long statusID)
     {
@@ -277,8 +275,9 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             } else
             {
                 Bundle args = new Bundle();
-                args.putLong("orderId", orderDto.getId());
-                args.putString("saleType", saleType);
+                args.putLong(Constants.ORDER_ID, orderDto.getId());
+                args.putString(Constants.SALE_TYPE, saleType);
+                args.putLong(Constants.VISIT_ID,visitId);
                 mainActivity.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
             }
 
@@ -401,24 +400,24 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     private void openPaymentFragment()
     {
         Bundle args = new Bundle();
-        args.putLong("customerId", customerId);
-        args.putLong("visitId", visitId);
+        args.putLong(Constants.CUSTOMER_ID, customerId);
+        args.putLong(Constants.VISIT_ID, visitId);
         mainActivity.changeFragment(MainActivity.PAYMENT_FRAGMENT_ID, args, false);
     }
 
     private void openSaveLocationFragment()
     {
         Bundle args = new Bundle();
-        args.putLong("customerId", customerId);
-        args.putLong("visitId", visitId);
+        args.putLong(Constants.CUSTOMER_ID, customerId);
+        args.putLong(Constants.VISIT_ID, visitId);
         mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, args, false);
     }
 
     private void openGeneralQuestionnairesFragment()
     {
         Bundle args = new Bundle();
-        args.putLong("customerId", customerId);
-        args.putLong("visitId", visitId);
+        args.putLong(Constants.CUSTOMER_ID, customerId);
+        args.putLong(Constants.VISIT_ID, visitId);
         mainActivity.changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
     }
 
@@ -435,7 +434,22 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     {
         try
         {
-            VisitInformation visitInformation = customerService.getVisitInformationById(visitId);
+            List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
+            if (detailList.size() == 0)
+            {
+                DialogUtil.showConfirmDialog(mainActivity,
+                        getString(R.string.title_attention),
+                        getString(R.string.message_error_no_visit_detail_found), new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i)
+                            {
+                                showWantsDialog();
+                            }
+                        });
+                return;
+            }
+            VisitInformation visitInformation = visitService.getVisitInformationById(visitId);
             if (Empty.isEmpty(visitInformation.getxLocation()) || Empty.isEmpty(visitInformation.getyLocation()))
             {
                 showDialogForEmptyLocation();
@@ -482,7 +496,6 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     {
         try
         {
-
             final ProgressDialog progressDialog = new ProgressDialog(mainActivity);
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(Boolean.FALSE);
@@ -499,7 +512,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                     progressDialog.dismiss();
                     try
                     {
-                        customerService.updateVisitLocation(visitId, location);
+                        visitService.updateVisitLocation(visitId, location);
                     } catch (Exception e)
                     {
                         Log.e(TAG, e.getMessage(), e);
@@ -563,10 +576,9 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     {
         try
         {
-            customerService.finishVisiting(visitId);
+            visitService.finishVisiting(visitId);
             Customer customer = customerService.getCustomerById(customerId);
             saleOrderService.deleteForAllCustomerOrdersByStatus(customer.getBackendId(), SaleOrderStatus.DRAFT.getId());
-//            mainActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
             mainActivity.removeFragment(this);
             mainActivity.setMenuEnabled(true);
         } catch (Exception ex)
@@ -584,6 +596,12 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
 
     private void showWantsDialog()
     {
+        List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
+        if (detailList.size() > 0)
+        {
+            ToastUtil.toastError(mainActivity, mainActivity.getString(R.string.message_error_wants_denied));
+            return;
+        }
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mainActivity);
 
         List<LabelValue> wants = baseInfoService.getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.WANT_TYPE.getId());
@@ -625,9 +643,9 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     {
         try
         {
-            VisitInformation visit = customerService.getVisitInformationById(visitId);
-            visit.setResult(selectedItem.getValue());
-            customerService.saveVisit(visit);
+            VisitInformationDetail visitInformationDetail = new VisitInformationDetail(
+                    visitId, VisitInformationDetailType.NONE, selectedItem.getValue());
+            visitService.saveVisitDetail(visitInformationDetail);
         } catch (Exception ex)
         {
             ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));

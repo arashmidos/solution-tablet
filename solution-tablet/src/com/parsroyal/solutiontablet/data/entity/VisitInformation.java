@@ -5,9 +5,8 @@ import com.parsroyal.solutiontablet.util.Empty;
 /**
  * Created by Mahyar on 7/16/2015.
  */
-public class  VisitInformation extends BaseEntity<Long>
+public class VisitInformation extends BaseEntity<Long>
 {
-
     public static final String TABLE_NAME = "COMMER_VISIT_INFORMATION";
     public static final String COL_ID = "_id";
     public static final String COL_VISIT_DATE = "VISIT_DATE_TIME";
