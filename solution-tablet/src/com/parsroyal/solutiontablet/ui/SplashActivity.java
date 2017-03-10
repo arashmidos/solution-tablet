@@ -11,7 +11,6 @@ import com.parsroyal.solutiontablet.R;
  */
 public class SplashActivity extends BaseActivity
 {
-
     private static final int SPLASH_SCREEN_TIME = 2000;
 
     @Override

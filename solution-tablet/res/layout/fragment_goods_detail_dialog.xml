@@ -36,6 +36,7 @@
         android:orientation="horizontal">
 
         <Spinner
+            style="@style/Spinner"
             android:id="@+id/goodUnitsSp"
             android:layout_width="100dp"
             android:layout_height="wrap_content"/>

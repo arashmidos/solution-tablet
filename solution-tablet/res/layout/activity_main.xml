@@ -1,56 +1,56 @@
-<android.support.v4.widget.DrawerLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    <!-- The main content view -->
+    android:layout_height="match_parent">
 
-
-    <LinearLayout
-        android:id="@+id/mainLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#ffffff"
-        android:gravity="right"
-        android:orientation="horizontal"
-        android:weightSum="100">
-
-
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- The main content view -->
         <LinearLayout
+            android:id="@+id/mainLayout"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="100"
-            android:background="#dddce1"
-            android:paddingTop="8dp">
+            android:layout_height="fill_parent"
+            android:background="#ffffff"
+            android:baselineAligned="false"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:weightSum="100">
 
-            <FrameLayout
-                android:id="@+id/contentFrame"
-                android:layout_width="fill_parent"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="#ffffff">
-            </FrameLayout>
+                android:layout_weight="100"
+                android:background="#dddce1"
+                android:paddingTop="8dp">
+
+                <FrameLayout
+                    android:id="@+id/contentFrame"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:background="#ffffff">
+                </FrameLayout>
+            </LinearLayout>
+
+            <include
+                layout="@layout/activity_main_sidebar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
+        <!-- The navigation drawer -->
+        <ListView
+            android:id="@+id/left_drawer"
+            android:layout_width="190dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:background="#D8D8D8"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"/>
 
-        <include
-            layout="@layout/activity_main_sidebar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    </android.support.v4.widget.DrawerLayout>
 
-    </LinearLayout>
-
-
-    <!-- The navigation drawer -->
-    <ListView
-        android:id="@+id/left_drawer"
-        android:layout_width="190dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:background="#D8D8D8"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"/>
-
-
-</android.support.v4.widget.DrawerLayout>
+</android.support.design.widget.CoordinatorLayout>

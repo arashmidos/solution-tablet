@@ -390,12 +390,12 @@ public class UserTrackingFragment extends BaseFragment implements
     {
         if (fromDate.getHint().equals("--"))
         {
-            ToastUtil.toastMessage(getActivity(), getString(R.string.error_tracking_cal1_empty));
+            ToastUtil.toastError(getActivity(), getString(R.string.error_tracking_cal1_empty));
             return;
         }
         if (toDate.getHint().equals("--"))
         {
-            ToastUtil.toastMessage(getActivity(), getString(R.string.error_tracking_cal2_empty));
+            ToastUtil.toastError(getActivity(), getString(R.string.error_tracking_cal2_empty));
             return;
         }
         Calendar c1 = startDate.getCalendar();
@@ -405,10 +405,10 @@ public class UserTrackingFragment extends BaseFragment implements
 
         if (days + 1 > 5)
         {
-            ToastUtil.toastMessage(getActivity(), getString(R.string.error_report_is_huge));
+            ToastUtil.toastError(getActivity(), getString(R.string.error_report_is_huge));
         } else if (days < 0)
         {
-            ToastUtil.toastMessage(getActivity(), getString(R.string.error_report_date_invalid));
+            ToastUtil.toastError(getActivity(), getString(R.string.error_report_date_invalid));
         } else
         {
             Date from = DateUtil.startOfDay(c1);

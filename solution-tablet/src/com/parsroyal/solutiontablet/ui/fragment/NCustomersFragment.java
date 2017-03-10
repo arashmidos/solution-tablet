@@ -1,11 +1,11 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.City;
@@ -20,6 +20,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NCustomersListAdapter;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
     private CustomerService customerService;
     private BaseInfoService baseInfoService;
     private NCustomerSO nCustomerSO;
+    private FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -44,8 +46,37 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
         this.nCustomerSO = new NCustomerSO();
         nCustomerSO.setSent(0);
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
         initTabs();
+        initFab();
         return view;
+    }
+
+    private void initFab()
+    {
+        fab.setVisibility(View.VISIBLE);
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                List<Province> provinceList = baseInfoService.getAllProvinces();
+                List<City> cityList = baseInfoService.getAllCities();
+                if (Empty.isEmpty(cityList))
+                {
+                    ToastUtil.toastError(getActivity(), R.string.message_cities_information_not_found);
+                    return;
+                }
+                if (Empty.isEmpty(provinceList))
+                {
+                    ToastUtil.toastError(getActivity(), R.string.message_provinces_information_not_foun);
+                    return;
+                }
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
+            }
+        });
     }
 
     private void initTabs()
@@ -94,30 +125,7 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
     @Override
     public View getHeaderView()
     {
-        View headerView = getLayoutInflater(getArguments()).inflate(R.layout.list_header_n_customers, null);
-        ImageButton addBtn = (ImageButton) headerView.findViewById(R.id.addBtn);
-        addBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                List<Province> provinceList = baseInfoService.getAllProvinces();
-                List<City> cityList = baseInfoService.getAllCities();
-                if (Empty.isEmpty(cityList))
-                {
-                    toastError(R.string.message_cities_information_not_found);
-                    return;
-                }
-                if (Empty.isEmpty(provinceList))
-                {
-                    toastError(R.string.message_provinces_information_not_foun);
-                    return;
-                }
-                MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
-            }
-        });
-        return headerView;
+        return null;
     }
 
     @Override

@@ -6,6 +6,7 @@
               android:orientation="vertical">
 
     <Spinner
+        style="@style/Spinner"
         android:id="@+id/wantsSP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

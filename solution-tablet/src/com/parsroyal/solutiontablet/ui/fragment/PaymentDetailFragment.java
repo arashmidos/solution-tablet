@@ -20,8 +20,8 @@ import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.constants.PaymentType;
+import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
@@ -37,6 +37,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.Calendar;
 import java.util.List;
@@ -116,22 +117,22 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
                 ref = arguments.getInt(Constants.PARENT);
             } else
             {
-                toastError(R.string.message_error_in_loading_or_creating_customer);
+                ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
                 mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
             }
         } catch (BusinessException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(ex);
+            ToastUtil.toastError(getActivity(), ex);
         } catch (Exception ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(new UnknownSystemException(ex));
+            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
         }
 
         if (Empty.isEmpty(customer))
         {
-            toastError(R.string.message_error_in_loading_or_creating_customer);
+            ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
             mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
         }
 
@@ -170,6 +171,7 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
         amount.addTextChangedListener(new TextWatcher()
         {
             boolean isEditing = false;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after)
             {
@@ -192,8 +194,8 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
                 isEditing = true;
                 try
                 {
-                    amountValue = Long.parseLong(NumberUtil.digitsToEnglish(s.toString().replaceAll(",","")));
-                    String number = String.format(Locale.US,"%,d", amountValue);
+                    amountValue = Long.parseLong(NumberUtil.digitsToEnglish(s.toString().replaceAll(",", "")));
+                    String number = String.format(Locale.US, "%,d", amountValue);
                     s.replace(0, s.length(), number);
                 } catch (NumberFormatException e)
                 {
@@ -224,7 +226,7 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
         try
         {
             amountValue = payment.getAmount() / 1000;
-            amount.setText(String.format(Locale.US,"%,d", amountValue));
+            amount.setText(String.format(Locale.US, "%,d", amountValue));
             dateModified = true;
             int position = 0;
             for (LabelValue labelValue : paymentTypes)
@@ -315,14 +317,14 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
 
         if (Empty.isEmpty(amount.getText().toString()))
         {
-            toastMessage(R.string.message_amount_is_required);
+            ToastUtil.toastError(getActivity(), R.string.message_amount_is_required);
             amount.requestFocus();
             return false;
         }
 
         if (paymentsSp.getSelectedItemPosition() == 1 && Empty.isEmpty(trackingNo.getText().toString()))
         {
-            toastMessage(R.string.message_tracking_no_is_required);
+            ToastUtil.toastError(getActivity(), R.string.message_tracking_no_is_required);
             trackingNo.requestFocus();
             return false;
         }
@@ -331,13 +333,13 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
         {
             if (!dateModified)
             {
-                toastMessage(R.string.message_cheque_date_is_required);
+                ToastUtil.toastError(getActivity(), R.string.message_cheque_date_is_required);
                 chequeDate.requestFocus();
                 return false;
             }
             if (Empty.isEmpty(chequeNo.getText().toString()))
             {
-                toastMessage(R.string.message_cheque_number_is_required);
+                ToastUtil.toastError(getActivity(), R.string.message_cheque_number_is_required);
                 chequeNo.requestFocus();
                 return false;
             }
@@ -391,17 +393,17 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
                         }
                         payment.setStatus(SendStatus.NEW.getId());
                         paymentService.savePayment(payment);
-                        toastMessage(R.string.message_payment_save_successfully);
+                        ToastUtil.toastSuccess(getActivity(), R.string.message_payment_save_successfully);
                         mainActivity.removeFragment(PaymentDetailFragment.this);
                     }
                 } catch (BusinessException ex)
                 {
                     Log.e(TAG, ex.getMessage(), ex);
-                    toastError(ex);
+                    ToastUtil.toastError(getActivity(), ex);
                 } catch (Exception e)
                 {
                     Log.e(TAG, e.getMessage(), e);
-                    toastError(new UnknownSystemException(e));
+                    ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
                 }
                 break;
         }

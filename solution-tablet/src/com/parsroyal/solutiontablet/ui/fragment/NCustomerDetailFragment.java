@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 
 import com.parsroyal.solutiontablet.R;
@@ -30,6 +31,7 @@ import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -80,6 +82,8 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
     EditText municipalityCodeTxt;
     @BindView(R.id.postalCodeTxt)
     EditText postalCodeTxt;
+    @BindView(R.id.root_view)
+    ScrollView rootView;
 
     private Context context;
     private MainActivity mainActivity;
@@ -115,16 +119,16 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
         } catch (BusinessException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(ex);
+            ToastUtil.toastError(getActivity(), ex);
         } catch (Exception ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(new UnknownSystemException(ex));
+            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
         }
 
         if (Empty.isEmpty(customer))
         {
-            toastError(R.string.message_error_in_loading_or_creating_customer);
+            ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
             mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
         }
 
@@ -315,7 +319,7 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
                 {
                     customer.setyLocation(location.getLatitude());
                     customer.setxLocation(location.getLongitude());
-                    toastMessage(R.string.message_found_location_successfully);
+                    ToastUtil.toastMessage(getActivity(), R.string.message_found_location_successfully);
                     dismissProgressDialog();
                 }
 
@@ -327,7 +331,7 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
                         @Override
                         public void run()
                         {
-                            toastMessage(R.string.message_finding_location_timeout);
+                            ToastUtil.toastError(getActivity(), R.string.message_finding_location_timeout);
                             dismissProgressDialog();
                         }
                     });
@@ -335,11 +339,11 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
             });
         } catch (BusinessException ex)
         {
-            toastError(ex);
+            ToastUtil.toastError(getActivity(), ex);
             dismissProgressDialog();
         } catch (Exception e)
         {
-            toastError(new UnknownSystemException(e));
+            ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
             Log.e(TAG, e.getMessage(), e);
             dismissProgressDialog();
         }
@@ -369,17 +373,17 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
             if (validate())
             {
                 customerService.saveCustomer(customer);
-                toastMessage(R.string.message_customer_save_successfully);
+                ToastUtil.toastSuccess(getActivity(), R.string.message_customer_save_successfully);
                 mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, false);
             }
         } catch (BusinessException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(ex);
+            ToastUtil.toastError(getActivity(), ex);
         } catch (Exception e)
         {
             Log.e(TAG, e.getMessage(), e);
-            toastError(new UnknownSystemException(e));
+            ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
         }
     }
 
@@ -391,28 +395,28 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
         }
         if (Empty.isEmpty(customer.getFullName()))
         {
-            toastMessage(R.string.message_customer_name_is_required);
+            ToastUtil.toastError(getActivity(), R.string.message_customer_name_is_required);
             fullNameTxt.requestFocus();
             return false;
         }
 
         if (Empty.isEmpty(customer.getPhoneNumber()))
         {
-            toastMessage(R.string.message_phone_is_required);
+            ToastUtil.toastError(getActivity(), R.string.message_phone_is_required);
             phoneNumberTxt.requestFocus();
             return false;
         }
 
         if (Empty.isEmpty(customer.getCellPhone()))
         {
-            toastMessage(R.string.message_cell_phone_is_required);
+            ToastUtil.toastError(getActivity(), R.string.message_cell_phone_is_required);
             cellPhoneTxt.requestFocus();
             return false;
         }
 
         if (Empty.isEmpty(customer.getShopName()))
         {
-            toastMessage(R.string.message_shop_name_is_required);
+            ToastUtil.toastError(getActivity(), R.string.message_shop_name_is_required);
             shopNameTxt.requestFocus();
             return false;
         }
@@ -420,7 +424,7 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
         String nationalCode = NumberUtil.digitsToEnglish(customer.getNationalCode());
         if (!Empty.isEmpty(nationalCode) && (!isValidNationalCode(nationalCode)))
         {
-            toastMessage(R.string.message_national_code_is_not_valid);
+            ToastUtil.toastError(getActivity(), R.string.message_national_code_is_not_valid);
             nationalCodeTxt.requestFocus();
             return false;
         }
@@ -428,14 +432,14 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
         String postalCode = customer.getPostalCode().trim();
         if (!Empty.isEmpty(postalCode) && postalCode.length() != 10)
         {
-            toastMessage(R.string.message_postal_code_is_not_valid);
+            ToastUtil.toastError(getActivity(), R.string.message_postal_code_is_not_valid);
             postalCodeTxt.requestFocus();
             return false;
         }
 
         if (Empty.isEmpty(customer.getAddress()))
         {
-            toastMessage(R.string.message_address_is_required);
+            ToastUtil.toastError(getActivity(), R.string.message_address_is_required);
             addressTxt.requestFocus();
             return false;
         }

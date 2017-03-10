@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +8,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -239,11 +239,11 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
 
                 if (Empty.isEmpty(cPic))
                 {
-                    toastError(R.string.message_error_in_loading_or_creating_customer);
+                    ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
                     mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
                 } else
                 {
-                    ToastUtil.toastMessage(mainActivity, mainActivity.getString(R.string.message_picutre_saved_successfully));
+                    ToastUtil.toastSuccess(mainActivity, mainActivity.getString(R.string.message_picutre_saved_successfully));
                     customerService.savePicture(cPic);
                 }
             } else if (resultCode == RESULT_CANCELED)
@@ -299,9 +299,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
 
     private void invokeGetRejectedData()
     {
-
-        //TODO: Progress bar
-        //  dataTransferPB.setVisibility(View.VISIBLE);
+        showProgressDialog(getString(R.string.message_transferring_rejected_goods_data));
         Thread thread = new Thread(new Runnable()
         {
             @Override
@@ -323,6 +321,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                             @Override
                             public void run()
                             {
+                                dismissProgressDialog();
                                 mainActivity.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
                             }
                         });
@@ -333,7 +332,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                             @Override
                             public void run()
                             {
-                                toastError(getString(R.string.err_reject_order_not_possible));
+                                dismissProgressDialog();
+                                ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_not_possible));
                             }
                         });
                     }
@@ -345,7 +345,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(ex);
+                            ToastUtil.toastError(getActivity(), ex);
                         }
                     });
                 } catch (final Exception ex)
@@ -356,7 +356,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastError(new UnknownSystemException(ex));
+                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
                         }
                     });
                 }
@@ -446,7 +446,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
         } catch (Exception ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(new UnknownSystemException(ex));
+            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
         }
     }
 
@@ -524,7 +524,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                         @Override
                         public void run()
                         {
-                            toastMessage(getString(R.string.visit_found_no_location));
+                            ToastUtil.toastError(getActivity(), getString(R.string.visit_found_no_location));
                             showDialogForEmptyLocation();
                         }
                     });
@@ -534,11 +534,11 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
         } catch (BusinessException ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(ex);
+            ToastUtil.toastError(getActivity(), ex);
         } catch (Exception ex)
         {
             Log.e(TAG, ex.getMessage(), ex);
-            toastError(new UnknownSystemException(ex));
+            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
         }
     }
 
@@ -589,7 +589,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
         List<LabelValue> wants = baseInfoService.getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.WANT_TYPE.getId());
         if (Empty.isEmpty(wants))
         {
-            ToastUtil.toastMessage(mainActivity, mainActivity.getString(R.string.message_found_no_wants_information));
+            ToastUtil.toastError(mainActivity, mainActivity.getString(R.string.message_found_no_wants_information));
             return;
         }
 
@@ -651,20 +651,13 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     @Override
     public void publishResult(final String message)
     {
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                ToastUtil.toastMessage(mainActivity, message);
-            }
-        });
+
     }
 
     @Override
     public void finished(boolean result)
     {
-
+        dismissProgressDialog();
     }
 
     @Override
@@ -725,7 +718,6 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             LinearLayout layout = new LinearLayout(mainActivity);
             layout.setLayoutParams(new GridView.LayoutParams(100, 100));
             layout.setGravity(Gravity.CENTER);
-//            layout.setBackgroundResource(R.drawable.visit_row_layout_background);
 
             ImageView imageView = new ImageView(mainActivity);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));

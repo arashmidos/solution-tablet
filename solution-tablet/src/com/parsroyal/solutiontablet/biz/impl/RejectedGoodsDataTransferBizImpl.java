@@ -141,7 +141,7 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
     @Override
     public void beforeTransfer()
     {
-        resultObserver.publishResult(context.getString(R.string.message_transferring_rejected_goods_data));
+        getObserver().publishResult(context.getString(R.string.message_transferring_rejected_goods_data));
     }
 
     @Override

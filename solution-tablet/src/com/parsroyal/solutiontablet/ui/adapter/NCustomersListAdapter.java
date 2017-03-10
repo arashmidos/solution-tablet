@@ -1,9 +1,9 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,7 +129,7 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
                                             @Override
                                             public void run()
                                             {
-                                                ToastUtil.toastMessage(mainActivity, mainActivity.getString(R.string.message_customer_deleted_successfully));
+                                                ToastUtil.toastSuccess(mainActivity, mainActivity.getString(R.string.message_customer_deleted_successfully));
                                             }
                                         });
                                     } catch (BusinessException ex)

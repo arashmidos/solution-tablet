@@ -1,11 +1,11 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -37,6 +37,7 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
     private CustomerService customerService;
     private Customer customer;
     private PaymentSO paymentSO;
+    private FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -58,8 +59,31 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
         View view = super.onCreateView(inflater, container, savedInstanceState);
         initTabs();
         updateList();
-
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        initFab();
         return view;
+    }
+
+    private void initFab()
+    {
+        fab.setVisibility(View.VISIBLE);
+        if (customer == null)
+        {
+            fab.setVisibility(View.GONE);
+        } else
+        {
+            fab.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    Bundle args = new Bundle();
+                    args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
+                    mainActivity.changeFragment(MainActivity.PAYMENT_DETAIL_FRAGMENT_ID, args, false);
+                }
+            });
+        }
     }
 
     private void initTabs()
@@ -100,26 +124,7 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
     @Override
     public View getHeaderView()
     {
-        View headerView = getLayoutInflater(getArguments()).inflate(R.layout.list_header_n_customers, null);
-        ImageButton addBtn = (ImageButton) headerView.findViewById(R.id.addBtn);
-        if (customer == null)
-        {
-            addBtn.setVisibility(View.GONE);
-        } else
-        {
-            addBtn.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    MainActivity mainActivity = (MainActivity) getActivity();
-                    Bundle args = new Bundle();
-                    args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
-                    mainActivity.changeFragment(MainActivity.PAYMENT_DETAIL_FRAGMENT_ID, args, false);
-                }
-            });
-        }
-        return headerView;
+        return null;
     }
 
     @Override

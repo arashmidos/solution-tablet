@@ -225,7 +225,7 @@ public class KPIFragment extends BaseFragment implements ResultObserver, OnChart
             @Override
             public void run()
             {
-                toastError(ex);
+                ToastUtil.toastError(getActivity(), ex);
                 mainActivity.removeFragment(KPIFragment.this);
                 mainActivity.changeSidebarItem(0);
             }

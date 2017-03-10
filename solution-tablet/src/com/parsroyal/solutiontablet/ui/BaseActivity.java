@@ -1,10 +1,10 @@
 package com.parsroyal.solutiontablet.ui;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by Mahyar on 6/2/2015.
  */
-public class BaseActivity extends Activity
+public class BaseActivity extends AppCompatActivity
 {
 }

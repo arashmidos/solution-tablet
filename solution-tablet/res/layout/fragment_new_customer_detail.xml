@@ -4,6 +4,7 @@
             android:layout_height="match_parent"
             android:background="#ffffffff"
             android:paddingLeft="150dp"
+            android:id="@+id/root_view"
             android:paddingRight="150dp">
 
     <LinearLayout
@@ -111,6 +112,7 @@
             android:weightSum="100">
 
             <Spinner
+                style="@style/Spinner"
                 android:id="@+id/provinceSp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -140,6 +142,7 @@
             android:weightSum="100">
 
             <Spinner
+                style="@style/Spinner"
                 android:id="@+id/citySp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -169,6 +172,7 @@
             android:weightSum="100">
 
             <Spinner
+                style="@style/Spinner"
                 android:id="@+id/activitySp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -198,6 +202,7 @@
             android:weightSum="100">
 
             <Spinner
+                style="@style/Spinner"
                 android:id="@+id/ownershipSp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -227,6 +232,7 @@
             android:weightSum="100">
 
             <Spinner
+                style="@style/Spinner"
                 android:id="@+id/classSp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

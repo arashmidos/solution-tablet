@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -60,8 +60,8 @@ import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
-import com.parsroyal.solutiontablet.util.NotificationUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
@@ -162,6 +162,7 @@ public class MainActivity extends BaseFragmentActivity
         setupActionbar();
         setupDrawer();
         initialize();
+
     }
 
     private void initialize()
@@ -426,20 +427,20 @@ public class MainActivity extends BaseFragmentActivity
 
     private boolean isDataTransferPossible()
     {
-        boolean check1 = dataTransferService.isDataTransferPossible();
-        boolean check2 = NetworkUtil.isNetworkAvailable(this);
+        boolean dataTransferPossible = dataTransferService.isDataTransferPossible();
+        boolean networkAvailable = NetworkUtil.isNetworkAvailable(this);
 
-        if (!check1)
+        if (!dataTransferPossible)
         {
-            toastMessage(R.string.message_required_setting_for_data_transfer_not_found);
+            ToastUtil.toastError(this, getString(R.string.message_required_setting_for_data_transfer_not_found));
         }
 
-        if (!check2)
+        if (!networkAvailable)
         {
-            toastMessage(R.string.message_device_does_not_have_active_internet_connection);
+            ToastUtil.toastError(this, getString(R.string.message_device_does_not_have_active_internet_connection));
         }
 
-        return check1 && check2;
+        return dataTransferPossible && networkAvailable;
     }
 
     private void setupDrawer()
@@ -655,7 +656,7 @@ public class MainActivity extends BaseFragmentActivity
             }
         } catch (Exception ex)
         {
-            toastMessage(R.string.err_update_failed);
+            ToastUtil.toastError(this, getString(R.string.err_update_failed));
         }
     }
 
@@ -683,11 +684,6 @@ public class MainActivity extends BaseFragmentActivity
                 })
                 .create();
         dialog.show();
-    }
-
-    public void showSnack(String message)
-    {
-        NotificationUtil.makeSnack(mainLayout, message);
     }
 }
 

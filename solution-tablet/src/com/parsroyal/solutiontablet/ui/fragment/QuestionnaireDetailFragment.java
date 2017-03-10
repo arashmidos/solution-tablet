@@ -1,7 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,6 +37,7 @@ import com.parsroyal.solutiontablet.ui.adapter.QuestionListAdapter;
 import com.parsroyal.solutiontablet.ui.component.FlowLayout;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -210,7 +211,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
                 } catch (Exception ex)
                 {
                     Log.e(TAG, ex.getMessage(), ex);
-                    toastError(new UnknownSystemException(ex));
+                    ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
                 }
             }
         });
@@ -239,7 +240,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
                 } catch (Exception ex)
                 {
                     Log.e(TAG, ex.getMessage(), ex);
-                    toastError(new UnknownSystemException(ex));
+                    ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
                 }
             }
         });
@@ -274,7 +275,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
                 } catch (Exception ex)
                 {
                     Log.e(TAG, ex.getMessage(), ex);
-                    toastError(new UnknownSystemException(ex));
+                    ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
                 }
                 alert.dismiss();
             }

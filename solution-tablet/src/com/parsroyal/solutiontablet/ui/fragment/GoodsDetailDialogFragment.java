@@ -2,12 +2,9 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -35,9 +32,6 @@ import java.util.Locale;
  */
 public class GoodsDetailDialogFragment extends DialogFragment
 {
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
-
     public static final String TAG = GoodsDetailDialogFragment.class.getSimpleName();
 
     private MainActivity context;
@@ -81,7 +75,6 @@ public class GoodsDetailDialogFragment extends DialogFragment
         {
             rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable("rejectedList");
             goodsInvoiceId = getArguments().getLong("goodsInvoiceId");
-
             selectedGoods = getGoodFromLocal();
         } else
         {
@@ -101,69 +94,65 @@ public class GoodsDetailDialogFragment extends DialogFragment
         {
             if (count == count.longValue())
             {
-                countTxt.setText(String.format(Locale.US,"%d", count.longValue()));
+                countTxt.setText(String.format(Locale.US, "%d", count.longValue()));
             } else
             {
-                countTxt.setText(String.format(Locale.US,"%s", count));
+                countTxt.setText(String.format(Locale.US, "%s", count));
             }
             countTxt.setSelection(countTxt.getText().length());
         }
 
+        List<LabelValue> unitsList = new ArrayList<>();
+        unitsList.add(new LabelValue(1L, selectedGoods.getUnit1Title()));
+        if (Empty.isNotEmpty(selectedGoods.getUnit2Title()))
         {
-            List<LabelValue> unitsList = new ArrayList<>();
-            unitsList.add(new LabelValue(1L, selectedGoods.getUnit1Title()));
-            if (Empty.isNotEmpty(selectedGoods.getUnit2Title()))
-            {
-                unitsList.add(new LabelValue(2L, selectedGoods.getUnit2Title()));
-            }
-            goodsUnitSp.setAdapter(new LabelValueArrayAdapter(context, unitsList));
+            unitsList.add(new LabelValue(2L, selectedGoods.getUnit2Title()));
+        }
+        goodsUnitSp.setAdapter(new LabelValueArrayAdapter(context, unitsList));
 
-            if (Empty.isNotEmpty(selectedUnit))
+        if (Empty.isNotEmpty(selectedUnit))
+        {
+            if (selectedUnit.equals(1L))
             {
-                if (selectedUnit.equals(1L))
-                {
-                    goodsUnitSp.setSelection(0);
-                }
-                if (selectedUnit.equals(2L))
-                {
-                    goodsUnitSp.setSelection(1);
-                }
+                goodsUnitSp.setSelection(0);
+            }
+            if (selectedUnit.equals(2L))
+            {
+                goodsUnitSp.setSelection(1);
             }
         }
 
+        confirmBtn.setOnClickListener(new View.OnClickListener()
         {
-            confirmBtn.setOnClickListener(new View.OnClickListener()
+            @Override
+            public void onClick(View v)
             {
-                @Override
-                public void onClick(View v)
+                if (Empty.isNotEmpty(onClickListener))
                 {
-                    if (Empty.isNotEmpty(onClickListener))
+                    if (validate())
                     {
-                        if (validate())
+                        Double count = Double.valueOf(NumberUtil.digitsToEnglish(countTxt.getText().toString()));
+                        LabelValue selectedUnitLv = (LabelValue) goodsUnitSp.getSelectedItem();
+                        Long selectedUnit = selectedUnitLv.getValue();
+                        if (selectedUnit.equals(2L))
                         {
-                            Double count = Double.valueOf(NumberUtil.digitsToEnglish(countTxt.getText().toString()));
-                            LabelValue selectedUnitLv = (LabelValue) goodsUnitSp.getSelectedItem();
-                            Long selectedUnit = selectedUnitLv.getValue();
-                            if (selectedUnit.equals(2L))
-                            {
-                                count *= Double.valueOf(selectedGoods.getUnit1Count());
-                            }
-                            onClickListener.onConfirmBtnClicked(count, selectedUnit);
-                            GoodsDetailDialogFragment.this.dismiss();
+                            count *= Double.valueOf(selectedGoods.getUnit1Count());
                         }
+                        onClickListener.onConfirmBtnClicked(count, selectedUnit);
+                        GoodsDetailDialogFragment.this.dismiss();
                     }
                 }
-            });
+            }
+        });
 
-            cancelBtn.setOnClickListener(new View.OnClickListener()
+        cancelBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
             {
-                @Override
-                public void onClick(View v)
-                {
-                    GoodsDetailDialogFragment.this.dismiss();
-                }
-            });
-        }
+                GoodsDetailDialogFragment.this.dismiss();
+            }
+        });
 
         this.getDialog().setTitle(context.getString(R.string.message_please_enter_count));
 
@@ -194,19 +183,6 @@ public class GoodsDetailDialogFragment extends DialogFragment
             return false;
         }
         return true;
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        Window window = getDialog().getWindow();
-        WindowManager.LayoutParams layoutParams = window.getAttributes();
-        layoutParams.y = 2;
-        window.setLayout(WIDTH, HEIGHT);
-        window.setGravity(Gravity.CENTER);
-        window.setAttributes(layoutParams);
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     public interface GoodsDialogOnClickListener

@@ -231,6 +231,7 @@
                 android:gravity="right">
 
                 <Spinner
+                    style="@style/Spinner"
                     android:id="@+id/saleTypeSp"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
