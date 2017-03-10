@@ -336,6 +336,7 @@
     <string name="search_hint">جستجو...</string>
     <string name="message_error_wants_denied">امکان ثبت عدم برای این ویزیت وجود ندارد</string>
     <string name="message_error_no_visit_detail_found">هیچ فعالیتی برای این ویزیت ثبت نشده است. آیا میخواهید عدم ثبت کنید؟</string>
+    <string name="visit_information_data_transfered_result">ارسال موفق: %1$s - ارسال ناموفق:%2$s</string>
     <string-array name="sale_type">
         <item>فروش سرد</item>
         <item>فروش گرم</item>

@@ -71,6 +71,7 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper
         db.execSQL(CustomerPic.CREATE_TABLE_SQL);
         db.execSQL(Payment.CREATE_TABLE_SCRIPT);
         db.execSQL(Position.CREATE_TABLE_SCRIPT);
+        db.execSQL(VisitInformationDetail.CREATE_TABLE_SQL);
         Log.i(TAG, "end of creating tables");
     }
 

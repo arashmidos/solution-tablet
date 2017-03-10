@@ -10,7 +10,7 @@ public class VisitInformationDetailDto
     private long id;
     private VisitInformationDetailType type;
     private long typeId;
-    private String extraData;
+    private String data;
     private long customerVisitId;
 
     public long getId()
@@ -33,14 +33,14 @@ public class VisitInformationDetailDto
         this.type = type;
     }
 
-    public String getExtraData()
+    public String getData()
     {
-        return extraData;
+        return data;
     }
 
-    public void setExtraData(String extraData)
+    public void setData(String data)
     {
-        this.extraData = extraData;
+        this.data = data;
     }
 
     public long getCustomerVisitId()
@@ -61,5 +61,17 @@ public class VisitInformationDetailDto
     public void setTypeId(long typeId)
     {
         this.typeId = typeId;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        VisitInformationDetailDto that = (VisitInformationDetailDto) o;
+
+        return type == that.type;
+
     }
 }

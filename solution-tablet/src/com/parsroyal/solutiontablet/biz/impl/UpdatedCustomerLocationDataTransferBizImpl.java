@@ -29,7 +29,6 @@ import java.util.List;
  */
 public class UpdatedCustomerLocationDataTransferBizImpl extends AbstractDataTransferBizImpl<String>
 {
-
     public static final String TAG = UpdatedCustomerLocationDataTransferBizImpl.class.getSimpleName();
 
     private Context context;

@@ -9,7 +9,11 @@ import android.location.Location;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
+import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,12 +74,12 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
                 VisitInformation.COL_CUSTOMER_BACKEND_ID,
                 VisitInformation.COL_RESULT,
                 VisitInformation.COL_VISIT_DATE,
-                VisitInformation.COL_VISIT_BACKEND_ID,
+                VisitInformation.COL_VISIT_BACKEND_ID,//4
                 VisitInformation.COL_START_TIME,
                 VisitInformation.COL_END_TIME,
                 VisitInformation.COL_X_LOCATION,
                 VisitInformation.COL_Y_LOCATION,
-                VisitInformation.COL_CREATE_DATE_TIME,
+                VisitInformation.COL_CREATE_DATE_TIME,//9
                 VisitInformation.COL_UPDATE_DATE_TIME,
                 VisitInformation.COL_CUSTOMER_ID
         };
@@ -139,5 +143,35 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
         cursor.close();
         return visitInformationList;
 
+    }
+
+    @Override
+    public List<VisitInformationDto> getAllVisitInformationDtoForSend()
+    {
+        CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        String selection = " " + VisitInformation.COL_VISIT_BACKEND_ID + " is null or " + VisitInformation.COL_VISIT_BACKEND_ID + " = 0";
+        Cursor cursor = db.query(getTableName(), getProjection(), selection, null, null, null, null);
+        List<VisitInformationDto> visitInformationList = new ArrayList<>();
+        while (cursor.moveToNext())
+        {
+            visitInformationList.add(createDtoFromCursor(cursor));
+        }
+        cursor.close();
+        return visitInformationList;
+    }
+
+    private VisitInformationDto createDtoFromCursor(Cursor cursor)
+    {
+        VisitInformationDto entity = new VisitInformationDto();
+        entity.setId(cursor.getLong(0));
+        entity.setCustomerBackendId(cursor.getLong(1));
+        entity.setVisitDate(cursor.getString(3));
+        entity.setStartTime(cursor.getString(5));
+        entity.setEndTime(cursor.getString(6));
+        entity.setxLocation(cursor.isNull(7) ? null : cursor.getDouble(7));
+        entity.setyLocation(cursor.isNull(8) ? null : cursor.getDouble(8));
+        entity.setSalesmanId(Long.valueOf(PreferenceHelper.retrieveByKey(ApplicationKeys.SALESMAN_ID).getValue()));
+        return entity;
     }
 }

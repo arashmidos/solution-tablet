@@ -104,11 +104,8 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable>
 
             //Make RestTemplate loggable
             System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-
             System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-
             System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire", "debug");
-
             System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
 
             RestTemplate restTemplate = new RestTemplate();
@@ -119,7 +116,6 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable>
             //
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-//            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
             String url = makeUrl(serverAddress1.getValue(), serverAddress2.getValue(), getMethod());
 
             HttpEntity httpEntity = getHttpEntity(httpHeaders);

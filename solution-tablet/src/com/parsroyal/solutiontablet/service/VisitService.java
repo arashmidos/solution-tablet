@@ -7,6 +7,7 @@ import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
+import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 
 import java.util.List;
 
@@ -40,4 +41,10 @@ public interface VisitService
     void saveVisitDetail(VisitInformationDetail visitDetail);
 
     List<VisitInformationDetail> getAllVisitDetailById(Long visitId);
+
+    void updateVisitDetailId(VisitInformationDetailType type, long id, long backendId);
+
+    List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailType type, Long typeId);
+
+    List<VisitInformationDto> getAllVisitDetailForSend();
 }

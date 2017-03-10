@@ -1,10 +1,8 @@
 package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteException;
 import android.location.Location;
 
-import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.CustomerPicDao;
@@ -16,28 +14,22 @@ import com.parsroyal.solutiontablet.data.dao.impl.CustomerPicDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDetailDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.Customer;
-import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
-import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
-import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
-import com.parsroyal.solutiontablet.data.model.CustomerDto;
-import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
-import com.parsroyal.solutiontablet.data.model.PositionModel;
-import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
-import com.parsroyal.solutiontablet.service.CustomerService;
+import com.parsroyal.solutiontablet.data.model.VisitInformationDetailDto;
+import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.MediaUtil;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Arash on 2017-03-08
@@ -86,7 +78,7 @@ public class VisitServiceImpl implements VisitService
     {
         VisitInformation visitInformation = new VisitInformation();
         visitInformation.setCustomerBackendId(customerBackendId);
-        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
         visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
         visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
         return saveVisit(visitInformation);
@@ -129,7 +121,7 @@ public class VisitServiceImpl implements VisitService
     @Override
     public VisitInformation getVisitInformationForNewCustomer(Long customerId)
     {
-        return  visitInformationDao.retrieveForNewCustomer(customerId);
+        return visitInformationDao.retrieveForNewCustomer(customerId);
     }
 
     @Override
@@ -173,5 +165,51 @@ public class VisitServiceImpl implements VisitService
     public List<VisitInformationDetail> getAllVisitDetailById(Long visitId)
     {
         return visitInformationDetailDao.getAllVisitDetail(visitId);
+    }
+
+    @Override
+    public void updateVisitDetailId(VisitInformationDetailType type, long id, long backendId)
+    {
+        visitInformationDetailDao.updateVisitDetailId(type, id, backendId);
+    }
+
+    @Override
+    public List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailType type, Long typeId)
+    {
+        return visitInformationDetailDao.search(type, typeId);
+    }
+
+    @Override
+    public List<VisitInformationDto> getAllVisitDetailForSend()
+    {
+        List<VisitInformationDto> visitList = visitInformationDao.getAllVisitInformationDtoForSend();
+        for (VisitInformationDto visit : visitList)
+        {
+            Map<VisitInformationDetailType, VisitInformationDetailDto> map = new HashMap<>();
+            List<VisitInformationDetailDto> tempDetailList = visitInformationDetailDao.getAllVisitDetailDto(visit.getId());
+
+            for (int i = 0; i < tempDetailList.size(); i++)
+            {
+                VisitInformationDetailDto detailToAdd = tempDetailList.get(i);
+                if (map.containsKey(detailToAdd.getType()))
+                {
+                    VisitInformationDetailDto detailToUpdate = map.get(detailToAdd.getType());
+                    if (detailToUpdate.getData().equals(""))
+                    {
+                        detailToUpdate.setData(detailToUpdate.getTypeId() + "&" + detailToAdd.getTypeId());
+                        detailToUpdate.setTypeId(0);
+                    } else
+                    {
+                        detailToUpdate.setData(detailToUpdate.getData() + "&" + detailToAdd.getTypeId());
+                    }
+                    map.put(detailToUpdate.getType(), detailToUpdate);
+                } else
+                {
+                    map.put(detailToAdd.getType(), detailToAdd);
+                }
+            }
+            visit.setDetails(new ArrayList<>(map.values()));
+        }
+        return visitList;
     }
 }

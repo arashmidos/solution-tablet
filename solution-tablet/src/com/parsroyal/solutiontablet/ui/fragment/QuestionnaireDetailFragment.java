@@ -298,7 +298,12 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
 
     private void setVisitDetail()
     {
-        //TODO: Check for duplicate, if it's set before, just update it
+        List<VisitInformationDetail> detailList = visitService.searchVisitDetail(VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
+        //If we have filled this questionary before
+        if (detailList.size() > 0)
+        {
+            return;
+        }
         visitService.saveVisitDetail(new VisitInformationDetail(visitId,
                 VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId));
     }

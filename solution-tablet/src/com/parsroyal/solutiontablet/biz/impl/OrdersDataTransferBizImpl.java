@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -50,5 +51,11 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl
     public String getMethod()
     {
         return "order/create";
+    }
+
+    @Override
+    protected VisitInformationDetailType getVisitDetailType()
+    {
+        return VisitInformationDetailType.CREATE_ORDER;
     }
 }

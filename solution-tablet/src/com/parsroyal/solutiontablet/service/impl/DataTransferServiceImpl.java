@@ -33,10 +33,10 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
-import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
+import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.InvalidServerAddressException;
 import com.parsroyal.solutiontablet.exception.PasswordNotProvidedForConnectingToServerException;
@@ -55,6 +55,7 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Mahyar on 6/15/2015.
@@ -164,13 +165,14 @@ public class DataTransferServiceImpl implements DataTransferService
         sendAllNewCustomers(resultObserver);
         sendAllCustomerPics(resultObserver);
         sendAllUpdatedCustomers(resultObserver);
-        sendAllVisitInformation(resultObserver);
         sendAllPositions(resultObserver);
         sendAllAnswers(resultObserver);
+        sendAllPayments(resultObserver);
         sendAllOrders(resultObserver);
         sendAllInvoicedOrders(resultObserver);
         sendAllReturnedOrders(resultObserver);
-        sendAllPayments(resultObserver);
+        //Visit detail always should be the last one
+        sendAllVisitInformation(resultObserver);
         uiObserver.finished(true);
     }
 
@@ -333,14 +335,28 @@ public class DataTransferServiceImpl implements DataTransferService
     private void sendAllVisitInformation(ResultObserver resultObserver)
     {
 
-        List<VisitInformation> visitInformationList = visitService.getAllVisitInformationForSend();
+        List<VisitInformationDto> visitInformationList = visitService.getAllVisitDetailForSend();
         if (Empty.isEmpty(visitInformationList))
         {
             resultObserver.publishResult(context.getString(R.string.message_found_no_visit_information_for_send));
             return;
         }
+        VisitInformationDataTransferBizImpl dataTranser =
+                new VisitInformationDataTransferBizImpl(context, resultObserver);
+        resultObserver.publishResult(context.getString(R.string.sending_visit_information_data));
+        for (int i = 0; i < visitInformationList.size(); i++)
+        {
+            VisitInformationDto visitInformationDto = visitInformationList.get(i);
+            if (visitInformationDto.getDetails() == null || visitInformationDto.getDetails().size() == 0)
+            {
+                continue;
+            }
+            dataTranser.setData(visitInformationDto);
+            dataTranser.getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        }
+        resultObserver.publishResult(String.format(Locale.US, context.getString(R.string.visit_information_data_transfered_result),
+                String.valueOf(dataTranser.getSuccess()), String.valueOf(visitInformationList.size() - dataTranser.getSuccess())));
 
-        new VisitInformationDataTransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
     }
 
     private void sendAllAnswers(ResultObserver resultObserver)
@@ -375,7 +391,6 @@ public class DataTransferServiceImpl implements DataTransferService
 
     private void sendAllOrders(ResultObserver resultObserver)
     {
-
         List<SaleOrderDto> saleOrders = saleOrderService.findOrderDtoByStatus(SaleOrderStatus.READY_TO_SEND.getId());
         if (Empty.isNotEmpty(saleOrders))
         {

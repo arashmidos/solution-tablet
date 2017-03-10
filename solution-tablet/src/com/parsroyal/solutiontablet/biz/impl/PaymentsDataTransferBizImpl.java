@@ -5,10 +5,12 @@ import android.content.Context;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SendStatus;
-import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.service.PaymentService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -32,6 +34,7 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
     private Context context;
     private PaymentService paymentService;
+    private VisitService visitService;
     private ResultObserver observer;
     private List<Payment> payments;
 
@@ -39,8 +42,9 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
     {
         super(context);
         this.context = context;
-        this.paymentService = new PaymentServiceImpl(context);
-        this.observer = resultObserver;
+        paymentService = new PaymentServiceImpl(context);
+        visitService = new VisitServiceImpl(context);
+        observer = resultObserver;
     }
 
     @Override
@@ -68,13 +72,14 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
                         payment.setBackendId(paymentBackendId);
                         payment.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
                         paymentService.updatePayment(payment);
+                        visitService.updateVisitDetailId(VisitInformationDetailType.CASH, paymentId, paymentBackendId);
                         success++;
                     } else
                     {
                         failure++;
                     }
                 }
-                getObserver().publishResult(String.format(Locale.US,context.getString(R.string.payments_data_transferred_successfully),
+                getObserver().publishResult(String.format(Locale.US, context.getString(R.string.payments_data_transferred_successfully),
                         String.valueOf(success), String.valueOf(failure)));
             } catch (Exception ex)
             {

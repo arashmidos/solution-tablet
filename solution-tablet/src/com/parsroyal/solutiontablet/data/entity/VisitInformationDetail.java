@@ -95,4 +95,16 @@ public class VisitInformationDetail extends BaseEntity<Long>
     {
         return id;
     }
+
+    @Override
+    public String toString()
+    {
+        return "VisitInformationDetail{" +
+                "id=" + id +
+                ", type=" + type +
+                ", typeId=" + typeId +
+                ", extraData='" + extraData + '\'' +
+                ", visitInformationId=" + visitInformationId +
+                '}';
+    }
 }
