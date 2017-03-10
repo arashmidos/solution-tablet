@@ -225,7 +225,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
                 "c." + Customer.COL_CELL_PHONE,
                 "c." + Customer.COL_ADDRESS,
                 "c." + Customer.COL_X_LOCATION,
-                "vi." + VisitInformation.COL_VISIT_DATE};
+                "vi." + VisitInformation.COL_CREATE_DATE_TIME};
 
         String selection = " c." + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
         String table = getTableName() + " c " +
