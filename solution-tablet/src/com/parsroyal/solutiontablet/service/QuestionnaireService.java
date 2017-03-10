@@ -21,7 +21,7 @@ public interface QuestionnaireService
 
     QuestionDto getQuestionDto(Long primaryKey, Long visitId, Long goodsBackendId);
 
-    QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order, Long goodsBackendId);
+    QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order, Long goodsBackendId,boolean isNext);
 
     Long saveAnswer(QAnswer qAnswer);
 

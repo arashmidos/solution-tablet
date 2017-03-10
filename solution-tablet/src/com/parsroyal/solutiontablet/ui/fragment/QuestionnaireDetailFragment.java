@@ -208,7 +208,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
                     adapter.setDataModel(dataModel);
                     adapter.notifyDataSetChanged();
                     adapter.notifyDataSetInvalidated();
-                    QuestionDto prvQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder() - 1, goodsBackendId);
+                    QuestionDto prvQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(), goodsBackendId, false);
                     if (Empty.isNotEmpty(prvQuestionDto))
                     {
                         alert.dismiss();
@@ -236,7 +236,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
                         questionDto.setAnswerId(saveAnswer(questionDto, answer));
                         setVisitDetail();
                     }
-                    QuestionDto nextQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder() + 1, goodsBackendId);
+                    QuestionDto nextQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(), goodsBackendId, true);
                     adapter.setDataModel(dataModel);
                     adapter.notifyDataSetChanged();
                     adapter.notifyDataSetInvalidated();

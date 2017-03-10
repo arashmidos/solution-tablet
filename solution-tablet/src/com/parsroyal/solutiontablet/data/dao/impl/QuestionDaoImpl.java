@@ -190,7 +190,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
     }
 
     @Override
-    public QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order, Long goodsBackendId)
+    public QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order, Long goodsBackendId, boolean isNext)
     {
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
@@ -210,7 +210,9 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
                 " INNER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID= q.QUESTIONNAIRE_BACKEND_ID" +
                 " Left OUTER JOIN COMMER_Q_ANSWER an on an.QUESTION_BACKEND_ID = q.BACKEND_ID" +
                 " and an.VISIT_ID = ? and (an.GOODS_BACKEND_ID = ? or  '-1' = ?)" +
-                " where qn.BACKEND_ID = ? AND q.qOrder = ?";
+                " where qn.BACKEND_ID = ? AND q.qOrder " +
+                (isNext ? "> ? " : "< ? ") + "ORDER BY q.qORDER " + (isNext ? "ASC" : "DESC") + " limit 1";
+
         String[] args = {
                 String.valueOf(visitId),
                 Empty.isNotEmpty(goodsBackendId) ? String.valueOf(goodsBackendId) : "-1",

@@ -58,9 +58,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService
     }
 
     @Override
-    public QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order, Long goodsBackendId)
+    public QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order, Long goodsBackendId, boolean isNext)
     {
-        return questionDao.getQuestionDto(questionnaireBackendId, visitId, order, goodsBackendId);
+        return questionDao.getQuestionDto(questionnaireBackendId, visitId, order, goodsBackendId, isNext);
     }
 
     @Override
