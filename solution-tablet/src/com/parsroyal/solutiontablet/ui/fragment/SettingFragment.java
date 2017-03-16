@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
@@ -90,9 +91,26 @@ public class SettingFragment extends BaseFragment implements ResultObserver
         branchSerialTxt.setText(Empty.isNotEmpty(branchSerial) ? branchSerial : "");
         stockSerialTxt.setText(Empty.isNotEmpty(stockSerial) ? stockSerial : "");
 
+        if (BuildConfig.DEBUG && Empty.isEmpty(serverAddress1Txt.getText().toString()))
+        {
+            setTestData();
+        }
         serverAddress1Txt.requestFocus();
 
         return rootView;
+    }
+
+    private void setTestData()
+    {
+        serverAddress1Txt.setText("http://173.212.199.107:8880/tabletbackend");
+        serverAddress2Txt.setText("Fcgroup\\administrator@Royal2015");
+        usernameTxt.setText("tablet");
+        passwordTxt.setText("123");
+        userCodeTxt.setText("1016");
+        gpsInterval.setText("300");
+        enableTrackingCb.setChecked(true);
+        branchSerialTxt.setText("100101");
+        stockSerialTxt.setText("100101");
     }
 
     private void invokeGetInformationService()

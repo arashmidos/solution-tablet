@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.util.ResourceUtil;
@@ -28,7 +29,7 @@ public abstract class BaseFragment extends Fragment
             this.progressDialog.setIndeterminate(true);
             this.progressDialog.setCancelable(Boolean.FALSE);
         }
-        this.progressDialog.setIcon(R.drawable.ic_action_info);
+        this.progressDialog.setIcon(R.drawable.ic_info_outline_24dp);
         this.progressDialog.setTitle(R.string.message_please_wait);
         this.progressDialog.setMessage(message);
         this.progressDialog.show();

@@ -5,6 +5,7 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 
 public class PreferenceHelper
 {
+    public static final String FORCE_EXIT = "FORCE_EXIT";
     private static final String LATEST_VERSION = "LATEST_VERSION";
     private static final String UPDATE_URI = "UPDATE_URI";
 
@@ -16,6 +17,16 @@ public class PreferenceHelper
     public static void setLatestVersion(int latestVersion)
     {
         SolutionTabletApplication.getPreference().edit().putInt(LATEST_VERSION, latestVersion).apply();
+    }
+
+    public static boolean isForceExit()
+    {
+        return SolutionTabletApplication.getPreference().getBoolean(FORCE_EXIT, false);
+    }
+
+    public static void setForceExit(boolean forceExit)
+    {
+        SolutionTabletApplication.getPreference().edit().putBoolean(FORCE_EXIT, forceExit).apply();
     }
 
     public static String getUpdateUri()

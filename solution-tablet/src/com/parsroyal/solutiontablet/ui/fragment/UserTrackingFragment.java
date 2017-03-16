@@ -18,7 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.components.JDF;
@@ -31,8 +30,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.clustering.ClusterManager;
@@ -142,8 +143,11 @@ public class UserTrackingFragment extends BaseFragment implements
                     showCustomers();
                 } else
                 {
-                    clusterManager.clearItems();
-                    clusterManager.cluster();
+                    if (Empty.isNotEmpty(clusterManager))
+                    {
+                        clusterManager.clearItems();
+                        clusterManager.cluster();
+                    }
                 }
             }
         });
@@ -415,13 +419,25 @@ public class UserTrackingFragment extends BaseFragment implements
             Date to = DateUtil.endOfDay(c2);
 
             List<LatLng> route = positionService.getAllPositionLatLngByDate(from, to);
-
+            if (route.size() > 0)
+            {
+                map.addMarker(new MarkerOptions()
+                        .position(route.get(0))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_green_48dp)));
+            }
+            if (route.size() > 1)
+            {
+                map.addMarker(new MarkerOptions()
+                        .position(route.get(route.size() - 1))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_red_48dp)));
+            }
             PolylineOptions polyOptions = new PolylineOptions();
             polyOptions.color(getResources().getColor(colors[3]));
             polyOptions.width(4);
             polyOptions.addAll(route);
             polyline = map.addPolyline(polyOptions);
             polylines.add(polyline);
+
         }
     }
 

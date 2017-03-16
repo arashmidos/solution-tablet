@@ -40,38 +40,34 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     {
         View dataTransferView = inflater.inflate(R.layout.fragment_data_transfer, null);
 
-        {
-            mainActivity = (MainActivity) getActivity();
-            dataTransferService = new DataTransferServiceImpl(mainActivity);
-        }
+        mainActivity = (MainActivity) getActivity();
+        dataTransferService = new DataTransferServiceImpl(mainActivity);
 
+        getDataBtn = (Button) dataTransferView.findViewById(R.id.getDataBtn);
+        transferSv = (ScrollView) dataTransferView.findViewById(R.id.transferSv);
+        transferSv.fullScroll(View.FOCUS_DOWN);
+        transferLogTxtV = (TextView) dataTransferView.findViewById(R.id.transferLogTxtV);
+        transferLogTxtV.setMovementMethod(new ScrollingMovementMethod());
+        getDataBtn.setOnClickListener(new View.OnClickListener()
         {
-            getDataBtn = (Button) dataTransferView.findViewById(R.id.getDataBtn);
-            transferSv = (ScrollView) dataTransferView.findViewById(R.id.transferSv);
-            transferSv.fullScroll(View.FOCUS_DOWN);
-            transferLogTxtV = (TextView) dataTransferView.findViewById(R.id.transferLogTxtV);
-            transferLogTxtV.setMovementMethod(new ScrollingMovementMethod());
-            getDataBtn.setOnClickListener(new View.OnClickListener()
+            @Override
+            public void onClick(View v)
             {
-                @Override
-                public void onClick(View v)
-                {
-                    transferLogTxtV.setText("");
-                    invokeGetData();
-                }
-            });
-            sendDataBtn = (Button) dataTransferView.findViewById(R.id.sendDataBtn);
-            sendDataBtn.setOnClickListener(new View.OnClickListener()
+                transferLogTxtV.setText("");
+                invokeGetData();
+            }
+        });
+        sendDataBtn = (Button) dataTransferView.findViewById(R.id.sendDataBtn);
+        sendDataBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
             {
-                @Override
-                public void onClick(View v)
-                {
-                    transferLogTxtV.setText("");
-                    invokeSendData();
-                }
-            });
-            dataTransferPB = (ProgressBar) dataTransferView.findViewById(R.id.dataTransferPB);
-        }
+                transferLogTxtV.setText("");
+                invokeSendData();
+            }
+        });
+        dataTransferPB = (ProgressBar) dataTransferView.findViewById(R.id.dataTransferPB);
 
         return dataTransferView;
     }

@@ -29,7 +29,6 @@ import java.util.List;
  */
 public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCustomersListAdapter>
 {
-
     public static final String TAG = NCustomersFragment.class.getSimpleName();
     private MainActivity context;
     private CustomerService customerService;
@@ -81,7 +80,6 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
 
     private void initTabs()
     {
-
         {
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(getString(R.string.sent));

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 
 /**
  * Created by Mahyar on 6/23/2015.
@@ -15,23 +16,34 @@ public class DialogUtil
     public static void showConfirmDialog(Context context, String title, String message,
                                          DialogInterface.OnClickListener positiveBtnOnClickListener)
     {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setTitle(title);
-        alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setPositiveButton(R.string.yes, positiveBtnOnClickListener);
-        alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
+        showCustomDialog(context, title, message, "", positiveBtnOnClickListener, "", new DialogInterface.OnClickListener()
         {
             @Override
-            public void onClick(DialogInterface dialog, int which)
+            public void onClick(DialogInterface dialog, int i)
             {
                 dialog.dismiss();
             }
-        });
+        }, Constants.ICON_MESSAGE);
+    }
+
+    public static void showCustomDialog(Context context, String title, String message,
+                                        String positiveChoice, DialogInterface.OnClickListener positiveBtnOnClickListener,
+                                        String negativeChoice, DialogInterface.OnClickListener negativeBtnOnClickListener,
+                                        int iconType)
+
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setIcon(iconType);
+        alertDialogBuilder.setPositiveButton(Empty.isEmpty(positiveChoice) ? context.getString(R.string.yes) : positiveChoice, positiveBtnOnClickListener);
+        alertDialogBuilder.setNegativeButton(Empty.isEmpty(negativeChoice) ? context.getString(R.string.no) : negativeChoice, negativeBtnOnClickListener);
         alertDialogBuilder.create().show();
     }
 
     /**
      * Show an Alert Dialog with Ok button
+     *
      * @param context
      * @param title
      * @param message
@@ -52,4 +64,6 @@ public class DialogUtil
                 .create();
         dialog.show();
     }
+
+
 }

@@ -36,10 +36,8 @@ public class LoginDialogFragment extends DialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
         try
         {
-
             settingService = new SettingServiceImpl(getActivity());
 
             View view = inflater.inflate(R.layout.dialog_setting_login, null);

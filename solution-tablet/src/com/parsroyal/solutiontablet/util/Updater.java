@@ -101,6 +101,7 @@ public class Updater
                     if (Empty.isNotEmpty(uriForDownloadedFile))
                     {
                         PreferenceHelper.setUpdateUri(uriForDownloadedFile.toString());
+                        PreferenceHelper.setForceExit(false);
                         EventBus.getDefault().post(new UpdateEvent(uriForDownloadedFile, false));
                     }
                 }

@@ -356,7 +356,6 @@ public class DataTransferServiceImpl implements DataTransferService
         }
         resultObserver.publishResult(String.format(Locale.US, context.getString(R.string.visit_information_data_transfered_result),
                 String.valueOf(dataTranser.getSuccess()), String.valueOf(visitInformationList.size() - dataTranser.getSuccess())));
-
     }
 
     private void sendAllAnswers(ResultObserver resultObserver)
@@ -432,7 +431,6 @@ public class DataTransferServiceImpl implements DataTransferService
         } else
         {
             resultObserver.publishResult(context.getString(R.string.message_no_payments_for_sending));
-            resultObserver.finished(true);
         }
 
     }
@@ -449,7 +447,6 @@ public class DataTransferServiceImpl implements DataTransferService
         } else
         {
             resultObserver.publishResult(context.getString(R.string.message_no_positions_for_sending));
-            resultObserver.finished(true);
         }
 
     }
@@ -466,7 +463,5 @@ public class DataTransferServiceImpl implements DataTransferService
         {
             resultObserver.publishResult(context.getString(R.string.message_no_invoice_found));
         }
-
     }
-
 }

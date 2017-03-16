@@ -22,7 +22,6 @@ import java.util.List;
  */
 public class QuestionDaoImpl extends AbstractDao<Question, Long> implements QuestionDao
 {
-
     private Context context;
 
     public QuestionDaoImpl(Context context)

@@ -25,8 +25,10 @@ import android.widget.ListView;
 
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
+import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.SettingService;
@@ -56,11 +58,13 @@ import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialog.LoginDialogFragment;
+import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
+import com.parsroyal.solutiontablet.util.ResourceUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -76,7 +80,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Mahyar on 6/2/2015.
  */
-public class MainActivity extends BaseFragmentActivity
+public class MainActivity extends BaseFragmentActivity implements ResultObserver
 {
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -617,7 +621,8 @@ public class MainActivity extends BaseFragmentActivity
         EventBus.getDefault().register(this);
         if (Updater.updateExist())
         {
-            installNewVersion(Uri.parse(PreferenceHelper.getUpdateUri()), true);
+            PreferenceHelper.setForceExit(true);
+            installNewVersion();
         } else
         {
             Updater.checkAppUpdate(this);
@@ -636,27 +641,69 @@ public class MainActivity extends BaseFragmentActivity
     {
         if (event instanceof UpdateEvent)
         {
-            UpdateEvent updateEvent = (UpdateEvent) event;
-            installNewVersion(updateEvent.getDownloadUri(), updateEvent.isForceUpdate());
+            installNewVersion();
         }
     }
 
-    private void installNewVersion(Uri downloadUri, boolean forceExit)
+    private void installNewVersion()
     {
-        Intent installIntent = new Intent(Intent.ACTION_VIEW);
-        installIntent.setDataAndType(downloadUri, "application/vnd.android.package-archive");
-        installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        try
+        DialogUtil.showCustomDialog(this, getString(R.string.message_update_title), getString(R.string.message_update_alert), "", new
+                DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i)
+                    {
+                        dialogInterface.dismiss();
+                        DialogUtil.showCustomDialog(MainActivity.this, getString(R.string.warning),
+                                getString(R.string.message_alert_send_data),
+                                "",
+                                new DialogInterface.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int i)
+                                    {
+                                        dialog.dismiss();
+                                        showProgressDialog(getString(R.string.message_sending_data));
+                                        new Thread(new Runnable()
+                                        {
+                                            @Override
+                                            public void run()
+                                            {
+                                                try
+                                                {
+                                                    dataTransferService.sendAllData(MainActivity.this);
+                                                } catch (Exception ex)
+                                                {
+                                                    ex.printStackTrace();
+                                                    ToastUtil.toastError(MainActivity.this, R.string.error_unknown_system_exception);
+                                                }
+                                            }
+                                        }).start();
+                                    }
+                                },
+                                "",
+                                new DialogInterface.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i)
+                                    {
+                                        doInstall();
+                                    }
+                                }, Constants.ICON_WARNING);
+                    }
+                }, "", new DialogInterface.OnClickListener()
         {
-            startActivity(installIntent);
-            if (forceExit)
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
             {
-                finish();
+                dialogInterface.dismiss();
+                if (PreferenceHelper.isForceExit())
+                {
+                    finish();
+                }
             }
-        } catch (Exception ex)
-        {
-            ToastUtil.toastError(this, getString(R.string.err_update_failed));
-        }
+        }, Constants.ICON_MESSAGE);
+
     }
 
     private void showGpsOffDialog()
@@ -683,6 +730,46 @@ public class MainActivity extends BaseFragmentActivity
                 })
                 .create();
         dialog.show();
+    }
+
+    @Override
+    public void publishResult(BusinessException ex)
+    {
+        changeMessageDialog(ResourceUtil.getString(this, ex.getClass().getCanonicalName()));
+    }
+
+    @Override
+    public void publishResult(String message)
+    {
+        changeMessageDialog(message);
+    }
+
+    @Override
+    public void finished(boolean success)
+    {
+        dismissProgressDialog();
+        if (success)
+        {
+            doInstall();
+        }
+    }
+
+    private void doInstall()
+    {
+        Intent installIntent = new Intent(Intent.ACTION_VIEW);
+        installIntent.setDataAndType(Uri.parse(PreferenceHelper.getUpdateUri()), "application/vnd.android.package-archive");
+        installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try
+        {
+            startActivity(installIntent);
+            if (PreferenceHelper.isForceExit())
+            {
+                finish();
+            }
+        } catch (Exception ex)
+        {
+            ToastUtil.toastError(MainActivity.this, getString(R.string.err_update_failed));
+        }
     }
 }
 

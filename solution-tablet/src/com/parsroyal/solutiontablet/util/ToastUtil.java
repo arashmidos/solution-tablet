@@ -50,7 +50,7 @@ public class ToastUtil
     public static void toastSuccess(Activity activity, int messageResource)
     {
         String message = activity.getString(messageResource);
-        toastSuccess(activity,message);
+        toastSuccess(activity, message);
     }
 
     public static void toastError(Activity activity, int messageResource)
@@ -68,6 +68,7 @@ public class ToastUtil
         builder.setActionTextColor(Color.BLACK);
         builder.setBackgroundColor(Color.RED);
         builder.setTextSize(20);
+        builder.setActionTextSize(20);
         builder.setDuration(Snacky.LENGTH_INDEFINITE);
         final Snackbar snack = builder.build();
         snack.setAction(activity.getString(R.string.button_ok), new View.OnClickListener()

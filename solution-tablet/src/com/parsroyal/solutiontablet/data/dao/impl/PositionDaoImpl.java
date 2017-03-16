@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Arash on 11/8/2016.
@@ -168,7 +169,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         String selection = Position.COL_CREATE_DATE_TIME + " between ? and ? ";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss", Locale.US);
 
         String[] args = {sdf.format(from), sdf.format(to)};
         String orderBy = Position.COL_CREATE_DATE_TIME;

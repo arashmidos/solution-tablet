@@ -26,6 +26,7 @@ public class BaseFragmentActivity extends AppCompatActivity
 {
     public static final String TAG = BaseFragmentActivity.class.getSimpleName();
     protected ImageView menuIv;
+    protected ProgressDialog progressDialog;
     private TextView userFullNameTxt;
     private TextView companyNameTxt;
     private BaseInfoService baseInfoService;
@@ -75,6 +76,43 @@ public class BaseFragmentActivity extends AppCompatActivity
         {
             Log.e(TAG, ex.getMessage(), ex);
             ToastUtil.toastError(this, new UnknownSystemException(ex));
+        }
+    }
+
+    public void changeMessageDialog(final String message)
+    {
+        if (progressDialog != null)
+        {
+            runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    progressDialog.setMessage(message);
+                }
+            });
+        }
+    }
+
+    public void showProgressDialog(CharSequence message)
+    {
+        if (this.progressDialog == null)
+        {
+            this.progressDialog = new ProgressDialog(this);
+            this.progressDialog.setIndeterminate(true);
+            this.progressDialog.setCancelable(Boolean.FALSE);
+        }
+        this.progressDialog.setIcon(R.drawable.ic_action_info);
+        this.progressDialog.setTitle(R.string.message_please_wait);
+        this.progressDialog.setMessage(message);
+        this.progressDialog.show();
+    }
+
+    public void dismissProgressDialog()
+    {
+        if (this.progressDialog != null)
+        {
+            this.progressDialog.dismiss();
         }
     }
 }

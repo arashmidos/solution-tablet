@@ -52,7 +52,6 @@ import java.util.List;
  */
 public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListModel, QuestionListAdapter> implements CompoundButton.OnCheckedChangeListener
 {
-
     public static final String TAG = QuestionnaireDetailFragment.class.getSimpleName();
 
     private MainActivity mainActivity;

@@ -40,7 +40,6 @@ import java.util.List;
  */
 public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel>
 {
-
     private final QuestionnaireService questionnaireService;
     private final NCustomerSO nCustomerSO;
     private MainActivity mainActivity;
