@@ -9,6 +9,7 @@ import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
@@ -19,6 +20,7 @@ import com.parsroyal.solutiontablet.data.model.PositionModel;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.LocationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,6 +227,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
                 "c." + Customer.COL_CELL_PHONE,
                 "c." + Customer.COL_ADDRESS,
                 "c." + Customer.COL_X_LOCATION,
+                "c." + Customer.COL_Y_LOCATION,
                 "vi." + VisitInformation.COL_CREATE_DATE_TIME};
 
         String selection = " c." + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
@@ -249,15 +252,18 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         }
 
         List<CustomerListModel> entities = new ArrayList<>();
+
+        Position position = new PositionDaoImpl(context).getLastPosition();
+
         while (cursor.moveToNext())
         {
-            entities.add(createListModelFromCursor(cursor));
+            entities.add(createListModelFromCursor(cursor, position));
         }
         cursor.close();
         return entities;
     }
 
-    private CustomerListModel createListModelFromCursor(Cursor cursor)
+    private CustomerListModel createListModelFromCursor(Cursor cursor, Position position)
     {
         CustomerListModel customerListModel = new CustomerListModel();
         customerListModel.setPrimaryKey(cursor.getLong(0));
@@ -269,7 +275,26 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         String location = cursor.getString(6);
 
         customerListModel.setHasLocation(Empty.isNotEmpty(location) && !location.equals("0"));
-        String visitDate = cursor.getString(7);
+        if (customerListModel.hasLocation())
+        {
+            customerListModel.setXlocation(cursor.getDouble(6));
+            customerListModel.setYlocation(cursor.getDouble(7));
+        } else
+        {
+            customerListModel.setXlocation(0.0);
+            customerListModel.setYlocation(0.0);
+        }
+
+        if (Empty.isEmpty(position))
+        {
+            customerListModel.setDistance(0.0f);
+        } else
+        {
+            customerListModel.setDistance(LocationUtil.distanceTo(
+                    position.getLatitude(), position.getLongitude(),
+                    cursor.getDouble(6), cursor.getDouble(7)));
+        }
+        String visitDate = cursor.getString(8);
 
         String today = DateUtil.getCurrentGregorianFullWithDate();
 

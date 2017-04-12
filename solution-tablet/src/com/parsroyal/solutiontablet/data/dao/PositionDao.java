@@ -20,4 +20,6 @@ public interface PositionDao extends BaseDao<Position, Long>
     List<LatLng> findPositionLatLngByDate(Date from, Date to);
 
     List<LatLng> findPositionLatLng();
+
+    Position getLastPosition();
 }

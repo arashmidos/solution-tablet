@@ -86,9 +86,14 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long>
 
     public List<T> retrieveAll(String selection, String[] args, String groupBy, String having, String orderBy)
     {
+        return retrieveAll(selection, args, groupBy, having, orderBy, null);
+    }
+
+    public List<T> retrieveAll(String selection, String[] args, String groupBy, String having, String orderBy, String limit)
+    {
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        Cursor cursor = db.query(getTableName(), getProjection(), selection, args, groupBy, having, null);
+        Cursor cursor = db.query(getTableName(), getProjection(), selection, args, groupBy, having, orderBy, limit);
         List<T> entities = new ArrayList<T>();
         while (cursor.moveToNext())
         {

@@ -12,6 +12,57 @@ public class CustomerListModel extends BaseListModel
     private String cellPhone;
     private boolean hasLocation;
     private boolean isVisited;
+    private double xlocation;
+    private double ylocation;
+    private boolean hasOrder;
+    private boolean hasRejection;
+
+    public void setDistance(Float distance)
+    {
+        this.distance = distance;
+    }
+
+    private Float distance;
+
+    public boolean hasOrder()
+    {
+        return hasOrder;
+    }
+
+    public void setHasOrder(boolean hasOrder)
+    {
+        this.hasOrder = hasOrder;
+    }
+
+    public boolean hasRejection()
+    {
+        return hasRejection;
+    }
+
+    public void setHasRejection(boolean hasRejection)
+    {
+        this.hasRejection = hasRejection;
+    }
+
+    public double getXlocation()
+    {
+        return xlocation;
+    }
+
+    public void setXlocation(double xlocation)
+    {
+        this.xlocation = xlocation;
+    }
+
+    public double getYlocation()
+    {
+        return ylocation;
+    }
+
+    public void setYlocation(double ylocation)
+    {
+        this.ylocation = ylocation;
+    }
 
     public boolean hasLocation()
     {
@@ -61,5 +112,10 @@ public class CustomerListModel extends BaseListModel
     public void setCellPhone(String cellPhone)
     {
         this.cellPhone = cellPhone;
+    }
+
+    public Float getDistance()
+    {
+        return distance;
     }
 }

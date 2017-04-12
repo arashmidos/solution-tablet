@@ -1,8 +1,8 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:custom="http://schemas.android.com/apk/res-auto"
@@ -40,6 +40,13 @@
                     android:paddingRight="35dp"
                     android:text="@string/cancel_btn"
                     android:textColor="@color/white"/>
+
+                <ImageButton
+                    android:id="@+id/sort_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_sort_24dp"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <EditText
@@ -110,14 +117,14 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        app:backgroundTint="@color/pink"
-        app:fabSize="normal"
-        app:srcCompat="@drawable/ic_action_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|left"
         android:layout_margin="16dp"
         android:clickable="true"
         android:tint="@color/white"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:backgroundTint="@color/pink"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_action_add"/>
 </android.support.design.widget.CoordinatorLayout>

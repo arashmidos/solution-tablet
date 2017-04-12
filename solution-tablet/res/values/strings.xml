@@ -342,6 +342,7 @@
     <string name="message_update_alert">نسخه جدید برنامه دریافت شد. آیا می خواهید بروزرسانی انجام شود؟</string>
     <string name="warning">هشدار!</string>
     <string name="message_alert_send_data">ممکن است داده های موجود در برنامه حذف شوند. آیا تمایل دارید قبل از نصب نسخه جدید، داده های موجود ارسال گردد؟</string>
+    <string name="sort_by">مرتب سازی بر اساس</string>
     <string-array name="sale_type">
         <item>فروش سرد</item>
         <item>فروش گرم</item>

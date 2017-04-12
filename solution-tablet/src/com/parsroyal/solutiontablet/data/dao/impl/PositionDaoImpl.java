@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.parsroyal.solutiontablet.data.dao.PositionDao;
+import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -191,6 +192,16 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
         Date from = DateUtil.startOfDay(to);
 
         return findPositionLatLngByDate(from, to);
+    }
 
+    @Override
+    public Position getLastPosition()
+    {
+        List<Position> positionList = retrieveAll(null, null, null, null, Position.COL_ID + " DESC ", "1");
+        if (positionList.size() == 1)
+        {
+            return positionList.get(0);
+        }
+        return null;
     }
 }
