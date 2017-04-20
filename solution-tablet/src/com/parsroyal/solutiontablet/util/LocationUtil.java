@@ -32,9 +32,11 @@ public class LocationUtil
      */
     public static Float distanceTo(Double lat1, Double long1, double lat2, double long2)
     {
+        //If it unknown location
         if (lat1 == 0.0f || long1 == 0.0f || lat2 == 0.0f || long2 == 0.0f)
         {
-            return 0.0f;
+            //Set it to infinity
+            return Float.MAX_VALUE;
         }
 
         Location l1 = new Location("");

@@ -2,7 +2,7 @@
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     jcenter {
         url "http://jcenter.bintray.com/"
     }

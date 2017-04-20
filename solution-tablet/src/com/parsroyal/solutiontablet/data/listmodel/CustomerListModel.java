@@ -16,6 +16,7 @@ public class CustomerListModel extends BaseListModel
     private double ylocation;
     private boolean hasOrder;
     private boolean hasRejection;
+    private Long codeNumber;
 
     public void setDistance(Float distance)
     {
@@ -117,5 +118,15 @@ public class CustomerListModel extends BaseListModel
     public Float getDistance()
     {
         return distance;
+    }
+
+    public void setCodeNumber(Long codeNumber)
+    {
+        this.codeNumber = codeNumber;
+    }
+
+    public Long getCodeNumber()
+    {
+        return codeNumber;
     }
 }

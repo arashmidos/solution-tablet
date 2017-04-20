@@ -5,10 +5,11 @@ package com.parsroyal.solutiontablet.constants;
  */
 public enum SortType
 {
-    NAME(0, "نام"),
-    DISTANCE(1,"فاصله"),
-    HAS_ORDER(2, "سفارش"),
-    HAS_REJECT(3,"مرجوعی");
+    DEFAULT(0,"پیشفرض"),
+    NAME(1, "نام"),
+    DISTANCE(2,"فاصله"),
+    HAS_ORDER(3, "سفارش"),
+    HAS_REJECT(4,"مرجوعی");
 
     private int id;
     private String title;

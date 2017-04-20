@@ -14,6 +14,7 @@ import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
@@ -24,6 +25,7 @@ import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 
 import java.io.File;
@@ -119,13 +121,33 @@ public class CustomerServiceImpl implements CustomerService
     @Override
     public List<CustomerListModel> getAllCustomersListModelByVisitLineBackendId(Long visitLineId)
     {
-        return customerDao.getAllCustomersListModelByVisitLineBackendId(visitLineId);
+        return getFilteredCustomerList(visitLineId, null);
     }
 
     @Override
     public List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint)
     {
-        return customerDao.getAllCustomersListModelByVisitLineWithConstraint(visitLineId, constraint);
+        List<CustomerListModel> listModel = customerDao.getAllCustomersListModelByVisitLineWithConstraint(visitLineId, constraint);
+//        Position position = new PositionDaoImpl(context).getLastPosition();
+        Position position = new Position();
+        position.setLatitude(35.6892);
+        position.setLongitude(51.3890);
+        //Set distances from current location
+        for (int i = 0; i < listModel.size(); i++)
+        {
+            CustomerListModel item = listModel.get(i);
+
+            if (Empty.isEmpty(position))
+            {
+                item.setDistance(0.0f);
+            } else
+            {
+                item.setDistance(LocationUtil.distanceTo(position.getLatitude(), position.getLongitude(),
+                        item.getXlocation(), item.getYlocation()));
+            }
+        }
+
+        return listModel;
     }
 
     @Override

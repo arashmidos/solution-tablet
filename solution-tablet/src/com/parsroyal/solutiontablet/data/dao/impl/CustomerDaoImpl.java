@@ -6,11 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.parsroyal.solutiontablet.constants.CustomerStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.Customer;
-import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
@@ -20,10 +21,11 @@ import com.parsroyal.solutiontablet.data.model.PositionModel;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.LocationUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Mahyar on 6/19/2015.
@@ -225,16 +227,18 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
                 "c." + Customer.COL_FULL_NAME,
                 "c." + Customer.COL_PHONE_NUMBER,
                 "c." + Customer.COL_CELL_PHONE,
-                "c." + Customer.COL_ADDRESS,
+                "c." + Customer.COL_ADDRESS,//5
                 "c." + Customer.COL_X_LOCATION,
                 "c." + Customer.COL_Y_LOCATION,
-                "vi." + VisitInformation.COL_CREATE_DATE_TIME};
+                "vi." + VisitInformation.COL_CREATE_DATE_TIME,
+                "vd." + VisitInformationDetail.COL_TYPE};
 
         String selection = " c." + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
         String table = getTableName() + " c " +
-                "LEFT OUTER JOIN COMMER_VISIT_INFORMATION vi on c." + Customer.COL_BACKEND_ID + " = vi." + VisitInformation.COL_CUSTOMER_BACKEND_ID + " ";
-
-        String groupBy = "c." + Customer.COL_BACKEND_ID + " ";
+                "LEFT OUTER JOIN COMMER_VISIT_INFORMATION vi on c." + Customer.COL_BACKEND_ID + " = vi." + VisitInformation.COL_CUSTOMER_BACKEND_ID +
+                " LEFT OUTER JOIN COMMER_VISIT_INFORMATION_DETAIL vd on vi._id = vd.VISIT_INFORMATION_ID ";
+//        String groupBy = "c." + Customer.COL_BACKEND_ID + " ";
+        String orderBy = "c." + Customer.COL_ID + " ";
 
         String[] args = {String.valueOf(visitLineId)};
         Cursor cursor;
@@ -245,29 +249,38 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
                     "c." + Customer.COL_PHONE_NUMBER + " like ? or c." + Customer.COL_CELL_PHONE + " like ? or c." + Customer.COL_CODE + " like ? )";
             constraint = "%" + constraint + "%";
             String[] args2 = {String.valueOf(visitLineId), constraint, constraint, constraint, constraint, constraint};
-            cursor = db.query(table, projection, selection, args2, groupBy, null, null);
+            cursor = db.query(table, projection, selection, args2, null, null, orderBy);
         } else
         {
-            cursor = db.query(table, projection, selection, args, groupBy, null, null);
+            cursor = db.query(table, projection, selection, args, null, null, orderBy);
         }
 
-        List<CustomerListModel> entities = new ArrayList<>();
-
-        Position position = new PositionDaoImpl(context).getLastPosition();
+        Map<Long, CustomerListModel> entitiesMap = new HashMap<>();
 
         while (cursor.moveToNext())
         {
-            entities.add(createListModelFromCursor(cursor, position));
+            CustomerListModel listModel = createListModelFromCursor(cursor);
+            if (entitiesMap.containsKey(listModel.getPrimaryKey()))
+            {
+                if ((listModel.hasOrder() || listModel.hasRejection()))
+                {
+                    entitiesMap.put(listModel.getPrimaryKey(), listModel);
+                }
+            } else
+            {
+                entitiesMap.put(listModel.getPrimaryKey(), listModel);
+            }
         }
         cursor.close();
-        return entities;
+        return new ArrayList<>(entitiesMap.values());
     }
 
-    private CustomerListModel createListModelFromCursor(Cursor cursor, Position position)
+    private CustomerListModel createListModelFromCursor(Cursor cursor)
     {
         CustomerListModel customerListModel = new CustomerListModel();
         customerListModel.setPrimaryKey(cursor.getLong(0));
         customerListModel.setCode(cursor.getString(1));
+        customerListModel.setCodeNumber(cursor.getLong(1));
         customerListModel.setTitle(cursor.getString(2));
         customerListModel.setPhoneNumber(cursor.getString(3));
         customerListModel.setCellPhone(cursor.getString(4));
@@ -285,20 +298,20 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
             customerListModel.setYlocation(0.0);
         }
 
-        if (Empty.isEmpty(position))
-        {
-            customerListModel.setDistance(0.0f);
-        } else
-        {
-            customerListModel.setDistance(LocationUtil.distanceTo(
-                    position.getLatitude(), position.getLongitude(),
-                    cursor.getDouble(6), cursor.getDouble(7)));
-        }
         String visitDate = cursor.getString(8);
 
         String today = DateUtil.getCurrentGregorianFullWithDate();
 
         customerListModel.setVisited(visitDate != null && visitDate.contains(today));
+
+        int type = cursor.getInt(9);
+        if (type == VisitInformationDetailType.CREATE_ORDER.getValue())
+        {
+            customerListModel.setHasOrder(true);
+        } else if (type == VisitInformationDetailType.NONE.getValue())
+        {
+            customerListModel.setHasRejection(true);
+        }
 
         return customerListModel;
     }
