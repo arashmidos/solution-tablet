@@ -24,4 +24,5 @@ public class Constants
     public static final String UPDATE_PASS = "pvstore1234";
     public static final int ICON_MESSAGE = R.drawable.ic_info_outline_black_24dp;
     public static final int ICON_WARNING = R.drawable.ic_warning_24dp;
+    public static final Float MAX_DISTANCE = 200.0f;
 }

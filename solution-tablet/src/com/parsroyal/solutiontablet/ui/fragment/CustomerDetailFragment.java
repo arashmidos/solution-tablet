@@ -11,20 +11,24 @@ import android.widget.TextView;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.LocationService;
+import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.service.order.SaleOrderService;
 import com.parsroyal.solutiontablet.service.order.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import butterknife.BindView;
@@ -97,7 +101,14 @@ public class CustomerDetailFragment extends BaseFragment
         switch (view.getId())
         {
             case R.id.saveEnteringBtn:
-                doEnter();
+                if (hasAcceptableDistance())
+                {
+
+                    doEnter();
+                } else
+                {
+                    ToastUtil.toastError(getActivity(),getString(R.string.error_distance_too_far_for_action));
+                }
                 break;
             case R.id.performanceBtn:
                 Bundle args = new Bundle();
@@ -105,6 +116,17 @@ public class CustomerDetailFragment extends BaseFragment
                 mainActivity.changeFragment(MainActivity.KPI_CUSTOMER_FRAGMENT_ID, args, false);
                 break;
         }
+    }
+
+    private boolean hasAcceptableDistance()
+    {
+        Position position = new PositionServiceImpl(getActivity()).getLastPosition();
+        Float distance = Float.MAX_VALUE;
+        if (Empty.isNotEmpty(position))
+        {
+            distance = LocationUtil.distanceTo(position.getLatitude(), position.getLongitude(), customer.getxLocation(), customer.getyLocation());
+        }
+        return distance <= Constants.MAX_DISTANCE;
     }
 
     private void doEnter()

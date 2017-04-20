@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30dp"
-                    android:text="کد مشتری:"
+                    android:text="@string/customer_code_label"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                 <TextView
@@ -85,7 +85,7 @@
                     style="@style/TextView.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="نام مشتری:"
+                    android:text="@string/customer_name_label"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
             </TableRow>
 

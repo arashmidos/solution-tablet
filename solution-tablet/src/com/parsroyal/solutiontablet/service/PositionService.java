@@ -26,4 +26,6 @@ public interface PositionService
     void sendPosition(Position position);
 
     List<LatLng> getAllPositionLatLng();
+
+    Position getLastPosition();
 }

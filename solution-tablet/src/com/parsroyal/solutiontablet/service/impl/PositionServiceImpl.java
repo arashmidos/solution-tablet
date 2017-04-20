@@ -2,16 +2,14 @@ package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.parsroyal.solutiontablet.biz.impl.PositionDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.dao.PositionDao;
 import com.parsroyal.solutiontablet.data.dao.impl.PositionDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Position;
-import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.service.PositionService;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Collections;
 import java.util.Date;
@@ -90,5 +88,11 @@ public class PositionServiceImpl implements PositionService
     public List<LatLng> getAllPositionLatLng()
     {
         return positionDao.findPositionLatLng();
+    }
+
+    @Override
+    public Position getLastPosition()
+    {
+        return positionDao.getLastPosition();
     }
 }

@@ -24,6 +24,7 @@ import com.parsroyal.solutiontablet.data.model.PositionModel;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.LocationService;
+import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -129,7 +130,7 @@ public class CustomerServiceImpl implements CustomerService
     public List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint)
     {
         List<CustomerListModel> listModel = customerDao.getAllCustomersListModelByVisitLineWithConstraint(visitLineId, constraint);
-        Position position = new PositionDaoImpl(context).getLastPosition();
+        Position position = new PositionServiceImpl(context).getLastPosition();
 
         //Set distances from current location
         for (int i = 0; i < listModel.size(); i++)
