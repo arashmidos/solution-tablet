@@ -132,8 +132,8 @@ public class FilterDialog extends DialogFragment
         if (Empty.isNotEmpty(distanceText))
         {
             distance = Integer.parseInt(distanceText);
-            //TODO fix this
-            if (distance <= 0 || distance > 50000)
+
+            if (distance <= 0 || distance > 500)
             {
                 ToastUtil.toastMessage(getActivity(), R.string.error_filter_max_distance);
                 return;

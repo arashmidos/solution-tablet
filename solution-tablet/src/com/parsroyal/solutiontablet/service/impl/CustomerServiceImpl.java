@@ -10,6 +10,7 @@ import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
 import com.parsroyal.solutiontablet.data.dao.VisitLineDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerPicDaoImpl;
+import com.parsroyal.solutiontablet.data.dao.impl.PositionDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
@@ -128,10 +129,8 @@ public class CustomerServiceImpl implements CustomerService
     public List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint)
     {
         List<CustomerListModel> listModel = customerDao.getAllCustomersListModelByVisitLineWithConstraint(visitLineId, constraint);
-//        Position position = new PositionDaoImpl(context).getLastPosition();
-        Position position = new Position();
-        position.setLatitude(35.6892);
-        position.setLongitude(51.3890);
+        Position position = new PositionDaoImpl(context).getLastPosition();
+
         //Set distances from current location
         for (int i = 0; i < listModel.size(); i++)
         {
