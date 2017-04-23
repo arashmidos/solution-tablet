@@ -29,7 +29,6 @@ import butterknife.OnClick;
 
 /**
  * Created by Mahyar on 6/3/2015.
- * Edited by Arash on 6/29/2016
  */
 public class SettingFragment extends BaseFragment implements ResultObserver
 {
@@ -54,6 +53,8 @@ public class SettingFragment extends BaseFragment implements ResultObserver
     EditText gpsInterval;
     @BindView(R.id.enableTrackingCb)
     CheckBox enableTrackingCb;
+    @BindView(R.id.enableCalculateDistanceCb)
+    CheckBox enableCalculateDistanceCb;
     @BindView(R.id.branchSerialTxt)
     EditText branchSerialTxt;
     @BindView(R.id.stockSerialTxt)
@@ -77,6 +78,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
         String saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
         String gpsIntervalValue = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_INTERVAL);
         String gpsEnabled = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_ENABLE);
+        String distanceEnabled = settingService.getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE);
         String branchSerial = settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE);
         String stockSerial = settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE);
 
@@ -88,6 +90,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
         saleTypeSp.setSelection(Empty.isNotEmpty(saleType) ? Integer.parseInt(saleType) - 1 : 1);
         gpsInterval.setText(Empty.isNotEmpty(gpsIntervalValue) ? gpsIntervalValue : "");
         enableTrackingCb.setChecked(Empty.isNotEmpty(gpsEnabled) && gpsEnabled.equals("1"));
+        enableCalculateDistanceCb.setChecked(Empty.isNotEmpty(distanceEnabled) && distanceEnabled.equals("1"));
         branchSerialTxt.setText(Empty.isNotEmpty(branchSerial) ? branchSerial : "");
         stockSerialTxt.setText(Empty.isNotEmpty(stockSerial) ? stockSerial : "");
 
@@ -109,6 +112,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
         userCodeTxt.setText("1016");
         gpsInterval.setText("300");
         enableTrackingCb.setChecked(true);
+        enableCalculateDistanceCb.setChecked(true);
         branchSerialTxt.setText("100101");
         stockSerialTxt.setText("100101");
     }
@@ -116,57 +120,25 @@ public class SettingFragment extends BaseFragment implements ResultObserver
     private void invokeGetInformationService()
     {
         showProgressDialog(getActivity().getString(R.string.message_connecting_to_server_please_wait));
-        new Thread(new Runnable()
+        new Thread(() ->
         {
-            @Override
-            public void run()
+            try
             {
-                try
-                {
-                    save();
-                    settingService.getUserInformation(SettingFragment.this);
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastSuccess(getActivity(), R.string.message_setting_saved_successfully);
-                        }
-                    });
+                save();
+                settingService.getUserInformation(SettingFragment.this);
+                runOnUiThread(() -> ToastUtil.toastSuccess(getActivity(), R.string.message_setting_saved_successfully));
 
 
-                } catch (final BusinessException ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), ex);
-                        }
-                    });
-                } catch (final Exception ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-                        }
-                    });
-                }
-                runOnUiThread(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        dismissProgressDialog();
-                    }
-                });
+            } catch (final BusinessException ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
+            } catch (final Exception ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
             }
+            runOnUiThread(() -> dismissProgressDialog());
         }).start();
     }
 
@@ -182,6 +154,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
             String saleType = String.valueOf(saleTypeSp.getSelectedItemPosition() + 1);
             String gpsIntervalValue = gpsInterval.getText().toString();
             String gpsEnabled = enableTrackingCb.isChecked() ? "1" : "0";
+            String distanceEnabled = enableCalculateDistanceCb.isChecked() ? "1" : "0";
             String stockSerial = stockSerialTxt.getText().toString();
             String branchSerial = branchSerialTxt.getText().toString();
 
@@ -193,6 +166,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver
             settingService.saveSetting(ApplicationKeys.SETTING_SALE_TYPE, saleType);
             settingService.saveSetting(ApplicationKeys.SETTING_GPS_INTERVAL, gpsIntervalValue);
             settingService.saveSetting(ApplicationKeys.SETTING_GPS_ENABLE, gpsEnabled);
+            settingService.saveSetting(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE, distanceEnabled);
             settingService.saveSetting(ApplicationKeys.SETTING_STOCK_CODE, stockSerial);
             settingService.saveSetting(ApplicationKeys.SETTING_BRANCH_CODE, branchSerial);
         }
@@ -202,105 +176,66 @@ public class SettingFragment extends BaseFragment implements ResultObserver
     {
         if (Empty.isEmpty(serverAddress1Txt.getText().toString()))
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    ToastUtil.toastError(getActivity(), R.string.error_serverAddress1_is_required);
-                    serverAddress1Txt.requestFocus();
-                }
+                ToastUtil.toastError(getActivity(), R.string.error_serverAddress1_is_required);
+                serverAddress1Txt.requestFocus();
             });
             return false;
         } else if (Empty.isEmpty(serverAddress2Txt.getText().toString()))
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    ToastUtil.toastError(getActivity(), R.string.error_serverAddress2_is_required);
-                    serverAddress2Txt.requestFocus();
-                }
+                ToastUtil.toastError(getActivity(), R.string.error_serverAddress2_is_required);
+                serverAddress2Txt.requestFocus();
             });
             return false;
         } else if (Empty.isEmpty(usernameTxt.getText().toString()))
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() -> runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), R.string.error_serverAddress1_is_required);
-                            serverAddress1Txt.requestFocus();
-                        }
-                    });
-                }
-            });
+                ToastUtil.toastError(getActivity(), R.string.error_serverAddress1_is_required);
+                serverAddress1Txt.requestFocus();
+            }));
             return false;
         } else if (Empty.isEmpty(passwordTxt.getText().toString()))
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    ToastUtil.toastError(getActivity(), R.string.error_password_is_required);
-                    passwordTxt.requestFocus();
-                }
+                ToastUtil.toastError(getActivity(), R.string.error_password_is_required);
+                passwordTxt.requestFocus();
             });
             return false;
         } else if (Empty.isEmpty(userCodeTxt.getText().toString()))
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    ToastUtil.toastError(getActivity(), R.string.error_user_code_is_required);
-                    userCodeTxt.requestFocus();
-                }
+                ToastUtil.toastError(getActivity(), R.string.error_user_code_is_required);
+                userCodeTxt.requestFocus();
             });
             return false;
         } else if (Empty.isEmpty(gpsInterval.getText().toString()))
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    ToastUtil.toastError(getActivity(), R.string.error_gps_interval_is_required);
-                    gpsInterval.requestFocus();
-                }
+                ToastUtil.toastError(getActivity(), R.string.error_gps_interval_is_required);
+                gpsInterval.requestFocus();
             });
             return false;
         } else if (Empty.isEmpty(branchSerialTxt.getText().toString()))
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_required);
-                    branchSerialTxt.requestFocus();
-                }
+                ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_required);
+                branchSerialTxt.requestFocus();
             });
             return false;
         } else if (Empty.isEmpty(stockSerialTxt.getText().toString()))
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    ToastUtil.toastError(getActivity(), R.string.error_stock_serial_is_required);
-                    stockSerialTxt.requestFocus();
-                }
+                ToastUtil.toastError(getActivity(), R.string.error_stock_serial_is_required);
+                stockSerialTxt.requestFocus();
             });
             return false;
         }
@@ -309,14 +244,10 @@ public class SettingFragment extends BaseFragment implements ResultObserver
             long serialBranch = Long.parseLong(branchSerialTxt.getText().toString());
         } catch (Exception ignore)
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_not_valid);
-                    branchSerialTxt.requestFocus();
-                }
+                ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_not_valid);
+                branchSerialTxt.requestFocus();
             });
             return false;
         }
@@ -325,14 +256,10 @@ public class SettingFragment extends BaseFragment implements ResultObserver
             long stockSerial = Long.parseLong(stockSerialTxt.getText().toString());
         } catch (Exception ignore)
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    ToastUtil.toastError(getActivity(), R.string.error_stock_serial_is_not_valid);
-                    stockSerialTxt.requestFocus();
-                }
+                ToastUtil.toastError(getActivity(), R.string.error_stock_serial_is_not_valid);
+                stockSerialTxt.requestFocus();
             });
             return false;
         }
@@ -342,27 +269,13 @@ public class SettingFragment extends BaseFragment implements ResultObserver
     @Override
     public void publishResult(final BusinessException ex)
     {
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                ToastUtil.toastError(getActivity(), ex);
-            }
-        });
+        runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
     }
 
     @Override
     public void publishResult(final String message)
     {
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                ToastUtil.toastMessage(getActivity(), message);
-            }
-        });
+        runOnUiThread(() -> ToastUtil.toastMessage(getActivity(), message));
     }
 
     @Override
@@ -370,17 +283,13 @@ public class SettingFragment extends BaseFragment implements ResultObserver
     {
         if (result)
         {
-            runOnUiThread(new Runnable()
+            runOnUiThread(() ->
             {
-                @Override
-                public void run()
-                {
-                    MainActivity mainActivity = (MainActivity) getActivity();
-                    mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, false);
-                    mainActivity.updateActionbar();
-                    //Start GPS Tracker
-                    new TrackerAlarmReceiver().setAlarm(getContext());
-                }
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, false);
+                mainActivity.updateActionbar();
+                //Start GPS Tracker
+                new TrackerAlarmReceiver().setAlarm(getContext());
             });
         }
     }
