@@ -17,11 +17,12 @@ import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.LocationService;
-import com.parsroyal.solutiontablet.service.PositionService;
+import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.service.order.SaleOrderService;
 import com.parsroyal.solutiontablet.service.order.impl.SaleOrderServiceImpl;
@@ -30,6 +31,7 @@ import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,11 +59,13 @@ public class CustomerDetailFragment extends BaseFragment
     private MainActivity mainActivity;
     private CustomerService customerService;
     private VisitService visitService;
+    private SettingService settingService;
 
     private SaleOrderService orderService;
     private LocationService locationService;
     private long customerId;
     private CustomerDto customer;
+    private boolean distanceServiceEnabled;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -71,6 +75,7 @@ public class CustomerDetailFragment extends BaseFragment
         locationService = new LocationServiceImpl(mainActivity);
         orderService = new SaleOrderServiceImpl(mainActivity);
         visitService = new VisitServiceImpl(mainActivity);
+        settingService = new SettingServiceImpl(mainActivity);
 
         Bundle arguments = getArguments();
         customerId = arguments.getLong("customerId");
@@ -86,6 +91,8 @@ public class CustomerDetailFragment extends BaseFragment
         addressTv.setText(customer.getAddress());
         activityTv.setText(Empty.isNotEmpty(customer.getActivityTitle()) ? customer.getActivityTitle() : "--");
 
+        String distanceEnabled = settingService.getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE);
+        distanceServiceEnabled = Empty.isNotEmpty(distanceEnabled) && distanceEnabled.equals("1");
         return view;
     }
 
@@ -101,15 +108,14 @@ public class CustomerDetailFragment extends BaseFragment
         switch (view.getId())
         {
             case R.id.saveEnteringBtn:
-                if (hasAcceptableDistance())
-                {
-
-                    doEnter();
-                } else
-                {
-                    ToastUtil.toastError(getActivity(),getString(R.string.error_distance_too_far_for_action));
-                }
-                break;
+                if (distanceServiceEnabled && hasAcceptableDistance())
+            {
+                doEnter();
+            } else
+            {
+                ToastUtil.toastError(getActivity(), getString(R.string.error_distance_too_far_for_action));
+            }
+            break;
             case R.id.performanceBtn:
                 Bundle args = new Bundle();
                 args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
@@ -120,11 +126,25 @@ public class CustomerDetailFragment extends BaseFragment
 
     private boolean hasAcceptableDistance()
     {
+
         Position position = new PositionServiceImpl(getActivity()).getLastPosition();
-        Float distance = Float.MAX_VALUE;
+        Float distance;
+        double lat2 = customer.getxLocation();
+        double long2 = customer.getyLocation();
+
+        if (lat2 == 0.0 || long2 == 0.0)
+        {
+            //Location not set for customer
+            return true;
+        }
+
         if (Empty.isNotEmpty(position))
         {
-            distance = LocationUtil.distanceTo(position.getLatitude(), position.getLongitude(), customer.getxLocation(), customer.getyLocation());
+            distance = LocationUtil.distanceTo(position.getLatitude(), position.getLongitude(), lat2, long2);
+        } else
+        {
+            ToastUtil.toastError(getActivity(), getString(R.string.error_salesman_location_not_found));
+            return false;
         }
         return distance <= Constants.MAX_DISTANCE;
     }

@@ -1,11 +1,13 @@
 package com.parsroyal.solutiontablet.data.listmodel;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
 import com.parsroyal.solutiontablet.data.model.BaseListModel;
 
 /**
  * Created by Mahyar on 7/6/2015.
  */
-public class CustomerListModel extends BaseListModel
+public class CustomerListModel extends BaseListModel implements ClusterItem
 {
     private String address;
     private String phoneNumber;
@@ -17,13 +19,29 @@ public class CustomerListModel extends BaseListModel
     private boolean hasOrder;
     private boolean hasRejection;
     private Long codeNumber;
+    private Float distance;
+    private Long backendId;
+    private String lastVisit;
 
-    public void setDistance(Float distance)
+    public Long getBackendId()
     {
-        this.distance = distance;
+        return backendId;
     }
 
-    private Float distance;
+    public void setBackendId(Long backendId)
+    {
+        this.backendId = backendId;
+    }
+
+    public String getLastVisit()
+    {
+        return lastVisit;
+    }
+
+    public void setLastVisit(String lastVisit)
+    {
+        this.lastVisit = lastVisit;
+    }
 
     public boolean hasOrder()
     {
@@ -120,13 +138,30 @@ public class CustomerListModel extends BaseListModel
         return distance;
     }
 
-    public void setCodeNumber(Long codeNumber)
+    public void setDistance(Float distance)
     {
-        this.codeNumber = codeNumber;
+        this.distance = distance;
     }
 
     public Long getCodeNumber()
     {
         return codeNumber;
+    }
+
+    public void setCodeNumber(Long codeNumber)
+    {
+        this.codeNumber = codeNumber;
+    }
+
+    @Override
+    public LatLng getPosition()
+    {
+        return new LatLng(xlocation, ylocation);
+    }
+
+    @Override
+    public String getSnippet()
+    {
+        return address;
     }
 }

@@ -49,4 +49,5 @@ public class PositionModel implements ClusterItem
     {
         return customer.getId();
     }
+
 }
