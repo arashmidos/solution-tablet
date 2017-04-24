@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.parsroyal.solutiontablet.constants.CustomerStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
@@ -21,14 +23,15 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Mahyar on 6/19/2015.
  */
 public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements CustomerDao
 {
-
     private Context context;
 
     public CustomerDaoImpl(Context context)
@@ -207,12 +210,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     }
 
     @Override
-    public List<CustomerListModel> getAllCustomersListModelByVisitLineBackendId(Long visitLineId)
-    {
-        return getAllCustomersListModelByVisitLineWithConstraint(visitLineId, null);
-    }
-
-    @Override
     public List<CustomerListModel> getAllCustomersListModelByVisitLineWithConstraint(Long visitLineId, String constraint)
     {
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
@@ -223,17 +220,32 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
                 "c." + Customer.COL_FULL_NAME,
                 "c." + Customer.COL_PHONE_NUMBER,
                 "c." + Customer.COL_CELL_PHONE,
-                "c." + Customer.COL_ADDRESS,
+                "c." + Customer.COL_ADDRESS,//5
                 "c." + Customer.COL_X_LOCATION,
-                "vi." + VisitInformation.COL_CREATE_DATE_TIME};
+                "c." + Customer.COL_Y_LOCATION,
+                "vi." + VisitInformation.COL_CREATE_DATE_TIME,
+                "vd." + VisitInformationDetail.COL_TYPE,
+                "vi." + VisitInformation.COL_VISIT_DATE,//10
+                "c." + Customer.COL_BACKEND_ID};
 
-        String selection = " c." + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
         String table = getTableName() + " c " +
-                "LEFT OUTER JOIN COMMER_VISIT_INFORMATION vi on c." + Customer.COL_BACKEND_ID + " = vi." + VisitInformation.COL_CUSTOMER_BACKEND_ID + " ";
+                "LEFT OUTER JOIN COMMER_VISIT_INFORMATION vi on c." + Customer.COL_BACKEND_ID + " = vi." + VisitInformation.COL_CUSTOMER_BACKEND_ID +
+                " LEFT OUTER JOIN COMMER_VISIT_INFORMATION_DETAIL vd on vi._id = vd.VISIT_INFORMATION_ID ";
 
-        String groupBy = "c." + Customer.COL_BACKEND_ID + " ";
+        String orderBy = "c." + Customer.COL_ID + " ";
 
-        String[] args = {String.valueOf(visitLineId)};
+        String selection = "";
+        String[] args = null;
+        if (Empty.isNotEmpty(visitLineId))
+        {
+            //Load all customers for Map
+            selection = " c." + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
+            args = new String[]{String.valueOf(visitLineId)};
+        } else
+        {
+            selection = "c." + Customer.COL_X_LOCATION + " is not null AND " + "c." + Customer.COL_X_LOCATION + " != 0";
+        }
+
         Cursor cursor;
         if (Empty.isNotEmpty(constraint))
         {
@@ -242,19 +254,30 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
                     "c." + Customer.COL_PHONE_NUMBER + " like ? or c." + Customer.COL_CELL_PHONE + " like ? or c." + Customer.COL_CODE + " like ? )";
             constraint = "%" + constraint + "%";
             String[] args2 = {String.valueOf(visitLineId), constraint, constraint, constraint, constraint, constraint};
-            cursor = db.query(table, projection, selection, args2, groupBy, null, null);
+            cursor = db.query(table, projection, selection, args2, null, null, orderBy);
         } else
         {
-            cursor = db.query(table, projection, selection, args, groupBy, null, null);
+            cursor = db.query(table, projection, selection, args, null, null, orderBy);
         }
 
-        List<CustomerListModel> entities = new ArrayList<>();
+        Map<Long, CustomerListModel> entitiesMap = new HashMap<>();
+
         while (cursor.moveToNext())
         {
-            entities.add(createListModelFromCursor(cursor));
+            CustomerListModel listModel = createListModelFromCursor(cursor);
+            if (entitiesMap.containsKey(listModel.getPrimaryKey()))
+            {
+                if ((listModel.hasOrder() || listModel.hasRejection()))
+                {
+                    entitiesMap.put(listModel.getPrimaryKey(), listModel);
+                }
+            } else
+            {
+                entitiesMap.put(listModel.getPrimaryKey(), listModel);
+            }
         }
         cursor.close();
-        return entities;
+        return new ArrayList<>(entitiesMap.values());
     }
 
     private CustomerListModel createListModelFromCursor(Cursor cursor)
@@ -262,6 +285,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         CustomerListModel customerListModel = new CustomerListModel();
         customerListModel.setPrimaryKey(cursor.getLong(0));
         customerListModel.setCode(cursor.getString(1));
+        customerListModel.setCodeNumber(cursor.getLong(1));
         customerListModel.setTitle(cursor.getString(2));
         customerListModel.setPhoneNumber(cursor.getString(3));
         customerListModel.setCellPhone(cursor.getString(4));
@@ -269,11 +293,33 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         String location = cursor.getString(6);
 
         customerListModel.setHasLocation(Empty.isNotEmpty(location) && !location.equals("0"));
-        String visitDate = cursor.getString(7);
+        if (customerListModel.hasLocation())
+        {
+            customerListModel.setXlocation(cursor.getDouble(6));
+            customerListModel.setYlocation(cursor.getDouble(7));
+        } else
+        {
+            customerListModel.setXlocation(0.0);
+            customerListModel.setYlocation(0.0);
+        }
+
+        String visitDate = cursor.getString(8);
 
         String today = DateUtil.getCurrentGregorianFullWithDate();
 
         customerListModel.setVisited(visitDate != null && visitDate.contains(today));
+
+        int type = cursor.getInt(9);
+        if (type == VisitInformationDetailType.CREATE_ORDER.getValue())
+        {
+            customerListModel.setHasOrder(true);
+        } else if (type == VisitInformationDetailType.NONE.getValue())
+        {
+            customerListModel.setHasRejection(true);
+        }
+
+        customerListModel.setLastVisit(cursor.getString(10));
+        customerListModel.setBackendId(cursor.getLong(11));
 
         return customerListModel;
     }
@@ -284,14 +330,31 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         String[] projection = {
-                " cu." + Customer.COL_ID, " cu." + Customer.COL_BACKEND_ID, " cu." + Customer.COL_FULL_NAME, " cu." + Customer.COL_PHONE_NUMBER,
-                " cu." + Customer.COL_CELL_PHONE, " cu." + Customer.COL_PROVINCE_BACKEND_ID, " cu." + Customer.COL_CITY_BACKEND_ID, " cu." + Customer.COL_ADDRESS,
-                " cu." + Customer.COL_ACTIVITY_BACKEND_ID, " cu." + Customer.COL_STORE_SURFACE, " cu." + Customer.COL_STORE_LOCATION_TYPE_BACKEND_ID,
+                " cu." + Customer.COL_ID,
+                " cu." + Customer.COL_BACKEND_ID,
+                " cu." + Customer.COL_FULL_NAME,
+                " cu." + Customer.COL_PHONE_NUMBER,
+                " cu." + Customer.COL_CELL_PHONE,
+                " cu." + Customer.COL_PROVINCE_BACKEND_ID, //5
+                " cu." + Customer.COL_CITY_BACKEND_ID,
+                " cu." + Customer.COL_ADDRESS,
+                " cu." + Customer.COL_ACTIVITY_BACKEND_ID,
+                " cu." + Customer.COL_STORE_SURFACE,
+                " cu." + Customer.COL_STORE_LOCATION_TYPE_BACKEND_ID,//10
                 " cu." + Customer.COL_STORE_LOCATION_TYPE_BACKEND_ID,
-                " cu." + Customer.COL_STATUS, " cu." + Customer.COL_CODE, " cu." + Customer.COL_VISIT_LINE_BACKEND_ID, " cu." + Customer.COL_CREATE_DATE_TIME,
-                " cu." + Customer.COL_UPDATE_DATE_TIME, " cu." + Customer.COL_X_LOCATION, " cu." + Customer.COL_Y_LOCATION,
-                " bi." + BaseInfo.COL_TITLE + " activityTitle", " cu." + Customer.COL_SHOP_NAME, " cu." + Customer.COL_NATIONAL_CODE,
-                " cu." + Customer.COL_MUNICIPALITY_CODE, " cu." + Customer.COL_POSTAL_CODE, " cu." + Customer.COL_APPROVED
+                " cu." + Customer.COL_STATUS,
+                " cu." + Customer.COL_CODE,
+                " cu." + Customer.COL_VISIT_LINE_BACKEND_ID,
+                " cu." + Customer.COL_CREATE_DATE_TIME,//15
+                " cu." + Customer.COL_UPDATE_DATE_TIME,
+                " cu." + Customer.COL_X_LOCATION,
+                " cu." + Customer.COL_Y_LOCATION,
+                " bi." + BaseInfo.COL_TITLE + " activityTitle",
+                " cu." + Customer.COL_SHOP_NAME, //20
+                " cu." + Customer.COL_NATIONAL_CODE,
+                " cu." + Customer.COL_MUNICIPALITY_CODE,
+                " cu." + Customer.COL_POSTAL_CODE,
+                " cu." + Customer.COL_APPROVED
         };
         String selection = " cu." + getPrimaryKeyColumnName() + " = ?";
         String[] args = {String.valueOf(customerId)};

@@ -307,7 +307,7 @@
     <string name="gps_interval">زمان ارسال</string>
     <string name="seconds">( ثانیه )</string>
     <string name="gps_setting">تنظیمات موقعیت یاب</string>
-    <string name="enable_gps_service">سرویس فعال باشد</string>
+    <string name="enable_gps_service">سرویس موقعیت یاب فعال باشد</string>
     <string name="sinse_date">از تاریخ:</string>
     <string name="toDate">الی :</string>
     <string name="filter">فیلتر</string>
@@ -342,6 +342,19 @@
     <string name="message_update_alert">نسخه جدید برنامه دریافت شد. آیا می خواهید بروزرسانی انجام شود؟</string>
     <string name="warning">هشدار!</string>
     <string name="message_alert_send_data">ممکن است داده های موجود در برنامه حذف شوند. آیا تمایل دارید قبل از نصب نسخه جدید، داده های موجود ارسال گردد؟</string>
+    <string name="sort_by">مرتب سازی بر اساس</string>
+    <string name="has_order">ثبت سفارش</string>
+    <string name="has_none">ثبت عدم</string>
+    <string name="clear">پاک کردن</string>
+    <string name="error_no_filter_selected">هیچ فیلتری انتخاب نشده است</string>
+    <string name="error_filter_max_distance">فاصله نمی تواند بیش از 500 متر باشد</string>
+    <string name="customer_code_label">کد مشتری:</string>
+    <string name="customer_name_label">نام مشتری:</string>
+    <string name="error_distance_too_far_for_action">فاصله شما بیش از حد مجاز برای انجام عملیات است</string>
+    <string name="enter">ورود</string>
+    <string name="last_visit_label">آخرین ویزیت:</string>
+    <string name="error_salesman_location_not_found">موقعیت شما مشخص نیست</string>
+    <string name="enable_calculate_distance">سرویس محاسبه فاصله تا مشتری فعال باشد</string>
     <string-array name="sale_type">
         <item>فروش سرد</item>
         <item>فروش گرم</item>

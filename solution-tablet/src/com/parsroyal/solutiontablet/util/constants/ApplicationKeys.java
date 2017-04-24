@@ -14,6 +14,7 @@ public class ApplicationKeys
     public static final String SETTING_SALE_TYPE = "setting.sale.type";
     public static final String SETTING_GPS_INTERVAL = "setting.gps.interval";
     public static final String SETTING_GPS_ENABLE = "setting.gps.enable";
+    public static final String SETTING_CALCULATE_DISTANCE_ENABLE = "setting.distance.enable";
     public static final String SETTING_STOCK_CODE = "setting.stock.code";
     public static final String SETTING_BRANCH_CODE = "setting.branch.code";
     public static final String USER_FULL_NAME = "user.full.name";

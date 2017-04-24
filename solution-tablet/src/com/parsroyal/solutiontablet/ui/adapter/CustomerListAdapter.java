@@ -18,6 +18,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -44,21 +45,26 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel>
         {
             if (constraint.length() != 0 && !constraint.toString().equals(""))
             {
-                return customerService.getFilteredCustomerList(visitLineId, CharacterFixUtil.fixString(constraint.toString()));
+                String keyword = CharacterFixUtil.fixString(constraint.toString());
+
+                for (Iterator<CustomerListModel> it = dataModel.iterator(); it.hasNext(); )
+                {
+                    CustomerListModel item = it.next();
+                    if (!item.getTitle().contains(keyword) && !item.getCode().contains(keyword)
+                            && !item.getAddress().contains(keyword) && !item.getPhoneNumber().contains(keyword)
+                            && !item.getCellPhone().contains(keyword))
+                    {
+                        it.remove();
+                    }
+                }
+                return dataModel;
             } else
             {
                 return customerService.getAllCustomersListModelByVisitLineBackendId(visitLineId);
             }
         } catch (final Exception ex)
         {
-            context.runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    ToastUtil.toastError(context, new UnknownSystemException(ex));
-                }
-            });
+            context.runOnUiThread(() -> ToastUtil.toastError(context, new UnknownSystemException(ex)));
             return new ArrayList<>();
         }
     }

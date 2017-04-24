@@ -23,6 +23,18 @@ public class PositionModel implements ClusterItem
         return new LatLng(customer.getxLocation(), customer.getyLocation());
     }
 
+    @Override
+    public String getTitle()
+    {
+        return customer.getFullName();
+    }
+
+    @Override
+    public String getSnippet()
+    {
+        return customer.getAddress();
+    }
+
     public String getName()
     {
         return customer.getFullName();
@@ -37,4 +49,5 @@ public class PositionModel implements ClusterItem
     {
         return customer.getId();
     }
+
 }

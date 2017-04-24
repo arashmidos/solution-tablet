@@ -5,7 +5,6 @@ package com.parsroyal.solutiontablet.data.model;
  */
 public class CustomerLocationDto
 {
-
     private Long customerBackendId;
     private Double latitude;
     private Double longitude;

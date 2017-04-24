@@ -306,6 +306,24 @@
                     android:text="@string/enable_gps_service"
                     />
             </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="right">
+
+                <CheckBox
+                    android:id="@+id/enableCalculateDistanceCb"
+                    style="@style/TextView.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:gravity="left"
+                    android:text="@string/enable_calculate_distance"
+                    />
+            </TableRow>
         </TableLayout>
     </ScrollView>
 </LinearLayout>
