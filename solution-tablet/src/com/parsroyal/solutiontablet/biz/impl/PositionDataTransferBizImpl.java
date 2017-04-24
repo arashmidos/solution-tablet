@@ -6,7 +6,6 @@ import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SendStatus;
-import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
@@ -150,7 +149,6 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
     public void sendAllData()
     {
-        prepare();
-        getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        exchangeData();
     }
 }

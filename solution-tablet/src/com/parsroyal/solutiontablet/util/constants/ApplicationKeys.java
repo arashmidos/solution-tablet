@@ -23,4 +23,5 @@ public class ApplicationKeys
 
     public static final String HOT_SALE = "2";
     public static final String COLD_SALE = "1";
+    public static final String GOODS_REQUEST_ID = "goods.request.id";
 }

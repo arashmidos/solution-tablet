@@ -108,7 +108,7 @@ public class CustomerDetailFragment extends BaseFragment
         switch (view.getId())
         {
             case R.id.saveEnteringBtn:
-                if (distanceServiceEnabled && hasAcceptableDistance())
+                if (!distanceServiceEnabled || hasAcceptableDistance())
             {
                 doEnter();
             } else
