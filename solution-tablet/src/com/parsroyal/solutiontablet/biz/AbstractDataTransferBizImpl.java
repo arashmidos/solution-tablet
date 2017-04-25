@@ -89,7 +89,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable>
             httpHeaders.setContentType(getContentType());
             HttpBasicAuthentication authentication = new HttpBasicAuthentication(username.getValue(), password.getValue());
             httpHeaders.setAuthorization(authentication);
-            httpHeaders.add("saleType", Empty.isEmpty(saleType) ? ApplicationKeys.COLD_SALE : saleType.getValue());
+            httpHeaders.add("saleType", Empty.isEmpty(saleType) ? ApplicationKeys.SALE_COLD : saleType.getValue());
 
             if (Empty.isNotEmpty(salesmanId))
             {

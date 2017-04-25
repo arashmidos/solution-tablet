@@ -205,7 +205,7 @@ public class OrderInfoFragment extends BaseFragment
                 orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()))
         {
             return getString(R.string.title_reject);
-        } else if (saleType.equals(ApplicationKeys.COLD_SALE))
+        } else if (saleType.equals(ApplicationKeys.SALE_COLD))
         {
             return getString(R.string.title_order);
         } else

@@ -27,7 +27,6 @@ import org.springframework.http.MediaType;
  */
 public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<GoodsDtoList>
 {
-
     public static final String TAG = DeliverableGoodsDataTransferBizImpl.class.getSimpleName();
 
     private Context context;
@@ -51,7 +50,6 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
         {
             try
             {
-
                 for (Goods goods : data.getGoodsDtoList())
                 {
                     goods.setTitle(CharacterFixUtil.fixString(goods.getTitle()));
@@ -67,7 +65,6 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
                         goods.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
                         goodsDao.create(goods);
                     }
-
                 }
 
                 resultObserver.publishResult(context.getString(R.string.message_deliverable_goods_transferred_successfully));

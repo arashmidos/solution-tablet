@@ -5,7 +5,6 @@ package com.parsroyal.solutiontablet.data.model;
  */
 public class User extends BaseModel
 {
-
     private String fullName;
     private String userCode;
     private String companyName;

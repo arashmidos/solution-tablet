@@ -286,7 +286,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             if (statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId()))
             {
                 ToastUtil.toastError(mainActivity, mainActivity.getString(R.string.message_cannot_create_rejected_right_now));
-            } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && saleType.equals(ApplicationKeys.COLD_SALE))
+            } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && saleType.equals(ApplicationKeys.SALE_COLD))
             {
                 ToastUtil.toastError(mainActivity, mainActivity.getString(R.string.message_cannot_create_order_right_now));
             } else
@@ -717,7 +717,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
         @Override
         public Object getItem(int position)
         {
-            if (position == 0 && saleType.equals(ApplicationKeys.HOT_SALE))
+            if (position == 0 && saleType.equals(ApplicationKeys.SALE_HOT))
             {
                 return R.drawable.selector_add_factor;
             }
@@ -740,7 +740,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             ImageView imageView = new ImageView(mainActivity);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            if (position == 0 && ApplicationKeys.HOT_SALE.equals(saleType))
+            if (position == 0 && ApplicationKeys.SALE_HOT.equals(saleType))
             {
                 imageView.setImageDrawable(mainActivity.getResources().getDrawable(R.drawable.selector_add_factor));
             } else

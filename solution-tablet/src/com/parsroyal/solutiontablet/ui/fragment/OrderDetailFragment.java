@@ -255,7 +255,7 @@ public class OrderDetailFragment extends BaseFragment
 
     private boolean isCold()
     {
-        return saleType.equals(ApplicationKeys.COLD_SALE);
+        return saleType.equals(ApplicationKeys.SALE_COLD);
     }
 
     /*

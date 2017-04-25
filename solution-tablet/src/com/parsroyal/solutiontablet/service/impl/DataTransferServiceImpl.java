@@ -82,6 +82,7 @@ public class DataTransferServiceImpl implements DataTransferService
     private KeyValue salesmanId;
 
     private int finishedTransfers;
+    private KeyValue saleType;
 
     public DataTransferServiceImpl(Context context)
     {
@@ -103,6 +104,8 @@ public class DataTransferServiceImpl implements DataTransferService
         username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
         password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
         salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
+        saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
+
         if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2))
         {
             throw new InvalidServerAddressException();
@@ -127,12 +130,20 @@ public class DataTransferServiceImpl implements DataTransferService
         getAllProvinces(resultObserver);
         getAllCities(resultObserver);
         getAllBaseInfos(resultObserver);
-        getAllVisitLines(resultObserver);
         getAllGoodsGroups(resultObserver);
-        getAllGoods(resultObserver);
         getAllQuestionnaires(resultObserver);
-        getAllDeliverableGoods(resultObserver);
-        getAllVisitLinesForDelivery(resultObserver);
+
+        if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER))
+        {
+            getAllDeliverableGoods(resultObserver);
+            getAllVisitLinesForDelivery(resultObserver);
+
+        } else
+        {
+            getAllGoods(resultObserver);
+            getAllVisitLines(resultObserver);
+        }
+
         getAllOrdersForDelivery(resultObserver);
         uiObserver.finished(true);
     }

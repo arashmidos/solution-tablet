@@ -359,6 +359,7 @@
     <string-array name="sale_type">
         <item>فروش سرد</item>
         <item>فروش گرم</item>
+        <item>توزیع کننده</item>
     </string-array>
 
 </resources>
