@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderListModel;
@@ -34,12 +35,12 @@ import java.util.List;
  */
 public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, SaleOrderListAdapter> implements ResultObserver
 {
-
     private static final String TAG = OrdersListFragment.class.getSimpleName();
 
     private MainActivity context;
     private SaleOrderSO saleOrderSO;
     private SaleOrderService saleOrderService;
+    private long visitId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -51,12 +52,14 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
         //Set default list to show
         {
             saleOrderSO = new SaleOrderSO();
-            if (Empty.isNotEmpty(getArguments()))
+            Bundle args = getArguments();
+            if (Empty.isNotEmpty(args))
             {
-                Object statusId = getArguments().get("statusId");
+                Object statusId = args.get(Constants.STATUS_ID);
                 saleOrderSO.setStatusId(Empty.isNotEmpty(statusId) ? (Long) statusId : null);
-                Object customerBackendId = getArguments().get("customerBackendId");
+                Object customerBackendId = args.get("customerBackendId");
                 saleOrderSO.setCustomerBackendId(Empty.isNotEmpty(customerBackendId) ? (Long) customerBackendId : null);
+                visitId = args.getLong(Constants.VISIT_ID);
             }
             if (Empty.isEmpty(saleOrderSO.getStatusId()))
             {
@@ -88,15 +91,11 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
         {
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(SaleOrderStatus.getDisplayTitle(context, SaleOrderStatus.DELIVERABLE.getId()));
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    saleOrderSO.setStatusId(SaleOrderStatus.DELIVERABLE.getId());
-                    dataModel = saleOrderService.findOrders(saleOrderSO);
-                    updateList();
-                }
+                saleOrderSO.setStatusId(SaleOrderStatus.DELIVERABLE.getId());
+                dataModel = saleOrderService.findOrders(saleOrderSO);
+                updateList();
             });
             tabContainer.addTab(tab);
         }
@@ -104,15 +103,11 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
         {
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(SaleOrderStatus.getDisplayTitle(context, SaleOrderStatus.SENT.getId()));
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    saleOrderSO.setStatusId(SaleOrderStatus.SENT.getId());
-                    dataModel = saleOrderService.findOrders(saleOrderSO);
-                    updateList();
-                }
+                saleOrderSO.setStatusId(SaleOrderStatus.SENT.getId());
+                dataModel = saleOrderService.findOrders(saleOrderSO);
+                updateList();
             });
             tabContainer.addTab(tab);
         }
@@ -121,37 +116,27 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(SaleOrderStatus.getDisplayTitle(context, SaleOrderStatus.READY_TO_SEND.getId()));
             tab.setActivated(true);
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    saleOrderSO.setStatusId(SaleOrderStatus.READY_TO_SEND.getId());
-                    dataModel = saleOrderService.findOrders(saleOrderSO);
-                    updateList();
-                }
+                saleOrderSO.setStatusId(SaleOrderStatus.READY_TO_SEND.getId());
+                dataModel = saleOrderService.findOrders(saleOrderSO);
+                updateList();
             });
             tabContainer.addTab(tab);
         }
-
     }
 
     private void setupGeneralTabs()
     {
-
         //Rejected and sent Order
         {
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(SaleOrderStatus.getDisplayTitle(context, SaleOrderStatus.REJECTED_SENT.getId()));
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    saleOrderSO.setStatusId(SaleOrderStatus.REJECTED_SENT.getId());
-                    dataModel = saleOrderService.findOrders(saleOrderSO);
-                    updateList();
-                }
+                saleOrderSO.setStatusId(SaleOrderStatus.REJECTED_SENT.getId());
+                dataModel = saleOrderService.findOrders(saleOrderSO);
+                updateList();
             });
             tabContainer.addTab(tab);
         }
@@ -160,15 +145,11 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
         {
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(SaleOrderStatus.getDisplayTitle(context, SaleOrderStatus.REJECTED.getId()));
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    saleOrderSO.setStatusId(SaleOrderStatus.REJECTED.getId());
-                    dataModel = saleOrderService.findOrders(saleOrderSO);
-                    updateList();
-                }
+                saleOrderSO.setStatusId(SaleOrderStatus.REJECTED.getId());
+                dataModel = saleOrderService.findOrders(saleOrderSO);
+                updateList();
             });
             tabContainer.addTab(tab);
         }
@@ -176,30 +157,22 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
         {
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(SaleOrderStatus.getDisplayTitle(context, SaleOrderStatus.CANCELED.getId()));
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    saleOrderSO.setStatusId(SaleOrderStatus.CANCELED.getId());
-                    dataModel = saleOrderService.findOrders(saleOrderSO);
-                    updateList();
-                }
+                saleOrderSO.setStatusId(SaleOrderStatus.CANCELED.getId());
+                dataModel = saleOrderService.findOrders(saleOrderSO);
+                updateList();
             });
             tabContainer.addTab(tab);
         }
         {
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(SaleOrderStatus.getDisplayTitle(context, SaleOrderStatus.SENT_INVOICE.getId()));
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    saleOrderSO.setStatusId(SaleOrderStatus.SENT_INVOICE.getId());
-                    dataModel = saleOrderService.findOrders(saleOrderSO);
-                    updateList();
-                }
+                saleOrderSO.setStatusId(SaleOrderStatus.SENT_INVOICE.getId());
+                dataModel = saleOrderService.findOrders(saleOrderSO);
+                updateList();
             });
             tabContainer.addTab(tab);
         }
@@ -207,18 +180,13 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
         {
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(SaleOrderStatus.getDisplayTitle(context, SaleOrderStatus.INVOICED.getId()));
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    saleOrderSO.setStatusId(SaleOrderStatus.INVOICED.getId());
-                    dataModel = saleOrderService.findOrders(saleOrderSO);
-                    updateList();
-                }
+                saleOrderSO.setStatusId(SaleOrderStatus.INVOICED.getId());
+                dataModel = saleOrderService.findOrders(saleOrderSO);
+                updateList();
             });
             tabContainer.addTab(tab);
-
         }
     }
 
@@ -243,89 +211,54 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
     @Override
     protected AdapterView.OnItemClickListener getOnItemClickListener()
     {
-        return new AdapterView.OnItemClickListener()
+        return (parent, view, position, id) ->
         {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            SaleOrderListModel selectedOrder = dataModel.get(position);
+            String saleType = new SettingServiceImpl(getActivity()).getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+            Bundle args = new Bundle();
+            args.putLong(Constants.ORDER_ID, selectedOrder.getId());
+            args.putString(Constants.SALE_TYPE, saleType);
+            args.putLong(Constants.VISIT_ID,visitId);
+            Long orderStatus = selectedOrder.getStatus();
+            if (orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
+                    orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()))
             {
-                SaleOrderListModel selectedOrder = dataModel.get(position);
-                String saleType = new SettingServiceImpl(getActivity()).getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
-                Bundle args = new Bundle();
-                args.putLong("orderId", selectedOrder.getId());
-                args.putString("saleType", saleType);
-                Long orderStatus = selectedOrder.getStatus();
-                if (orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
-                        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()))
-                {
-                    requestLiveData(selectedOrder.getId(), selectedOrder.getCustomerBackendId(), orderStatus, saleType);
-                } else
-                {
-                    context.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
-                }
+                requestLiveData(selectedOrder.getId(), selectedOrder.getCustomerBackendId(), orderStatus, saleType);
+            } else
+            {
+                context.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
             }
         };
     }
 
     private void requestLiveData(final Long id, final Long customerBackendId, final Long orderStatus, final String saleType)
     {
-        Thread thread = new Thread(new Runnable()
+        Thread thread = new Thread(() ->
         {
-            @Override
-            public void run()
+            try
             {
-                try
+                DataTransferService dataTransferService = new DataTransferServiceImpl(getActivity());
+                GoodsDtoList rejectedGoodsList = dataTransferService.getRejectedData(OrdersListFragment.this, customerBackendId);
+                if (rejectedGoodsList != null)
                 {
-                    DataTransferService dataTransferService = new DataTransferServiceImpl(getActivity());
-                    GoodsDtoList rejectedGoodsList = dataTransferService.getRejectedData(OrdersListFragment.this, customerBackendId);
-                    if (rejectedGoodsList != null)
-                    {
-                        final Bundle args = new Bundle();
-                        args.putLong("orderId", id);
-                        args.putLong("orderStatus", orderStatus);
-                        args.putString("saleType", saleType);
-                        args.putSerializable("rejectedList", rejectedGoodsList);
-                        getActivity().runOnUiThread(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                ((MainActivity) getActivity()).changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
-                            }
-                        });
-                    } else
-                    {
-                        runOnUiThread(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_detail_not_accessable));
-                            }
-                        });
-                    }
-                } catch (final BusinessException ex)
+                    final Bundle args = new Bundle();
+                    args.putLong("orderId", id);
+                    args.putLong("orderStatus", orderStatus);
+                    args.putString("saleType", saleType);
+                    args.putSerializable("rejectedList", rejectedGoodsList);
+                    getActivity().runOnUiThread(() -> ((MainActivity) getActivity()).changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false));
+                } else
                 {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), ex);
-                        }
-                    });
-                } catch (final Exception ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-                        }
-                    });
+                    runOnUiThread(() -> ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_detail_not_accessable)));
                 }
+            } catch (final BusinessException ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
+            } catch (final Exception ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
             }
         });
 
@@ -353,32 +286,17 @@ public class OrdersListFragment extends BaseListFragment<SaleOrderListModel, Sal
     @Override
     public void publishResult(final BusinessException ex)
     {
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                ToastUtil.toastError(getActivity(), getErrorString(ex));
-            }
-        });
+        runOnUiThread(() -> ToastUtil.toastError(getActivity(), getErrorString(ex)));
     }
 
     @Override
     public void publishResult(final String message)
     {
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                ToastUtil.toastMessage(getActivity(), message);
-            }
-        });
+        runOnUiThread(() -> ToastUtil.toastMessage(getActivity(), message));
     }
 
     @Override
     public void finished(boolean result)
     {
-
     }
 }

@@ -80,8 +80,6 @@ public class DataTransferServiceImpl implements DataTransferService
     private KeyValue username;
     private KeyValue password;
     private KeyValue salesmanId;
-
-    private int finishedTransfers;
     private KeyValue saleType;
 
     public DataTransferServiceImpl(Context context)
@@ -439,7 +437,6 @@ public class DataTransferServiceImpl implements DataTransferService
             PaymentsDataTransferBizImpl paymentsDataTransferBiz = new PaymentsDataTransferBizImpl(context, resultObserver);
             paymentsDataTransferBiz.setPayments(payments);
             paymentsDataTransferBiz.exchangeData();
-
         } else
         {
             resultObserver.publishResult(context.getString(R.string.message_no_payments_for_sending));

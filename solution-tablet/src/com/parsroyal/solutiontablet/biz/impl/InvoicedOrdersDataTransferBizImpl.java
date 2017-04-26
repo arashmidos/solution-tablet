@@ -185,6 +185,11 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
 
     protected VisitInformationDetailType getVisitDetailType()
     {
+        String saleType = keyValueBiz.findByKey(ApplicationKeys.SETTING_SALE_TYPE).getValue();
+        if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER))
+        {
+            return VisitInformationDetailType.DELIVER_ORDER;
+        }
         return VisitInformationDetailType.CREATE_INVOICE;
     }
 }

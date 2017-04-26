@@ -86,26 +86,22 @@ public class OrderDetailFragment extends BaseFragment
 
                 tab.setText(String.format(Locale.US, getString(R.string.title_items_x), getProperTitle()));
 
-                tab.setOnClickListener(new View.OnClickListener()
+                tab.setOnClickListener(v ->
                 {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        FragmentManager childFragMan = getChildFragmentManager();
-                        FragmentTransaction childFragTrans = childFragMan.beginTransaction();
-                        OrderItemsFragment orderItemsFragment = new OrderItemsFragment();
+                    FragmentManager childFragMan = getChildFragmentManager();
+                    FragmentTransaction childFragTrans = childFragMan.beginTransaction();
+                    OrderItemsFragment orderItemsFragment = new OrderItemsFragment();
 
-                        Bundle args = new Bundle();
-                        args.putLong(Constants.ORDER_ID, order.getId());
-                        args.putBoolean(Constants.DISABLED, isDisable());
-                        args.putLong(Constants.ORDER_STATUS, orderStatus);
-                        args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
-                        orderItemsFragment.setArguments(args);
+                    Bundle args = new Bundle();
+                    args.putLong(Constants.ORDER_ID, order.getId());
+                    args.putBoolean(Constants.DISABLED, isDisable());
+                    args.putLong(Constants.ORDER_STATUS, orderStatus);
+                    args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+                    orderItemsFragment.setArguments(args);
 
-                        childFragTrans.replace(R.id.orderDetailContentFrame, orderItemsFragment);
-                        childFragTrans.commit();
+                    childFragTrans.replace(R.id.orderDetailContentFrame, orderItemsFragment);
+                    childFragTrans.commit();
 
-                    }
                 });
                 tabContainer.addTab(tab);
             }
@@ -114,29 +110,24 @@ public class OrderDetailFragment extends BaseFragment
                 ParsRoyalTab tab = new ParsRoyalTab(context);
                 tab.setText(String.format(Locale.US, getString(R.string.title_x_detail), getProperTitle()));
                 tab.setActivated(true);
-                tab.setOnClickListener(new View.OnClickListener()
+                tab.setOnClickListener(v ->
                 {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        FragmentManager childFragMan = getChildFragmentManager();
-                        FragmentTransaction childFragTrans = childFragMan.beginTransaction();
-                        orderInfoFrg = new OrderInfoFragment();
-                        Bundle args = new Bundle();
-                        args.putLong(Constants.ORDER_ID, orderId);
-                        args.putString(Constants.SALE_TYPE, saleType);
-                        orderInfoFrg.setArguments(args);
-                        childFragTrans.replace(R.id.orderDetailContentFrame, orderInfoFrg);
-                        childFragTrans.commit();
+                    FragmentManager childFragMan = getChildFragmentManager();
+                    FragmentTransaction childFragTrans = childFragMan.beginTransaction();
+                    orderInfoFrg = new OrderInfoFragment();
+                    Bundle args = new Bundle();
+                    args.putLong(Constants.ORDER_ID, orderId);
+                    args.putString(Constants.SALE_TYPE, saleType);
+                    orderInfoFrg.setArguments(args);
+                    childFragTrans.replace(R.id.orderDetailContentFrame, orderInfoFrg);
+                    childFragTrans.commit();
 
-                    }
                 });
                 tabContainer.addTab(tab);
                 tabContainer.activeTab(tab);
             }
 
             {
-
                 if (orderStatus.equals(SaleOrderStatus.DRAFT.getId())
                         || orderStatus.equals(SaleOrderStatus.READY_TO_SEND.getId())
                         || orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()))
@@ -145,66 +136,44 @@ public class OrderDetailFragment extends BaseFragment
                     ParsRoyalTab tab = new ParsRoyalTab(context);
                     tab.setText(getString(R.string.title_goods_list));
                     tab.setActivated(true);
-                    tab.setOnClickListener(new View.OnClickListener()
+                    tab.setOnClickListener(v ->
                     {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            FragmentManager childFragMan = getChildFragmentManager();
-                            FragmentTransaction childFragTrans = childFragMan.beginTransaction();
+                        FragmentManager childFragMan = getChildFragmentManager();
+                        FragmentTransaction childFragTrans = childFragMan.beginTransaction();
 
-                            GoodsListFragment goodsListFragment = new GoodsListFragment();
-                            Bundle args = new Bundle();
-                            args.putLong(Constants.ORDER_ID, orderId);
-                            args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
-                            goodsListFragment.setArguments(args);
+                        GoodsListFragment goodsListFragment = new GoodsListFragment();
+                        Bundle args = new Bundle();
+                        args.putLong(Constants.ORDER_ID, orderId);
+                        args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+                        goodsListFragment.setArguments(args);
 
-                            childFragTrans.replace(R.id.orderDetailContentFrame, goodsListFragment);
-                            childFragTrans.commit();
+                        childFragTrans.replace(R.id.orderDetailContentFrame, goodsListFragment);
+                        childFragTrans.commit();
 
-                        }
                     });
                     tabContainer.addTab(tab);
                     tabContainer.activeTab(tab);
                 }
             }
 
-            actionsLayout.addView(createActionButton(context.getString(R.string.title_cancel), new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    context.removeFragment(OrderDetailFragment.this);
-                }
-            }));
+            actionsLayout.addView(createActionButton(context.getString(R.string.title_cancel), v -> context.removeFragment(OrderDetailFragment.this)));
 
             if (orderStatus.equals(SaleOrderStatus.DELIVERABLE.getId()))
             {
 
                 cancelOrderBtn = createActionButton(
                         String.format(Locale.US, getString(R.string.title_cancel_sale_x), getProperTitle()),
-                        new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                showSaveOrderConfirmDialog(
-                                        String.format(Locale.US, getString(R.string.title_cancel_sale_x),
-                                                getProperTitle()), SaleOrderStatus.CANCELED.getId());
-                            }
-                        });
+                        v -> showSaveOrderConfirmDialog(
+                                String.format(Locale.US, getString(R.string.title_cancel_sale_x),
+                                        getProperTitle()), SaleOrderStatus.CANCELED.getId()));
 
                 deliverOrderBtn = createActionButton(getString(R.string.title_deliver_sale_x)
-                        + getProperTitle(), new View.OnClickListener()
+                        + getProperTitle(), v ->
                 {
-                    @Override
-                    public void onClick(View v)
+                    if (validateOrderForDeliver())
                     {
-                        if (validateOrderForDeliver())
-                        {
-                            showSaveOrderConfirmDialog(getString(R.string.title_deliver_sale_x)
-                                    + getProperTitle(), SaleOrderStatus.INVOICED.getId());
-                        }
+                        showSaveOrderConfirmDialog(getString(R.string.title_deliver_sale_x)
+                                + getProperTitle(), SaleOrderStatus.INVOICED.getId());
                     }
                 });
 
@@ -217,26 +186,22 @@ public class OrderDetailFragment extends BaseFragment
                     || SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus))
 
             {
-                saveOrderBtn = createActionButton(context.getString(R.string.title_save_order), new View.OnClickListener()
+                saveOrderBtn = createActionButton(context.getString(R.string.title_save_order), v ->
                 {
-                    @Override
-                    public void onClick(View v)
+                    order = saleOrderService.findOrderDtoById(orderId);
+                    if (validateOrderForSave())
                     {
-                        order = saleOrderService.findOrderDtoById(orderId);
-                        if (validateOrderForSave())
+                        if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()))
                         {
-                            if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()))
+                            showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.REJECTED.getId());
+                        } else
+                        {
+                            if (isCold())
                             {
-                                showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.REJECTED.getId());
+                                showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.READY_TO_SEND.getId());
                             } else
                             {
-                                if (isCold())
-                                {
-                                    showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.READY_TO_SEND.getId());
-                                } else
-                                {
-                                    showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.INVOICED.getId());
-                                }
+                                showSaveOrderConfirmDialog(getString(R.string.title_save_order), SaleOrderStatus.INVOICED.getId());
                             }
                         }
                     }
@@ -309,14 +274,10 @@ public class OrderDetailFragment extends BaseFragment
     private void showSaveOrderConfirmDialog(String title, final Long statusId)
     {
         DialogUtil.showConfirmDialog(context, title,
-                context.getString(R.string.message_are_you_sure), new DialogInterface.OnClickListener()
+                context.getString(R.string.message_are_you_sure), (dialog, which) ->
                 {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        saveOrder(statusId);
-                        context.removeFragment(OrderDetailFragment.this);
-                    }
+                    saveOrder(statusId);
+                    context.removeFragment(OrderDetailFragment.this);
                 });
     }
 
@@ -339,10 +300,8 @@ public class OrderDetailFragment extends BaseFragment
             order.setDescription(description);
 
             long typeId = saleOrderService.saveOrder(order);
-            VisitInformationDetail visitDetail = new VisitInformationDetail(visitId,
-                    isRejected() ? VisitInformationDetailType.CREATE_REJECT :
-                            isCold() ? VisitInformationDetailType.CREATE_ORDER :
-                                    VisitInformationDetailType.CREATE_INVOICE, typeId);
+
+            VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, getDetailType(), typeId);
             visitService.saveVisitDetail(visitDetail);
         } catch (BusinessException ex)
         {
@@ -353,6 +312,25 @@ public class OrderDetailFragment extends BaseFragment
             Log.e(TAG, ex.getMessage(), ex);
             ToastUtil.toastError(context, new UnknownSystemException(ex));
         }
+    }
+
+    private VisitInformationDetailType getDetailType()
+    {
+        if (isRejected())
+        {
+            return VisitInformationDetailType.CREATE_REJECT;
+        }
+        switch (saleType)
+        {
+            case ApplicationKeys.SALE_COLD:
+                return VisitInformationDetailType.CREATE_ORDER;
+            case ApplicationKeys.SALE_HOT:
+                return VisitInformationDetailType.CREATE_INVOICE;
+            case ApplicationKeys.SALE_DISTRIBUTER:
+                return VisitInformationDetailType.DELIVER_ORDER;
+        }
+        //Should not happen
+        return null;
     }
 
     private Button createActionButton(String buttonTitle, View.OnClickListener onClickListener)

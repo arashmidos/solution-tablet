@@ -126,7 +126,6 @@ public class CustomerDetailFragment extends BaseFragment
 
     private boolean hasAcceptableDistance()
     {
-
         Position position = new PositionServiceImpl(getActivity()).getLastPosition();
         Float distance;
         double lat2 = customer.getxLocation();
