@@ -356,9 +356,11 @@
     <string name="last_visit_label">آخرین ویزیت:</string>
     <string name="error_salesman_location_not_found">موقعیت شما مشخص نیست</string>
     <string name="enable_calculate_distance">سرویس محاسبه فاصله تا مشتری فعال باشد</string>
+    <string name="not_visited">عدم ویزیت</string>
     <string-array name="sale_type">
         <item>فروش سرد</item>
         <item>فروش گرم</item>
+        <item>توزیع کننده</item>
     </string-array>
 
 </resources>

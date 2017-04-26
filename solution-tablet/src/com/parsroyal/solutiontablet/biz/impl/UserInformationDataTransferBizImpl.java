@@ -6,6 +6,7 @@ import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.model.User;
+import com.parsroyal.solutiontablet.data.model.UserInformationRequest;
 import com.parsroyal.solutiontablet.exception.GotNoResponseFromBackendException;
 import com.parsroyal.solutiontablet.exception.InvalidUserCodeException;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
@@ -18,18 +19,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
-import java.nio.charset.Charset;
-
 /**
  * Created by Mahyar on 6/18/2015.
  */
 public class UserInformationDataTransferBizImpl extends AbstractDataTransferBizImpl<User>
 {
-
-    private Context context;
     private ResultObserver observer;
     private KeyValueBiz keyValueBiz;
     private KeyValue userCode;
+    private KeyValue type;
 
     public UserInformationDataTransferBizImpl(Context context, ResultObserver observer)
     {
@@ -56,6 +54,7 @@ public class UserInformationDataTransferBizImpl extends AbstractDataTransferBizI
     public void beforeTransfer()
     {
         userCode = keyValueBiz.findByKey(ApplicationKeys.SETTING_USER_CODE);
+        type = keyValueBiz.findByKey(ApplicationKeys.SETTING_SALE_TYPE);
         if (Empty.isEmpty(userCode))
         {
             getObserver().publishResult(new InvalidUserCodeException());
@@ -89,7 +88,7 @@ public class UserInformationDataTransferBizImpl extends AbstractDataTransferBizI
     @Override
     protected MediaType getContentType()
     {
-        return new MediaType("TEXT", "PLAIN", Charset.forName("UTF-8"));
+        return MediaType.APPLICATION_JSON;
     }
 
     @Override
@@ -98,7 +97,8 @@ public class UserInformationDataTransferBizImpl extends AbstractDataTransferBizI
         headers.add("branchCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_CODE).getValue());
         headers.add("stockCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_STOCK_CODE).getValue());
 
-        HttpEntity<String> entity = new HttpEntity<String>(userCode.getValue(), headers);
+        UserInformationRequest request = new UserInformationRequest(userCode.getValue(), type.getValue());
+        HttpEntity<UserInformationRequest> entity = new HttpEntity<>(request, headers);
         return entity;
     }
 }

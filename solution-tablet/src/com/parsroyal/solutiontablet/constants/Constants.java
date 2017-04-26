@@ -20,6 +20,7 @@ public class Constants
     public static final String DISABLED = "disabled";
     public static final String ORDER_STATUS = "orderStatus";
     public static final String REJECTED_LIST = "rejectedList";
+    public static final String STATUS_ID = "statusId";
     public static final String UPDATE_USER = "pvstore";
     public static final String UPDATE_PASS = "pvstore1234";
     public static final int ICON_MESSAGE = R.drawable.ic_info_outline_black_24dp;

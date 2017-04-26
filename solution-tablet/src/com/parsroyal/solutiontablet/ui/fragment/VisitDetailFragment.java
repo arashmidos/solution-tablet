@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -15,8 +14,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -137,62 +136,55 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
 
     private void setItemClickListener()
     {
-        mainLayout.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        mainLayout.setOnItemClickListener((parent, view, position, id) ->
         {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            switch (position)
             {
-                switch (position)
-                {
-                    //Add Invoice / Add Order
-                    case 0:
-                        openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
-                        break;
-                    //Add returned
-                    case 1:
-                        openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
-                        break;
-                    //Cash
-                    case 2:
-                        openPaymentFragment();
-                        break;
-                    //Location
-                    case 3:
-                        openSaveLocationFragment();
-                        break;
-                    //Detail
-                    case 4:
-                        openKPIFragment();
-                        break;
-                    //General Questionary
-                    case 5:
-                        openGeneralQuestionnairesFragment();
-                        break;
-                    //Goods Questionary
-                    case 6:
-                        openGoodsQuestionnairesFragment();
-                        break;
-                    //Delivery
-                    case 7:
-                        openDeliverableOrdersFragment();
-                        break;
-                    //Camera
-                    case 8:
-                        startCameraActivity();
-                        break;
-                    //Reject
-                    case 9:
-                        showWantsDialog();
-                        break;
-                    //Exit
-                    case 10:
-                        finishVisiting();
-                        break;
-
-                }
+                //Add Invoice / Add Order
+                case 0:
+                    openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+                    break;
+                //Add returned
+                case 1:
+                    openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
+                    break;
+                //Cash
+                case 2:
+                    openPaymentFragment();
+                    break;
+                //Location
+                case 3:
+                    openSaveLocationFragment();
+                    break;
+                //Detail
+                case 4:
+                    openKPIFragment();
+                    break;
+                //General Questionary
+                case 5:
+                    openGeneralQuestionnairesFragment();
+                    break;
+                //Goods Questionary
+                case 6:
+                    openGoodsQuestionnairesFragment();
+                    break;
+                //Delivery
+                case 7:
+                    openDeliverableOrdersFragment();
+                    break;
+                //Camera
+                case 8:
+                    startCameraActivity();
+                    break;
+                //Reject
+                case 9:
+                    showWantsDialog();
+                    break;
+                //Exit
+                case 10:
+                    finishVisiting();
+                    break;
             }
-
-
         });
     }
 
@@ -247,12 +239,10 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             } else if (resultCode == RESULT_CANCELED)
             {
                 // User cancelled the image capture
-
             } else
             {
                 // Image capture failed, advise user
             }
-
         }
     }
 
@@ -277,7 +267,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                 Bundle args = new Bundle();
                 args.putLong(Constants.ORDER_ID, orderDto.getId());
                 args.putString(Constants.SALE_TYPE, saleType);
-                args.putLong(Constants.VISIT_ID,visitId);
+                args.putLong(Constants.VISIT_ID, visitId);
                 mainActivity.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
             }
 
@@ -286,7 +276,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             if (statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId()))
             {
                 ToastUtil.toastError(mainActivity, mainActivity.getString(R.string.message_cannot_create_rejected_right_now));
-            } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && saleType.equals(ApplicationKeys.COLD_SALE))
+            } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && saleType.equals(ApplicationKeys.SALE_COLD))
             {
                 ToastUtil.toastError(mainActivity, mainActivity.getString(R.string.message_cannot_create_order_right_now));
             } else
@@ -299,66 +289,40 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     private void invokeGetRejectedData()
     {
         showProgressDialog(getString(R.string.message_transferring_rejected_goods_data));
-        Thread thread = new Thread(new Runnable()
+        Thread thread = new Thread(() ->
         {
-            @Override
-            public void run()
+            try
             {
-                try
+                DataTransferService dataTransferService = new DataTransferServiceImpl(mainActivity);
+                rejectedGoodsList = dataTransferService.getRejectedData(VisitDetailFragment.this, customer.getBackendId());
+                if (rejectedGoodsList != null)
                 {
-                    DataTransferService dataTransferService = new DataTransferServiceImpl(mainActivity);
-                    rejectedGoodsList = dataTransferService.getRejectedData(VisitDetailFragment.this, customer.getBackendId());
-                    if (rejectedGoodsList != null)
-                    {
 
-                        final Bundle args = new Bundle();
-                        args.putLong("orderId", orderDto.getId());
-                        args.putString("saleType", saleType);
-                        args.putSerializable("rejectedList", rejectedGoodsList);
-                        mainActivity.runOnUiThread(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                dismissProgressDialog();
-                                mainActivity.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
-                            }
-                        });
-                    } else
+                    final Bundle args = new Bundle();
+                    args.putLong("orderId", orderDto.getId());
+                    args.putString("saleType", saleType);
+                    args.putSerializable("rejectedList", rejectedGoodsList);
+                    mainActivity.runOnUiThread(() ->
                     {
-                        runOnUiThread(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                dismissProgressDialog();
-                                ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_not_possible));
-                            }
-                        });
-                    }
-                } catch (final BusinessException ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), ex);
-                        }
+                        dismissProgressDialog();
+                        mainActivity.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
                     });
-                } catch (final Exception ex)
+                } else
                 {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    runOnUiThread(new Runnable()
+                    runOnUiThread(() ->
                     {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-                        }
+                        dismissProgressDialog();
+                        ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_not_possible));
                     });
                 }
+            } catch (final BusinessException ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
+            } catch (final Exception ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
             }
         });
 
@@ -392,8 +356,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     {
         Bundle args = new Bundle();
         args.putLong("customerBackendId", customer.getBackendId());
-        args.putLong("visitId", visitId);
-        args.putLong("statusId", SaleOrderStatus.DELIVERABLE.getId());
+        args.putLong(Constants.VISIT_ID, visitId);
+        args.putLong(Constants.STATUS_ID, SaleOrderStatus.DELIVERABLE.getId());
         mainActivity.changeFragment(MainActivity.ORDERS_LIST_FRAGMENT, args, false);
     }
 
@@ -439,14 +403,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             {
                 DialogUtil.showConfirmDialog(mainActivity,
                         getString(R.string.title_attention),
-                        getString(R.string.message_error_no_visit_detail_found), new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i)
-                            {
-                                showWantsDialog();
-                            }
-                        });
+                        getString(R.string.message_error_no_visit_detail_found), (dialogInterface, i) -> showWantsDialog());
                 return;
             }
             VisitInformation visitInformation = visitService.getVisitInformationById(visitId);
@@ -469,24 +426,16 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.visit_location));
         builder.setMessage(getString(R.string.visit_empty_location_message));
-        builder.setPositiveButton(getString(R.string.visit_empty_location_dialog_try_again), new DialogInterface.OnClickListener()
+        builder.setPositiveButton(getString(R.string.visit_empty_location_dialog_try_again), (dialogInterface, i) ->
         {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                dialogInterface.dismiss();
-                tryFindingLocation();
-            }
+            dialogInterface.dismiss();
+            tryFindingLocation();
         });
 
-        builder.setNegativeButton(getString(R.string.visit_empty_location_dialog_finish), new DialogInterface.OnClickListener()
+        builder.setNegativeButton(getString(R.string.visit_empty_location_dialog_finish), (dialogInterface, i) ->
         {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                dialogInterface.dismiss();
-                doFinishVisiting();
-            }
+            dialogInterface.dismiss();
+            doFinishVisiting();
         });
 
         builder.create().show();
@@ -518,28 +467,17 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                         Log.e(TAG, e.getMessage(), e);
                     }
 
-                    mainActivity.runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            showFoundLocationDialog();
-                        }
-                    });
+                    mainActivity.runOnUiThread(() -> showFoundLocationDialog());
                 }
 
                 @Override
                 public void timeOut()
                 {
                     progressDialog.dismiss();
-                    mainActivity.runOnUiThread(new Runnable()
+                    mainActivity.runOnUiThread(() ->
                     {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), getString(R.string.visit_found_no_location));
-                            showDialogForEmptyLocation();
-                        }
+                        ToastUtil.toastError(getActivity(), getString(R.string.visit_found_no_location));
+                        showDialogForEmptyLocation();
                     });
                 }
             });
@@ -560,14 +498,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.visit_location));
         builder.setMessage(getString(R.string.visit_found_location_message));
-        builder.setPositiveButton(getString(R.string.finish_visit), new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                doFinishVisiting();
-            }
-        });
+        builder.setPositiveButton(getString(R.string.finish_visit), (dialogInterface, i) -> doFinishVisiting());
 
         builder.create().show();
     }
@@ -613,38 +544,31 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
 
         View wantsDialogView = mainActivity.getLayoutInflater().inflate(R.layout.dialog_wants, null);
         final Spinner wantsSpinner = (Spinner) wantsDialogView.findViewById(R.id.wantsSP);
+        CheckBox notVisitedCb = (CheckBox) wantsDialogView.findViewById((R.id.not_visited_cb));
 
+        notVisitedCb.setOnCheckedChangeListener((compoundButton, isChecked) -> wantsSpinner.setEnabled(!isChecked));
         LabelValueArrayAdapter labelValueArrayAdapter = new LabelValueArrayAdapter(mainActivity, wants);
         wantsSpinner.setAdapter(labelValueArrayAdapter);
 
         dialogBuilder.setView(wantsDialogView);
-        dialogBuilder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener()
+        dialogBuilder.setPositiveButton(R.string.button_ok, (dialog, which) ->
         {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                LabelValue selectedItem = (LabelValue) wantsSpinner.getSelectedItem();
-                updateVisitResult(selectedItem);
-            }
+            LabelValue selectedItem = (LabelValue) wantsSpinner.getSelectedItem();
+            updateVisitResult(selectedItem, notVisitedCb.isChecked());
         });
-        dialogBuilder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener()
+        dialogBuilder.setNegativeButton(R.string.button_cancel, (dialog, which) ->
         {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-
-            }
         });
         dialogBuilder.setTitle(R.string.title_save_want);
         dialogBuilder.create().show();
     }
 
-    private void updateVisitResult(LabelValue selectedItem)
+    private void updateVisitResult(LabelValue selectedItem, boolean notVisited)
     {
         try
         {
             VisitInformationDetail visitInformationDetail = new VisitInformationDetail(
-                    visitId, VisitInformationDetailType.NONE, selectedItem.getValue());
+                    visitId, notVisited ? VisitInformationDetailType.NONE : VisitInformationDetailType.NO_ORDER, selectedItem.getValue());
             visitService.saveVisitDetail(visitInformationDetail);
         } catch (Exception ex)
         {
@@ -656,20 +580,12 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     @Override
     public void publishResult(final BusinessException ex)
     {
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                ToastUtil.toastError(mainActivity, getErrorString(ex));
-            }
-        });
+        runOnUiThread(() -> ToastUtil.toastError(mainActivity, getErrorString(ex)));
     }
 
     @Override
     public void publishResult(final String message)
     {
-
     }
 
     @Override
@@ -690,19 +606,15 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
 
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener()
+        getView().setOnKeyListener((v, keyCode, event) ->
         {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event)
-            {
 
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK)
-                {
-                    finishVisiting();
-                    return true;
-                }
-                return false;
+            if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK)
+            {
+                finishVisiting();
+                return true;
             }
+            return false;
         });
     }
 
@@ -717,7 +629,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
         @Override
         public Object getItem(int position)
         {
-            if (position == 0 && saleType.equals(ApplicationKeys.HOT_SALE))
+            if (position == 0 && saleType.equals(ApplicationKeys.SALE_HOT))
             {
                 return R.drawable.selector_add_factor;
             }
@@ -740,7 +652,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
             ImageView imageView = new ImageView(mainActivity);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            if (position == 0 && ApplicationKeys.HOT_SALE.equals(saleType))
+            if (position == 0 && ApplicationKeys.SALE_HOT.equals(saleType))
             {
                 imageView.setImageDrawable(mainActivity.getResources().getDrawable(R.drawable.selector_add_factor));
             } else

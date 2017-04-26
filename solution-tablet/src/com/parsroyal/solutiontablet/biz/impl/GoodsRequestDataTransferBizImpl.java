@@ -99,7 +99,6 @@ public class GoodsRequestDataTransferBizImpl extends AbstractDataTransferBizImpl
     @Override
     protected HttpEntity getHttpEntity(HttpHeaders headers)
     {
-//        headers.add("branchCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_CODE).getValue());
         HttpEntity requestEntity = new HttpEntity<String>(headers);
 
         return requestEntity;

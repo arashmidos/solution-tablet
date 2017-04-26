@@ -21,7 +21,8 @@ public class ApplicationKeys
     public static final String USER_COMPANY_NAME = "user.company.name";
     public static final String SALESMAN_ID = "salesman.id";
 
-    public static final String HOT_SALE = "2";
-    public static final String COLD_SALE = "1";
+    public static final String SALE_DISTRIBUTER = "3";
+    public static final String SALE_HOT = "2";
+    public static final String SALE_COLD = "1";
     public static final String GOODS_REQUEST_ID = "goods.request.id";
 }
