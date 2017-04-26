@@ -65,16 +65,12 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
     }
 
     @Override
-    public void getAllData(KeyValue serverAddress1, KeyValue serverAddress2, KeyValue username, KeyValue password, KeyValue salesmanId)
+    public void exchangeData()
     {
         boolean result = false;
         try
         {
-            this.serverAddress1 = serverAddress1;
-            this.serverAddress2 = serverAddress2;
-            this.username = username;
-            this.password = password;
-            this.salesmanId = salesmanId;
+            prepare();
 
             beforeTransfer();
 

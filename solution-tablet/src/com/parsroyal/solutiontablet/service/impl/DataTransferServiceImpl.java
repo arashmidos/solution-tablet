@@ -145,6 +145,7 @@ public class DataTransferServiceImpl implements DataTransferService
         username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
         password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
         salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
+
         if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2))
         {
             throw new InvalidServerAddressException();
@@ -189,7 +190,7 @@ public class DataTransferServiceImpl implements DataTransferService
             Log.d(TAG, "Send Pic" + pics.length());
         }
 
-        new NewCustomerPicDataTransferBizImpl(context, resultObserver, pics).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new NewCustomerPicDataTransferBizImpl(context, resultObserver, pics).exchangeData();
     }
 
     @Override
@@ -277,22 +278,22 @@ public class DataTransferServiceImpl implements DataTransferService
 
     private void getAllCities(ResultObserver observer)
     {
-        new CityDataTransferBizImpl(context, observer).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new CityDataTransferBizImpl(context, observer).exchangeData();
     }
 
     private void getAllProvinces(ResultObserver observer)
     {
-        new ProvinceDataTransferBizImpl(context, observer).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new ProvinceDataTransferBizImpl(context, observer).exchangeData();
     }
 
     private void getAllBaseInfos(ResultObserver resultObserver)
     {
-        new BaseInfoDataTransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new BaseInfoDataTransferBizImpl(context, resultObserver).exchangeData();
     }
 
     private void getAllVisitLines(ResultObserver resultObserver)
     {
-        new VisitLineDataTaransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new VisitLineDataTaransferBizImpl(context, resultObserver).exchangeData();
     }
 
     private void sendAllNewCustomers(ResultObserver resultObserver)
@@ -303,7 +304,7 @@ public class DataTransferServiceImpl implements DataTransferService
             resultObserver.publishResult(context.getString(R.string.message_found_no_new_customer_for_send));
             return;
         }
-        new NewCustomerDataTransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new NewCustomerDataTransferBizImpl(context, resultObserver).exchangeData();
     }
 
     private void sendAllUpdatedCustomers(ResultObserver resultObserver)
@@ -314,22 +315,22 @@ public class DataTransferServiceImpl implements DataTransferService
             resultObserver.publishResult(context.getString(R.string.message_found_no_updated_customer_for_send));
             return;
         }
-        new UpdatedCustomerLocationDataTransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new UpdatedCustomerLocationDataTransferBizImpl(context, resultObserver).exchangeData();
     }
 
     private void getAllQuestionnaires(ResultObserver resultObserver)
     {
-        new QuestionnaireDataTransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new QuestionnaireDataTransferBizImpl(context, resultObserver).exchangeData();
     }
 
     private void getAllGoodsGroups(ResultObserver resultObserver)
     {
-        new GoodsGroupDataTransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new GoodsGroupDataTransferBizImpl(context, resultObserver).exchangeData();
     }
 
     private void getAllGoods(ResultObserver resultObserver)
     {
-        new GoodsDataTransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new GoodsDataTransferBizImpl(context, resultObserver).exchangeData();
     }
 
     private void sendAllVisitInformation(ResultObserver resultObserver)
@@ -352,7 +353,7 @@ public class DataTransferServiceImpl implements DataTransferService
                 continue;
             }
             dataTranser.setData(visitInformationDto);
-            dataTranser.getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+            dataTranser.exchangeData();
         }
         resultObserver.publishResult(String.format(Locale.US, context.getString(R.string.visit_information_data_transfered_result),
                 String.valueOf(dataTranser.getSuccess()), String.valueOf(visitInformationList.size() - dataTranser.getSuccess())));
@@ -369,23 +370,23 @@ public class DataTransferServiceImpl implements DataTransferService
             return;
         }
 
-        new QAnswersDataTransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new QAnswersDataTransferBizImpl(context, resultObserver).exchangeData();
 
     }
 
     private void getAllDeliverableGoods(ResultObserver resultObserver)
     {
-        new DeliverableGoodsDataTransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new DeliverableGoodsDataTransferBizImpl(context, resultObserver).exchangeData();
     }
 
     private void getAllVisitLinesForDelivery(ResultObserver resultObserver)
     {
-        new VisitLineForDeliveryDataTaransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new VisitLineForDeliveryDataTaransferBizImpl(context, resultObserver).exchangeData();
     }
 
     private void getAllOrdersForDelivery(ResultObserver resultObserver)
     {
-        new SaleOrderForDeliveryDataTaransferBizImpl(context, resultObserver).getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+        new SaleOrderForDeliveryDataTaransferBizImpl(context, resultObserver).exchangeData();
     }
 
     private void sendAllOrders(ResultObserver resultObserver)
@@ -395,7 +396,7 @@ public class DataTransferServiceImpl implements DataTransferService
         {
             OrdersDataTransferBizImpl ordersDataTransferBiz = new OrdersDataTransferBizImpl(context, resultObserver);
             ordersDataTransferBiz.setOrders(saleOrders);
-            ordersDataTransferBiz.getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+            ordersDataTransferBiz.exchangeData();
         } else
         {
             resultObserver.publishResult(context.getString(R.string.message_no_orders_for_sending));
@@ -410,7 +411,7 @@ public class DataTransferServiceImpl implements DataTransferService
         {
             ReturnedOrdersDataTransferBizImpl returnedOrdersDataTransferBiz = new ReturnedOrdersDataTransferBizImpl(context, resultObserver);
             returnedOrdersDataTransferBiz.setOrders(saleOrders);
-            returnedOrdersDataTransferBiz.getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+            returnedOrdersDataTransferBiz.exchangeData();
 
         } else
         {
@@ -426,7 +427,7 @@ public class DataTransferServiceImpl implements DataTransferService
         {
             PaymentsDataTransferBizImpl paymentsDataTransferBiz = new PaymentsDataTransferBizImpl(context, resultObserver);
             paymentsDataTransferBiz.setPayments(payments);
-            paymentsDataTransferBiz.getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+            paymentsDataTransferBiz.exchangeData();
 
         } else
         {
@@ -458,7 +459,7 @@ public class DataTransferServiceImpl implements DataTransferService
         {
             InvoicedOrdersDataTransferBizImpl invoicedOrdersDataTransferBiz = new InvoicedOrdersDataTransferBizImpl(context, resultObserver);
             invoicedOrdersDataTransferBiz.setOrders(saleOrders);
-            invoicedOrdersDataTransferBiz.getAllData(serverAddress1, serverAddress2, username, password, salesmanId);
+            invoicedOrdersDataTransferBiz.exchangeData();
         } else
         {
             resultObserver.publishResult(context.getString(R.string.message_no_invoice_found));

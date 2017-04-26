@@ -41,7 +41,6 @@ import java.util.List;
 
 /**
  * Created by Mahyar on 6/18/2015.
- * Edited by Arash on 29/6/2016
  */
 public abstract class AbstractDataTransferBizImpl<T extends Serializable>
 {
@@ -57,6 +56,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable>
 
     protected KeyValueDao keyValueDao;
     protected KeyValue salesmanCode;
+    private KeyValue goodsRequestId;
 
     public AbstractDataTransferBizImpl(Context context)
     {
@@ -73,21 +73,16 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable>
         saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
         salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
         salesmanCode = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USER_CODE);
+        goodsRequestId = keyValueDao.retrieveByKey(ApplicationKeys.GOODS_REQUEST_ID);
     }
 
-    public void getAllData(KeyValue serverAddress1, KeyValue serverAddress2, KeyValue username, KeyValue password, KeyValue salesmanId)
+    public void exchangeData()
     {
         boolean result = false;
         try
         {
-            this.serverAddress1 = serverAddress1;
-            this.serverAddress2 = serverAddress2;
-            this.username = username;
-            this.password = password;
-            this.salesmanId = salesmanId;
+            prepare();
 
-            saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
-            salesmanCode = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USER_CODE);
             beforeTransfer();
 
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -101,6 +96,10 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable>
                 httpHeaders.add("salesmanId", salesmanId.getValue());
             }
             httpHeaders.add("salesmanCode", salesmanCode.getValue());
+            if (Empty.isNotEmpty(goodsRequestId))
+            {
+                httpHeaders.add("goodsRequestId", goodsRequestId.getValue());
+            }
 
             //Make RestTemplate loggable
             System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");

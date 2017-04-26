@@ -78,6 +78,6 @@ public class SettingServiceImpl implements SettingService
         }
 
         UserInformationDataTransferBizImpl userInformationBiz = new UserInformationDataTransferBizImpl(context, observer);
-        userInformationBiz.getAllData(serverAddress1, serverAddress2, username, password, null);
+        userInformationBiz.exchangeData();
     }
 }

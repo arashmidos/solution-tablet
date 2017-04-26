@@ -12,6 +12,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.biz.KeyValueBiz;
+import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
+import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.DataTransferService;
@@ -19,6 +23,11 @@ import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Mahyar on 6/15/2015.
@@ -26,48 +35,34 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 public class DataTransferFragment extends BaseFragment implements ResultObserver
 {
     public static final String TAG = DataTransferFragment.class.getSimpleName();
+    @BindView(R.id.getDataBtn)
+    Button getDataBtn;
+    @BindView(R.id.sendDataBtn)
+    Button sendDataBtn;
+    @BindView(R.id.transferLogTxtV)
+    TextView transferLogTxtV;
+    @BindView(R.id.transferSv)
+    ScrollView transferSv;
+    @BindView(R.id.dataTransferPB)
+    ProgressBar dataTransferPB;
 
     private MainActivity mainActivity;
-    private ScrollView transferSv;
-    private Button sendDataBtn;
-    private Button getDataBtn;
-    private TextView transferLogTxtV;
-    private ProgressBar dataTransferPB;
     private DataTransferService dataTransferService;
+    private KeyValueBiz keyValueBiz;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View dataTransferView = inflater.inflate(R.layout.fragment_data_transfer, null);
 
+        ButterKnife.bind(this, dataTransferView);
+
         mainActivity = (MainActivity) getActivity();
         dataTransferService = new DataTransferServiceImpl(mainActivity);
+        keyValueBiz = new KeyValueBizImpl(mainActivity);
 
-        getDataBtn = (Button) dataTransferView.findViewById(R.id.getDataBtn);
-        transferSv = (ScrollView) dataTransferView.findViewById(R.id.transferSv);
         transferSv.fullScroll(View.FOCUS_DOWN);
-        transferLogTxtV = (TextView) dataTransferView.findViewById(R.id.transferLogTxtV);
         transferLogTxtV.setMovementMethod(new ScrollingMovementMethod());
-        getDataBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                transferLogTxtV.setText("");
-                invokeGetData();
-            }
-        });
-        sendDataBtn = (Button) dataTransferView.findViewById(R.id.sendDataBtn);
-        sendDataBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                transferLogTxtV.setText("");
-                invokeSendData();
-            }
-        });
-        dataTransferPB = (ProgressBar) dataTransferView.findViewById(R.id.dataTransferPB);
 
         return dataTransferView;
     }
@@ -76,37 +71,19 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     {
         dataTransferPB.setVisibility(View.VISIBLE);
         enableButtons(false);
-        Thread thread = new Thread(new Runnable()
+        Thread thread = new Thread(() ->
         {
-            @Override
-            public void run()
+            try
             {
-                try
-                {
-                    dataTransferService.sendAllData(DataTransferFragment.this);
-                } catch (final BusinessException ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), ex);
-                        }
-                    });
-                } catch (final Exception ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-                        }
-                    });
-                }
+                dataTransferService.sendAllData(DataTransferFragment.this);
+            } catch (final BusinessException ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
+            } catch (final Exception ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
             }
         });
 
@@ -125,84 +102,58 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     {
         dataTransferPB.setVisibility(View.VISIBLE);
         enableButtons(false);
-        Thread thread = new Thread(new Runnable()
+        Thread thread = new Thread(() ->
         {
-            @Override
-            public void run()
+            try
             {
-                try
+                KeyValue saleType = keyValueBiz.findByKey(ApplicationKeys.SETTING_SALE_TYPE);
+                if (saleType.getValue().equals(ApplicationKeys.HOT_SALE))
                 {
-                    dataTransferService.getAllData(DataTransferFragment.this);
-                } catch (final BusinessException ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), ex);
-                        }
-                    });
-                } catch (final Exception ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-                        }
-                    });
+                    new GoodsRequestDataTransferBizImpl(getActivity(), DataTransferFragment.this).exchangeData();
                 }
+                dataTransferService.getAllData(DataTransferFragment.this);
+            } catch (final BusinessException ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
+            } catch (final Exception ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
             }
         });
 
         thread.start();
-
     }
 
     @Override
     public void publishResult(final BusinessException ex)
     {
-        runOnUiThread(new Runnable()
+        runOnUiThread(() ->
         {
-            @Override
-            public void run()
-            {
-                transferLogTxtV.append(getErrorString(ex) + "\n\n");
-                transferSv.scrollTo(0, transferSv.getBottom());
-            }
+            transferLogTxtV.append(getErrorString(ex) + "\n\n");
+            transferSv.scrollTo(0, transferSv.getBottom());
         });
     }
 
     @Override
     public void publishResult(final String message)
     {
-        runOnUiThread(new Runnable()
+        runOnUiThread(() ->
         {
-            @Override
-            public void run()
-            {
-                transferLogTxtV.append(message + "\n\n");
-                transferSv.scrollTo(0, transferSv.getBottom());
-            }
+            transferLogTxtV.append(message + "\n\n");
+            transferSv.scrollTo(0, transferSv.getBottom());
         });
     }
 
     @Override
     public void finished(boolean result)
     {
-        runOnUiThread(new Runnable()
+        runOnUiThread(() ->
         {
-            @Override
-            public void run()
-            {
-                dataTransferPB.setVisibility(View.INVISIBLE);
-                enableButtons(true);
-                transferSv.scrollTo(0, transferSv.getBottom());
-            }
+            dataTransferPB.setVisibility(View.INVISIBLE);
+            enableButtons(true);
+            transferSv.scrollTo(0, transferSv.getBottom());
         });
     }
 
@@ -210,5 +161,20 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     public int getFragmentId()
     {
         return MainActivity.DATA_TRANSFER_FRAGMENT_ID;
+    }
+
+    @OnClick({R.id.getDataBtn, R.id.sendDataBtn})
+    public void onViewClicked(View view)
+    {
+        transferLogTxtV.setText("");
+        switch (view.getId())
+        {
+            case R.id.getDataBtn:
+                invokeGetData();
+                break;
+            case R.id.sendDataBtn:
+                invokeSendData();
+                break;
+        }
     }
 }
