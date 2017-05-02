@@ -127,7 +127,7 @@
         android:layout_alignTop="@+id/cellPhoneTxt"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:src="@drawable/ic_visibility_off_grey_700_24dp"/>
+        android:src="@drawable/ic_visibility_off_24dp"/>
 
     <ImageView
         android:id="@+id/has_location_img"
@@ -137,6 +137,28 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_toRightOf="@+id/visit_today_img"
-        android:src="@drawable/ic_location_off_grey_700_24dp"/>
+        android:src="@drawable/ic_location_off_24dp"/>
+
+    <ImageView
+        android:id="@+id/has_order_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cellPhoneTxt"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:visibility="gone"
+        android:layout_toRightOf="@+id/has_location_img"
+        android:src="@drawable/ic_add_shopping_cart_24dp"/>
+
+    <ImageView
+        android:id="@+id/has_none_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cellPhoneTxt"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_toRightOf="@+id/has_location_img"
+        android:src="@drawable/ic_remove_shopping_cart_24dp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

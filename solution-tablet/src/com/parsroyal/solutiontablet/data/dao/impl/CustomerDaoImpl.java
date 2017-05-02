@@ -23,6 +23,7 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -223,7 +224,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
                 "c." + Customer.COL_ADDRESS,//5
                 "c." + Customer.COL_X_LOCATION,
                 "c." + Customer.COL_Y_LOCATION,
-                "vi." + VisitInformation.COL_CREATE_DATE_TIME,
+                "vi." + VisitInformation.COL_UPDATE_DATE_TIME,
                 "vd." + VisitInformationDetail.COL_TYPE,
                 "vi." + VisitInformation.COL_VISIT_DATE,//10
                 "c." + Customer.COL_BACKEND_ID};
@@ -303,17 +304,17 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
             customerListModel.setYlocation(0.0);
         }
 
-        String visitDate = cursor.getString(8);
+        String visitDate = cursor.getString(10);
 
-        String today = DateUtil.getCurrentGregorianFullWithDate();
+        String today = DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA");
 
-        customerListModel.setVisited(visitDate != null && visitDate.contains(today));
+        customerListModel.setVisited(visitDate!=null && visitDate.equals(today));
 
         int type = cursor.getInt(9);
         if (type == VisitInformationDetailType.CREATE_ORDER.getValue())
         {
             customerListModel.setHasOrder(true);
-        } else if (type == VisitInformationDetailType.NONE.getValue())
+        } else if (type == VisitInformationDetailType.NONE.getValue()||type == VisitInformationDetailType.NO_ORDER.getValue())
         {
             customerListModel.setHasRejection(true);
         }

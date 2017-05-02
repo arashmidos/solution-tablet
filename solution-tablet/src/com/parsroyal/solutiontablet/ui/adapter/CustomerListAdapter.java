@@ -88,6 +88,7 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel>
                 holder.addressTxt = (TextView) convertView.findViewById(R.id.addressTxt);
                 holder.locationImg = (ImageView) convertView.findViewById(R.id.has_location_img);
                 holder.visitImg = (ImageView) convertView.findViewById(R.id.visit_today_img);
+                holder.orderImg = (ImageView) convertView.findViewById(R.id.has_order_img);
                 convertView.setTag(holder);
             } else
             {
@@ -105,19 +106,27 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel>
             //set location icon
             if (model.hasLocation())
             {
-                holder.locationImg.setImageResource(R.drawable.ic_location_on_light_green_700_24dp);
+                holder.locationImg.setImageResource(R.drawable.ic_location_on_24dp);
             } else
             {
-                holder.locationImg.setImageResource(R.drawable.ic_location_off_grey_700_24dp);
+                holder.locationImg.setImageResource(R.drawable.ic_location_off_24dp);
             }
             //set visit icon
             if (model.isVisited())
             {
-                holder.visitImg.setImageResource(R.drawable.ic_visibility_light_green_700_24dp);
+                if (model.hasRejection())
+                {
+                    holder.visitImg.setImageResource(R.drawable.ic_visibility_off_none_24dp);
+                } else
+                {
+                    holder.visitImg.setImageResource(R.drawable.ic_visibility_24dp);
+                }
             } else
             {
-                holder.visitImg.setImageResource(R.drawable.ic_visibility_off_grey_700_24dp);
+                holder.visitImg.setImageResource(R.drawable.ic_visibility_off_24dp);
             }
+
+            holder.orderImg.setVisibility(model.hasOrder() ? View.VISIBLE : View.GONE);
 
             return convertView;
         } catch (Exception e)
@@ -137,5 +146,6 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel>
         public TextView addressTxt;
         public ImageView locationImg;
         public ImageView visitImg;
+        public ImageView orderImg;
     }
 }
