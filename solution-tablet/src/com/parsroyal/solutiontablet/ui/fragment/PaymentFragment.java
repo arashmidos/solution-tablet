@@ -74,17 +74,13 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
             fab.setVisibility(View.GONE);
         } else
         {
-            fab.setOnClickListener(new View.OnClickListener()
+            fab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    MainActivity mainActivity = (MainActivity) getActivity();
-                    Bundle args = new Bundle();
-                    args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
-                    args.putLong(Constants.VISIT_ID,visitId);
-                    mainActivity.changeFragment(MainActivity.PAYMENT_DETAIL_FRAGMENT_ID, args, false);
-                }
+                MainActivity mainActivity = (MainActivity) getActivity();
+                Bundle args = new Bundle();
+                args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
+                args.putLong(Constants.VISIT_ID,visitId);
+                mainActivity.changeFragment(MainActivity.PAYMENT_DETAIL_FRAGMENT_ID, args, false);
             });
         }
     }
@@ -94,14 +90,10 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
         {
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(getString(R.string.sent));
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    paymentSO.setSent(SendStatus.SENT.getId());
-                    updateList();
-                }
+                paymentSO.setSent(SendStatus.SENT.getId());
+                updateList();
             });
             tabContainer.addTab(tab);
         }
@@ -111,14 +103,10 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
             tab.setText(getString(R.string.not_sent));
             tab.setActivated(true);
             tab.performClick();
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    paymentSO.setSent(SendStatus.NEW.getId());
-                    updateList();
-                }
+                paymentSO.setSent(SendStatus.NEW.getId());
+                updateList();
             });
             tabContainer.addTab(tab);
         }
@@ -145,20 +133,16 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
     @Override
     protected AdapterView.OnItemClickListener getOnItemClickListener()
     {
-        return new AdapterView.OnItemClickListener()
+        return (parent, view, position, id) ->
         {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                PaymentListModel listModel = dataModel.get(position);
-                Bundle bundle = new Bundle();
-                bundle.putLong(Constants.CUSTOMER_BACKEND_ID, listModel.getCustomerBackendId());
-                bundle.putLong(Constants.PAYMENT_ID, listModel.getPrimaryKey());
-                bundle.putLong(Constants.VISIT_ID,visitId);
-                bundle.putInt(Constants.PARENT,
-                        (customer != null ? MainActivity.CUSTOMER_LIST_FRAGMENT_ID : MainActivity.FUNDS_FRAGMENT_ID));
-                context.changeFragment(MainActivity.PAYMENT_DETAIL_FRAGMENT_ID, bundle, true);
-            }
+            PaymentListModel listModel = dataModel.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putLong(Constants.CUSTOMER_BACKEND_ID, listModel.getCustomerBackendId());
+            bundle.putLong(Constants.PAYMENT_ID, listModel.getPrimaryKey());
+            bundle.putLong(Constants.VISIT_ID,visitId);
+            bundle.putInt(Constants.PARENT,
+                    (customer != null ? MainActivity.CUSTOMER_LIST_FRAGMENT_ID : MainActivity.FUNDS_FRAGMENT_ID));
+            context.changeFragment(MainActivity.PAYMENT_DETAIL_FRAGMENT_ID, bundle, true);
         };
     }
 

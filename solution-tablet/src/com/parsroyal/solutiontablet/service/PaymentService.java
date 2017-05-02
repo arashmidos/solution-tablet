@@ -26,4 +26,6 @@ public interface PaymentService
     List<PaymentListModel> getAllPaymentsListModelByCustomerBackendId(Long customerBackendId);
 
     List<PaymentListModel> searchForPayments(PaymentSO paymentSO);
+
+    void clearAllSentPayment();
 }

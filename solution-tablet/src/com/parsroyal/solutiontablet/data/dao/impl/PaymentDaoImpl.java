@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.PaymentDao;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.Payment;
@@ -266,5 +267,17 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         }
         cursor.close();
         return entities;
+    }
+
+    @Override
+    public void deleteAllSentPayment()
+    {
+        CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        db.beginTransaction();
+        db.execSQL(String.format("DELETE FROM %s WHERE %s = %s"
+                , getTableName(), Payment.COL_STATUS, SendStatus.SENT.getId()));
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 }

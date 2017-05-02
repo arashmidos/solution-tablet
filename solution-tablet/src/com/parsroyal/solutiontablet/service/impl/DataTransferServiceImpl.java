@@ -143,7 +143,13 @@ public class DataTransferServiceImpl implements DataTransferService
         }
 
         getAllOrdersForDelivery(resultObserver);
+        cleanOldData();
         uiObserver.finished(true);
+    }
+
+    private void cleanOldData()
+    {
+        paymentService.clearAllSentPayment();
     }
 
     @Override
@@ -441,7 +447,6 @@ public class DataTransferServiceImpl implements DataTransferService
         {
             resultObserver.publishResult(context.getString(R.string.message_no_payments_for_sending));
         }
-
     }
 
     private void sendAllPositions(ResultObserver resultObserver)
