@@ -22,7 +22,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -174,45 +173,37 @@ public class SaveLocationFragment extends BaseFragment implements
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatlng, cameraZoom), 4000, null);
         }
 
-        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener()
+        map.setOnCameraChangeListener(cameraPosition ->
         {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition)
-            {
-                currentLatlng = map.getCameraPosition().target;
-                locationMarkertext.setText(getString(R.string.set_your_location));
-                if (isFirstTime)
-                {
-                    map.clear();
-                }
-                markerLayout.setVisibility(View.VISIBLE);
-            }
-        });
-
-        markerLayout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
+            currentLatlng = map.getCameraPosition().target;
+            locationMarkertext.setText(getString(R.string.set_your_location));
+            if (isFirstTime)
             {
                 map.clear();
-                LatLng temp = new LatLng(currentLatlng.latitude, currentLatlng.longitude);
-
-                //Save customer location
-                customer.setxLocation(currentLatlng.latitude);
-                customer.setyLocation(currentLatlng.longitude);
-                customer.setStatus(CustomerStatus.UPDATED.getId());
-                customerService.saveCustomer(customer);
-                //
-                VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, VisitInformationDetailType.SAVE_LOCATION, 0);
-                visitService.saveVisitDetail(visitDetail);
-
-                Marker m = map.addMarker(new MarkerOptions()
-                        .position(temp).title(getString(R.string.location_set)).snippet("").icon(BitmapDescriptorFactory
-                                .fromResource(R.drawable.ic_action_flag)));
-                isFirstTime = true;
-                m.setDraggable(true);
-                markerLayout.setVisibility(View.GONE);
             }
+            markerLayout.setVisibility(View.VISIBLE);
+        });
+
+        markerLayout.setOnClickListener(view ->
+        {
+            map.clear();
+            LatLng temp = new LatLng(currentLatlng.latitude, currentLatlng.longitude);
+
+            //Save customer location
+            customer.setxLocation(currentLatlng.latitude);
+            customer.setyLocation(currentLatlng.longitude);
+            customer.setStatus(CustomerStatus.UPDATED.getId());
+            customerService.saveCustomer(customer);
+            //
+            VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, VisitInformationDetailType.SAVE_LOCATION, 0);
+            visitService.saveVisitDetail(visitDetail);
+
+            Marker m = map.addMarker(new MarkerOptions()
+                    .position(temp).title(getString(R.string.location_set)).snippet("").icon(BitmapDescriptorFactory
+                            .fromResource(R.drawable.ic_action_flag)));
+            isFirstTime = true;
+            m.setDraggable(true);
+            markerLayout.setVisibility(View.GONE);
         });
     }
 }
