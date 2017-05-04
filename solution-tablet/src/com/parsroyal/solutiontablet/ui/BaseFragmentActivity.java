@@ -27,8 +27,8 @@ public class BaseFragmentActivity extends AppCompatActivity
     public static final String TAG = BaseFragmentActivity.class.getSimpleName();
     protected ImageView menuIv;
     protected ProgressDialog progressDialog;
-    private TextView userFullNameTxt;
-    private TextView companyNameTxt;
+    protected TextView userFullNameTxt;
+    protected TextView companyNameTxt;
     private BaseInfoService baseInfoService;
 
     @Override
