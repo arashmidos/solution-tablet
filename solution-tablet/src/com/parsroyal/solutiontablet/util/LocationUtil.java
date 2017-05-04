@@ -36,7 +36,7 @@ public class LocationUtil
         if (lat1 == 0.0f || long1 == 0.0f || lat2 == 0.0f || long2 == 0.0f)
         {
             //Set it to infinity
-            return Float.MAX_VALUE;
+            return -1f;
         }
 
         Location l1 = new Location("");

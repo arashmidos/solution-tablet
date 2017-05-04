@@ -87,14 +87,21 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
             @Override
             public void doFilter(int distance, boolean hasOrder, boolean hasNone)
             {
-                adapter.setDataModel( getDataModel());
+                adapter.setDataModel(getDataModel());
 
                 for (Iterator<CustomerListModel> it = adapter.getDataModel().iterator(); it.hasNext(); )
                 {
                     CustomerListModel listModel = it.next();
-                    if (listModel.hasOrder() != hasOrder || listModel.hasRejection() != hasNone || listModel.getDistance() > distance)
+                    if (listModel.hasOrder() != hasOrder || listModel.hasRejection() != hasNone)
                     {
                         it.remove();
+                    } else if (distance != 0)//If meter filter set
+                    {
+                        //If has not location or it's greater than user filter
+                        if (listModel.getDistance() == -1 || listModel.getDistance() > distance)
+                        {
+                            it.remove();
+                        }
                     }
                 }
                 sort(sortType);

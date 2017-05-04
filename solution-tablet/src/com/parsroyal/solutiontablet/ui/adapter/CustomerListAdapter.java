@@ -114,16 +114,14 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel>
             //set visit icon
             if (model.isVisited())
             {
-                if (model.hasRejection())
-                {
-                    holder.visitImg.setImageResource(R.drawable.ic_visibility_off_none_24dp);
-                } else
-                {
-                    holder.visitImg.setImageResource(R.drawable.ic_visibility_24dp);
-                }
+                holder.visitImg.setImageResource(R.drawable.ic_visibility_24dp);
             } else
             {
                 holder.visitImg.setImageResource(R.drawable.ic_visibility_off_24dp);
+            }
+            if (model.hasRejection())
+            {
+                holder.visitImg.setImageResource(R.drawable.ic_visibility_off_none_24dp);
             }
 
             holder.orderImg.setVisibility(model.hasOrder() ? View.VISIBLE : View.GONE);
