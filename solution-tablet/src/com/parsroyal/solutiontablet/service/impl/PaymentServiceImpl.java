@@ -91,4 +91,10 @@ public class PaymentServiceImpl implements PaymentService
         return paymentDao.searchForPayments(paymentSO);
     }
 
+    @Override
+    public void clearAllSentPayment()
+    {
+        paymentDao.deleteAllSentPayment();
+    }
+
 }

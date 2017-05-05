@@ -67,6 +67,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.NotificationUtil;
 import com.parsroyal.solutiontablet.util.SunDate;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -141,7 +142,6 @@ public class UserTrackingFragment extends BaseFragment implements
     private Marker endMarker;
     private boolean distanceServiceEnabled;
     private FragmentActivity context;
-//    private static View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -454,7 +454,6 @@ public class UserTrackingFragment extends BaseFragment implements
     @Override
     public void onCameraChange(CameraPosition cameraPosition)
     {
-
     }
 
     @OnClick(R.id.filter)
@@ -524,13 +523,15 @@ public class UserTrackingFragment extends BaseFragment implements
             {
                 startMarker = map.addMarker(new MarkerOptions()
                         .position(route.get(0))
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_green_48dp)));
+                        .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+                                getActivity(),R.drawable.ic_place_green_48dp))));
             }
             if (route.size() > 1)
             {
                 endMarker = map.addMarker(new MarkerOptions()
                         .position(route.get(route.size() - 1))
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_red_48dp)));
+                        .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+                                getActivity(),R.drawable.ic_place_red_48dp))));
             }
             PolylineOptions polyOptions = new PolylineOptions();
             polyOptions.color(getResources().getColor(colors[3]));
@@ -538,7 +539,6 @@ public class UserTrackingFragment extends BaseFragment implements
             polyOptions.addAll(route);
             polyline = map.addPolyline(polyOptions);
             polylines.add(polyline);
-
         }
     }
 
@@ -611,17 +611,21 @@ public class UserTrackingFragment extends BaseFragment implements
             super.onBeforeClusterItemRendered(item, markerOptions);
             markerOptions.title(item.getTitle());
 
-            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_red_36dp);
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+                    getActivity(),R.drawable.ic_location_on_red_36dp));
 
             if (item.hasOrder())
             {
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_green_36dp);
+                icon = BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+                        getActivity(),R.drawable.ic_location_on_green_36dp));
             } else if (item.hasRejection())
             {
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_black_36dp);
+                icon = BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+                        getActivity(),R.drawable.ic_location_on_black_36dp));
             } else if (item.isVisited())
             {
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_blue_36dp);
+                icon = BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+                        getActivity(),R.drawable.ic_location_on_blue_36dp));
             }
 
             markerOptions.icon(icon);

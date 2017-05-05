@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -27,9 +27,9 @@ public class FilterDialog extends DialogFragment
     @BindView(R.id.distance_filter)
     EditText distanceFilter;
     @BindView(R.id.filter_has_order)
-    CheckBox filterHasOrder;
+    RadioButton filterHasOrder;
     @BindView(R.id.filter_has_none)
-    CheckBox filterHasNone;
+    RadioButton filterHasNone;
     @BindView(R.id.filter_btn)
     Button filterBtn;
     @BindView(R.id.filter_clear_btn)
@@ -122,25 +122,33 @@ public class FilterDialog extends DialogFragment
 
         boolean hasOrder = filterHasOrder.isChecked();
         boolean hasNone = filterHasNone.isChecked();
-        if (Empty.isEmpty(distanceText) && !hasOrder && !hasNone)
-        {
-            ToastUtil.toastMessage(getActivity(), R.string.error_no_filter_selected);
-            return;
-        }
 
         int distance;
         if (Empty.isNotEmpty(distanceText))
         {
-            distance = Integer.parseInt(distanceText);
-
-            if (distance <= 0 || distance > 500)
+            try
             {
-                ToastUtil.toastMessage(getActivity(), R.string.error_filter_max_distance);
+                distance = Integer.parseInt(distanceText);
+
+                if (distance < 0 || distance > 500)
+                {
+                    ToastUtil.toastMessage(getActivity(), R.string.error_filter_max_distance);
+                    return;
+                }
+            } catch (Exception e)
+            {
+                ToastUtil.toastMessage(getActivity(), R.string.error_filter_is_not_correct);
                 return;
             }
         } else
         {
-            distance = Integer.MAX_VALUE;
+            distance = 0;
+        }
+
+        if (distance == 0 && !hasOrder && !hasNone)
+        {
+            ToastUtil.toastMessage(getActivity(), R.string.error_no_filter_selected);
+            return;
         }
 
         onClickListener.doFilter(distance, hasOrder, hasNone);

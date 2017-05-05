@@ -20,4 +20,6 @@ public interface PaymentDao extends BaseDao<Payment, Long>
     List<Payment> findPaymentByCustomerId(Long customerID);
 
     List<PaymentListModel> searchForPayments(PaymentSO paymentSO);
+
+    void deleteAllSentPayment();
 }

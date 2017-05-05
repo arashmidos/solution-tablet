@@ -29,26 +29,27 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:gravity="right"
         android:orientation="horizontal">
 
         <Spinner
-            style="@style/Spinner"
             android:id="@+id/goodUnitsSp"
+            style="@style/Spinner"
             android:layout_width="100dp"
             android:layout_height="wrap_content"/>
 
         <EditText
             android:id="@+id/countTxt"
             style="@style/EditBox"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:ems="10"
+            android:layout_weight="1"
             android:digits="1234567890.-۰۱۲۳۴۵۶۷۸۹"
+            android:ems="10"
             android:inputType="numberDecimal"/>
 
         <TextView
