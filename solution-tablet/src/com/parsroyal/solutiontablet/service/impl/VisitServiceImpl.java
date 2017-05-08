@@ -14,6 +14,7 @@ import com.parsroyal.solutiontablet.data.dao.impl.CustomerPicDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDetailDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
@@ -211,5 +212,24 @@ public class VisitServiceImpl implements VisitService
             visit.setDetails(new ArrayList<>(map.values()));
         }
         return visitList;
+    }
+
+    @Override
+    public Long startAnonymousVisit()
+    {
+        VisitInformation visitInformation = new VisitInformation();
+        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
+        visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        // -2 Means visit without customer
+        visitInformation.setResult(-2L);
+        Position position = new PositionServiceImpl(context).getLastPosition();
+
+        if (Empty.isNotEmpty(position))
+        {
+            visitInformation.setxLocation(position.getLatitude());
+            visitInformation.setyLocation(position.getLongitude());
+        }
+        return saveVisit(visitInformation);
     }
 }

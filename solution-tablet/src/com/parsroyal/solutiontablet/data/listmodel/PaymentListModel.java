@@ -1,7 +1,5 @@
 package com.parsroyal.solutiontablet.data.listmodel;
 
-import com.parsroyal.solutiontablet.data.model.BaseListModel;
-
 /**
  * Created by Arash on 08/19/2016
  */

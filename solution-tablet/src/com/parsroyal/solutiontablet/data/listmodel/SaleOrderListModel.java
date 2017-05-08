@@ -1,11 +1,10 @@
-package com.parsroyal.solutiontablet.data.model;
+package com.parsroyal.solutiontablet.data.listmodel;
 
 /**
  * Created by Mahyar on 8/25/2015.
  */
 public class SaleOrderListModel extends BaseListModel
 {
-
     private Long id;
     private Long backendId;
     private String saleOrderNumber;

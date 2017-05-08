@@ -11,7 +11,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
-import com.parsroyal.solutiontablet.data.model.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;

@@ -80,24 +80,17 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             goodsService = new GoodsServiceImpl(mainActivity);
             visitService = new VisitServiceImpl(mainActivity);
 
-            questionnaireBackendId = getArguments().getLong("qnId");
+            questionnaireBackendId = getArguments().getLong(Constants.QUESTIONAIRE_ID);
             visitId = getArguments().getLong(Constants.VISIT_ID);
             customerId = getArguments().getLong(Constants.CUSTOMER_ID);
-            goodsBackendId = getArguments().getLong("goodsBackendId");
+            goodsBackendId = getArguments().getLong(Constants.GOODS_BACKEND_ID);
 
             customer = customerService.getCustomerById(customerId);
 
             View view = super.onCreateView(inflater, container, savedInstanceState);
             buttonPanel.setVisibility(View.VISIBLE);
             Button canclButton = (Button) buttonPanel.findViewById(R.id.cancelBtn);
-            canclButton.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    mainActivity.removeFragment(QuestionnaireDetailFragment.this);
-                }
-            });
+            canclButton.setOnClickListener(v -> mainActivity.removeFragment(QuestionnaireDetailFragment.this));
             return view;
         } catch (Exception ex)
         {
@@ -136,14 +129,10 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             return null;
         }
 
-        return new AdapterView.OnItemClickListener()
+        return (parent, view, position, id) ->
         {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                QuestionDto questionDto = questionnaireService.getQuestionDto(dataModel.get(position).getPrimaryKey(), visitId, goodsBackendId);
-                openQuestionDialog(questionDto);
-            }
+            QuestionDto questionDto = questionnaireService.getQuestionDto(dataModel.get(position).getPrimaryKey(), visitId, goodsBackendId);
+            openQuestionDialog(questionDto);
         };
     }
 
@@ -188,108 +177,91 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
         alertBuilder.setView(view);
 
         final AlertDialog alert = alertBuilder.create();
-        alert.getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-        prvBtn.setOnClickListener(new View.OnClickListener()
+        prvBtn.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
+            try
             {
-                try
+                String answer = getAnswer(questionDto);
+                if (Empty.isNotEmpty(answer))
                 {
-                    String answer = getAnswer(questionDto);
-                    if (Empty.isNotEmpty(answer))
-                    {
-                        questionDto.setAnswerId(saveAnswer(questionDto, answer));
-                        setVisitDetail();
-                    }
-                    adapter.setDataModel(dataModel);
-                    adapter.notifyDataSetChanged();
-                    adapter.notifyDataSetInvalidated();
-                    QuestionDto prvQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(), goodsBackendId, false);
-                    if (Empty.isNotEmpty(prvQuestionDto))
-                    {
-                        alert.dismiss();
-                        openQuestionDialog(prvQuestionDto);
-                    }
-
-                } catch (Exception ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
+                    questionDto.setAnswerId(saveAnswer(questionDto, answer));
+                    setVisitDetail();
                 }
+                adapter.setDataModel(dataModel);
+                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetInvalidated();
+                QuestionDto prvQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(), goodsBackendId, false);
+                if (Empty.isNotEmpty(prvQuestionDto))
+                {
+                    alert.dismiss();
+                    openQuestionDialog(prvQuestionDto);
+                }
+
+            } catch (Exception ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
             }
         });
 
-        nextBtn.setOnClickListener(new View.OnClickListener()
+        nextBtn.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
+            try
             {
-                try
+                String answer = getAnswer(questionDto);
+                if (Empty.isNotEmpty(answer))
                 {
-                    String answer = getAnswer(questionDto);
-                    if (Empty.isNotEmpty(answer))
-                    {
-                        questionDto.setAnswerId(saveAnswer(questionDto, answer));
-                        setVisitDetail();
-                    }
-                    QuestionDto nextQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(), goodsBackendId, true);
-                    adapter.setDataModel(dataModel);
-                    adapter.notifyDataSetChanged();
-                    adapter.notifyDataSetInvalidated();
-                    if (Empty.isNotEmpty(nextQuestionDto))
-                    {
-                        alert.dismiss();
-                        openQuestionDialog(nextQuestionDto);
-                    }
-                } catch (Exception ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
+                    questionDto.setAnswerId(saveAnswer(questionDto, answer));
+                    setVisitDetail();
                 }
+                QuestionDto nextQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(), goodsBackendId, true);
+                adapter.setDataModel(dataModel);
+                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetInvalidated();
+                if (Empty.isNotEmpty(nextQuestionDto))
+                {
+                    alert.dismiss();
+                    openQuestionDialog(nextQuestionDto);
+                }
+            } catch (Exception ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
             }
         });
 
-        cancelBtn.setOnClickListener(new View.OnClickListener()
+        cancelBtn.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
+            dataModel = getDataModel();
+            adapter.setDataModel(dataModel);
+            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetInvalidated();
+            alert.dismiss();
+        });
+
+        saveBtn.setOnClickListener(v ->
+        {
+            try
             {
+                String answer = getAnswer(questionDto);
+                Long answerId = saveAnswer(questionDto, answer);
+                if (Empty.isNotEmpty(answer))
+                {
+                    setVisitDetail();
+                }
+                questionDto.setAnswerId(answerId);
                 dataModel = getDataModel();
                 adapter.setDataModel(dataModel);
                 adapter.notifyDataSetChanged();
                 adapter.notifyDataSetInvalidated();
-                alert.dismiss();
-            }
-        });
-
-        saveBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
+            } catch (Exception ex)
             {
-                try
-                {
-                    String answer = getAnswer(questionDto);
-                    Long answerId = saveAnswer(questionDto, answer);
-                    if (Empty.isNotEmpty(answer))
-                    {
-                        setVisitDetail();
-                    }
-                    questionDto.setAnswerId(answerId);
-                    dataModel = getDataModel();
-                    adapter.setDataModel(dataModel);
-                    adapter.notifyDataSetChanged();
-                    adapter.notifyDataSetInvalidated();
-                } catch (Exception ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-                }
-                alert.dismiss();
+                Log.e(TAG, ex.getMessage(), ex);
+                ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
             }
+            alert.dismiss();
         });
 
         alert.show();
@@ -393,7 +365,10 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             qAnswer.setId(questionDto.getAnswerId());
             qAnswer.setAnswer(answer);
             qAnswer.setDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
-            qAnswer.setCustomerBackendId(customer.getBackendId() == 0 ? customerId : customer.getBackendId());
+            if (Empty.isNotEmpty(customer))
+            {
+                qAnswer.setCustomerBackendId(customer.getBackendId() == 0 ? customerId : customer.getBackendId());
+            }
             if (Empty.isNotEmpty(goodsBackendId))
             {
                 qAnswer.setGoodsBackendId(goodsBackendId);

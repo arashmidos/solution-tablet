@@ -18,7 +18,7 @@ import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
-import com.parsroyal.solutiontablet.data.model.GoodsListModel;
+import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.exception.BusinessException;

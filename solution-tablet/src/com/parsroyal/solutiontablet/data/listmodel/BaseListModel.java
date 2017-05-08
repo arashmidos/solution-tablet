@@ -1,11 +1,12 @@
-package com.parsroyal.solutiontablet.data.model;
+package com.parsroyal.solutiontablet.data.listmodel;
+
+import com.parsroyal.solutiontablet.data.model.BaseModel;
 
 /**
  * Created by Mahyar on 7/6/2015.
  */
 public abstract class BaseListModel extends BaseModel
 {
-
     private Long primaryKey;
     private String title;
     private String code;

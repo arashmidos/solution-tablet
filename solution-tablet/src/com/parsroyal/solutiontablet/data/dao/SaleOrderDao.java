@@ -2,7 +2,7 @@ package com.parsroyal.solutiontablet.data.dao;
 
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
-import com.parsroyal.solutiontablet.data.model.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 
 import java.util.List;

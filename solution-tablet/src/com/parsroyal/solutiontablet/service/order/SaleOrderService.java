@@ -5,7 +5,7 @@ import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
-import com.parsroyal.solutiontablet.data.model.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 
 import java.util.List;

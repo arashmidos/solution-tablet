@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.data.model.GoodsListModel;
+import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.service.GoodsService;

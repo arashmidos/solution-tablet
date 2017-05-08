@@ -1,12 +1,12 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -14,54 +14,45 @@ import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.QuestionnaireListAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.NQuestionnaireListAdapter;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.List;
 
 /**
- * Created by Mahyar on 7/24/2015.
+ * Created by Arash on 2017-05-08
  */
-public class GeneralQuestionnairesFragment extends BaseListFragment<QuestionnaireListModel, QuestionnaireListAdapter>
+public class NQuestionnairesFragment extends BaseListFragment<QuestionnaireListModel, NQuestionnaireListAdapter>
 {
-    public static final String TAG = GeneralQuestionnairesFragment.class.getSimpleName();
+    public static final String TAG = NQuestionnairesFragment.class.getSimpleName();
 
     protected MainActivity mainActivity;
     protected QuestionnaireService questionnaireService;
-
     protected List<QuestionnaireListModel> dataModel;
-    protected Long visitId;
-    protected Long customerId;
     protected int parent;
+    private VisitService visitService;
+    private FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
         mainActivity = (MainActivity) getActivity();
         questionnaireService = new QuestionnaireServiceImpl(mainActivity);
+        visitService = new VisitServiceImpl(mainActivity);
 
         try
         {
-            Bundle arguments = getArguments();
-
-            visitId = arguments.getLong(Constants.VISIT_ID);
-            customerId = arguments.getLong(Constants.CUSTOMER_ID, -1);
-            parent = arguments.getInt(Constants.PARENT, MainActivity.NQUESTIONAIRE_FRAGMENT_ID);
-
             QuestionnaireSo questionnaireSo = getSearchObject();
-            dataModel = questionnaireService.searchForQuestionnaires(questionnaireSo);
+            questionnaireSo.setAnonymous(true);
+            dataModel = questionnaireService.searchForAnonymousQuestionaire(questionnaireSo);
 
             View view = super.onCreateView(inflater, container, savedInstanceState);
-            buttonPanel.setVisibility(View.VISIBLE);
-            Button canclButton = (Button) buttonPanel.findViewById(R.id.cancelBtn);
-            canclButton.setOnClickListener(v ->
-            {
-                mainActivity.removeFragment(GeneralQuestionnairesFragment.this);
-                mainActivity.changeSidebarItem(parent);
-            });
+            fab = (FloatingActionButton) view.findViewById(R.id.fab);
+            initFab();
             return view;
 
         } catch (Exception ex)
@@ -72,10 +63,25 @@ public class GeneralQuestionnairesFragment extends BaseListFragment<Questionnair
         }
     }
 
+    private void initFab()
+    {
+        fab.setVisibility(View.VISIBLE);
+
+        fab.setOnClickListener(v ->
+        {
+            Long visitId = visitService.startAnonymousVisit();
+            MainActivity mainActivity = (MainActivity) getActivity();
+            Bundle args = new Bundle();
+            args.putLong(Constants.VISIT_ID, visitId);
+            mainActivity.changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+        });
+
+    }
+
     protected QuestionnaireSo getSearchObject()
     {
         QuestionnaireSo questionnaireSo = new QuestionnaireSo();
-        questionnaireSo.setGeneral(true);
+        questionnaireSo.setAnonymous(true);
         return questionnaireSo;
     }
 
@@ -92,9 +98,9 @@ public class GeneralQuestionnairesFragment extends BaseListFragment<Questionnair
     }
 
     @Override
-    protected QuestionnaireListAdapter getAdapter()
+    protected NQuestionnaireListAdapter getAdapter()
     {
-        return new QuestionnaireListAdapter(mainActivity, dataModel, true);
+        return new NQuestionnaireListAdapter(mainActivity, dataModel);
     }
 
     @Override
@@ -104,9 +110,8 @@ public class GeneralQuestionnairesFragment extends BaseListFragment<Questionnair
         {
             QuestionnaireListModel questionnaireListModel = dataModel.get(position);
             Bundle args = new Bundle();
-            args.putLong(Constants.QUESTIONAIRE_ID, questionnaireListModel.getBackendId());
-            args.putLong(Constants.VISIT_ID, visitId);
-            args.putLong(Constants.CUSTOMER_ID, customerId);
+            args.putLong(Constants.QUESTIONAIRE_ID, questionnaireListModel.getPrimaryKey());
+            args.putLong(Constants.VISIT_ID, questionnaireListModel.getVisitId());
             mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
         };
     }

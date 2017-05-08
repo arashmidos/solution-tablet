@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.data.listmodel;
 
 import com.parsroyal.solutiontablet.constants.QuestionType;
-import com.parsroyal.solutiontablet.data.model.BaseListModel;
 
 /**
  * Created by Mahyar on 7/25/2015.

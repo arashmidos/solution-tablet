@@ -55,26 +55,22 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
     private void initFab()
     {
         fab.setVisibility(View.VISIBLE);
-        fab.setOnClickListener(new View.OnClickListener()
+        fab.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
+            List<Province> provinceList = baseInfoService.getAllProvinces();
+            List<City> cityList = baseInfoService.getAllCities();
+            if (Empty.isEmpty(cityList))
             {
-                List<Province> provinceList = baseInfoService.getAllProvinces();
-                List<City> cityList = baseInfoService.getAllCities();
-                if (Empty.isEmpty(cityList))
-                {
-                    ToastUtil.toastError(getActivity(), R.string.message_cities_information_not_found);
-                    return;
-                }
-                if (Empty.isEmpty(provinceList))
-                {
-                    ToastUtil.toastError(getActivity(), R.string.message_provinces_information_not_foun);
-                    return;
-                }
-                MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
+                ToastUtil.toastError(getActivity(), R.string.message_cities_information_not_found);
+                return;
             }
+            if (Empty.isEmpty(provinceList))
+            {
+                ToastUtil.toastError(getActivity(), R.string.message_provinces_information_not_foun);
+                return;
+            }
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
         });
     }
 
@@ -83,14 +79,10 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
         {
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(getString(R.string.sent));
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    nCustomerSO.setSent(1);
-                    updateList();
-                }
+                nCustomerSO.setSent(1);
+                updateList();
             });
             tabContainer.addTab(tab);
         }
@@ -99,14 +91,10 @@ public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCu
             ParsRoyalTab tab = new ParsRoyalTab(context);
             tab.setText(getString(R.string.not_sent));
             tab.setActivated(true);
-            tab.setOnClickListener(new View.OnClickListener()
+            tab.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    nCustomerSO.setSent(0);
-                    updateList();
-                }
+                nCustomerSO.setSent(0);
+                updateList();
             });
             tabContainer.addTab(tab);
         }

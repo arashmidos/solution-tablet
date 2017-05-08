@@ -47,4 +47,6 @@ public interface VisitService
     List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailType type, Long typeId);
 
     List<VisitInformationDto> getAllVisitDetailForSend();
+
+    Long startAnonymousVisit();
 }

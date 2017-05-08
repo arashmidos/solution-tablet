@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.data.listmodel;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
-import com.parsroyal.solutiontablet.data.model.BaseListModel;
 
 /**
  * Created by Mahyar on 7/6/2015.
