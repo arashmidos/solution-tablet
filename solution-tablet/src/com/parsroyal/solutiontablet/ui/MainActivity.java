@@ -23,9 +23,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -166,7 +168,16 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         setupActionbar();
         setupDrawer();
         initialize();
+        logUser();
+    }
 
+    private void logUser()
+    {
+        Crashlytics.setUserName(userFullNameTxt.getText().toString());
+        Crashlytics.setString("Company", companyNameTxt.getText().toString());
+
+        KeyValue saleType = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
+        Crashlytics.setString("Sale Type", saleType == null ? "" : saleType.getValue());
     }
 
     private void initialize()
@@ -176,16 +187,12 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
     private void setupSidebar()
     {
-        View.OnClickListener sideBarItemsOnClickListener = new View.OnClickListener()
+        View.OnClickListener sideBarItemsOnClickListener = view ->
         {
-            @Override
-            public void onClick(View view)
+            if (isMenuEnabled)
             {
-                if (isMenuEnabled)
-                {
-                    int fragmentId = Integer.parseInt(view.getTag().toString());
-                    changeFragment(fragmentId, true);
-                }
+                int fragmentId = Integer.parseInt(view.getTag().toString());
+                changeFragment(fragmentId, true);
             }
         };
         customerListTabIv = (ImageView) findViewById(R.id.customerListTabIv);

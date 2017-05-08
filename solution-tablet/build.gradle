@@ -128,7 +128,7 @@ dependencies {
     //For debug purpose only
 //    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
