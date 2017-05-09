@@ -46,7 +46,7 @@
         android:scaleType="fitXY"
         android:layout_weight="1"
         android:clickable="true"
-        android:src="@drawable/ic_sidebar_new_customer"
+        android:src="@drawable/ic_sidebar_questionaire_inactive"
         android:tag="26"
         />
 

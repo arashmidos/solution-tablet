@@ -25,7 +25,6 @@ import java.util.List;
  */
 public class QuestionnaireServiceImpl implements QuestionnaireService
 {
-
     private Context context;
     private QuestionnaireDao questionnaireDao;
     private QuestionDao questionDao;

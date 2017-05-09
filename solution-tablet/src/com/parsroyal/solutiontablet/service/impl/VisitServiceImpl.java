@@ -157,6 +157,7 @@ public class VisitServiceImpl implements VisitService
             visitInformationDetailDao.create(visitDetail);
         } else
         {
+            visitDetail.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
             visitDetail.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
             visitInformationDetailDao.update(visitDetail);
         }
@@ -175,9 +176,9 @@ public class VisitServiceImpl implements VisitService
     }
 
     @Override
-    public List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailType type, Long typeId)
+    public List<VisitInformationDetail> searchVisitDetail(Long visitId, VisitInformationDetailType type, Long typeId)
     {
-        return visitInformationDetailDao.search(type, typeId);
+        return visitInformationDetailDao.search(visitId,type, typeId);
     }
 
     @Override

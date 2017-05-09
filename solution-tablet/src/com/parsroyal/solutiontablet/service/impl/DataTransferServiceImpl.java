@@ -376,7 +376,6 @@ public class DataTransferServiceImpl implements DataTransferService
 
     private void sendAllAnswers(ResultObserver resultObserver)
     {
-
         List<QAnswer> answersForSend = questionnaireService.getAllAnswersForSend();
 
         if (Empty.isEmpty(answersForSend))

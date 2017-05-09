@@ -244,8 +244,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
                 fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report_active);
                 break;
             case NQUESTIONAIRE_FRAGMENT_ID://26
-                //TODO update this with new image
-                questionaireTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
+                questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_active);
                 break;
         }
     }
@@ -259,11 +258,12 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
         userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
         fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
+        questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_inactive);
     }
 
     public void changeFragment(int fragmentId, boolean addToBackStack)
     {
-        BaseFragment fragment = findFragment(fragmentId);
+        BaseFragment fragment = findFragment(fragmentId,new Bundle());
         if (Empty.isNotEmpty(fragment) && !fragment.isVisible())
         {
             commitFragment(fragment.getFragmentTag(), fragment, addToBackStack);
@@ -272,7 +272,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
     public void changeFragment(int fragmentId, Bundle args, boolean addToBackStack)
     {
-        BaseFragment fragment = findFragment(fragmentId);
+        BaseFragment fragment = findFragment(fragmentId,args);
         if (Empty.isNotEmpty(fragment) && !fragment.isVisible())
         {
             if (Empty.isNotEmpty(args))
@@ -293,7 +293,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         fragmentTransaction.commit();
     }
 
-    private BaseFragment findFragment(int fragmentId)
+    private BaseFragment findFragment(int fragmentId,Bundle args)
     {
         BaseFragment fragment = null;
         switch (fragmentId)
@@ -324,7 +324,8 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
                 break;
             case GENERAL_QUESTIONNAIRES_FRAGMENT_ID://6
                 fragment = new GeneralQuestionnairesFragment();
-                changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
+                int parent = args.getInt(Constants.PARENT,0);
+                changeSidebarItem(parent);
                 break;
             case QUESTIONNAIRE_DETAIL_FRAGMENT_ID:
                 fragment = new QuestionnaireDetailFragment();
@@ -366,7 +367,6 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
                 break;
             case GOODS_LIST_FRAGMENT_ID:
                 fragment = new GoodsListFragment();
-                Bundle args = new Bundle();
                 args.putBoolean("view_all", true);
                 fragment.setArguments(args);
                 changeSidebarItem(GOODS_LIST_FRAGMENT_ID);
@@ -508,7 +508,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
                 BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
                 if (Empty.isNotEmpty(lastFragment))
                 {
-                    findFragment(lastFragment.getFragmentId());
+                    findFragment(lastFragment.getFragmentId(),new Bundle());
                 }
                 super.onBackPressed();
             } else

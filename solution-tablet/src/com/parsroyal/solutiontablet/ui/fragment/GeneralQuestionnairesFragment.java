@@ -49,7 +49,7 @@ public class GeneralQuestionnairesFragment extends BaseListFragment<Questionnair
 
             visitId = arguments.getLong(Constants.VISIT_ID);
             customerId = arguments.getLong(Constants.CUSTOMER_ID, -1);
-            parent = arguments.getInt(Constants.PARENT, MainActivity.NQUESTIONAIRE_FRAGMENT_ID);
+            parent = arguments.getInt(Constants.PARENT, 0);
 
             QuestionnaireSo questionnaireSo = getSearchObject();
             dataModel = questionnaireService.searchForQuestionnaires(questionnaireSo);

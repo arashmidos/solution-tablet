@@ -73,9 +73,9 @@ public class NQuestionnairesFragment extends BaseListFragment<QuestionnaireListM
             MainActivity mainActivity = (MainActivity) getActivity();
             Bundle args = new Bundle();
             args.putLong(Constants.VISIT_ID, visitId);
+            args.putInt(Constants.PARENT, MainActivity.NQUESTIONAIRE_FRAGMENT_ID);
             mainActivity.changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
         });
-
     }
 
     protected QuestionnaireSo getSearchObject()

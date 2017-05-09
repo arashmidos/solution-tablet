@@ -44,7 +44,7 @@ public interface VisitService
 
     void updateVisitDetailId(VisitInformationDetailType type, long id, long backendId);
 
-    List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailType type, Long typeId);
+    List<VisitInformationDetail> searchVisitDetail(Long visitId, VisitInformationDetailType type, Long typeId);
 
     List<VisitInformationDto> getAllVisitDetailForSend();
 
