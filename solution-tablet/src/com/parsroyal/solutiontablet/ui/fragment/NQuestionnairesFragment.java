@@ -32,7 +32,6 @@ public class NQuestionnairesFragment extends BaseListFragment<QuestionnaireListM
 
     protected MainActivity mainActivity;
     protected QuestionnaireService questionnaireService;
-    protected List<QuestionnaireListModel> dataModel;
     protected int parent;
     private VisitService visitService;
     private FloatingActionButton fab;
@@ -88,7 +87,8 @@ public class NQuestionnairesFragment extends BaseListFragment<QuestionnaireListM
     @Override
     protected List<QuestionnaireListModel> getDataModel()
     {
-        return dataModel;
+        QuestionnaireSo questionnaireSo = getSearchObject();
+        return questionnaireService.searchForAnonymousQuestionaire(questionnaireSo);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class NQuestionnairesFragment extends BaseListFragment<QuestionnaireListM
     @Override
     protected NQuestionnaireListAdapter getAdapter()
     {
-        return new NQuestionnaireListAdapter(mainActivity, dataModel);
+        return new NQuestionnaireListAdapter(mainActivity, getDataModel());
     }
 
     @Override
@@ -112,6 +112,7 @@ public class NQuestionnairesFragment extends BaseListFragment<QuestionnaireListM
             Bundle args = new Bundle();
             args.putLong(Constants.QUESTIONAIRE_ID, questionnaireListModel.getPrimaryKey());
             args.putLong(Constants.VISIT_ID, questionnaireListModel.getVisitId());
+            args.putInt(Constants.PARENT, MainActivity.NQUESTIONAIRE_FRAGMENT_ID);
             mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
         };
     }
@@ -132,5 +133,12 @@ public class NQuestionnairesFragment extends BaseListFragment<QuestionnaireListM
     public int getFragmentId()
     {
         return MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        Log.d(TAG, "On resume");
     }
 }

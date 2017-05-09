@@ -135,10 +135,10 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
         String selection = VisitInformation.COL_CUSTOMER_ID + " = ? AND " + VisitInformation.COL_RESULT + " = -1 ";
         String[] args = {String.valueOf(customerId)};
         Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
-        VisitInformation visitInformationList=null;// = new VisitInformation();
+        VisitInformation visitInformationList = null;// = new VisitInformation();
         if (cursor.moveToNext())
         {
-            visitInformationList=createEntityFromCursor(cursor);
+            visitInformationList = createEntityFromCursor(cursor);
         }
         cursor.close();
         return visitInformationList;
@@ -159,6 +159,17 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
         }
         cursor.close();
         return visitInformationList;
+    }
+
+    @Override
+    public void clearAllSent()
+    {
+        CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        db.beginTransaction();
+        db.execSQL(String.format("DELETE FROM %s WHERE %s is not null", getTableName(), VisitInformation.COL_VISIT_BACKEND_ID));
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     private VisitInformationDto createDtoFromCursor(Cursor cursor)

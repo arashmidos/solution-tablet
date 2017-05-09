@@ -107,6 +107,7 @@ public class GeneralQuestionnairesFragment extends BaseListFragment<Questionnair
             args.putLong(Constants.QUESTIONAIRE_ID, questionnaireListModel.getBackendId());
             args.putLong(Constants.VISIT_ID, visitId);
             args.putLong(Constants.CUSTOMER_ID, customerId);
+            args.putInt(Constants.PARENT,parent);
             mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
         };
     }

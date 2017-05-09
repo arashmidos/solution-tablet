@@ -23,4 +23,6 @@ public interface BaseDao<ENTITY extends BaseEntity, PK extends Serializable>
 
     void deleteAll();
 
+    void deleteAll(String column, String condition);
+
 }

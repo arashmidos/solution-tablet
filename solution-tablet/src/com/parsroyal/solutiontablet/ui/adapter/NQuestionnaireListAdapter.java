@@ -42,7 +42,7 @@ public class NQuestionnaireListAdapter extends BaseListAdapter<QuestionnaireList
         {
             questionnaireSo.setConstraint(constraint.toString());
         }
-        return questionnaireService.searchForQuestionnaires(questionnaireSo);
+        return questionnaireService.searchForAnonymousQuestionaire(questionnaireSo);
     }
 
     @Override

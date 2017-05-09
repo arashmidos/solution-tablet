@@ -81,6 +81,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
     private LinearLayout textAnswerLayout;
     private CompoundButton userChoice;
     private long amountValue;
+    private int parent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -93,17 +94,30 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             goodsService = new GoodsServiceImpl(mainActivity);
             visitService = new VisitServiceImpl(mainActivity);
 
-            questionnaireBackendId = getArguments().getLong(Constants.QUESTIONAIRE_ID);
-            visitId = getArguments().getLong(Constants.VISIT_ID);
-            customerId = getArguments().getLong(Constants.CUSTOMER_ID);
-            goodsBackendId = getArguments().getLong(Constants.GOODS_BACKEND_ID);
+            Bundle arguments = getArguments();
+            questionnaireBackendId = arguments.getLong(Constants.QUESTIONAIRE_ID);
+            visitId = arguments.getLong(Constants.VISIT_ID);
+            customerId = arguments.getLong(Constants.CUSTOMER_ID);
+            goodsBackendId = arguments.getLong(Constants.GOODS_BACKEND_ID);
+            parent = arguments.getInt(Constants.PARENT, 0);
 
             customer = customerService.getCustomerById(customerId);
 
             View view = super.onCreateView(inflater, container, savedInstanceState);
             buttonPanel.setVisibility(View.VISIBLE);
             Button canclButton = (Button) buttonPanel.findViewById(R.id.cancelBtn);
-            canclButton.setOnClickListener(v -> mainActivity.removeFragment(QuestionnaireDetailFragment.this));
+            canclButton.setOnClickListener(v ->
+            {
+                if (Empty.isEmpty(customer))
+                {
+                    //It's anonymous questionaire
+                    //known bug, it he has not answered any quesiton, should remove the entire visit.
+                    // List<VisitInformationDetail> detailList = visitService.searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
+                    visitService.finishVisiting(visitId);
+                }
+                mainActivity.removeFragment(QuestionnaireDetailFragment.this);
+                mainActivity.changeSidebarItem(parent);
+            });
             return view;
         } catch (Exception ex)
         {
@@ -348,7 +362,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
 
     private void setVisitDetail()
     {
-        List<VisitInformationDetail> detailList = visitService.searchVisitDetail(visitId,VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
+        List<VisitInformationDetail> detailList = visitService.searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
         //If we have filled this questionary before
         if (detailList.size() > 0)
         {

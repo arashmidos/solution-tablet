@@ -49,4 +49,6 @@ public interface VisitService
     List<VisitInformationDto> getAllVisitDetailForSend();
 
     Long startAnonymousVisit();
+
+    void deleteAll();
 }

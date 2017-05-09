@@ -150,6 +150,7 @@ public class DataTransferServiceImpl implements DataTransferService
     private void cleanOldData()
     {
         paymentService.clearAllSentPayment();
+        visitService.deleteAll();
     }
 
     @Override
@@ -359,6 +360,7 @@ public class DataTransferServiceImpl implements DataTransferService
         }
         VisitInformationDataTransferBizImpl dataTranser =
                 new VisitInformationDataTransferBizImpl(context, resultObserver);
+        dataTranser.resetCounter();
         resultObserver.publishResult(context.getString(R.string.sending_visit_information_data));
         for (int i = 0; i < visitInformationList.size(); i++)
         {

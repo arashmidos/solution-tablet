@@ -113,6 +113,16 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long>
         db.endTransaction();
     }
 
+    public void deleteAll(String column, String condition)
+    {
+        CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        db.beginTransaction();
+        db.execSQL(String.format("DELETE FROM %s WHERE %s = %s", getTableName(), column, condition));
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
     public void delete(String selection, String[] args)
     {
         CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());

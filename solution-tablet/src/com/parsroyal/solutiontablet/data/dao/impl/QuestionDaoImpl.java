@@ -255,7 +255,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
                 " LEFT OUTER JOIN COMMER_QUESTION q ON a.QUESTION_BACKEND_ID = q.BACKEND_ID  " +
                 " LEFT OUTER JOIN COMMER_VISIT_INFORMATION v on v._id = a.VISIT_ID " +
                 " LEFT OUTER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID = q.QUESTIONNAIRE_BACKEND_ID " +
-                " WHERE v.CUSTOMER_BACKEND_ID is null AND v.CUSTOMER_ID is null GROUP BY a.VISIT_ID ORDER BY q.qOrder ";
+                " WHERE v.CUSTOMER_BACKEND_ID = 0 AND v.CUSTOMER_ID = 0 GROUP BY a.VISIT_ID ORDER BY q.qOrder ";
         sql = sql.concat(" ");
 
         String[] args =null;

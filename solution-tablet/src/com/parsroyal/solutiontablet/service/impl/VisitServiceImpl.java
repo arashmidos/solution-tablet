@@ -90,7 +90,7 @@ public class VisitServiceImpl implements VisitService
     {
         VisitInformation visitInformation = new VisitInformation();
         visitInformation.setCustomerId(customerId);
-        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
         visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
         visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
         // -1 Means new customer without backendId
@@ -178,7 +178,7 @@ public class VisitServiceImpl implements VisitService
     @Override
     public List<VisitInformationDetail> searchVisitDetail(Long visitId, VisitInformationDetailType type, Long typeId)
     {
-        return visitInformationDetailDao.search(visitId,type, typeId);
+        return visitInformationDetailDao.search(visitId, type, typeId);
     }
 
     @Override
@@ -219,7 +219,7 @@ public class VisitServiceImpl implements VisitService
     public Long startAnonymousVisit()
     {
         VisitInformation visitInformation = new VisitInformation();
-        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
         visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
         visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
         // -2 Means visit without customer
@@ -232,5 +232,11 @@ public class VisitServiceImpl implements VisitService
             visitInformation.setyLocation(position.getLongitude());
         }
         return saveVisit(visitInformation);
+    }
+
+    @Override
+    public void deleteAll()
+    {
+//        visitInformationDao.clearAllSent();
     }
 }

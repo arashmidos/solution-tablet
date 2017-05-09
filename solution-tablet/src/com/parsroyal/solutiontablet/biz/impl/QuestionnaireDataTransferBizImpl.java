@@ -5,8 +5,10 @@ import android.util.Log;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
+import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.dao.QuestionDao;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
+import com.parsroyal.solutiontablet.data.dao.impl.QAnswerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.QuestionDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Question;
@@ -36,6 +38,7 @@ public class QuestionnaireDataTransferBizImpl extends AbstractDataTransferBizImp
     private Context context;
     private QuestionnaireDao questionnaireDao;
     private QuestionDao questionDao;
+    private QAnswerDao qAnswerDao;
     private ResultObserver resultObserver;
 
     public QuestionnaireDataTransferBizImpl(Context context, ResultObserver resultObserver)
@@ -44,6 +47,7 @@ public class QuestionnaireDataTransferBizImpl extends AbstractDataTransferBizImp
         this.context = context;
         this.questionnaireDao = new QuestionnaireDaoImpl(context);
         this.questionDao = new QuestionDaoImpl(context);
+        this.qAnswerDao = new QAnswerDaoImpl(context);
         this.resultObserver = resultObserver;
     }
 
@@ -55,6 +59,7 @@ public class QuestionnaireDataTransferBizImpl extends AbstractDataTransferBizImp
             try
             {
                 questionDao.deleteAll();
+                qAnswerDao.deleteAll();
                 questionnaireDao.deleteAll();
                 for (QuestionnaireDto questionnaireDto : data.getQuestionnaireDtoList())
                 {
