@@ -3,7 +3,7 @@ package com.parsroyal.solutiontablet.service;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
-import com.parsroyal.solutiontablet.data.model.QuestionnaireListModel;
+import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 
@@ -28,4 +28,6 @@ public interface QuestionnaireService
     List<QAnswer> getAllAnswersForSend();
 
     QAnswer getAnswerById(Long id);
+
+    List<QuestionnaireListModel> searchForAnonymousQuestionaire(QuestionnaireSo questionnaireSo);
 }

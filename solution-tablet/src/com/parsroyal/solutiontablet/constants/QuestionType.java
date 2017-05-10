@@ -9,7 +9,8 @@ public enum QuestionType
     SIMPLE(100),
     SIMPLE_NUMERIC(101),
     CHOICE_SINGLE(102),
-    CHOICE_MULTIPLE(103),;
+    CHOICE_MULTIPLE(103),
+    DATE(104),;
 
     private int value;
 

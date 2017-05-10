@@ -6,6 +6,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.QuestionType;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
@@ -13,9 +14,11 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Mahyar on 7/25/2015.
@@ -74,7 +77,14 @@ public class QuestionListAdapter extends BaseListAdapter<QuestionListModel>
 
             QuestionListModel model = dataModel.get(position);
             holder.questionTv.setText(model.getQuestion());
-            holder.answerTv.setText(Empty.isEmpty(model.getAnswer()) ? "--" : model.getAnswer().replaceAll("[*]", " - "));
+            if (model.getType().equals(QuestionType.SIMPLE_NUMERIC))
+            {
+                holder.answerTv.setText(Empty.isEmpty(model.getAnswer()) ? "--" : String.format(Locale.US, "%,d",
+                        Long.parseLong(NumberUtil.digitsToEnglish(model.getAnswer().replaceAll(",", "")))));
+            } else
+            {
+                holder.answerTv.setText(Empty.isEmpty(model.getAnswer()) ? "--" : model.getAnswer().replaceAll("[*]", " - "));
+            }
 
             return convertView;
 

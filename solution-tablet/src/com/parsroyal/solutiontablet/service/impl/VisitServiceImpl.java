@@ -14,6 +14,7 @@ import com.parsroyal.solutiontablet.data.dao.impl.CustomerPicDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDetailDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
@@ -89,7 +90,7 @@ public class VisitServiceImpl implements VisitService
     {
         VisitInformation visitInformation = new VisitInformation();
         visitInformation.setCustomerId(customerId);
-        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
         visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
         visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
         // -1 Means new customer without backendId
@@ -156,6 +157,7 @@ public class VisitServiceImpl implements VisitService
             visitInformationDetailDao.create(visitDetail);
         } else
         {
+            visitDetail.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
             visitDetail.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
             visitInformationDetailDao.update(visitDetail);
         }
@@ -174,9 +176,9 @@ public class VisitServiceImpl implements VisitService
     }
 
     @Override
-    public List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailType type, Long typeId)
+    public List<VisitInformationDetail> searchVisitDetail(Long visitId, VisitInformationDetailType type, Long typeId)
     {
-        return visitInformationDetailDao.search(type, typeId);
+        return visitInformationDetailDao.search(visitId, type, typeId);
     }
 
     @Override
@@ -211,5 +213,30 @@ public class VisitServiceImpl implements VisitService
             visit.setDetails(new ArrayList<>(map.values()));
         }
         return visitList;
+    }
+
+    @Override
+    public Long startAnonymousVisit()
+    {
+        VisitInformation visitInformation = new VisitInformation();
+        visitInformation.setVisitDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
+        visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
+        visitInformation.setUpdateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        // -2 Means visit without customer
+        visitInformation.setResult(-2L);
+        Position position = new PositionServiceImpl(context).getLastPosition();
+
+        if (Empty.isNotEmpty(position))
+        {
+            visitInformation.setxLocation(position.getLatitude());
+            visitInformation.setyLocation(position.getLongitude());
+        }
+        return saveVisit(visitInformation);
+    }
+
+    @Override
+    public void deleteAll()
+    {
+//        visitInformationDao.clearAllSent();
     }
 }

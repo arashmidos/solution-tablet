@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
-import com.parsroyal.solutiontablet.data.model.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.order.SaleOrderService;

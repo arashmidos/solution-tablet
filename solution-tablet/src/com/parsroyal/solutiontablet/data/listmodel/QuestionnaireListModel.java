@@ -1,16 +1,37 @@
-package com.parsroyal.solutiontablet.data.model;
+package com.parsroyal.solutiontablet.data.listmodel;
 
 /**
  * Created by Mahyar on 7/24/2015.
  */
 public class QuestionnaireListModel extends BaseListModel
 {
-
     private Long id;
     private Long backendId;
     private String description;
     private Integer questionsCount;
     private Long goodsGroupBackendId;
+    private Long visitId;
+    private String date;
+
+    public Long getVisitId()
+    {
+        return visitId;
+    }
+
+    public void setVisitId(Long visitId)
+    {
+        this.visitId = visitId;
+    }
+
+    public String getDate()
+    {
+        return date;
+    }
+
+    public void setDate(String date)
+    {
+        this.date = date;
+    }
 
     public Long getId()
     {

@@ -86,7 +86,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"/>
-
+                <EditText
+                    android:id="@+id/answerEt2"
+                    android:inputType="numberDecimal"
+                    android:digits="1234567890,۰۱۲۳۴۵۶۷۸۹"
+                    style="@style/EditBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:gravity="right"/>
                 <TextView
                     android:id="@+id/textView39"
                     style="@style/TextView.Caption"

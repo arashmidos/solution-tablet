@@ -3,7 +3,6 @@ package com.parsroyal.solutiontablet.ui;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
@@ -18,7 +17,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -49,6 +47,7 @@ import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomersFragment;
+import com.parsroyal.solutiontablet.ui.fragment.NQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrdersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentDetailFragment;
@@ -112,6 +111,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     public static final int FUNDS_FRAGMENT_ID = 23;
     public static final int CUSTOMER_TRACKING_FRAGMENT_ID = 24;
     public static final int BASE_TRACKING_FRAGMENT_ID = 25;
+    public static final int NQUESTIONAIRE_FRAGMENT_ID = 26;
 
     private final Integer[] drawerItemTitles = {
             R.string.setting,
@@ -138,6 +138,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     private ImageView goodsTabIv;
     private ImageView userPerformanceTabIv;
     private ImageView fundsTabIv;
+    private ImageView questionaireTabIv;
     private DataTransferService dataTransferService;
     private SettingService settingService;
     private boolean isMenuEnabled = true;
@@ -168,7 +169,10 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         setupActionbar();
         setupDrawer();
         initialize();
-        logUser();
+        if (!BuildConfig.DEBUG)
+        {
+            logUser();
+        }
     }
 
     private void logUser()
@@ -209,90 +213,57 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         userPerformanceTabIv.setOnClickListener(sideBarItemsOnClickListener);
         fundsTabIv = (ImageView) findViewById(R.id.fundsTabIv);
         fundsTabIv.setOnClickListener(sideBarItemsOnClickListener);
+        questionaireTabIv = (ImageView) findViewById(R.id.questionaryTabIv);
+        questionaireTabIv.setOnClickListener(sideBarItemsOnClickListener);
     }
 
     public void changeSidebarItem(int fragmentId)
     {
+        setAllImagesInactive();
         switch (fragmentId)
         {
             case 0:
                 customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list_active);
-                newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
-                dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
-                ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
-                goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
-                userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
-                fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
                 break;
             case 1:
-                customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
-                dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
                 newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer_active);
-                ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
-                goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
-                userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
-                fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
                 break;
             case 12:
                 dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_active);
-                customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
-                newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
-                ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
-                goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
-                userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
-                fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
                 break;
             case 14:
-                dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
-                customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
-                newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
                 ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_active);
-                goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
-                userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
-                fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
                 break;
             case 16:
                 goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods_active);
-                dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
-                customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
-                newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
-                ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
-                userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
-                fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
                 break;
             case KPI_SALESMAN_FRAGMENT_ID://22
-                dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
-                customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
-                newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
-                ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
-                goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
                 userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance_active);
-                fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
                 break;
             case FUNDS_FRAGMENT_ID://23
-                dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
-                customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
-                newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
-                ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
-                goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
-                userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
                 fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report_active);
                 break;
-            default:
-                customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
-                newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
-                dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
-                ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
-                goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
-                userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
-                fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
+            case NQUESTIONAIRE_FRAGMENT_ID://26
+                questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_active);
                 break;
         }
     }
 
+    private void setAllImagesInactive()
+    {
+        customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
+        dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
+        newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
+        ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
+        goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
+        userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
+        fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
+        questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_inactive);
+    }
+
     public void changeFragment(int fragmentId, boolean addToBackStack)
     {
-        BaseFragment fragment = findFragment(fragmentId);
+        BaseFragment fragment = findFragment(fragmentId,new Bundle());
         if (Empty.isNotEmpty(fragment) && !fragment.isVisible())
         {
             commitFragment(fragment.getFragmentTag(), fragment, addToBackStack);
@@ -301,7 +272,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
     public void changeFragment(int fragmentId, Bundle args, boolean addToBackStack)
     {
-        BaseFragment fragment = findFragment(fragmentId);
+        BaseFragment fragment = findFragment(fragmentId,args);
         if (Empty.isNotEmpty(fragment) && !fragment.isVisible())
         {
             if (Empty.isNotEmpty(args))
@@ -322,7 +293,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         fragmentTransaction.commit();
     }
 
-    private BaseFragment findFragment(int fragmentId)
+    private BaseFragment findFragment(int fragmentId,Bundle args)
     {
         BaseFragment fragment = null;
         switch (fragmentId)
@@ -353,7 +324,8 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
                 break;
             case GENERAL_QUESTIONNAIRES_FRAGMENT_ID://6
                 fragment = new GeneralQuestionnairesFragment();
-                changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
+                int parent = args.getInt(Constants.PARENT,0);
+                changeSidebarItem(parent);
                 break;
             case QUESTIONNAIRE_DETAIL_FRAGMENT_ID:
                 fragment = new QuestionnaireDetailFragment();
@@ -378,8 +350,6 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
                 }
                 break;
             case DASHBOARD_FRAGMENT_ID:
-//                fragment = new DashBoardFragment();
-//                fragment = new TrackingBaseFragment();
                 fragment = new UserTrackingFragment();
                 changeSidebarItem(DASHBOARD_FRAGMENT_ID);
                 break;
@@ -397,7 +367,6 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
                 break;
             case GOODS_LIST_FRAGMENT_ID:
                 fragment = new GoodsListFragment();
-                Bundle args = new Bundle();
                 args.putBoolean("view_all", true);
                 fragment.setArguments(args);
                 changeSidebarItem(GOODS_LIST_FRAGMENT_ID);
@@ -430,6 +399,9 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
                 fragment = new PaymentFragment();
                 changeSidebarItem(FUNDS_FRAGMENT_ID);
                 break;
+            case NQUESTIONAIRE_FRAGMENT_ID:
+                fragment = new NQuestionnairesFragment();
+                changeSidebarItem(NQUESTIONAIRE_FRAGMENT_ID);
 
         }
         return fragment;
@@ -460,60 +432,51 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         drawerItemsList = (ListView) findViewById(R.id.left_drawer);
 
         drawerItemsList.setAdapter(adapter);
-        drawerItemsList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        drawerItemsList.setOnItemClickListener((parent, view, position, id) ->
         {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            switch (position)
             {
-                switch (position)
-                {
-                    case 0:
-                        if (Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME)) &&
-                                Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME)) &&
-                                !BuildConfig.DEBUG)
-                        {
-                            settingLoginDialog();
-                            closeDrawer();
-                        } else
-                        {
-                            changeFragment(SETTING_FRAGMENT_ID, false);
-                            closeDrawer();
-
-                        }
-                        break;
-                    case 1:
-                        changeFragment(DATA_TRANSFER_FRAGMENT_ID, false);
-                        closeDrawer();
-                        break;
-                    case 2:
-                        changeFragment(ABOUT_US_FRAGMENT_ID, false);
-                        closeDrawer();
-                        break;
-                    case 3:
-                        showVersionDialog();
-                        break;
-                    case 4:
-                        showDialogForExit();
-                        break;
-                }
-            }
-        });
-
-        menuIv.setOnClickListener(new View.OnClickListener()
-        {
-
-            @Override
-            public void onClick(View v)
-            {
-                if (isMenuEnabled)
-                {
-                    if (mDrawerLayout.isDrawerOpen(Gravity.LEFT))
+                case 0:
+                    if (Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME)) &&
+                            Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME)) &&
+                            !BuildConfig.DEBUG)
                     {
+                        settingLoginDialog();
                         closeDrawer();
                     } else
                     {
-                        openDrawer();
+                        changeFragment(SETTING_FRAGMENT_ID, false);
+                        closeDrawer();
+
                     }
+                    break;
+                case 1:
+                    changeFragment(DATA_TRANSFER_FRAGMENT_ID, false);
+                    closeDrawer();
+                    break;
+                case 2:
+                    changeFragment(ABOUT_US_FRAGMENT_ID, false);
+                    closeDrawer();
+                    break;
+                case 3:
+                    showVersionDialog();
+                    break;
+                case 4:
+                    showDialogForExit();
+                    break;
+            }
+        });
+
+        menuIv.setOnClickListener(v ->
+        {
+            if (isMenuEnabled)
+            {
+                if (mDrawerLayout.isDrawerOpen(Gravity.LEFT))
+                {
+                    closeDrawer();
+                } else
+                {
+                    openDrawer();
                 }
             }
         });
@@ -545,7 +508,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
                 BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
                 if (Empty.isNotEmpty(lastFragment))
                 {
-                    findFragment(lastFragment.getFragmentId());
+                    findFragment(lastFragment.getFragmentId(),new Bundle());
                 }
                 super.onBackPressed();
             } else
@@ -561,14 +524,10 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     protected void showDialogForExit()
     {
         DialogUtil.showConfirmDialog(this, getString(R.string.message_exit), getString(R.string.message_do_you_want_to_exit),
-                new DialogInterface.OnClickListener()
+                (dialog, which) ->
                 {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        dialog.dismiss();
-                        finish();
-                    }
+                    dialog.dismiss();
+                    finish();
                 });
     }
 
@@ -654,60 +613,36 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
     private void installNewVersion()
     {
-        DialogUtil.showCustomDialog(this, getString(R.string.message_update_title), getString(R.string.message_update_alert), "", new
-                DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i)
-                    {
-                        dialogInterface.dismiss();
-                        DialogUtil.showCustomDialog(MainActivity.this, getString(R.string.warning),
-                                getString(R.string.message_alert_send_data),
-                                "",
-                                new DialogInterface.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int i)
-                                    {
-                                        dialog.dismiss();
-                                        showProgressDialog(getString(R.string.message_sending_data));
-                                        new Thread(new Runnable()
-                                        {
-                                            @Override
-                                            public void run()
-                                            {
-                                                try
-                                                {
-                                                    dataTransferService.sendAllData(MainActivity.this);
-                                                } catch (Exception ex)
-                                                {
-                                                    ex.printStackTrace();
-                                                    ToastUtil.toastError(MainActivity.this, R.string.error_unknown_system_exception);
-                                                }
-                                            }
-                                        }).start();
-                                    }
-                                },
-                                "",
-                                new DialogInterface.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i)
-                                    {
-                                        doInstall();
-                                    }
-                                }, Constants.ICON_WARNING);
-                    }
-                }, "", new DialogInterface.OnClickListener()
+        DialogUtil.showCustomDialog(this, getString(R.string.message_update_title), getString(R.string.message_update_alert), "", (dialogInterface, i) ->
         {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
+            dialogInterface.dismiss();
+            DialogUtil.showCustomDialog(MainActivity.this, getString(R.string.warning),
+                    getString(R.string.message_alert_send_data),
+                    "",
+                    (dialog, i1) ->
+                    {
+                        dialog.dismiss();
+                        showProgressDialog(getString(R.string.message_sending_data));
+                        new Thread(() ->
+                        {
+                            try
+                            {
+                                dataTransferService.sendAllData(MainActivity.this);
+                            } catch (Exception ex)
+                            {
+                                ex.printStackTrace();
+                                ToastUtil.toastError(MainActivity.this, R.string.error_unknown_system_exception);
+                            }
+                        }).start();
+                    },
+                    "",
+                    (dialogInterface1, i12) -> doInstall(), Constants.ICON_WARNING);
+        }, "", (dialogInterface, i) ->
+        {
+            dialogInterface.dismiss();
+            if (PreferenceHelper.isForceExit())
             {
-                dialogInterface.dismiss();
-                if (PreferenceHelper.isForceExit())
-                {
-                    finish();
-                }
+                finish();
             }
         }, Constants.ICON_MESSAGE);
 
@@ -718,22 +653,11 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         Dialog dialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.error_gps_is_disabled))
 
-                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener()
+                .setNegativeButton(getString(R.string.no), (dialog1, which) -> finish())
+                .setPositiveButton(getString(R.string.yes), (dialog12, which) ->
                 {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        finish();
-                    }
-                })
-                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
                 })
                 .create();
         dialog.show();

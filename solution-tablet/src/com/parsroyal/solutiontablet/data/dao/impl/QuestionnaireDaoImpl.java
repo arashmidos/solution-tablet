@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
 import com.parsroyal.solutiontablet.data.entity.Questionnaire;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
-import com.parsroyal.solutiontablet.data.model.QuestionnaireListModel;
+import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.util.Empty;
 
@@ -112,7 +112,7 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
                 " COUNT(qs._id) "
         };
         String selection = " 1 = 1";
-        List<String> argList = new ArrayList<String>();
+        List<String> argList = new ArrayList<>();
 
         String constraint = questionnaireSo.getConstraint();
         if (Empty.isNotEmpty(constraint))

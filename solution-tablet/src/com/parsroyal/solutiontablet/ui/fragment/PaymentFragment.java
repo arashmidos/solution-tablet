@@ -29,7 +29,6 @@ import java.util.List;
  */
 public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentListAdapter>
 {
-
     public static final String TAG = PaymentFragment.class.getSimpleName();
     private MainActivity context;
     private PaymentService paymentService;

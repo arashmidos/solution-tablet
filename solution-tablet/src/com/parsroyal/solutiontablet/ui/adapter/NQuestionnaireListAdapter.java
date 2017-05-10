@@ -18,34 +18,31 @@ import com.parsroyal.solutiontablet.util.Empty;
 import java.util.List;
 
 /**
- * Created by Mahyar on 7/24/2015.
+ * Created by Arash on 2017-05-08
  */
-public class QuestionnaireListAdapter extends BaseListAdapter<QuestionnaireListModel>
+public class NQuestionnaireListAdapter extends BaseListAdapter<QuestionnaireListModel>
 {
-
     private Context context;
     private QuestionnaireSo questionnaireSo;
     private QuestionnaireService questionnaireService;
-    private boolean isGeneral;
 
-    public QuestionnaireListAdapter(MainActivity context, List<QuestionnaireListModel> dataModel, boolean isGeneral)
+    public NQuestionnaireListAdapter(MainActivity context, List<QuestionnaireListModel> dataModel)
     {
         super(context, dataModel);
         this.questionnaireService = new QuestionnaireServiceImpl(context);
         this.context = context;
-        this.isGeneral = isGeneral;
     }
 
     @Override
     protected List<QuestionnaireListModel> getFilteredData(CharSequence constraint)
     {
         questionnaireSo = new QuestionnaireSo();
-        questionnaireSo.setGeneral(isGeneral);
+        questionnaireSo.setAnonymous(true);
         if (constraint.length() != 0 && Empty.isNotEmpty(constraint.toString()))
         {
             questionnaireSo.setConstraint(constraint.toString());
         }
-        return questionnaireService.searchForQuestionnaires(questionnaireSo);
+        return questionnaireService.searchForAnonymousQuestionaire(questionnaireSo);
     }
 
     @Override
@@ -57,11 +54,11 @@ public class QuestionnaireListAdapter extends BaseListAdapter<QuestionnaireListM
 
             if (convertView == null)
             {
-                convertView = mLayoutInflater.inflate(R.layout.row_layout_questionnaire, null);
+                convertView = mLayoutInflater.inflate(R.layout.row_layout_nquestionnaire, null);
                 holder = new QuestionnaireViewHolder();
                 holder.rowLayout = (RelativeLayout) convertView.findViewById(R.id.rowLayout);
                 holder.descriptionTv = (TextView) convertView.findViewById(R.id.descriptionTv);
-                holder.qCountTv = (TextView) convertView.findViewById(R.id.qCountTv);
+                holder.dateTv = (TextView) convertView.findViewById(R.id.dateTv);
                 convertView.setTag(holder);
             } else
             {
@@ -70,10 +67,8 @@ public class QuestionnaireListAdapter extends BaseListAdapter<QuestionnaireListM
 
             final QuestionnaireListModel model = dataModel.get(position);
 
-            {
-                holder.descriptionTv.setText(model.getDescription());
-                holder.qCountTv.setText(String.valueOf(model.getQuestionsCount()));
-            }
+            holder.descriptionTv.setText(model.getDescription());
+            holder.dateTv.setText(String.valueOf(model.getDate()));
 
             return convertView;
         } catch (Exception e)
@@ -86,8 +81,7 @@ public class QuestionnaireListAdapter extends BaseListAdapter<QuestionnaireListM
     private class QuestionnaireViewHolder
     {
         private RelativeLayout rowLayout;
+        private TextView dateTv;
         private TextView descriptionTv;
-        private TextView qCountTv;
     }
-
 }

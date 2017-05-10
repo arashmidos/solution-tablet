@@ -116,4 +116,9 @@ public class VisitInformationDataTransferBizImpl extends AbstractDataTransferBiz
     {
         return success;
     }
+
+    public void resetCounter()
+    {
+        success = 0;
+    }
 }

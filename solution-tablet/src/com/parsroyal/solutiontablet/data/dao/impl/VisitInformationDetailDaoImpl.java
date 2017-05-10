@@ -116,11 +116,12 @@ public class VisitInformationDetailDaoImpl extends AbstractDao<VisitInformationD
     }
 
     @Override
-    public List<VisitInformationDetail> search(VisitInformationDetailType type, Long typeId)
+    public List<VisitInformationDetail> search(Long visitId, VisitInformationDetailType type, Long typeId)
     {
-        String selection = " " + VisitInformationDetail.COL_TYPE + " = ? and " + VisitInformationDetail.COL_TYPE_ID + " = ? ";
+        String selection = " " + VisitInformationDetail.COL_VISIT_INFORMATION_ID + " = ? and " +
+                VisitInformationDetail.COL_TYPE + " = ? and " + VisitInformationDetail.COL_TYPE_ID + " = ? ";
 
-        String[] args = {String.valueOf(type.getValue()), String.valueOf(typeId)};
+        String[] args = {String.valueOf(visitId), String.valueOf(type.getValue()), String.valueOf(typeId)};
 
         return retrieveAll(selection, args, null, null, null);
     }

@@ -46,14 +46,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_sort_by_alpha_24dp"
+                    app:srcCompat="@drawable/ic_sort_by_alpha_24dp"
                     android:visibility="gone"/>
 
                 <ImageButton
                     android:id="@+id/filter_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_filter_list_24dp"
+                    app:srcCompat="@drawable/ic_filter_list_24dp"
                     android:visibility="gone"/>
             </LinearLayout>
 

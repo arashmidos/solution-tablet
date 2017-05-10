@@ -1,8 +1,11 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.alirezaafkar.sundatepicker.DatePicker;
+import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
@@ -41,16 +46,22 @@ import com.parsroyal.solutiontablet.ui.adapter.QuestionListAdapter;
 import com.parsroyal.solutiontablet.ui.component.FlowLayout;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import static android.view.View.GONE;
 
 /**
  * Created by Mahyar on 7/25/2015.
  */
-public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListModel, QuestionListAdapter> implements CompoundButton.OnCheckedChangeListener
+public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListModel, QuestionListAdapter>
+        implements CompoundButton.OnCheckedChangeListener, DateSetListener
 {
     public static final String TAG = QuestionnaireDetailFragment.class.getSimpleName();
 
@@ -65,9 +76,12 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
     private Long visitId;
     private Customer customer;
     private EditText answerEt;
+    private EditText answerEt2;
     private FlowLayout buttonAnswerLayout;
     private LinearLayout textAnswerLayout;
     private CompoundButton userChoice;
+    private long amountValue;
+    private int parent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -80,23 +94,29 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             goodsService = new GoodsServiceImpl(mainActivity);
             visitService = new VisitServiceImpl(mainActivity);
 
-            questionnaireBackendId = getArguments().getLong("qnId");
-            visitId = getArguments().getLong(Constants.VISIT_ID);
-            customerId = getArguments().getLong(Constants.CUSTOMER_ID);
-            goodsBackendId = getArguments().getLong("goodsBackendId");
+            Bundle arguments = getArguments();
+            questionnaireBackendId = arguments.getLong(Constants.QUESTIONAIRE_ID);
+            visitId = arguments.getLong(Constants.VISIT_ID);
+            customerId = arguments.getLong(Constants.CUSTOMER_ID);
+            goodsBackendId = arguments.getLong(Constants.GOODS_BACKEND_ID);
+            parent = arguments.getInt(Constants.PARENT, 0);
 
             customer = customerService.getCustomerById(customerId);
 
             View view = super.onCreateView(inflater, container, savedInstanceState);
             buttonPanel.setVisibility(View.VISIBLE);
             Button canclButton = (Button) buttonPanel.findViewById(R.id.cancelBtn);
-            canclButton.setOnClickListener(new View.OnClickListener()
+            canclButton.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
+                if (Empty.isEmpty(customer))
                 {
-                    mainActivity.removeFragment(QuestionnaireDetailFragment.this);
+                    //It's anonymous questionaire
+                    //known bug, it he has not answered any quesiton, should remove the entire visit.
+                    // List<VisitInformationDetail> detailList = visitService.searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
+                    visitService.finishVisiting(visitId);
                 }
+                mainActivity.removeFragment(QuestionnaireDetailFragment.this);
+                mainActivity.changeSidebarItem(parent);
             });
             return view;
         } catch (Exception ex)
@@ -136,14 +156,10 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             return null;
         }
 
-        return new AdapterView.OnItemClickListener()
+        return (parent, view, position, id) ->
         {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                QuestionDto questionDto = questionnaireService.getQuestionDto(dataModel.get(position).getPrimaryKey(), visitId, goodsBackendId);
-                openQuestionDialog(questionDto);
-            }
+            QuestionDto questionDto = questionnaireService.getQuestionDto(dataModel.get(position).getPrimaryKey(), visitId, goodsBackendId);
+            openQuestionDialog(questionDto);
         };
     }
 
@@ -158,24 +174,8 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
         buttonAnswerLayout = (FlowLayout) view.findViewById(R.id.buttonAnswerLayout);
         textAnswerLayout = (LinearLayout) view.findViewById(R.id.textAnswerLayout);
         answerEt = (EditText) view.findViewById(R.id.answerEt);
-        switch (questionDto.getType())
-        {
-            case SIMPLE:
-                answerEt.setInputType(InputType.TYPE_TEXT_VARIATION_FILTER);
-                buttonAnswerLayout.setVisibility(View.GONE);
-                break;
-            case SIMPLE_NUMERIC:
-                answerEt.setInputType(InputType.TYPE_CLASS_NUMBER);
-                buttonAnswerLayout.setVisibility(View.GONE);
-                break;
-            case CHOICE_SINGLE:
-                textAnswerLayout.setVisibility(View.GONE);
-                createRadioButtons(questionDto.getqAnswers(), questionDto.getAnswer());
-                break;
-            case CHOICE_MULTIPLE:
-                textAnswerLayout.setVisibility(View.GONE);
-                createCheckBox(questionDto.getqAnswers(), questionDto.getAnswer());
-        }
+        answerEt2 = (EditText) view.findViewById(R.id.answerEt2);
+
         final Button prvBtn = (Button) view.findViewById(R.id.prvBtn);
         Button nextBtn = (Button) view.findViewById(R.id.nextBtn);
         Button cancelBtn = (Button) view.findViewById(R.id.cancelBtn);
@@ -185,111 +185,176 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
         questionTv.setText(questionDto.getQuestion());
         answerEt.setText(Empty.isEmpty(questionDto.getAnswer()) ? "" : questionDto.getAnswer().replaceAll("[*]", " - "));
 
+        switch (questionDto.getType())
+        {
+            case SIMPLE:
+                answerEt.setVisibility(View.VISIBLE);
+                answerEt.setInputType(InputType.TYPE_TEXT_VARIATION_FILTER);
+                buttonAnswerLayout.setVisibility(GONE);
+                answerEt2.setVisibility(GONE);
+                break;
+            case SIMPLE_NUMERIC:
+                answerEt.setVisibility(GONE);
+                answerEt2.setVisibility(View.VISIBLE);
+                String s = answerEt2.getText().toString();
+                if (Empty.isNotEmpty(s))
+                {
+                    answerEt2.setText(String.format(Locale.US, "%,d", Integer.parseInt(s)));
+                }
+                answerEt2.addTextChangedListener(new TextWatcher()
+                {
+                    boolean isEditing = false;
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after)
+                    {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count)
+                    {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s)
+                    {
+                        if (isEditing)
+                        {
+                            return;
+                        }
+                        isEditing = true;
+                        try
+                        {
+                            amountValue = Long.parseLong(NumberUtil.digitsToEnglish(s.toString().replaceAll(",", "")));
+                            String number = String.format(Locale.US, "%,d", amountValue);
+                            s.replace(0, s.length(), number);
+                        } catch (NumberFormatException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        isEditing = false;
+                    }
+                });
+                buttonAnswerLayout.setVisibility(GONE);
+                answerEt2.setText(Empty.isEmpty(questionDto.getAnswer()) ? "" : questionDto.getAnswer().replaceAll("[*]", " - "));
+                break;
+            case CHOICE_SINGLE:
+                textAnswerLayout.setVisibility(GONE);
+                createRadioButtons(questionDto.getqAnswers(), questionDto.getAnswer());
+                break;
+            case CHOICE_MULTIPLE:
+                textAnswerLayout.setVisibility(GONE);
+                createCheckBox(questionDto.getqAnswers(), questionDto.getAnswer());
+                break;
+            case DATE:
+                answerEt.setVisibility(View.VISIBLE);
+                answerEt2.setVisibility(GONE);
+                answerEt.setFocusable(false);
+                answerEt.setHint(Empty.isEmpty(questionDto.getAnswer()) ? "انتخاب تاریخ..." : questionDto.getAnswer());
+                answerEt.setText("");
+                answerEt.setOnClickListener(v ->
+                {
+                    DatePicker.Builder builder = new DatePicker.Builder().id(1);
+                    if (Empty.isNotEmpty(questionDto.getAnswer()))
+                    {
+                        String[] date = questionDto.getAnswer().split("/");
+                        builder.date(Integer.parseInt(date[2]),
+                                Integer.parseInt(date[1]),
+                                Integer.parseInt("13" + date[0]));
+                    }
+                    builder.build(QuestionnaireDetailFragment.this).show(getFragmentManager(), "");
+                });
+                buttonAnswerLayout.setVisibility(GONE);
+        }
+
         alertBuilder.setView(view);
 
         final AlertDialog alert = alertBuilder.create();
-        alert.getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-        prvBtn.setOnClickListener(new View.OnClickListener()
+        prvBtn.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
+            try
             {
-                try
+                String answer = getAnswer(questionDto);
+                if (Empty.isNotEmpty(answer))
                 {
-                    String answer = getAnswer(questionDto);
-                    if (Empty.isNotEmpty(answer))
-                    {
-                        questionDto.setAnswerId(saveAnswer(questionDto, answer));
-                        setVisitDetail();
-                    }
-                    adapter.setDataModel(dataModel);
-                    adapter.notifyDataSetChanged();
-                    adapter.notifyDataSetInvalidated();
-                    QuestionDto prvQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(), goodsBackendId, false);
-                    if (Empty.isNotEmpty(prvQuestionDto))
-                    {
-                        alert.dismiss();
-                        openQuestionDialog(prvQuestionDto);
-                    }
-
-                } catch (Exception ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
+                    questionDto.setAnswerId(saveAnswer(questionDto, answer));
+                    setVisitDetail();
                 }
+                adapter.setDataModel(dataModel);
+                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetInvalidated();
+                QuestionDto prvQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(), goodsBackendId, false);
+                if (Empty.isNotEmpty(prvQuestionDto))
+                {
+                    alert.dismiss();
+                    openQuestionDialog(prvQuestionDto);
+                }
+
+            } catch (Exception ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
             }
         });
 
-        nextBtn.setOnClickListener(new View.OnClickListener()
+        nextBtn.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
+            try
             {
-                try
+                String answer = getAnswer(questionDto);
+                if (Empty.isNotEmpty(answer))
                 {
-                    String answer = getAnswer(questionDto);
-                    if (Empty.isNotEmpty(answer))
-                    {
-                        questionDto.setAnswerId(saveAnswer(questionDto, answer));
-                        setVisitDetail();
-                    }
-                    QuestionDto nextQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(), goodsBackendId, true);
-                    adapter.setDataModel(dataModel);
-                    adapter.notifyDataSetChanged();
-                    adapter.notifyDataSetInvalidated();
-                    if (Empty.isNotEmpty(nextQuestionDto))
-                    {
-                        alert.dismiss();
-                        openQuestionDialog(nextQuestionDto);
-                    }
-                } catch (Exception ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
+                    questionDto.setAnswerId(saveAnswer(questionDto, answer));
+                    setVisitDetail();
                 }
+                QuestionDto nextQuestionDto = questionnaireService.getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(), goodsBackendId, true);
+                adapter.setDataModel(dataModel);
+                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetInvalidated();
+                if (Empty.isNotEmpty(nextQuestionDto))
+                {
+                    alert.dismiss();
+                    openQuestionDialog(nextQuestionDto);
+                }
+            } catch (Exception ex)
+            {
+                Log.e(TAG, ex.getMessage(), ex);
+                ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
             }
         });
 
-        cancelBtn.setOnClickListener(new View.OnClickListener()
+        cancelBtn.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
+            dataModel = getDataModel();
+            adapter.setDataModel(dataModel);
+            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetInvalidated();
+            alert.dismiss();
+        });
+
+        saveBtn.setOnClickListener(v ->
+        {
+            try
             {
+                String answer = getAnswer(questionDto);
+                Long answerId = saveAnswer(questionDto, answer);
+                if (Empty.isNotEmpty(answer))
+                {
+                    setVisitDetail();
+                }
+                questionDto.setAnswerId(answerId);
                 dataModel = getDataModel();
                 adapter.setDataModel(dataModel);
                 adapter.notifyDataSetChanged();
                 adapter.notifyDataSetInvalidated();
-                alert.dismiss();
-            }
-        });
-
-        saveBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
+            } catch (Exception ex)
             {
-                try
-                {
-                    String answer = getAnswer(questionDto);
-                    Long answerId = saveAnswer(questionDto, answer);
-                    if (Empty.isNotEmpty(answer))
-                    {
-                        setVisitDetail();
-                    }
-                    questionDto.setAnswerId(answerId);
-                    dataModel = getDataModel();
-                    adapter.setDataModel(dataModel);
-                    adapter.notifyDataSetChanged();
-                    adapter.notifyDataSetInvalidated();
-                } catch (Exception ex)
-                {
-                    Log.e(TAG, ex.getMessage(), ex);
-                    ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-                }
-                alert.dismiss();
+                Log.e(TAG, ex.getMessage(), ex);
+                ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
             }
+            alert.dismiss();
         });
 
         alert.show();
@@ -297,7 +362,7 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
 
     private void setVisitDetail()
     {
-        List<VisitInformationDetail> detailList = visitService.searchVisitDetail(VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
+        List<VisitInformationDetail> detailList = visitService.searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
         //If we have filled this questionary before
         if (detailList.size() > 0)
         {
@@ -340,8 +405,10 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
         switch (questionDto.getType())
         {
             case SIMPLE:
-            case SIMPLE_NUMERIC:
                 answer = answerEt.getText().toString();
+                break;
+            case SIMPLE_NUMERIC:
+                answer = String.valueOf(amountValue);
                 break;
             case CHOICE_SINGLE:
                 answer = userChoice == null ? "" : userChoice.getText().toString();
@@ -359,6 +426,9 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
                 {
                     answer = answer.substring(0, answer.length() - 1);
                 }
+                break;
+            case DATE:
+                answer = answerEt.getHint().toString();
         }
         return answer;
     }
@@ -393,7 +463,10 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             qAnswer.setId(questionDto.getAnswerId());
             qAnswer.setAnswer(answer);
             qAnswer.setDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
-            qAnswer.setCustomerBackendId(customer.getBackendId() == 0 ? customerId : customer.getBackendId());
+            if (Empty.isNotEmpty(customer))
+            {
+                qAnswer.setCustomerBackendId(customer.getBackendId() == 0 ? customerId : customer.getBackendId());
+            }
             if (Empty.isNotEmpty(goodsBackendId))
             {
                 qAnswer.setGoodsBackendId(goodsBackendId);
@@ -443,5 +516,12 @@ public class QuestionnaireDetailFragment extends BaseListFragment<QuestionListMo
             buttonView.setChecked(true);
             userChoice = buttonView;
         }
+    }
+
+    @Override
+    public void onDateSet(int id, @Nullable Calendar calendar, int day, int month, int year)
+    {
+        int tempYear = year % 100;
+        answerEt.setHint(tempYear + "/" + month + "/" + day);
     }
 }

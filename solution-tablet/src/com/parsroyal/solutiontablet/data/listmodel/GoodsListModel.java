@@ -1,4 +1,6 @@
-package com.parsroyal.solutiontablet.data.model;
+package com.parsroyal.solutiontablet.data.listmodel;
+
+import com.parsroyal.solutiontablet.data.listmodel.BaseListModel;
 
 /**
  * Created by Mahyar on 7/29/2015.

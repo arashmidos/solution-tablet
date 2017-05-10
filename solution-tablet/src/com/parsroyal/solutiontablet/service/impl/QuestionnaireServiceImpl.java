@@ -11,7 +11,7 @@ import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
-import com.parsroyal.solutiontablet.data.model.QuestionnaireListModel;
+import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
@@ -25,7 +25,6 @@ import java.util.List;
  */
 public class QuestionnaireServiceImpl implements QuestionnaireService
 {
-
     private Context context;
     private QuestionnaireDao questionnaireDao;
     private QuestionDao questionDao;
@@ -89,5 +88,11 @@ public class QuestionnaireServiceImpl implements QuestionnaireService
     public QAnswer getAnswerById(Long id)
     {
         return qAnswerDao.retrieve(id);
+    }
+
+    @Override
+    public List<QuestionnaireListModel> searchForAnonymousQuestionaire(QuestionnaireSo questionnaireSo)
+    {
+        return questionDao.searchForAnonymousQuestions(questionnaireSo);
     }
 }

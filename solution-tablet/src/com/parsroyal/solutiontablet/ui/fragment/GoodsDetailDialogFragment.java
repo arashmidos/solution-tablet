@@ -122,37 +122,26 @@ public class GoodsDetailDialogFragment extends DialogFragment
             }
         }
 
-        confirmBtn.setOnClickListener(new View.OnClickListener()
+        confirmBtn.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
+            if (Empty.isNotEmpty(onClickListener))
             {
-                if (Empty.isNotEmpty(onClickListener))
+                if (validate())
                 {
-                    if (validate())
+                    Double count1 = Double.valueOf(NumberUtil.digitsToEnglish(countTxt.getText().toString()));
+                    LabelValue selectedUnitLv = (LabelValue) goodsUnitSp.getSelectedItem();
+                    Long selectedUnit1 = selectedUnitLv.getValue();
+                    if (selectedUnit1.equals(2L))
                     {
-                        Double count = Double.valueOf(NumberUtil.digitsToEnglish(countTxt.getText().toString()));
-                        LabelValue selectedUnitLv = (LabelValue) goodsUnitSp.getSelectedItem();
-                        Long selectedUnit = selectedUnitLv.getValue();
-                        if (selectedUnit.equals(2L))
-                        {
-                            count *= Double.valueOf(selectedGoods.getUnit1Count());
-                        }
-                        onClickListener.onConfirmBtnClicked(count, selectedUnit);
-                        GoodsDetailDialogFragment.this.dismiss();
+                        count1 *= Double.valueOf(selectedGoods.getUnit1Count());
                     }
+                    onClickListener.onConfirmBtnClicked(count1, selectedUnit1);
+                    GoodsDetailDialogFragment.this.dismiss();
                 }
             }
         });
 
-        cancelBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                GoodsDetailDialogFragment.this.dismiss();
-            }
-        });
+        cancelBtn.setOnClickListener(v -> GoodsDetailDialogFragment.this.dismiss());
 
         this.getDialog().setTitle(context.getString(R.string.message_please_enter_count));
 

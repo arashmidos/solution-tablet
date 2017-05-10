@@ -62,4 +62,10 @@ public class KeyValueDaoImpl implements KeyValueDao
     {
         throw new RuntimeException("Not implemented yet");
     }
+
+    @Override
+    public void deleteAll(String column, String condition)
+    {
+        throw new RuntimeException("Not implemented yet");
+    }
 }

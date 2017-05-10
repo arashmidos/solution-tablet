@@ -7,6 +7,18 @@ public class QuestionnaireSo extends BaseSO
 {
     private boolean general;
 
+    public boolean isAnonymous()
+    {
+        return anonymous;
+    }
+
+    public void setAnonymous(boolean anonymous)
+    {
+        this.anonymous = anonymous;
+    }
+
+    private boolean anonymous;
+
     public QuestionnaireSo(boolean isGeneral)
     {
         super();

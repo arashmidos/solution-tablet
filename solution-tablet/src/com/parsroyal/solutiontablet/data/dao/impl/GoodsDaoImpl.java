@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.data.dao.GoodsDao;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
-import com.parsroyal.solutiontablet.data.model.GoodsListModel;
+import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.util.Empty;
 
