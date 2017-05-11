@@ -168,6 +168,7 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
     {
         return (parent, view, position, id) ->
         {
+            searchTxt.setText("");
             CustomerListModel customerListModel = (CustomerListModel) adapter.getItem(position);
             Bundle bundle = new Bundle();
             bundle.putLong("customerId", customerListModel.getPrimaryKey());
