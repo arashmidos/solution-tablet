@@ -292,7 +292,7 @@
   <string name="location_set">ثبت شد!</string>
   <string name="tracking_no">شماره پیگیری</string>
   <string name="cheque_date">تاریخ چک:</string>
-  <string name="cheque_date_sample">95/5/31</string>
+  <string name="cheque_date_sample">95/05/31</string>
   <string name="cheque_number">شماره چک:</string>
   <string name="cheque_account_number">شماره حساب:</string>
   <string name="cheque_branch">شعبه:</string>
