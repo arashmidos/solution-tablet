@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,7 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.alirezaafkar.sundatepicker.DatePicker;
-import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -44,14 +42,11 @@ import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Arash on 2016-08-13.
- */
-public class PaymentDetailFragment extends BaseFragment implements DateSetListener {
+
+public class PaymentDetailFragment extends BaseFragment {
 
   public static final String TAG = PaymentDetailFragment.class.getSimpleName();
 
@@ -149,7 +144,11 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
                 Integer.parseInt(date[1]),
                 Integer.parseInt("13" + date[0]));
           }
-          builder.build(PaymentDetailFragment.this).show(getFragmentManager(), "");
+          builder.build((id, calendar, day, month, year) -> {
+            chequeDate.setHint(
+                String.format(Locale.ENGLISH, "%02d/%02d/%02d", year % 100, month, day));
+            dateModified = true;
+          }).show(getFragmentManager(), "");
         }
       });
     }
@@ -373,12 +372,5 @@ public class PaymentDetailFragment extends BaseFragment implements DateSetListen
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
     }
-  }
-
-  @Override
-  public void onDateSet(int id, @Nullable Calendar calendar, int day, int month, int year) {
-    int tempYear = year % 100;
-    chequeDate.setHint(tempYear + "/" + month + "/" + day);
-    dateModified = true;
   }
 }
