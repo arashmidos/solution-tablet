@@ -4,26 +4,25 @@ import com.parsroyal.solutiontablet.data.entity.City;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Province;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
-
 import java.util.List;
 
 /**
  * Created by Mahyar on 6/14/2015.
  */
-public interface BaseInfoService
-{
-    KeyValue getKeyValue(String key);
+public interface BaseInfoService {
 
-    List<Province> getAllProvinces();
+  KeyValue getKeyValue(String key);
 
-    List<City> getAllCities();
+  List<Province> getAllProvinces();
 
-    List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long id);
+  List<City> getAllCities();
 
-    List<LabelValue> getAllProvincesLabelValues();
+  List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long id);
 
-    List<LabelValue> getAllCitiesLabelsValues(Long provinceId);
+  List<LabelValue> getAllProvincesLabelValues();
 
-    List<LabelValue> getAllPaymentType();
+  List<LabelValue> getAllCitiesLabelsValues(Long provinceId);
+
+  List<LabelValue> getAllPaymentType();
 
 }

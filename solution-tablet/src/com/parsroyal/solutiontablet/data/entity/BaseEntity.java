@@ -5,33 +5,29 @@ import java.io.Serializable;
 /**
  * Created by Mahyar on 6/4/2015.
  */
-public abstract class BaseEntity<PK extends Serializable> implements Serializable
-{
-    public static final String COL_CREATE_DATE_TIME = "CREATE_DATE_TIME";
-    public static final String COL_UPDATE_DATE_TIME = "UPDATE_DATE_TIME";
+public abstract class BaseEntity<PK extends Serializable> implements Serializable {
 
-    protected String createDateTime;
-    protected String updateDateTime;
+  public static final String COL_CREATE_DATE_TIME = "CREATE_DATE_TIME";
+  public static final String COL_UPDATE_DATE_TIME = "UPDATE_DATE_TIME";
 
-    public String getCreateDateTime()
-    {
-        return createDateTime;
-    }
+  protected String createDateTime;
+  protected String updateDateTime;
 
-    public void setCreateDateTime(String createDateTime)
-    {
-        this.createDateTime = createDateTime;
-    }
+  public String getCreateDateTime() {
+    return createDateTime;
+  }
 
-    public String getUpdateDateTime()
-    {
-        return updateDateTime;
-    }
+  public void setCreateDateTime(String createDateTime) {
+    this.createDateTime = createDateTime;
+  }
 
-    public void setUpdateDateTime(String updateDateTime)
-    {
-        this.updateDateTime = updateDateTime;
-    }
+  public String getUpdateDateTime() {
+    return updateDateTime;
+  }
 
-    public abstract PK getPrimaryKey();
+  public void setUpdateDateTime(String updateDateTime) {
+    this.updateDateTime = updateDateTime;
+  }
+
+  public abstract PK getPrimaryKey();
 }

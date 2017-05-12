@@ -7,35 +7,35 @@ import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionModel;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
-
 import java.util.List;
 
 /**
  * Created by Mahyar on 6/19/2015.
  */
-public interface CustomerDao extends BaseDao<Customer, Long>
-{
-    List<Customer> retrieveAllNewCustomersForSend();
+public interface CustomerDao extends BaseDao<Customer, Long> {
 
-    List<Customer> retrieveAllNewCustomers();
+  List<Customer> retrieveAllNewCustomersForSend();
 
-    List<CustomerLocationDto> retrieveAllUpdatedCustomerLocationDto();
+  List<Customer> retrieveAllNewCustomers();
 
-    void deleteAllCustomersRelatedToVisitLines();
+  List<CustomerLocationDto> retrieveAllUpdatedCustomerLocationDto();
 
-    List<Customer> retrieveAllCustomersByVisitLineBackendId(Long visitLineId);
+  void deleteAllCustomersRelatedToVisitLines();
 
-    List<CustomerListModel> getAllCustomersListModelByVisitLineWithConstraint(Long visitLineId, String constraint);
+  List<Customer> retrieveAllCustomersByVisitLineBackendId(Long visitLineId);
 
-    CustomerDto getCustomerDtoById(Long customerId);
+  List<CustomerListModel> getAllCustomersListModelByVisitLineWithConstraint(Long visitLineId,
+      String constraint);
 
-    List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
+  CustomerDto getCustomerDtoById(Long customerId);
 
-    List<Customer> getCustomersVisitLineBackendId(Long backendId);
+  List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
 
-    Customer retrieveByBackendId(Long customerBackendId);
+  List<Customer> getCustomersVisitLineBackendId(Long backendId);
 
-    void updateAllSentCustomer();
+  Customer retrieveByBackendId(Long customerBackendId);
 
-    List<PositionModel> getAllCusromerPostionModel(NCustomerSO nCustomerSO);
+  void updateAllSentCustomer();
+
+  List<PositionModel> getAllCusromerPostionModel(NCustomerSO nCustomerSO);
 }

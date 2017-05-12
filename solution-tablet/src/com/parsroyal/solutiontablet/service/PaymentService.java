@@ -3,29 +3,29 @@ package com.parsroyal.solutiontablet.service;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.data.searchobject.PaymentSO;
-
 import java.util.List;
 
 /**
  * Created by Arash on 08/19/2016
  */
-public interface PaymentService
-{
-    Payment getPaymentById(Long paymentID);
+public interface PaymentService {
 
-    long savePayment(Payment payment);
+  Payment getPaymentById(Long paymentID);
 
-    void updatePayment(Payment payment);
+  long savePayment(Payment payment);
 
-    List<Payment> getAllPaymentsByStatus(Long status);
+  void updatePayment(Payment payment);
 
-    List<Payment> getAllPaymentByCustomerID(Long customerId);
+  List<Payment> getAllPaymentsByStatus(Long status);
 
-    List<PaymentListModel> getAllPaymentListModelByCustomerIdWithConstraint(Long customerId, String constraint);
+  List<Payment> getAllPaymentByCustomerID(Long customerId);
 
-    List<PaymentListModel> getAllPaymentsListModelByCustomerBackendId(Long customerBackendId);
+  List<PaymentListModel> getAllPaymentListModelByCustomerIdWithConstraint(Long customerId,
+      String constraint);
 
-    List<PaymentListModel> searchForPayments(PaymentSO paymentSO);
+  List<PaymentListModel> getAllPaymentsListModelByCustomerBackendId(Long customerBackendId);
 
-    void clearAllSentPayment();
+  List<PaymentListModel> searchForPayments(PaymentSO paymentSO);
+
+  void clearAllSentPayment();
 }

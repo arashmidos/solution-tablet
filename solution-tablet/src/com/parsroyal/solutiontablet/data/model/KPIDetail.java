@@ -3,39 +3,33 @@ package com.parsroyal.solutiontablet.data.model;
 /**
  * Created by mahyarsefidi1 on 9/20/16.
  */
-public class KPIDetail extends BaseModel
-{
-    private String code;
-    private String description;
-    private Double value;
+public class KPIDetail extends BaseModel {
 
-    public String getCode()
-    {
-        return code;
-    }
+  private String code;
+  private String description;
+  private Double value;
 
-    public void setCode(String code)
-    {
-        this.code = code;
-    }
+  public String getCode() {
+    return code;
+  }
 
-    public String getDescription()
-    {
-        return description;
-    }
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public Double getValue()
-    {
-        return value;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setValue(Double value)
-    {
-        this.value = value;
-    }
+  public Double getValue() {
+    return value;
+  }
+
+  public void setValue(Double value) {
+    this.value = value;
+  }
 }

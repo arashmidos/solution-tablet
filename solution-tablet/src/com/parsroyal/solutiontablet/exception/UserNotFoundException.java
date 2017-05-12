@@ -3,6 +3,6 @@ package com.parsroyal.solutiontablet.exception;
 /**
  * Created by Mahyar on 6/9/2015.
  */
-public class UserNotFoundException extends BusinessException
-{
+public class UserNotFoundException extends BusinessException {
+
 }

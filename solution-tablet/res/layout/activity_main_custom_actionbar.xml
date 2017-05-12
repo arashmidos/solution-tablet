@@ -1,73 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/colorPrimary">
 
-    <ImageView
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/parsroyallogo"/>
+  <ImageView
+    android:id="@+id/imageButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentTop="true"
+    android:background="@drawable/parsroyallogo"/>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="115dp"
-        android:layout_marginRight="115dp"
-        android:layout_toLeftOf="@+id/imageButton"
-        android:layout_toStartOf="@+id/imageButton"
-        android:background="@drawable/vizitor"/>
+  <ImageView
+    android:id="@+id/imageView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_marginEnd="115dp"
+    android:layout_marginRight="115dp"
+    android:layout_toLeftOf="@+id/imageButton"
+    android:layout_toStartOf="@+id/imageButton"
+    android:background="@drawable/vizitor"/>
 
-    <TextView
-        android:id="@+id/userFullNameTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="12dp"
-        android:layout_toLeftOf="@+id/imageView"
-        android:layout_toStartOf="@+id/imageView"
-        android:text=" -- "
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#ffffff"/>
+  <TextView
+    android:id="@+id/userFullNameTxt"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="20dp"
+    android:layout_marginTop="12dp"
+    android:layout_toLeftOf="@+id/imageView"
+    android:layout_toStartOf="@+id/imageView"
+    android:text=" -- "
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textColor="#ffffff"/>
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="80dp"
-        android:layout_toLeftOf="@+id/userFullNameTxt"
-        android:layout_toStartOf="@+id/userFullNameTxt"
-        android:background="@drawable/company"/>
+  <ImageView
+    android:id="@+id/imageView2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_marginEnd="32dp"
+    android:layout_marginRight="80dp"
+    android:layout_toLeftOf="@+id/userFullNameTxt"
+    android:layout_toStartOf="@+id/userFullNameTxt"
+    android:background="@drawable/company"/>
 
-    <TextView
-        android:id="@+id/companyNameTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="43dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="12dp"
-        android:layout_toLeftOf="@+id/imageView2"
-        android:layout_toStartOf="@+id/imageView2"
-        android:text=" -- "
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#ffffff"/>
+  <TextView
+    android:id="@+id/companyNameTxt"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="43dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="12dp"
+    android:layout_toLeftOf="@+id/imageView2"
+    android:layout_toStartOf="@+id/imageView2"
+    android:text=" -- "
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textColor="#ffffff"/>
 
-    <ImageView
-        android:id="@+id/menuIv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/menu"/>
+  <ImageView
+    android:id="@+id/menuIv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignTop="@+id/imageView2"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/menu"/>
 </RelativeLayout>

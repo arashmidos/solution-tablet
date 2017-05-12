@@ -5,50 +5,42 @@ import com.parsroyal.solutiontablet.constants.QuestionType;
 /**
  * Created by Mahyar on 7/25/2015.
  */
-public class QuestionListModel extends BaseListModel
-{
-    private String question;
-    private String answer;
-    private Integer qOrder;
-    private QuestionType type;
+public class QuestionListModel extends BaseListModel {
 
-    public String getQuestion()
-    {
-        return question;
-    }
+  private String question;
+  private String answer;
+  private Integer qOrder;
+  private QuestionType type;
 
-    public void setQuestion(String question)
-    {
-        this.question = question;
-    }
+  public String getQuestion() {
+    return question;
+  }
 
-    public String getAnswer()
-    {
-        return answer;
-    }
+  public void setQuestion(String question) {
+    this.question = question;
+  }
 
-    public void setAnswer(String answer)
-    {
-        this.answer = answer;
-    }
+  public String getAnswer() {
+    return answer;
+  }
 
-    public Integer getqOrder()
-    {
-        return qOrder;
-    }
+  public void setAnswer(String answer) {
+    this.answer = answer;
+  }
 
-    public void setqOrder(Integer qOrder)
-    {
-        this.qOrder = qOrder;
-    }
+  public Integer getqOrder() {
+    return qOrder;
+  }
 
-    public QuestionType getType()
-    {
-        return type;
-    }
+  public void setqOrder(Integer qOrder) {
+    this.qOrder = qOrder;
+  }
 
-    public void setType(QuestionType type)
-    {
-        this.type = type;
-    }
+  public QuestionType getType() {
+    return type;
+  }
+
+  public void setType(QuestionType type) {
+    this.type = type;
+  }
 }

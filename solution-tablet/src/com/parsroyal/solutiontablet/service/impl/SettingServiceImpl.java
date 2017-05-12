@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
-
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UserInformationDataTransferBizImpl;
@@ -19,65 +18,57 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 /**
  * Created by Mahyar on 6/4/2015.
  */
-public class SettingServiceImpl implements SettingService
-{
+public class SettingServiceImpl implements SettingService {
 
-    private Context context;
-    private KeyValueBiz keyValueBiz;
-    private KeyValueDao keyValueDao;
+  private Context context;
+  private KeyValueBiz keyValueBiz;
+  private KeyValueDao keyValueDao;
 
-    private KeyValue serverAddress1;
-    private KeyValue serverAddress2;
-    private KeyValue username;
-    private KeyValue password;
+  private KeyValue serverAddress1;
+  private KeyValue serverAddress2;
+  private KeyValue username;
+  private KeyValue password;
 
-    public SettingServiceImpl(Context context)
-    {
-        this.context = context;
-        this.keyValueBiz = new KeyValueBizImpl(context);
-        this.keyValueDao = new KeyValueDaoImpl(context);
+  public SettingServiceImpl(Context context) {
+    this.context = context;
+    this.keyValueBiz = new KeyValueBizImpl(context);
+    this.keyValueDao = new KeyValueDaoImpl(context);
+  }
+
+  @Override
+  public void saveSetting(String settingKey, String settingValue) {
+    keyValueBiz.save(new KeyValue(settingKey, settingValue));
+  }
+
+  @Override
+  public String getSettingValue(String key) {
+    KeyValue keyValue = keyValueBiz.findByKey(key);
+    if (Empty.isNotEmpty(keyValue)) {
+      return keyValue.getValue();
+    }
+    return null;
+  }
+
+  @Override
+  public void getUserInformation(ResultObserver observer) {
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    serverAddress2 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
+    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
+    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
+    if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2)) {
+      throw new InvalidServerAddressException();
     }
 
-    @Override
-    public void saveSetting(String settingKey, String settingValue)
-    {
-        keyValueBiz.save(new KeyValue(settingKey, settingValue));
+    if (Empty.isEmpty(username)) {
+      throw new UsernameNotProvidedForConnectingToServerException();
     }
 
-    @Override
-    public String getSettingValue(String key)
-    {
-        KeyValue keyValue = keyValueBiz.findByKey(key);
-        if (Empty.isNotEmpty(keyValue))
-        {
-            return keyValue.getValue();
-        }
-        return null;
+    if (Empty.isEmpty(password)) {
+      throw new PasswordNotProvidedForConnectingToServerException();
     }
 
-    @Override
-    public void getUserInformation(ResultObserver observer)
-    {
-        serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-        serverAddress2 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
-        username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
-        password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
-        if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2))
-        {
-            throw new InvalidServerAddressException();
-        }
-
-        if (Empty.isEmpty(username))
-        {
-            throw new UsernameNotProvidedForConnectingToServerException();
-        }
-
-        if (Empty.isEmpty(password))
-        {
-            throw new PasswordNotProvidedForConnectingToServerException();
-        }
-
-        UserInformationDataTransferBizImpl userInformationBiz = new UserInformationDataTransferBizImpl(context, observer);
-        userInformationBiz.exchangeData();
-    }
+    UserInformationDataTransferBizImpl userInformationBiz = new UserInformationDataTransferBizImpl(
+        context, observer);
+    userInformationBiz.exchangeData();
+  }
 }

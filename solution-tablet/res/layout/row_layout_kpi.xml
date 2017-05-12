@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:gravity="left"
+  android:orientation="horizontal"
+  android:id="@+id/kpi_row_layout">
+
+  <TextView
+    android:id="@+id/codeTv"
+    android:layout_width="100dp"
     android:layout_height="wrap_content"
     android:gravity="left"
-    android:orientation="horizontal"
-    android:id="@+id/kpi_row_layout">
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:text="کد"
+    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-    <TextView
-        android:id="@+id/codeTv"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="کد"
-        android:textAppearance="?android:attr/textAppearanceSmall"/>
+  <TextView
 
-    <TextView
+    android:id="@+id/descriptionTv"
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="wrap_content"
+    android:gravity="left"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:text="توضیحات"
+    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-        android:id="@+id/descriptionTv"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="توضیحات"
-        android:textAppearance="?android:attr/textAppearanceSmall"/>
-
-    <TextView
-        android:id="@+id/valueTv"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="مقدار"
-        android:textAppearance="?android:attr/textAppearanceSmall"/>
+  <TextView
+    android:id="@+id/valueTv"
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="wrap_content"
+    android:gravity="left"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:text="مقدار"
+    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 </LinearLayout>

@@ -1,177 +1,146 @@
 package com.parsroyal.solutiontablet.data.model;
 
 import com.parsroyal.solutiontablet.data.entity.Customer;
-
 import java.util.List;
 
 /**
  * Created by Mahyar on 8/27/2015.
  */
-public class SaleOrderDto extends BaseModel
-{
-    private Long id;
-    private Long number;
-    private String date;
-    private Long amount;
-    private Long paymentTypeBackendId;
-    private Long salesmanId;
-    private Long customerBackendId;
-    private String description;
-    private Long status;
-    private Long backendId;
-    private Long invoiceBackendId;
-    private String createDateTime;
-    private String updateDateTime;
-    private List<SaleOrderItemDto> orderItems;
-    private Customer customer;
+public class SaleOrderDto extends BaseModel {
 
-    public Long getId()
-    {
-        return id;
-    }
+  private Long id;
+  private Long number;
+  private String date;
+  private Long amount;
+  private Long paymentTypeBackendId;
+  private Long salesmanId;
+  private Long customerBackendId;
+  private String description;
+  private Long status;
+  private Long backendId;
+  private Long invoiceBackendId;
+  private String createDateTime;
+  private String updateDateTime;
+  private List<SaleOrderItemDto> orderItems;
+  private Customer customer;
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Long getNumber()
-    {
-        return number;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setNumber(Long number)
-    {
-        this.number = number;
-    }
+  public Long getNumber() {
+    return number;
+  }
 
-    public String getDate()
-    {
-        return date;
-    }
+  public void setNumber(Long number) {
+    this.number = number;
+  }
 
-    public void setDate(String date)
-    {
-        this.date = date;
-    }
+  public String getDate() {
+    return date;
+  }
 
-    public Long getAmount()
-    {
-        return amount;
-    }
+  public void setDate(String date) {
+    this.date = date;
+  }
 
-    public void setAmount(Long amount)
-    {
-        this.amount = amount;
-    }
+  public Long getAmount() {
+    return amount;
+  }
 
-    public Long getPaymentTypeBackendId()
-    {
-        return paymentTypeBackendId;
-    }
+  public void setAmount(Long amount) {
+    this.amount = amount;
+  }
 
-    public void setPaymentTypeBackendId(Long paymentTypeBackendId)
-    {
-        this.paymentTypeBackendId = paymentTypeBackendId;
-    }
+  public Long getPaymentTypeBackendId() {
+    return paymentTypeBackendId;
+  }
 
-    public Long getSalesmanId()
-    {
-        return salesmanId;
-    }
+  public void setPaymentTypeBackendId(Long paymentTypeBackendId) {
+    this.paymentTypeBackendId = paymentTypeBackendId;
+  }
 
-    public void setSalesmanId(Long salesmanId)
-    {
-        this.salesmanId = salesmanId;
-    }
+  public Long getSalesmanId() {
+    return salesmanId;
+  }
 
-    public Long getCustomerBackendId()
-    {
-        return customerBackendId;
-    }
+  public void setSalesmanId(Long salesmanId) {
+    this.salesmanId = salesmanId;
+  }
 
-    public void setCustomerBackendId(Long customerBackendId)
-    {
-        this.customerBackendId = customerBackendId;
-    }
+  public Long getCustomerBackendId() {
+    return customerBackendId;
+  }
 
-    public String getDescription()
-    {
-        return description;
-    }
+  public void setCustomerBackendId(Long customerBackendId) {
+    this.customerBackendId = customerBackendId;
+  }
 
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public Long getStatus()
-    {
-        return status;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setStatus(Long status)
-    {
-        this.status = status;
-    }
+  public Long getStatus() {
+    return status;
+  }
 
-    public Long getBackendId()
-    {
-        return backendId;
-    }
+  public void setStatus(Long status) {
+    this.status = status;
+  }
 
-    public void setBackendId(Long backendId)
-    {
-        this.backendId = backendId;
-    }
+  public Long getBackendId() {
+    return backendId;
+  }
 
-    public Long getInvoiceBackendId()
-    {
-        return invoiceBackendId;
-    }
+  public void setBackendId(Long backendId) {
+    this.backendId = backendId;
+  }
 
-    public void setInvoiceBackendId(Long invoiceBackendId)
-    {
-        this.invoiceBackendId = invoiceBackendId;
-    }
+  public Long getInvoiceBackendId() {
+    return invoiceBackendId;
+  }
 
-    public List<SaleOrderItemDto> getOrderItems()
-    {
-        return orderItems;
-    }
+  public void setInvoiceBackendId(Long invoiceBackendId) {
+    this.invoiceBackendId = invoiceBackendId;
+  }
 
-    public void setOrderItems(List<SaleOrderItemDto> orderItems)
-    {
-        this.orderItems = orderItems;
-    }
+  public List<SaleOrderItemDto> getOrderItems() {
+    return orderItems;
+  }
 
-    public Customer getCustomer()
-    {
-        return customer;
-    }
+  public void setOrderItems(List<SaleOrderItemDto> orderItems) {
+    this.orderItems = orderItems;
+  }
 
-    public void setCustomer(Customer customer)
-    {
-        this.customer = customer;
-    }
+  public Customer getCustomer() {
+    return customer;
+  }
 
-    public String getCreateDateTime()
-    {
-        return createDateTime;
-    }
+  public void setCustomer(Customer customer) {
+    this.customer = customer;
+  }
 
-    public void setCreateDateTime(String createDateTime)
-    {
-        this.createDateTime = createDateTime;
-    }
+  public String getCreateDateTime() {
+    return createDateTime;
+  }
 
-    public String getUpdateDateTime()
-    {
-        return updateDateTime;
-    }
+  public void setCreateDateTime(String createDateTime) {
+    this.createDateTime = createDateTime;
+  }
 
-    public void setUpdateDateTime(String updateDateTime)
-    {
-        this.updateDateTime = updateDateTime;
-    }
+  public String getUpdateDateTime() {
+    return updateDateTime;
+  }
+
+  public void setUpdateDateTime(String updateDateTime) {
+    this.updateDateTime = updateDateTime;
+  }
 }

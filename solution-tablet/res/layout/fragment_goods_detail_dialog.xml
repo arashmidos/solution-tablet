@@ -1,85 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:padding="20dp">
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="20dp">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:gravity="right"
-        android:orientation="horizontal">
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:gravity="right"
+    android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/goodNameTv"
-            style="@style/TextView.Value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="استند 20 سانتی ک"/>
+    <TextView
+      android:id="@+id/goodNameTv"
+      style="@style/TextView.Value"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="استند 20 سانتی ک"/>
 
-        <TextView
-            android:id="@+id/textView56"
-            style="@style/TextView.Caption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="نام کالا"/>
-    </LinearLayout>
+    <TextView
+      android:id="@+id/textView56"
+      style="@style/TextView.Caption"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical|center_horizontal"
+      android:text="نام کالا"/>
+  </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:gravity="right"
-        android:orientation="horizontal">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:gravity="right"
+    android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/goodUnitsSp"
-            style="@style/Spinner"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"/>
+    <Spinner
+      android:id="@+id/goodUnitsSp"
+      style="@style/Spinner"
+      android:layout_width="100dp"
+      android:layout_height="wrap_content"/>
 
-        <EditText
-            android:id="@+id/countTxt"
-            style="@style/EditBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:digits="1234567890.-۰۱۲۳۴۵۶۷۸۹"
-            android:ems="10"
-            android:inputType="numberDecimal"/>
+    <EditText
+      android:id="@+id/countTxt"
+      style="@style/EditBox"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:layout_weight="1"
+      android:digits="1234567890.-۰۱۲۳۴۵۶۷۸۹"
+      android:ems="10"
+      android:inputType="numberDecimal"/>
 
-        <TextView
-            android:id="@+id/textView52"
-            style="@style/TextView.Caption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="تعداد/مقدار کالا:"/>
-    </LinearLayout>
+    <TextView
+      android:id="@+id/textView52"
+      style="@style/TextView.Caption"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:gravity="center_vertical|center_horizontal"
+      android:text="تعداد/مقدار کالا:"/>
+  </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:orientation="horizontal">
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/cancelBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableRight="@drawable/ic_action_cancel"
-            android:text="انصراف"/>
+    <Button
+      android:id="@+id/cancelBtn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:drawableRight="@drawable/ic_action_cancel"
+      android:text="انصراف"/>
 
-        <Button
-            android:id="@+id/confirmBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableRight="@drawable/ic_action_tick"
-            android:text="تایید"/>
-    </LinearLayout>
+    <Button
+      android:id="@+id/confirmBtn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:drawableRight="@drawable/ic_action_tick"
+      android:text="تایید"/>
+  </LinearLayout>
 </LinearLayout>

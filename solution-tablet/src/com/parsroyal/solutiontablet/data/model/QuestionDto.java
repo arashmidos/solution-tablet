@@ -5,128 +5,106 @@ import com.parsroyal.solutiontablet.constants.QuestionType;
 /**
  * Created by Mahyar on 7/26/2015.
  */
-public class QuestionDto extends BaseModel
-{
-    private Long questionId;
-    private Integer qOrder;
-    private String questionnaireTitle;
-    private String question;
-    private String description;
-    private Long answerId;
-    private String answer;
+public class QuestionDto extends BaseModel {
 
-    public String getqAnswers()
-    {
-        return qAnswers;
-    }
+  private Long questionId;
+  private Integer qOrder;
+  private String questionnaireTitle;
+  private String question;
+  private String description;
+  private Long answerId;
+  private String answer;
 
-    public void setqAnswers(String qAnswers)
-    {
-        this.qAnswers = qAnswers;
-    }
+  public String getqAnswers() {
+    return qAnswers;
+  }
 
-    private String qAnswers;
-    private Long questionBackendId;
-    private String createDateTime;
-    private QuestionType type;
+  public void setqAnswers(String qAnswers) {
+    this.qAnswers = qAnswers;
+  }
 
-    public QuestionType getType()
-    {
-        return type;
-    }
+  private String qAnswers;
+  private Long questionBackendId;
+  private String createDateTime;
+  private QuestionType type;
 
-    public void setType(QuestionType type)
-    {
-        this.type = type;
-    }
+  public QuestionType getType() {
+    return type;
+  }
 
-    public Long getQuestionId()
-    {
-        return questionId;
-    }
+  public void setType(QuestionType type) {
+    this.type = type;
+  }
 
-    public void setQuestionId(Long questionId)
-    {
-        this.questionId = questionId;
-    }
+  public Long getQuestionId() {
+    return questionId;
+  }
 
-    public String getQuestionnaireTitle()
-    {
-        return questionnaireTitle;
-    }
+  public void setQuestionId(Long questionId) {
+    this.questionId = questionId;
+  }
 
-    public void setQuestionnaireTitle(String questionnaireTitle)
-    {
-        this.questionnaireTitle = questionnaireTitle;
-    }
+  public String getQuestionnaireTitle() {
+    return questionnaireTitle;
+  }
 
-    public String getQuestion()
-    {
-        return question;
-    }
+  public void setQuestionnaireTitle(String questionnaireTitle) {
+    this.questionnaireTitle = questionnaireTitle;
+  }
 
-    public void setQuestion(String question)
-    {
-        this.question = question;
-    }
+  public String getQuestion() {
+    return question;
+  }
 
-    public String getDescription()
-    {
-        return description;
-    }
+  public void setQuestion(String question) {
+    this.question = question;
+  }
 
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public Integer getqOrder()
-    {
-        return qOrder;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setqOrder(Integer qOrder)
-    {
-        this.qOrder = qOrder;
-    }
+  public Integer getqOrder() {
+    return qOrder;
+  }
 
-    public Long getAnswerId()
-    {
-        return answerId;
-    }
+  public void setqOrder(Integer qOrder) {
+    this.qOrder = qOrder;
+  }
 
-    public void setAnswerId(Long answerId)
-    {
-        this.answerId = answerId;
-    }
+  public Long getAnswerId() {
+    return answerId;
+  }
 
-    public String getAnswer()
-    {
-        return answer;
-    }
+  public void setAnswerId(Long answerId) {
+    this.answerId = answerId;
+  }
 
-    public void setAnswer(String answer)
-    {
-        this.answer = answer;
-    }
+  public String getAnswer() {
+    return answer;
+  }
 
-    public Long getQuestionBackendId()
-    {
-        return questionBackendId;
-    }
+  public void setAnswer(String answer) {
+    this.answer = answer;
+  }
 
-    public void setQuestionBackendId(Long questionBackendId)
-    {
-        this.questionBackendId = questionBackendId;
-    }
+  public Long getQuestionBackendId() {
+    return questionBackendId;
+  }
 
-    public String getCreateDateTime()
-    {
-        return createDateTime;
-    }
+  public void setQuestionBackendId(Long questionBackendId) {
+    this.questionBackendId = questionBackendId;
+  }
 
-    public void setCreateDateTime(String createDateTime)
-    {
-        this.createDateTime = createDateTime;
-    }
+  public String getCreateDateTime() {
+    return createDateTime;
+  }
+
+  public void setCreateDateTime(String createDateTime) {
+    this.createDateTime = createDateTime;
+  }
 }

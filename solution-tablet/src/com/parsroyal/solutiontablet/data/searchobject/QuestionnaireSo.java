@@ -3,40 +3,34 @@ package com.parsroyal.solutiontablet.data.searchobject;
 /**
  * Created by Mahyar on 7/24/2015.
  */
-public class QuestionnaireSo extends BaseSO
-{
-    private boolean general;
+public class QuestionnaireSo extends BaseSO {
 
-    public boolean isAnonymous()
-    {
-        return anonymous;
-    }
+  private boolean general;
 
-    public void setAnonymous(boolean anonymous)
-    {
-        this.anonymous = anonymous;
-    }
+  public boolean isAnonymous() {
+    return anonymous;
+  }
 
-    private boolean anonymous;
+  public void setAnonymous(boolean anonymous) {
+    this.anonymous = anonymous;
+  }
 
-    public QuestionnaireSo(boolean isGeneral)
-    {
-        super();
-        setGeneral(isGeneral);
-    }
+  private boolean anonymous;
 
-    public QuestionnaireSo()
-    {
-        super();
-    }
+  public QuestionnaireSo(boolean isGeneral) {
+    super();
+    setGeneral(isGeneral);
+  }
 
-    public boolean isGeneral()
-    {
-        return general;
-    }
+  public QuestionnaireSo() {
+    super();
+  }
 
-    public void setGeneral(boolean general)
-    {
-        this.general = general;
-    }
+  public boolean isGeneral() {
+    return general;
+  }
+
+  public void setGeneral(boolean general) {
+    this.general = general;
+  }
 }

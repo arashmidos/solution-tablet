@@ -6,19 +6,19 @@ import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
-
 import java.util.List;
 
 /**
  * Created by Mahyar on 7/24/2015.
  */
-public interface QuestionDao extends BaseDao<Question, Long>
-{
-    List<QuestionListModel> searchForQuestions(QuestionSo questionSo);
+public interface QuestionDao extends BaseDao<Question, Long> {
 
-    QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId);
+  List<QuestionListModel> searchForQuestions(QuestionSo questionSo);
 
-    QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order, Long goodsBackendId,boolean isNext);
+  QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId);
 
-    List<QuestionnaireListModel> searchForAnonymousQuestions(QuestionnaireSo questionnaireSo);
+  QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
+      Long goodsBackendId, boolean isNext);
+
+  List<QuestionnaireListModel> searchForAnonymousQuestions(QuestionnaireSo questionnaireSo);
 }

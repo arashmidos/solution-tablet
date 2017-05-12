@@ -4,66 +4,55 @@ package com.parsroyal.solutiontablet.data.response;
  * Created by Arash on 2017-02-16.
  */
 
-public class UpdateResponse extends Response
-{
-    private Integer id;
-    private String applicationKey;
-    private String downloadUrl;
-    private Integer version;
-    private Boolean published;
+public class UpdateResponse extends Response {
 
-    public Integer getId()
-    {
-        return id;
-    }
+  private Integer id;
+  private String applicationKey;
+  private String downloadUrl;
+  private Integer version;
+  private Boolean published;
 
-    public void setId(Integer id)
-    {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public String getApplicationKey()
-    {
-        return applicationKey;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setApplicationKey(String applicationKey)
-    {
-        this.applicationKey = applicationKey;
-    }
+  public String getApplicationKey() {
+    return applicationKey;
+  }
 
-    public String getDownloadUrl()
-    {
-        return downloadUrl;
-    }
+  public void setApplicationKey(String applicationKey) {
+    this.applicationKey = applicationKey;
+  }
 
-    public void setDownloadUrl(String downloadUrl)
-    {
-        this.downloadUrl = downloadUrl;
-    }
+  public String getDownloadUrl() {
+    return downloadUrl;
+  }
 
-    public Integer getVersion()
-    {
-        return version;
-    }
+  public void setDownloadUrl(String downloadUrl) {
+    this.downloadUrl = downloadUrl;
+  }
 
-    public void setVersion(Integer version)
-    {
-        this.version = version;
-    }
+  public Integer getVersion() {
+    return version;
+  }
 
-    public Boolean getPublished()
-    {
-        return published;
-    }
+  public void setVersion(Integer version) {
+    this.version = version;
+  }
 
-    public void setPublished(Boolean published)
-    {
-        this.published = published;
-    }
+  public Boolean getPublished() {
+    return published;
+  }
 
-    public boolean isSuccess()
-    {
-        return getError() == null;
-    }
+  public void setPublished(Boolean published) {
+    this.published = published;
+  }
+
+  public boolean isSuccess() {
+    return getError() == null;
+  }
 }

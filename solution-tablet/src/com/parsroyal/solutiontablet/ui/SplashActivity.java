@@ -3,34 +3,30 @@ package com.parsroyal.solutiontablet.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-
 import com.parsroyal.solutiontablet.R;
 
 /**
  * Created by m.sefidi on 5/24/14.
  */
-public class SplashActivity extends BaseActivity
-{
-    private static final int SPLASH_SCREEN_TIME = 2000;
+public class SplashActivity extends BaseActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        new Handler().postDelayed(new Runnable()
-        {
+  private static final int SPLASH_SCREEN_TIME = 2000;
 
-            public void run()
-            {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_splash);
+    new Handler().postDelayed(new Runnable() {
 
-                Intent iMainActivity = new Intent(getApplicationContext(),
-                        MainActivity.class);
-                startActivity(iMainActivity);
+      public void run() {
 
-                finish();
-            }
+        Intent iMainActivity = new Intent(getApplicationContext(),
+            MainActivity.class);
+        startActivity(iMainActivity);
 
-        }, SPLASH_SCREEN_TIME);
-    }
+        finish();
+      }
+
+    }, SPLASH_SCREEN_TIME);
+  }
 }

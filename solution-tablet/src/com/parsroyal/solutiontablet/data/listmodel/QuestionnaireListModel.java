@@ -3,83 +3,69 @@ package com.parsroyal.solutiontablet.data.listmodel;
 /**
  * Created by Mahyar on 7/24/2015.
  */
-public class QuestionnaireListModel extends BaseListModel
-{
-    private Long id;
-    private Long backendId;
-    private String description;
-    private Integer questionsCount;
-    private Long goodsGroupBackendId;
-    private Long visitId;
-    private String date;
+public class QuestionnaireListModel extends BaseListModel {
 
-    public Long getVisitId()
-    {
-        return visitId;
-    }
+  private Long id;
+  private Long backendId;
+  private String description;
+  private Integer questionsCount;
+  private Long goodsGroupBackendId;
+  private Long visitId;
+  private String date;
 
-    public void setVisitId(Long visitId)
-    {
-        this.visitId = visitId;
-    }
+  public Long getVisitId() {
+    return visitId;
+  }
 
-    public String getDate()
-    {
-        return date;
-    }
+  public void setVisitId(Long visitId) {
+    this.visitId = visitId;
+  }
 
-    public void setDate(String date)
-    {
-        this.date = date;
-    }
+  public String getDate() {
+    return date;
+  }
 
-    public Long getId()
-    {
-        return id;
-    }
+  public void setDate(String date) {
+    this.date = date;
+  }
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Long getBackendId()
-    {
-        return backendId;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setBackendId(Long backendId)
-    {
-        this.backendId = backendId;
-    }
+  public Long getBackendId() {
+    return backendId;
+  }
 
-    public String getDescription()
-    {
-        return description;
-    }
+  public void setBackendId(Long backendId) {
+    this.backendId = backendId;
+  }
 
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public Integer getQuestionsCount()
-    {
-        return questionsCount;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setQuestionsCount(Integer questionsCount)
-    {
-        this.questionsCount = questionsCount;
-    }
+  public Integer getQuestionsCount() {
+    return questionsCount;
+  }
 
-    public Long getGoodsGroupBackendId()
-    {
-        return goodsGroupBackendId;
-    }
+  public void setQuestionsCount(Integer questionsCount) {
+    this.questionsCount = questionsCount;
+  }
 
-    public void setGoodsGroupBackendId(Long goodsGroupBackendId)
-    {
-        this.goodsGroupBackendId = goodsGroupBackendId;
-    }
+  public Long getGoodsGroupBackendId() {
+    return goodsGroupBackendId;
+  }
+
+  public void setGoodsGroupBackendId(Long goodsGroupBackendId) {
+    this.goodsGroupBackendId = goodsGroupBackendId;
+  }
 }

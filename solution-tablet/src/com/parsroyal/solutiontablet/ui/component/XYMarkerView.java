@@ -2,49 +2,46 @@ package com.parsroyal.solutiontablet.ui.component;
 
 import android.content.Context;
 import android.widget.TextView;
-
-import com.parsroyal.solutiontablet.R;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
-
+import com.parsroyal.solutiontablet.R;
 import java.text.DecimalFormat;
 
 /**
  * Created by Arashmidos on 2017-01-23.
  */
-public class XYMarkerView extends MarkerView
-{
-    private TextView tvContent;
-    private IAxisValueFormatter xAxisValueFormatter;
+public class XYMarkerView extends MarkerView {
 
-    private DecimalFormat format;
+  private TextView tvContent;
+  private IAxisValueFormatter xAxisValueFormatter;
 
-    public XYMarkerView(Context context, IAxisValueFormatter xAxisValueFormatter)
-    {
-        super(context, R.layout.custom_marker_view);
+  private DecimalFormat format;
 
-        this.xAxisValueFormatter = xAxisValueFormatter;
-        tvContent = (TextView) findViewById(R.id.tvContent);
-        format = new DecimalFormat("###.0");
-    }
+  public XYMarkerView(Context context, IAxisValueFormatter xAxisValueFormatter) {
+    super(context, R.layout.custom_marker_view);
 
-    // callbacks everytime the MarkerView is redrawn, can be used to update the
-    // content (user-interface)
-    @Override
-    public void refreshContent(Entry e, Highlight highlight)
-    {
+    this.xAxisValueFormatter = xAxisValueFormatter;
+    tvContent = (TextView) findViewById(R.id.tvContent);
+    format = new DecimalFormat("###.0");
+  }
 
-        tvContent.setText("x: " + xAxisValueFormatter.getFormattedValue(e.getX(), null) + ", y: " + format.format(e.getY()));
+  // callbacks everytime the MarkerView is redrawn, can be used to update the
+  // content (user-interface)
+  @Override
+  public void refreshContent(Entry e, Highlight highlight) {
 
-        super.refreshContent(e, highlight);
-    }
+    tvContent.setText(
+        "x: " + xAxisValueFormatter.getFormattedValue(e.getX(), null) + ", y: " + format
+            .format(e.getY()));
 
-    @Override
-    public MPPointF getOffset()
-    {
-        return new MPPointF(-(getWidth() / 2), -getHeight());
-    }
+    super.refreshContent(e, highlight);
+  }
+
+  @Override
+  public MPPointF getOffset() {
+    return new MPPointF(-(getWidth() / 2), -getHeight());
+  }
 }

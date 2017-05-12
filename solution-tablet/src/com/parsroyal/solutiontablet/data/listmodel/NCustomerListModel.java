@@ -3,65 +3,55 @@ package com.parsroyal.solutiontablet.data.listmodel;
 /**
  * Created by Mahyar on 7/13/2015.
  */
-public class NCustomerListModel extends CustomerListModel
-{
-    private Long status;
-    private Long backendId;
-    private String phoneNumber;
-    private String cellPhone;
-    private String createDateTime;
+public class NCustomerListModel extends CustomerListModel {
 
-    public Long getStatus()
-    {
-        return status;
-    }
+  private Long status;
+  private Long backendId;
+  private String phoneNumber;
+  private String cellPhone;
+  private String createDateTime;
 
-    public void setStatus(Long status)
-    {
-        this.status = status;
-    }
+  public Long getStatus() {
+    return status;
+  }
 
-    public Long getBackendId()
-    {
-        return backendId;
-    }
+  public void setStatus(Long status) {
+    this.status = status;
+  }
 
-    public void setBackendId(Long backendId)
-    {
-        this.backendId = backendId;
-    }
+  public Long getBackendId() {
+    return backendId;
+  }
 
-    @Override
-    public String getPhoneNumber()
-    {
-        return phoneNumber;
-    }
+  public void setBackendId(Long backendId) {
+    this.backendId = backendId;
+  }
 
-    @Override
-    public void setPhoneNumber(String phoneNumber)
-    {
-        this.phoneNumber = phoneNumber;
-    }
+  @Override
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
 
-    @Override
-    public String getCellPhone()
-    {
-        return cellPhone;
-    }
+  @Override
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
 
-    @Override
-    public void setCellPhone(String cellPhone)
-    {
-        this.cellPhone = cellPhone;
-    }
+  @Override
+  public String getCellPhone() {
+    return cellPhone;
+  }
 
-    public String getCreateDateTime()
-    {
-        return createDateTime;
-    }
+  @Override
+  public void setCellPhone(String cellPhone) {
+    this.cellPhone = cellPhone;
+  }
 
-    public void setCreateDateTime(String createDateTime)
-    {
-        this.createDateTime = createDateTime;
-    }
+  public String getCreateDateTime() {
+    return createDateTime;
+  }
+
+  public void setCreateDateTime(String createDateTime) {
+    this.createDateTime = createDateTime;
+  }
 }

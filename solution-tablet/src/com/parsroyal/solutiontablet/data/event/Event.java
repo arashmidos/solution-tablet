@@ -2,29 +2,25 @@ package com.parsroyal.solutiontablet.data.event;
 
 import java.io.Serializable;
 
-public class Event implements Serializable
-{
-    protected String message;
+public class Event implements Serializable {
 
-    public int getStatusCode()
-    {
-        return statusCode;
-    }
+  protected String message;
 
-    public void setStatusCode(int statusCode)
-    {
-        this.statusCode = statusCode;
-    }
+  public int getStatusCode() {
+    return statusCode;
+  }
 
-    protected int statusCode;
+  public void setStatusCode(int statusCode) {
+    this.statusCode = statusCode;
+  }
 
-    public String getMessage()
-    {
-        return message;
-    }
+  protected int statusCode;
 
-    public void setMessage(String message)
-    {
-        this.message = message;
-    }
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
 }

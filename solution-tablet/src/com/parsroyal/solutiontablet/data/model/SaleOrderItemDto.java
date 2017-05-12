@@ -5,138 +5,114 @@ import com.parsroyal.solutiontablet.data.entity.Goods;
 /**
  * Created by Mahyar on 8/27/2015.
  */
-public class SaleOrderItemDto extends BaseModel
-{
-    private Long id;
-    private Long goodsBackendId;
-    private Long goodsCount;
-    private Long amount;
-    private Long saleOrderId;
-    private Long saleOrderBackendId;
-    private Long selectedUnit;
-    private Long backendId;
-    private String createDateTime;
-    private String updateDateTime;
-    private Long invoiceBackendId;
-    private Goods goods;
+public class SaleOrderItemDto extends BaseModel {
 
-    public Long getInvoiceBackendId()
-    {
-        return invoiceBackendId;
-    }
+  private Long id;
+  private Long goodsBackendId;
+  private Long goodsCount;
+  private Long amount;
+  private Long saleOrderId;
+  private Long saleOrderBackendId;
+  private Long selectedUnit;
+  private Long backendId;
+  private String createDateTime;
+  private String updateDateTime;
+  private Long invoiceBackendId;
+  private Goods goods;
 
-    public void setInvoiceBackendId(Long invoiceBackendId)
-    {
-        this.invoiceBackendId = invoiceBackendId;
-    }
+  public Long getInvoiceBackendId() {
+    return invoiceBackendId;
+  }
 
-    public Long getId()
-    {
-        return id;
-    }
+  public void setInvoiceBackendId(Long invoiceBackendId) {
+    this.invoiceBackendId = invoiceBackendId;
+  }
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Long getGoodsBackendId()
-    {
-        return goodsBackendId;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setGoodsBackendId(Long goodsBackendId)
-    {
-        this.goodsBackendId = goodsBackendId;
-    }
+  public Long getGoodsBackendId() {
+    return goodsBackendId;
+  }
 
-    public Long getGoodsCount()
-    {
-        return goodsCount;
-    }
+  public void setGoodsBackendId(Long goodsBackendId) {
+    this.goodsBackendId = goodsBackendId;
+  }
 
-    public void setGoodsCount(Long goodsCount)
-    {
-        this.goodsCount = goodsCount;
-    }
+  public Long getGoodsCount() {
+    return goodsCount;
+  }
 
-    public Long getAmount()
-    {
-        return amount;
-    }
+  public void setGoodsCount(Long goodsCount) {
+    this.goodsCount = goodsCount;
+  }
 
-    public void setAmount(Long amount)
-    {
-        this.amount = amount;
-    }
+  public Long getAmount() {
+    return amount;
+  }
 
-    public Long getSaleOrderId()
-    {
-        return saleOrderId;
-    }
+  public void setAmount(Long amount) {
+    this.amount = amount;
+  }
 
-    public void setSaleOrderId(Long saleOrderId)
-    {
-        this.saleOrderId = saleOrderId;
-    }
+  public Long getSaleOrderId() {
+    return saleOrderId;
+  }
 
-    public Long getSaleOrderBackendId()
-    {
-        return saleOrderBackendId;
-    }
+  public void setSaleOrderId(Long saleOrderId) {
+    this.saleOrderId = saleOrderId;
+  }
 
-    public void setSaleOrderBackendId(Long saleOrderBackendId)
-    {
-        this.saleOrderBackendId = saleOrderBackendId;
-    }
+  public Long getSaleOrderBackendId() {
+    return saleOrderBackendId;
+  }
 
-    public Long getSelectedUnit()
-    {
-        return selectedUnit;
-    }
+  public void setSaleOrderBackendId(Long saleOrderBackendId) {
+    this.saleOrderBackendId = saleOrderBackendId;
+  }
 
-    public void setSelectedUnit(Long selectedUnit)
-    {
-        this.selectedUnit = selectedUnit;
-    }
+  public Long getSelectedUnit() {
+    return selectedUnit;
+  }
 
-    public Long getBackendId()
-    {
-        return backendId;
-    }
+  public void setSelectedUnit(Long selectedUnit) {
+    this.selectedUnit = selectedUnit;
+  }
 
-    public void setBackendId(Long backendId)
-    {
-        this.backendId = backendId;
-    }
+  public Long getBackendId() {
+    return backendId;
+  }
 
-    public Goods getGoods()
-    {
-        return goods;
-    }
+  public void setBackendId(Long backendId) {
+    this.backendId = backendId;
+  }
 
-    public void setGoods(Goods goods)
-    {
-        this.goods = goods;
-    }
+  public Goods getGoods() {
+    return goods;
+  }
 
-    public String getCreateDateTime()
-    {
-        return createDateTime;
-    }
+  public void setGoods(Goods goods) {
+    this.goods = goods;
+  }
 
-    public void setCreateDateTime(String createDateTime)
-    {
-        this.createDateTime = createDateTime;
-    }
+  public String getCreateDateTime() {
+    return createDateTime;
+  }
 
-    public String getUpdateDateTime()
-    {
-        return updateDateTime;
-    }
+  public void setCreateDateTime(String createDateTime) {
+    this.createDateTime = createDateTime;
+  }
 
-    public void setUpdateDateTime(String updateDateTime)
-    {
-        this.updateDateTime = updateDateTime;
-    }
+  public String getUpdateDateTime() {
+    return updateDateTime;
+  }
+
+  public void setUpdateDateTime(String updateDateTime) {
+    this.updateDateTime = updateDateTime;
+  }
 }

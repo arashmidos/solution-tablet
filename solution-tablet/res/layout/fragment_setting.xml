@@ -1,329 +1,329 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:gravity="right"
+  android:orientation="vertical"
+  android:padding="20dp">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="right"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <Button
+      android:id="@+id/cancelBtn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="left"
+      android:layout_marginLeft="10dp"
+      android:paddingLeft="35dp"
+      android:paddingRight="35dp"
+      android:text="@string/cancel_btn"/>
 
-        <Button
-            android:id="@+id/cancelBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="10dp"
-            android:paddingLeft="35dp"
-            android:paddingRight="35dp"
-            android:text="@string/cancel_btn"/>
+    <Button
+      android:id="@+id/saveBtn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="left"
+      android:layout_marginLeft="10dp"
+      android:paddingLeft="35dp"
+      android:paddingRight="35dp"
+      android:text="@string/save"/>
 
-        <Button
-            android:id="@+id/saveBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="10dp"
-            android:paddingLeft="35dp"
-            android:paddingRight="35dp"
-            android:text="@string/save"/>
+    <Space
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="1"/>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+    <TextView
+      android:id="@+id/textView11"
+      style="@style/TextView.PageTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="@string/setting"/>
+  </LinearLayout>
+
+  <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="2dp"
+    android:background="#ffdddce1"
+    android:paddingBottom="2dp"
+    android:paddingTop="2dp"
+    android:scaleType="fitXY"/>
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp">
+
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
+
+        <EditText
+          android:id="@+id/serverAdress1Txt"
+          style="@style/EditBox"
+          android:layout_width="300dp"
+          android:layout_height="wrap_content"
+          android:nextFocusDown="@+id/serverAdress2Txt"/>
 
         <TextView
-            android:id="@+id/textView11"
-            style="@style/TextView.PageTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/setting"/>
-    </LinearLayout>
+          android:id="@+id/textView16"
+          style="@style/TextView.Caption"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/main_address"/>
+      </TableRow>
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+      <TableRow
         android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
+
+        <EditText
+          android:id="@+id/serverAdress2Txt"
+          style="@style/EditBox"
+          android:layout_width="300dp"
+          android:layout_height="wrap_content"
+          android:nextFocusDown="@+id/usernameTxt"/>
+
+        <TextView
+          android:id="@+id/textView17"
+          style="@style/TextView.Caption"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/sub_address"/>
+      </TableRow>
+
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
+
+        <EditText
+          android:id="@+id/usernameTxt"
+          style="@style/EditBox"
+          android:layout_width="300dp"
+          android:layout_height="wrap_content"
+          android:nextFocusDown="@+id/passwordTxt"/>
+
+        <TextView
+          android:id="@+id/textView18"
+          style="@style/TextView.Caption"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/username"/>
+      </TableRow>
+
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
+
+        <EditText
+          android:id="@+id/passwordTxt"
+          style="@style/EditBox"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:ems="10"
+          android:inputType="textPassword"
+          android:nextFocusDown="@+id/userCodeTxt"/>
+
+        <TextView
+          android:id="@+id/textView19"
+          style="@style/TextView.Caption"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/password"/>
+      </TableRow>
+
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
+
+        <EditText
+          android:id="@+id/userCodeTxt"
+          style="@style/EditBox"
+          android:layout_width="300dp"
+          android:layout_height="wrap_content"
+          android:nextFocusDown="@+id/branchSerialTxt"/>
+
+        <TextView
+          android:id="@+id/textView20"
+          style="@style/TextView.Caption"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/user_code"/>
+      </TableRow>
+
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
+
+        <EditText
+          android:id="@+id/branchSerialTxt"
+          style="@style/EditBox"
+          android:layout_width="300dp"
+          android:inputType="number"
+          android:layout_height="wrap_content"
+          android:nextFocusDown="@+id/stockSerialTxt"/>
+
+        <TextView
+          android:id="@+id/textView48"
+          style="@style/TextView.Caption"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/branch_code"/>
+      </TableRow>
+
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
+
+        <EditText
+          android:id="@+id/stockSerialTxt"
+          style="@style/EditBox"
+          android:layout_width="300dp"
+          android:inputType="number"
+          android:layout_height="wrap_content"
+          android:nextFocusDown="@+id/saleTypeSp"/>
+
+        <TextView
+          android:id="@+id/textView49"
+          style="@style/TextView.Caption"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/stock_code"/>
+      </TableRow>
+
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
+
+        <Spinner
+          style="@style/Spinner"
+          android:id="@+id/saleTypeSp"
+          android:layout_width="300dp"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="15dp"
+          android:layout_marginTop="15dp"
+          android:entries="@array/sale_type"
+          android:prompt="@string/select_sale_type"
+          android:spinnerMode="dropdown"/>
+
+        <TextView
+          android:id="@+id/textView21"
+          style="@style/TextView.Caption"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/sale_type_label"/>
+      </TableRow>
+
+      <TextView
+        android:id="@+id/textView23"
+        style="@style/TextView.PageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/gps_setting"/>
+
+      <View
+        android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginTop="10dp"
         android:background="#ffdddce1"
         android:paddingBottom="2dp"
-        android:paddingTop="2dp"
         android:scaleType="fitXY"/>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+        <EditText
+          android:id="@+id/gps_interval"
+          style="@style/EditBox"
+          android:layout_width="300dp"
+          android:layout_height="wrap_content"
+          android:hint="@string/seconds"
+          android:inputType="number"
+          android:maxLength="3"/>
 
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
+        <TextView
+          android:id="@+id/textView22"
+          style="@style/TextView.Caption"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/gps_interval"/>
+      </TableRow>
 
-                <EditText
-                    android:id="@+id/serverAdress1Txt"
-                    style="@style/EditBox"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:nextFocusDown="@+id/serverAdress2Txt"/>
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
 
-                <TextView
-                    android:id="@+id/textView16"
-                    style="@style/TextView.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/main_address"/>
-            </TableRow>
+        <CheckBox
+          android:id="@+id/enableTrackingCb"
+          style="@style/TextView.Caption"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right"
+          android:gravity="left"
+          android:text="@string/enable_gps_service"
+          />
+      </TableRow>
 
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right">
 
-                <EditText
-                    android:id="@+id/serverAdress2Txt"
-                    style="@style/EditBox"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:nextFocusDown="@+id/usernameTxt"/>
-
-                <TextView
-                    android:id="@+id/textView17"
-                    style="@style/TextView.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sub_address"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
-
-                <EditText
-                    android:id="@+id/usernameTxt"
-                    style="@style/EditBox"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:nextFocusDown="@+id/passwordTxt"/>
-
-                <TextView
-                    android:id="@+id/textView18"
-                    style="@style/TextView.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/username"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
-
-                <EditText
-                    android:id="@+id/passwordTxt"
-                    style="@style/EditBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:nextFocusDown="@+id/userCodeTxt"/>
-
-                <TextView
-                    android:id="@+id/textView19"
-                    style="@style/TextView.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/password"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
-
-                <EditText
-                    android:id="@+id/userCodeTxt"
-                    style="@style/EditBox"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:nextFocusDown="@+id/branchSerialTxt"/>
-
-                <TextView
-                    android:id="@+id/textView20"
-                    style="@style/TextView.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/user_code"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
-
-                <EditText
-                    android:id="@+id/branchSerialTxt"
-                    style="@style/EditBox"
-                    android:layout_width="300dp"
-                    android:inputType="number"
-                    android:layout_height="wrap_content"
-                    android:nextFocusDown="@+id/stockSerialTxt"/>
-
-                <TextView
-                    android:id="@+id/textView48"
-                    style="@style/TextView.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/branch_code"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
-
-                <EditText
-                    android:id="@+id/stockSerialTxt"
-                    style="@style/EditBox"
-                    android:layout_width="300dp"
-                    android:inputType="number"
-                    android:layout_height="wrap_content"
-                    android:nextFocusDown="@+id/saleTypeSp"/>
-
-                <TextView
-                    android:id="@+id/textView49"
-                    style="@style/TextView.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/stock_code"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
-
-                <Spinner
-                    style="@style/Spinner"
-                    android:id="@+id/saleTypeSp"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginTop="15dp"
-                    android:entries="@array/sale_type"
-                    android:prompt="@string/select_sale_type"
-                    android:spinnerMode="dropdown"/>
-
-                <TextView
-                    android:id="@+id/textView21"
-                    style="@style/TextView.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sale_type_label"/>
-            </TableRow>
-
-            <TextView
-                android:id="@+id/textView23"
-                style="@style/TextView.PageTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/gps_setting"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="10dp"
-                android:background="#ffdddce1"
-                android:paddingBottom="2dp"
-                android:scaleType="fitXY"/>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
-
-                <EditText
-                    android:id="@+id/gps_interval"
-                    style="@style/EditBox"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/seconds"
-                    android:inputType="number"
-                    android:maxLength="3"/>
-
-                <TextView
-                    android:id="@+id/textView22"
-                    style="@style/TextView.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/gps_interval"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
-
-                <CheckBox
-                    android:id="@+id/enableTrackingCb"
-                    style="@style/TextView.Caption"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:gravity="left"
-                    android:text="@string/enable_gps_service"
-                    />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right">
-
-                <CheckBox
-                    android:id="@+id/enableCalculateDistanceCb"
-                    style="@style/TextView.Caption"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:gravity="left"
-                    android:text="@string/enable_calculate_distance"
-                    />
-            </TableRow>
-        </TableLayout>
-    </ScrollView>
+        <CheckBox
+          android:id="@+id/enableCalculateDistanceCb"
+          style="@style/TextView.Caption"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right"
+          android:gravity="left"
+          android:text="@string/enable_calculate_distance"
+          />
+      </TableRow>
+    </TableLayout>
+  </ScrollView>
 </LinearLayout>

@@ -5,9 +5,9 @@ import android.location.Location;
 /**
  * Created by Mahyar on 6/22/2015.
  */
-public interface FindLocationListener
-{
-    void foundLocation(Location location);
+public interface FindLocationListener {
 
-    void timeOut();
+  void foundLocation(Location location);
+
+  void timeOut();
 }

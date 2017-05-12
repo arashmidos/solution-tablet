@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.City;
 import com.parsroyal.solutiontablet.data.entity.Province;
@@ -21,132 +20,120 @@ import com.parsroyal.solutiontablet.ui.adapter.NCustomersListAdapter;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-
 import java.util.List;
 
 /**
  * Created by Mahyar on 7/13/2015.
  */
-public class NCustomersFragment extends BaseListFragment<NCustomerListModel, NCustomersListAdapter>
-{
-    public static final String TAG = NCustomersFragment.class.getSimpleName();
-    private MainActivity context;
-    private CustomerService customerService;
-    private BaseInfoService baseInfoService;
-    private NCustomerSO nCustomerSO;
-    private FloatingActionButton fab;
+public class NCustomersFragment extends
+    BaseListFragment<NCustomerListModel, NCustomersListAdapter> {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+  public static final String TAG = NCustomersFragment.class.getSimpleName();
+  private MainActivity context;
+  private CustomerService customerService;
+  private BaseInfoService baseInfoService;
+  private NCustomerSO nCustomerSO;
+  private FloatingActionButton fab;
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    this.context = (MainActivity) getActivity();
+    this.customerService = new CustomerServiceImpl(context);
+    this.baseInfoService = new BaseInfoServiceImpl(context);
+    this.nCustomerSO = new NCustomerSO();
+    nCustomerSO.setSent(0);
+    View view = super.onCreateView(inflater, container, savedInstanceState);
+    fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
+    initTabs();
+    initFab();
+    return view;
+  }
+
+  private void initFab() {
+    fab.setVisibility(View.VISIBLE);
+    fab.setOnClickListener(v ->
     {
-        this.context = (MainActivity) getActivity();
-        this.customerService = new CustomerServiceImpl(context);
-        this.baseInfoService = new BaseInfoServiceImpl(context);
-        this.nCustomerSO = new NCustomerSO();
-        nCustomerSO.setSent(0);
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+      List<Province> provinceList = baseInfoService.getAllProvinces();
+      List<City> cityList = baseInfoService.getAllCities();
+      if (Empty.isEmpty(cityList)) {
+        ToastUtil.toastError(getActivity(), R.string.message_cities_information_not_found);
+        return;
+      }
+      if (Empty.isEmpty(provinceList)) {
+        ToastUtil.toastError(getActivity(), R.string.message_provinces_information_not_foun);
+        return;
+      }
+      MainActivity mainActivity = (MainActivity) getActivity();
+      mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
+    });
+  }
 
-        initTabs();
-        initFab();
-        return view;
+  private void initTabs() {
+    {
+      ParsRoyalTab tab = new ParsRoyalTab(context);
+      tab.setText(getString(R.string.sent));
+      tab.setOnClickListener(v ->
+      {
+        nCustomerSO.setSent(1);
+        updateList();
+      });
+      tabContainer.addTab(tab);
     }
 
-    private void initFab()
     {
-        fab.setVisibility(View.VISIBLE);
-        fab.setOnClickListener(v ->
-        {
-            List<Province> provinceList = baseInfoService.getAllProvinces();
-            List<City> cityList = baseInfoService.getAllCities();
-            if (Empty.isEmpty(cityList))
-            {
-                ToastUtil.toastError(getActivity(), R.string.message_cities_information_not_found);
-                return;
-            }
-            if (Empty.isEmpty(provinceList))
-            {
-                ToastUtil.toastError(getActivity(), R.string.message_provinces_information_not_foun);
-                return;
-            }
-            MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
-        });
-    }
-
-    private void initTabs()
-    {
-        {
-            ParsRoyalTab tab = new ParsRoyalTab(context);
-            tab.setText(getString(R.string.sent));
-            tab.setOnClickListener(v ->
-            {
-                nCustomerSO.setSent(1);
-                updateList();
-            });
-            tabContainer.addTab(tab);
-        }
-
-        {
-            ParsRoyalTab tab = new ParsRoyalTab(context);
-            tab.setText(getString(R.string.not_sent));
-            tab.setActivated(true);
-            tab.setOnClickListener(v ->
-            {
-                nCustomerSO.setSent(0);
-                updateList();
-            });
-            tabContainer.addTab(tab);
-        }
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
+      ParsRoyalTab tab = new ParsRoyalTab(context);
+      tab.setText(getString(R.string.not_sent));
+      tab.setActivated(true);
+      tab.setOnClickListener(v ->
+      {
         nCustomerSO.setSent(0);
         updateList();
+      });
+      tabContainer.addTab(tab);
     }
+  }
 
-    @Override
-    public View getHeaderView()
-    {
-        return null;
-    }
+  @Override
+  public void onResume() {
+    super.onResume();
+    nCustomerSO.setSent(0);
+    updateList();
+  }
 
-    @Override
-    protected List<NCustomerListModel> getDataModel()
-    {
-        return customerService.searchForNCustomers(nCustomerSO);
-    }
+  @Override
+  public View getHeaderView() {
+    return null;
+  }
 
-    @Override
-    protected NCustomersListAdapter getAdapter()
-    {
-        return new NCustomersListAdapter(context, getDataModel(), nCustomerSO);
-    }
+  @Override
+  protected List<NCustomerListModel> getDataModel() {
+    return customerService.searchForNCustomers(nCustomerSO);
+  }
 
-    @Override
-    protected AdapterView.OnItemClickListener getOnItemClickListener()
-    {
-        return null;
-    }
+  @Override
+  protected NCustomersListAdapter getAdapter() {
+    return new NCustomersListAdapter(context, getDataModel(), nCustomerSO);
+  }
 
-    @Override
-    protected String getClassTag()
-    {
-        return TAG;
-    }
+  @Override
+  protected AdapterView.OnItemClickListener getOnItemClickListener() {
+    return null;
+  }
 
-    @Override
-    protected String getTitle()
-    {
-        return "";
-    }
+  @Override
+  protected String getClassTag() {
+    return TAG;
+  }
 
-    @Override
-    public int getFragmentId()
-    {
-        return MainActivity.NEW_CUSTOMER_FRAGMENT_ID;
-    }
+  @Override
+  protected String getTitle() {
+    return "";
+  }
+
+  @Override
+  public int getFragmentId() {
+    return MainActivity.NEW_CUSTOMER_FRAGMENT_ID;
+  }
 }

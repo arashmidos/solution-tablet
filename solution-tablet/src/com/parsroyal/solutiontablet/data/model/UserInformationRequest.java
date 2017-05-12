@@ -1,33 +1,28 @@
 package com.parsroyal.solutiontablet.data.model;
 
-public class UserInformationRequest extends BaseModel
-{
-    private Integer code;
-    private Integer type;
+public class UserInformationRequest extends BaseModel {
 
-    public UserInformationRequest(String code, String type)
-    {
-        this.code = Integer.valueOf(code);
-        this.type = Integer.valueOf(type);
-    }
+  private Integer code;
+  private Integer type;
 
-    public Integer getCode()
-    {
-        return code;
-    }
+  public UserInformationRequest(String code, String type) {
+    this.code = Integer.valueOf(code);
+    this.type = Integer.valueOf(type);
+  }
 
-    public void setCode(Integer code)
-    {
-        this.code = code;
-    }
+  public Integer getCode() {
+    return code;
+  }
 
-    public Integer getType()
-    {
-        return type;
-    }
+  public void setCode(Integer code) {
+    this.code = code;
+  }
 
-    public void setType(Integer type)
-    {
-        this.type = type;
-    }
+  public Integer getType() {
+    return type;
+  }
+
+  public void setType(Integer type) {
+    this.type = type;
+  }
 }

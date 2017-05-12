@@ -3,61 +3,51 @@ package com.parsroyal.solutiontablet.data.response;
 /**
  * Created by Arash on 2017-02-16.
  */
-public class Response
-{
-    private Integer timestamp;
-    private Integer status;
-    private String error;
-    private String message;
-    private String path;
+public class Response {
 
-    public Integer getTimestamp()
-    {
-        return timestamp;
-    }
+  private Integer timestamp;
+  private Integer status;
+  private String error;
+  private String message;
+  private String path;
 
-    public void setTimestamp(Integer timestamp)
-    {
-        this.timestamp = timestamp;
-    }
+  public Integer getTimestamp() {
+    return timestamp;
+  }
 
-    public Integer getStatus()
-    {
-        return status;
-    }
+  public void setTimestamp(Integer timestamp) {
+    this.timestamp = timestamp;
+  }
 
-    public void setStatus(Integer status)
-    {
-        this.status = status;
-    }
+  public Integer getStatus() {
+    return status;
+  }
 
-    public String getError()
-    {
-        return error;
-    }
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
 
-    public void setError(String error)
-    {
-        this.error = error;
-    }
+  public String getError() {
+    return error;
+  }
 
-    public String getMessage()
-    {
-        return message;
-    }
+  public void setError(String error) {
+    this.error = error;
+  }
 
-    public void setMessage(String message)
-    {
-        this.message = message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public String getPath()
-    {
-        return path;
-    }
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-    public void setPath(String path)
-    {
-        this.path = path;
-    }
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
 }

@@ -1,26 +1,25 @@
 package com.parsroyal.solutiontablet.data.dao;
 
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
-import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
-
 import java.util.List;
 
 /**
  * Created by Mahyar on 8/21/2015.
  */
-public interface SaleOrderDao extends BaseDao<SaleOrder, Long>
-{
-    List<SaleOrder> retrieveSaleOrderByStatus(Long statusId);
+public interface SaleOrderDao extends BaseDao<SaleOrder, Long> {
 
-    List<SaleOrderListModel> searchForOrders(SaleOrderSO saleOrderSO);
+  List<SaleOrder> retrieveSaleOrderByStatus(Long statusId);
 
-    SaleOrderDto getOrderDtoById(Long orderId);
+  List<SaleOrderListModel> searchForOrders(SaleOrderSO saleOrderSO);
 
-    SaleOrderDto getOrderDtoByCustomerBackendIdAndStatus(Long customerBackendId, Long statusId);
+  SaleOrderDto getOrderDtoById(Long orderId);
 
-    List<SaleOrderDto> findOrderDtoByStatusId(Long statusId);
+  SaleOrderDto getOrderDtoByCustomerBackendIdAndStatus(Long customerBackendId, Long statusId);
 
-    void deleteByCustomerBackendIdAndStatus(Long customerBackendId, Long statusId);
+  List<SaleOrderDto> findOrderDtoByStatusId(Long statusId);
+
+  void deleteByCustomerBackendIdAndStatus(Long customerBackendId, Long statusId);
 }

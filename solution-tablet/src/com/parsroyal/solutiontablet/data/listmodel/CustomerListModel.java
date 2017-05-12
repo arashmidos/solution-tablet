@@ -6,161 +6,133 @@ import com.google.maps.android.clustering.ClusterItem;
 /**
  * Created by Mahyar on 7/6/2015.
  */
-public class CustomerListModel extends BaseListModel implements ClusterItem
-{
-    private String address;
-    private String phoneNumber;
-    private String cellPhone;
-    private boolean hasLocation;
-    private boolean isVisited;
-    private double xlocation;
-    private double ylocation;
-    private boolean hasOrder;
-    private boolean hasRejection;
-    private Long codeNumber;
-    private Float distance;
-    private Long backendId;
-    private String lastVisit;
+public class CustomerListModel extends BaseListModel implements ClusterItem {
 
-    public Long getBackendId()
-    {
-        return backendId;
-    }
+  private String address;
+  private String phoneNumber;
+  private String cellPhone;
+  private boolean hasLocation;
+  private boolean isVisited;
+  private double xlocation;
+  private double ylocation;
+  private boolean hasOrder;
+  private boolean hasRejection;
+  private Long codeNumber;
+  private Float distance;
+  private Long backendId;
+  private String lastVisit;
 
-    public void setBackendId(Long backendId)
-    {
-        this.backendId = backendId;
-    }
+  public Long getBackendId() {
+    return backendId;
+  }
 
-    public String getLastVisit()
-    {
-        return lastVisit;
-    }
+  public void setBackendId(Long backendId) {
+    this.backendId = backendId;
+  }
 
-    public void setLastVisit(String lastVisit)
-    {
-        this.lastVisit = lastVisit;
-    }
+  public String getLastVisit() {
+    return lastVisit;
+  }
 
-    public boolean hasOrder()
-    {
-        return hasOrder;
-    }
+  public void setLastVisit(String lastVisit) {
+    this.lastVisit = lastVisit;
+  }
 
-    public void setHasOrder(boolean hasOrder)
-    {
-        this.hasOrder = hasOrder;
-    }
+  public boolean hasOrder() {
+    return hasOrder;
+  }
 
-    public boolean hasRejection()
-    {
-        return hasRejection;
-    }
+  public void setHasOrder(boolean hasOrder) {
+    this.hasOrder = hasOrder;
+  }
 
-    public void setHasRejection(boolean hasRejection)
-    {
-        this.hasRejection = hasRejection;
-    }
+  public boolean hasRejection() {
+    return hasRejection;
+  }
 
-    public double getXlocation()
-    {
-        return xlocation;
-    }
+  public void setHasRejection(boolean hasRejection) {
+    this.hasRejection = hasRejection;
+  }
 
-    public void setXlocation(double xlocation)
-    {
-        this.xlocation = xlocation;
-    }
+  public double getXlocation() {
+    return xlocation;
+  }
 
-    public double getYlocation()
-    {
-        return ylocation;
-    }
+  public void setXlocation(double xlocation) {
+    this.xlocation = xlocation;
+  }
 
-    public void setYlocation(double ylocation)
-    {
-        this.ylocation = ylocation;
-    }
+  public double getYlocation() {
+    return ylocation;
+  }
 
-    public boolean hasLocation()
-    {
-        return hasLocation;
-    }
+  public void setYlocation(double ylocation) {
+    this.ylocation = ylocation;
+  }
 
-    public void setHasLocation(boolean hasLocation)
-    {
-        this.hasLocation = hasLocation;
-    }
+  public boolean hasLocation() {
+    return hasLocation;
+  }
 
-    public boolean isVisited()
-    {
-        return isVisited;
-    }
+  public void setHasLocation(boolean hasLocation) {
+    this.hasLocation = hasLocation;
+  }
 
-    public void setVisited(boolean visited)
-    {
-        isVisited = visited;
-    }
+  public boolean isVisited() {
+    return isVisited;
+  }
 
-    public String getAddress()
-    {
-        return address;
-    }
+  public void setVisited(boolean visited) {
+    isVisited = visited;
+  }
 
-    public void setAddress(String address)
-    {
-        this.address = address;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public String getPhoneNumber()
-    {
-        return phoneNumber;
-    }
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-    public void setPhoneNumber(String phoneNumber)
-    {
-        this.phoneNumber = phoneNumber;
-    }
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
 
-    public String getCellPhone()
-    {
-        return cellPhone;
-    }
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
 
-    public void setCellPhone(String cellPhone)
-    {
-        this.cellPhone = cellPhone;
-    }
+  public String getCellPhone() {
+    return cellPhone;
+  }
 
-    public Float getDistance()
-    {
-        return distance;
-    }
+  public void setCellPhone(String cellPhone) {
+    this.cellPhone = cellPhone;
+  }
 
-    public void setDistance(Float distance)
-    {
-        this.distance = distance;
-    }
+  public Float getDistance() {
+    return distance;
+  }
 
-    public Long getCodeNumber()
-    {
-        return codeNumber;
-    }
+  public void setDistance(Float distance) {
+    this.distance = distance;
+  }
 
-    public void setCodeNumber(Long codeNumber)
-    {
-        this.codeNumber = codeNumber;
-    }
+  public Long getCodeNumber() {
+    return codeNumber;
+  }
 
-    @Override
-    public LatLng getPosition()
-    {
-        return new LatLng(xlocation, ylocation);
-    }
+  public void setCodeNumber(Long codeNumber) {
+    this.codeNumber = codeNumber;
+  }
 
-    @Override
-    public String getSnippet()
-    {
-        return address;
-    }
+  @Override
+  public LatLng getPosition() {
+    return new LatLng(xlocation, ylocation);
+  }
+
+  @Override
+  public String getSnippet() {
+    return address;
+  }
 }
