@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SortType;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
@@ -107,6 +109,10 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
                     }
                 }
                 sort(sortType);
+                Answers.getInstance().logCustom(new CustomEvent("Filter")
+                        .putCustomAttribute("Distance", distance)
+                        .putCustomAttribute("Has Order", String.valueOf(hasOrder))
+                        .putCustomAttribute("Has None", String.valueOf(hasNone)));
                 adapter.notifyDataSetChanged();
             }
 
@@ -124,6 +130,8 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
     private void sort(int type)
     {
         List<CustomerListModel> dataModel = adapter.getDataModel();
+        Answers.getInstance().logCustom(new CustomEvent("Sort")
+                .putCustomAttribute("Size", dataModel.size()).putCustomAttribute("Type", type));
         switch (type)
         {
             case 0:

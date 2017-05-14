@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -140,53 +142,66 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
     {
         mainLayout.setOnItemClickListener((parent, view, position, id) ->
         {
+            String contentName = "";
             switch (position)
             {
                 //Add Invoice / Add Order
                 case 0:
                     openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+                    contentName = "New Order/Invoice";
                     break;
                 //Add returned
                 case 1:
                     openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
+                    contentName = "New Reject";
                     break;
                 //Cash
                 case 2:
                     openPaymentFragment();
+                    contentName = "Open Payment";
                     break;
                 //Location
                 case 3:
                     openSaveLocationFragment();
+                    contentName = "New Location";
                     break;
                 //Detail
                 case 4:
                     openKPIFragment();
+                    contentName = "View Customer KPI";
                     break;
                 //General Questionary
                 case 5:
                     openGeneralQuestionnairesFragment();
+                    contentName = "New Questionnaire";
                     break;
                 //Goods Questionary
                 case 6:
                     openGoodsQuestionnairesFragment();
+                    contentName = "New Goods Questionnaire";
                     break;
                 //Delivery
                 case 7:
                     openDeliverableOrdersFragment();
+                    contentName = "View Deliverable";
                     break;
                 //Camera
                 case 8:
                     startCameraActivity();
+                    contentName = "New Photo";
                     break;
                 //Reject
                 case 9:
                     showWantsDialog();
+                    contentName = "New None";
                     break;
                 //Exit
                 case 10:
                     finishVisiting();
                     break;
             }
+            Answers.getInstance().logContentView(new ContentViewEvent().putContentName(contentName)
+                    .putContentType("Visit"));
         });
     }
 

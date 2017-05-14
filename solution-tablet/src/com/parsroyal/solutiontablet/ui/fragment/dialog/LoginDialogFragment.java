@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.LoginEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.SettingService;
@@ -75,11 +77,13 @@ public class LoginDialogFragment extends DialogFragment
 
                     if (username.equals(usernameValue) && password.equals(passwordValue))
                     {
+                        Answers.getInstance().logLogin(new LoginEvent().putSuccess(true));
                         ((MainActivity) getActivity()).changeFragment(MainActivity.SETTING_FRAGMENT_ID, false);
                         LoginDialogFragment.this.dismiss();
                     } else
                     {
                         ToastUtil.toastError(getActivity(), R.string.error_invalid_login);
+                        Answers.getInstance().logLogin(new LoginEvent().putSuccess(false));
                     }
 
                 }
