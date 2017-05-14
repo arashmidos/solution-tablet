@@ -313,9 +313,10 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver
                 {
 
                     final Bundle args = new Bundle();
-                    args.putLong("orderId", orderDto.getId());
-                    args.putString("saleType", saleType);
-                    args.putSerializable("rejectedList", rejectedGoodsList);
+                    args.putLong(Constants.ORDER_ID, orderDto.getId());
+                    args.putString(Constants.SALE_TYPE, saleType);
+                    args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+                    args.putLong(Constants.VISIT_ID, visitId);
                     mainActivity.runOnUiThread(() ->
                     {
                         dismissProgressDialog();
