@@ -6,27 +6,29 @@ import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
+
 import java.util.List;
 
 /**
  * Created by Mahyar on 7/24/2015.
  */
-public interface QuestionnaireService {
+public interface QuestionnaireService
+{
 
-  List<QuestionnaireListModel> searchForQuestionnaires(QuestionnaireSo questionnaireSo);
+    List<QuestionnaireListModel> searchForQuestionnaires(QuestionnaireSo questionnaireSo);
 
-  List<QuestionListModel> searchForQuestions(QuestionSo questionSo);
+    List<QuestionListModel> searchForQuestions(QuestionSo questionSo);
 
-  QuestionDto getQuestionDto(Long primaryKey, Long visitId, Long goodsBackendId);
+    QuestionDto getQuestionDto(Long primaryKey, Long visitId, Long goodsBackendId);
 
-  QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
-      Long goodsBackendId, boolean isNext);
+    QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
+                               Long goodsBackendId, boolean isNext);
 
-  Long saveAnswer(QAnswer qAnswer);
+    Long saveAnswer(QAnswer qAnswer);
 
-  List<QAnswer> getAllAnswersForSend();
+    List<QAnswer> getAllAnswersForSend();
 
-  QAnswer getAnswerById(Long id);
+    QAnswer getAnswerById(Long id);
 
-  List<QuestionnaireListModel> searchForAnonymousQuestionaire(QuestionnaireSo questionnaireSo);
+    List<QuestionnaireListModel> searchForAnonymousQuestionaire(QuestionnaireSo questionnaireSo);
 }

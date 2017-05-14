@@ -5,11 +5,12 @@ import com.parsroyal.solutiontablet.exception.BusinessException;
 /**
  * Created by Mahyar on 6/18/2015.
  */
-public interface ResultObserver {
+public interface ResultObserver
+{
 
-  void publishResult(BusinessException ex);
+    void publishResult(BusinessException ex);
 
-  void publishResult(String message);
+    void publishResult(String message);
 
-  void finished(boolean result);
+    void finished(boolean result);
 }

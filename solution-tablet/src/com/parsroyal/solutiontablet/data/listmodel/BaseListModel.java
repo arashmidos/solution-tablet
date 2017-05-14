@@ -5,33 +5,40 @@ import com.parsroyal.solutiontablet.data.model.BaseModel;
 /**
  * Created by Mahyar on 7/6/2015.
  */
-public abstract class BaseListModel extends BaseModel {
+public abstract class BaseListModel extends BaseModel
+{
 
-  private Long primaryKey;
-  private String title;
-  private String code;
+    private Long primaryKey;
+    private String title;
+    private String code;
 
-  public Long getPrimaryKey() {
-    return primaryKey;
-  }
+    public Long getPrimaryKey()
+    {
+        return primaryKey;
+    }
 
-  public void setPrimaryKey(Long primaryKey) {
-    this.primaryKey = primaryKey;
-  }
+    public void setPrimaryKey(Long primaryKey)
+    {
+        this.primaryKey = primaryKey;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public String getTitle()
+    {
+        return title;
+    }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
 
-  public String getCode() {
-    return code;
-  }
+    public String getCode()
+    {
+        return code;
+    }
 
-  public void setCode(String code) {
-    this.code = code;
-  }
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
 }

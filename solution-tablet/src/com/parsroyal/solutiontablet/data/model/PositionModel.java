@@ -8,39 +8,47 @@ import com.parsroyal.solutiontablet.data.entity.Customer;
  * Created by Arashmidos on 2016-11-11.
  */
 
-public class PositionModel implements ClusterItem {
+public class PositionModel implements ClusterItem
+{
 
-  private Customer customer;
+    private Customer customer;
 
-  public PositionModel(Customer customer) {
-    this.customer = customer;
-  }
+    public PositionModel(Customer customer)
+    {
+        this.customer = customer;
+    }
 
-  @Override
-  public LatLng getPosition() {
-    return new LatLng(customer.getxLocation(), customer.getyLocation());
-  }
+    @Override
+    public LatLng getPosition()
+    {
+        return new LatLng(customer.getxLocation(), customer.getyLocation());
+    }
 
-  @Override
-  public String getTitle() {
-    return customer.getFullName();
-  }
+    @Override
+    public String getTitle()
+    {
+        return customer.getFullName();
+    }
 
-  @Override
-  public String getSnippet() {
-    return customer.getAddress();
-  }
+    @Override
+    public String getSnippet()
+    {
+        return customer.getAddress();
+    }
 
-  public String getName() {
-    return customer.getFullName();
-  }
+    public String getName()
+    {
+        return customer.getFullName();
+    }
 
-  public long getCustomerBackendId() {
-    return customer.getBackendId();
-  }
+    public long getCustomerBackendId()
+    {
+        return customer.getBackendId();
+    }
 
-  public long getCustomerId() {
-    return customer.getId();
-  }
+    public long getCustomerId()
+    {
+        return customer.getId();
+    }
 
 }

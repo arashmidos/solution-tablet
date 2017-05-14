@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SendStatus;
@@ -13,111 +14,131 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * Created by Arash on 2016-08-21
  */
-public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
+public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<String>
+{
 
-  public static final String TAG = PaymentsDataTransferBizImpl.class.getSimpleName();
+    public static final String TAG = PaymentsDataTransferBizImpl.class.getSimpleName();
 
-  private Context context;
-  private PaymentService paymentService;
-  private VisitService visitService;
-  private ResultObserver observer;
-  private List<Payment> payments;
+    private Context context;
+    private PaymentService paymentService;
+    private VisitService visitService;
+    private ResultObserver observer;
+    private List<Payment> payments;
 
-  public PaymentsDataTransferBizImpl(Context context, ResultObserver resultObserver) {
-    super(context);
-    this.context = context;
-    paymentService = new PaymentServiceImpl(context);
-    visitService = new VisitServiceImpl(context);
-    observer = resultObserver;
-  }
-
-  @Override
-  public void receiveData(String response) {
-    if (Empty.isNotEmpty(response)) {
-      try {
-        String[] rows = response.split("[$]");
-        int success = 0;
-        int failure = 0;
-        for (int i = 0; i < rows.length; i++) {
-          String row = rows[i];
-          String[] columns = row.split("[&]");
-          long paymentId = Long.parseLong(columns[0]);
-          long paymentBackendId = Long.parseLong(columns[1]);
-          long updated = Long.parseLong(columns[2]);
-
-          Payment payment = paymentService.getPaymentById(paymentId);
-          if (Empty.isNotEmpty(payment) && updated == 1) {
-            payment.setStatus(SendStatus.SENT.getId());
-            payment.setBackendId(paymentBackendId);
-            payment.setUpdateDateTime(DateUtil
-                .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-            paymentService.updatePayment(payment);
-            visitService
-                .updateVisitDetailId(VisitInformationDetailType.CASH, paymentId, paymentBackendId);
-            success++;
-          } else {
-            failure++;
-          }
-        }
-        getObserver().publishResult(String
-            .format(Locale.US, context.getString(R.string.payments_data_transferred_successfully),
-                String.valueOf(success), String.valueOf(failure)));
-      } catch (Exception ex) {
-        getObserver().publishResult(context.getString(R.string.error_payments_transfer));
-      }
-    } else {
-      getObserver().publishResult(context.getString(R.string.message_got_no_response));
+    public PaymentsDataTransferBizImpl(Context context, ResultObserver resultObserver)
+    {
+        super(context);
+        this.context = context;
+        paymentService = new PaymentServiceImpl(context);
+        visitService = new VisitServiceImpl(context);
+        observer = resultObserver;
     }
-  }
 
-  @Override
-  public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.sending_payments_data));
-  }
+    @Override
+    public void receiveData(String response)
+    {
+        if (Empty.isNotEmpty(response))
+        {
+            try
+            {
+                String[] rows = response.split("[$]");
+                int success = 0;
+                int failure = 0;
+                for (int i = 0; i < rows.length; i++)
+                {
+                    String row = rows[i];
+                    String[] columns = row.split("[&]");
+                    long paymentId = Long.parseLong(columns[0]);
+                    long paymentBackendId = Long.parseLong(columns[1]);
+                    long updated = Long.parseLong(columns[2]);
 
-  @Override
-  public ResultObserver getObserver() {
-    return observer;
-  }
+                    Payment payment = paymentService.getPaymentById(paymentId);
+                    if (Empty.isNotEmpty(payment) && updated == 1)
+                    {
+                        payment.setStatus(SendStatus.SENT.getId());
+                        payment.setBackendId(paymentBackendId);
+                        payment.setUpdateDateTime(DateUtil
+                                .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+                        paymentService.updatePayment(payment);
+                        visitService
+                                .updateVisitDetailId(VisitInformationDetailType.CASH, paymentId, paymentBackendId);
+                        success++;
+                    } else
+                    {
+                        failure++;
+                    }
+                }
+                getObserver().publishResult(String
+                        .format(Locale.US, context.getString(R.string.payments_data_transferred_successfully),
+                                String.valueOf(success), String.valueOf(failure)));
+            } catch (Exception ex)
+            {
+                getObserver().publishResult(context.getString(R.string.error_payments_transfer));
+            }
+        } else
+        {
+            getObserver().publishResult(context.getString(R.string.message_got_no_response));
+        }
+    }
 
-  @Override
-  public String getMethod() {
-    return "payment/create";
-  }
+    @Override
+    public void beforeTransfer()
+    {
+        getObserver().publishResult(context.getString(R.string.sending_payments_data));
+    }
 
-  @Override
-  public Class getType() {
-    return String.class;
-  }
+    @Override
+    public ResultObserver getObserver()
+    {
+        return observer;
+    }
 
-  @Override
-  public HttpMethod getHttpMethod() {
-    return HttpMethod.POST;
-  }
+    @Override
+    public String getMethod()
+    {
+        return "payment/create";
+    }
 
-  @Override
-  protected MediaType getContentType() {
-    return MediaType.APPLICATION_JSON;
-  }
+    @Override
+    public Class getType()
+    {
+        return String.class;
+    }
 
-  @Override
-  protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity<List<Payment>> requestEntity = new HttpEntity<>(payments, headers);
-    return requestEntity;
-  }
+    @Override
+    public HttpMethod getHttpMethod()
+    {
+        return HttpMethod.POST;
+    }
 
-  public void setPayments(List<Payment> payments) {
-    this.payments = payments;
-  }
+    @Override
+    protected MediaType getContentType()
+    {
+        return MediaType.APPLICATION_JSON;
+    }
+
+    @Override
+    protected HttpEntity getHttpEntity(HttpHeaders headers)
+    {
+        HttpEntity<List<Payment>> requestEntity = new HttpEntity<>(payments, headers);
+        return requestEntity;
+    }
+
+    public void setPayments(List<Payment> payments)
+    {
+        this.payments = payments;
+    }
 }

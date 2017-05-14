@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/rowLayout"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:padding="15dp">
+                android:id="@+id/rowLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="15dp">
 
-  <TextView
-    android:id="@+id/textView31"
-    style="@style/TextView.Caption"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
-    android:layout_alignParentTop="true"
-    android:layout_marginEnd="33dp"
-    android:layout_marginRight="32dp"
-    android:layout_marginTop="15dp"
-    android:text="عنوان:"/>
+    <TextView
+        android:id="@+id/textView31"
+        style="@style/TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="33dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="15dp"
+        android:text="عنوان:"/>
 
-  <TextView
-    android:id="@+id/descriptionTv"
-    android:layout_width="300dp"
-    android:layout_height="wrap_content"
-    android:layout_alignTop="@+id/textView31"
-    android:layout_toLeftOf="@+id/textView31"
-    android:layout_toStartOf="@+id/textView31"
-    android:text="پرسشنامه فصلی"
-    android:textAppearance="?android:attr/textAppearanceMedium"/>
+    <TextView
+        android:id="@+id/descriptionTv"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView31"
+        android:layout_toLeftOf="@+id/textView31"
+        android:layout_toStartOf="@+id/textView31"
+        android:text="پرسشنامه فصلی"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-  <TextView
-    android:id="@+id/textView33"
-    style="@style/TextView.Caption"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:layout_marginEnd="29dp"
-    android:layout_marginRight="40dp"
-    android:layout_marginTop="15dp"
-    android:layout_toLeftOf="@+id/descriptionTv"
-    android:layout_toStartOf="@+id/descriptionTv"
-    android:text="تعداد سوالات:"/>
+    <TextView
+        android:id="@+id/textView33"
+        style="@style/TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="29dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_toLeftOf="@+id/descriptionTv"
+        android:layout_toStartOf="@+id/descriptionTv"
+        android:text="تعداد سوالات:"/>
 
-  <TextView
-    android:id="@+id/qCountTv"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignTop="@+id/textView33"
-    android:layout_toLeftOf="@+id/textView33"
-    android:layout_toStartOf="@+id/textView33"
-    android:text="12"
-    android:textAppearance="?android:attr/textAppearanceMedium"/>
+    <TextView
+        android:id="@+id/qCountTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView33"
+        android:layout_toLeftOf="@+id/textView33"
+        android:layout_toStartOf="@+id/textView33"
+        android:text="12"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 </RelativeLayout>
