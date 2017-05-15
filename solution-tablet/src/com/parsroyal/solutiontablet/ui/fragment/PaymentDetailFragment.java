@@ -45,7 +45,6 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 import java.util.Locale;
 
-
 public class PaymentDetailFragment extends BaseFragment {
 
   public static final String TAG = PaymentDetailFragment.class.getSimpleName();
@@ -144,7 +143,8 @@ public class PaymentDetailFragment extends BaseFragment {
                 Integer.parseInt(date[1]),
                 Integer.parseInt("13" + date[0]));
           }
-          builder.build((id, calendar, day, month, year) -> {
+          builder.build((id, calendar, day, month, year) ->
+          {
             chequeDate.setHint(
                 String.format(Locale.ENGLISH, "%02d/%02d/%02d", year % 100, month, day));
             dateModified = true;

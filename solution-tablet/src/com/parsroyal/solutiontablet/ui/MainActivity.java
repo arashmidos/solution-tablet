@@ -23,6 +23,8 @@ import android.widget.ListView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -205,32 +207,42 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
   public void changeSidebarItem(int fragmentId) {
     setAllImagesInactive();
+    String contentName = "";
     switch (fragmentId) {
       case 0:
         customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list_active);
+        contentName = "Customer List";
         break;
       case 1:
         newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer_active);
+        contentName = "New Customer";
         break;
       case 12:
         dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_active);
+        contentName = "Map";
         break;
       case 14:
         ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_active);
+        contentName = "Reports";
         break;
       case 16:
         goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods_active);
+        contentName = "Goods List";
         break;
       case KPI_SALESMAN_FRAGMENT_ID://22
         userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance_active);
+        contentName = "User KPI";
         break;
       case FUNDS_FRAGMENT_ID://23
         fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report_active);
+        contentName = "Payment Reports";
         break;
       case NQUESTIONAIRE_FRAGMENT_ID://26
         questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_active);
+        contentName = "New Questionnaire";
         break;
     }
+    Answers.getInstance().logContentView(new ContentViewEvent().putContentName(contentName));
   }
 
   private void setAllImagesInactive() {
@@ -378,6 +390,8 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         changeSidebarItem(NQUESTIONAIRE_FRAGMENT_ID);
 
     }
+    Answers.getInstance().logContentView(
+        new ContentViewEvent().putContentId("Fragment " + String.valueOf(fragmentId)));
     return fragment;
   }
 

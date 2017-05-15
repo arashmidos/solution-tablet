@@ -10,7 +10,7 @@
   </style>
 
 
-  <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"/>
+  <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" />
 
   <style name="MyActionBar" parent="Theme.AppCompat.Light">
     <item name="android:background">#3F51B5</item>
@@ -79,5 +79,5 @@
     <item name="colorButtonNormal">@color/gray</item>
   </style>
 
-  <style name="Widget.GifView" parent="@android:style/Widget"/>
+  <style name="Widget.GifView" parent="@android:style/Widget" />
 </resources>

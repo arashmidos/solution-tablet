@@ -3,14 +3,14 @@
   android:id="@+id/layout"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:paddingRight="15dp"
   android:gravity="right"
-  android:orientation="horizontal"
-  android:paddingRight="15dp">
+  android:orientation="horizontal">
 
 
   <ImageButton
     android:id="@+id/addBtn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_action_add"/>
+    android:src="@drawable/ic_action_add" />
 </LinearLayout>

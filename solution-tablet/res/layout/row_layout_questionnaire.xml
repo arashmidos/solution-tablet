@@ -10,13 +10,13 @@
     style="@style/TextView.Caption"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:layout_marginEnd="33dp"
+    android:layout_marginRight="32dp"
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
-    android:layout_marginEnd="33dp"
-    android:layout_marginRight="32dp"
-    android:layout_marginTop="15dp"
-    android:text="عنوان:"/>
+    android:text="عنوان:" />
 
   <TextView
     android:id="@+id/descriptionTv"
@@ -26,20 +26,20 @@
     android:layout_toLeftOf="@+id/textView31"
     android:layout_toStartOf="@+id/textView31"
     android:text="پرسشنامه فصلی"
-    android:textAppearance="?android:attr/textAppearanceMedium"/>
+    android:textAppearance="?android:attr/textAppearanceMedium" />
 
   <TextView
     android:id="@+id/textView33"
     style="@style/TextView.Caption"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
+    android:layout_marginTop="15dp"
     android:layout_marginEnd="29dp"
     android:layout_marginRight="40dp"
-    android:layout_marginTop="15dp"
+    android:layout_alignParentTop="true"
     android:layout_toLeftOf="@+id/descriptionTv"
     android:layout_toStartOf="@+id/descriptionTv"
-    android:text="تعداد سوالات:"/>
+    android:text="تعداد سوالات:" />
 
   <TextView
     android:id="@+id/qCountTv"
@@ -49,5 +49,5 @@
     android:layout_toLeftOf="@+id/textView33"
     android:layout_toStartOf="@+id/textView33"
     android:text="12"
-    android:textAppearance="?android:attr/textAppearanceMedium"/>
+    android:textAppearance="?android:attr/textAppearanceMedium" />
 </RelativeLayout>

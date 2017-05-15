@@ -10,6 +10,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.SearchEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.BaseListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -99,6 +101,8 @@ public abstract class BaseListAdapter<T extends BaseListModel> extends BaseAdapt
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+          Answers.getInstance().logSearch(new SearchEvent()
+              .putQuery(constraint.toString()));
           FilterResults results = new FilterResults();
           List<T> filteredData = getFilteredData(constraint);
           results.count = filteredData.size();

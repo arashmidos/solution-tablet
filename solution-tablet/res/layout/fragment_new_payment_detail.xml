@@ -2,14 +2,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#ffffffff"
-  android:padding="16dp">
+  android:padding="16dp"
+  android:background="#ffffffff">
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:orientation="vertical">
 
 
     <TextView
@@ -18,7 +18,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="right"
       android:text="لطفا اطلاعات دریافت وجه را در فرم زیر وارد نمایید"
-      android:textAppearance="?android:attr/textAppearanceMedium"/>
+      android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -27,36 +27,36 @@
       android:weightSum="100">
 
       <Spinner
-        style="@style/Spinner"
         android:id="@+id/paymentsSp"
+        style="@style/Spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
         android:layout_weight="80"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:prompt="@string/please_select_payment_type"
-        android:spinnerMode="dropdown"/>
+        android:spinnerMode="dropdown" />
 
       <TextView
         android:id="@+id/textView5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:layout_weight="20"
+        android:layout_gravity="center_vertical"
         android:text="@string/payment_type_caption"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
     <EditText
       android:id="@+id/amount"
-      android:inputType="numberDecimal"
-      android:digits="1234567890,۰۱۲۳۴۵۶۷۸۹"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:layout_marginBottom="15dp"
       android:layout_marginTop="15dp"
-      android:hint="@string/payment_amount"/>
+      android:layout_marginBottom="15dp"
+      android:layout_gravity="center"
+      android:digits="1234567890,۰۱۲۳۴۵۶۷۸۹"
+      android:hint="@string/payment_amount"
+      android:inputType="numberDecimal" />
 
 
     <LinearLayout
@@ -70,10 +70,10 @@
         android:id="@+id/trackingNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
-        android:hint="@string/tracking_no"/>
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="center"
+        android:hint="@string/tracking_no" />
 
     </LinearLayout>
 
@@ -92,15 +92,15 @@
         <EditText
           android:id="@+id/chequeNo"
           android:layout_width="0dp"
-          android:layout_weight="1"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
+          android:layout_weight="1"
+          android:layout_marginTop="15dp"
           android:layout_marginBottom="15dp"
           android:layout_marginLeft="10dp"
           android:layout_marginRight="10dp"
-          android:layout_marginTop="15dp"
+          android:layout_gravity="center"
           android:gravity="right"
-          android:hint=""/>
+          android:hint="" />
 
         <TextView
           android:id="@+id/chequeNoLabel"
@@ -108,20 +108,20 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:text="@string/cheque_number"
-          android:textAppearance="?android:attr/textAppearanceMedium"/>
+          android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-          android:focusable="false"
           android:id="@+id/chequeDate"
           android:layout_width="150dp"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
+          android:layout_marginTop="15dp"
           android:layout_marginBottom="15dp"
           android:layout_marginLeft="10dp"
           android:layout_marginRight="10dp"
-          android:layout_marginTop="15dp"
+          android:layout_gravity="center"
+          android:focusable="false"
           android:gravity="center"
-          android:hint="@string/cheque_date_sample"/>
+          android:hint="@string/cheque_date_sample" />
 
         <TextView
           android:id="@+id/chequeDateLabel"
@@ -129,9 +129,10 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:text="@string/cheque_date"
-          android:textAppearance="?android:attr/textAppearanceMedium"/>
+          android:textAppearance="?android:attr/textAppearanceMedium" />
 
       </LinearLayout>
+
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -141,15 +142,15 @@
         <EditText
           android:id="@+id/chequeAccNo"
           android:layout_width="0dp"
-          android:layout_weight="1"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
+          android:layout_weight="1"
+          android:layout_marginTop="15dp"
           android:layout_marginBottom="15dp"
           android:layout_marginLeft="10dp"
           android:layout_marginRight="10dp"
-          android:layout_marginTop="15dp"
+          android:layout_gravity="center"
           android:gravity="right"
-          android:hint=""/>
+          android:hint="" />
 
         <TextView
           android:id="@+id/chequeAccountNoLabel"
@@ -157,10 +158,11 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:text="@string/cheque_account_number"
-          android:textAppearance="?android:attr/textAppearanceMedium"/>
+          android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
       </LinearLayout>
+
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -170,15 +172,15 @@
         <EditText
           android:id="@+id/chequeOwner"
           android:layout_width="0dp"
-          android:layout_weight="1"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
+          android:layout_weight="1"
+          android:layout_marginTop="15dp"
           android:layout_marginBottom="15dp"
           android:layout_marginLeft="10dp"
           android:layout_marginRight="10dp"
-          android:layout_marginTop="15dp"
+          android:layout_gravity="center"
           android:gravity="right"
-          android:hint="@string/cheque_owner_hint"/>
+          android:hint="@string/cheque_owner_hint" />
 
         <TextView
           android:id="@+id/chequeAccountOwnerLabel"
@@ -186,10 +188,11 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:text="@string/cheque_account_owner"
-          android:textAppearance="?android:attr/textAppearanceMedium"/>
+          android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
       </LinearLayout>
+
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -199,15 +202,15 @@
         <EditText
           android:id="@+id/chequeBranch"
           android:layout_width="0dp"
-          android:layout_weight="1"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
+          android:layout_weight="1"
+          android:layout_marginTop="15dp"
           android:layout_marginBottom="15dp"
           android:layout_marginLeft="10dp"
           android:layout_marginRight="10dp"
-          android:layout_marginTop="15dp"
+          android:layout_gravity="center"
           android:gravity="right"
-          android:hint=""/>
+          android:hint="" />
 
         <TextView
           android:id="@+id/chequeBranchLabel"
@@ -215,19 +218,19 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:text="@string/cheque_branch"
-          android:textAppearance="?android:attr/textAppearanceMedium"/>
+          android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
-          style="@style/Spinner"
           android:id="@+id/bankSp"
+          style="@style/Spinner"
           android:layout_width="240dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="15dp"
+          android:layout_marginBottom="15dp"
           android:layout_marginLeft="10dp"
           android:layout_marginRight="10dp"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="15dp"
-          android:layout_marginTop="15dp"
           android:prompt="@string/please_select_payment_type"
-          android:spinnerMode="dropdown"/>
+          android:spinnerMode="dropdown" />
 
         <TextView
           android:id="@+id/chequeBankLabel"
@@ -235,7 +238,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:text="@string/cheque_bank"
-          android:textAppearance="?android:attr/textAppearanceMedium"/>
+          android:textAppearance="?android:attr/textAppearanceMedium" />
 
       </LinearLayout>
     </LinearLayout>
@@ -243,8 +246,8 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="15dp"
       android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
       android:orientation="horizontal">
 
       <Button
@@ -252,18 +255,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/title_cancel"/>
+        android:text="@string/title_cancel" />
 
       <View
         android:layout_width="10dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
       <Button
         android:id="@+id/saveBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/save"/>
+        android:text="@string/save" />
 
     </LinearLayout>
 

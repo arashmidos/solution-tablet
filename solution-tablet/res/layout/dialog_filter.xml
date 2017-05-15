@@ -2,21 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:padding="16dp">
+  android:padding="16dp"
+  android:orientation="vertical">
 
   <TextView
     style="@style/TextView.PageTitle"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:layout_gravity="right"
-    android:text="فیلتر بر اساس"/>
+    android:text="فیلتر بر اساس" />
 
   <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="right"
     android:layout_marginTop="20dp"
+    android:layout_gravity="right"
     android:orientation="horizontal">
 
     <TextView
@@ -24,7 +24,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="right|bottom"
-      android:text="متر"/>
+      android:text="متر" />
 
     <EditText
       android:id="@+id/distance_filter"
@@ -34,22 +34,22 @@
       android:layout_marginLeft="15dp"
       android:layout_marginRight="10dp"
       android:hint="500"
-      android:inputType="number"/>
+      android:inputType="number" />
 
     <TextView
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="right|bottom"
-      android:text="فاصله : کمتر از "/>
+      android:text="فاصله : کمتر از " />
   </LinearLayout>
 
 
   <RadioGroup
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="right"
     android:layout_marginTop="20dp"
+    android:layout_gravity="right"
     android:gravity="right"
     android:orientation="horizontal">
 
@@ -58,9 +58,9 @@
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="right"
       android:layout_marginRight="20dp"
-      android:text="@string/has_order"/>
+      android:layout_gravity="right"
+      android:text="@string/has_order" />
 
     <RadioButton
       android:id="@+id/filter_has_none"
@@ -68,15 +68,15 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="right"
-      android:text="@string/has_none"/>
+      android:text="@string/has_none" />
   </RadioGroup>
 
 
   <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="right"
     android:layout_marginTop="20dp"
+    android:layout_gravity="right"
     android:orientation="horizontal">
 
     <Button
@@ -87,7 +87,7 @@
       android:layout_marginRight="15dp"
       android:background="@drawable/rounded_button_gray"
       android:text="@string/clear"
-      android:textColor="@color/white"/>
+      android:textColor="@color/white" />
 
     <Button
       android:id="@+id/filter_btn"
@@ -96,6 +96,6 @@
       android:layout_marginRight="15dp"
       android:background="@drawable/rounded_button_gray"
       android:text="@string/filter"
-      android:textColor="@color/white"/>
+      android:textColor="@color/white" />
   </LinearLayout>
 </LinearLayout>

@@ -3,8 +3,8 @@
   xmlns:custom="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
   android:padding="10dp"
+  android:orientation="vertical"
   android:weightSum="100">
 
   <LinearLayout
@@ -29,18 +29,17 @@
       android:layout_height="match_parent"
       android:layout_weight="50"
       android:gravity="right"
-      custom:defaultPosition="0">
-    </com.parsroyal.solutiontablet.ui.component.TabContainer>
+      custom:defaultPosition="0"></com.parsroyal.solutiontablet.ui.component.TabContainer>
   </LinearLayout>
 
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="2dp"
     android:layout_marginTop="10dp"
-    android:background="#ffdddce1"
-    android:paddingBottom="2dp"
     android:paddingTop="2dp"
-    android:scaleType="fitXY"/>
+    android:paddingBottom="2dp"
+    android:background="#ffdddce1"
+    android:scaleType="fitXY" />
 
   <LinearLayout
     android:id="@+id/contentPanel"
@@ -52,7 +51,6 @@
       android:id="@+id/orderDetailContentFrame"
       android:layout_width="fill_parent"
       android:layout_height="match_parent"
-      android:background="#ffffff">
-    </FrameLayout>
+      android:background="#ffffff"></FrameLayout>
   </LinearLayout>
 </LinearLayout>

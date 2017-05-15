@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:padding="5dp">
+  android:padding="5dp"
+  android:orientation="vertical">
 
 
   <LinearLayout
@@ -16,22 +16,22 @@
       android:id="@+id/searchTxt"
       style="@style/EditBox"
       android:layout_width="300dip"
-      android:layout_height="wrap_content"/>
+      android:layout_height="wrap_content" />
 
     <TextView
       android:id="@+id/textView55"
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="جستجو:"/>
+      android:text="جستجو:" />
   </LinearLayout>
 
   <TableLayout
     android:id="@+id/goodsDataTableHeaders"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
     android:layout_marginTop="15dp"
+    android:layout_gravity="center"
     android:gravity="right">
 
     <TableRow
@@ -46,35 +46,35 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal"
-        android:text="عملیات"/>
+        android:text="عملیات" />
 
       <TextView
         android:id="@+id/tvPaymentTime"
         style="@style/TextView.Cell"
         android:layout_width="100dp"
         android:layout_height="fill_parent"
-        android:layout_marginLeft="0dp"
         android:layout_weight="0"
+        android:layout_marginLeft="0dp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="راس پرداخت"/>
+        android:text="راس پرداخت" />
 
       <TextView
         android:id="@+id/tvRemaining"
         style="@style/TextView.Cell"
         android:layout_width="150dp"
-        android:layout_marginLeft="0dp"
         android:layout_weight="0"
+        android:layout_marginLeft="0dp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="موجودی"/>
+        android:text="موجودی" />
 
       <TextView
         android:id="@+id/textView53"
         style="@style/TextView.Cell"
         android:layout_width="105dp"
-        android:layout_marginLeft="0dp"
         android:layout_weight="0"
+        android:layout_marginLeft="0dp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="قیمت واحد"/>
+        android:text="قیمت واحد" />
 
       <TextView
         android:id="@+id/textView57"
@@ -82,24 +82,24 @@
         android:layout_width="120dp"
         android:layout_marginLeft="0dp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="کد کالا"/>
+        android:text="کد کالا" />
 
       <TextView
         android:id="@+id/textView75"
         style="@style/TextView.Cell"
         android:layout_width="250dp"
-        android:layout_marginLeft="0dp"
         android:layout_weight="0"
+        android:layout_marginLeft="0dp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="نام کالا"/>
+        android:text="نام کالا" />
     </TableRow>
   </TableLayout>
 
   <ScrollView
-    android:background="@color/white"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1"
+    android:background="@color/white"
     android:scrollbars="vertical|none">
 
     <LinearLayout
@@ -108,14 +108,13 @@
       android:orientation="vertical">
 
       <TableLayout
-        android:background="@color/white"
         android:id="@+id/goodsDataTable"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:background="@color/white"
         android:gravity="right"
-        android:showDividers="middle">
-      </TableLayout>
+        android:showDividers="middle"></TableLayout>
     </LinearLayout>
   </ScrollView>
 

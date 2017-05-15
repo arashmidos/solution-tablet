@@ -12,29 +12,29 @@
     <TableRow
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:layout_marginBottom="10dp"
       android:layout_marginTop="5dp"
+      android:layout_marginBottom="10dp"
       android:gravity="center">
 
       <EditText
         android:id="@+id/usernameTxt"
         style="@style/EditBox"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
       <TextView
         android:id="@+id/textView18"
         style="@style/TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="نام کاربری"/>
+        android:text="نام کاربری" />
     </TableRow>
 
     <TableRow
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:layout_marginBottom="10dp"
       android:layout_marginTop="5dp"
+      android:layout_marginBottom="10dp"
       android:gravity="center">
 
       <EditText
@@ -43,34 +43,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
 
       <TextView
         android:id="@+id/textView19"
         style="@style/TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="رمز عبور"/>
+        android:text="رمز عبور" />
     </TableRow>
 
     <TableRow
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:layout_marginBottom="10dp"
       android:layout_marginTop="10dp"
+      android:layout_marginBottom="10dp"
       android:gravity="center">
 
       <Button
         android:id="@+id/loginBtn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="@string/login"/>
+        android:text="@string/login" />
 
       <Button
         android:id="@+id/cancelBtn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="@string/button_cancel"/>
+        android:text="@string/button_cancel" />
     </TableRow>
   </TableLayout>
 

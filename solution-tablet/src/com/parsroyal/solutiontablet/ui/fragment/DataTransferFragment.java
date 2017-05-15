@@ -13,6 +13,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
@@ -67,6 +69,8 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
 
   private void invokeSendData() {
     dataTransferPB.setVisibility(View.VISIBLE);
+    Answers.getInstance().logContentView(new ContentViewEvent().putContentName("Send Data")
+        .putContentType("Data Transfer"));
     enableButtons(false);
     Thread thread = new Thread(() ->
     {
@@ -93,6 +97,8 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
 
   private void invokeGetData() {
     dataTransferPB.setVisibility(View.VISIBLE);
+    Answers.getInstance().logContentView(new ContentViewEvent().putContentName("Get Data")
+        .putContentType("Data Transfer"));
     enableButtons(false);
     Thread thread = new Thread(() ->
     {

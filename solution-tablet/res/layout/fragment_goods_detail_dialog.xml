@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:padding="20dp">
+  android:padding="20dp"
+  android:orientation="vertical">
 
   <LinearLayout
     android:layout_width="fill_parent"
@@ -17,7 +17,7 @@
       style="@style/TextView.Value"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="استند 20 سانتی ک"/>
+      android:text="استند 20 سانتی ک" />
 
     <TextView
       android:id="@+id/textView56"
@@ -25,7 +25,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:gravity="center_vertical|center_horizontal"
-      android:text="نام کالا"/>
+      android:text="نام کالا" />
   </LinearLayout>
 
   <LinearLayout
@@ -39,18 +39,18 @@
       android:id="@+id/goodUnitsSp"
       style="@style/Spinner"
       android:layout_width="100dp"
-      android:layout_height="wrap_content"/>
+      android:layout_height="wrap_content" />
 
     <EditText
       android:id="@+id/countTxt"
       style="@style/EditBox"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_gravity="bottom"
       android:layout_weight="1"
+      android:layout_gravity="bottom"
       android:digits="1234567890.-۰۱۲۳۴۵۶۷۸۹"
       android:ems="10"
-      android:inputType="numberDecimal"/>
+      android:inputType="numberDecimal" />
 
     <TextView
       android:id="@+id/textView52"
@@ -59,7 +59,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
       android:gravity="center_vertical|center_horizontal"
-      android:text="تعداد/مقدار کالا:"/>
+      android:text="تعداد/مقدار کالا:" />
   </LinearLayout>
 
   <LinearLayout
@@ -73,13 +73,13 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:drawableRight="@drawable/ic_action_cancel"
-      android:text="انصراف"/>
+      android:text="انصراف" />
 
     <Button
       android:id="@+id/confirmBtn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:drawableRight="@drawable/ic_action_tick"
-      android:text="تایید"/>
+      android:text="تایید" />
   </LinearLayout>
 </LinearLayout>

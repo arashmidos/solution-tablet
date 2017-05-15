@@ -14,6 +14,10 @@ public class QuestionDto extends BaseModel {
   private String description;
   private Long answerId;
   private String answer;
+  private String qAnswers;
+  private Long questionBackendId;
+  private String createDateTime;
+  private QuestionType type;
 
   public String getqAnswers() {
     return qAnswers;
@@ -22,11 +26,6 @@ public class QuestionDto extends BaseModel {
   public void setqAnswers(String qAnswers) {
     this.qAnswers = qAnswers;
   }
-
-  private String qAnswers;
-  private Long questionBackendId;
-  private String createDateTime;
-  private QuestionType type;
 
   public QuestionType getType() {
     return type;

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    android:paddingRight="10dp"
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -28,56 +27,56 @@
           style="@style/TextView.Value"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="پرسشنامه عمومی"/>
+          android:text="پرسشنامه عمومی" />
 
         <TextView
           android:id="@+id/text12"
           style="@style/TextView.Caption"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="پرسشنامه:"/>
+          android:text="پرسشنامه:" />
       </LinearLayout>
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_margin="10dp"
-        android:background="#ffdddce1"
-        android:paddingBottom="2dp"
         android:paddingTop="2dp"
-        android:scaleType="fitXY"/>
+        android:paddingBottom="2dp"
+        android:background="#ffdddce1"
+        android:scaleType="fitXY" />
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:orientation="horizontal"
         android:paddingBottom="5dp"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        android:gravity="right"
+        android:orientation="horizontal">
 
         <TextView
           android:id="@+id/questionTv"
           style="@style/TextView.Value"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="مزیت رقابتی ما نسبت به رقبا چیست؟"/>
+          android:text="مزیت رقابتی ما نسبت به رقبا چیست؟" />
 
         <TextView
           android:id="@+id/textView36"
           style="@style/TextView.Caption"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="سوال:"/>
+          android:text="سوال:" />
       </LinearLayout>
 
       <LinearLayout
         android:id="@+id/textAnswerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        android:orientation="horizontal">
 
         <EditText
           android:id="@+id/answerEt"
@@ -85,23 +84,25 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:gravity="right"/>
+          android:gravity="right" />
+
         <EditText
           android:id="@+id/answerEt2"
-          android:inputType="numberDecimal"
-          android:digits="1234567890,۰۱۲۳۴۵۶۷۸۹"
           style="@style/EditBox"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:visibility="gone"
-          android:gravity="right"/>
+          android:digits="1234567890,۰۱۲۳۴۵۶۷۸۹"
+          android:gravity="right"
+          android:inputType="numberDecimal"
+          android:visibility="gone" />
+
         <TextView
           android:id="@+id/textView39"
           style="@style/TextView.Caption"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="پاسخ:"/>
+          android:text="پاسخ:" />
       </LinearLayout>
 
       <com.parsroyal.solutiontablet.ui.component.FlowLayout
@@ -118,34 +119,34 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="2dp"
+      android:layout_marginTop="10dp"
       android:layout_marginBottom="10dp"
       android:layout_marginLeft="10dp"
       android:layout_marginRight="10dp"
-      android:layout_marginTop="10dp"
-      android:background="#ffdddce1"
-      android:paddingBottom="2dp"
       android:paddingTop="2dp"
-      android:scaleType="fitXY"/>
+      android:paddingBottom="2dp"
+      android:background="#ffdddce1"
+      android:scaleType="fitXY" />
 
     <LinearLayout
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
+      android:paddingBottom="10dp"
       android:gravity="center"
-      android:orientation="horizontal"
-      android:paddingBottom="10dp">
+      android:orientation="horizontal">
 
       <Button
         android:id="@+id/cancelBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cancel_btn"/>
+        android:text="@string/cancel_btn" />
 
       <Button
         android:id="@+id/saveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="@string/save"/>
+        android:text="@string/save" />
 
       <Button
         android:id="@+id/nextBtn"
@@ -153,13 +154,13 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="@string/next"/>
+        android:text="@string/next" />
 
       <Button
         android:id="@+id/prvBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/prev"/>
+        android:text="@string/prev" />
     </LinearLayout>
   </LinearLayout>
 </ScrollView>

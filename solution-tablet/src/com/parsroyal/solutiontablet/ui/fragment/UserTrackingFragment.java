@@ -26,6 +26,8 @@ import butterknife.OnClick;
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.components.JDF;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -388,6 +390,7 @@ public class UserTrackingFragment extends BaseFragment implements
       Bundle args = new Bundle();
       args.putLong(Constants.VISIT_ID, visitInformationId);
       args.putLong(Constants.CUSTOMER_ID, clickedClusterItem.getPrimaryKey());
+      Answers.getInstance().logContentView(new ContentViewEvent().putContentName("Map Visit"));
       ((MainActivity) context).changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, false);
 
 
@@ -484,6 +487,8 @@ public class UserTrackingFragment extends BaseFragment implements
       polyOptions.addAll(route);
       polyline = map.addPolyline(polyOptions);
       polylines.add(polyline);
+
+      Answers.getInstance().logContentView(new ContentViewEvent().putContentName("Map Filter"));
     }
   }
 

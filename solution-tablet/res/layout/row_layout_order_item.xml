@@ -1,11 +1,9 @@
-<TableRow
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/tableRow1"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:gravity="right"
-  >
+  android:gravity="right">
 
   <LinearLayout
     android:id="@+id/actionsLayout"
@@ -13,24 +11,23 @@
     android:layout_width="200dp"
     android:layout_height="match_parent"
     android:layout_weight="0"
-    android:gravity="right"
-    android:orientation="horizontal"
     android:padding="5dp"
-    >
+    android:gravity="right"
+    android:orientation="horizontal">
 
     <ImageButton
       android:id="@+id/deleteItemIb"
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:layout_gravity="center"
-      android:src="@drawable/ic_action_cancel"/>
+      android:src="@drawable/ic_action_cancel" />
 
     <ImageButton
       android:id="@+id/editItemIb"
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:layout_gravity="center"
-      android:src="@drawable/ic_action_edit"/>
+      android:src="@drawable/ic_action_edit" />
   </LinearLayout>
 
 
@@ -41,7 +38,7 @@
     android:layout_height="match_parent"
     android:layout_weight="0"
     android:gravity="center_vertical|center_horizontal"
-    android:text="قیمت کل"/>
+    android:text="قیمت کل" />
 
   <TextView
     android:id="@+id/unit2CountTv"
@@ -50,7 +47,7 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
     android:text=""
-    tools:text="واحد 2"/>
+    tools:text="واحد 2" />
 
   <TextView
     android:id="@+id/unit1CountTv"
@@ -58,7 +55,7 @@
     android:layout_width="105dp"
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
-    android:text="واحد 1"/>
+    android:text="واحد 1" />
 
   <TextView
     android:id="@+id/goodAmountTv"
@@ -66,7 +63,7 @@
     android:layout_width="110dp"
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
-    android:text="قیمت واحد"/>
+    android:text="قیمت واحد" />
 
   <TextView
     android:id="@+id/goodNameTv"
@@ -74,6 +71,6 @@
     android:layout_width="250dp"
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
-    android:text="نام کالا"/>
+    android:text="نام کالا" />
 
 </TableRow>

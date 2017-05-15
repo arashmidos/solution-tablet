@@ -191,8 +191,8 @@ public class GifView extends View {
   @Override
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
     super.onLayout(changed, l, t, r, b);
-		/*
-		 * Calculate mLeft / mTop for drawing in center
+        /*
+     * Calculate mLeft / mTop for drawing in center
 		 */
     mLeft = (getWidth() - mMeasuredMovieWidth) / 2f;
     mTop = (getHeight() - mMeasuredMovieHeight) / 2f;

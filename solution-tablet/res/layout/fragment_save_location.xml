@@ -12,7 +12,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:textColor="@color/red"
-    tools:text="Google play is not available"/>
+    tools:text="Google play is not available" />
 
   <FrameLayout
     android:id="@+id/layout_container"
@@ -23,17 +23,17 @@
 
     <fragment
       android:id="@+id/map"
-      android:name="com.google.android.gms.maps.SupportMapFragment"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      tools:context=".ui.MainActivity"/>
+      android:name="com.google.android.gms.maps.SupportMapFragment"
+      tools:context=".ui.MainActivity" />
 
     <LinearLayout
       android:id="@+id/locationMarker"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
       android:layout_marginBottom="30dp"
+      android:layout_gravity="center"
       android:gravity="center"
       android:orientation="vertical">
 
@@ -41,18 +41,18 @@
         android:id="@+id/locationMarkertext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_corner_map"
-        android:gravity="center"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
+        android:background="@drawable/rounded_corner_map"
+        android:gravity="center"
         android:text="@string/set_your_location"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white" />
 
       <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_location"/>
+        android:src="@drawable/ic_action_location" />
     </LinearLayout>
   </FrameLayout>
 

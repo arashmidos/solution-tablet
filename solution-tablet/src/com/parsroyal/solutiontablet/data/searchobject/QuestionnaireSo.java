@@ -6,15 +6,6 @@ package com.parsroyal.solutiontablet.data.searchobject;
 public class QuestionnaireSo extends BaseSO {
 
   private boolean general;
-
-  public boolean isAnonymous() {
-    return anonymous;
-  }
-
-  public void setAnonymous(boolean anonymous) {
-    this.anonymous = anonymous;
-  }
-
   private boolean anonymous;
 
   public QuestionnaireSo(boolean isGeneral) {
@@ -24,6 +15,14 @@ public class QuestionnaireSo extends BaseSO {
 
   public QuestionnaireSo() {
     super();
+  }
+
+  public boolean isAnonymous() {
+    return anonymous;
+  }
+
+  public void setAnonymous(boolean anonymous) {
+    this.anonymous = anonymous;
   }
 
   public boolean isGeneral() {

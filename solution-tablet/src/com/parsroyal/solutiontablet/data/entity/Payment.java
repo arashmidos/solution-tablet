@@ -131,7 +131,6 @@ public class Payment extends BaseEntity<Long> {
     this.chequeNumber = chequeNumber;
   }
 
-
   public String getChequeBranch() {
     return chequeBranch;
   }
@@ -179,7 +178,6 @@ public class Payment extends BaseEntity<Long> {
   public void setTrackingNo(String trackingNo) {
     this.trackingNo = trackingNo;
   }
-
 
   public String getChequeOwner() {
     return chequeOwner;

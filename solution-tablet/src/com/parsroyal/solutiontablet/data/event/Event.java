@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Event implements Serializable {
 
   protected String message;
+  protected int statusCode;
 
   public int getStatusCode() {
     return statusCode;
@@ -13,8 +14,6 @@ public class Event implements Serializable {
   public void setStatusCode(int statusCode) {
     this.statusCode = statusCode;
   }
-
-  protected int statusCode;
 
   public String getMessage() {
     return message;
