@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <declare-styleable name="TabContainer">
-    <attr format="integer" name="defaultPosition" />
+    <attr format="integer" name="defaultPosition"/>
   </declare-styleable>
 
   <declare-styleable name="GaugeView">
-    <attr format="boolean" name="showOuterShadow" />
-    <attr format="boolean" name="showOuterBorder" />
-    <attr format="boolean" name="showOuterRim" />
-    <attr format="boolean" name="showInnerRim" />
-    <attr format="boolean" name="showNeedle" />
-    <attr format="boolean" name="showScale" />
-    <attr format="boolean" name="showRanges" />
-    <attr format="boolean" name="showTexts" />
+    <attr format="boolean" name="showOuterShadow"/>
+    <attr format="boolean" name="showOuterBorder"/>
+    <attr format="boolean" name="showOuterRim"/>
+    <attr format="boolean" name="showInnerRim"/>
+    <attr format="boolean" name="showNeedle"/>
+    <attr format="boolean" name="showScale"/>
+    <attr format="boolean" name="showRanges"/>
+    <attr format="boolean" name="showTexts"/>
 
-    <attr format="float" name="outerShadowWidth" />
-    <attr format="float" name="outerBorderWidth" />
-    <attr format="float" name="outerRimWidth" />
-    <attr format="float" name="innerRimWidth" />
-    <attr format="float" name="innerRimBorderWidth" />
-    <attr format="float" name="needleWidth" />
-    <attr format="float" name="needleHeight" />
+    <attr format="float" name="outerShadowWidth"/>
+    <attr format="float" name="outerBorderWidth"/>
+    <attr format="float" name="outerRimWidth"/>
+    <attr format="float" name="innerRimWidth"/>
+    <attr format="float" name="innerRimBorderWidth"/>
+    <attr format="float" name="needleWidth"/>
+    <attr format="float" name="needleHeight"/>
 
-    <attr format="float" name="scalePosition" />
-    <attr format="float" name="scaleStartValue" />
-    <attr format="float" name="scaleEndValue" />
-    <attr format="float" name="scaleStartAngle" />
-    <attr format="float" name="scaleEndAngle" />
+    <attr format="float" name="scalePosition"/>
+    <attr format="float" name="scaleStartValue"/>
+    <attr format="float" name="scaleEndValue"/>
+    <attr format="float" name="scaleStartAngle"/>
+    <attr format="float" name="scaleEndAngle"/>
 
-    <attr format="integer" name="divisions" />
-    <attr format="integer" name="subdivisions" />
+    <attr format="integer" name="divisions"/>
+    <attr format="integer" name="subdivisions"/>
 
-    <attr format="reference" name="rangeValues" />
-    <attr format="reference" name="rangeColors" />
+    <attr format="reference" name="rangeValues"/>
+    <attr format="reference" name="rangeColors"/>
 
-    <attr format="string|reference" name="textValue" />
-    <attr format="color" name="textValueColor" />
-    <attr format="float" name="textValueSize" />
-    <attr format="string|reference" name="textUnit" />
-    <attr format="color" name="textUnitColor" />
-    <attr format="float" name="textUnitSize" />
-    <attr format="color" name="textShadowColor" />
+    <attr format="string|reference" name="textValue"/>
+    <attr format="color" name="textValueColor"/>
+    <attr format="float" name="textValueSize"/>
+    <attr format="string|reference" name="textUnit"/>
+    <attr format="color" name="textUnitColor"/>
+    <attr format="float" name="textUnitSize"/>
+    <attr format="color" name="textShadowColor"/>
 
   </declare-styleable>
 
   <declare-styleable name="GifView">
-    <attr format="reference" name="gif" />
-    <attr format="boolean" name="paused" />
+    <attr format="reference" name="gif"/>
+    <attr format="boolean" name="paused"/>
   </declare-styleable>
 
   <declare-styleable name="CustomTheme">
-    <attr format="reference" name="gifViewStyle" />
+    <attr format="reference" name="gifViewStyle"/>
   </declare-styleable>
 
   <declare-styleable name="FlowLayout">
-    <attr name="android:gravity" />
+    <attr name="android:gravity"/>
   </declare-styleable>
   <declare-styleable name="FlowLayout_Layout">
-    <attr name="android:layout_gravity" />
+    <attr name="android:layout_gravity"/>
   </declare-styleable>
 
 </resources>

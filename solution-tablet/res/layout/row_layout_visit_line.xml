@@ -11,7 +11,7 @@
     android:layout_marginRight="10dp"
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
-    android:src="@drawable/ic_visitline" />
+    android:src="@drawable/ic_visitline"/>
 
   <TextView
     android:id="@+id/textView35"
@@ -23,7 +23,7 @@
     android:layout_toLeftOf="@+id/imageView3"
     android:layout_toStartOf="@+id/imageView3"
     android:text="نام گروه:"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
   <TextView
     android:id="@+id/nameTxt"
@@ -35,7 +35,7 @@
     android:layout_toLeftOf="@+id/textView35"
     android:layout_toStartOf="@+id/textView35"
     android:text="مهیار"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
   <TextView
     android:id="@+id/textView38"
@@ -47,7 +47,7 @@
     android:layout_toLeftOf="@+id/nameTxt"
     android:layout_toStartOf="@+id/nameTxt"
     android:text="کد گروه:"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
   <TextView
     android:id="@+id/codeTxt"
@@ -59,7 +59,7 @@
     android:layout_toLeftOf="@+id/textView38"
     android:layout_toStartOf="@+id/textView38"
     android:text="111"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
   <TextView
     android:id="@+id/textView40"
@@ -70,7 +70,7 @@
     android:layout_toLeftOf="@+id/codeTxt"
     android:layout_toStartOf="@+id/codeTxt"
     android:text="تعداد مشتری:"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
   <TextView
     android:id="@+id/countTxt"
@@ -82,5 +82,5 @@
     android:layout_toLeftOf="@+id/textView40"
     android:layout_toStartOf="@+id/textView40"
     android:text="12"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:textAppearance="?android:attr/textAppearanceMedium"/>
 </RelativeLayout>

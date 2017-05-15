@@ -27,14 +27,14 @@
           style="@style/TextView.Value"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="پرسشنامه عمومی" />
+          android:text="پرسشنامه عمومی"/>
 
         <TextView
           android:id="@+id/text12"
           style="@style/TextView.Caption"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="پرسشنامه:" />
+          android:text="پرسشنامه:"/>
       </LinearLayout>
 
       <LinearLayout
@@ -44,7 +44,7 @@
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:background="#ffdddce1"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"/>
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -60,14 +60,14 @@
           style="@style/TextView.Value"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="مزیت رقابتی ما نسبت به رقبا چیست؟" />
+          android:text="مزیت رقابتی ما نسبت به رقبا چیست؟"/>
 
         <TextView
           android:id="@+id/textView36"
           style="@style/TextView.Caption"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="سوال:" />
+          android:text="سوال:"/>
       </LinearLayout>
 
       <LinearLayout
@@ -84,7 +84,7 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:gravity="right" />
+          android:gravity="right"/>
 
         <EditText
           android:id="@+id/answerEt2"
@@ -95,14 +95,14 @@
           android:digits="1234567890,۰۱۲۳۴۵۶۷۸۹"
           android:gravity="right"
           android:inputType="numberDecimal"
-          android:visibility="gone" />
+          android:visibility="gone"/>
 
         <TextView
           android:id="@+id/textView39"
           style="@style/TextView.Caption"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="پاسخ:" />
+          android:text="پاسخ:"/>
       </LinearLayout>
 
       <com.parsroyal.solutiontablet.ui.component.FlowLayout
@@ -126,7 +126,7 @@
       android:paddingTop="2dp"
       android:paddingBottom="2dp"
       android:background="#ffdddce1"
-      android:scaleType="fitXY" />
+      android:scaleType="fitXY"/>
 
     <LinearLayout
       android:layout_width="fill_parent"
@@ -139,14 +139,14 @@
         android:id="@+id/cancelBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cancel_btn" />
+        android:text="@string/cancel_btn"/>
 
       <Button
         android:id="@+id/saveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="@string/save" />
+        android:text="@string/save"/>
 
       <Button
         android:id="@+id/nextBtn"
@@ -154,13 +154,13 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="@string/next" />
+        android:text="@string/next"/>
 
       <Button
         android:id="@+id/prvBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/prev" />
+        android:text="@string/prev"/>
     </LinearLayout>
   </LinearLayout>
 </ScrollView>

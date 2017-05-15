@@ -16,7 +16,7 @@
     android:layout_gravity="center"
     android:text=""
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:visibility="gone" />
+    android:visibility="gone"/>
 
   <TextView
     android:id="@+id/textView47"
@@ -26,7 +26,7 @@
     android:layout_marginEnd="29dp"
     android:layout_marginRight="29dp"
     android:text="مشتری:"
-    android:visibility="gone" />
+    android:visibility="gone"/>
 
   <TextView
     android:id="@+id/dateTv"
@@ -36,7 +36,7 @@
     android:layout_marginRight="10dp"
     android:layout_gravity="center"
     android:text=""
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
   <TextView
     android:id="@+id/textView27"
@@ -45,7 +45,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="29dp"
     android:layout_marginRight="29dp"
-    android:text="تاریخ:" />
+    android:text="تاریخ:"/>
 
   <TextView
     android:id="@+id/typeTv"
@@ -55,7 +55,7 @@
     android:layout_marginRight="10dp"
     android:layout_gravity="center"
     android:text="وجه نقد"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
   <TextView
     android:id="@+id/textView26"
@@ -64,7 +64,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="29dp"
     android:layout_marginRight="29dp"
-    android:text="نوع دریافت:" />
+    android:text="نوع دریافت:"/>
 
   <TextView
     android:id="@+id/amountTv"
@@ -74,7 +74,7 @@
     android:layout_marginRight="10dp"
     android:layout_gravity="center"
     android:text="125000"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
   <TextView
     android:id="@+id/textView25"
@@ -83,7 +83,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="29dp"
     android:layout_marginRight="29dp"
-    android:text="مبلغ:" />
+    android:text="مبلغ:"/>
 
 
 </LinearLayout>

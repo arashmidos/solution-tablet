@@ -14,7 +14,7 @@
     android:layout_marginRight="10dp"
     android:gravity="left"
     android:text="کد"
-    android:textAppearance="?android:attr/textAppearanceSmall" />
+    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
   <TextView
 
@@ -26,7 +26,7 @@
     android:layout_marginRight="10dp"
     android:gravity="left"
     android:text="توضیحات"
-    android:textAppearance="?android:attr/textAppearanceSmall" />
+    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
   <TextView
     android:id="@+id/valueTv"
@@ -37,6 +37,6 @@
     android:layout_marginRight="10dp"
     android:gravity="left"
     android:text="مقدار"
-    android:textAppearance="?android:attr/textAppearanceSmall" />
+    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 </LinearLayout>

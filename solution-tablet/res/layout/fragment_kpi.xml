@@ -34,7 +34,7 @@
           gauge:showInnerRim="false"
           gauge:showOuterBorder="false"
           gauge:showOuterRim="false"
-          gauge:showOuterShadow="false" />
+          gauge:showOuterShadow="false"/>
 
         <TextView
           android:id="@+id/gauge_value1"
@@ -45,12 +45,12 @@
           android:paddingBottom="10dp"
           android:textColor="@color/white"
           android:textSize="22sp"
-          tools:text="Hello Kitty" />
+          tools:text="Hello Kitty"/>
       </RelativeLayout>
 
       <View
         android:layout_width="50dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
       <RelativeLayout
         android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
           gauge:showInnerRim="false"
           gauge:showOuterBorder="false"
           gauge:showOuterRim="false"
-          gauge:showOuterShadow="false" />
+          gauge:showOuterShadow="false"/>
 
         <TextView
           android:id="@+id/gauge_value2"
@@ -74,7 +74,7 @@
           android:paddingBottom="10dp"
           android:textColor="@color/white"
           android:textSize="22sp"
-          tools:text="Hello Kitty" />
+          tools:text="Hello Kitty"/>
       </RelativeLayout>
 
     </LinearLayout>
@@ -106,7 +106,7 @@
           android:layout_marginRight="10dp"
           android:gravity="left"
           android:text="کد"
-          android:textAppearance="?android:attr/textAppearanceMedium" />
+          android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <TextView
           android:id="@+id/descriptionLabel"
@@ -118,7 +118,7 @@
           android:layout_marginRight="10dp"
           android:gravity="left"
           android:text="توضیحات"
-          android:textAppearance="?android:attr/textAppearanceMedium" />
+          android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <TextView
           android:id="@+id/valueLabel"
@@ -130,7 +130,7 @@
           android:layout_marginRight="10dp"
           android:gravity="left"
           android:text="مقدار"
-          android:textAppearance="?android:attr/textAppearanceMedium" />
+          android:textAppearance="?android:attr/textAppearanceMedium"/>
       </LinearLayout>
 
       <ListView
@@ -142,7 +142,7 @@
         android:padding="10dp"
         android:divider="#ffc5ccc6"
         android:dividerHeight="1dp"
-        android:headerDividersEnabled="false" />
+        android:headerDividersEnabled="false"/>
     </LinearLayout>
   </LinearLayout>
 
@@ -152,11 +152,11 @@
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
     android:background="@color/colorPrimaryDark"
-    android:scaleType="fitXY" />
+    android:scaleType="fitXY"/>
 
   <com.github.mikephil.charting.charts.BarChart
     android:id="@+id/chart"
     android:layout_width="match_parent"
     android:layout_height="0dp"
-    android:layout_weight="0.5" />
+    android:layout_weight="0.5"/>
 </LinearLayout>

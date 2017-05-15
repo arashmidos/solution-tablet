@@ -39,7 +39,7 @@
     android:paddingTop="2dp"
     android:paddingBottom="2dp"
     android:background="#ffdddce1"
-    android:scaleType="fitXY" />
+    android:scaleType="fitXY"/>
 
   <LinearLayout
     android:id="@+id/contentPanel"

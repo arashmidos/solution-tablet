@@ -10,7 +10,7 @@
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:layout_gravity="right"
-    android:text="فیلتر بر اساس" />
+    android:text="فیلتر بر اساس"/>
 
   <LinearLayout
     android:layout_width="wrap_content"
@@ -24,7 +24,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="right|bottom"
-      android:text="متر" />
+      android:text="متر"/>
 
     <EditText
       android:id="@+id/distance_filter"
@@ -34,14 +34,14 @@
       android:layout_marginLeft="15dp"
       android:layout_marginRight="10dp"
       android:hint="500"
-      android:inputType="number" />
+      android:inputType="number"/>
 
     <TextView
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="right|bottom"
-      android:text="فاصله : کمتر از " />
+      android:text="فاصله : کمتر از "/>
   </LinearLayout>
 
 
@@ -60,7 +60,7 @@
       android:layout_height="wrap_content"
       android:layout_marginRight="20dp"
       android:layout_gravity="right"
-      android:text="@string/has_order" />
+      android:text="@string/has_order"/>
 
     <RadioButton
       android:id="@+id/filter_has_none"
@@ -68,7 +68,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="right"
-      android:text="@string/has_none" />
+      android:text="@string/has_none"/>
   </RadioGroup>
 
 
@@ -87,7 +87,7 @@
       android:layout_marginRight="15dp"
       android:background="@drawable/rounded_button_gray"
       android:text="@string/clear"
-      android:textColor="@color/white" />
+      android:textColor="@color/white"/>
 
     <Button
       android:id="@+id/filter_btn"
@@ -96,6 +96,6 @@
       android:layout_marginRight="15dp"
       android:background="@drawable/rounded_button_gray"
       android:text="@string/filter"
-      android:textColor="@color/white" />
+      android:textColor="@color/white"/>
   </LinearLayout>
 </LinearLayout>

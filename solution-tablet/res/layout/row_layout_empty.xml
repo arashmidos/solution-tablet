@@ -11,6 +11,6 @@
     android:layout_weight="0"
     android:padding="5dp"
     android:gravity="center_vertical|center_horizontal"
-    android:text="@string/no_result" />
+    android:text="@string/no_result"/>
 
 </TableRow>

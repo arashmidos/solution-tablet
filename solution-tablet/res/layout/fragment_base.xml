@@ -38,7 +38,7 @@
           android:paddingRight="35dp"
           android:background="@drawable/rounded_button_gray"
           android:text="@string/cancel_btn"
-          android:textColor="@color/white" />
+          android:textColor="@color/white"/>
 
         <ImageButton
           android:id="@+id/sort_btn"
@@ -46,14 +46,14 @@
           android:layout_height="wrap_content"
           android:layout_marginLeft="10dp"
           android:visibility="gone"
-          app:srcCompat="@drawable/ic_sort_by_alpha_24dp" />
+          app:srcCompat="@drawable/ic_sort_by_alpha_24dp"/>
 
         <ImageButton
           android:id="@+id/filter_btn"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:visibility="gone"
-          app:srcCompat="@drawable/ic_filter_list_24dp" />
+          app:srcCompat="@drawable/ic_filter_list_24dp"/>
       </LinearLayout>
 
       <EditText
@@ -68,7 +68,7 @@
         android:paddingRight="5dp"
         android:hint="@string/search_hint"
         android:inputType="text"
-        android:maxLines="1" />
+        android:maxLines="1"/>
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -99,7 +99,7 @@
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:gravity="right"
-      android:orientation="vertical" />
+      android:orientation="vertical"/>
 
     <ListView
       android:id="@+id/dataModelLv"
@@ -108,7 +108,7 @@
       android:padding="15dp"
       android:divider="#ffc5ccc6"
       android:dividerHeight="1dp"
-      android:headerDividersEnabled="false" />
+      android:headerDividersEnabled="false"/>
 
     <TextView
       android:id="@+id/emptyElement"
@@ -116,7 +116,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="20dp"
       android:layout_marginRight="20dp"
-      android:text="@string/message_no_item_found" />
+      android:text="@string/message_no_item_found"/>
 
   </LinearLayout>
 
@@ -132,5 +132,5 @@
     android:visibility="gone"
     app:backgroundTint="@color/pink"
     app:fabSize="normal"
-    app:srcCompat="@drawable/ic_action_add" />
+    app:srcCompat="@drawable/ic_action_add"/>
 </android.support.design.widget.CoordinatorLayout>

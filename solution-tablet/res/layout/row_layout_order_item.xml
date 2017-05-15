@@ -20,14 +20,14 @@
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:layout_gravity="center"
-      android:src="@drawable/ic_action_cancel" />
+      android:src="@drawable/ic_action_cancel"/>
 
     <ImageButton
       android:id="@+id/editItemIb"
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:layout_gravity="center"
-      android:src="@drawable/ic_action_edit" />
+      android:src="@drawable/ic_action_edit"/>
   </LinearLayout>
 
 
@@ -38,7 +38,7 @@
     android:layout_height="match_parent"
     android:layout_weight="0"
     android:gravity="center_vertical|center_horizontal"
-    android:text="قیمت کل" />
+    android:text="قیمت کل"/>
 
   <TextView
     android:id="@+id/unit2CountTv"
@@ -47,7 +47,7 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
     android:text=""
-    tools:text="واحد 2" />
+    tools:text="واحد 2"/>
 
   <TextView
     android:id="@+id/unit1CountTv"
@@ -55,7 +55,7 @@
     android:layout_width="105dp"
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
-    android:text="واحد 1" />
+    android:text="واحد 1"/>
 
   <TextView
     android:id="@+id/goodAmountTv"
@@ -63,7 +63,7 @@
     android:layout_width="110dp"
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
-    android:text="قیمت واحد" />
+    android:text="قیمت واحد"/>
 
   <TextView
     android:id="@+id/goodNameTv"
@@ -71,6 +71,6 @@
     android:layout_width="250dp"
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
-    android:text="نام کالا" />
+    android:text="نام کالا"/>
 
 </TableRow>

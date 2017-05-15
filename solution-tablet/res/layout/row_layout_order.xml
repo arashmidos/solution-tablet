@@ -20,14 +20,14 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="40dp"
-      android:text="94/06/03" />
+      android:text="94/06/03"/>
 
     <TextView
       android:id="@+id/orderDateLabel"
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/date_x" />
+      android:text="@string/date_x"/>
 
     <TextView
       android:id="@+id/orderNumberTv"
@@ -35,14 +35,14 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="40dp"
-      android:text="112" />
+      android:text="112"/>
 
     <TextView
       android:id="@+id/orderNumberLabel"
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/number_x" />
+      android:text="@string/number_x"/>
 
     <TextView
       android:id="@+id/customerNameTv"
@@ -50,14 +50,14 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="40dp"
-      android:text="مهیار سفیدی" />
+      android:text="مهیار سفیدی"/>
 
     <TextView
       android:id="@+id/textView45"
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text=":نام مشتری" />
+      android:text=":نام مشتری"/>
   </LinearLayout>
 
   <LinearLayout
@@ -73,14 +73,14 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="40dp"
-      android:text="قابل تحویل" />
+      android:text="قابل تحویل"/>
 
     <TextView
       android:id="@+id/textView63"
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="وضعیت سفارش:" />
+      android:text="وضعیت سفارش:"/>
 
     <TextView
       android:id="@+id/paymentTypeTitleTv"
@@ -88,14 +88,14 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="40dp"
-      android:text="چک 90 روز" />
+      android:text="چک 90 روز"/>
 
     <TextView
       android:id="@+id/rejectOrPaymentLabel"
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="نوع پرداخت:" />
+      android:text="نوع پرداخت:"/>
 
     <TextView
       android:id="@+id/amountTv"
@@ -103,14 +103,14 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="40dp"
-      android:text="125,000 تومان" />
+      android:text="125,000 تومان"/>
 
     <TextView
       android:id="@+id/amountLabel"
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/amount_x" />
+      android:text="@string/amount_x"/>
   </LinearLayout>
 
 </LinearLayout>

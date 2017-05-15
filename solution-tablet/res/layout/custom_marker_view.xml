@@ -17,6 +17,6 @@
     android:text=""
     android:textAppearance="?android:attr/textAppearanceSmall"
     android:textColor="@android:color/white"
-    android:textSize="12dp" />
+    android:textSize="12dp"/>
 
 </RelativeLayout>

@@ -21,7 +21,7 @@
       android:layout_toStartOf="@+id/sendDataBtn"
       android:drawableRight="@drawable/ic_action_download"
       android:text="@string/get_data"
-      android:textAppearance="?android:attr/textAppearanceSmall" />
+      android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <Button
       android:id="@+id/sendDataBtn"
@@ -35,7 +35,7 @@
       android:layout_alignParentTop="true"
       android:drawableRight="@drawable/ic_action_upload"
       android:text="@string/send_data"
-      android:textAppearance="?android:attr/textAppearanceSmall" />
+      android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <ProgressBar
       android:id="@+id/dataTransferPB"
@@ -46,7 +46,7 @@
       android:layout_alignTop="@+id/getDataBtn"
       android:layout_toLeftOf="@+id/getDataBtn"
       android:layout_toStartOf="@+id/getDataBtn"
-      android:visibility="invisible" />
+      android:visibility="invisible"/>
   </RelativeLayout>
 
   <ScrollView
@@ -62,7 +62,7 @@
       android:layout_marginTop="20dp"
       android:layout_marginLeft="50dp"
       android:scrollbars="vertical"
-      android:textAppearance="?android:attr/textAppearanceSmall" />
+      android:textAppearance="?android:attr/textAppearanceSmall"/>
 
   </ScrollView>
 </LinearLayout>

@@ -20,7 +20,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="right"
       android:text="لطفا اطلاعات مشتری را در فرم زیر وارد نمایید"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
+      android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <EditText
       android:id="@+id/fullNameTxt"
@@ -29,7 +29,7 @@
       android:layout_marginTop="15dp"
       android:layout_marginBottom="15dp"
       android:layout_gravity="center"
-      android:hint="@string/customer_full_name" />
+      android:hint="@string/customer_full_name"/>
 
     <EditText
       android:id="@+id/phoneNumberTxt"
@@ -40,7 +40,7 @@
       android:layout_gravity="center"
       android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
       android:hint="@string/phone_number"
-      android:inputType="number" />
+      android:inputType="number"/>
 
     <EditText
       android:id="@+id/cellPhoneTxt"
@@ -51,7 +51,7 @@
       android:layout_gravity="center"
       android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
       android:hint="@string/cell_phone"
-      android:inputType="number" />
+      android:inputType="number"/>
 
     <EditText
       android:id="@+id/shopNameTxt"
@@ -60,7 +60,7 @@
       android:layout_marginTop="15dp"
       android:layout_marginBottom="15dp"
       android:layout_gravity="center"
-      android:hint="@string/shop_name" />
+      android:hint="@string/shop_name"/>
 
     <EditText
       android:id="@+id/nationalCodeTxt"
@@ -71,7 +71,7 @@
       android:layout_gravity="center"
       android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
       android:hint="@string/national_code"
-      android:inputType="number" />
+      android:inputType="number"/>
 
     <EditText
       android:id="@+id/municipalityCodeTxt"
@@ -82,7 +82,7 @@
       android:layout_gravity="center"
       android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
       android:hint="@string/municipality_code"
-      android:inputType="number" />
+      android:inputType="number"/>
 
     <EditText
       android:id="@+id/postalCodeTxt"
@@ -93,7 +93,7 @@
       android:layout_gravity="center"
       android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
       android:hint="@string/postal_code"
-      android:inputType="number" />
+      android:inputType="number"/>
 
     <EditText
       android:id="@+id/addressTxt"
@@ -103,7 +103,7 @@
       android:layout_marginBottom="15dp"
       android:ems="10"
       android:hint="@string/address"
-      android:inputType="textMultiLine" />
+      android:inputType="textMultiLine"/>
 
     <LinearLayout
       android:layout_width="fill_parent"
@@ -122,7 +122,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:prompt="@string/please_select_province"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"/>
 
       <TextView
         android:id="@+id/textView5"
@@ -132,7 +132,7 @@
         android:layout_marginLeft="15dp"
         android:layout_gravity="center"
         android:text="@string/province_caption"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
     </LinearLayout>
 
     <LinearLayout
@@ -152,7 +152,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:prompt="@string/please_select_city"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"/>
 
       <TextView
         android:id="@+id/textView6"
@@ -162,7 +162,7 @@
         android:layout_marginLeft="15dp"
         android:layout_gravity="center"
         android:text="@string/city_caption"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
     </LinearLayout>
 
     <LinearLayout
@@ -182,7 +182,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:prompt="@string/please_select_customer_activity_type"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"/>
 
       <TextView
         android:id="@+id/textView7"
@@ -192,7 +192,7 @@
         android:layout_marginLeft="15dp"
         android:layout_gravity="center"
         android:text="@string/activity_type_caption"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
     </LinearLayout>
 
     <LinearLayout
@@ -212,7 +212,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:prompt="@string/please_select_customer_ownership"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"/>
 
       <TextView
         android:id="@+id/textView8"
@@ -222,7 +222,7 @@
         android:layout_marginLeft="15dp"
         android:layout_gravity="center"
         android:text="@string/ownership_type_caption"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
     </LinearLayout>
 
     <LinearLayout
@@ -242,7 +242,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:prompt="@string/please_select_customer_ownership"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"/>
 
       <TextView
         android:id="@+id/textView41"
@@ -252,7 +252,7 @@
         android:layout_marginLeft="15dp"
         android:layout_gravity="center"
         android:text="کلاس مشتری:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
     </LinearLayout>
 
     <EditText
@@ -264,7 +264,7 @@
       android:layout_gravity="center"
       android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
       android:hint="@string/customer_store_surface"
-      android:inputType="number" />
+      android:inputType="number"/>
 
     <Button
       android:id="@+id/getLocationBtn"
@@ -272,14 +272,14 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="15dp"
       android:layout_marginBottom="15dp"
-      android:text="@string/get_customer_location" />
+      android:text="@string/get_customer_location"/>
 
     <Button
       android:id="@+id/saveBtn"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="15dp"
-      android:text="@string/save" />
+      android:text="@string/save"/>
 
   </LinearLayout>
 </ScrollView>

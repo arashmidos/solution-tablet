@@ -11,7 +11,7 @@
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
-    android:background="@drawable/parsroyallogo" />
+    android:background="@drawable/parsroyallogo"/>
 
   <ImageView
     android:id="@+id/imageView"
@@ -22,7 +22,7 @@
     android:layout_alignParentTop="true"
     android:layout_toLeftOf="@+id/imageButton"
     android:layout_toStartOf="@+id/imageButton"
-    android:background="@drawable/vizitor" />
+    android:background="@drawable/vizitor"/>
 
   <TextView
     android:id="@+id/userFullNameTxt"
@@ -34,7 +34,7 @@
     android:layout_toStartOf="@+id/imageView"
     android:text=" -- "
     android:textAppearance="?android:attr/textAppearanceSmall"
-    android:textColor="#ffffff" />
+    android:textColor="#ffffff"/>
 
   <ImageView
     android:id="@+id/imageView2"
@@ -45,7 +45,7 @@
     android:layout_alignParentTop="true"
     android:layout_toLeftOf="@+id/userFullNameTxt"
     android:layout_toStartOf="@+id/userFullNameTxt"
-    android:background="@drawable/company" />
+    android:background="@drawable/company"/>
 
   <TextView
     android:id="@+id/companyNameTxt"
@@ -58,7 +58,7 @@
     android:layout_toStartOf="@+id/imageView2"
     android:text=" -- "
     android:textAppearance="?android:attr/textAppearanceSmall"
-    android:textColor="#ffffff" />
+    android:textColor="#ffffff"/>
 
   <ImageView
     android:id="@+id/menuIv"
@@ -68,5 +68,5 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_alignTop="@+id/imageView2"
-    android:background="@drawable/menu" />
+    android:background="@drawable/menu"/>
 </RelativeLayout>

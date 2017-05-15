@@ -12,7 +12,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:textColor="@color/red"
-    tools:text="Google play is not available" />
+    tools:text="Google play is not available"/>
 
   <FrameLayout
     android:id="@+id/layout_container"
@@ -25,7 +25,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:name="com.google.android.gms.maps.SupportMapFragment"
-      tools:context=".ui.MainActivity" />
+      tools:context=".ui.MainActivity"/>
 
   </FrameLayout>
 
@@ -36,7 +36,7 @@
     android:layout_margin="12dp"
     android:padding="4dp"
     android:background="@drawable/rounded_button"
-    android:src="@drawable/ic_action_filter" />
+    android:src="@drawable/ic_action_filter"/>
 
   <LinearLayout
     android:id="@+id/filter_layout"
@@ -55,7 +55,7 @@
       android:layout_marginRight="10dp"
       android:paddingLeft="35dp"
       android:paddingRight="35dp"
-      android:text="@string/cancel_btn" />
+      android:text="@string/cancel_btn"/>
 
     <Button
       android:id="@+id/filter_btn"
@@ -63,7 +63,7 @@
       android:layout_height="wrap_content"
       android:paddingLeft="35dp"
       android:paddingRight="35dp"
-      android:text="@string/filter" />
+      android:text="@string/filter"/>
 
     <CheckBox
       android:id="@+id/show_customers"
@@ -72,7 +72,7 @@
       android:paddingLeft="5dp"
       android:paddingRight="5dp"
       android:checked="true"
-      android:text="مشتریان" />
+      android:text="مشتریان"/>
 
     <CheckBox
       android:id="@+id/show_track"
@@ -81,12 +81,12 @@
       android:paddingLeft="5dp"
       android:paddingRight="5dp"
       android:checked="true"
-      android:text="گزارش" />
+      android:text="گزارش"/>
 
     <View
       android:layout_width="0dp"
       android:layout_height="match_parent"
-      android:layout_weight="1" />
+      android:layout_weight="1"/>
 
     <EditText
       android:id="@+id/toDate"
@@ -98,7 +98,7 @@
       android:layout_gravity="center"
       android:focusable="false"
       android:gravity="center"
-      android:hint="--" />
+      android:hint="--"/>
 
     <TextView
       android:id="@+id/textView43"
@@ -106,7 +106,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/toDate"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
+      android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <EditText
       android:id="@+id/fromDate"
@@ -118,7 +118,7 @@
       android:layout_gravity="center"
       android:focusable="false"
       android:gravity="center"
-      android:hint="--" />
+      android:hint="--"/>
 
     <TextView
       android:id="@+id/textView42"
@@ -127,7 +127,7 @@
       android:layout_height="wrap_content"
       android:paddingRight="10dp"
       android:text="@string/sinse_date"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
+      android:textAppearance="?android:attr/textAppearanceMedium"/>
 
   </LinearLayout>
 

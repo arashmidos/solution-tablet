@@ -15,7 +15,7 @@
     android:clickable="true"
     android:scaleType="fitXY"
     android:src="@drawable/ic_sidebar_map_inactive"
-    android:tag="12" />
+    android:tag="12"/>
 
   <ImageView
     android:id="@+id/customerListTabIv"
@@ -25,7 +25,7 @@
     android:clickable="true"
     android:scaleType="fitXY"
     android:src="@drawable/ic_sidebar_customer_list"
-    android:tag="0" />
+    android:tag="0"/>
 
   <ImageView
     android:id="@+id/newCustomerTabIv"
@@ -35,7 +35,7 @@
     android:clickable="true"
     android:scaleType="fitXY"
     android:src="@drawable/ic_sidebar_new_customer"
-    android:tag="1" />
+    android:tag="1"/>
 
   <ImageView
     android:id="@+id/questionaryTabIv"
@@ -45,7 +45,7 @@
     android:clickable="true"
     android:scaleType="fitXY"
     android:src="@drawable/ic_sidebar_questionaire_inactive"
-    android:tag="26" />
+    android:tag="26"/>
 
   <ImageView
     android:id="@+id/goodsTabIv"
@@ -55,7 +55,7 @@
     android:clickable="false"
     android:scaleType="fitXY"
     android:src="@drawable/ic_sidebar_goods"
-    android:tag="16" />
+    android:tag="16"/>
 
   <ImageView
     android:id="@+id/ordersTabIv"
@@ -65,7 +65,7 @@
     android:clickable="true"
     android:scaleType="fitXY"
     android:src="@drawable/ic_sidebar_report_inactive"
-    android:tag="14" />
+    android:tag="14"/>
 
   <ImageView
     android:id="@+id/fundsTabIv"
@@ -75,7 +75,7 @@
     android:clickable="false"
     android:scaleType="fitXY"
     android:src="@drawable/ic_sidebar_cash_report"
-    android:tag="23" />
+    android:tag="23"/>
 
   <ImageView
     android:id="@+id/userPerformanceTabIv"
@@ -85,6 +85,6 @@
     android:clickable="false"
     android:scaleType="fitXY"
     android:src="@drawable/ic_sidebar_salesman_performance"
-    android:tag="22" />
+    android:tag="22"/>
 
 </LinearLayout>

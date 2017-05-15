@@ -14,7 +14,7 @@
     android:layout_alignParentTop="true"
     android:layout_gravity="center"
     android:padding="4dp"
-    android:scaleType="fitXY" />
+    android:scaleType="fitXY"/>
 
 
   <TextView
@@ -25,6 +25,6 @@
     android:layout_toLeftOf="@+id/icon"
     android:layout_toStartOf="@+id/icon"
     android:textAppearance="?android:attr/textAppearanceSmall"
-    android:textColor="#000000" />
+    android:textColor="#000000"/>
 
 </RelativeLayout>
