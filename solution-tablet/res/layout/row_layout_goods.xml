@@ -1,111 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableRow
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/goodsRowLayout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/goodsRowLayout"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:gravity="right">
+
+  <LinearLayout
+    android:id="@+id/operationsContainer"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="200dp"
+    android:layout_height="match_parent"
+    android:padding="5dp"
     android:gravity="right">
 
-    <LinearLayout
-        android:id="@+id/operationsContainer"
-        style="@style/TextView.Cell.Value"
-        android:layout_width="200dp"
-        android:layout_height="match_parent"
-        android:gravity="right"
-        android:padding="5dp"
-        >
+    <ImageButton
+      android:id="@+id/addBtn"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_gravity="center"
+      android:src="@drawable/ic_action_add" />
+  </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/addBtn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_action_add"/>
-    </LinearLayout>
+  <TextView
+    android:id="@+id/recoveryDateTv"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="100dp"
+    android:layout_height="match_parent"
+    android:layout_weight="0"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="1,200,000" />
 
-    <TextView
-        android:id="@+id/recoveryDateTv"
-        style="@style/TextView.Cell.Value"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="1,200,000"
-        />
-
-    <TextView
-        android:id="@+id/unit1ExistingTv"
-        style="@style/TextView.Cell.Value"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="120 عدد"/>
+  <TextView
+    android:id="@+id/unit1ExistingTv"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="150dp"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="120 عدد" />
 
 
-    <TextView
-        android:id="@+id/goodAmountTv"
-        style="@style/TextView.Cell.Value"
-        android:layout_width="105dp"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="200,000"/>
+  <TextView
+    android:id="@+id/goodAmountTv"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="105dp"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="200,000" />
 
-    <TextView
-        android:id="@+id/goodCodeTv"
-        style="@style/TextView.Cell.Value"
-        android:layout_width="120dp"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="122232"/>
+  <TextView
+    android:id="@+id/goodCodeTv"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="120dp"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="122232" />
 
-    <TextView
-        android:id="@+id/goodNameTv"
-        style="@style/TextView.Cell.Value"
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="کالای مهم اول"/>
+  <TextView
+    android:id="@+id/goodNameTv"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="250dp"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="کالای مهم اول" />
 
-</TableRow>
-    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:layout_width="fill_parent" android:layout_height="wrap_content" android:scaleType="fitXY"-->
-    <!--android:layout_marginTop="10dp"-->
-    <!--android:layout_marginBottom="10dp" android:id="@+id/goodsRowLayout"-->
-    <!--android:gravity="right" android:paddingTop="10dp" android:paddingBottom="10dp">-->
-    <!--<TextView style="@style/TextView.Value" android:layout_width="100dp"-->
-    <!--android:layout_height="match_parent" android:text="1,200,000" android:id="@+id/recoveryDateTv"-->
-    <!--android:layout_weight="0"-->
-    <!--android:layout_gravity="center" android:gravity="center_vertical|right"/>-->
-    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:background="#ff000000"-->
-    <!--android:layout_width="2dp" android:layout_height="match_parent" android:scaleType="fitXY"-->
-    <!--android:paddingBottom="2dp" android:paddingTop="2dp"-->
-    <!--android:layout_marginLeft="5dp" android:layout_marginRight="5dp" android:gravity="fill_horizontal|center_horizontal"-->
-    <!--android:layout_gravity="center"/>-->
-    <!--<TextView style="@style/TextView.Value" android:layout_width="190dp"-->
-    <!--android:layout_height="match_parent" android:id="@+id/unit1ExistingTv"-->
-    <!--android:layout_weight="0"-->
-    <!--android:layout_gravity="center" android:text="120 عدد" android:gravity="center_vertical|right"/>-->
-    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:background="#ff000000"-->
-    <!--android:layout_width="2dp" android:layout_height="match_parent" android:scaleType="fitXY"-->
-    <!--android:paddingBottom="2dp" android:paddingTop="2dp"-->
-    <!--android:layout_marginLeft="5dp" android:layout_marginRight="5dp" android:gravity="fill_horizontal|center_horizontal"-->
-    <!--android:layout_gravity="center"/>-->
-    <!--<TextView style="@style/TextView.Value" android:layout_width="100dp" android:layout_height="match_parent"-->
-    <!--android:text="200,000" android:id="@+id/goodAmountTv"-->
-    <!--android:layout_gravity="center" android:gravity="center_vertical|right"/>-->
-    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:background="#ff000000"-->
-    <!--android:layout_width="2dp" android:layout_height="match_parent" android:scaleType="fitXY"-->
-    <!--android:paddingBottom="2dp" android:paddingTop="2dp" android:layout_marginLeft="5dp"-->
-    <!--android:layout_marginRight="5dp" android:gravity="fill_horizontal|center_horizontal"-->
-    <!--android:layout_gravity="center"/>-->
-    <!--<TextView style="@style/TextView.Value" android:layout_width="150dp" android:layout_height="match_parent"-->
-    <!--android:id="@+id/goodCodeTv" android:layout_gravity="center" android:gravity="center_vertical|right"/>-->
-    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:background="#ff000000"-->
-    <!--android:layout_width="2dp" android:layout_height="match_parent" android:scaleType="fitXY"-->
-    <!--android:paddingBottom="2dp" android:paddingTop="2dp"-->
-    <!--android:layout_marginLeft="5dp" android:layout_marginRight="5dp" android:gravity="fill_horizontal|center_horizontal"-->
-    <!--android:layout_gravity="center"/>-->
-    <!--<TextView style="@style/TextView.Value" android:layout_width="250dp"-->
-    <!--android:layout_height="match_parent" android:id="@+id/goodNameTv"-->
-    <!--android:layout_gravity="center" android:gravity="center_vertical|right"/>-->
-    <!--</LinearLayout>-->
+</TableRow><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="fill_parent" android:layout_height="wrap_content" android:scaleType="fitXY"--><!--android:layout_marginTop="10dp"--><!--android:layout_marginBottom="10dp" android:id="@+id/goodsRowLayout"--><!--android:gravity="right" android:paddingTop="10dp" android:paddingBottom="10dp">--><!--<TextView style="@style/TextView.Value" android:layout_width="100dp"--><!--android:layout_height="match_parent" android:text="1,200,000" android:id="@+id/recoveryDateTv"--><!--android:layout_weight="0"--><!--android:layout_gravity="center" android:gravity="center_vertical|right"/>--><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:background="#ff000000"--><!--android:layout_width="2dp" android:layout_height="match_parent" android:scaleType="fitXY"--><!--android:paddingBottom="2dp" android:paddingTop="2dp"--><!--android:layout_marginLeft="5dp" android:layout_marginRight="5dp" android:gravity="fill_horizontal|center_horizontal"--><!--android:layout_gravity="center"/>--><!--<TextView style="@style/TextView.Value" android:layout_width="190dp"--><!--android:layout_height="match_parent" android:id="@+id/unit1ExistingTv"--><!--android:layout_weight="0"--><!--android:layout_gravity="center" android:text="120 عدد" android:gravity="center_vertical|right"/>--><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:background="#ff000000"--><!--android:layout_width="2dp" android:layout_height="match_parent" android:scaleType="fitXY"--><!--android:paddingBottom="2dp" android:paddingTop="2dp"--><!--android:layout_marginLeft="5dp" android:layout_marginRight="5dp" android:gravity="fill_horizontal|center_horizontal"--><!--android:layout_gravity="center"/>--><!--<TextView style="@style/TextView.Value" android:layout_width="100dp" android:layout_height="match_parent"--><!--android:text="200,000" android:id="@+id/goodAmountTv"--><!--android:layout_gravity="center" android:gravity="center_vertical|right"/>--><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:background="#ff000000"--><!--android:layout_width="2dp" android:layout_height="match_parent" android:scaleType="fitXY"--><!--android:paddingBottom="2dp" android:paddingTop="2dp" android:layout_marginLeft="5dp"--><!--android:layout_marginRight="5dp" android:gravity="fill_horizontal|center_horizontal"--><!--android:layout_gravity="center"/>--><!--<TextView style="@style/TextView.Value" android:layout_width="150dp" android:layout_height="match_parent"--><!--android:id="@+id/goodCodeTv" android:layout_gravity="center" android:gravity="center_vertical|right"/>--><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:background="#ff000000"--><!--android:layout_width="2dp" android:layout_height="match_parent" android:scaleType="fitXY"--><!--android:paddingBottom="2dp" android:paddingTop="2dp"--><!--android:layout_marginLeft="5dp" android:layout_marginRight="5dp" android:gravity="fill_horizontal|center_horizontal"--><!--android:layout_gravity="center"/>--><!--<TextView style="@style/TextView.Value" android:layout_width="250dp"--><!--android:layout_height="match_parent" android:id="@+id/goodNameTv"--><!--android:layout_gravity="center" android:gravity="center_vertical|right"/>--><!--</LinearLayout>-->

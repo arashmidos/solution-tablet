@@ -1,285 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/root_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ffffffff"
-            android:paddingLeft="150dp"
-            android:paddingRight="150dp">
+  android:id="@+id/root_view"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:paddingLeft="150dp"
+  android:paddingRight="150dp"
+  android:background="#ffffffff">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:orientation="vertical">
+
+
+    <TextView
+      android:id="@+id/textView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="right"
+      android:text="لطفا اطلاعات مشتری را در فرم زیر وارد نمایید"
+      android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+      android:id="@+id/fullNameTxt"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
+      android:layout_gravity="center"
+      android:hint="@string/customer_full_name" />
+
+    <EditText
+      android:id="@+id/phoneNumberTxt"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
+      android:layout_gravity="center"
+      android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+      android:hint="@string/phone_number"
+      android:inputType="number" />
+
+    <EditText
+      android:id="@+id/cellPhoneTxt"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
+      android:layout_gravity="center"
+      android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+      android:hint="@string/cell_phone"
+      android:inputType="number" />
+
+    <EditText
+      android:id="@+id/shopNameTxt"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
+      android:layout_gravity="center"
+      android:hint="@string/shop_name" />
+
+    <EditText
+      android:id="@+id/nationalCodeTxt"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
+      android:layout_gravity="center"
+      android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+      android:hint="@string/national_code"
+      android:inputType="number" />
+
+    <EditText
+      android:id="@+id/municipalityCodeTxt"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
+      android:layout_gravity="center"
+      android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+      android:hint="@string/municipality_code"
+      android:inputType="number" />
+
+    <EditText
+      android:id="@+id/postalCodeTxt"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
+      android:layout_gravity="center"
+      android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+      android:hint="@string/postal_code"
+      android:inputType="number" />
+
+    <EditText
+      android:id="@+id/addressTxt"
+      android:layout_width="fill_parent"
+      android:layout_height="150dp"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
+      android:ems="10"
+      android:hint="@string/address"
+      android:inputType="textMultiLine" />
 
     <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:orientation="horizontal"
+      android:weightSum="100">
+
+      <Spinner
+        android:id="@+id/provinceSp"
+        style="@style/Spinner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:prompt="@string/please_select_province"
+        android:spinnerMode="dropdown" />
 
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="لطفا اطلاعات مشتری را در فرم زیر وارد نمایید"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-        <EditText
-            android:id="@+id/fullNameTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:hint="@string/customer_full_name"/>
-
-        <EditText
-            android:id="@+id/phoneNumberTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
-            android:hint="@string/phone_number"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/cellPhoneTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
-            android:hint="@string/cell_phone"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/shopNameTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:hint="@string/shop_name"/>
-
-        <EditText
-            android:id="@+id/nationalCodeTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
-            android:hint="@string/national_code"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/municipalityCodeTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
-            android:hint="@string/municipality_code"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/postalCodeTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
-            android:hint="@string/postal_code"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/addressTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="150dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:ems="10"
-            android:hint="@string/address"
-            android:inputType="textMultiLine"/>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <Spinner
-                android:id="@+id/provinceSp"
-                style="@style/Spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_weight="20"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:prompt="@string/please_select_province"
-                android:spinnerMode="dropdown"/>
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_weight="80"
-                android:text="@string/province_caption"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <Spinner
-                android:id="@+id/citySp"
-                style="@style/Spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_weight="20"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:prompt="@string/please_select_city"
-                android:spinnerMode="dropdown"/>
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_weight="80"
-                android:text="@string/city_caption"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <Spinner
-                android:id="@+id/activitySp"
-                style="@style/Spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_weight="20"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:prompt="@string/please_select_customer_activity_type"
-                android:spinnerMode="dropdown"/>
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_weight="80"
-                android:text="@string/activity_type_caption"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <Spinner
-                android:id="@+id/ownershipSp"
-                style="@style/Spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_weight="20"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:prompt="@string/please_select_customer_ownership"
-                android:spinnerMode="dropdown"/>
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_weight="80"
-                android:text="@string/ownership_type_caption"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <Spinner
-                android:id="@+id/classSp"
-                style="@style/Spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_weight="20"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:prompt="@string/please_select_customer_ownership"
-                android:spinnerMode="dropdown"/>
-
-            <TextView
-                android:id="@+id/textView41"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_weight="80"
-                android:text="کلاس مشتری:"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/storeSurfaceTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
-            android:hint="@string/customer_store_surface"
-            android:inputType="number"/>
-
-        <Button
-            android:id="@+id/getLocationBtn"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:text="@string/get_customer_location"/>
-
-        <Button
-            android:id="@+id/saveBtn"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:text="@string/save"/>
-
+      <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="80"
+        android:layout_marginLeft="15dp"
+        android:layout_gravity="center"
+        android:text="@string/province_caption"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:orientation="horizontal"
+      android:weightSum="100">
+
+      <Spinner
+        android:id="@+id/citySp"
+        style="@style/Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:prompt="@string/please_select_city"
+        android:spinnerMode="dropdown" />
+
+      <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="80"
+        android:layout_marginLeft="15dp"
+        android:layout_gravity="center"
+        android:text="@string/city_caption"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:orientation="horizontal"
+      android:weightSum="100">
+
+      <Spinner
+        android:id="@+id/activitySp"
+        style="@style/Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:prompt="@string/please_select_customer_activity_type"
+        android:spinnerMode="dropdown" />
+
+      <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="80"
+        android:layout_marginLeft="15dp"
+        android:layout_gravity="center"
+        android:text="@string/activity_type_caption"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:orientation="horizontal"
+      android:weightSum="100">
+
+      <Spinner
+        android:id="@+id/ownershipSp"
+        style="@style/Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:prompt="@string/please_select_customer_ownership"
+        android:spinnerMode="dropdown" />
+
+      <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="80"
+        android:layout_marginLeft="15dp"
+        android:layout_gravity="center"
+        android:text="@string/ownership_type_caption"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:orientation="horizontal"
+      android:weightSum="100">
+
+      <Spinner
+        android:id="@+id/classSp"
+        style="@style/Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:prompt="@string/please_select_customer_ownership"
+        android:spinnerMode="dropdown" />
+
+      <TextView
+        android:id="@+id/textView41"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="80"
+        android:layout_marginLeft="15dp"
+        android:layout_gravity="center"
+        android:text="کلاس مشتری:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <EditText
+      android:id="@+id/storeSurfaceTxt"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
+      android:layout_gravity="center"
+      android:digits="1234567890-۰۱۲۳۴۵۶۷۸۹"
+      android:hint="@string/customer_store_surface"
+      android:inputType="number" />
+
+    <Button
+      android:id="@+id/getLocationBtn"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="15dp"
+      android:text="@string/get_customer_location" />
+
+    <Button
+      android:id="@+id/saveBtn"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="15dp"
+      android:text="@string/save" />
+
+  </LinearLayout>
 </ScrollView>

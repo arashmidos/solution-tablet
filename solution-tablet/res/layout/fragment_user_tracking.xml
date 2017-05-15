@@ -1,134 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="6dp"
-                tools:context=".ui.MainActivity">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_margin="6dp"
+  tools:context=".ui.MainActivity">
+
+  <TextView
+    android:id="@+id/error_msg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:textColor="@color/red"
+    tools:text="Google play is not available" />
+
+  <FrameLayout
+    android:id="@+id/layout_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+
+    <fragment
+      android:id="@+id/map"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:name="com.google.android.gms.maps.SupportMapFragment"
+      tools:context=".ui.MainActivity" />
+
+  </FrameLayout>
+
+  <ImageView
+    android:id="@+id/filter"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    android:padding="4dp"
+    android:background="@drawable/rounded_button"
+    android:src="@drawable/ic_action_filter" />
+
+  <LinearLayout
+    android:id="@+id/filter_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white30"
+    android:gravity="right|center_vertical"
+    android:orientation="horizontal"
+    android:visibility="gone">
+
+    <Button
+      android:id="@+id/cancel_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      android:paddingLeft="35dp"
+      android:paddingRight="35dp"
+      android:text="@string/cancel_btn" />
+
+    <Button
+      android:id="@+id/filter_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingLeft="35dp"
+      android:paddingRight="35dp"
+      android:text="@string/filter" />
+
+    <CheckBox
+      android:id="@+id/show_customers"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingLeft="5dp"
+      android:paddingRight="5dp"
+      android:checked="true"
+      android:text="مشتریان" />
+
+    <CheckBox
+      android:id="@+id/show_track"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingLeft="5dp"
+      android:paddingRight="5dp"
+      android:checked="true"
+      android:text="گزارش" />
+
+    <View
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="1" />
+
+    <EditText
+      android:id="@+id/toDate"
+      android:layout_width="110dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="7dp"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      android:layout_gravity="center"
+      android:focusable="false"
+      android:gravity="center"
+      android:hint="--" />
 
     <TextView
-        android:id="@+id/error_msg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textColor="@color/red"
-        tools:text="Google play is not available"/>
+      android:id="@+id/textView43"
+      style="@style/TextView.Caption"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/toDate"
+      android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <FrameLayout
-        android:id="@+id/layout_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+    <EditText
+      android:id="@+id/fromDate"
+      android:layout_width="110dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="7dp"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      android:layout_gravity="center"
+      android:focusable="false"
+      android:gravity="center"
+      android:hint="--" />
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".ui.MainActivity"/>
+    <TextView
+      android:id="@+id/textView42"
+      style="@style/TextView.Caption"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingRight="10dp"
+      android:text="@string/sinse_date"
+      android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    </FrameLayout>
-
-    <ImageView
-        android:id="@+id/filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:background="@drawable/rounded_button"
-        android:padding="4dp"
-        android:src="@drawable/ic_action_filter"/>
-
-    <LinearLayout
-        android:id="@+id/filter_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white30"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/cancel_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:paddingLeft="35dp"
-            android:paddingRight="35dp"
-            android:text="@string/cancel_btn"/>
-
-        <Button
-            android:id="@+id/filter_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="35dp"
-            android:paddingRight="35dp"
-            android:text="@string/filter"/>
-
-        <CheckBox
-            android:id="@+id/show_customers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="مشتریان"/>
-
-        <CheckBox
-            android:id="@+id/show_track"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="گزارش"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
-
-        <EditText
-            android:id="@+id/toDate"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="7dp"
-            android:focusable="false"
-            android:gravity="center"
-            android:hint="--"/>
-
-        <TextView
-            android:id="@+id/textView43"
-            style="@style/TextView.Caption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/toDate"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-        <EditText
-            android:id="@+id/fromDate"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="7dp"
-            android:focusable="false"
-            android:gravity="center"
-            android:hint="--"/>
-
-        <TextView
-            android:id="@+id/textView42"
-            style="@style/TextView.Caption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:text="@string/sinse_date"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-    </LinearLayout>
+  </LinearLayout>
 
 </RelativeLayout>
