@@ -6,29 +6,24 @@ import java.util.List;
  * Created by mahyarsefidi1 on 9/20/16.
  * //Key Performance Indicator
  */
-public class KPIDto extends BaseModel
-{
+public class KPIDto extends BaseModel {
 
-    private List<KPIDetail> details;
-    private Double kpiGauge;
+  private List<KPIDetail> details;
+  private Double kpiGauge;
 
-    public List<KPIDetail> getDetails()
-    {
-        return details;
-    }
+  public List<KPIDetail> getDetails() {
+    return details;
+  }
 
-    public void setDetails(List<KPIDetail> details)
-    {
-        this.details = details;
-    }
+  public void setDetails(List<KPIDetail> details) {
+    this.details = details;
+  }
 
-    public Double getKpiGauge()
-    {
-        return kpiGauge;
-    }
+  public Double getKpiGauge() {
+    return kpiGauge;
+  }
 
-    public void setKpiGauge(Double kpiGauge)
-    {
-        this.kpiGauge = kpiGauge;
-    }
+  public void setKpiGauge(Double kpiGauge) {
+    this.kpiGauge = kpiGauge;
+  }
 }

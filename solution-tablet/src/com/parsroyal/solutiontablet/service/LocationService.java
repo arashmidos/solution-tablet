@@ -9,10 +9,9 @@ import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
  * Time: 2:18 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface LocationService
-{
+public interface LocationService {
 
-    void findCurrentLocation(FindLocationListener listener);
+  void findCurrentLocation(FindLocationListener listener);
 
-    void stopFindingLocation();
+  void stopFindingLocation();
 }

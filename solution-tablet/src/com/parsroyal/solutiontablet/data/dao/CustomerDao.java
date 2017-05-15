@@ -7,37 +7,35 @@ import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionModel;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
-
 import java.util.List;
 
 /**
  * Created by Mahyar on 6/19/2015.
  */
-public interface CustomerDao extends BaseDao<Customer, Long>
-{
+public interface CustomerDao extends BaseDao<Customer, Long> {
 
-    List<Customer> retrieveAllNewCustomersForSend();
+  List<Customer> retrieveAllNewCustomersForSend();
 
-    List<Customer> retrieveAllNewCustomers();
+  List<Customer> retrieveAllNewCustomers();
 
-    List<CustomerLocationDto> retrieveAllUpdatedCustomerLocationDto();
+  List<CustomerLocationDto> retrieveAllUpdatedCustomerLocationDto();
 
-    void deleteAllCustomersRelatedToVisitLines();
+  void deleteAllCustomersRelatedToVisitLines();
 
-    List<Customer> retrieveAllCustomersByVisitLineBackendId(Long visitLineId);
+  List<Customer> retrieveAllCustomersByVisitLineBackendId(Long visitLineId);
 
-    List<CustomerListModel> getAllCustomersListModelByVisitLineWithConstraint(Long visitLineId,
-                                                                              String constraint);
+  List<CustomerListModel> getAllCustomersListModelByVisitLineWithConstraint(Long visitLineId,
+      String constraint);
 
-    CustomerDto getCustomerDtoById(Long customerId);
+  CustomerDto getCustomerDtoById(Long customerId);
 
-    List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
+  List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
 
-    List<Customer> getCustomersVisitLineBackendId(Long backendId);
+  List<Customer> getCustomersVisitLineBackendId(Long backendId);
 
-    Customer retrieveByBackendId(Long customerBackendId);
+  Customer retrieveByBackendId(Long customerBackendId);
 
-    void updateAllSentCustomer();
+  void updateAllSentCustomer();
 
-    List<PositionModel> getAllCusromerPostionModel(NCustomerSO nCustomerSO);
+  List<PositionModel> getAllCusromerPostionModel(NCustomerSO nCustomerSO);
 }

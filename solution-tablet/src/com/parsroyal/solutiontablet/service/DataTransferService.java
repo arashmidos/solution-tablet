@@ -7,14 +7,13 @@ import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
  * Created by Mahyar on 6/15/2015.
  * Edited by Arash on 7/11/2016
  */
-public interface DataTransferService
-{
+public interface DataTransferService {
 
-    void getAllData(ResultObserver observer);
+  void getAllData(ResultObserver observer);
 
-    void sendAllData(ResultObserver resultObserver);
+  void sendAllData(ResultObserver resultObserver);
 
-    boolean isDataTransferPossible();
+  boolean isDataTransferPossible();
 
-    GoodsDtoList getRejectedData(ResultObserver resultObserver, Long customerId);
+  GoodsDtoList getRejectedData(ResultObserver resultObserver, Long customerId);
 }

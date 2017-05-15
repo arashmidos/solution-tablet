@@ -5,10 +5,9 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 /**
  * Created by Mahyar on 6/14/2015.
  */
-public interface KeyValueBiz
-{
+public interface KeyValueBiz {
 
-    void save(KeyValue keyValue);
+  void save(KeyValue keyValue);
 
-    KeyValue findByKey(String key);
+  KeyValue findByKey(String key);
 }

@@ -3,7 +3,6 @@ package com.parsroyal.solutiontablet.data.entity;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
 import com.parsroyal.solutiontablet.util.Empty;
-
 import java.util.List;
 
 /**
@@ -14,246 +13,214 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-public class SaleOrder extends BaseEntity<Long>
-{
+public class SaleOrder extends BaseEntity<Long> {
 
-    public static final String TABLE_NAME = "COMMER_SALE_ORDER";
-    public static final String COL_ID = "_id";
-    public static final String COL_NUMBER = "NUMBER";
-    public static final String COL_AMOUNT = "AMOUNT";
-    public static final String COL_DATE = "DATE";
-    public static final String COL_PAYMENT_TYPE_BACKEND_ID = "PAYMENT_TYPE_BACKEND_ID";
-    public static final String COL_SALESMAN_ID = "SALESMAN_ID";
-    public static final String COL_CUSTOMER_BACKEND_ID = "CUSTOMER_BACKEND_ID";
-    public static final String COL_DESCRIPTION = "DESCRIPTION";
-    public static final String COL_STATUS = "STATUS";
-    public static final String COL_BACKEND_ID = "BACKEND_ID";
-    public static final String COL_INVOICE_BACKEND_ID = "INVOICE_BACKEND_ID";
+  public static final String TABLE_NAME = "COMMER_SALE_ORDER";
+  public static final String COL_ID = "_id";
+  public static final String COL_NUMBER = "NUMBER";
+  public static final String COL_AMOUNT = "AMOUNT";
+  public static final String COL_DATE = "DATE";
+  public static final String COL_PAYMENT_TYPE_BACKEND_ID = "PAYMENT_TYPE_BACKEND_ID";
+  public static final String COL_SALESMAN_ID = "SALESMAN_ID";
+  public static final String COL_CUSTOMER_BACKEND_ID = "CUSTOMER_BACKEND_ID";
+  public static final String COL_DESCRIPTION = "DESCRIPTION";
+  public static final String COL_STATUS = "STATUS";
+  public static final String COL_BACKEND_ID = "BACKEND_ID";
+  public static final String COL_INVOICE_BACKEND_ID = "INVOICE_BACKEND_ID";
 
-    public static final String CREATE_TABLE_SCRIPT = "CREATE TABLE " + SaleOrder.TABLE_NAME + " (" +
-            " " + SaleOrder.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            " " + SaleOrder.COL_NUMBER + " INTEGER," +
-            " " + SaleOrder.COL_AMOUNT + " INTEGER," +
-            " " + SaleOrder.COL_DATE + " TEXT," +
-            " " + SaleOrder.COL_PAYMENT_TYPE_BACKEND_ID + " INTEGER," +
-            " " + SaleOrder.COL_SALESMAN_ID + " INTEGER," +
-            " " + SaleOrder.COL_CUSTOMER_BACKEND_ID + " INTEGER," +
-            " " + SaleOrder.COL_DESCRIPTION + " TEXT," +
-            " " + SaleOrder.COL_STATUS + " INTEGER," +
-            " " + SaleOrder.COL_BACKEND_ID + " INTEGER," +
-            " " + SaleOrder.COL_INVOICE_BACKEND_ID + " INTEGER," +
-            " " + SaleOrder.COL_CREATE_DATE_TIME + " TEXT," +
-            " " + SaleOrder.COL_UPDATE_DATE_TIME + " TEXT" +
-            " );";
+  public static final String CREATE_TABLE_SCRIPT = "CREATE TABLE " + SaleOrder.TABLE_NAME + " (" +
+      " " + SaleOrder.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+      " " + SaleOrder.COL_NUMBER + " INTEGER," +
+      " " + SaleOrder.COL_AMOUNT + " INTEGER," +
+      " " + SaleOrder.COL_DATE + " TEXT," +
+      " " + SaleOrder.COL_PAYMENT_TYPE_BACKEND_ID + " INTEGER," +
+      " " + SaleOrder.COL_SALESMAN_ID + " INTEGER," +
+      " " + SaleOrder.COL_CUSTOMER_BACKEND_ID + " INTEGER," +
+      " " + SaleOrder.COL_DESCRIPTION + " TEXT," +
+      " " + SaleOrder.COL_STATUS + " INTEGER," +
+      " " + SaleOrder.COL_BACKEND_ID + " INTEGER," +
+      " " + SaleOrder.COL_INVOICE_BACKEND_ID + " INTEGER," +
+      " " + SaleOrder.COL_CREATE_DATE_TIME + " TEXT," +
+      " " + SaleOrder.COL_UPDATE_DATE_TIME + " TEXT" +
+      " );";
 
-    private Long id;
-    private Long number;
-    private String date;
-    private Long amount;
-    private Long paymentTypeBackendId;
-    private Long salesmanId;
-    private Long customerBackendId;
-    private String description;
-    private Long status;
-    private Long backendId;
-    private Long invoiceBackendId;
-    private String exportDate;
-    private Long rejectBackendId;
+  private Long id;
+  private Long number;
+  private String date;
+  private Long amount;
+  private Long paymentTypeBackendId;
+  private Long salesmanId;
+  private Long customerBackendId;
+  private String description;
+  private Long status;
+  private Long backendId;
+  private Long invoiceBackendId;
+  private String exportDate;
+  private Long rejectBackendId;
 
-    private List<SaleOrderItem> orderItems;
+  private List<SaleOrderItem> orderItems;
 
-    public static String createString(SaleOrderDto order)
+  public static String createString(SaleOrderDto order) {
+    StringBuilder stringBuilder = new StringBuilder();
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        {
-            stringBuilder.append(order.getId());
-            stringBuilder.append("&");
-        }
-        {
+      stringBuilder.append(order.getId());
+      stringBuilder.append("&");
+    }
+    {
 //            String englishDate = order.getDate();
 //            englishDate = NumberUtil.digitsToEnglish(englishDate);
-            stringBuilder.append(order.getDate());
-            stringBuilder.append("&");
-        }
-        {
-            Long backendId = order.getBackendId();
-            stringBuilder.append(Empty.isEmpty(backendId) ? "NULL" : backendId);
-            stringBuilder.append("&");
-        }
-        {
-            stringBuilder.append(order.getCustomerBackendId());
-            stringBuilder.append("&");
-        }
-        {
-            Long amount = order.getAmount();
-            stringBuilder.append(Empty.isEmpty(amount) ? "NULL" : amount);
-            stringBuilder.append("&");
-        }
-        {
-            String desc = order.getDescription();
-            stringBuilder.append(Empty.isEmpty(desc) ? "NULL" : desc);
-            stringBuilder.append("&");
-        }
-        {
-            Long paymentTypeId = order.getPaymentTypeBackendId();
-            stringBuilder.append(Empty.isEmpty(paymentTypeId) ? "NULL" : paymentTypeId);
-            stringBuilder.append("&");
-        }
-        {
-            for (SaleOrderItemDto saleOrderItemDto : order.getOrderItems())
-            {
-                String itemStr = SaleOrderItem.createString(saleOrderItemDto, order.getStatus());
-                stringBuilder.append(itemStr);
-                stringBuilder.append("$");
-            }
-        }
-
-        return stringBuilder.toString();
+      stringBuilder.append(order.getDate());
+      stringBuilder.append("&");
     }
-
-    public Long getId()
     {
-        return id;
+      Long backendId = order.getBackendId();
+      stringBuilder.append(Empty.isEmpty(backendId) ? "NULL" : backendId);
+      stringBuilder.append("&");
+    }
+    {
+      stringBuilder.append(order.getCustomerBackendId());
+      stringBuilder.append("&");
+    }
+    {
+      Long amount = order.getAmount();
+      stringBuilder.append(Empty.isEmpty(amount) ? "NULL" : amount);
+      stringBuilder.append("&");
+    }
+    {
+      String desc = order.getDescription();
+      stringBuilder.append(Empty.isEmpty(desc) ? "NULL" : desc);
+      stringBuilder.append("&");
+    }
+    {
+      Long paymentTypeId = order.getPaymentTypeBackendId();
+      stringBuilder.append(Empty.isEmpty(paymentTypeId) ? "NULL" : paymentTypeId);
+      stringBuilder.append("&");
+    }
+    {
+      for (SaleOrderItemDto saleOrderItemDto : order.getOrderItems()) {
+        String itemStr = SaleOrderItem.createString(saleOrderItemDto, order.getStatus());
+        stringBuilder.append(itemStr);
+        stringBuilder.append("$");
+      }
     }
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+    return stringBuilder.toString();
+  }
 
-    public Long getNumber()
-    {
-        return number;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setNumber(Long number)
-    {
-        this.number = number;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getDate()
-    {
-        return date;
-    }
+  public Long getNumber() {
+    return number;
+  }
 
-    public void setDate(String date)
-    {
-        this.date = date;
-    }
+  public void setNumber(Long number) {
+    this.number = number;
+  }
 
-    public Long getAmount()
-    {
-        return amount;
-    }
+  public String getDate() {
+    return date;
+  }
 
-    public void setAmount(Long amount)
-    {
-        this.amount = amount;
-    }
+  public void setDate(String date) {
+    this.date = date;
+  }
 
-    public Long getPaymentTypeBackendId()
-    {
-        return paymentTypeBackendId;
-    }
+  public Long getAmount() {
+    return amount;
+  }
 
-    public void setPaymentTypeBackendId(Long paymentTypeBackendId)
-    {
-        this.paymentTypeBackendId = paymentTypeBackendId;
-    }
+  public void setAmount(Long amount) {
+    this.amount = amount;
+  }
 
-    public Long getSalesmanId()
-    {
-        return salesmanId;
-    }
+  public Long getPaymentTypeBackendId() {
+    return paymentTypeBackendId;
+  }
 
-    public void setSalesmanId(Long salesmanId)
-    {
-        this.salesmanId = salesmanId;
-    }
+  public void setPaymentTypeBackendId(Long paymentTypeBackendId) {
+    this.paymentTypeBackendId = paymentTypeBackendId;
+  }
 
-    public Long getCustomerBackendId()
-    {
-        return customerBackendId;
-    }
+  public Long getSalesmanId() {
+    return salesmanId;
+  }
 
-    public void setCustomerBackendId(Long customerBackendId)
-    {
-        this.customerBackendId = customerBackendId;
-    }
+  public void setSalesmanId(Long salesmanId) {
+    this.salesmanId = salesmanId;
+  }
 
-    public String getDescription()
-    {
-        return description;
-    }
+  public Long getCustomerBackendId() {
+    return customerBackendId;
+  }
 
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
+  public void setCustomerBackendId(Long customerBackendId) {
+    this.customerBackendId = customerBackendId;
+  }
 
-    public Long getStatus()
-    {
-        return status;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setStatus(Long status)
-    {
-        this.status = status;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public Long getBackendId()
-    {
-        return backendId;
-    }
+  public Long getStatus() {
+    return status;
+  }
 
-    public void setBackendId(Long backendId)
-    {
-        this.backendId = backendId;
-    }
+  public void setStatus(Long status) {
+    this.status = status;
+  }
 
-    public Long getInvoiceBackendId()
-    {
-        return invoiceBackendId;
-    }
+  public Long getBackendId() {
+    return backendId;
+  }
 
-    public void setInvoiceBackendId(Long invoiceBackendId)
-    {
-        this.invoiceBackendId = invoiceBackendId;
-    }
+  public void setBackendId(Long backendId) {
+    this.backendId = backendId;
+  }
 
-    public List<SaleOrderItem> getOrderItems()
-    {
-        return orderItems;
-    }
+  public Long getInvoiceBackendId() {
+    return invoiceBackendId;
+  }
 
-    public void setOrderItems(List<SaleOrderItem> orderItems)
-    {
-        this.orderItems = orderItems;
-    }
+  public void setInvoiceBackendId(Long invoiceBackendId) {
+    this.invoiceBackendId = invoiceBackendId;
+  }
 
-    public String getExportDate()
-    {
-        return exportDate;
-    }
+  public List<SaleOrderItem> getOrderItems() {
+    return orderItems;
+  }
 
-    public void setExportDate(String exportDate)
-    {
-        this.exportDate = exportDate;
-    }
+  public void setOrderItems(List<SaleOrderItem> orderItems) {
+    this.orderItems = orderItems;
+  }
 
-    public Long getRejectBackendId()
-    {
-        return rejectBackendId;
-    }
+  public String getExportDate() {
+    return exportDate;
+  }
 
-    public void setRejectBackendId(Long rejectBackendId)
-    {
-        this.rejectBackendId = rejectBackendId;
-    }
+  public void setExportDate(String exportDate) {
+    this.exportDate = exportDate;
+  }
 
-    @Override
-    public Long getPrimaryKey()
-    {
-        return id;
-    }
+  public Long getRejectBackendId() {
+    return rejectBackendId;
+  }
+
+  public void setRejectBackendId(Long rejectBackendId) {
+    this.rejectBackendId = rejectBackendId;
+  }
+
+  @Override
+  public Long getPrimaryKey() {
+    return id;
+  }
 }

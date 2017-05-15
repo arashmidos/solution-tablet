@@ -1,56 +1,53 @@
 package com.parsroyal.solutiontablet.service;
 
 import android.location.Location;
-
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
-
 import java.util.List;
 
 /**
  * Created by Arash on 2017-03-08
  */
-public interface VisitService
-{
+public interface VisitService {
 
-    List<VisitLine> getAllVisitLines();
+  List<VisitLine> getAllVisitLines();
 
-    List<VisitLineListModel> getAllVisitLinesListModel();
+  List<VisitLineListModel> getAllVisitLinesListModel();
 
-    List<VisitLineListModel> getAllFilteredVisitLinesListModel(String constraint);
+  List<VisitLineListModel> getAllFilteredVisitLinesListModel(String constraint);
 
-    Long startVisiting(Long customerBackendId);
+  Long startVisiting(Long customerBackendId);
 
-    Long startVisitingNewCustomer(Long customerId);
+  Long startVisitingNewCustomer(Long customerId);
 
-    void finishVisiting(Long visitId);
+  void finishVisiting(Long visitId);
 
-    List<VisitInformation> getAllVisitInformationForSend();
+  List<VisitInformation> getAllVisitInformationForSend();
 
-    VisitInformation getVisitInformationById(Long visitId);
+  VisitInformation getVisitInformationById(Long visitId);
 
-    VisitInformation getVisitInformationForNewCustomer(Long customerId);
+  VisitInformation getVisitInformationForNewCustomer(Long customerId);
 
-    Long saveVisit(VisitInformation visit);
+  Long saveVisit(VisitInformation visit);
 
-    void updateVisitLocation(Long visitInformationId, Location location);
+  void updateVisitLocation(Long visitInformationId, Location location);
 
-    void saveVisitDetail(VisitInformationDetail visitDetail);
+  void saveVisitDetail(VisitInformationDetail visitDetail);
 
-    List<VisitInformationDetail> getAllVisitDetailById(Long visitId);
+  List<VisitInformationDetail> getAllVisitDetailById(Long visitId);
 
-    void updateVisitDetailId(VisitInformationDetailType type, long id, long backendId);
+  void updateVisitDetailId(VisitInformationDetailType type, long id, long backendId);
 
-    List<VisitInformationDetail> searchVisitDetail(Long visitId, VisitInformationDetailType type,
-                                                   Long typeId);
+  List<VisitInformationDetail> searchVisitDetail(Long visitId, VisitInformationDetailType type,
+      Long typeId);
 
-    List<VisitInformationDto> getAllVisitDetailForSend();
+  List<VisitInformationDto> getAllVisitDetailForSend();
 
-    Long startAnonymousVisit();
+  Long startAnonymousVisit();
 
-    void deleteAll();
+  void deleteAll();
 }

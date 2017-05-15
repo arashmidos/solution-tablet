@@ -8,43 +8,41 @@ import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionModel;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
-
 import java.io.File;
 import java.util.List;
 
 /**
  * Created by Mahyar on 6/14/2015.
  */
-public interface CustomerService
-{
+public interface CustomerService {
 
-    Customer getCustomerById(Long customerId);
+  Customer getCustomerById(Long customerId);
 
-    Customer getCustomerByBackendId(Long customerId);
+  Customer getCustomerByBackendId(Long customerId);
 
-    void saveCustomer(Customer customer);
+  void saveCustomer(Customer customer);
 
-    List<Customer> getAllNewCustomers();
+  List<Customer> getAllNewCustomers();
 
-    void deleteCustomer(Long id);
+  void deleteCustomer(Long id);
 
-    List<Customer> getAllNewCustomersForSend();
+  List<Customer> getAllNewCustomersForSend();
 
-    List<CustomerLocationDto> getAllUpdatedCustomerLocation();
+  List<CustomerLocationDto> getAllUpdatedCustomerLocation();
 
-    List<Customer> getAllCustomersByVisitLineBackendId(Long visitLineId);
+  List<Customer> getAllCustomersByVisitLineBackendId(Long visitLineId);
 
-    List<CustomerListModel> getAllCustomersListModelByVisitLineBackendId(Long visitLineId);
+  List<CustomerListModel> getAllCustomersListModelByVisitLineBackendId(Long visitLineId);
 
-    List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint);
+  List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint);
 
-    CustomerDto getCustomerDtoById(Long customerId);
+  CustomerDto getCustomerDtoById(Long customerId);
 
-    List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
+  List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
 
-    long savePicture(CustomerPic customerPic);
+  long savePicture(CustomerPic customerPic);
 
-    File getAllCustomerPicForSend();
+  File getAllCustomerPicForSend();
 
-    List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
+  List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
 }
