@@ -29,8 +29,8 @@ android {
         applicationId "com.parsroyal.solutiontablet"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 41
-        versionName "2.8.8"
+        versionCode 43
+        versionName "2.8.9"
         vectorDrawables.useSupportLibrary = true
         jackOptions {
             enabled true
