@@ -23,8 +23,6 @@ import android.widget.ListView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -63,6 +61,7 @@ import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialog.LoginDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
+import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
@@ -163,7 +162,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     setupDrawer();
     initialize();
     if (!BuildConfig.DEBUG) {
-      logUser();
+    logUser();
     }
   }
 
@@ -242,7 +241,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         contentName = "New Questionnaire";
         break;
     }
-    Answers.getInstance().logContentView(new ContentViewEvent().putContentName(contentName));
+    Analytics.logContentView(contentName);
   }
 
   private void setAllImagesInactive() {
@@ -390,8 +389,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         changeSidebarItem(NQUESTIONAIRE_FRAGMENT_ID);
 
     }
-    Answers.getInstance().logContentView(
-        new ContentViewEvent().putContentId("Fragment " + String.valueOf(fragmentId)));
+    Analytics.logContentView("Fragment " + String.valueOf(fragmentId));
     return fragment;
   }
 

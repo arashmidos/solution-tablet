@@ -152,12 +152,9 @@ public class TrackLocationService extends Service implements GoogleApiClient.Con
       instantUpdate = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_ENABLE)
           .equals("1");
       if (instantUpdate) {
-        Thread sender = new Thread(new Runnable() {
-          @Override
-          public void run() {
-            if (NetworkUtil.isNetworkAvailable(getApplicationContext())) {
-              positionService.sendPosition(position);
-            }
+        Thread sender = new Thread(() -> {
+          if (NetworkUtil.isNetworkAvailable(getApplicationContext())) {
+            positionService.sendPosition(position);
           }
         });
         sender.start();

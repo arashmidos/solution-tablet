@@ -15,6 +15,7 @@ import com.crashlytics.android.answers.SearchEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.BaseListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.List;
 
@@ -101,8 +102,7 @@ public abstract class BaseListAdapter<T extends BaseListModel> extends BaseAdapt
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-          Answers.getInstance().logSearch(new SearchEvent()
-              .putQuery(constraint.toString()));
+          Analytics.logSearch(constraint.toString());
           FilterResults results = new FilterResults();
           List<T> filteredData = getFilteredData(constraint);
           results.count = filteredData.size();

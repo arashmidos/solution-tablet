@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SortType;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
@@ -18,6 +16,7 @@ import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerListAdapter;
+import com.parsroyal.solutiontablet.util.Analytics;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Iterator;
@@ -98,10 +97,8 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
           }
         }
         sort(sortType);
-        Answers.getInstance().logCustom(new CustomEvent("Filter")
-            .putCustomAttribute("Distance", distance)
-            .putCustomAttribute("Has Order", String.valueOf(hasOrder))
-            .putCustomAttribute("Has None", String.valueOf(hasNone)));
+        Analytics.logCustom("Filter", new String[]{"Distance", "Has Order", "Has none"},
+            String.valueOf(distance), String.valueOf(hasOrder), String.valueOf(hasNone));
         adapter.notifyDataSetChanged();
       }
 
@@ -117,8 +114,8 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
 
   private void sort(int type) {
     List<CustomerListModel> dataModel = adapter.getDataModel();
-    Answers.getInstance().logCustom(new CustomEvent("Sort")
-        .putCustomAttribute("Size", dataModel.size()).putCustomAttribute("Type", type));
+    Analytics.logCustom("Sort", new String[]{"Size", "Type"}, String.valueOf(dataModel.size()),
+        String.valueOf(type));
     switch (type) {
       case 0:
         Collections.sort(dataModel,
