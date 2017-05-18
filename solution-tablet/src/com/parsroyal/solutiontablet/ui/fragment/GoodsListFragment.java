@@ -25,8 +25,8 @@ import com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingEx
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
-import com.parsroyal.solutiontablet.service.order.SaleOrderService;
-import com.parsroyal.solutiontablet.service.order.impl.SaleOrderServiceImpl;
+import com.parsroyal.solutiontablet.service.SaleOrderService;
+import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsListAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
