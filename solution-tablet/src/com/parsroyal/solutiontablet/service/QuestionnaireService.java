@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Mahyar on 7/24/2015.
  */
-public interface QuestionnaireService {
+public interface QuestionnaireService extends BaseService {
 
   List<QuestionnaireListModel> searchForQuestionnaires(QuestionnaireSo questionnaireSo);
 

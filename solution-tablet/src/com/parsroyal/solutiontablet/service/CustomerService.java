@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Mahyar on 6/14/2015.
  */
-public interface CustomerService {
+public interface CustomerService extends BaseService {
 
   Customer getCustomerById(Long customerId);
 
@@ -45,4 +45,6 @@ public interface CustomerService {
   File getAllCustomerPicForSend();
 
   List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
+
+  void deleteAllPics();
 }

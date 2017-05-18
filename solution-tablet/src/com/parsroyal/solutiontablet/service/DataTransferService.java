@@ -16,4 +16,6 @@ public interface DataTransferService {
   boolean isDataTransferPossible();
 
   GoodsDtoList getRejectedData(ResultObserver resultObserver, Long customerId);
+
+  void clearAllData();
 }

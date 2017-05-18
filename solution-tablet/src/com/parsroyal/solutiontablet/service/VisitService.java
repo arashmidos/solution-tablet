@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Arash on 2017-03-08
  */
-public interface VisitService {
+public interface VisitService extends BaseService {
 
   List<VisitLine> getAllVisitLines();
 
@@ -48,6 +48,4 @@ public interface VisitService {
   List<VisitInformationDto> getAllVisitDetailForSend();
 
   Long startAnonymousVisit();
-
-  void deleteAll();
 }

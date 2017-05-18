@@ -1,4 +1,4 @@
-package com.parsroyal.solutiontablet.service.order.impl;
+package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -20,7 +20,7 @@ import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingException;
-import com.parsroyal.solutiontablet.service.order.SaleOrderService;
+import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.List;
@@ -246,5 +246,11 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     if (!orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
       goodsDao.update(goods);
     }
+  }
+
+  @Override
+  public void deleteAll() {
+    saleOrderDao.deleteAll();
+    saleOrderItemDao.deleteAll();
   }
 }

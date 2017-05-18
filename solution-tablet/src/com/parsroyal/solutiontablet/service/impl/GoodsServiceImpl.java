@@ -2,7 +2,9 @@ package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 import com.parsroyal.solutiontablet.data.dao.GoodsDao;
+import com.parsroyal.solutiontablet.data.dao.GoodsGroupDao;
 import com.parsroyal.solutiontablet.data.dao.impl.GoodsDaoImpl;
+import com.parsroyal.solutiontablet.data.dao.impl.GoodsGroupDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
@@ -14,12 +16,14 @@ import java.util.List;
  */
 public class GoodsServiceImpl implements GoodsService {
 
+  private final GoodsGroupDao goodsGroupDao;
   private Context context;
   private GoodsDao goodsDao;
 
   public GoodsServiceImpl(Context context) {
     this.context = context;
     this.goodsDao = new GoodsDaoImpl(context);
+    this.goodsGroupDao = new GoodsGroupDaoImpl(context);
   }
 
   @Override
@@ -35,5 +39,15 @@ public class GoodsServiceImpl implements GoodsService {
   @Override
   public Goods getGoodsByBackendId(Long goodsBackendId) {
     return goodsDao.retrieveByBackendId(goodsBackendId);
+  }
+
+  @Override
+  public void deleteAllGoodsGroup() {
+    goodsGroupDao.deleteAll();
+  }
+
+  @Override
+  public void deleteAll() {
+    goodsDao.deleteAll();
   }
 }

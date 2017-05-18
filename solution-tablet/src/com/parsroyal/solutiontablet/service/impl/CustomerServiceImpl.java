@@ -172,4 +172,14 @@ public class CustomerServiceImpl implements CustomerService {
   public List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO) {
     return customerDao.getAllCusromerPostionModel(nCustomerSO);
   }
+
+  @Override
+  public void deleteAllPics() {
+    customerPicDao.deleteAll();
+  }
+
+  @Override
+  public void deleteAll() {
+    customerDao.deleteAll();
+  }
 }

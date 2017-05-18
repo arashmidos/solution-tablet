@@ -83,4 +83,9 @@ public class PositionServiceImpl implements PositionService {
   public Position getLastPosition() {
     return positionDao.getLastPosition();
   }
+
+  @Override
+  public void deleteAll() {
+    positionDao.deleteAll();
+  }
 }

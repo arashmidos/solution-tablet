@@ -1,4 +1,4 @@
-package com.parsroyal.solutiontablet.service.order;
+package com.parsroyal.solutiontablet.service;
 
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Mahyar on 8/25/2015.
  * Edited by Arash 7/17/2016
  */
-public interface SaleOrderService {
+public interface SaleOrderService extends BaseService {
 
   List<SaleOrderListModel> findOrders(SaleOrderSO saleOrderSO);
 

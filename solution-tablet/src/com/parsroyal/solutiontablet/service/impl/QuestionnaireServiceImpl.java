@@ -85,4 +85,11 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
       QuestionnaireSo questionnaireSo) {
     return questionDao.searchForAnonymousQuestions(questionnaireSo);
   }
+
+  @Override
+  public void deleteAll() {
+    questionDao.deleteAll();
+    questionnaireDao.deleteAll();
+    qAnswerDao.deleteAll();
+  }
 }

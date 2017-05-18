@@ -8,11 +8,13 @@ import java.util.List;
 /**
  * Created by Mahyar on 7/27/2015.
  */
-public interface GoodsService {
+public interface GoodsService extends BaseService {
 
   Goods getGoodsById(Long goodsId);
 
   List<GoodsListModel> searchForGoods(GoodsSo goodsSo);
 
   Goods getGoodsByBackendId(Long goodsBackendId);
+
+  void deleteAllGoodsGroup();
 }

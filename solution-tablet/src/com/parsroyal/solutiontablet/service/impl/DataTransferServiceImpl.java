@@ -41,13 +41,13 @@ import com.parsroyal.solutiontablet.exception.InvalidServerAddressException;
 import com.parsroyal.solutiontablet.exception.PasswordNotProvidedForConnectingToServerException;
 import com.parsroyal.solutiontablet.exception.SalesmanIdNotProvidedForConnectingToServerException;
 import com.parsroyal.solutiontablet.exception.UsernameNotProvidedForConnectingToServerException;
+import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.PaymentService;
 import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
-import com.parsroyal.solutiontablet.service.order.SaleOrderService;
-import com.parsroyal.solutiontablet.service.order.impl.SaleOrderServiceImpl;
+import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -140,6 +140,29 @@ public class DataTransferServiceImpl implements DataTransferService {
   private void cleanOldData() {
     paymentService.clearAllSentPayment();
     visitService.deleteAll();
+  }
+
+  public void clearAllData() {
+    BaseInfoService infoService = new BaseInfoServiceImpl(context);
+    infoService.deleteAll();
+    infoService.deleteAllCities();
+    infoService.deleteAllProvinces();
+
+    keyValueDao.update(new KeyValue(ApplicationKeys.USER_FULL_NAME, ""));
+    keyValueDao.update(new KeyValue(ApplicationKeys.USER_COMPANY_NAME, ""));
+
+    customerService.deleteAll();
+    customerService.deleteAllPics();
+
+    GoodsServiceImpl goodsService = new GoodsServiceImpl(context);
+    goodsService.deleteAll();
+    goodsService.deleteAllGoodsGroup();
+
+    paymentService.deleteAll();
+    visitService.deleteAll();
+    questionnaireService.deleteAll();
+    saleOrderService.deleteAll();
+    positionService.deleteAll();
   }
 
   @Override

@@ -85,4 +85,8 @@ public class PaymentServiceImpl implements PaymentService {
     paymentDao.deleteAllSentPayment();
   }
 
+  @Override
+  public void deleteAll() {
+    paymentDao.deleteAll();
+  }
 }
