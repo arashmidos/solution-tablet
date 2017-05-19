@@ -2,8 +2,12 @@ package com.parsroyal.solutiontablet.util;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import de.mateware.snacky.Snacky;
@@ -17,11 +21,16 @@ public class ToastUtil {
   public static void toastMessage(Activity activity, String message) {
     Snacky.Builder builder = Snacky.builder();
     builder.setActivty(activity);
+
     builder.setText(message);
     builder.setActionTextColor(Color.WHITE);
     builder.setTextSize(20);
     builder.setDuration(Snacky.LENGTH_LONG);
     final Snackbar snack = builder.info();
+    View view = snack.getView();
+    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) view.getLayoutParams();
+    params.gravity = Gravity.TOP;
+    view.setLayoutParams(params);
     snack.show();
   }
 
@@ -38,6 +47,10 @@ public class ToastUtil {
     builder.setTextSize(20);
     builder.setDuration(Snacky.LENGTH_LONG);
     final Snackbar snack = builder.success();
+    View view = snack.getView();
+    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) view.getLayoutParams();
+    params.gravity = Gravity.TOP;
+    view.setLayoutParams(params);
     snack.show();
   }
 
@@ -62,12 +75,11 @@ public class ToastUtil {
     builder.setActionTextSize(20);
     builder.setDuration(Snacky.LENGTH_INDEFINITE);
     final Snackbar snack = builder.build();
-    snack.setAction(activity.getString(R.string.button_ok), new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        snack.dismiss();
-      }
-    });
+    View view = snack.getView();
+    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) view.getLayoutParams();
+    params.gravity = Gravity.TOP;
+    view.setLayoutParams(params);
+    snack.setAction(activity.getString(R.string.button_ok), v -> snack.dismiss());
     snack.show();
   }
 

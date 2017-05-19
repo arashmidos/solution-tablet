@@ -13,8 +13,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
@@ -26,6 +24,7 @@ import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
+import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
@@ -69,8 +68,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
 
   private void invokeSendData() {
     dataTransferPB.setVisibility(View.VISIBLE);
-    Answers.getInstance().logContentView(new ContentViewEvent().putContentName("Send Data")
-        .putContentType("Data Transfer"));
+    Analytics.logContentView("Send Data", "Data Transfer");
     enableButtons(false);
     Thread thread = new Thread(() ->
     {
@@ -97,8 +95,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
 
   private void invokeGetData() {
     dataTransferPB.setVisibility(View.VISIBLE);
-    Answers.getInstance().logContentView(new ContentViewEvent().putContentName("Get Data")
-        .putContentType("Data Transfer"));
+    Analytics.logContentView("Get Data", "Data Transfer");
     enableButtons(false);
     Thread thread = new Thread(() ->
     {

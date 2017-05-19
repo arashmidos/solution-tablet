@@ -20,8 +20,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -53,6 +51,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
+import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -192,8 +191,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
           finishVisiting();
           break;
       }
-      Answers.getInstance().logContentView(new ContentViewEvent().putContentName(contentName)
-          .putContentType("Visit"));
+      Analytics.logContentView(contentName, "Visit");
     });
   }
 

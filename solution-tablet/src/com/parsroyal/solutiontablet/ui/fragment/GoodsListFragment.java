@@ -12,8 +12,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.SearchEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
@@ -30,6 +28,7 @@ import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.order.SaleOrderService;
 import com.parsroyal.solutiontablet.service.order.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsListAdapter;
+import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -126,8 +125,7 @@ public class GoodsListFragment extends BaseFragment {
 
           if (Empty.isNotEmpty(constraint)) {
             goodsSo.setConstraint(CharacterFixUtil.fixString("%" + constraint + "%"));
-            Answers.getInstance().logSearch(new SearchEvent().putQuery(constraint)
-                .putCustomAttribute("Type", "Goods"));
+            Analytics.logSearch(constraint, "Type", "Goods");
             updateGoodsDataTb();
 
           } else {
