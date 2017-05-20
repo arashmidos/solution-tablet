@@ -15,6 +15,7 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.exception.BackendIsNotReachableException;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
@@ -128,8 +129,10 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
         }
         save();
         settingService.getUserInformation(SettingFragment.this);
-        runOnUiThread(() -> ToastUtil
-            .toastSuccess(getActivity(), R.string.message_setting_saved_successfully));
+
+      } catch (BackendIsNotReachableException ex) {
+        Log.e(TAG, ex.getMessage(), ex);
+        runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
       } catch (BusinessException ex) {
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
@@ -266,6 +269,8 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     if (result) {
       runOnUiThread(() ->
       {
+        runOnUiThread(() -> ToastUtil
+            .toastSuccess(getActivity(), R.string.message_setting_saved_successfully));
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, false);
         mainActivity.updateActionbar();

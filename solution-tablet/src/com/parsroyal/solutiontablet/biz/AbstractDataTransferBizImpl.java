@@ -120,6 +120,10 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
 
       result = true;
 
+    } catch (BackendIsNotReachableException ex) {
+      if (Empty.isNotEmpty(getObserver())) {
+        getObserver().publishResult(ex);
+      }
     } catch (ResourceAccessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
       if (Empty.isNotEmpty(getObserver())) {
