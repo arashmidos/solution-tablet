@@ -162,7 +162,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     setupDrawer();
     initialize();
     if (!BuildConfig.DEBUG) {
-    logUser();
+      logUser();
     }
   }
 
@@ -422,7 +422,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
       switch (position) {
         case 0:
           if (Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME)) &&
-              Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME)) &&
+              Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD)) &&
               !BuildConfig.DEBUG) {
             settingLoginDialog();
             closeDrawer();

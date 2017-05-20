@@ -272,7 +272,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
         runOnUiThread(() -> ToastUtil
             .toastSuccess(getActivity(), R.string.message_setting_saved_successfully));
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, false);
+        mainActivity.removeFragment(this);
         mainActivity.updateActionbar();
         //Start GPS Tracker
         new TrackerAlarmReceiver().setAlarm(getContext());
@@ -289,7 +289,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.cancelBtn:
-        ((MainActivity) getActivity()).changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, false);
+        ((MainActivity) getActivity()).removeFragment(this);
         break;
       case R.id.saveBtn:
         try {
