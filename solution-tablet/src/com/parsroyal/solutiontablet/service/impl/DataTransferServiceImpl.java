@@ -23,6 +23,7 @@ import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransfer
 import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitLineDataTaransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitLineForDeliveryDataTaransferBizImpl;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
@@ -142,15 +143,16 @@ public class DataTransferServiceImpl implements DataTransferService {
     visitService.deleteAll();
   }
 
-  public void clearAllData() {
-    BaseInfoService infoService = new BaseInfoServiceImpl(context);
-    infoService.deleteAll();
-    infoService.deleteAllCities();
-    infoService.deleteAllProvinces();
+  public void clearData(int updateType) {
+    if (updateType == Constants.FULL_UPDATE) {
+      BaseInfoService infoService = new BaseInfoServiceImpl(context);
+      infoService.deleteAll();
+      infoService.deleteAllCities();
+      infoService.deleteAllProvinces();
 
-    keyValueDao.update(new KeyValue(ApplicationKeys.USER_FULL_NAME, ""));
-    keyValueDao.update(new KeyValue(ApplicationKeys.USER_COMPANY_NAME, ""));
-
+      keyValueDao.update(new KeyValue(ApplicationKeys.USER_FULL_NAME, ""));
+      keyValueDao.update(new KeyValue(ApplicationKeys.USER_COMPANY_NAME, ""));
+    }
     customerService.deleteAll();
     customerService.deleteAllPics();
 
@@ -164,6 +166,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     saleOrderService.deleteAll();
     positionService.deleteAll();
   }
+
 
   @Override
   public void sendAllData(final ResultObserver uiObserver) {
@@ -453,4 +456,6 @@ public class DataTransferServiceImpl implements DataTransferService {
       resultObserver.publishResult(context.getString(R.string.message_no_invoice_found));
     }
   }
+
+
 }
