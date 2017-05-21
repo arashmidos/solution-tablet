@@ -220,6 +220,8 @@ public class VisitServiceImpl implements VisitService {
 
   @Override
   public void deleteAll() {
-//        visitInformationDao.clearAllSent();
+    visitLineDao.deleteAll();
+    visitInformationDao.deleteAll();
+    visitInformationDetailDao.deleteAll();
   }
 }

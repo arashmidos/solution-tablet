@@ -5,7 +5,6 @@ import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 
 /**
  * Created by Mahyar on 6/15/2015.
- * Edited by Arash on 7/11/2016
  */
 public interface DataTransferService {
 
@@ -16,4 +15,7 @@ public interface DataTransferService {
   boolean isDataTransferPossible();
 
   GoodsDtoList getRejectedData(ResultObserver resultObserver, Long customerId);
+
+  void clearData(int updateType);
+
 }

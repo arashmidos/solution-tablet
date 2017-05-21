@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Arash on 08/19/2016
  */
-public interface PaymentService {
+public interface PaymentService extends BaseService {
 
   Payment getPaymentById(Long paymentID);
 

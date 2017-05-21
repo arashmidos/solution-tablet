@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Arash on 09/12/2016
  */
-public interface PositionService {
+public interface PositionService extends BaseService{
 
   Position getPositionById(Long positionId);
 

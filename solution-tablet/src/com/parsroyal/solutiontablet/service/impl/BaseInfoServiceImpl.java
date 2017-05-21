@@ -86,4 +86,18 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     return entities;
   }
 
+  @Override
+  public void deleteAllCities() {
+    cityDao.deleteAll();
+  }
+
+  @Override
+  public void deleteAllProvinces() {
+    provinceDao.deleteAll();
+  }
+
+  @Override
+  public void deleteAll() {
+    baseInfoDao.deleteAll();
+  }
 }

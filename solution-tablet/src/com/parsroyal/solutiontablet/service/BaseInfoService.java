@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Mahyar on 6/14/2015.
  */
-public interface BaseInfoService {
+public interface BaseInfoService extends BaseService{
 
   KeyValue getKeyValue(String key);
 
@@ -24,5 +24,9 @@ public interface BaseInfoService {
   List<LabelValue> getAllCitiesLabelsValues(Long provinceId);
 
   List<LabelValue> getAllPaymentType();
+
+  void deleteAllCities();
+
+  void deleteAllProvinces();
 
 }

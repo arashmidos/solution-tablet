@@ -98,6 +98,7 @@
   <string name="message_customer_delete_confirm">آیا از حذف مشتری مطمئن هستید؟</string>
   <string name="yes">بله</string>
   <string name="no">خیر</string>
+  <string name="no_send_data">خیر، می خواهم اطلاعات قبلی را ارسال کنم</string>
   <string name="message_customer_deleted_successfully">مشتری با موفقیت حذف شد.</string>
   <string name="message_no_item_found">هیچ آیتمی یافت نشد</string>
   <string name="new_customers_data_transferred_successfully">اطلاعات مشتریان جدید با موفقیت ارسال شد</string>
@@ -358,6 +359,7 @@
   <string name="enable_calculate_distance">سرویس محاسبه فاصله تا مشتری فعال باشد</string>
   <string name="not_visited">عدم ویزیت</string>
   <string name="error_filter_is_not_correct">عدد وارد شده صحیح نیست.</string>
+  <string name="warning_delete_data_after_setting_change">با تغییر تنظیمات تمام داده های قبلی برنامه حذف می شوند.\n چنانچه اطلاعات ارسال نشده ای دارید،‌ می بایست ابتدا از قسمت انتقال اطلاعات ارسال کنید. آیا از تغییر تنظیمات مطمئن هستید؟</string>
   <string-array name="sale_type">
     <item>فروش سرد</item>
     <item>فروش گرم</item>

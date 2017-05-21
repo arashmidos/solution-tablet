@@ -15,12 +15,7 @@ public class DialogUtil {
   public static void showConfirmDialog(Context context, String title, String message,
       DialogInterface.OnClickListener positiveBtnOnClickListener) {
     showCustomDialog(context, title, message, "", positiveBtnOnClickListener, "",
-        new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int i) {
-            dialog.dismiss();
-          }
-        }, Constants.ICON_MESSAGE);
+        (dialog, i) -> dialog.dismiss(), Constants.ICON_MESSAGE);
   }
 
   public static void showCustomDialog(Context context, String title, String message,
@@ -50,12 +45,7 @@ public class DialogUtil {
         .setTitle(title)
         .setMessage(message)
         .setPositiveButton(context.getString(R.string.button_ok),
-            new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-              }
-            })
+            (dialog1, which) -> dialog1.dismiss())
         .create();
     dialog.show();
   }

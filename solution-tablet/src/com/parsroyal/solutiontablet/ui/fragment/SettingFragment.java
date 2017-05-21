@@ -14,13 +14,17 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.exception.BackendIsNotReachableException;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.SettingService;
+import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -115,18 +119,21 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     stockSerialTxt.setText("100101");
   }
 
-  private void invokeGetInformationService() {
+  private void invokeGetInformationService(int updateType) {
     showProgressDialog(getActivity().getString(R.string.message_connecting_to_server_please_wait));
     new Thread(() ->
     {
       try {
+        if (updateType != Constants.NO_UPDATE) {
+          new DataTransferServiceImpl(getActivity()).clearData(updateType);
+        }
         save();
         settingService.getUserInformation(SettingFragment.this);
-        runOnUiThread(() -> ToastUtil
-            .toastSuccess(getActivity(), R.string.message_setting_saved_successfully));
 
-
-      } catch (final BusinessException ex) {
+      } catch (BackendIsNotReachableException ex) {
+        Log.e(TAG, ex.getMessage(), ex);
+        runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
+      } catch (BusinessException ex) {
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
       } catch (final Exception ex) {
@@ -262,8 +269,10 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     if (result) {
       runOnUiThread(() ->
       {
+        runOnUiThread(() -> ToastUtil
+            .toastSuccess(getActivity(), R.string.message_setting_saved_successfully));
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, false);
+        mainActivity.removeFragment(this);
         mainActivity.updateActionbar();
         //Start GPS Tracker
         new TrackerAlarmReceiver().setAlarm(getContext());
@@ -280,11 +289,35 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.cancelBtn:
-        ((MainActivity) getActivity()).changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, false);
+        ((MainActivity) getActivity()).removeFragment(this);
         break;
       case R.id.saveBtn:
         try {
-          invokeGetInformationService();
+          String userFullName = settingService.getSettingValue(ApplicationKeys.USER_FULL_NAME);
+          //It there is some data
+          if (Empty.isNotEmpty(userFullName)) {
+            //Did he change essential info?
+            boolean newSalesman = isNewSalesman();
+            boolean saleInfoChanged = isSaleInfoChanged();
+            if (newSalesman || saleInfoChanged) {
+              DialogUtil.showCustomDialog(getActivity(), getString(R.string.warning),
+                  getString(R.string.warning_delete_data_after_setting_change),
+                  getString(R.string.yes),
+                  (dialog, which) -> {
+                    invokeGetInformationService(
+                        newSalesman ? Constants.FULL_UPDATE : Constants.PARTIAL_UPDATE);
+                  }, getString(R.string.no_send_data), (dialog, which) -> {
+                    ((MainActivity) getActivity())
+                        .changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, true);
+                  }, Constants.ICON_WARNING
+              );
+            } else {
+              invokeGetInformationService(Constants.NO_UPDATE);
+            }
+          } else {
+            //Its first use of the app
+            invokeGetInformationService(Constants.FULL_UPDATE);
+          }
         } catch (BusinessException ex) {
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), ex);
@@ -294,5 +327,33 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
         }
         break;
     }
+  }
+
+  private boolean isSaleInfoChanged() {
+    String saleType = String.valueOf(saleTypeSp.getSelectedItemPosition() + 1);
+    String stockSerial = stockSerialTxt.getText().toString();
+    String branchSerial = branchSerialTxt.getText().toString();
+
+    String oldSaleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+    String oldBranchSerial = settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE);
+    String oldStockSerial = settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE);
+
+    return !(saleType.equals(oldSaleType) && stockSerial.equals(oldStockSerial) && branchSerial
+        .equals(oldBranchSerial));
+  }
+
+  private boolean isNewSalesman() {
+    String address1 = serverAddress1Txt.getText().toString();
+    String address2 = serverAddress2Txt.getText().toString();
+    String username = usernameTxt.getText().toString();
+    String userCode = userCodeTxt.getText().toString();
+
+    String oldAddress1 = settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    String oldAaddress2 = settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
+    String oldUsername = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
+    String oldUserCode = settingService.getSettingValue(ApplicationKeys.SETTING_USER_CODE);
+
+    return !(address1.equals(oldAddress1) && address2.equals(oldAaddress2) && username
+        .equals(oldUsername) && userCode.equals(oldUserCode));
   }
 }
