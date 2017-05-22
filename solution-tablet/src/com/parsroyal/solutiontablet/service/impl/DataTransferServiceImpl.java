@@ -117,6 +117,8 @@ public class DataTransferServiceImpl implements DataTransferService {
       throw new SalesmanIdNotProvidedForConnectingToServerException();
     }
 
+    clearData(Constants.FULL_UPDATE);
+
     final ResultObserver resultObserver = prepareResultObserverForGetAllData(uiObserver);
     getAllProvinces(resultObserver);
     getAllCities(resultObserver);
