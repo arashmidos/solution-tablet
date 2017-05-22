@@ -15,6 +15,7 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.exception.BackendIsNotReachableException;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
@@ -125,6 +126,8 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     {
       try {
         if (updateType != Constants.NO_UPDATE) {
+          settingService.saveSetting(ApplicationKeys.USER_FULL_NAME,"");
+          settingService.saveSetting(ApplicationKeys.USER_COMPANY_NAME,"");
           new DataTransferServiceImpl(getActivity()).clearData(updateType);
         }
         save();

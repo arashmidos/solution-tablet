@@ -647,6 +647,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         finish();
       }
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "Install Update", "Error in installing update" + ex.getMessage());
       ToastUtil.toastError(MainActivity.this, getString(R.string.err_update_failed));
     }
   }

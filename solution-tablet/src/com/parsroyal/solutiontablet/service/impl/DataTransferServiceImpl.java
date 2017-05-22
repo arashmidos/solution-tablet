@@ -136,7 +136,6 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
 
     getAllOrdersForDelivery(resultObserver);
-    cleanOldData();
     uiObserver.finished(true);
   }
 
@@ -151,9 +150,6 @@ public class DataTransferServiceImpl implements DataTransferService {
       infoService.deleteAll();
       infoService.deleteAllCities();
       infoService.deleteAllProvinces();
-
-      keyValueDao.update(new KeyValue(ApplicationKeys.USER_FULL_NAME, ""));
-      keyValueDao.update(new KeyValue(ApplicationKeys.USER_COMPANY_NAME, ""));
     }
     customerService.deleteAll();
     customerService.deleteAllPics();
