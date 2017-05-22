@@ -101,7 +101,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     {
       try {
         KeyValue saleType = keyValueBiz.findByKey(ApplicationKeys.SETTING_SALE_TYPE);
-        if (saleType.getValue().equals(ApplicationKeys.SALE_HOT)) {
+        if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER)) {
           new GoodsRequestDataTransferBizImpl(getActivity(), DataTransferFragment.this)
               .exchangeData();
         }
