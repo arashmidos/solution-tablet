@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
@@ -117,6 +118,8 @@ public class QuestionnaireDetailFragment extends
       });
       return view;
     } catch (Exception ex) {
+      Crashlytics
+          .log(Log.ERROR, "UI Exception", "Error in creating QuestionaireDetailFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       return inflater.inflate(R.layout.view_error_page, null);
     }
@@ -277,6 +280,7 @@ public class QuestionnaireDetailFragment extends
         }
 
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in loading questions " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
       }
@@ -301,6 +305,7 @@ public class QuestionnaireDetailFragment extends
           openQuestionDialog(nextQuestionDto);
         }
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in loading next questions " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
       }
@@ -329,6 +334,7 @@ public class QuestionnaireDetailFragment extends
         adapter.notifyDataSetChanged();
         adapter.notifyDataSetInvalidated();
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in saving questions " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
       }

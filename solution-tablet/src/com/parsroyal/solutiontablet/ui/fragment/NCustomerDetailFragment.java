@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.data.entity.Customer;
@@ -113,6 +114,7 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating NCustomerDetailFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
@@ -132,8 +134,6 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
       initializeComponents();
       loadSpinnersData();
     } catch (BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-    } catch (Exception ex) {
       Log.e(TAG, ex.getMessage(), ex);
     }
   }
@@ -282,12 +282,9 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
 
         @Override
         public void timeOut() {
-          runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              ToastUtil.toastError(getActivity(), R.string.message_finding_location_timeout);
-              dismissProgressDialog();
-            }
+          runOnUiThread(() -> {
+            ToastUtil.toastError(getActivity(), R.string.message_finding_location_timeout);
+            dismissProgressDialog();
           });
         }
       });
@@ -295,6 +292,8 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
       ToastUtil.toastError(getActivity(), ex);
       dismissProgressDialog();
     } catch (Exception e) {
+      Crashlytics
+          .log(Log.ERROR, "Location Service", "Error in finding location " + e.getMessage());
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       Log.e(TAG, e.getMessage(), e);
       dismissProgressDialog();
@@ -333,6 +332,7 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in saving new customer data " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
     }

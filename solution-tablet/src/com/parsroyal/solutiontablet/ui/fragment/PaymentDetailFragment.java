@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.alirezaafkar.sundatepicker.DatePicker;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -120,6 +121,7 @@ public class PaymentDetailFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating PaymentDetailFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
@@ -132,24 +134,21 @@ public class PaymentDetailFragment extends BaseFragment {
     loadSpinnersData();
 
     if (!isDisabled()) {
-      chequeDate.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          DatePicker.Builder builder = new DatePicker.Builder()
-              .id(1);
-          if (Empty.isNotEmpty(payment) && Empty.isNotEmpty(payment.getChequeDate())) {
-            String[] date = payment.getChequeDate().split("/");
-            builder.date(Integer.parseInt(date[2]),
-                Integer.parseInt(date[1]),
-                Integer.parseInt("13" + date[0]));
-          }
-          builder.build((id, calendar, day, month, year) ->
-          {
-            chequeDate.setHint(
-                String.format(Locale.ENGLISH, "%02d/%02d/%02d", year % 100, month, day));
-            dateModified = true;
-          }).show(getFragmentManager(), "");
+      chequeDate.setOnClickListener(v -> {
+        DatePicker.Builder builder = new DatePicker.Builder()
+            .id(1);
+        if (Empty.isNotEmpty(payment) && Empty.isNotEmpty(payment.getChequeDate())) {
+          String[] date = payment.getChequeDate().split("/");
+          builder.date(Integer.parseInt(date[2]),
+              Integer.parseInt(date[1]),
+              Integer.parseInt("13" + date[0]));
         }
+        builder.build((id, calendar, day, month, year) ->
+        {
+          chequeDate.setHint(
+              String.format(Locale.ENGLISH, "%02d/%02d/%02d", year % 100, month, day));
+          dateModified = true;
+        }).show(getFragmentManager(), "");
       });
     }
 
@@ -244,6 +243,8 @@ public class PaymentDetailFragment extends BaseFragment {
           }
       }
     } catch (Exception e) {
+      Crashlytics
+          .log(Log.ERROR, "Data retrieval", "Error in loading payment data " + e.getMessage());
       e.printStackTrace();
       mainActivity.removeFragment(this);
     }
@@ -369,6 +370,7 @@ public class PaymentDetailFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in saving new payment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
     }

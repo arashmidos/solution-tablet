@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.TrackLocationService;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
@@ -80,6 +81,7 @@ public class TrackerAlarmReceiver extends WakefulBroadcastReceiver {
           PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
           PackageManager.DONT_KILL_APP);
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "Alarm", "Error in canceling alarm " + ex.getMessage());
       Log.e(TAG, "error in canceling alarm", ex);
     }
   }

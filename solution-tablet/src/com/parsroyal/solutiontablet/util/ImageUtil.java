@@ -13,7 +13,9 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Base64;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,6 +39,7 @@ public class ImageUtil {
       out.close();
       return file.getAbsolutePath();
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Storage Exception", "Error in Bsaving temp image " + e.getMessage());
       e.printStackTrace();
       return "";
     }

@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
@@ -76,8 +77,7 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
 
             //Update Visits
             VisitInformation visitList = visitInformationDao.retrieveForNewCustomer(customerId);
-//                        for (VisitInformation visit : visitList)
-//                        {
+
             if (visitList != null) {
               visitList.setCustomerBackendId(backendId);
               visitInformationDao.update(visitList);
@@ -90,6 +90,7 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
         getObserver()
             .publishResult(context.getString(R.string.new_customers_data_transferred_successfully));
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving NewCustomerData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         getObserver()
             .publishResult(context.getString(R.string.message_exception_in_sending_new_customers));

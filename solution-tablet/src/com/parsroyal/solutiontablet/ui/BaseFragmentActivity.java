@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -65,6 +66,7 @@ public class BaseFragmentActivity extends AppCompatActivity {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(this, ex);
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in updating actionbar " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(this, new UnknownSystemException(ex));
     }

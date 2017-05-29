@@ -10,6 +10,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.SearchEvent;
 import com.parsroyal.solutiontablet.R;
@@ -79,6 +80,7 @@ public abstract class BaseListAdapter<T extends BaseListModel> extends BaseAdapt
       }
       return convertView;
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in BaseListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

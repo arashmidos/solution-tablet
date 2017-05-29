@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
@@ -51,6 +52,7 @@ public class VisitInformationDataTransferBizImpl extends
         }
 
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving VisitInformationData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         observer.publishResult(
             context.getString(R.string.message_exception_in_sending_visit_information));
@@ -60,7 +62,6 @@ public class VisitInformationDataTransferBizImpl extends
 
   @Override
   public void beforeTransfer() {
-//        observer.publishResult(context.getString(R.string.sending_visit_information_data));
   }
 
   @Override

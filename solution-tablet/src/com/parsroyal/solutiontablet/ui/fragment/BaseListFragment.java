@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.BaseListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -42,12 +43,7 @@ public abstract class BaseListFragment<T extends BaseListModel, AD extends BaseL
 
       View view = inflater.inflate(R.layout.fragment_base, null);
       final HorizontalScrollView view1 = (HorizontalScrollView) view.findViewById(R.id.scroll);
-      view1.postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          view1.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-        }
-      }, 100);
+      view1.postDelayed(() -> view1.fullScroll(HorizontalScrollView.FOCUS_RIGHT), 100);
 
       buttonPanel = (LinearLayout) view.findViewById(R.id.button_panel);
       searchTxt = (EditText) view.findViewById(R.id.searchTxt);
@@ -87,6 +83,7 @@ public abstract class BaseListFragment<T extends BaseListModel, AD extends BaseL
 
       return view;
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating BaseListFragment " + e.getMessage());
       Log.e(getClassTag(), e.getMessage(), e);
       return getErrorPageView(inflater);
     }

@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
@@ -24,8 +25,8 @@ import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.GoodsService;
-import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
+import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsListAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
@@ -73,11 +74,9 @@ public class GoodsListFragment extends BaseFragment {
 
       isViewAll = getArguments().getBoolean("view_all", false);
       if (!isViewAll) {
-        try {
-          orderId = getArguments().getLong("orderId");
-        } catch (Exception ex) {
-          Log.e(TAG, ex.getMessage(), ex);
-        }
+
+        orderId = getArguments().getLong("orderId");
+
         if (Empty.isNotEmpty(orderId)) {
           order = saleOrderService.findOrderDtoById(orderId);
         } else {
@@ -143,6 +142,7 @@ public class GoodsListFragment extends BaseFragment {
       return view;
 
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating GoodsListFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);
@@ -226,12 +226,7 @@ public class GoodsListFragment extends BaseFragment {
     }
 
     if (Empty.isNotEmpty(orderId)) {
-      addBtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          handleOnGoodsItemClickListener(goods);
-        }
-      });
+      addBtn.setOnClickListener(view1 -> handleOnGoodsItemClickListener(goods));
     } else {
       addBtn.setVisibility(View.INVISIBLE);
     }
@@ -274,12 +269,7 @@ public class GoodsListFragment extends BaseFragment {
     unit1ExistingTv.setText(existingSb.toString());
 
     if (Empty.isNotEmpty(orderId)) {
-      addBtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          handleOnGoodsItemClickListener(goods);
-        }
-      });
+      addBtn.setOnClickListener(view1 -> handleOnGoodsItemClickListener(goods));
     } else {
       addBtn.setVisibility(View.INVISIBLE);
     }
@@ -307,18 +297,17 @@ public class GoodsListFragment extends BaseFragment {
 
       goodsDetailDialog.setArguments(bundle);
       goodsDetailDialog
-          .setOnClickListener(new GoodsDetailDialogFragment.GoodsDialogOnClickListener() {
-            @Override
-            public void onConfirmBtnClicked(Double count, Long selectedUnit) {
+          .setOnClickListener((count, selectedUnit) -> {
 
-              handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
+            handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
 
-              updateGoodsDataTb();
-            }
+            updateGoodsDataTb();
           });
 
       goodsDetailDialog.show(getActivity().getSupportFragmentManager(), "GoodsDetailDialog");
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+          "Error in handling GoodsList " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
     }
@@ -348,18 +337,15 @@ public class GoodsListFragment extends BaseFragment {
 
       goodsDetailDialog.setArguments(bundle);
       goodsDetailDialog
-          .setOnClickListener(new GoodsDetailDialogFragment.GoodsDialogOnClickListener() {
-            @Override
-            public void onConfirmBtnClicked(Double count, Long selectedUnit) {
-
-              handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
-
-              updateGoodsDataTb();
-            }
+          .setOnClickListener((count, selectedUnit) -> {
+            handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
+            updateGoodsDataTb();
           });
 
       goodsDetailDialog.show(getActivity().getSupportFragmentManager(), "GoodsDetailDialog");
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+          "Error in confirming handling GoodsList " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
     }
@@ -385,6 +371,8 @@ public class GoodsListFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+          "Error in confirming GoodsList " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
@@ -411,6 +399,9 @@ public class GoodsListFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
+      Crashlytics
+          .log(Log.ERROR, "Data storage Exception",
+              "Error in confirming GoodsList " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }

@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz;
 
 import android.content.Context;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
@@ -150,6 +151,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
         getObserver().publishResult(ex);
       }
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Data transfer", "abstract exchange data " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       if (Empty.isNotEmpty(getObserver())) {
         getObserver().publishResult(new UnknownSystemException(e));

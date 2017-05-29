@@ -20,6 +20,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -126,6 +127,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
 
       return view;
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating VisitDetailFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       return inflater.inflate(R.layout.view_error_page, null);
     }
@@ -214,6 +216,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
       }
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "General Exception", "Error in opening camera " + e.getMessage());
       e.printStackTrace();
     }
   }
@@ -316,6 +319,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
       } catch (final Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in getting rejected data " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
       }
@@ -338,6 +342,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       orderDto.setId(id);
       return orderDto;
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in creating draft order " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
     }
@@ -399,6 +404,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
         doFinishVisiting();
       }
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
@@ -442,6 +448,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
           try {
             visitService.updateVisitLocation(visitId, location);
           } catch (Exception e) {
+            Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in updating visit location " + e.getMessage());
             Log.e(TAG, e.getMessage(), e);
           }
 
@@ -463,6 +470,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "Location Service", "Error in finding location " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
@@ -487,6 +495,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       mainActivity.removeFragment(this);
       mainActivity.setMenuEnabled(true);
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
@@ -544,6 +553,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
           selectedItem.getValue());
       visitService.saveVisitDetail(visitInformationDetail);
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in updating visit result " + ex.getMessage());
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
       Log.e(TAG, ex.getMessage(), ex);
     }

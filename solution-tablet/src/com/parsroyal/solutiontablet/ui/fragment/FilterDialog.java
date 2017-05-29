@@ -117,7 +117,7 @@ public class FilterDialog extends DialogFragment {
           ToastUtil.toastMessage(getActivity(), R.string.error_filter_max_distance);
           return;
         }
-      } catch (Exception e) {
+      } catch (NumberFormatException e) {
         ToastUtil.toastMessage(getActivity(), R.string.error_filter_is_not_correct);
         return;
       }

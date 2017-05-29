@@ -489,6 +489,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         showDialogForExit();
       }
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in backPressed " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
     }
   }
@@ -586,6 +587,8 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
                   try {
                     dataTransferService.sendAllData(MainActivity.this);
                   } catch (Exception ex) {
+                    Crashlytics.log(Log.ERROR, "Install Update",
+                        "Error in installing new version" + ex.getMessage());
                     ex.printStackTrace();
                     ToastUtil
                         .toastError(MainActivity.this, R.string.error_unknown_system_exception);
@@ -601,7 +604,6 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
             finish();
           }
         }, Constants.ICON_MESSAGE);
-
   }
 
   private void showGpsOffDialog() {

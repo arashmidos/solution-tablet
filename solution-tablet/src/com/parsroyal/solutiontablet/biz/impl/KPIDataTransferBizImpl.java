@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.model.KPIDto;
@@ -99,6 +100,7 @@ public class KPIDataTransferBizImpl extends AbstractDataTransferBizImpl<KPIDto> 
       Log.e(TAG, ex.getMessage(), ex);
       getObserver().publishResult(ex);
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Data transfer", "Error in exchanging KPIData" + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       getObserver().publishResult(new UnknownSystemException(e));
     } finally {

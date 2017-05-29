@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
@@ -38,12 +39,7 @@ public class VisitLinesAdapter extends BaseListAdapter<VisitLineListModel> {
         return visitService.getAllVisitLinesListModel();
       }
     } catch (final Exception ex) {
-      context.runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-          ToastUtil.toastError(context, new UnknownSystemException(ex));
-        }
-      });
+      context.runOnUiThread(() -> ToastUtil.toastError(context, new UnknownSystemException(ex)));
       return new ArrayList<>();
     }
   }
@@ -74,6 +70,7 @@ public class VisitLinesAdapter extends BaseListAdapter<VisitLineListModel> {
       }
       return convertView;
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in VisitLinesAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

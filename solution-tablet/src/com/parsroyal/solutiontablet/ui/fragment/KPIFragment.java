@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.crashlytics.android.Crashlytics;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -264,6 +265,8 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
         Log.e(TAG, ex.getMessage(), ex);
 
       } catch (Exception ex) {
+        Crashlytics
+            .log(Log.ERROR, "Data Transfer", "Error in getting kpi data " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
       }
       return null;

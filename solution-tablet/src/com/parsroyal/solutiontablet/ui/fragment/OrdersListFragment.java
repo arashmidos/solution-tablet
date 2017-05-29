@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -245,6 +246,7 @@ public class OrdersListFragment extends
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
       } catch (final Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in requesting live data " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
       }

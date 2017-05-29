@@ -1,9 +1,11 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.QuestionType;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
@@ -80,6 +82,7 @@ public class QuestionListAdapter extends BaseListAdapter<QuestionListModel> {
       return convertView;
 
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in BqUESTIONListAdapter.getView " + ex.getMessage());
       ToastUtil.toastError(context, new UnknownSystemException(ex));
       return null;
     }
@@ -91,5 +94,4 @@ public class QuestionListAdapter extends BaseListAdapter<QuestionListModel> {
     public TextView questionTv;
     public TextView answerTv;
   }
-
 }

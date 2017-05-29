@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -140,6 +141,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
       } catch (final Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in getting user information " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
       }
@@ -236,7 +238,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     }
     try {
       long serialBranch = Long.parseLong(branchSerialTxt.getText().toString());
-    } catch (Exception ignore) {
+    } catch (NumberFormatException ignore) {
       runOnUiThread(() ->
       {
         ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_not_valid);
@@ -246,7 +248,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     }
     try {
       long stockSerial = Long.parseLong(stockSerialTxt.getText().toString());
-    } catch (Exception ignore) {
+    } catch (NumberFormatException ignore) {
       runOnUiThread(() ->
       {
         ToastUtil.toastError(getActivity(), R.string.error_stock_serial_is_not_valid);
@@ -325,6 +327,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), ex);
         } catch (Exception ex) {
+          Crashlytics.log(Log.ERROR, "UI Exception", "Error in settingFragment.onClick " + ex.getMessage());
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
         }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -151,6 +152,8 @@ public class CustomerDetailFragment extends BaseFragment {
           try {
             visitService.updateVisitLocation(visitInformationId, location);
           } catch (Exception e) {
+            Crashlytics
+                .log(Log.ERROR, "Location Service", "Error in finding location " + e.getMessage());
             Log.e(TAG, e.getMessage(), e);
           }
         }
@@ -172,6 +175,7 @@ public class CustomerDetailFragment extends BaseFragment {
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(mainActivity, e);
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "General Exception", "Error in entering customer " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
     } finally {

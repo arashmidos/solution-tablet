@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
@@ -91,53 +92,42 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
       holder.cellPhoneTxt
           .setText(Empty.isNotEmpty(model.getCellPhone()) ? model.getCellPhone() : "--");
 
-      holder.editBtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          Bundle args = new Bundle();
-          args.putLong(NCustomerDetailFragment.CUSTOMER_ID_KEY, model.getPrimaryKey());
-          mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, false);
-        }
+      holder.editBtn.setOnClickListener(v -> {
+        Bundle args = new Bundle();
+        args.putLong(NCustomerDetailFragment.CUSTOMER_ID_KEY, model.getPrimaryKey());
+        mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, false);
       });
 
-      holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          DialogUtil
-              .showConfirmDialog(mainActivity, mainActivity.getString(R.string.delete_customer),
-                  mainActivity.getString(R.string.message_customer_delete_confirm),
-                  new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                      try {
-                        customerService.deleteCustomer(model.getPrimaryKey());
-                        NCustomersListAdapter.this.dataModel.remove(model);
-                        NCustomersListAdapter.this.notifyDataSetChanged();
-                        NCustomersListAdapter.this.notifyDataSetInvalidated();
-                        mainActivity.runOnUiThread(new Runnable() {
-                          @Override
-                          public void run() {
-                            ToastUtil.toastSuccess(mainActivity, mainActivity
-                                .getString(R.string.message_customer_deleted_successfully));
-                          }
-                        });
-                      } catch (BusinessException ex) {
-                        Log.e(TAG, ex.getMessage(), ex);
-                        ToastUtil.toastError(mainActivity, ex);
-                      } catch (Exception ex) {
-                        Log.e(TAG, ex.getMessage(), ex);
-                        ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
-                      }
-                    }
-                  }
-              );
-        }
-      });
+      holder.deleteBtn.setOnClickListener(v -> DialogUtil
+          .showConfirmDialog(mainActivity, mainActivity.getString(R.string.delete_customer),
+              mainActivity.getString(R.string.message_customer_delete_confirm),
+              (dialog, which) -> {
+                try {
+                  customerService.deleteCustomer(model.getPrimaryKey());
+                  NCustomersListAdapter.this.dataModel.remove(model);
+                  NCustomersListAdapter.this.notifyDataSetChanged();
+                  NCustomersListAdapter.this.notifyDataSetInvalidated();
+                  mainActivity
+                      .runOnUiThread(() -> ToastUtil.toastSuccess(mainActivity, mainActivity
+                          .getString(R.string.message_customer_deleted_successfully)));
+                } catch (BusinessException ex) {
+                  Log.e(TAG, ex.getMessage(), ex);
+                  ToastUtil.toastError(mainActivity, ex);
+                } catch (Exception ex) {
+                  Crashlytics.log(Log.ERROR, "UI Exception",
+                      "Error in NCustomersListAdapter.delete " + ex.getMessage());
+                  Log.e(TAG, ex.getMessage(), ex);
+                  ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+                }
+              }
+          ));
 
       VisitInformation visitInformations = null;
       try {
         visitInformations = visitService.getVisitInformationForNewCustomer(model.getPrimaryKey());
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "UI Exception",
+            "Error in NCustomerListAdapter.getView " + ex.getMessage());
         ex.printStackTrace();
       }
       if (visitInformations != null) {
@@ -145,65 +135,56 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
       }
 
       final VisitInformation finalVisitInformations = visitInformations;
-      holder.researchBtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          List<QuestionnaireListModel> generalQmodel = questionnaireService
-              .searchForQuestionnaires(new QuestionnaireSo(true));
-          List<QuestionnaireListModel> goodsQmodel = questionnaireService
-              .searchForQuestionnaires(new QuestionnaireSo(false));
+      holder.researchBtn.setOnClickListener(v -> {
+        List<QuestionnaireListModel> generalQmodel = questionnaireService
+            .searchForQuestionnaires(new QuestionnaireSo(true));
+        List<QuestionnaireListModel> goodsQmodel = questionnaireService
+            .searchForQuestionnaires(new QuestionnaireSo(false));
 
-          //Calculate count of questions is each category ( i.e: General and Goods )
-          //There could be more than one questionary in each of them, or questionaries with no question.
-          int generalQCount = 0;
-          int goodsQCount = 0;
-          for (int i = 0; i < goodsQmodel.size(); i++) {
-            QuestionnaireListModel questionnaireListModel = goodsQmodel.get(i);
-            goodsQCount += questionnaireListModel.getQuestionsCount();
-          }
-          for (int i = 0; i < generalQmodel.size(); i++) {
-            QuestionnaireListModel questionnaireListModel = generalQmodel.get(i);
-            generalQCount += questionnaireListModel.getQuestionsCount();
-          }
+        //Calculate count of questions is each category ( i.e: General and Goods )
+        //There could be more than one questionary in each of them, or questionaries with no question.
+        int generalQCount = 0;
+        int goodsQCount = 0;
+        for (int i = 0; i < goodsQmodel.size(); i++) {
+          QuestionnaireListModel questionnaireListModel = goodsQmodel.get(i);
+          goodsQCount += questionnaireListModel.getQuestionsCount();
+        }
+        for (int i = 0; i < generalQmodel.size(); i++) {
+          QuestionnaireListModel questionnaireListModel = generalQmodel.get(i);
+          generalQCount += questionnaireListModel.getQuestionsCount();
+        }
 
-          //Initialize args
-          final Bundle args = new Bundle();
-          args.putLong(Constants.CUSTOMER_ID, model.getPrimaryKey());
-          long visitId;
-          if (finalVisitInformations == null) {
-            visitId = visitService.startVisitingNewCustomer(model.getPrimaryKey());
-          } else {
-            visitId = finalVisitInformations.getId();
-          }
-          args.putLong(Constants.VISIT_ID, visitId);
-          //
+        //Initialize args
+        final Bundle args = new Bundle();
+        args.putLong(Constants.CUSTOMER_ID, model.getPrimaryKey());
+        long visitId;
+        if (finalVisitInformations == null) {
+          visitId = visitService.startVisitingNewCustomer(model.getPrimaryKey());
+        } else {
+          visitId = finalVisitInformations.getId();
+        }
+        args.putLong(Constants.VISIT_ID, visitId);
+        //
 
-          //if question count > 0 is each category so we should display it to user.
-          if (goodsQCount > 0 && generalQCount > 0) {
-            CharSequence options[] = new CharSequence[]{"تحقیقات عمومی", "تحقیقات کالایی"};
+        //if question count > 0 is each category so we should display it to user.
+        if (goodsQCount > 0 && generalQCount > 0) {
+          CharSequence options[] = new CharSequence[]{"تحقیقات عمومی", "تحقیقات کالایی"};
 
-            Dialog dialog = new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.select_questionary))
-                .setItems(options, new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialog, int which) {
-
-                    mainActivity.changeFragment(
-                        which == 0 ? MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID :
-                            MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
-                  }
-                })
-                .create();
-            dialog.show();
-          } else if (generalQCount > 0) {
-            mainActivity
-                .changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
-          } else if (goodsQCount > 0) {
-            mainActivity.changeFragment(MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
-          } else {
-            DialogUtil.showMessageDialog(context, context.getString(R.string.select_questionary),
-                context.getString(R.string.error_no_questionary_found));
-          }
+          Dialog dialog = new AlertDialog.Builder(context)
+              .setTitle(context.getString(R.string.select_questionary))
+              .setItems(options, (dialog1, which) -> mainActivity.changeFragment(
+                  which == 0 ? MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID :
+                      MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false))
+              .create();
+          dialog.show();
+        } else if (generalQCount > 0) {
+          mainActivity
+              .changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+        } else if (goodsQCount > 0) {
+          mainActivity.changeFragment(MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+        } else {
+          DialogUtil.showMessageDialog(context, context.getString(R.string.select_questionary),
+              context.getString(R.string.error_no_questionary_found));
         }
       });
 
@@ -217,6 +198,7 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
 
       return convertView;
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in NCustomerListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

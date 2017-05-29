@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
@@ -47,14 +48,12 @@ public class GoodsListForQuestionnairesFragment extends
       View view = super.onCreateView(inflater, container, savedInstanceState);
       buttonPanel.setVisibility(View.VISIBLE);
       Button canclButton = (Button) buttonPanel.findViewById(R.id.cancelBtn);
-      canclButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          mainActivity.removeFragment(GoodsListForQuestionnairesFragment.this);
-        }
-      });
+      canclButton.setOnClickListener(
+          v -> mainActivity.removeFragment(GoodsListForQuestionnairesFragment.this));
       return view;
     } catch (Exception e) {
+      Crashlytics
+          .log(Log.ERROR, "UI Exception", "Error in creating GoodsListQuestionaireFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return mainActivity.getLayoutInflater().inflate(R.layout.view_error_page, null);
     }
@@ -79,17 +78,14 @@ public class GoodsListForQuestionnairesFragment extends
 
   @Override
   protected AdapterView.OnItemClickListener getOnItemClickListener() {
-    return new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    return (parent, view, position, id) -> {
 
-        Bundle args = new Bundle();
-        args.putLong("qnId", questionnaireBackendId);
-        args.putLong(Constants.VISIT_ID, visitId);
-        args.putLong(Constants.CUSTOMER_ID, customerId);
-        args.putLong("goodsBackendId", dataModel.get(position).getGoodsBackendId());
-        mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
-      }
+      Bundle args = new Bundle();
+      args.putLong("qnId", questionnaireBackendId);
+      args.putLong(Constants.VISIT_ID, visitId);
+      args.putLong(Constants.CUSTOMER_ID, customerId);
+      args.putLong("goodsBackendId", dataModel.get(position).getGoodsBackendId());
+      mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
     };
   }
 
