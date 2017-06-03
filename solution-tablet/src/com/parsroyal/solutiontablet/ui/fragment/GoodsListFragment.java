@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -8,16 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.crashlytics.android.Crashlytics;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
-import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
@@ -28,46 +29,54 @@ import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
-import com.parsroyal.solutiontablet.ui.adapter.GoodsListAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.GoodListAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
 
 /**
  * Created by mahyar on 2/12/16.
- * Edited by Arash on 7/8/2016
  */
 public class GoodsListFragment extends BaseFragment {
 
   public static final String TAG = GoodsListFragment.class.getSimpleName();
+  @BindView(R.id.list)
+  UltimateRecyclerView list;
+  @BindView(R.id.tvPaymentTime)
+  TextView tvPaymentTime;
+  @BindView(R.id.searchTxt)
+  EditText searchTxt;
 
-  private EditText searchTxt;
-  private TableLayout dataTb;
-
-  private List<GoodsListModel> goodsListModelList;
+  private List<Goods> goodsList;
   private GoodsService goodsService;
-  private GoodsSo goodsSo;
+  private GoodsSo goodsSo = new GoodsSo();
   private Long orderId;
   private SaleOrderDto order;
 
   private SaleOrderService saleOrderService;
 
-  private GoodsListAdapter adapter;
+  private GoodListAdapter adapter;
   private Long orderStatus;
   private GoodsDtoList rejectedGoodsList;
   private String constraint;
   private boolean isViewAll;
+  private boolean readOnly;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     try {
-
       View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_goods_list, null);
+      ButterKnife.bind(this, view);
 
       goodsService = new GoodsServiceImpl(getActivity());
       saleOrderService = new SaleOrderServiceImpl(getActivity());
@@ -75,47 +84,42 @@ public class GoodsListFragment extends BaseFragment {
       isViewAll = getArguments().getBoolean("view_all", false);
       if (!isViewAll) {
 
-        orderId = getArguments().getLong("orderId");
+        orderId = getArguments().getLong(Constants.ORDER_ID, -1);
 
-        if (Empty.isNotEmpty(orderId)) {
+        if (orderId != -1) {
           order = saleOrderService.findOrderDtoById(orderId);
+          orderStatus = order.getStatus();
+          readOnly = false;
         } else {
-          TextView operationsHeader = (TextView) view.findViewById(R.id.operationsHeader);
-          operationsHeader.setVisibility(View.INVISIBLE);
+          readOnly = true;
         }
-
-        orderStatus = order.getStatus();
       } else {
-        TextView operationsHeader = (TextView) view.findViewById(R.id.operationsHeader);
-        operationsHeader.setVisibility(View.INVISIBLE);
+        readOnly = true;
       }
 
-      goodsSo = new GoodsSo();
-      goodsListModelList = goodsService.searchForGoods(goodsSo);
+      list.setHasFixedSize(true);
+      list.setLayoutManager(new LinearLayoutManager(getActivity()));
+      list.setItemAnimator(new FadeInRightAnimator());
+
+      long start = System.currentTimeMillis();
 
       if (SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
-        TextView tvPaymentTime = (TextView) view.findViewById(R.id.tvPaymentTime);
         tvPaymentTime.setVisibility(View.GONE);
-        rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable("rejectedList");
-      }
+        rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
 
-      dataTb = (TableLayout) view.findViewById(R.id.goodsDataTable);
-
-      if (SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
-        for (Goods goods : rejectedGoodsList.getGoodsDtoList()) {
-          dataTb.addView(createGoodsRowView(goods));
-        }
+        adapter = new GoodListAdapter(this, rejectedGoodsList.getGoodsDtoList(), readOnly);
       } else {
-        for (GoodsListModel goodsListModel : goodsListModelList) {
-          dataTb.addView(createGoodsRowView(goodsListModel));
-        }
+        goodsList = goodsService.searchForGoodsList(goodsSo);
+        adapter = new GoodListAdapter(this, goodsList, readOnly);
       }
 
-      searchTxt = (EditText) view.findViewById(R.id.searchTxt);
+      list.setAdapter(adapter);
+      long end = System.currentTimeMillis();
+      Toast.makeText(getActivity(), "Total:" + (end - start), Toast.LENGTH_SHORT).show();
+
       searchTxt.addTextChangedListener(new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
 
         @Override
@@ -126,7 +130,6 @@ public class GoodsListFragment extends BaseFragment {
             goodsSo.setConstraint(CharacterFixUtil.fixString("%" + constraint + "%"));
             Analytics.logSearch(constraint, "Type", "Goods");
             updateGoodsDataTb();
-
           } else {
             goodsSo.setConstraint(null);
             updateGoodsDataTb();
@@ -135,12 +138,10 @@ public class GoodsListFragment extends BaseFragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-
         }
       });
 
       return view;
-
     } catch (Exception e) {
       Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating GoodsListFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
@@ -150,210 +151,76 @@ public class GoodsListFragment extends BaseFragment {
   }
 
   private void updateGoodsDataTb() {
-    dataTb.removeAllViews();
-    goodsListModelList = goodsService.searchForGoods(goodsSo);
+
     if (SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
       if (Empty.isNotEmpty(rejectedGoodsList)) {
-        for (Goods goods : rejectedGoodsList.getGoodsDtoList()) {
-          if (Empty.isNotEmpty(constraint) && !goods.getTitle().contains(constraint)) {
+        List<Goods> goodsList = rejectedGoodsList.getGoodsDtoList();
+        List<Goods> filteredList = new ArrayList<>();
+        for (int i = 0; i < goodsList.size(); i++) {
+          Goods good = goodsList.get(i);
+          if (Empty.isNotEmpty(constraint) && !good.getTitle().equals(constraint)) {
             continue;
           }
-          dataTb.addView(createGoodsRowView(goods));
+          filteredList.add(good);
         }
+        list.hideEmptyView();
+        adapter.filter(filteredList);
       } else {
-        dataTb.addView(createEmptyView());
+        list.showEmptyView();
       }
     } else {
-      if (Empty.isNotEmpty(goodsListModelList)) {
-        for (GoodsListModel goodsListModel : goodsListModelList) {
-          dataTb.addView(createGoodsRowView(goodsListModel));
-        }
+      goodsList = goodsService.searchForGoodsList(goodsSo);
+      if (Empty.isNotEmpty(goodsList)) {
+        list.hideEmptyView();
+        adapter.filter(goodsList);
       } else {
-        dataTb.addView(createEmptyView());
+        list.showEmptyView();
       }
     }
   }
 
-  private View createEmptyView() {
-    return getActivity().getLayoutInflater().inflate(R.layout.row_layout_empty, null);
-  }
-
-  private View createGoodsRowView(final GoodsListModel goods) {
-    View view = getActivity().getLayoutInflater().inflate(R.layout.row_layout_goods, null);
-    LinearLayout goodsRowLayout = (LinearLayout) view.findViewById(R.id.goodsRowLayout);
-    TextView goodsNameTv = (TextView) view.findViewById(R.id.goodNameTv);
-    TextView goodsCodeTv = (TextView) view.findViewById(R.id.goodCodeTv);
-    TextView goodsAmountTv = (TextView) view.findViewById(R.id.goodAmountTv);
-    TextView unit1ExistingTv = (TextView) view.findViewById(R.id.unit1ExistingTv);
-    TextView recoveryDateTv = (TextView) view.findViewById(R.id.recoveryDateTv);
-    //
-    ImageButton addBtn = (ImageButton) view.findViewById(R.id.addBtn);
-    LinearLayout operationsContainer = (LinearLayout) view.findViewById(R.id.operationsContainer);
-
-    if (Empty.isEmpty(orderId)) {
-      operationsContainer.setVisibility(View.INVISIBLE);
-    }
-
-    goodsNameTv.setText(goods.getTitle());
-    goodsCodeTv.setText(goods.getCode());
-    {
-      Double goodsAmount = Double.valueOf(goods.getGoodsAmount()) / 1000D;
-      goodsAmountTv.setText(NumberUtil.getCommaSeparated(goodsAmount) + " " + getActivity()
-          .getString(R.string.common_irr_currency));
-    }
-    StringBuilder existingSb = new StringBuilder();
-    {
-      Double unit1Existing = Double.valueOf(goods.getExisting()) / 1000D;
-      existingSb.append(NumberUtil.formatDoubleWith2DecimalPlaces(unit1Existing)).append(" ")
-          .append(Empty.isNotEmpty(goods.getUnit1Title()) ? goods.getUnit1Title() : "--");
-
-    }
-    {
-      Long unit1Count = goods.getUnit1Count();
-      if (Empty.isNotEmpty(unit1Count) && !unit1Count.equals(0L)) {
-        Double unit2Existing = Double.valueOf(goods.getExisting()) / Double.valueOf(unit1Count);
-        unit2Existing = unit2Existing / 1000D;
-        existingSb.append("  ").append(NumberUtil.formatDoubleWith2DecimalPlaces(unit2Existing))
-            .append(" ")
-            .append(Empty.isNotEmpty(goods.getUnit2Title()) ? goods.getUnit2Title() : "--");
-      }
-    }
-
-    unit1ExistingTv.setText(existingSb.toString());
-
-    if (Empty.isNotEmpty(goods.getRecoveryDate())) {
-      recoveryDateTv.setText(String.valueOf(goods.getRecoveryDate()));
-    }
-
-    if (Empty.isNotEmpty(orderId)) {
-      addBtn.setOnClickListener(view1 -> handleOnGoodsItemClickListener(goods));
-    } else {
-      addBtn.setVisibility(View.INVISIBLE);
-    }
-
-    return view;
-  }
-
-  private View createGoodsRowView(final Goods goods) {
-    View view = getActivity().getLayoutInflater().inflate(R.layout.row_layout_goods, null);
-    LinearLayout goodsRowLayout = (LinearLayout) view.findViewById(R.id.goodsRowLayout);
-    TextView goodsNameTv = (TextView) view.findViewById(R.id.goodNameTv);
-    TextView goodsCodeTv = (TextView) view.findViewById(R.id.goodCodeTv);
-    TextView goodsAmountTv = (TextView) view.findViewById(R.id.goodAmountTv);
-    TextView unit1ExistingTv = (TextView) view.findViewById(R.id.unit1ExistingTv);
-    TextView recoveryDateTv = (TextView) view.findViewById(R.id.recoveryDateTv);
-
-    ImageButton addBtn = (ImageButton) view.findViewById(R.id.addBtn);
-    LinearLayout operationsContainer = (LinearLayout) view.findViewById(R.id.operationsContainer);
-
-    if (Empty.isEmpty(orderId)) {
-      operationsContainer.setVisibility(View.INVISIBLE);
-    }
-
-    goodsNameTv.setText(goods.getTitle());
-    goodsCodeTv.setText(goods.getCode());
-
-    Double goodsAmount = Double.valueOf(goods.getPrice()) / 1000D;
-    goodsAmountTv.setText(NumberUtil.getCommaSeparated(goodsAmount) + " " + getActivity()
-        .getString(R.string.common_irr_currency));
-
-    StringBuilder existingSb = new StringBuilder();
-    {
-      Double unit1Existing = Double.valueOf(goods.getExisting()) / 1000D;
-      existingSb.append(NumberUtil.formatDoubleWith2DecimalPlaces(unit1Existing)).append(" ")
-          .append(Empty.isNotEmpty(goods.getUnit1Title()) ? goods.getUnit1Title() : " ");
-
-    }
-
-    recoveryDateTv.setVisibility(View.GONE);
-    unit1ExistingTv.setText(existingSb.toString());
-
-    if (Empty.isNotEmpty(orderId)) {
-      addBtn.setOnClickListener(view1 -> handleOnGoodsItemClickListener(goods));
-    } else {
-      addBtn.setVisibility(View.INVISIBLE);
-    }
-
-    return view;
-  }
-
-  private void handleOnGoodsItemClickListener(final GoodsListModel goods) {
+  public void handleOnGoodsItemClickListener(final Goods goods) {
     try {
       GoodsDetailDialogFragment goodsDetailDialog = new GoodsDetailDialogFragment();
 
-      final SaleOrderItem item = saleOrderService
-          .findOrderItemByOrderIdAndGoodsBackendId(order.getId(), goods.getGoodsBackendId(), 0);
-
-      Bundle bundle = new Bundle();
-      bundle.putLong("goodsBackendId", goods.getGoodsBackendId());
-      bundle.putLong("orderStatus", orderStatus);
-      if (Empty.isNotEmpty(item)) {
-        Double count = Double.valueOf(item.getGoodsCount()) / 1000D;
-        bundle.putDouble("count", count);
-        if (Empty.isNotEmpty(item.getSelectedUnit())) {
-          bundle.putLong("selectedUnit", item.getSelectedUnit());
-        }
+      Long invoiceBackendId = 0L;
+      if (SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
+        invoiceBackendId = goods.getInvoiceBackendId();
       }
-
-      goodsDetailDialog.setArguments(bundle);
-      goodsDetailDialog
-          .setOnClickListener((count, selectedUnit) -> {
-
-            handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
-
-            updateGoodsDataTb();
-          });
-
-      goodsDetailDialog.show(getActivity().getSupportFragmentManager(), "GoodsDetailDialog");
-    } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
-          "Error in handling GoodsList " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
-    }
-
-  }
-
-  private void handleOnGoodsItemClickListener(final Goods goods) {
-    try {
-      GoodsDetailDialogFragment goodsDetailDialog = new GoodsDetailDialogFragment();
-
       final SaleOrderItem item = saleOrderService.findOrderItemByOrderIdAndGoodsBackendId(
-          order.getId(), goods.getBackendId(), goods.getInvoiceBackendId());
+              order.getId(), goods.getBackendId(), invoiceBackendId);
 
       Bundle bundle = new Bundle();
-      bundle.putLong("goodsBackendId", goods.getBackendId());
-      bundle.putLong("goodsInvoiceId", goods.getInvoiceBackendId());
-      bundle.putLong("orderStatus", orderStatus);
-      bundle.putSerializable("rejectedList", rejectedGoodsList);
+      bundle.putLong(Constants.GOODS_BACKEND_ID, goods.getBackendId());
+      bundle.putLong(Constants.GOODS_INVOICE_ID, invoiceBackendId);
+      bundle.putLong(Constants.ORDER_STATUS, orderStatus);
+      bundle.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
       if (Empty.isNotEmpty(item)) {
         Double count = item.getGoodsCount() / 1000D;
 
-        bundle.putDouble("count", count);
+        bundle.putDouble(Constants.COUNT, count);
         if (Empty.isNotEmpty(item.getSelectedUnit())) {
-          bundle.putLong("selectedUnit", item.getSelectedUnit());
+          bundle.putLong(Constants.SELECTED_UNIT, item.getSelectedUnit());
         }
       }
 
       goodsDetailDialog.setArguments(bundle);
-      goodsDetailDialog
-          .setOnClickListener((count, selectedUnit) -> {
-            handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
-            updateGoodsDataTb();
-          });
+      goodsDetailDialog.setOnClickListener((count, selectedUnit) -> {
+        handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
+        updateGoodsDataTb();
+      });
 
       goodsDetailDialog.show(getActivity().getSupportFragmentManager(), "GoodsDetailDialog");
     } catch (Exception e) {
       Crashlytics.log(Log.ERROR, "Data Storage Exception",
-          "Error in confirming handling GoodsList " + e.getMessage());
+              "Error in confirming handling GoodsList " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
     }
-
   }
 
   private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItem item,
-      GoodsListModel goods) {
+                                           Goods goods) {
     try {
       if (Empty.isEmpty(item)) {
         if (count * 1000L > Double.valueOf(String.valueOf(goods.getExisting()))) {
@@ -362,61 +229,20 @@ public class GoodsListFragment extends BaseFragment {
         }
         item = createOrderItem(goods);
       }
-
-      saleOrderService.updateOrderItemCount(item.getId(), count, selectedUnit, orderStatus, null);
-      Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
-      order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
-      order.setAmount(orderAmount);
-    } catch (BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), ex);
-    } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
-          "Error in confirming GoodsList " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-    }
-  }
-
-  private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItem item,
-      Goods goods) {
-    try {
-      if (Empty.isEmpty(item)) {
-        if (count * 1000L > Double.valueOf(String.valueOf(goods.getExisting()))) {
-          ToastUtil.toastError(getActivity(), new SaleOrderItemCountExceedExistingException());
-          return;
-        }
-        item = createOrderItem(goods);
-      }
-      //
 
       saleOrderService.updateOrderItemCount(item.getId(), count, selectedUnit, orderStatus, goods);
       Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);
-//            goods.setExisting((long) (goods.getExisting() + item.getGoodsCount() - count*1000L));
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
-      Crashlytics
-          .log(Log.ERROR, "Data storage Exception",
+      Crashlytics.log(Log.ERROR, "Data storage Exception",
               "Error in confirming GoodsList " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
-  }
-
-  private SaleOrderItem createOrderItem(GoodsListModel goods) {
-    SaleOrderItem saleOrderItem = new SaleOrderItem();
-    saleOrderItem.setGoodsBackendId(goods.getGoodsBackendId());
-    saleOrderItem.setGoodsCount(0L);
-    saleOrderItem.setSaleOrderId(order.getId());
-    saleOrderItem.setCreateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
-    saleOrderItem.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
-    Long orderItemId = saleOrderService.saveOrderItem(saleOrderItem);
-    saleOrderItem.setId(orderItemId);
-    return saleOrderItem;
   }
 
   private SaleOrderItem createOrderItem(Goods goods) {
@@ -437,4 +263,8 @@ public class GoodsListFragment extends BaseFragment {
     return 0;
   }
 
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+  }
 }

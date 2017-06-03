@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
+
 import com.parsroyal.solutiontablet.data.dao.GoodsDao;
 import com.parsroyal.solutiontablet.data.dao.GoodsGroupDao;
 import com.parsroyal.solutiontablet.data.dao.impl.GoodsDaoImpl;
@@ -9,6 +10,7 @@ import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.service.GoodsService;
+
 import java.util.List;
 
 /**
@@ -34,6 +36,11 @@ public class GoodsServiceImpl implements GoodsService {
   @Override
   public List<GoodsListModel> searchForGoods(GoodsSo goodsSo) {
     return goodsDao.findGoods(goodsSo);
+  }
+
+  @Override
+  public List<Goods> searchForGoodsList(GoodsSo goodsSo) {
+    return goodsDao.findGoodsList(goodsSo);
   }
 
   @Override

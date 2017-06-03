@@ -4,8 +4,10 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.util.TypefaceUtil;
+
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -24,7 +26,7 @@ public class SolutionTabletApplication extends Application {
   public static SharedPreferences getPreference() {
     if (sPreference == null) {
       sPreference = PreferenceManager.getDefaultSharedPreferences(
-          sInstance.getApplicationContext());
+              sInstance.getApplicationContext());
     }
 
     return sPreference;

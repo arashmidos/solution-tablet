@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
@@ -21,6 +23,7 @@ import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -57,23 +60,22 @@ public class GoodsDetailDialogFragment extends DialogFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_goods_detail_dialog, null);
 
     context = (MainActivity) getActivity();
-    orderStatus = getArguments().getLong("orderStatus");
-    goodsBackendId = getArguments().getLong("goodsBackendId");
-    count = getArguments().getDouble("count");
-    selectedUnit = getArguments().getLong("selectedUnit");
+    orderStatus = getArguments().getLong(Constants.ORDER_STATUS);
+    goodsBackendId = getArguments().getLong(Constants.GOODS_BACKEND_ID);
+    count = getArguments().getDouble(Constants.COUNT);
+    selectedUnit = getArguments().getLong(Constants.SELECTED_UNIT);
 
     goodsService = new GoodsServiceImpl(context);
 
     if (orderStatus == SaleOrderStatus.REJECTED_DRAFT.getId()) {
-      rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable("rejectedList");
-      goodsInvoiceId = getArguments().getLong("goodsInvoiceId");
+      rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
+      goodsInvoiceId = getArguments().getLong(Constants.GOODS_INVOICE_ID);
       selectedGoods = getGoodFromLocal();
     } else {
-
       selectedGoods = goodsService.getGoodsByBackendId(goodsBackendId);
     }
 
@@ -110,8 +112,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
       }
     }
 
-    confirmBtn.setOnClickListener(v ->
-    {
+    confirmBtn.setOnClickListener(v -> {
       if (Empty.isNotEmpty(onClickListener)) {
         if (validate()) {
           Double count1 = Double.valueOf(NumberUtil.digitsToEnglish(countTxt.getText().toString()));

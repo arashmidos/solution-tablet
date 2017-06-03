@@ -75,7 +75,7 @@ public class OrderDetailFragment extends BaseFragment {
       actionsLayout = (LinearLayout) view.findViewById(R.id.actionsLayout);
 
       if (isRejected()) {
-        rejectedGoodsList = (GoodsDtoList) arguments.getSerializable("rejectedList");
+        rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
       }
       {
         ParsRoyalTab tab = new ParsRoyalTab(context);
