@@ -41,6 +41,8 @@ public class UserInformationDataTransferBizImpl extends AbstractDataTransferBizI
           CharacterFixUtil.fixString(data.getFullName())));
       keyValueBiz.save(new KeyValue(ApplicationKeys.USER_COMPANY_NAME,
           CharacterFixUtil.fixString(data.getCompanyName())));
+      keyValueBiz
+          .save(new KeyValue(ApplicationKeys.USER_COMPANY_ID, String.valueOf(data.getCompanyId())));
     } else {
       getObserver().publishResult(new GotNoResponseFromBackendException());
     }
