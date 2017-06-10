@@ -16,7 +16,6 @@ import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.exception.BackendIsNotReachableException;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
@@ -63,6 +62,12 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
   EditText branchSerialTxt;
   @BindView(R.id.stockSerialTxt)
   EditText stockSerialTxt;
+  @BindView(R.id.invoiceTypeTxt)
+  EditText invoiceTypeTxt;
+  @BindView(R.id.orderTypeTxt)
+  EditText orderTypeTxt;
+  @BindView(R.id.rejectTypeTxt)
+  EditText rejectTypeTxt;
 
   private SettingService settingService;
 
@@ -86,6 +91,9 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
         .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE);
     String branchSerial = settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE);
     String stockSerial = settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE);
+    String invoiceType = settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE);
+    String orderType = settingService.getSettingValue(ApplicationKeys.SETTING_ORDER_TYPE);
+    String rejectType = settingService.getSettingValue(ApplicationKeys.SETTING_REJECT_TYPE);
 
     serverAddress1Txt.setText(Empty.isNotEmpty(address1) ? address1 : "");
     serverAddress2Txt.setText(Empty.isNotEmpty(address2) ? address2 : "");
@@ -99,6 +107,9 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
         .setChecked(Empty.isNotEmpty(distanceEnabled) && distanceEnabled.equals("1"));
     branchSerialTxt.setText(Empty.isNotEmpty(branchSerial) ? branchSerial : "");
     stockSerialTxt.setText(Empty.isNotEmpty(stockSerial) ? stockSerial : "");
+    invoiceTypeTxt.setText(Empty.isNotEmpty(invoiceType) ? invoiceType : "");
+    orderTypeTxt.setText(Empty.isNotEmpty(orderType) ? orderType : "");
+    rejectTypeTxt.setText(Empty.isNotEmpty(rejectType) ? rejectType : "");
 
     if (BuildConfig.DEBUG && Empty.isEmpty(serverAddress1Txt.getText().toString())) {
       setTestData();
@@ -119,6 +130,9 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     enableCalculateDistanceCb.setChecked(true);
     branchSerialTxt.setText("100101");
     stockSerialTxt.setText("100101");
+    invoiceTypeTxt.setText("1");
+    orderTypeTxt.setText("1");
+    rejectTypeTxt.setText("2");
   }
 
   private void invokeGetInformationService(int updateType) {
@@ -127,13 +141,13 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     {
       try {
         if (updateType != Constants.NO_UPDATE) {
-          settingService.saveSetting(ApplicationKeys.USER_FULL_NAME,"");
-          settingService.saveSetting(ApplicationKeys.USER_COMPANY_NAME,"");
+          settingService.saveSetting(ApplicationKeys.USER_FULL_NAME, "");
+          settingService.saveSetting(ApplicationKeys.USER_COMPANY_NAME, "");
           new DataTransferServiceImpl(getActivity()).clearData(updateType);
         }
-        save();
-        settingService.getUserInformation(SettingFragment.this);
-
+        if(canSave()) {
+          settingService.getUserInformation(SettingFragment.this);
+        }
       } catch (BackendIsNotReachableException ex) {
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
@@ -141,7 +155,8 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
       } catch (final Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in getting user information " + ex.getMessage());
+        Crashlytics.log(Log.ERROR, "Data transfer",
+            "Error in getting user information " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
       }
@@ -149,7 +164,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     }).start();
   }
 
-  public void save() {
+  public boolean canSave() {
     if (validate()) {
       String serverAddress1 = serverAddress1Txt.getText().toString();
       String serverAddress2 = serverAddress2Txt.getText().toString();
@@ -162,6 +177,9 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
       String distanceEnabled = enableCalculateDistanceCb.isChecked() ? "1" : "0";
       String stockSerial = stockSerialTxt.getText().toString();
       String branchSerial = branchSerialTxt.getText().toString();
+      String invoiceType = invoiceTypeTxt.getText().toString();
+      String orderType = orderTypeTxt.getText().toString();
+      String rejectType = rejectTypeTxt.getText().toString();
 
       settingService.saveSetting(ApplicationKeys.SETTING_SERVER_ADDRESS_1, serverAddress1);
       settingService.saveSetting(ApplicationKeys.SETTING_SERVER_ADDRESS_2, serverAddress2);
@@ -175,7 +193,12 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
           .saveSetting(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE, distanceEnabled);
       settingService.saveSetting(ApplicationKeys.SETTING_STOCK_CODE, stockSerial);
       settingService.saveSetting(ApplicationKeys.SETTING_BRANCH_CODE, branchSerial);
+      settingService.saveSetting(ApplicationKeys.SETTING_INVOICE_TYPE, invoiceType);
+      settingService.saveSetting(ApplicationKeys.SETTING_ORDER_TYPE, orderType);
+      settingService.saveSetting(ApplicationKeys.SETTING_REJECT_TYPE, rejectType);
+      return true;
     }
+    return false;
   }
 
   private boolean validate() {
@@ -233,6 +256,27 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
       {
         ToastUtil.toastError(getActivity(), R.string.error_stock_serial_is_required);
         stockSerialTxt.requestFocus();
+      });
+      return false;
+    } else if (Empty.isEmpty(invoiceTypeTxt.getText().toString())) {
+      runOnUiThread(() ->
+      {
+        ToastUtil.toastError(getActivity(), R.string.error_invoice_type_is_required);
+        invoiceTypeTxt.requestFocus();
+      });
+      return false;
+    } else if (Empty.isEmpty(orderTypeTxt.getText().toString())) {
+      runOnUiThread(() ->
+      {
+        ToastUtil.toastError(getActivity(), R.string.error_order_type_is_required);
+        orderTypeTxt.requestFocus();
+      });
+      return false;
+    } else if (Empty.isEmpty(rejectTypeTxt.getText().toString())) {
+      runOnUiThread(() ->
+      {
+        ToastUtil.toastError(getActivity(), R.string.error_reject_type_is_required);
+        rejectTypeTxt.requestFocus();
       });
       return false;
     }
@@ -327,7 +371,8 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), ex);
         } catch (Exception ex) {
-          Crashlytics.log(Log.ERROR, "UI Exception", "Error in settingFragment.onClick " + ex.getMessage());
+          Crashlytics.log(Log.ERROR, "UI Exception",
+              "Error in settingFragment.onClick " + ex.getMessage());
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
         }
@@ -361,5 +406,10 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
 
     return !(address1.equals(oldAddress1) && address2.equals(oldAaddress2) && username
         .equals(oldUsername) && userCode.equals(oldUserCode));
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
   }
 }

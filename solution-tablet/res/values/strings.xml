@@ -26,6 +26,9 @@
   <string name="error_branch_serial_is_required">مقدار سریال شعبه ضروری است</string>
   <string name="error_branch_serial_is_not_valid">مقدار سریال شعبه صحیح نیست</string>
   <string name="error_stock_serial_is_required">مقدار سریال انبار ضروری است</string>
+  <string name="error_invoice_type_is_required">مقدار نوع فاکتور ضروری است</string>
+  <string name="error_order_type_is_required">مقدار نوع سفارش ضروری است</string>
+  <string name="error_reject_type_is_required">مقدار نوع مرجوعی ضروری است</string>
   <string name="error_stock_serial_is_not_valid">مقدار سریال انبار صحیح نیست</string>
   <string name="error_unknown_system_exception">خطای سیستمی ناشناس</string>
   <string name="message_setting_saved_successfully">اطلاعات تنظیمات با موفقیت ذخیره شد</string>
@@ -360,6 +363,9 @@
   <string name="not_visited">عدم ویزیت</string>
   <string name="error_filter_is_not_correct">عدد وارد شده صحیح نیست.</string>
   <string name="warning_delete_data_after_setting_change">با تغییر تنظیمات تمام داده های قبلی برنامه حذف می شوند.\n چنانچه اطلاعات ارسال نشده ای دارید،‌ می بایست ابتدا از قسمت انتقال اطلاعات ارسال کنید. آیا از تغییر تنظیمات مطمئن هستید؟</string>
+  <string name="invoice_type">نوع فاکتور</string>
+  <string name="order_type">نوع سفارش</string>
+  <string name="reject_type">نوع مرجوعی</string>
   <string-array name="sale_type">
     <item>فروش سرد</item>
     <item>فروش گرم</item>
