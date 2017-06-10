@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
@@ -55,6 +56,7 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
         resultObserver
             .publishResult(context.getString(R.string.answers_data_transferred_successfully));
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving QAnswerData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         resultObserver
             .publishResult(context.getString(R.string.message_exception_in_sending_answers));

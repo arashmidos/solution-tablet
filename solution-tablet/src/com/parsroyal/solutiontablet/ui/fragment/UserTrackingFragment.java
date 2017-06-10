@@ -26,6 +26,7 @@ import butterknife.OnClick;
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.components.JDF;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -375,6 +376,8 @@ public class UserTrackingFragment extends BaseFragment implements
           try {
             visitService.updateVisitLocation(visitInformationId, location);
           } catch (Exception e) {
+            Crashlytics
+                .log(Log.ERROR, "Location Service", "Error in finding location " + e.getMessage());
             Log.e(TAG, e.getMessage(), e);
           }
         }
@@ -397,6 +400,7 @@ public class UserTrackingFragment extends BaseFragment implements
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(context, e);
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "General Exception", "Error in entering customer from map " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(context, new UnknownSystemException(e));
     } finally {

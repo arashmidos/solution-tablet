@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
@@ -73,6 +74,7 @@ public class QuestionnaireDataTransferBizImpl extends
         getObserver().publishResult(
             context.getString(R.string.message_questionnaires_transferred_successfully));
       } catch (Exception e) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving QuestionaireData " + e.getMessage());
         Log.e(TAG, e.getMessage(), e);
         getObserver().publishResult(
             context.getString(R.string.message_exception_in_transferring_questionnaires));
@@ -125,7 +127,7 @@ public class QuestionnaireDataTransferBizImpl extends
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity requestEntity = new HttpEntity<String>(
+    HttpEntity requestEntity = new HttpEntity<>(
         DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"), headers);
     return requestEntity;
   }

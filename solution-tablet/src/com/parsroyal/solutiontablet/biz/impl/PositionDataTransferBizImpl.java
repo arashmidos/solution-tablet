@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SendStatus;
@@ -71,6 +72,7 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
                   String.valueOf(success), String.valueOf(failure)));
         }
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving PositionData " + ex.getMessage());
         if (Empty.isNotEmpty(getObserver())) {
           getObserver().publishResult(context.getString(R.string.error_position_transfer));
         }

@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
@@ -76,6 +77,7 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
 
         resultObserver.publishResult(getSuccessfulMessage());
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving InvoicedOrders " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         resultObserver.publishResult(getExceptionMessage());
       }

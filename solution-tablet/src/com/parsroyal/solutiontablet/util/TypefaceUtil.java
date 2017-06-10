@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.util;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import java.lang.reflect.Field;
 
 /**
@@ -32,6 +33,7 @@ public class TypefaceUtil {
       defaultFontTypefaceField.setAccessible(true);
       defaultFontTypefaceField.set(null, customFontTypeface);
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Resource Exception", "Error in overriding fonts " + e.getMessage());
       Log.e("Can not set custom font " + customFontFileNameInAssets + " instead of "
           + defaultFontNameToOverride, TAG);
     }

@@ -20,8 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
@@ -71,9 +70,14 @@ import com.parsroyal.solutiontablet.util.ResourceUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.util.Locale;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Mahyar on 6/2/2015.
@@ -111,18 +115,18 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   public static final int NQUESTIONAIRE_FRAGMENT_ID = 26;
 
   private final Integer[] drawerItemTitles = {
-      R.string.setting,
-      R.string.data_transfer,
-      R.string.about_us,
-      R.string.version,
-      R.string.exit
+          R.string.setting,
+          R.string.data_transfer,
+          R.string.about_us,
+          R.string.version,
+          R.string.exit
   };
   private final Integer[] drawerItemImages = {
-      R.drawable.ic_settings_43dp,
-      R.drawable.ic_transform_43dp,
-      R.drawable.ic_aboutus_43dp,
-      R.drawable.ic_version_43dp,
-      R.drawable.ic_exit_43dp,
+          R.drawable.ic_settings_43dp,
+          R.drawable.ic_transform_43dp,
+          R.drawable.ic_aboutus_43dp,
+          R.drawable.ic_version_43dp,
+          R.drawable.ic_exit_43dp,
   };
   @BindView(R.id.mainLayout)
   LinearLayout mainLayout;
@@ -399,12 +403,12 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
     if (!dataTransferPossible) {
       ToastUtil.toastError(this,
-          getString(R.string.message_required_setting_for_data_transfer_not_found));
+              getString(R.string.message_required_setting_for_data_transfer_not_found));
     }
 
     if (!networkAvailable) {
       ToastUtil.toastError(this,
-          getString(R.string.message_device_does_not_have_active_internet_connection));
+              getString(R.string.message_device_does_not_have_active_internet_connection));
     }
 
     return dataTransferPossible && networkAvailable;
@@ -413,7 +417,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   private void setupDrawer() {
     mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     DrawerArrayAdapter adapter = new DrawerArrayAdapter(MainActivity.this, drawerItemTitles,
-        drawerItemImages);
+            drawerItemImages);
     drawerItemsList = (ListView) findViewById(R.id.left_drawer);
 
     drawerItemsList.setAdapter(adapter);
@@ -422,8 +426,8 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
       switch (position) {
         case 0:
           if (Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME)) &&
-              Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD)) &&
-              !BuildConfig.DEBUG) {
+                  Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD)) &&
+                  !BuildConfig.DEBUG) {
             settingLoginDialog();
             closeDrawer();
           } else {
@@ -463,7 +467,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
   private void showVersionDialog() {
     DialogUtil.showMessageDialog(this, getString(R.string.version),
-        String.format(Locale.US, getString(R.string.your_version), BuildConfig.VERSION_NAME));
+            String.format(Locale.US, getString(R.string.your_version), BuildConfig.VERSION_NAME));
   }
 
   private void settingLoginDialog() {
@@ -478,7 +482,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
       if (supportFragmentManager.getBackStackEntryCount() > 1) {
         FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager
-            .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 2);
+                .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 2);
         String tag = backStackEntryAt.getName();
         BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
         if (Empty.isNotEmpty(lastFragment)) {
@@ -489,18 +493,19 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         showDialogForExit();
       }
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in backPressed " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
     }
   }
 
   protected void showDialogForExit() {
     DialogUtil.showConfirmDialog(this, getString(R.string.message_exit),
-        getString(R.string.message_do_you_want_to_exit),
-        (dialog, which) ->
-        {
-          dialog.dismiss();
-          finish();
-        });
+            getString(R.string.message_do_you_want_to_exit),
+            (dialog, which) ->
+            {
+              dialog.dismiss();
+              finish();
+            });
   }
 
   public void openDrawer() {
@@ -571,50 +576,51 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
   private void installNewVersion() {
     DialogUtil.showCustomDialog(this, getString(R.string.message_update_title),
-        getString(R.string.message_update_alert), "", (dialogInterface, i) ->
-        {
-          dialogInterface.dismiss();
-          DialogUtil.showCustomDialog(MainActivity.this, getString(R.string.warning),
-              getString(R.string.message_alert_send_data),
-              "",
-              (dialog, i1) ->
-              {
-                dialog.dismiss();
-                showProgressDialog(getString(R.string.message_sending_data));
-                new Thread(() ->
-                {
-                  try {
-                    dataTransferService.sendAllData(MainActivity.this);
-                  } catch (Exception ex) {
-                    ex.printStackTrace();
-                    ToastUtil
-                        .toastError(MainActivity.this, R.string.error_unknown_system_exception);
-                  }
-                }).start();
-              },
-              "",
-              (dialogInterface1, i12) -> doInstall(), Constants.ICON_WARNING);
-        }, "", (dialogInterface, i) ->
-        {
-          dialogInterface.dismiss();
-          if (PreferenceHelper.isForceExit()) {
-            finish();
-          }
-        }, Constants.ICON_MESSAGE);
-
+            getString(R.string.message_update_alert), "", (dialogInterface, i) ->
+            {
+              dialogInterface.dismiss();
+              DialogUtil.showCustomDialog(MainActivity.this, getString(R.string.warning),
+                      getString(R.string.message_alert_send_data),
+                      "",
+                      (dialog, i1) ->
+                      {
+                        dialog.dismiss();
+                        showProgressDialog(getString(R.string.message_sending_data));
+                        new Thread(() ->
+                        {
+                          try {
+                            dataTransferService.sendAllData(MainActivity.this);
+                          } catch (Exception ex) {
+                            Crashlytics.log(Log.ERROR, "Install Update",
+                                    "Error in installing new version" + ex.getMessage());
+                            ex.printStackTrace();
+                            ToastUtil
+                                    .toastError(MainActivity.this, R.string.error_unknown_system_exception);
+                          }
+                        }).start();
+                      },
+                      "",
+                      (dialogInterface1, i12) -> doInstall(), Constants.ICON_WARNING);
+            }, "", (dialogInterface, i) ->
+            {
+              dialogInterface.dismiss();
+              if (PreferenceHelper.isForceExit()) {
+                finish();
+              }
+            }, Constants.ICON_MESSAGE);
   }
 
   private void showGpsOffDialog() {
     Dialog dialog = new AlertDialog.Builder(this)
-        .setTitle(getString(R.string.error_gps_is_disabled))
+            .setTitle(getString(R.string.error_gps_is_disabled))
 
-        .setNegativeButton(getString(R.string.no), (dialog1, which) -> finish())
-        .setPositiveButton(getString(R.string.yes), (dialog12, which) ->
-        {
-          Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-          startActivity(intent);
-        })
-        .create();
+            .setNegativeButton(getString(R.string.no), (dialog1, which) -> finish())
+            .setPositiveButton(getString(R.string.yes), (dialog12, which) ->
+            {
+              Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+              startActivity(intent);
+            })
+            .create();
     dialog.show();
   }
 
@@ -639,7 +645,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   private void doInstall() {
     Intent installIntent = new Intent(Intent.ACTION_VIEW);
     installIntent.setDataAndType(Uri.parse(PreferenceHelper.getUpdateUri()),
-        "application/vnd.android.package-archive");
+            "application/vnd.android.package-archive");
     installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     try {
       startActivity(installIntent);

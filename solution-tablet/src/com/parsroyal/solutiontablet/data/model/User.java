@@ -10,6 +10,16 @@ public class User extends BaseModel {
   private String companyName;
   private String salesmanId;
 
+  public long getCompanyId() {
+    return companyId;
+  }
+
+  public void setCompanyId(long companyId) {
+    this.companyId = companyId;
+  }
+
+  private long companyId;
+
   public String getFullName() {
     return fullName;
   }

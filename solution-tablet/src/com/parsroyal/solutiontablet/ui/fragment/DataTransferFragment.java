@@ -13,6 +13,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
@@ -78,6 +79,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
       } catch (final Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in send data " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
       }
@@ -110,6 +112,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
       } catch (final Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data Transfer", "Error in get data" + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
       }

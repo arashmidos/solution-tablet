@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
@@ -44,13 +45,10 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
       }
       return saleOrderService.findOrders(saleOrderSO);
     } catch (final Exception e) {
+      Crashlytics
+          .log(Log.ERROR, "Filter data", "Error in filtering sale order list" + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
-      context.runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-          ToastUtil.toastError(context, new UnknownSystemException(e));
-        }
-      });
+      context.runOnUiThread(() -> ToastUtil.toastError(context, new UnknownSystemException(e)));
       return null;
     }
   }
@@ -80,45 +78,40 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
         holder = (SaleOrderViewHolder) convertView.getTag();
       }
 
-      {
-        SaleOrderListModel orderListModel = dataModel.get(position);
+      SaleOrderListModel orderListModel = dataModel.get(position);
 
-        if (Empty.isNotEmpty(orderListModel)) {
-          String title = getProperTitle(orderListModel.getStatus());
-          holder.saleOrderNumberLabel
-              .setText(String.format(Locale.US, context.getString(R.string.number_x), title));
-          holder.saleOrderNumberTv.setText(orderListModel.getSaleOrderNumber());
-          holder.dateTv.setText(orderListModel.getDate());
-          {
-            Double displayAmount = Double.valueOf(orderListModel.getAmount()) / 1000D;
-            holder.amountTv.setText(NumberUtil.getCommaSeparated(displayAmount) + context
-                .getString(R.string.common_irr_currency));
-          }
-          holder.orderDateLabel
-              .setText(String.format(Locale.US, context.getString(R.string.date_x), title));
-          holder.amountLabel
-              .setText(String.format(Locale.US, context.getString(R.string.amount_x), title));
-          if (isRejected(orderListModel.getStatus())) {
-            holder.rejectOrPaymentLabel.setText(context.getString(R.string.reject_reason_title));
-          } else {
-            holder.rejectOrPaymentLabel.setText(context.getString(R.string.payment_type));
-          }
-          //update reason
-          holder.paymentTypeTitleTv.setText(orderListModel.getPaymentTypeTitle());
-          holder.statusTv
-              .setText(SaleOrderStatus.getDisplayTitle(context, orderListModel.getStatus()));
-          holder.customerNameTv.setText(orderListModel.getCustomerName());
+      if (Empty.isNotEmpty(orderListModel)) {
+        String title = getProperTitle(orderListModel.getStatus());
+        holder.saleOrderNumberLabel
+            .setText(String.format(Locale.US, context.getString(R.string.number_x), title));
+        holder.saleOrderNumberTv.setText(orderListModel.getSaleOrderNumber());
+        holder.dateTv.setText(orderListModel.getDate());
+        {
+          Double displayAmount = Double.valueOf(orderListModel.getAmount()) / 1000D;
+          holder.amountTv.setText(NumberUtil.getCommaSeparated(displayAmount) + context
+              .getString(R.string.common_irr_currency));
         }
+        holder.orderDateLabel
+            .setText(String.format(Locale.US, context.getString(R.string.date_x), title));
+        holder.amountLabel
+            .setText(String.format(Locale.US, context.getString(R.string.amount_x), title));
+        if (isRejected(orderListModel.getStatus())) {
+          holder.rejectOrPaymentLabel.setText(context.getString(R.string.reject_reason_title));
+        } else {
+          holder.rejectOrPaymentLabel.setText(context.getString(R.string.payment_type));
+        }
+        //update reason
+        holder.paymentTypeTitleTv.setText(orderListModel.getPaymentTypeTitle());
+        holder.statusTv
+            .setText(SaleOrderStatus.getDisplayTitle(context, orderListModel.getStatus()));
+        holder.customerNameTv.setText(orderListModel.getCustomerName());
       }
+
       return convertView;
     } catch (final Exception e) {
+      Crashlytics.log(Log.ERROR, "Unknown exception", "Error in SaleOrderListAdapter.getView" + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
-      context.runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-          ToastUtil.toastError(context, new UnknownSystemException(e));
-        }
-      });
+      context.runOnUiThread(() -> ToastUtil.toastError(context, new UnknownSystemException(e)));
       return null;
     }
   }

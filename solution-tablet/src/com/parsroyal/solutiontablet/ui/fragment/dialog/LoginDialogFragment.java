@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.SettingService;
@@ -81,6 +82,8 @@ public class LoginDialogFragment extends DialogFragment {
       return view;
 
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Login Exception", "Error in settings login " + e.getMessage());
+
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       Log.e(TAG, e.getMessage(), e);
       return inflater.inflate(R.layout.view_error_page, null);

@@ -19,6 +19,7 @@ public class ApplicationKeys {
   public static final String SETTING_BRANCH_CODE = "setting.branch.code";
   public static final String USER_FULL_NAME = "user.full.name";
   public static final String USER_COMPANY_NAME = "user.company.name";
+  public static final String USER_COMPANY_ID = "user.company.id";
   public static final String SALESMAN_ID = "salesman.id";
 
   public static final String SALE_DISTRIBUTER = "3";

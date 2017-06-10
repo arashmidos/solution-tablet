@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
@@ -63,6 +64,7 @@ public class NQuestionnaireListAdapter extends BaseListAdapter<QuestionnaireList
 
       return convertView;
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in NQuestionaireListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

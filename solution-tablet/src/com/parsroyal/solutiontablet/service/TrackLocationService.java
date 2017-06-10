@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -69,6 +70,7 @@ public class TrackLocationService extends Service implements GoogleApiClient.Con
           .addOnConnectionFailedListener(this)
           .addApi(LocationServices.API).build();
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "Location Service", "Error in creating LocationService " + ex.getMessage());
       Log.d(TAG, "Error in creating google api client");
     }
 
@@ -160,6 +162,7 @@ public class TrackLocationService extends Service implements GoogleApiClient.Con
         sender.start();
       }
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "Location Service", "Error in saving data into db " + ex.getMessage());
       ex.printStackTrace();
     }
   }
@@ -168,17 +171,11 @@ public class TrackLocationService extends Service implements GoogleApiClient.Con
   public void onConnected(@Nullable Bundle bundle) {
     Log.d(TAG, "Gplay Connected");
 
-       /* LocationSettingsRequest.Builder locationBuilder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(createLocationRequest());
-        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.
-                checkLocationSettings(googleApiClient, locationBuilder.build());
-*/
     currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
     LocationServices.FusedLocationApi
         .requestLocationUpdates(googleApiClient, createLocationRequest(), this);
 
     saveLocationToDb(currentLocation);
-
   }
 
   @Override

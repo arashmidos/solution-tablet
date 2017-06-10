@@ -14,5 +14,5 @@ public interface GoodsDao extends BaseDao<Goods, Long> {
 
   Goods retrieveByBackendId(Long backendId);
 
-
+  List<Goods> findGoodsList(GoodsSo goodsSo);
 }

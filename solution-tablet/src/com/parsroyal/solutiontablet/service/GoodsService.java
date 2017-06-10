@@ -13,6 +13,7 @@ public interface GoodsService extends BaseService {
   Goods getGoodsById(Long goodsId);
 
   List<GoodsListModel> searchForGoods(GoodsSo goodsSo);
+  List<Goods> searchForGoodsList(GoodsSo goodsSo);
 
   Goods getGoodsByBackendId(Long goodsBackendId);
 

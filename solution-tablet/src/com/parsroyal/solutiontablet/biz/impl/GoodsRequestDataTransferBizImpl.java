@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
@@ -41,6 +42,7 @@ public class GoodsRequestDataTransferBizImpl extends AbstractDataTransferBizImpl
       try {
         keyValueBiz.save(new KeyValue(ApplicationKeys.GOODS_REQUEST_ID, response));
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving GoodsRequest " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
       }
     } else {

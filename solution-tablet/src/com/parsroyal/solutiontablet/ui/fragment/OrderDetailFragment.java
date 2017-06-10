@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -74,7 +75,7 @@ public class OrderDetailFragment extends BaseFragment {
       actionsLayout = (LinearLayout) view.findViewById(R.id.actionsLayout);
 
       if (isRejected()) {
-        rejectedGoodsList = (GoodsDtoList) arguments.getSerializable("rejectedList");
+        rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
       }
       {
         ParsRoyalTab tab = new ParsRoyalTab(context);
@@ -203,6 +204,8 @@ public class OrderDetailFragment extends BaseFragment {
 
       return view;
     } catch (Exception e) {
+      Crashlytics
+          .log(Log.ERROR, "UI Exception", "Error in creating OrderDetailFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);
@@ -287,6 +290,7 @@ public class OrderDetailFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(context, ex);
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in saving new order detail " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(context, new UnknownSystemException(ex));
     }

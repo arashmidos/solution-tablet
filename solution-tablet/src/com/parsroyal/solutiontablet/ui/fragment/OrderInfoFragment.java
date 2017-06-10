@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -19,8 +20,8 @@ import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.exception.SaleOrderNotFoundException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.BaseInfoService;
-import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
+import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
@@ -80,13 +81,9 @@ public class OrderInfoFragment extends BaseFragment {
       context = (MainActivity) getActivity();
       saleOrderService = new SaleOrderServiceImpl(getActivity());
       baseInfoService = new BaseInfoServiceImpl(getActivity());
-      try {
-        orderId = getArguments().getLong("orderId");
-        saleType = getArguments().getString("saleType");
+      orderId = getArguments().getLong("orderId");
+      saleType = getArguments().getString("saleType");
 
-      } catch (Exception ex) {
-        Log.e(TAG, ex.getMessage(), ex);
-      }
       if (Empty.isNotEmpty(orderId)) {
         order = saleOrderService.findOrderDtoById(orderId);
       }
@@ -163,6 +160,8 @@ public class OrderInfoFragment extends BaseFragment {
       }
 
     } catch (Exception e) {
+      Crashlytics
+          .log(Log.ERROR, "UI Exception", "Error in creating OrderInfoFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);

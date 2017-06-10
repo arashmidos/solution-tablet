@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
@@ -63,6 +64,7 @@ public class GeneralQuestionnairesFragment extends
       return view;
 
     } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating GeneralQuestionaireFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
       return inflater.inflate(R.layout.view_error_page, null);

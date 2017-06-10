@@ -5,17 +5,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
-import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.PaymentService;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
-import com.parsroyal.solutiontablet.util.ToastUtil;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,21 +36,6 @@ public class PaymentListAdapter extends BaseListAdapter<PaymentListModel> {
 
   @Override
   protected List<PaymentListModel> getFilteredData(CharSequence constraint) {
-    try {
-      if (constraint.length() != 0 && !constraint.toString().equals("")) {
-//                 paymentService.ge(constraint.toString()));
-      } else {
-//                return customerService.getAllCustomersListModelByVisitLineBackendId(visitLineId);
-      }
-    } catch (final Exception ex) {
-      context.runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-          ToastUtil.toastError(context, new UnknownSystemException(ex));
-        }
-      });
-      return new ArrayList<>();
-    }
     return paymentService.getAllPaymentsListModelByCustomerBackendId(customerBackendId);
   }
 
@@ -77,21 +60,19 @@ public class PaymentListAdapter extends BaseListAdapter<PaymentListModel> {
 
       final PaymentListModel model = dataModel.get(position);
 
-      {
-        long amount = Long.parseLong(model.getAmount()) / 1000L;
-        holder.amountTxt.setText(NumberUtil.getCommaSeparated(amount) + " " + context
-            .getString(R.string.common_irr_currency));
-        holder.typeTxt.setText(model.getType().equals("1") ? "وجه نقد" :
-            model.getType().equals("2") ? "پرداخت الکترونیکی" : "چک");
-        if (Empty.isNotEmpty(model.getDate())) {
+      long amount = Long.parseLong(model.getAmount()) / 1000L;
+      holder.amountTxt.setText(NumberUtil.getCommaSeparated(amount) + " " + context
+          .getString(R.string.common_irr_currency));
+      holder.typeTxt.setText(model.getType().equals("1") ? "وجه نقد" :
+          model.getType().equals("2") ? "پرداخت الکترونیکی" : "چک");
+      if (Empty.isNotEmpty(model.getDate())) {
 
-          Date createDate = DateUtil
-              .convertStringToDate(model.getDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
-                  "FA");
+        Date createDate = DateUtil
+            .convertStringToDate(model.getDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
+                "FA");
 
-          String dateString = DateUtil.convertDate(createDate, DateUtil.GLOBAL_FORMATTER, "FA");
-          holder.dateTxt.setText(dateString);
-        }
+        String dateString = DateUtil.convertDate(createDate, DateUtil.GLOBAL_FORMATTER, "FA");
+        holder.dateTxt.setText(dateString);
 
         if (customerBackendId == -1) {
           holder.customerNameTv.setVisibility(View.VISIBLE);
@@ -104,6 +85,8 @@ public class PaymentListAdapter extends BaseListAdapter<PaymentListModel> {
       }
       return convertView;
     } catch (Exception e) {
+      Crashlytics
+          .log(Log.ERROR, "UI Exception", "Error in PaymentListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

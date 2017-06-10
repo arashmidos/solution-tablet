@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
@@ -67,6 +67,7 @@ public class OrderItemsFragment extends BaseFragment {
       return view;
 
     } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating OrderItemsFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);
@@ -129,19 +130,9 @@ public class OrderItemsFragment extends BaseFragment {
       deleteItemIb.setVisibility(View.INVISIBLE);
     }
 
-    editItemIb.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        handleOnEditItemBtnClick(goods, item);
-      }
-    });
+    editItemIb.setOnClickListener(v -> handleOnEditItemBtnClick(goods, item));
 
-    deleteItemIb.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        hadnleOnDeleteItemBtnClick(goods, item);
-      }
-    });
+    deleteItemIb.setOnClickListener(v -> hadnleOnDeleteItemBtnClick(goods, item));
 
     return itemView;
   }
@@ -151,37 +142,33 @@ public class OrderItemsFragment extends BaseFragment {
     return (orderStatus == SaleOrderStatus.REJECTED_DRAFT.getId() ||
         orderStatus == SaleOrderStatus.REJECTED.getId() ||
         orderStatus == SaleOrderStatus.REJECTED_SENT.getId());
-
-
   }
 
   private void hadnleOnDeleteItemBtnClick(final Goods goods, final SaleOrderItemDto item) {
     DialogUtil
         .showConfirmDialog(getActivity(), getActivity().getString(R.string.title_delete_order_item),
-            getActivity().getString(R.string.message_are_you_sure),
-            new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                try {
-                  saleOrderService.deleteOrderItem(item.getId(), isRejected());
+            getActivity().getString(R.string.message_are_you_sure), (dialog, which) -> {
+              try {
+                saleOrderService.deleteOrderItem(item.getId(), isRejected());
 
-                  if (orderStatus == SaleOrderStatus.REJECTED_DRAFT.getId()) {
-                    goods.setExisting(goods.getExisting() + item.getGoodsCount());
-                    orderItems = saleOrderService
-                        .getLocalOrderItemDtoList(orderId, rejectedGoodsList);
+                if (orderStatus == SaleOrderStatus.REJECTED_DRAFT.getId()) {
+                  goods.setExisting(goods.getExisting() + item.getGoodsCount());
+                  orderItems = saleOrderService
+                      .getLocalOrderItemDtoList(orderId, rejectedGoodsList);
 
-                  } else {
-                    orderItems = saleOrderService.getOrderItemDtoList(orderId);
-                  }
-                  saleOrderService.updateOrderAmount(orderId);
-                  updateItemsTable();
-                } catch (BusinessException ex) {
-                  Log.e(TAG, ex.getMessage(), ex);
-                  ToastUtil.toastError(getActivity(), ex);
-                } catch (Exception ex) {
-                  Log.e(TAG, ex.getMessage(), ex);
-                  ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
+                } else {
+                  orderItems = saleOrderService.getOrderItemDtoList(orderId);
                 }
+                saleOrderService.updateOrderAmount(orderId);
+                updateItemsTable();
+              } catch (BusinessException ex) {
+                Log.e(TAG, ex.getMessage(), ex);
+                ToastUtil.toastError(getActivity(), ex);
+              } catch (Exception ex) {
+                Crashlytics.log(Log.ERROR, "Data Storage Exception",
+                    "Error in deleting order items " + ex.getMessage());
+                Log.e(TAG, ex.getMessage(), ex);
+                ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
               }
             });
   }
@@ -201,12 +188,8 @@ public class OrderItemsFragment extends BaseFragment {
 
     goodsDetailDialog.setArguments(bundle);
     goodsDetailDialog
-        .setOnClickListener(new GoodsDetailDialogFragment.GoodsDialogOnClickListener() {
-          @Override
-          public void onConfirmBtnClicked(Double count, Long selectedUnit) {
-            handleGoodsDialogConfirmBtn(count, selectedUnit, item);
-          }
-        });
+        .setOnClickListener(
+            (count1, selectedUnit) -> handleGoodsDialogConfirmBtn(count1, selectedUnit, item));
 
     goodsDetailDialog.show(getActivity().getSupportFragmentManager(), "GoodsDetailDialog");
   }
@@ -237,11 +220,11 @@ public class OrderItemsFragment extends BaseFragment {
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), ex);
         } catch (Exception ex) {
+          Crashlytics.log(Log.ERROR, "UI Exception", "Error in confirming order item detail " + ex.getMessage());
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
         }
       }
-
     }
   }
 

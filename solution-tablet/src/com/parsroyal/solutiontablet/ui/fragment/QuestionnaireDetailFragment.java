@@ -1,7 +1,5 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import static android.view.View.GONE;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -22,8 +20,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
@@ -49,18 +49,21 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static android.view.View.GONE;
+
 /**
  * Created by Mahyar on 7/25/2015.
  */
 public class QuestionnaireDetailFragment extends
-    BaseListFragment<QuestionListModel, QuestionListAdapter>
-    implements CompoundButton.OnCheckedChangeListener, DateSetListener {
+        BaseListFragment<QuestionListModel, QuestionListAdapter>
+        implements CompoundButton.OnCheckedChangeListener, DateSetListener {
 
   public static final String TAG = QuestionnaireDetailFragment.class.getSimpleName();
 
@@ -84,7 +87,7 @@ public class QuestionnaireDetailFragment extends
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     try {
       mainActivity = (MainActivity) getActivity();
       questionnaireService = new QuestionnaireServiceImpl(mainActivity);
@@ -117,6 +120,8 @@ public class QuestionnaireDetailFragment extends
       });
       return view;
     } catch (Exception ex) {
+      Crashlytics
+              .log(Log.ERROR, "UI Exception", "Error in creating QuestionaireDetailFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       return inflater.inflate(R.layout.view_error_page, null);
     }
@@ -150,7 +155,7 @@ public class QuestionnaireDetailFragment extends
     return (parent, view, position, id) ->
     {
       QuestionDto questionDto = questionnaireService
-          .getQuestionDto(dataModel.get(position).getPrimaryKey(), visitId, goodsBackendId);
+              .getQuestionDto(dataModel.get(position).getPrimaryKey(), visitId, goodsBackendId);
       openQuestionDialog(questionDto);
     };
   }
@@ -175,7 +180,7 @@ public class QuestionnaireDetailFragment extends
     questionnaireTitleTv.setText(questionDto.getQuestionnaireTitle());
     questionTv.setText(questionDto.getQuestion());
     answerEt.setText(Empty.isEmpty(questionDto.getAnswer()) ? ""
-        : questionDto.getAnswer().replaceAll("[*]", " - "));
+            : questionDto.getAnswer().replaceAll("[*]", " - "));
 
     switch (questionDto.getType()) {
       case SIMPLE:
@@ -210,7 +215,7 @@ public class QuestionnaireDetailFragment extends
             isEditing = true;
             try {
               amountValue = Long
-                  .parseLong(NumberUtil.digitsToEnglish(s.toString().replaceAll(",", "")));
+                      .parseLong(NumberUtil.digitsToEnglish(s.toString().replaceAll(",", "")));
               String number = String.format(Locale.US, "%,d", amountValue);
               s.replace(0, s.length(), number);
             } catch (NumberFormatException e) {
@@ -221,7 +226,7 @@ public class QuestionnaireDetailFragment extends
         });
         buttonAnswerLayout.setVisibility(GONE);
         answerEt2.setText(Empty.isEmpty(questionDto.getAnswer()) ? ""
-            : questionDto.getAnswer().replaceAll("[*]", " - "));
+                : questionDto.getAnswer().replaceAll("[*]", " - "));
         break;
       case CHOICE_SINGLE:
         textAnswerLayout.setVisibility(GONE);
@@ -236,7 +241,7 @@ public class QuestionnaireDetailFragment extends
         answerEt2.setVisibility(GONE);
         answerEt.setFocusable(false);
         answerEt.setHint(
-            Empty.isEmpty(questionDto.getAnswer()) ? "انتخاب تاریخ..." : questionDto.getAnswer());
+                Empty.isEmpty(questionDto.getAnswer()) ? "انتخاب تاریخ..." : questionDto.getAnswer());
         answerEt.setText("");
         answerEt.setOnClickListener(v ->
         {
@@ -244,8 +249,8 @@ public class QuestionnaireDetailFragment extends
           if (Empty.isNotEmpty(questionDto.getAnswer())) {
             String[] date = questionDto.getAnswer().split("/");
             builder.date(Integer.parseInt(date[2]),
-                Integer.parseInt(date[1]),
-                Integer.parseInt("13" + date[0]));
+                    Integer.parseInt(date[1]),
+                    Integer.parseInt("13" + date[0]));
           }
           builder.build(QuestionnaireDetailFragment.this).show(getFragmentManager(), "");
         });
@@ -269,14 +274,15 @@ public class QuestionnaireDetailFragment extends
         adapter.notifyDataSetChanged();
         adapter.notifyDataSetInvalidated();
         QuestionDto prvQuestionDto = questionnaireService
-            .getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(),
-                goodsBackendId, false);
+                .getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(),
+                        goodsBackendId, false);
         if (Empty.isNotEmpty(prvQuestionDto)) {
           alert.dismiss();
           openQuestionDialog(prvQuestionDto);
         }
 
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in loading questions " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
       }
@@ -291,8 +297,8 @@ public class QuestionnaireDetailFragment extends
           setVisitDetail();
         }
         QuestionDto nextQuestionDto = questionnaireService
-            .getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(),
-                goodsBackendId, true);
+                .getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(),
+                        goodsBackendId, true);
         adapter.setDataModel(dataModel);
         adapter.notifyDataSetChanged();
         adapter.notifyDataSetInvalidated();
@@ -301,6 +307,7 @@ public class QuestionnaireDetailFragment extends
           openQuestionDialog(nextQuestionDto);
         }
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in loading next questions " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
       }
@@ -329,6 +336,7 @@ public class QuestionnaireDetailFragment extends
         adapter.notifyDataSetChanged();
         adapter.notifyDataSetInvalidated();
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in saving questions " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
       }
@@ -340,14 +348,14 @@ public class QuestionnaireDetailFragment extends
 
   private void setVisitDetail() {
     List<VisitInformationDetail> detailList = visitService
-        .searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE,
-            questionnaireBackendId);
+            .searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE,
+                    questionnaireBackendId);
     //If we have filled this questionary before
     if (detailList.size() > 0) {
       return;
     }
     visitService.saveVisitDetail(new VisitInformationDetail(visitId,
-        VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId));
+            VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId));
   }
 
   private void createCheckBox(String answer, String selectedAnswer) {
@@ -362,7 +370,7 @@ public class QuestionnaireDetailFragment extends
     for (int i = answerList.length - 1; i >= 0; i--) {
       CheckBox checkBox = new CheckBox(getActivity());
       checkBox.setLayoutParams(new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT,
-          FlowLayout.LayoutParams.WRAP_CONTENT));
+              FlowLayout.LayoutParams.WRAP_CONTENT));
       checkBox.setId(i);
       checkBox.setPadding(5, 0, 5, 0);
       checkBox.setGravity(Gravity.RIGHT);
@@ -409,7 +417,7 @@ public class QuestionnaireDetailFragment extends
     for (int i = answerList.length - 1; i >= 0; i--) {
       RadioButton rdbtn = new RadioButton(getActivity());
       rdbtn.setLayoutParams(new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT,
-          FlowLayout.LayoutParams.WRAP_CONTENT));
+              FlowLayout.LayoutParams.WRAP_CONTENT));
       rdbtn.setId(i);
       rdbtn.setPadding(5, 0, 5, 0);
       rdbtn.setText(answerList[i]);
@@ -431,7 +439,7 @@ public class QuestionnaireDetailFragment extends
       qAnswer.setDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
       if (Empty.isNotEmpty(customer)) {
         qAnswer.setCustomerBackendId(
-            customer.getBackendId() == 0 ? customerId : customer.getBackendId());
+                customer.getBackendId() == 0 ? customerId : customer.getBackendId());
       }
       if (Empty.isNotEmpty(goodsBackendId)) {
         qAnswer.setGoodsBackendId(goodsBackendId);
@@ -463,7 +471,7 @@ public class QuestionnaireDetailFragment extends
    * Called when the checked state of a compound button has changed.
    *
    * @param buttonView The compound button view whose state has changed.
-   * @param isChecked The new checked state of buttonView.
+   * @param isChecked  The new checked state of buttonView.
    */
   @Override
   public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

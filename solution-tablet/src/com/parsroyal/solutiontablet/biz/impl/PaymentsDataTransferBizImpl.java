@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
+import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SendStatus;
@@ -74,6 +76,7 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
             .format(Locale.US, context.getString(R.string.payments_data_transferred_successfully),
                 String.valueOf(success), String.valueOf(failure)));
       } catch (Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving PaymentData " + ex.getMessage());
         getObserver().publishResult(context.getString(R.string.error_payments_transfer));
       }
     } else {
