@@ -26,23 +26,17 @@ public class ReturnedOrdersDataTransferBizImpl extends InvoicedOrdersDataTransfe
   }
 
   @Override
-  protected String getSuccessfulMessage() {
-    return context.getString(R.string.returned_orders_data_transferred_successfully);
-  }
-
-  @Override
   protected String getExceptionMessage() {
     return context.getString(R.string.message_exception_in_sending_returned_orders);
   }
 
   @Override
   public void beforeTransfer() {
-    resultObserver.publishResult(context.getString(R.string.message_transferring_returned_orders));
   }
 
   @Override
   public String getMethod() {
-    return "reject/create";
+    return "salerejects";
   }
 
   @Override

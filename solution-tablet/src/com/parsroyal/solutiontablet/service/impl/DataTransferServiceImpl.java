@@ -33,9 +33,9 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
-import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.InvalidServerAddressException;
@@ -343,9 +343,8 @@ public class DataTransferServiceImpl implements DataTransferService {
           .publishResult(context.getString(R.string.message_found_no_visit_information_for_send));
       return;
     }
-    VisitInformationDataTransferBizImpl dataTranser =
+    VisitInformationDataTransferBizImpl dataTransfer =
         new VisitInformationDataTransferBizImpl(context, resultObserver);
-    dataTranser.resetCounter();
     resultObserver.publishResult(context.getString(R.string.sending_visit_information_data));
     for (int i = 0; i < visitInformationList.size(); i++) {
       VisitInformationDto visitInformationDto = visitInformationList.get(i);
@@ -353,13 +352,13 @@ public class DataTransferServiceImpl implements DataTransferService {
           || visitInformationDto.getDetails().size() == 0) {
         continue;
       }
-      dataTranser.setData(visitInformationDto);
-      dataTranser.exchangeData();
+      dataTransfer.setData(visitInformationDto);
+      dataTransfer.exchangeData();
     }
     resultObserver.publishResult(String
-        .format(Locale.US, context.getString(R.string.visit_information_data_transfered_result),
-            String.valueOf(dataTranser.getSuccess()),
-            String.valueOf(visitInformationList.size() - dataTranser.getSuccess())));
+        .format(Locale.US, context.getString(R.string.data_transfered_result),
+            String.valueOf(dataTransfer.getSuccess()),
+            String.valueOf(visitInformationList.size() - dataTransfer.getSuccess())));
   }
 
   private void sendAllAnswers(ResultObserver resultObserver) {
@@ -387,33 +386,60 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   private void sendAllOrders(ResultObserver resultObserver) {
-    List<SaleOrderDto> saleOrders = saleOrderService
+    List<BaseSaleDocument> saleOrders = saleOrderService
         .findOrderDtoByStatus(SaleOrderStatus.READY_TO_SEND.getId());
     if (Empty.isNotEmpty(saleOrders)) {
-      OrdersDataTransferBizImpl ordersDataTransferBiz = new OrdersDataTransferBizImpl(context,
+      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(context,
           resultObserver);
-      ordersDataTransferBiz.setOrders(saleOrders);
-      ordersDataTransferBiz.exchangeData();
+      resultObserver.publishResult(context.getString(R.string.message_transferring_orders));
+      for (int i = 0; i < saleOrders.size(); i++) {
+        BaseSaleDocument baseSaleDocument = saleOrders.get(i);
+        dataTransfer.setOrder(baseSaleDocument);
+        dataTransfer.exchangeData();
+      }
+      resultObserver.publishResult(dataTransfer.getSuccessfulMessage());
     } else {
       resultObserver.publishResult(context.getString(R.string.message_no_orders_for_sending));
     }
+  }
 
+  private void sendAllInvoicedOrders(ResultObserver resultObserver) {
+    List<BaseSaleDocument> saleOrders = saleOrderService
+        .findOrderDtoByStatus(SaleOrderStatus.INVOICED.getId());
+    if (Empty.isNotEmpty(saleOrders)) {
+      InvoicedOrdersDataTransferBizImpl dataTransfer = new InvoicedOrdersDataTransferBizImpl(
+          context, resultObserver);
+      resultObserver.publishResult(context.getString(R.string.message_transferring_invoices));
+      for (int i = 0; i < saleOrders.size(); i++) {
+        BaseSaleDocument baseSaleDocument = saleOrders.get(i);
+        dataTransfer.setOrder(baseSaleDocument);
+        dataTransfer.exchangeData();
+      }
+      resultObserver.publishResult(dataTransfer.getSuccessfulMessage());
+    } else {
+      resultObserver.publishResult(context.getString(R.string.message_no_invoice_found));
+    }
   }
 
   private void sendAllReturnedOrders(ResultObserver resultObserver) {
-    List<SaleOrderDto> saleOrders = saleOrderService
+    List<BaseSaleDocument> saleOrders = saleOrderService
         .findOrderDtoByStatus(SaleOrderStatus.REJECTED.getId());
     if (Empty.isNotEmpty(saleOrders)) {
-      ReturnedOrdersDataTransferBizImpl returnedOrdersDataTransferBiz = new ReturnedOrdersDataTransferBizImpl(
+      ReturnedOrdersDataTransferBizImpl dataTransfer = new ReturnedOrdersDataTransferBizImpl(
           context, resultObserver);
-      returnedOrdersDataTransferBiz.setOrders(saleOrders);
-      returnedOrdersDataTransferBiz.exchangeData();
+      resultObserver
+          .publishResult(context.getString(R.string.message_transferring_returned_orders));
+      for (int i = 0; i < saleOrders.size(); i++) {
+        BaseSaleDocument baseSaleDocument = saleOrders.get(i);
+        dataTransfer.setOrder(baseSaleDocument);
+        dataTransfer.exchangeData();
+      }
+      resultObserver.publishResult(dataTransfer.getSuccessfulMessage());
 
     } else {
       resultObserver
           .publishResult(context.getString(R.string.message_no_returned_orders_for_sending));
     }
-
   }
 
   private void sendAllPayments(ResultObserver resultObserver) {
@@ -439,21 +465,5 @@ public class DataTransferServiceImpl implements DataTransferService {
     } else {
       resultObserver.publishResult(context.getString(R.string.message_no_positions_for_sending));
     }
-
   }
-
-  private void sendAllInvoicedOrders(ResultObserver resultObserver) {
-    List<SaleOrderDto> saleOrders = saleOrderService
-        .findOrderDtoByStatus(SaleOrderStatus.INVOICED.getId());
-    if (Empty.isNotEmpty(saleOrders)) {
-      InvoicedOrdersDataTransferBizImpl invoicedOrdersDataTransferBiz = new InvoicedOrdersDataTransferBizImpl(
-          context, resultObserver);
-      invoicedOrdersDataTransferBiz.setOrders(saleOrders);
-      invoicedOrdersDataTransferBiz.exchangeData();
-    } else {
-      resultObserver.publishResult(context.getString(R.string.message_no_invoice_found));
-    }
-  }
-
-
 }

@@ -25,7 +25,7 @@ import org.springframework.http.MediaType;
 public class VisitInformationDataTransferBizImpl extends
     AbstractDataTransferBizImpl<VisitInformationDto> {
 
-  private static int success = 0;
+  private int success = 0;
   private VisitInformationDao visitInformationDao;
   private VisitService visitService;
   private ResultObserver observer;
@@ -101,9 +101,5 @@ public class VisitInformationDataTransferBizImpl extends
 
   public int getSuccess() {
     return success;
-  }
-
-  public void resetCounter() {
-    success = 0;
   }
 }

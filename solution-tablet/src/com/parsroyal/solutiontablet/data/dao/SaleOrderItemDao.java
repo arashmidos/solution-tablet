@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.data.dao;
 
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocumentItem;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
 import java.util.List;
 
@@ -12,6 +13,8 @@ public interface SaleOrderItemDao extends BaseDao<SaleOrderItem, Long> {
   void deleteAllItemsBySaleOrderId(Long saleOrderId);
 
   List<SaleOrderItemDto> getAllOrderItemsDtoByOrderId(Long orderId);
+
+  List<BaseSaleDocumentItem> getAllSaleDocumentItemsByOrderId(Long orderId);
 
   SaleOrderItem getOrderItemByOrderIdAndGoodsId(Long orderId, Long goodsBackendId,
       long invoiceBackendId);

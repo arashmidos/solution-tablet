@@ -15,6 +15,8 @@ import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocumentItem;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
@@ -70,6 +72,10 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     return allOrderItemsDtoByOrderId;
   }
 
+  public List<BaseSaleDocumentItem> getSaleDocumentItems(Long orderId) {
+    return saleOrderItemDao.getAllSaleDocumentItemsByOrderId(orderId);
+  }
+
   public List<SaleOrderItemDto> getLocalOrderItemDtoList(Long orderId, GoodsDtoList goodsDtoList) {
     List<SaleOrderItemDto> allOrderItemsDtoByOrderId = saleOrderItemDao
         .getAllOrderItemsDtoByOrderId(orderId);
@@ -110,14 +116,12 @@ public class SaleOrderServiceImpl implements SaleOrderService {
   }
 
   @Override
-  public List<SaleOrderDto> findOrderDtoByStatus(Long statusId) {
-    List<SaleOrderDto> saleOrderDtoList = saleOrderDao.findOrderDtoByStatusId(statusId);
-    for (SaleOrderDto saleOrderDto : saleOrderDtoList) {
-      saleOrderDto.setOrderItems(getOrderItemDtoList(saleOrderDto.getId()));
-      Customer customer = customerDao.retrieveByBackendId(saleOrderDto.getCustomerBackendId());
-      saleOrderDto.setCustomer(customer);
+  public List<BaseSaleDocument> findOrderDtoByStatus(Long statusId) {
+    List<BaseSaleDocument> saleOrderList = saleOrderDao.findOrderDocumentsByStatusId(statusId);
+    for (BaseSaleDocument baseSaleDocument : saleOrderList) {
+      baseSaleDocument.setItems(getSaleDocumentItems(baseSaleDocument.getId()));
     }
-    return saleOrderDtoList;
+    return saleOrderList;
   }
 
   @Override

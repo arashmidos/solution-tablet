@@ -3,6 +3,8 @@ package com.parsroyal.solutiontablet.service;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocumentItem;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
@@ -25,6 +27,7 @@ public interface SaleOrderService extends BaseService {
       Goods goods);
 
   List<SaleOrderItemDto> getOrderItemDtoList(Long orderId);
+  List<BaseSaleDocumentItem> getSaleDocumentItems(Long orderId);
 
   List<SaleOrderItemDto> getLocalOrderItemDtoList(Long orderId, GoodsDtoList goodsList);
 
@@ -32,7 +35,7 @@ public interface SaleOrderService extends BaseService {
 
   void changeOrderStatus(Long orderId, Long statusId);
 
-  List<SaleOrderDto> findOrderDtoByStatus(Long statusId);
+  List<BaseSaleDocument> findOrderDtoByStatus(Long statusId);
 
   SaleOrderDto findOrderDtoByCustomerBackendIdAndStatus(Long backendId, Long statusId);
 

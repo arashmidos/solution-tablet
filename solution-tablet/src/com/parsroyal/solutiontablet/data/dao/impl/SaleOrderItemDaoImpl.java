@@ -7,7 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderItemDao;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocumentItem;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
+import com.parsroyal.solutiontablet.service.SettingService;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +22,11 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     SaleOrderItemDao {
 
   private Context context;
+  private SettingService settingService;
 
   public SaleOrderItemDaoImpl(Context context) {
     this.context = context;
+    settingService = new SettingServiceImpl(context);
   }
 
   @Override
@@ -121,6 +127,22 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
   }
 
   @Override
+  public List<BaseSaleDocumentItem> getAllSaleDocumentItemsByOrderId(Long orderId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String selection = " " + SaleOrderItem.COL_SALE_ORDER_ID + " = ?";
+    String[] selectionArgs = {String.valueOf(orderId)};
+    Cursor cursor = db
+        .query(getTableName(), getProjection(), selection, selectionArgs, null, null, null);
+    List<BaseSaleDocumentItem> items = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      items.add(createSaleDocumentItemFromCursor(cursor));
+    }
+    cursor.close();
+    return items;
+  }
+
+  @Override
   public SaleOrderItem getOrderItemByOrderIdAndGoodsId(Long orderId, Long goodsBackendId,
       long invoiceBackendId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
@@ -152,6 +174,19 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setCreateDateTime(cursor.getString(8));
     saleOrderItem.setUpdateDateTime(cursor.getString(9));
     saleOrderItem.setInvoiceBackendId(cursor.getLong(10));
+    return saleOrderItem;
+  }
+
+  private BaseSaleDocumentItem createSaleDocumentItemFromCursor(Cursor cursor) {
+    BaseSaleDocumentItem saleOrderItem = new BaseSaleDocumentItem();
+
+    saleOrderItem.setGoods(cursor.getLong(1));
+    saleOrderItem.setCount1(cursor.getLong(2));
+    //TODO update this
+    saleOrderItem.setCount2(0L);
+    saleOrderItem.setCompanyId(
+        Integer.valueOf(settingService.getSettingValue(ApplicationKeys.USER_COMPANY_ID)));
+
     return saleOrderItem;
   }
 }
