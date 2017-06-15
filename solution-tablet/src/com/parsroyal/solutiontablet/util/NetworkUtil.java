@@ -40,7 +40,7 @@ public class NetworkUtil {
             .encodeToString((username + ":" + password).getBytes("UTF-8"), Base64.NO_WRAP);
         //urlc.setRequestProperty("Authorization", "Basic " + encoded);
         urlc.setRequestProperty("Authorization", "Basic " + encoded);
-        urlc.setConnectTimeout(10 * 1000);          // 10 s.
+        urlc.setConnectTimeout(20 * 1000);          // 10 s.
 
         String userCredentials = username + ":" + password;
         String basicAuth = "Basic " + new String(Base64Utils.encode(userCredentials.getBytes()));
@@ -48,9 +48,10 @@ public class NetworkUtil {
 
         urlc.connect();
         if (urlc.getResponseCode() == 200) {        // 200 = "OK" code (http connection is fine).
-          Log.wtf("Connection", "Success !");
+          Log.wtf("Connection", toTestUrl + " Success !");
           return true;
         } else {
+          Log.wtf("Connection", toTestUrl + " Failed with responseCode: " + urlc.getResponseCode());
           return false;
         }
       } catch (MalformedURLException e1) {

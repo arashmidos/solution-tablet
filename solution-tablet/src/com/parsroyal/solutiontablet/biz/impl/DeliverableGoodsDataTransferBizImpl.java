@@ -11,6 +11,8 @@ import com.parsroyal.solutiontablet.data.dao.impl.GoodsDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
+import com.parsroyal.solutiontablet.service.SettingService;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -32,6 +34,7 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
   private ResultObserver resultObserver;
   private GoodsDao goodsDao;
   private KeyValueBiz keyValueBiz;
+  private SettingService settingService;
 
   public DeliverableGoodsDataTransferBizImpl(Context context, ResultObserver resultObserver) {
     super(context);
@@ -39,6 +42,7 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
     this.resultObserver = resultObserver;
     this.goodsDao = new GoodsDaoImpl(context);
     this.keyValueBiz = new KeyValueBizImpl(context);
+    this.settingService = new SettingServiceImpl(context);
   }
 
   @Override
@@ -63,7 +67,8 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
             context.getString(R.string.message_deliverable_goods_transferred_successfully));
 
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving DeliverableGoods " + ex.getMessage());
+        Crashlytics.log(Log.ERROR, "Data transfer",
+            "Error in receiving DeliverableGoods " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         resultObserver.publishResult(
             context.getString(R.string.message_exception_in_transferring_deliverable_goods));
@@ -86,7 +91,13 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
 
   @Override
   public String getMethod() {
-    return "goods/deliverable";
+    String url = String.format("goods/%s/%s/%s/%s",
+        settingService.getSettingValue(ApplicationKeys.USER_COMPANY_ID),
+        settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE),
+        settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE),
+        settingService.getSettingValue(ApplicationKeys.SALESMAN_ID));
+    Log.d(TAG, "Calling service:" + url);
+    return url;
   }
 
   @Override
@@ -96,7 +107,7 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
 
   @Override
   public HttpMethod getHttpMethod() {
-    return HttpMethod.POST;
+    return HttpMethod.GET;
   }
 
   @Override

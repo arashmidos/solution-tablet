@@ -45,12 +45,11 @@ public class GoodsGroupDataTransferBizImpl extends AbstractDataTransferBizImpl<S
 
   @Override
   public void receiveData(String data) {
+    try {
+      List<GoodsGroup> list = new Gson().fromJson(data, new TypeToken<List<GoodsGroup>>() {
+      }.getType());
+      if (Empty.isNotEmpty(data) && Empty.isNotEmpty(list)) {
 
-    Gson gson = new Gson();
-    List<GoodsGroup> list = gson.fromJson(data, new TypeToken<List<GoodsGroup>>() {
-    }.getType());
-    if (Empty.isNotEmpty(data)) {
-      try {
         for (GoodsGroup group : list) {
           group.setTitle(CharacterFixUtil.fixString(group.getTitle()));
           group.setCreateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
@@ -60,15 +59,16 @@ public class GoodsGroupDataTransferBizImpl extends AbstractDataTransferBizImpl<S
 
         resultObserver.publishResult(
             context.getString(R.string.message_goods_groups_transferred_successfully));
-      } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer",
-            "Error in receiving GoodsGroupData " + ex.getMessage());
-        Log.e(TAG, ex.getMessage(), ex);
-        resultObserver.publishResult(
-            context.getString(R.string.message_exception_in_transferring_goods_groups));
+      } else {
+        resultObserver
+            .publishResult(context.getString(R.string.message_no_goods_group_transferred));
       }
-    } else {
-      resultObserver.publishResult(context.getString(R.string.message_no_goods_group_transferred));
+    } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "Data transfer",
+          "Error in receiving GoodsGroupData " + ex.getMessage());
+      Log.e(TAG, ex.getMessage(), ex);
+      resultObserver.publishResult(
+          context.getString(R.string.message_exception_in_transferring_goods_groups));
     }
   }
 

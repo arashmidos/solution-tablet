@@ -97,7 +97,7 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
 
   @Override
   public String getMethod() {
-    return "order/deliverable";
+    return "saleorders/deliverable";
   }
 
   @Override
