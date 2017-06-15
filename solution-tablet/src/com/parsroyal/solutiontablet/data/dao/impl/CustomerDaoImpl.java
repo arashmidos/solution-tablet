@@ -18,6 +18,7 @@ import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionModel;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
+import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.ArrayList;
@@ -502,5 +503,26 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     customer.setPostalCode(cursor.getString(23));
     customer.setApproved(cursor.getInt(24) == 1);
     return customer;
+  }
+
+  public void bulkInsert(List<Customer> list) {
+    CommerDatabaseHelper databaseHelper = new CommerDatabaseHelper(getContext());
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    db.beginTransaction();
+    try {
+      for (Customer customer : list) {
+        customer.setFullName(CharacterFixUtil.fixString(customer.getFullName()));
+        customer.setShopName(CharacterFixUtil.fixString(customer.getShopName()));
+        customer.setAddress(CharacterFixUtil.fixString(customer.getAddress()));
+        customer.setCreateDateTime(
+            DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        customer.setUpdateDateTime(
+            DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        db.insert(getTableName(), null, getContentValues(customer));
+      }
+      db.setTransactionSuccessful();
+    } finally {
+      db.endTransaction();
+    }
   }
 }

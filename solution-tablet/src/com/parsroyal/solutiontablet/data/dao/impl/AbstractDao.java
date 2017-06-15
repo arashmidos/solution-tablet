@@ -26,6 +26,20 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long> {
     return (PK) id;
   }
 
+  public void bulkInsert(List<T> list) {
+    CommerDatabaseHelper databaseHelper = new CommerDatabaseHelper(getContext());
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    db.beginTransaction();
+    try {
+      for (T entity : list) {
+        db.insert(getTableName(), null, getContentValues(entity));
+      }
+      db.setTransactionSuccessful();
+    } finally {
+      db.endTransaction();
+    }
+  }
+
   public T retrieve(PK id) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();

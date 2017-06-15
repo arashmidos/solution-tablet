@@ -29,6 +29,11 @@ public class KeyValueDaoImpl implements KeyValueDao {
   }
 
   @Override
+  public void bulkInsert(List<KeyValue> list) {
+    throw new RuntimeException("Not implemented yet");
+  }
+
+  @Override
   public void update(KeyValue entity) {
     create(entity);
   }

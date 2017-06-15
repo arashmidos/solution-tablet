@@ -52,15 +52,8 @@ public class GoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<String
       List<Goods> list = new Gson().fromJson(data, new TypeToken<List<Goods>>() {
       }.getType());
       if (Empty.isNotEmpty(data) && Empty.isNotEmpty(list)) {
-
         goodsDao.deleteAll();
-
-        for (Goods goods : list) {
-          goods.setTitle(CharacterFixUtil.fixString(goods.getTitle()));
-          goods.setCreateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
-          goods.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
-          goodsDao.create(goods);
-        }
+        goodsDao.bulkInsert(list);
         resultObserver
             .publishResult(context.getString(R.string.message_goods_transferred_successfully));
       } else {

@@ -7,15 +7,12 @@ import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.VisitLineDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.model.VisitLineDto;
 import com.parsroyal.solutiontablet.data.model.VisitLineDtoList;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
-import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import java.util.Date;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -49,16 +46,7 @@ public class VisitLineDataTaransferBizImpl extends AbstractDataTransferBizImpl<V
         visitLineDto.setTitle(CharacterFixUtil.fixString(visitLineDto.getTitle()));
         VisitLine visitLine = createVisitLineEntity(visitLineDto);
         visitLineDao.create(visitLine);
-        for (Customer customer : visitLineDto.getCustomerList()) {
-          customer.setFullName(CharacterFixUtil.fixString(customer.getFullName()));
-          customer.setShopName(CharacterFixUtil.fixString(customer.getShopName()));
-          customer.setAddress(CharacterFixUtil.fixString(customer.getAddress()));
-          customer.setCreateDateTime(
-              DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-          customer.setUpdateDateTime(
-              DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-          customerDao.create(customer);
-        }
+        customerDao.bulkInsert(visitLineDto.getCustomerList());
       }
     }
     getObserver()
