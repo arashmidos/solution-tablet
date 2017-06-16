@@ -40,16 +40,17 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     contentValues.put(Goods.COL_TITLE, entity.getTitle());
     contentValues.put(Goods.COL_CODE, entity.getCode());
     contentValues.put(Goods.COL_PRICE, entity.getPrice());
-    contentValues.put(Goods.COL_CUSTOMER_PRICE, entity.getCustomerPrice());
+    contentValues.put(Goods.COL_CUSTOMER_PRICE, entity.getCustomerPrice());//5
     contentValues.put(Goods.COL_EXISTING, entity.getExisting());
     contentValues.put(Goods.COL_UNIT1_TITLE, entity.getUnit1Title());
     contentValues.put(Goods.COL_UNIT2_TITLE, entity.getUnit2Title());
     contentValues.put(Goods.COL_REFERENCE_CODE, entity.getReferenceCode());
-    contentValues.put(Goods.COL_UNIT1_COUNT, entity.getUnit1Count());
+    contentValues.put(Goods.COL_UNIT1_COUNT, entity.getUnit1Count());//10
     contentValues.put(Goods.COL_GROUP_BACKEND_ID, entity.getGroupBackendId());
     contentValues.put(Goods.COL_BAR_CODE, entity.getBarCode());
     contentValues.put(Goods.COL_DEFAULT_UNIT, entity.getDefaultUnit());
     contentValues.put(Goods.COL_RECOVERY_DATE, entity.getDefaultUnit());
+    contentValues.put(Goods.COL_SALE_RATE, entity.getSaleRate());//15
     contentValues.put(Goods.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(Goods.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
 
@@ -74,16 +75,17 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
         Goods.COL_TITLE,
         Goods.COL_CODE,
         Goods.COL_PRICE,
-        Goods.COL_CUSTOMER_PRICE,
+        Goods.COL_CUSTOMER_PRICE,//5
         Goods.COL_EXISTING,
         Goods.COL_UNIT1_TITLE,
         Goods.COL_UNIT2_TITLE,
         Goods.COL_REFERENCE_CODE,
-        Goods.COL_UNIT1_COUNT,
+        Goods.COL_UNIT1_COUNT,//10
         Goods.COL_GROUP_BACKEND_ID,
         Goods.COL_BAR_CODE,
         Goods.COL_DEFAULT_UNIT,
         Goods.COL_RECOVERY_DATE,
+        Goods.COL_SALE_RATE,//15
         Goods.COL_CREATE_DATE_TIME,
         Goods.COL_UPDATE_DATE_TIME
     };
@@ -108,8 +110,9 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     goods.setBarCode(cursor.getString(12));
     goods.setDefaultUnit(cursor.getInt(13));
     goods.setRecoveryDate(cursor.getString(14));
-    goods.setCreateDateTime(cursor.getString(15));
-    goods.setUpdateDateTime(cursor.getString(16));
+    goods.setSaleRate(cursor.getLong(15));
+    goods.setCreateDateTime(cursor.getString(16));
+    goods.setUpdateDateTime(cursor.getString(17));
     return goods;
   }
 
@@ -131,6 +134,7 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
             + ", " + Goods.COL_RECOVERY_DATE
             + ", " + Goods.COL_CUSTOMER_PRICE //10
             + ", " + Goods.COL_DEFAULT_UNIT
+            + ", " + Goods.COL_SALE_RATE
             + " FROM COMMER_GOODS WHERE 1=1";
 
     if (Empty.isNotEmpty(goodsSo.getGoodsGroupBackendId())) {
@@ -182,13 +186,14 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
             + ", " + Goods.COL_TITLE
             + ", " + Goods.COL_CODE
             + ", " + Goods.COL_PRICE
-            + ", " + Goods.COL_EXISTING
+            + ", " + Goods.COL_EXISTING //5
             + ", " + Goods.COL_UNIT1_COUNT
             + ", " + Goods.COL_UNIT1_TITLE
             + ", " + Goods.COL_UNIT2_TITLE
             + ", " + Goods.COL_RECOVERY_DATE
-            + ", " + Goods.COL_CUSTOMER_PRICE
+            + ", " + Goods.COL_CUSTOMER_PRICE //10
             + ", " + Goods.COL_DEFAULT_UNIT
+            + ", " + Goods.COL_SALE_RATE
             + " FROM COMMER_GOODS WHERE 1=1";
     if (Empty.isNotEmpty(goodsSo.getGoodsGroupBackendId())) {
       sql = sql.concat(" AND GROUP_BACKEND_ID = ? ");
@@ -244,6 +249,7 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     goods.setRecoveryDate(cursor.getString(9));
     goods.setCustomerPrice(cursor.getLong(10));
     goods.setDefaultUnit(cursor.getInt(11));
+    goods.setSaleRate(cursor.getLong(12));
     return goods;
   }
 

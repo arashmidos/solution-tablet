@@ -24,7 +24,6 @@ public class GoodsListForQuestionnairesAdapter extends BaseListAdapter<GoodsList
     this.mainActivity = context;
     this.goodsService = new GoodsServiceImpl(context);
     this.goodsGroupBackendId = goodsGroupBackendId;
-
   }
 
   @Override
