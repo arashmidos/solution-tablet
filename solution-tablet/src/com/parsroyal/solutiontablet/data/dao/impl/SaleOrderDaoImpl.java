@@ -85,7 +85,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         SaleOrder.COL_AMOUNT,
         SaleOrder.COL_DATE,
         SaleOrder.COL_PAYMENT_TYPE_BACKEND_ID,
-        SaleOrder.COL_SALESMAN_ID,
+        SaleOrder.COL_SALESMAN_ID,//5
         SaleOrder.COL_CUSTOMER_BACKEND_ID,
         SaleOrder.COL_DESCRIPTION,
         SaleOrder.COL_STATUS,
@@ -151,14 +151,13 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       saleOrder = new SaleInvoiceDocument();
       saleOrder.setType(
           Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE)));
-      //TODO: update this cursor.getLong(10)
-      ((SaleInvoiceDocument) saleOrder).setSaleOrderId(0L);
+
+      ((SaleInvoiceDocument) saleOrder).setSaleOrderId(cursor.getLong(10));
     } else if (SaleOrderStatus.REJECTED.getId().equals(statusId)) {
       saleOrder = new SaleRejectDocument();
       saleOrder.setType(
           Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_REJECT_TYPE)));
-      //TODO: update this cursor.getLong(9)
-      ((SaleRejectDocument) saleOrder).setSaleOrderId(0L);
+      ((SaleRejectDocument) saleOrder).setSaleOrderId(cursor.getLong(9));
     }
 
     saleOrder.setId(cursor.getLong(0));
