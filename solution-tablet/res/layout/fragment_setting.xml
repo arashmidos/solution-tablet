@@ -315,6 +315,23 @@
           android:text="@string/reject_type" />
       </TableRow>
 
+      <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="right">
+
+        <CheckBox
+          android:id="@+id/enable_sale_rate"
+          style="@style/TextView.Caption"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right"
+          android:gravity="left"
+          android:text="@string/enable_sale_rate" />
+      </TableRow>
+
       <TextView
         android:id="@+id/textView23"
         style="@style/TextView.PageTitle"

@@ -68,6 +68,8 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
   EditText orderTypeTxt;
   @BindView(R.id.rejectTypeTxt)
   EditText rejectTypeTxt;
+  @BindView(R.id.enable_sale_rate)
+  CheckBox enableSaleRateCb;
 
   private SettingService settingService;
 
@@ -94,6 +96,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     String invoiceType = settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE);
     String orderType = settingService.getSettingValue(ApplicationKeys.SETTING_ORDER_TYPE);
     String rejectType = settingService.getSettingValue(ApplicationKeys.SETTING_REJECT_TYPE);
+    String saleRateEnabled = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE);
 
     serverAddress1Txt.setText(Empty.isNotEmpty(address1) ? address1 : "");
     serverAddress2Txt.setText(Empty.isNotEmpty(address2) ? address2 : "");
@@ -110,6 +113,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     invoiceTypeTxt.setText(Empty.isNotEmpty(invoiceType) ? invoiceType : "");
     orderTypeTxt.setText(Empty.isNotEmpty(orderType) ? orderType : "");
     rejectTypeTxt.setText(Empty.isNotEmpty(rejectType) ? rejectType : "");
+    enableSaleRateCb.setChecked(Empty.isNotEmpty(saleRateEnabled) && saleRateEnabled.equals("1"));
 
     if (BuildConfig.DEBUG && Empty.isEmpty(serverAddress1Txt.getText().toString())) {
       setTestData();
@@ -120,7 +124,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
   }
 
   private void setTestData() {
-    serverAddress1Txt.setText("http://173.212.199.107:8880/tabletbackend");
+    serverAddress1Txt.setText("http://173.212.199.107:50000/tabletbackend");
     serverAddress2Txt.setText("Fcgroup\\administrator@Royal2015");
     usernameTxt.setText("tablet");
     passwordTxt.setText("123");
@@ -128,6 +132,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     gpsInterval.setText("300");
     enableTrackingCb.setChecked(true);
     enableCalculateDistanceCb.setChecked(true);
+    enableSaleRateCb.setChecked(true);
     branchSerialTxt.setText("100101");
     stockSerialTxt.setText("100101");
     invoiceTypeTxt.setText("1");
@@ -145,7 +150,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
           settingService.saveSetting(ApplicationKeys.USER_COMPANY_NAME, "");
           new DataTransferServiceImpl(getActivity()).clearData(updateType);
         }
-        if(canSave()) {
+        if (canSave()) {
           settingService.getUserInformation(SettingFragment.this);
         }
       } catch (BackendIsNotReachableException ex) {
@@ -180,6 +185,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
       String invoiceType = invoiceTypeTxt.getText().toString();
       String orderType = orderTypeTxt.getText().toString();
       String rejectType = rejectTypeTxt.getText().toString();
+      String saleRateEnabled = enableSaleRateCb.isChecked() ? "1" : "0";
 
       settingService.saveSetting(ApplicationKeys.SETTING_SERVER_ADDRESS_1, serverAddress1);
       settingService.saveSetting(ApplicationKeys.SETTING_SERVER_ADDRESS_2, serverAddress2);
@@ -196,6 +202,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
       settingService.saveSetting(ApplicationKeys.SETTING_INVOICE_TYPE, invoiceType);
       settingService.saveSetting(ApplicationKeys.SETTING_ORDER_TYPE, orderType);
       settingService.saveSetting(ApplicationKeys.SETTING_REJECT_TYPE, rejectType);
+      settingService.saveSetting(ApplicationKeys.SETTING_SALE_RATE_ENABLE,saleRateEnabled);
       return true;
     }
     return false;
@@ -406,10 +413,5 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
 
     return !(address1.equals(oldAddress1) && address2.equals(oldAaddress2) && username
         .equals(oldUsername) && userCode.equals(oldUserCode));
-  }
-
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
   }
 }

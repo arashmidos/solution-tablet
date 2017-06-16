@@ -20,11 +20,14 @@ import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.service.GoodsService;
+import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -46,6 +49,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
 
   private MainActivity context;
   private GoodsService goodsService;
+  private SettingService settingService;
 
   private Long goodsBackendId;
   private Goods selectedGoods;
@@ -57,6 +61,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
   private GoodsDtoList rejectedGoodsList;
   private long goodsInvoiceId;
   private long saleRate;
+  private boolean saleRateEnabled;
 
   public void setOnClickListener(GoodsDialogOnClickListener onClickListener) {
     this.onClickListener = onClickListener;
@@ -77,6 +82,10 @@ public class GoodsDetailDialogFragment extends DialogFragment {
     saleRate = arguments.getLong(Constants.GOODS_SALE_RATE);
 
     goodsService = new GoodsServiceImpl(context);
+    settingService = new SettingServiceImpl(context);
+
+    saleRateEnabled = "1"
+        .equals(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE));
 
     if (orderStatus == SaleOrderStatus.REJECTED_DRAFT.getId()) {
       rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
@@ -151,11 +160,10 @@ public class GoodsDetailDialogFragment extends DialogFragment {
       errorMsg.setVisibility(View.VISIBLE);
       return false;
     }
-    if (Double.valueOf(countValue) % selectedGoods.getSaleRate() != 0.0) {
-      errorMsg.setText(String
-          .format(context.getString(R.string.error_sale_rate_not_correct),
-              String.valueOf(selectedGoods.getSaleRate()),
-              selectedGoods.getUnit1Title()));
+
+    if (saleRateEnabled && Double.valueOf(countValue) % selectedGoods.getSaleRate() != 0.0) {
+      errorMsg.setText(String.format(context.getString(R.string.error_sale_rate_not_correct),
+          String.valueOf(selectedGoods.getSaleRate()), selectedGoods.getUnit1Title()));
       errorMsg.setVisibility(View.VISIBLE);
       return false;
     }

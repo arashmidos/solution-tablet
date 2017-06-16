@@ -19,6 +19,7 @@ public class ApplicationKeys {
   public static final String SETTING_INVOICE_TYPE = "setting.invoice.type";
   public static final String SETTING_ORDER_TYPE = "setting.order.type";
   public static final String SETTING_REJECT_TYPE = "setting.reject.type";
+  public static final String SETTING_SALE_RATE_ENABLE = "setting.salerate.enable";
 
   public static final String USER_FULL_NAME = "user.full.name";
   public static final String USER_COMPANY_NAME = "user.company.name";
