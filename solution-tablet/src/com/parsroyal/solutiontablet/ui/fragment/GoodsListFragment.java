@@ -187,6 +187,7 @@ public class GoodsListFragment extends BaseFragment {
       bundle.putLong(Constants.GOODS_BACKEND_ID, goods.getBackendId());
       bundle.putLong(Constants.GOODS_INVOICE_ID, invoiceBackendId);
       bundle.putLong(Constants.ORDER_STATUS, orderStatus);
+      bundle.putLong(Constants.GOODS_SALE_RATE, goods.getSaleRate());
       bundle.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
 
       long defaultUnit = goods.getDefaultUnit() != null ? goods.getDefaultUnit() : 1;

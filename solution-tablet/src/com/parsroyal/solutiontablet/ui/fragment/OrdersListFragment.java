@@ -232,10 +232,10 @@ public class OrdersListFragment extends
             .getRejectedData(OrdersListFragment.this, customerBackendId);
         if (rejectedGoodsList != null) {
           final Bundle args = new Bundle();
-          args.putLong("orderId", id);
-          args.putLong("orderStatus", orderStatus);
-          args.putString("saleType", saleType);
-          args.putSerializable("rejectedList", rejectedGoodsList);
+          args.putLong(Constants.ORDER_ID, id);
+          args.putLong(Constants.ORDER_STATUS, orderStatus);
+          args.putString(Constants.SALE_TYPE, saleType);
+          args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
           getActivity().runOnUiThread(() -> ((MainActivity) getActivity())
               .changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false));
         } else {

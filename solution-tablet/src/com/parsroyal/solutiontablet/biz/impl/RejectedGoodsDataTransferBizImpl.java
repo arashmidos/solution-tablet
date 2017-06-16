@@ -91,7 +91,7 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
           .exchange(url, getHttpMethod(), httpEntity, getType());
 
       result = true;
-
+//TODO: CHECK TO SEE IF HAS DEFAULT_UNIT AND SALERATE
       goodsDtoList = response.getBody();
 
     } catch (ResourceAccessException ex) {

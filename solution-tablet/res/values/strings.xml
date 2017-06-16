@@ -366,6 +366,7 @@
   <string name="invoice_type">نوع فاکتور</string>
   <string name="order_type">نوع سفارش</string>
   <string name="reject_type">نوع مرجوعی</string>
+  <string name="error_sale_rate_not_correct">ضریب فروش این کالا باید %1$s %2$s‌ باشد</string>
   <string-array name="sale_type">
     <item>فروش سرد</item>
     <item>فروش گرم</item>
