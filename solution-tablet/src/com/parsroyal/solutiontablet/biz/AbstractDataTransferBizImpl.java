@@ -45,7 +45,6 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
   public static final String TAG = AbstractDataTransferBizImpl.class.getSimpleName();
   protected Context context;
   protected KeyValue serverAddress1;
-  protected KeyValue serverAddress2;
   protected KeyValue username;
   protected KeyValue password;
   protected KeyValue salesmanId;
@@ -62,7 +61,6 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
 
   public void prepare() {
     serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-    serverAddress2 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
@@ -111,7 +109,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
       //
       restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
       restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-      String url = makeUrl(serverAddress1.getValue(), serverAddress2.getValue(), getMethod());
+      String url = makeUrl(serverAddress1.getValue(), getMethod());
 
       HttpEntity httpEntity = getHttpEntity(httpHeaders);
       ResponseEntity<T> response = restTemplate
@@ -163,14 +161,11 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
     }
   }
 
-  protected String makeUrl(String serverAddress1, String serverAdress2, String method) {
+  protected String makeUrl(String serverAddress1, String method) {
     Log.i(TAG, "Trying to reach url with server addresses");
     if (NetworkUtil.isURLReachable(context, serverAddress1)) {
       Log.i(TAG, "Server address 1 is available");
       return serverAddress1 + "/" + method;
-    } else if (NetworkUtil.isURLReachable(context, serverAdress2)) {
-      Log.i(TAG, "Server address 2 is available");
-      return serverAdress2 + "/" + method;
     } else {
       Log.i(TAG, "Both server addresses are not available");
       throw new BackendIsNotReachableException();

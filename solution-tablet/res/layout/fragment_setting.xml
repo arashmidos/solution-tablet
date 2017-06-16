@@ -93,28 +93,6 @@
         android:gravity="right">
 
         <EditText
-          android:id="@+id/serverAdress2Txt"
-          style="@style/EditBox"
-          android:layout_width="300dp"
-          android:layout_height="wrap_content"
-          android:nextFocusDown="@+id/usernameTxt" />
-
-        <TextView
-          android:id="@+id/textView17"
-          style="@style/TextView.Caption"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/sub_address" />
-      </TableRow>
-
-      <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="right">
-
-        <EditText
           android:id="@+id/usernameTxt"
           style="@style/EditBox"
           android:layout_width="300dp"

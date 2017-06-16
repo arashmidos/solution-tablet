@@ -75,7 +75,6 @@ public class DataTransferServiceImpl implements DataTransferService {
   private VisitServiceImpl visitService;
 
   private KeyValue serverAddress1;
-  private KeyValue serverAddress2;
   private KeyValue username;
   private KeyValue password;
   private KeyValue salesmanId;
@@ -95,13 +94,12 @@ public class DataTransferServiceImpl implements DataTransferService {
   @Override
   public void getAllData(final ResultObserver uiObserver) {
     serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-    serverAddress2 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
     saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
 
-    if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2)) {
+    if (Empty.isEmpty(serverAddress1)) {
       throw new InvalidServerAddressException();
     }
 
@@ -168,12 +166,11 @@ public class DataTransferServiceImpl implements DataTransferService {
   @Override
   public void sendAllData(final ResultObserver uiObserver) {
     serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-    serverAddress2 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
 
-    if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2)) {
+    if (Empty.isEmpty(serverAddress1)) {
       throw new InvalidServerAddressException();
     }
 
@@ -218,12 +215,11 @@ public class DataTransferServiceImpl implements DataTransferService {
   @Override
   public boolean isDataTransferPossible() {
     serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-    serverAddress2 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
 
-    if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2) || Empty.isEmpty(username) ||
+    if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(username) ||
         Empty.isEmpty(password) || Empty.isEmpty(salesmanId)) {
       return false;
     } else {
@@ -234,11 +230,10 @@ public class DataTransferServiceImpl implements DataTransferService {
   @Override
   public GoodsDtoList getRejectedData(ResultObserver uiObserver, Long customerId) {
     serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-    serverAddress2 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-    if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2)) {
+    if (Empty.isEmpty(serverAddress1)) {
       throw new InvalidServerAddressException();
     }
 
@@ -261,7 +256,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   private GoodsDtoList getAllRejectedGoods(ResultObserver observer, Long customerId) {
     return new RejectedGoodsDataTransferBizImpl(context, observer)
-        .getAllRejectedData(serverAddress1, serverAddress2, username, password, salesmanId,
+        .getAllRejectedData(serverAddress1, username, password, salesmanId,
             customerId);
   }
 

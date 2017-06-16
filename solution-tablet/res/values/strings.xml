@@ -15,10 +15,8 @@
   <string name="password">رمز عبور</string>
   <string name="userCode">کد کاربر</string>
   <string name="serverAddress1">آدرس سرور 1</string>
-  <string name="serverAddress2">آدرس سرور 2</string>
   <string name="save">ذخیره</string>
   <string name="error_serverAddress1_is_required">مقدار آدرس سرور 1 ضروری است</string>
-  <string name="error_serverAddress2_is_required">مقدار آدرس سرور 2 ضروری است</string>
   <string name="error_username_is_required">مقدار نام کاربری ضروری است</string>
   <string name="error_password_is_required">مقدار رمز عبور اجباری است.</string>
   <string name="error_user_code_is_required">مقدار کد کاربری ضروری است</string>

@@ -42,8 +42,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
   Button saveBtn;
   @BindView(R.id.serverAdress1Txt)
   EditText serverAddress1Txt;
-  @BindView(R.id.serverAdress2Txt)
-  EditText serverAddress2Txt;
   @BindView(R.id.usernameTxt)
   EditText usernameTxt;
   @BindView(R.id.passwordTxt)
@@ -82,7 +80,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     settingService = new SettingServiceImpl(getActivity());
 
     String address1 = settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-    String address2 = settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
     String username = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
     String userCode = settingService.getSettingValue(ApplicationKeys.SETTING_USER_CODE);
     String password = settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD);
@@ -96,10 +93,10 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
     String invoiceType = settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE);
     String orderType = settingService.getSettingValue(ApplicationKeys.SETTING_ORDER_TYPE);
     String rejectType = settingService.getSettingValue(ApplicationKeys.SETTING_REJECT_TYPE);
-    String saleRateEnabled = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE);
+    String saleRateEnabled = settingService
+        .getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE);
 
     serverAddress1Txt.setText(Empty.isNotEmpty(address1) ? address1 : "");
-    serverAddress2Txt.setText(Empty.isNotEmpty(address2) ? address2 : "");
     usernameTxt.setText(Empty.isNotEmpty(username) ? username : "");
     passwordTxt.setText(Empty.isNotEmpty(password) ? password : "");
     userCodeTxt.setText(Empty.isNotEmpty(userCode) ? userCode : "");
@@ -125,7 +122,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
 
   private void setTestData() {
     serverAddress1Txt.setText("http://173.212.199.107:50000/tabletbackend");
-    serverAddress2Txt.setText("Fcgroup\\administrator@Royal2015");
     usernameTxt.setText("tablet");
     passwordTxt.setText("123");
     userCodeTxt.setText("1016");
@@ -172,7 +168,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
   public boolean canSave() {
     if (validate()) {
       String serverAddress1 = serverAddress1Txt.getText().toString();
-      String serverAddress2 = serverAddress2Txt.getText().toString();
       String username = usernameTxt.getText().toString();
       String password = passwordTxt.getText().toString();
       String userCode = userCodeTxt.getText().toString();
@@ -188,7 +183,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
       String saleRateEnabled = enableSaleRateCb.isChecked() ? "1" : "0";
 
       settingService.saveSetting(ApplicationKeys.SETTING_SERVER_ADDRESS_1, serverAddress1);
-      settingService.saveSetting(ApplicationKeys.SETTING_SERVER_ADDRESS_2, serverAddress2);
       settingService.saveSetting(ApplicationKeys.SETTING_USERNAME, username);
       settingService.saveSetting(ApplicationKeys.SETTING_USER_CODE, userCode);
       settingService.saveSetting(ApplicationKeys.SETTING_PASSWORD, password);
@@ -202,7 +196,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
       settingService.saveSetting(ApplicationKeys.SETTING_INVOICE_TYPE, invoiceType);
       settingService.saveSetting(ApplicationKeys.SETTING_ORDER_TYPE, orderType);
       settingService.saveSetting(ApplicationKeys.SETTING_REJECT_TYPE, rejectType);
-      settingService.saveSetting(ApplicationKeys.SETTING_SALE_RATE_ENABLE,saleRateEnabled);
+      settingService.saveSetting(ApplicationKeys.SETTING_SALE_RATE_ENABLE, saleRateEnabled);
       return true;
     }
     return false;
@@ -214,13 +208,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
       {
         ToastUtil.toastError(getActivity(), R.string.error_serverAddress1_is_required);
         serverAddress1Txt.requestFocus();
-      });
-      return false;
-    } else if (Empty.isEmpty(serverAddress2Txt.getText().toString())) {
-      runOnUiThread(() ->
-      {
-        ToastUtil.toastError(getActivity(), R.string.error_serverAddress2_is_required);
-        serverAddress2Txt.requestFocus();
       });
       return false;
     } else if (Empty.isEmpty(usernameTxt.getText().toString())) {
@@ -402,16 +389,14 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
 
   private boolean isNewSalesman() {
     String address1 = serverAddress1Txt.getText().toString();
-    String address2 = serverAddress2Txt.getText().toString();
     String username = usernameTxt.getText().toString();
     String userCode = userCodeTxt.getText().toString();
 
     String oldAddress1 = settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-    String oldAaddress2 = settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
     String oldUsername = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
     String oldUserCode = settingService.getSettingValue(ApplicationKeys.SETTING_USER_CODE);
 
-    return !(address1.equals(oldAddress1) && address2.equals(oldAaddress2) && username
-        .equals(oldUsername) && userCode.equals(oldUserCode));
+    return !(address1.equals(oldAddress1) && username.equals(oldUsername) && userCode
+        .equals(oldUserCode));
   }
 }

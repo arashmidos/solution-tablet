@@ -51,14 +51,13 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
     this.goodsDao = new GoodsDaoImpl(context);
   }
 
-  public GoodsDtoList getAllRejectedData(KeyValue serverAddress1, KeyValue serverAddress2,
+  public GoodsDtoList getAllRejectedData(KeyValue serverAddress1,
       KeyValue username, KeyValue password,
       KeyValue salesmanId, Long customerId) {
     boolean result = false;
     GoodsDtoList goodsDtoList = null;
     try {
       this.serverAddress1 = serverAddress1;
-      this.serverAddress2 = serverAddress2;
       this.username = username;
       this.password = password;
       this.salesmanId = salesmanId;
@@ -84,7 +83,7 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
       restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
       restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
       restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-      String url = makeUrl(serverAddress1.getValue(), serverAddress2.getValue(), getMethod());
+      String url = makeUrl(serverAddress1.getValue(), getMethod());
 
       HttpEntity httpEntity = getHttpEntity(httpHeaders);
       ResponseEntity<GoodsDtoList> response = restTemplate
