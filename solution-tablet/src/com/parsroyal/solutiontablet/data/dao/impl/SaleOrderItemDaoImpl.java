@@ -5,11 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderItemDao;
+import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocumentItem;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
+import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.SettingService;
+import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
@@ -23,10 +26,12 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
 
   private Context context;
   private SettingService settingService;
+  private GoodsService goodsService;
 
   public SaleOrderItemDaoImpl(Context context) {
     this.context = context;
     settingService = new SettingServiceImpl(context);
+    goodsService = new GoodsServiceImpl(context);
   }
 
   @Override
@@ -181,9 +186,15 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     BaseSaleDocumentItem saleOrderItem = new BaseSaleDocumentItem();
 
     saleOrderItem.setGoods(cursor.getLong(1));
-    saleOrderItem.setCount1(cursor.getLong(2));
-    //TODO update this
-    saleOrderItem.setCount2(0L);
+    long count1 = cursor.getLong(2);
+    saleOrderItem.setCount1(count1);
+    int selectedUnit = cursor.getInt(6);
+    long count2 = 0L;
+    if (selectedUnit == 2) {
+      Goods goods = goodsService.getGoodsByBackendId(cursor.getLong(1));
+      count2 = count1 / goods.getUnit1Count();
+    }
+    saleOrderItem.setCount2(count2);
     saleOrderItem.setCompanyId(
         Integer.valueOf(settingService.getSettingValue(ApplicationKeys.USER_COMPANY_ID)));
 

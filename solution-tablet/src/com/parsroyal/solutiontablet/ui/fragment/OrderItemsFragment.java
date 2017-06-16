@@ -67,7 +67,8 @@ public class OrderItemsFragment extends BaseFragment {
       return view;
 
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating OrderItemsFragment " + e.getMessage());
+      Crashlytics
+          .log(Log.ERROR, "UI Exception", "Error in creating OrderItemsFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);
@@ -179,13 +180,17 @@ public class OrderItemsFragment extends BaseFragment {
     Bundle bundle = new Bundle();
     bundle.putLong("goodsBackendId", goods.getBackendId());
     Double count = Double.valueOf(item.getGoodsCount()) / 1000D;
-    bundle.putDouble("count", count);
     bundle.putLong("orderStatus", orderStatus);
     bundle.putSerializable("rejectedList", rejectedGoodsList);
-    if (Empty.isNotEmpty(item.getSelectedUnit())) {
-      bundle.putLong("selectedUnit", item.getSelectedUnit());
+    Long defaultUnit = item.getSelectedUnit();
+    if (Empty.isNotEmpty(defaultUnit)) {
+      bundle.putLong("selectedUnit", defaultUnit);
+      if (defaultUnit == 2) {
+        count = count / goods.getUnit1Count();
+      }
     }
 
+    bundle.putDouble("count", count);
     goodsDetailDialog.setArguments(bundle);
     goodsDetailDialog
         .setOnClickListener(
@@ -220,7 +225,8 @@ public class OrderItemsFragment extends BaseFragment {
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), ex);
         } catch (Exception ex) {
-          Crashlytics.log(Log.ERROR, "UI Exception", "Error in confirming order item detail " + ex.getMessage());
+          Crashlytics.log(Log.ERROR, "UI Exception",
+              "Error in confirming order item detail " + ex.getMessage());
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
         }

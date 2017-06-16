@@ -14,6 +14,15 @@ public class GoodsListModel extends BaseListModel {
   private String unit2Title;
   private Long recoveryDate;
   private long customerPrice;
+  private long defaultUnit;
+
+  public long getDefaultUnit() {
+    return defaultUnit;
+  }
+
+  public void setDefaultUnit(long defaultUnit) {
+    this.defaultUnit = defaultUnit;
+  }
 
   public long getGoodsBackendId() {
     return goodsBackendId;

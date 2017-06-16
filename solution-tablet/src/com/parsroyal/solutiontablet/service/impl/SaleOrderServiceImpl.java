@@ -116,7 +116,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
   }
 
   @Override
-  public List<BaseSaleDocument> findOrderDtoByStatus(Long statusId) {
+  public List<BaseSaleDocument> findOrderDocumentByStatus(Long statusId) {
     List<BaseSaleDocument> saleOrderList = saleOrderDao.findOrderDocumentsByStatusId(statusId);
     for (BaseSaleDocument baseSaleDocument : saleOrderList) {
       baseSaleDocument.setItems(getSaleDocumentItems(baseSaleDocument.getId()));

@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -23,7 +22,6 @@ import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -60,7 +58,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_goods_detail_dialog, null);
 
     context = (MainActivity) getActivity();
@@ -106,8 +104,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
     if (Empty.isNotEmpty(selectedUnit)) {
       if (selectedUnit.equals(1L)) {
         goodsUnitSp.setSelection(0);
-      }
-      if (selectedUnit.equals(2L)) {
+      } else if (selectedUnit.equals(2L)) {
         goodsUnitSp.setSelection(1);
       }
     }

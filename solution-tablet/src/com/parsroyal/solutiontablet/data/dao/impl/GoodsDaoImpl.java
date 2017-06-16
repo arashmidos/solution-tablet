@@ -119,16 +119,27 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     SQLiteDatabase db = commerDatabaseHelper.getWritableDatabase();
     List<String> argsList = new ArrayList<>();
     String sql =
-        "select g._id, g.BACKEND_ID, g.TITLE, g.CODE, g.PRICE, g.EXISTING, g.UNIT1_COUNT, g.UNIT1_TITLE, "
-            +
-            "g.UNIT2_TITLE, g.RECOVERY_DATE, g.CUSTOMER_PRICE from COMMER_GOODS g WHERE 1=1";
+        "SELECT " + Goods.COL_ID
+            + ", " + Goods.COL_BACKEND_ID
+            + ", " + Goods.COL_TITLE
+            + ", " + Goods.COL_CODE
+            + ", " + Goods.COL_PRICE
+            + ", " + Goods.COL_EXISTING //5
+            + ", " + Goods.COL_UNIT1_COUNT
+            + ", " + Goods.COL_UNIT1_TITLE
+            + ", " + Goods.COL_UNIT2_TITLE
+            + ", " + Goods.COL_RECOVERY_DATE
+            + ", " + Goods.COL_CUSTOMER_PRICE //10
+            + ", " + Goods.COL_DEFAULT_UNIT
+            + " FROM COMMER_GOODS WHERE 1=1";
+
     if (Empty.isNotEmpty(goodsSo.getGoodsGroupBackendId())) {
-      sql = sql.concat(" AND g.GROUP_BACKEND_ID = ? ");
+      sql = sql.concat(" AND GROUP_BACKEND_ID = ? ");
       argsList.add(String.valueOf(goodsSo.getGoodsGroupBackendId()));
     }
 
     if (Empty.isNotEmpty(goodsSo.getConstraint())) {
-      sql = sql.concat(" AND g.TITLE like ? ");
+      sql = sql.concat(" AND TITLE like ? ");
       argsList.add(goodsSo.getConstraint());
     }
 
@@ -166,16 +177,26 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     SQLiteDatabase db = commerDatabaseHelper.getWritableDatabase();
     List<String> argsList = new ArrayList<>();
     String sql =
-        "select g._id, g.BACKEND_ID, g.TITLE, g.CODE, g.PRICE, g.EXISTING, g.UNIT1_COUNT, g.UNIT1_TITLE, "
-            +
-            "g.UNIT2_TITLE, g.RECOVERY_DATE, g.CUSTOMER_PRICE from COMMER_GOODS g WHERE 1=1";
+        "SELECT " + Goods.COL_ID
+            + ", " + Goods.COL_BACKEND_ID
+            + ", " + Goods.COL_TITLE
+            + ", " + Goods.COL_CODE
+            + ", " + Goods.COL_PRICE
+            + ", " + Goods.COL_EXISTING
+            + ", " + Goods.COL_UNIT1_COUNT
+            + ", " + Goods.COL_UNIT1_TITLE
+            + ", " + Goods.COL_UNIT2_TITLE
+            + ", " + Goods.COL_RECOVERY_DATE
+            + ", " + Goods.COL_CUSTOMER_PRICE
+            + ", " + Goods.COL_DEFAULT_UNIT
+            + " FROM COMMER_GOODS WHERE 1=1";
     if (Empty.isNotEmpty(goodsSo.getGoodsGroupBackendId())) {
-      sql = sql.concat(" AND g.GROUP_BACKEND_ID = ? ");
+      sql = sql.concat(" AND GROUP_BACKEND_ID = ? ");
       argsList.add(String.valueOf(goodsSo.getGoodsGroupBackendId()));
     }
 
     if (Empty.isNotEmpty(goodsSo.getConstraint())) {
-      sql = sql.concat(" AND g.TITLE like ? ");
+      sql = sql.concat(" AND TITLE like ? ");
       argsList.add(goodsSo.getConstraint());
     }
 
@@ -205,6 +226,7 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     goodsListModel.setUnit2Title(cursor.getString(8));
     goodsListModel.setRecoveryDate(cursor.getLong(9));
     goodsListModel.setCustomerPrice(cursor.getLong(10));
+    goodsListModel.setDefaultUnit(cursor.getInt(11));
     return goodsListModel;
   }
 
@@ -221,6 +243,7 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     goods.setUnit2Title(cursor.getString(8));
     goods.setRecoveryDate(cursor.getString(9));
     goods.setCustomerPrice(cursor.getLong(10));
+    goods.setDefaultUnit(cursor.getInt(11));
     return goods;
   }
 

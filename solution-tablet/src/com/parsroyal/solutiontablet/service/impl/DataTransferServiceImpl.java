@@ -129,7 +129,6 @@ public class DataTransferServiceImpl implements DataTransferService {
     if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER)) {
       getAllDeliverableGoods(resultObserver);
       getAllVisitLinesForDelivery(resultObserver);
-
     } else {
       getAllGoods(resultObserver);
       getAllVisitLines(resultObserver);
@@ -387,7 +386,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   private void sendAllOrders(ResultObserver resultObserver) {
     List<BaseSaleDocument> saleOrders = saleOrderService
-        .findOrderDtoByStatus(SaleOrderStatus.READY_TO_SEND.getId());
+        .findOrderDocumentByStatus(SaleOrderStatus.READY_TO_SEND.getId());
     if (Empty.isNotEmpty(saleOrders)) {
       OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(context,
           resultObserver);
@@ -405,7 +404,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   private void sendAllInvoicedOrders(ResultObserver resultObserver) {
     List<BaseSaleDocument> saleOrders = saleOrderService
-        .findOrderDtoByStatus(SaleOrderStatus.INVOICED.getId());
+        .findOrderDocumentByStatus(SaleOrderStatus.INVOICED.getId());
     if (Empty.isNotEmpty(saleOrders)) {
       InvoicedOrdersDataTransferBizImpl dataTransfer = new InvoicedOrdersDataTransferBizImpl(
           context, resultObserver);
@@ -423,7 +422,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   private void sendAllReturnedOrders(ResultObserver resultObserver) {
     List<BaseSaleDocument> saleOrders = saleOrderService
-        .findOrderDtoByStatus(SaleOrderStatus.REJECTED.getId());
+        .findOrderDocumentByStatus(SaleOrderStatus.REJECTED.getId());
     if (Empty.isNotEmpty(saleOrders)) {
       ReturnedOrdersDataTransferBizImpl dataTransfer = new ReturnedOrdersDataTransferBizImpl(
           context, resultObserver);

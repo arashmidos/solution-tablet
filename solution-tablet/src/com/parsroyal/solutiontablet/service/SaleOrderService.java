@@ -35,7 +35,7 @@ public interface SaleOrderService extends BaseService {
 
   void changeOrderStatus(Long orderId, Long statusId);
 
-  List<BaseSaleDocument> findOrderDtoByStatus(Long statusId);
+  List<BaseSaleDocument> findOrderDocumentByStatus(Long statusId);
 
   SaleOrderDto findOrderDtoByCustomerBackendIdAndStatus(Long backendId, Long statusId);
 
