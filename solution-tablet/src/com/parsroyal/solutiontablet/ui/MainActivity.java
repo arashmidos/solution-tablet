@@ -165,9 +165,9 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     setupActionbar();
     setupDrawer();
     initialize();
-    if (!BuildConfig.DEBUG) {
+//    if (!BuildConfig.DEBUG) {
       logUser();
-    }
+//    }
   }
 
   private void logUser() {
