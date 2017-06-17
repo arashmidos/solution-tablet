@@ -3,10 +3,13 @@ package com.parsroyal.solutiontablet.biz.impl;
 import android.content.Context;
 import android.util.Log;
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.dao.GoodsDao;
 import com.parsroyal.solutiontablet.data.dao.impl.GoodsDaoImpl;
+import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -17,6 +20,7 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.util.List;
 import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +39,7 @@ import org.springframework.web.client.RestTemplate;
 /**
  * Created by Mahyar on 7/24/2015.
  */
-public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<GoodsDtoList> {
+public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
 
   public static final String TAG = RejectedGoodsDataTransferBizImpl.class.getSimpleName();
 
@@ -86,11 +90,18 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
       String url = makeUrl(serverAddress1.getValue(), getMethod());
 
       HttpEntity httpEntity = getHttpEntity(httpHeaders);
-      ResponseEntity<GoodsDtoList> response = restTemplate
+      ResponseEntity<String> response = restTemplate
           .exchange(url, getHttpMethod(), httpEntity, getType());
 
       result = true;
-      goodsDtoList = response.getBody();
+      String responseBody = response.getBody();
+      List<Goods> list = new Gson().fromJson(responseBody, new TypeToken<List<Goods>>() {
+      }.getType());
+
+      if (Empty.isNotEmpty(list)) {
+        goodsDtoList = new GoodsDtoList();
+        goodsDtoList.setGoodsDtoList(list);
+      }
 
     } catch (ResourceAccessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
@@ -110,7 +121,8 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
       Log.e(TAG, ex.getMessage(), ex);
       getObserver().publishResult(ex);
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data transfer", "Error in exchanging RejectedGoodsData " + e.getMessage());
+      Crashlytics.log(Log.ERROR, "Data transfer",
+          "Error in exchanging RejectedGoodsData " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       getObserver().publishResult(new UnknownSystemException(e));
     } finally {
@@ -120,7 +132,7 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
   }
 
   @Override
-  public void receiveData(GoodsDtoList data) {
+  public void receiveData(String data) {
 
   }
 
@@ -142,7 +154,7 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
 
   @Override
   public Class getType() {
-    return GoodsDtoList.class;
+    return String.class;
   }
 
   @Override
