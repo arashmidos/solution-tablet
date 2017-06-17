@@ -140,6 +140,10 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       switch (position) {
         //Add Invoice / Add Order
         case 0:
+          //Distributer should not add order/invoice
+          if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+            return;
+          }
           openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
           contentName = "New Order/Invoice";
           break;
