@@ -70,7 +70,8 @@ public class TrackLocationService extends Service implements GoogleApiClient.Con
           .addOnConnectionFailedListener(this)
           .addApi(LocationServices.API).build();
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Location Service", "Error in creating LocationService " + ex.getMessage());
+      Crashlytics.log(Log.ERROR, "Location Service",
+          "Error in creating LocationService " + ex.getMessage());
       Log.d(TAG, "Error in creating google api client");
     }
 
@@ -162,7 +163,8 @@ public class TrackLocationService extends Service implements GoogleApiClient.Con
         sender.start();
       }
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Location Service", "Error in saving data into db " + ex.getMessage());
+      Crashlytics
+          .log(Log.ERROR, "Location Service", "Error in saving data into db " + ex.getMessage());
       ex.printStackTrace();
     }
   }
@@ -186,6 +188,7 @@ public class TrackLocationService extends Service implements GoogleApiClient.Con
   @Override
   public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     Log.d(TAG, "Gpaly onConnectionFailed");
+    Crashlytics.log(Log.ERROR, "GooglePlay", "Google play is not installed");
   }
 
   protected LocationRequest createLocationRequest() {

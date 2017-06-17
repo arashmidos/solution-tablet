@@ -139,6 +139,7 @@
         android:gravity="right">
 
         <EditText
+          android:inputType="number"
           android:id="@+id/userCodeTxt"
           style="@style/EditBox"
           android:layout_width="300dp"
@@ -213,6 +214,8 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="15dp"
           android:layout_marginBottom="15dp"
+          android:focusable="true"
+          android:focusableInTouchMode="true"
           android:entries="@array/sale_type"
           android:nextFocusDown="@+id/invoiceType"
           android:prompt="@string/select_sale_type"

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -33,7 +34,7 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 /**
  * Created by Mahyar on 6/3/2015.
  */
-public class SettingFragment extends BaseFragment implements ResultObserver {
+public class SettingFragment extends BaseFragment implements ResultObserver, OnFocusChangeListener {
 
   public static final String TAG = SettingFragment.class.getSimpleName();
   @BindView(R.id.cancelBtn)
@@ -116,7 +117,8 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
       setTestData();
     }
     serverAddress1Txt.requestFocus();
-
+    saleTypeSp.setFocusableInTouchMode(true);
+    saleTypeSp.setOnFocusChangeListener(this);
     return rootView;
   }
 
@@ -398,5 +400,12 @@ public class SettingFragment extends BaseFragment implements ResultObserver {
 
     return !(address1.equals(oldAddress1) && username.equals(oldUsername) && userCode
         .equals(oldUserCode));
+  }
+
+  @Override
+  public void onFocusChange(View v, boolean hasFocus) {
+    if (hasFocus) {
+      v.performClick();
+    }
   }
 }
