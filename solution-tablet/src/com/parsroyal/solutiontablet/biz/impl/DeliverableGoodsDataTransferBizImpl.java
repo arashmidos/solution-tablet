@@ -3,6 +3,8 @@ package com.parsroyal.solutiontablet.biz.impl;
 import android.content.Context;
 import android.util.Log;
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
@@ -18,6 +20,7 @@ import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.util.List;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,7 +29,7 @@ import org.springframework.http.MediaType;
 /**
  * Created by Mahyar on 7/24/2015.
  */
-public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<GoodsDtoList> {
+public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
 
   public static final String TAG = DeliverableGoodsDataTransferBizImpl.class.getSimpleName();
 
@@ -46,10 +49,13 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
   }
 
   @Override
-  public void receiveData(GoodsDtoList data) {
-    if (Empty.isNotEmpty(data) && Empty.isNotEmpty(data.getGoodsDtoList())) {
+  public void receiveData(String data) {
+    List<Goods> list = new Gson().fromJson(data, new TypeToken<List<Goods>>() {
+    }.getType());
+
+    if (Empty.isNotEmpty(data) && Empty.isNotEmpty(list)) {
       try {
-        for (Goods goods : data.getGoodsDtoList()) {
+        for (Goods goods : list) {
           goods.setTitle(CharacterFixUtil.fixString(goods.getTitle()));
           Goods oldGoods = goodsDao.retrieveByBackendId(goods.getBackendId());
           if (Empty.isNotEmpty(oldGoods)) {
@@ -102,7 +108,7 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
 
   @Override
   public Class getType() {
-    return GoodsDtoList.class;
+    return String.class;
   }
 
   @Override
