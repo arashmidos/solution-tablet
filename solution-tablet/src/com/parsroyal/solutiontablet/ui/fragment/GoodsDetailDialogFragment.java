@@ -161,7 +161,11 @@ public class GoodsDetailDialogFragment extends DialogFragment {
       return false;
     }
 
-    if (saleRateEnabled && Double.valueOf(countValue) % selectedGoods.getSaleRate() != 0.0) {
+    int selectedUnit = goodUnitsSp.getSelectedItemPosition();
+
+    //If saleRate setting is enabled & default unit is unit1 & mod unit1 is not zero
+    if (saleRateEnabled && selectedUnit == 0
+        && Double.valueOf(countValue) % selectedGoods.getSaleRate() != 0.0) {
       errorMsg.setText(String.format(context.getString(R.string.error_sale_rate_not_correct),
           String.valueOf(selectedGoods.getSaleRate()), selectedGoods.getUnit1Title()));
       errorMsg.setVisibility(View.VISIBLE);
