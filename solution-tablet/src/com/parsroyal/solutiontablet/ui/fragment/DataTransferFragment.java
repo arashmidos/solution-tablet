@@ -102,11 +102,6 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     Thread thread = new Thread(() ->
     {
       try {
-        KeyValue saleType = keyValueBiz.findByKey(ApplicationKeys.SETTING_SALE_TYPE);
-        if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER)) {
-          new GoodsRequestDataTransferBizImpl(getActivity(), DataTransferFragment.this)
-              .exchangeData();
-        }
         dataTransferService.getAllData(DataTransferFragment.this);
       } catch (final BusinessException ex) {
         Log.e(TAG, ex.getMessage(), ex);

@@ -7,6 +7,7 @@ import com.parsroyal.solutiontablet.biz.impl.CityDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.DeliverableGoodsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.GoodsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.GoodsGroupDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.NewCustomerDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.NewCustomerPicDataTransferBizImpl;
@@ -118,6 +119,11 @@ public class DataTransferServiceImpl implements DataTransferService {
     clearData(Constants.FULL_UPDATE);
 
     final ResultObserver resultObserver = prepareResultObserverForGetAllData(uiObserver);
+
+    if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+      new GoodsRequestDataTransferBizImpl(context, resultObserver).exchangeData();
+    }
+
     getAllProvinces(resultObserver);
     getAllCities(resultObserver);
     getAllBaseInfos(resultObserver);
