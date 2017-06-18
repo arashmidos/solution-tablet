@@ -161,17 +161,24 @@ public class GoodsDetailDialogFragment extends DialogFragment {
       return false;
     }
 
-    int selectedUnit = goodUnitsSp.getSelectedItemPosition();
+    int currentUnit = goodUnitsSp.getSelectedItemPosition();
 
     //If saleRate setting is enabled & default unit is unit1 & mod unit1 is not zero
-    if (saleRateEnabled && selectedUnit == 0
-        && Double.valueOf(countValue) % selectedGoods.getSaleRate() != 0.0) {
+    if (shouldApplySaleRate(countValue,currentUnit)) {
       errorMsg.setText(String.format(context.getString(R.string.error_sale_rate_not_correct),
           String.valueOf(selectedGoods.getSaleRate()), selectedGoods.getUnit1Title()));
       errorMsg.setVisibility(View.VISIBLE);
       return false;
     }
     return true;
+  }
+
+  private boolean shouldApplySaleRate(String countValue,int currentUnit) {
+    return saleRateEnabled
+        && currentUnit == 0
+        && (orderStatus == SaleOrderStatus.DRAFT.getId()
+        || orderStatus == SaleOrderStatus.READY_TO_SEND.getId())
+        && (Double.valueOf(countValue) % selectedGoods.getSaleRate() != 0.0);
   }
 
   @Override

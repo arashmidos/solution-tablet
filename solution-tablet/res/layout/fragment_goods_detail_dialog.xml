@@ -49,7 +49,7 @@
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:layout_gravity="bottom"
-      android:digits="1234567890.-۰۱۲۳۴۵۶۷۸۹"
+      android:digits="1234567890.۰۱۲۳۴۵۶۷۸۹"
       android:ems="10"
       android:inputType="numberDecimal" />
 
