@@ -286,8 +286,12 @@ public class OrderDetailFragment extends BaseFragment {
       String description = orderInfoFrg.getDescription();
       order.setDescription(description);
 
-      order
-          .setSalesmanId(Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
+      //Distributer should not enter his salesmanId.
+      if (!SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus)) {
+        order
+            .setSalesmanId(
+                Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
+      }
       long typeId = saleOrderService.saveOrder(order);
 
       VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, getDetailType(),

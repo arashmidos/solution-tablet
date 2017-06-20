@@ -127,6 +127,8 @@
   <string name="activity_type_caption">نوع فعالیت:</string>
   <string name="ownership_type_caption">نوع مالکیت:</string>
   <string name="message_transferring_visit_lines_data">در حال انتقال اطلاعات خطوط بازدید...</string>
+  <string name="message_exception_in_transferring_visit_lines_data">خطا در انتقال اطلاعات خطوط بازدید</string>
+  <string name="message_no_visit_lines_data">هیچ خط بازدیدی دریافت نشد</string>
   <string name="visitlines_data_transferred_successfully">اطلاعات خطوط بازدید با موفقیت دریافت شد.</string>
   <string name="visit_lines">خطوط بازدید</string>
   <string name="cusomters">مشتریان</string>
@@ -174,7 +176,7 @@
   <string name="message_exit">خروج از برنامه</string>
   <string name="message_do_you_want_to_exit">آیا می خواهید از برنامه خارج شوید؟</string>
   <string name="message_exception_in_transfering_sale_order_for_delivery">خطا در انتقال سفارشات قابل تحویل</string>
-  <string name="message_found_no_deliverable_orders">هیچ سفارش قابل تحویلی منتقل نشد.</string>
+  <string name="message_found_no_deliverable_orders">هیچ سفارش قابل تحویلی وجود ندارد.</string>
   <string name="message_transferring_deliverable_orders">در حال انتقال سفارشات قابل تحویل ...</string>
   <string name="message_deliverable_orders_transferred_successfully">سفارشات قابل تحویل با موفقیت منتقل شد.</string>
   <string name="common_irr_currency">ریال</string>

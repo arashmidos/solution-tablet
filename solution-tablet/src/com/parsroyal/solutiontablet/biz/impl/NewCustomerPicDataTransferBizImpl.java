@@ -57,7 +57,7 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
   }
 
   @Override
-  public void exchangeData() {
+  public boolean exchangeData() {
     boolean result = false;
     try {
       prepare();
@@ -115,13 +115,14 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
       Log.e(TAG, ex.getMessage(), ex);
       getObserver().publishResult(ex);
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data transfer", "Error in exchanging NewCustomerPicData " + e.getMessage());
+      Crashlytics.log(Log.ERROR, "Data transfer",
+          "Error in exchanging NewCustomerPicData " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       getObserver().publishResult(new UnknownSystemException(e));
     } finally {
       getObserver().finished(result);
     }
-
+    return result;
   }
 
   @Override

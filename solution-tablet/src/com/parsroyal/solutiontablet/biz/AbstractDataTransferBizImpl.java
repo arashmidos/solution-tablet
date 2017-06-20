@@ -69,7 +69,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
     goodsRequestId = keyValueDao.retrieveByKey(ApplicationKeys.GOODS_REQUEST_ID);
   }
 
-  public void exchangeData() {
+  public boolean exchangeData() {
     boolean result = false;
     try {
       prepare();
@@ -159,15 +159,16 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
         getObserver().finished(result);
       }
     }
+    return result;
   }
 
   protected String makeUrl(String serverAddress1, String method) {
     Log.i(TAG, "Trying to reach url with server addresses");
-    if (NetworkUtil.isURLReachable(context, serverAddress1)) {
+    if (/*NetworkUtil.isURLReachable(context, serverAddress1)*/true) {
       Log.i(TAG, "Server address 1 is available");
       return serverAddress1 + "/" + method;
     } else {
-      Log.i(TAG, "Both server addresses are not available");
+      Log.i(TAG, "Server addresses are not available");
       throw new BackendIsNotReachableException();
     }
   }

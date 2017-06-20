@@ -7,33 +7,34 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListFragment;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
-
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Arash on 03/06/2017
  */
 public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewHolder> {
+
   private final boolean readOnly;
+  private final boolean isRejectedGoods;
   private LayoutInflater mInflater;
   private List<Goods> goods;
   private GoodsListFragment context;
 
-  public GoodListAdapter(GoodsListFragment context, List<Goods> goods, boolean readOnly) {
+  public GoodListAdapter(GoodsListFragment context, List<Goods> goods, boolean readOnly,
+      boolean isRejectedGoods) {
     this.goods = goods;
     this.context = context;
     this.mInflater = LayoutInflater.from(context.getActivity());
     this.readOnly = readOnly;
+    this.isRejectedGoods = isRejectedGoods;
   }
 
   public void filter(List<Goods> goods) {
@@ -137,7 +138,7 @@ public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewH
     }
 
     public void setData(Goods good, int position) {
-      this.id = good.getId();
+      this.id = good.getBackendId();
       this.current = good;
       this.pos = position;
 
@@ -145,26 +146,30 @@ public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewH
       goodCodeTv.setText(good.getCode());
       Double goodsAmount = Double.valueOf(good.getPrice()) / 1000D;
       goodAmountTv.setText(NumberUtil.getCommaSeparated(goodsAmount) + " " +
-              context.getString(R.string.common_irr_currency));
+          context.getString(R.string.common_irr_currency));
 
       StringBuilder existingSb = new StringBuilder();
 
       Double unit1Existing = Double.valueOf(good.getExisting()) / 1000D;
       existingSb.append(NumberUtil.formatDoubleWith2DecimalPlaces(unit1Existing)).append(" ")
-              .append(Empty.isNotEmpty(good.getUnit1Title()) ? good.getUnit1Title() : "--");
+          .append(Empty.isNotEmpty(good.getUnit1Title()) ? good.getUnit1Title() : "--");
 
       Long unit1Count = good.getUnit1Count();
       if (Empty.isNotEmpty(unit1Count) && !unit1Count.equals(0L)) {
         Double unit2Existing = Double.valueOf(good.getExisting()) / Double.valueOf(unit1Count);
         unit2Existing = unit2Existing / 1000D;
         existingSb.append(" ").append(NumberUtil.formatDoubleWith2DecimalPlaces(unit2Existing))
-                .append(" ")
-                .append(Empty.isNotEmpty(good.getUnit2Title()) ? good.getUnit2Title() : "--");
+            .append(" ")
+            .append(Empty.isNotEmpty(good.getUnit2Title()) ? good.getUnit2Title() : "--");
       }
       unit1ExistingTv.setText(existingSb.toString());
 
-      if (Empty.isNotEmpty(good.getRecoveryDate())) {
-        recoveryDateTv.setText(good.getRecoveryDate());
+      if (isRejectedGoods) {
+        recoveryDateTv.setVisibility(View.GONE);
+      } else {
+        if (Empty.isNotEmpty(good.getRecoveryDate())) {
+          recoveryDateTv.setText(good.getRecoveryDate());
+        }
       }
     }
   }

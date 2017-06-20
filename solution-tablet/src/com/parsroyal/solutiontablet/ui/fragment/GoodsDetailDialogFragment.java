@@ -79,7 +79,6 @@ public class GoodsDetailDialogFragment extends DialogFragment {
     goodsBackendId = arguments.getLong(Constants.GOODS_BACKEND_ID);
     count = arguments.getDouble(Constants.COUNT);
     selectedUnit = arguments.getLong(Constants.SELECTED_UNIT);
-    saleRate = arguments.getLong(Constants.GOODS_SALE_RATE);
 
     goodsService = new GoodsServiceImpl(context);
     settingService = new SettingServiceImpl(context);
@@ -176,6 +175,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
   private boolean shouldApplySaleRate(String countValue,int currentUnit) {
     return saleRateEnabled
         && currentUnit == 0
+        //TODO: Fix prevent hot cold
         && (orderStatus == SaleOrderStatus.DRAFT.getId()
         || orderStatus == SaleOrderStatus.READY_TO_SEND.getId())
         && (Double.valueOf(countValue) % selectedGoods.getSaleRate() != 0.0);

@@ -185,7 +185,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   private void setupSidebar() {
     View.OnClickListener sideBarItemsOnClickListener = view ->
     {
-      if (isMenuEnabled) {
+      if (isMenuEnabled || BuildConfig.DEBUG) {
         int fragmentId = Integer.parseInt(view.getTag().toString());
         changeFragment(fragmentId, true);
       }
@@ -455,7 +455,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
     menuIv.setOnClickListener(v ->
     {
-      if (isMenuEnabled) {
+      if (isMenuEnabled || BuildConfig.DEBUG) {
         if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
           closeDrawer();
         } else {
