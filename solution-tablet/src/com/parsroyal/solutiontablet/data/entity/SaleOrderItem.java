@@ -23,6 +23,7 @@ public class SaleOrderItem extends BaseEntity<Long> {
   public static final String COL_SELECTED_UNIT = "SELECTED_UNIT";
   public static final String COL_BACKEND_ID = "BACKEND_ID";
   public static final String COL_INVOICE_BACKEND_ID = "INVOICE_BACKEND_ID";
+  public static final String COL_GOODS_COUNT_2 = "GOODS_COUNT_2";
 
   public static final String CREATE_TABLE_SCRIPT =
       "CREATE TABLE " + SaleOrderItem.TABLE_NAME + " (" +
@@ -36,7 +37,8 @@ public class SaleOrderItem extends BaseEntity<Long> {
           " " + SaleOrderItem.COL_BACKEND_ID + " INTEGER," +
           " " + SaleOrderItem.COL_CREATE_DATE_TIME + " TEXT," +
           " " + SaleOrderItem.COL_UPDATE_DATE_TIME + " TEXT," +
-          " " + SaleOrderItem.COL_INVOICE_BACKEND_ID + " INTEGER" +
+          " " + SaleOrderItem.COL_INVOICE_BACKEND_ID + " INTEGER," +
+          " " + SaleOrderItem.COL_GOODS_COUNT_2 + " INTEGER" +
           " );";
 
   private Long id;
@@ -52,51 +54,6 @@ public class SaleOrderItem extends BaseEntity<Long> {
   private Long invoiceBackendId;
   private Long rejectBackendId;
   private Long rejectItemBackendId;
-
-  public static String createString(SaleOrderItemDto saleOrderItemDto, Long status) {
-    StringBuilder stringBuilder = new StringBuilder();
-    boolean isRejected = status.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
-        status.equals(SaleOrderStatus.REJECTED.getId()) ||
-        status.equals(SaleOrderStatus.REJECTED_SENT.getId());
-    Goods goods = null;
-    if (!isRejected) {
-      goods = saleOrderItemDto.getGoods();
-    }
-
-    stringBuilder.append(saleOrderItemDto.getId());
-    stringBuilder.append("#");
-
-    if (isRejected) {
-      stringBuilder.append(saleOrderItemDto.getGoodsBackendId());
-    } else {
-      stringBuilder.append(goods.getBackendId());
-    }
-    stringBuilder.append("#");
-
-    stringBuilder.append(saleOrderItemDto.getGoodsCount());
-    stringBuilder.append("#");
-
-    stringBuilder.append(saleOrderItemDto.getAmount());
-    stringBuilder.append("#");
-    if (!isRejected) {
-      Long unit1Count = goods.getUnit1Count();
-      if (Empty.isNotEmpty(unit1Count) && unit1Count != 0) {
-        Double goodsUnit2Count = Double.valueOf(saleOrderItemDto.getGoodsCount()) / 1000D;
-        goodsUnit2Count = goodsUnit2Count / Double.valueOf(unit1Count);
-        goodsUnit2Count *= 1000D;
-        stringBuilder.append(goodsUnit2Count.longValue());
-      } else {
-        stringBuilder.append("NULL");
-      }
-    } else {
-      stringBuilder.append("NULL");
-    }
-    stringBuilder.append("#");
-
-    stringBuilder.append(saleOrderItemDto.getInvoiceBackendId()).append("#");
-
-    return stringBuilder.toString();
-  }
 
   public Long getId() {
     return id;

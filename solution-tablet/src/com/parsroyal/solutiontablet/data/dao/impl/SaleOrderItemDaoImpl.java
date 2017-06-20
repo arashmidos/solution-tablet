@@ -14,6 +14,7 @@ import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     contentValues.put(SaleOrderItem.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(SaleOrderItem.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
     contentValues.put(SaleOrderItem.COL_INVOICE_BACKEND_ID, entity.getInvoiceBackendId());
+    contentValues.put(SaleOrderItem.COL_GOODS_COUNT_2, entity.getGoodsUnit2Count());
     return contentValues;
   }
 
@@ -74,12 +76,13 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
         SaleOrderItem.COL_GOODS_COUNT,
         SaleOrderItem.COL_AMOUNT,
         SaleOrderItem.COL_SALE_ORDER_ID,
-        SaleOrderItem.COL_SALE_ORDER_BACKEND_ID,
+        SaleOrderItem.COL_SALE_ORDER_BACKEND_ID,//5
         SaleOrderItem.COL_SELECTED_UNIT,
         SaleOrderItem.COL_BACKEND_ID,
         SaleOrderItem.COL_CREATE_DATE_TIME,
         SaleOrderItem.COL_UPDATE_DATE_TIME,
-        SaleOrderItem.COL_INVOICE_BACKEND_ID
+        SaleOrderItem.COL_INVOICE_BACKEND_ID,//10
+        SaleOrderItem.COL_GOODS_COUNT_2
     };
     return projection;
   }
@@ -98,6 +101,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setCreateDateTime(cursor.getString(8));
     saleOrderItem.setUpdateDateTime(cursor.getString(9));
     saleOrderItem.setInvoiceBackendId(cursor.getLong(10));
+    saleOrderItem.setGoodsUnit2Count(cursor.getLong(11));
     return saleOrderItem;
   }
 
@@ -179,6 +183,8 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setCreateDateTime(cursor.getString(8));
     saleOrderItem.setUpdateDateTime(cursor.getString(9));
     saleOrderItem.setInvoiceBackendId(cursor.getLong(10));
+    saleOrderItem.setGoodsUnit2Count(cursor.getLong(11));
+
     return saleOrderItem;
   }
 
@@ -190,7 +196,12 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setCount1(count1);
     int selectedUnit = cursor.getInt(6);
     Goods goods = goodsService.getGoodsByBackendId(cursor.getLong(1));
-    long count2 = count1 / goods.getUnit1Count();
+    long count2;
+    if (Empty.isNotEmpty(goods)) {
+      count2 = count1 / goods.getUnit1Count();
+    }else{
+      count2 = cursor.getLong(11);
+    }
 
     saleOrderItem.setCount2(count2);
     saleOrderItem.setCompanyId(

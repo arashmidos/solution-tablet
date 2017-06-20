@@ -10,6 +10,7 @@ public class SaleOrderItemDto extends BaseModel {
   private Long id;
   private Long goodsBackendId;
   private Long goodsCount;
+  private Long goodsUnit2Count;
   private Long amount;
   private Long saleOrderId;
   private Long saleOrderBackendId;
@@ -114,5 +115,13 @@ public class SaleOrderItemDto extends BaseModel {
 
   public void setUpdateDateTime(String updateDateTime) {
     this.updateDateTime = updateDateTime;
+  }
+
+  public Long getGoodsUnit2Count() {
+    return goodsUnit2Count;
+  }
+
+  public void setGoodsUnit2Count(Long goodsUnit2Count) {
+    this.goodsUnit2Count = goodsUnit2Count;
   }
 }

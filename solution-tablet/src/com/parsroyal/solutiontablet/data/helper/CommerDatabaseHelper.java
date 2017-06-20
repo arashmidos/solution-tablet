@@ -77,7 +77,10 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
       db.execSQL(VisitInformationDetail.CREATE_TABLE_SQL);
     }
     if (oldVersion < 4) {
-      db.execSQL(String.format(SQL_ADD_COLUMN,Goods.TABLE_NAME,Goods.COL_SALE_RATE,"INTEGER"));
+      db.execSQL(String.format(SQL_ADD_COLUMN, Goods.TABLE_NAME, Goods.COL_SALE_RATE, "INTEGER"));
+      db.execSQL(String
+          .format(SQL_ADD_COLUMN, SaleOrderItem.TABLE_NAME, SaleOrderItem.COL_GOODS_COUNT_2,
+              "INTEGER"));
     }
   }
 }
