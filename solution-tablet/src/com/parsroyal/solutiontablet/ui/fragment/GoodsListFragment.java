@@ -167,6 +167,7 @@ public class GoodsListFragment extends BaseFragment {
         list.hideEmptyView();
         adapter.filter(goodsList);
       } else {
+        adapter.filter(null);
         list.showEmptyView();
       }
     }

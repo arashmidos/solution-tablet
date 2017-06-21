@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
@@ -44,7 +43,11 @@ public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewH
   }
 
   public void filter(List<Goods> goods) {
-    this.goods = goods;
+    if (Empty.isEmpty(goods)) {
+      this.goods.clear();
+    } else {
+      this.goods = goods;
+    }
     notifyDataSetChanged();
   }
 
