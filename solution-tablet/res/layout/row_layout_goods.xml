@@ -65,4 +65,11 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
     android:text="کالای مهم اول" />
+
+  <ImageView
+    android:layout_width="56dp"
+    style="@style/TextView.Cell.Value"
+    android:layout_height="56dp"
+    android:id="@+id/good_image"
+    android:src="@drawable/goods_default" />
 </LinearLayout>

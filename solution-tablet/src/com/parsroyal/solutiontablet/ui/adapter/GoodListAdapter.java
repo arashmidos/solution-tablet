@@ -1,19 +1,25 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
+import android.app.Dialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.bumptech.glide.Glide;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListFragment;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.List;
 
@@ -52,6 +58,10 @@ public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewH
   public void onBindViewHolder(MyViewHolder holder, int position) {
     Goods good = goods.get(position);
     holder.setData(good, position);
+    Glide.with(context)
+        .load(MediaUtil.getGoodImage(good.getBackendId()))
+        .error(R.drawable.goods_default)
+        .into(holder.imageView);
   }
 
   @Override
@@ -111,8 +121,10 @@ public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewH
     TextView goodNameTv;
     @BindView(R.id.goodsRowLayout)
     LinearLayout goodsRowLayout;
-
+    @BindView(R.id.good_image)
+    ImageView imageView;
     long id;
+
     Goods current;
     private int pos;
 
@@ -122,6 +134,7 @@ public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewH
       if (!readOnly) {
         view.setOnClickListener(this);
       }
+      imageView.setOnClickListener(this);
     }
 
     /**
@@ -132,6 +145,17 @@ public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewH
     @Override
     public void onClick(View v) {
       switch (v.getId()) {
+        case R.id.good_image:
+          Dialog settingsDialog = new Dialog(context.getActivity());
+          settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+          View view = context.getActivity().getLayoutInflater()
+              .inflate(R.layout.image_fullscreen_layout, null);
+          Glide.with(context)
+              .load(MediaUtil.getGoodImage(current.getBackendId()))
+              .into((ImageView) view.findViewById(R.id.good_image));
+          settingsDialog.setContentView(view);
+          settingsDialog.show();
+          break;
         default:
           context.handleOnGoodsItemClickListener(current);
       }

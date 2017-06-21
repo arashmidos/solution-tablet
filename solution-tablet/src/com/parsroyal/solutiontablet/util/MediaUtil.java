@@ -175,13 +175,22 @@ public class MediaUtil {
     File image = new File(GOODS_IMAGES_FOLDER + backendId + ".png");
     if (image.exists()) {
       return image.getAbsolutePath();
-    }else{
+    } else {
       image = new File(GOODS_IMAGES_FOLDER + backendId + ".jpg");
       if (image.exists()) {
         return image.getAbsolutePath();
-      }else{
+      } else {
         return null;
       }
+    }
+  }
+
+  public static void clearGoodsFolder() {
+    File dir = new File(GOODS_IMAGES_FOLDER);
+
+    String[] files = dir.list();
+    for (String file : files) {
+      new File(dir, file).delete();
     }
   }
 }
