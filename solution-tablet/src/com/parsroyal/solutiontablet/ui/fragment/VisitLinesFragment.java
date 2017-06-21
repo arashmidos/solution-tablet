@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
@@ -48,14 +49,11 @@ public class VisitLinesFragment extends BaseListFragment<VisitLineListModel, Vis
 
   @Override
   protected AdapterView.OnItemClickListener getOnItemClickListener() {
-    return new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        VisitLineListModel visitLine = dataModel.get(position);
-        Bundle bundle = new Bundle();
-        bundle.putLong("visitLineBackendId", visitLine.getPrimaryKey());
-        context.changeFragment(MainActivity.CUSTOMERS_FRAGMENT_ID, bundle, true);
-      }
+    return (parent, view, position, id) -> {
+      VisitLineListModel visitLine = dataModel.get(position);
+      Bundle bundle = new Bundle();
+      bundle.putLong(Constants.VISITLINE_BACKEND_ID, visitLine.getPrimaryKey());
+      context.changeFragment(MainActivity.CUSTOMERS_FRAGMENT_ID, bundle, true);
     };
   }
 

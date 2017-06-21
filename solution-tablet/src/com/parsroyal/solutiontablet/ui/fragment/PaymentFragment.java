@@ -61,6 +61,17 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
     return view;
   }
 
+  @Override
+  public void onResume() {
+    super.onResume();
+    if (Empty.isNotEmpty(customer)) {
+      paymentSO = new PaymentSO(customer.getBackendId(), SendStatus.NEW.getId());
+    } else {
+      paymentSO = new PaymentSO(SendStatus.NEW.getId());
+    }
+    updateList();
+  }
+
   private void initFab() {
     fab.setVisibility(View.VISIBLE);
     if (customer == null) {
@@ -123,7 +134,8 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
   protected AdapterView.OnItemClickListener getOnItemClickListener() {
     return (parent, view, position, id) ->
     {
-      PaymentListModel listModel = dataModel.get(position);
+      searchTxt.setText("");
+      PaymentListModel listModel = (PaymentListModel) adapter.getItem(position);
       Bundle bundle = new Bundle();
       bundle.putLong(Constants.CUSTOMER_BACKEND_ID, listModel.getCustomerBackendId());
       bundle.putLong(Constants.PAYMENT_ID, listModel.getPrimaryKey());

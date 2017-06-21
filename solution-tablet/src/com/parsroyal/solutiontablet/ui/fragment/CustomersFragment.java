@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SortType;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.service.CustomerService;
@@ -144,7 +145,7 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
 
   @Override
   protected List<CustomerListModel> getDataModel() {
-    visitLineId = getArguments().getLong("visitLineBackendId");
+    visitLineId = getArguments().getLong(Constants.VISITLINE_BACKEND_ID);
     return customerService.getAllCustomersListModelByVisitLineBackendId(visitLineId);
   }
 
