@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,7 @@ import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
-import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
-import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.DataTransferService;
@@ -27,7 +26,6 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
 /**
  * Created by Mahyar on 6/15/2015.
@@ -93,6 +91,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     getDataBtn.setEnabled(status);
     sendDataBtn.setClickable(status);
     sendDataBtn.setEnabled(status);
+    mainActivity.setMenuEnabled(status);
   }
 
   private void invokeGetData() {
@@ -160,5 +159,27 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
         invokeSendData();
         break;
     }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+
+    if (getView() == null) {
+      return;
+    }
+
+    getView().setFocusableInTouchMode(true);
+    getView().requestFocus();
+    getView().setOnKeyListener((v, keyCode, event) ->
+    {
+      if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+        if (mainActivity.isMenuEnabled()) {
+          mainActivity.onBackPressed();
+        }
+        return true;
+      }
+      return false;
+    });
   }
 }
