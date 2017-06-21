@@ -32,6 +32,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
@@ -174,41 +175,48 @@ public class GoodsDetailDialogFragment extends DialogFragment {
     this.getDialog().setTitle(context.getString(R.string.message_please_enter_count));
 
     fillLeftPanel();
-
+    Glide.with(this)
+        .load(MediaUtil.getGoodImage(selectedGoods.getBackendId()))
+        .error(R.drawable.no_image)
+        .into(goodsImage);
     return view;
   }
 
   private void fillLeftPanel() {
-    try {
-      Double count1 = Double.valueOf(NumberUtil.digitsToEnglish(countTxt.getText().toString()));
-      if (Empty.isNotEmpty(count1) && !count1.equals(0D)) {
-        int selectedUnit1 = goodUnitsSp.getSelectedItemPosition();
-        if (selectedUnit1 == 1) {
-          goodsUnitTitle2.setText(String.format(Locale.US, "%d %s", count1.intValue(), unit2Title));
-          count1 *= Double.valueOf(unit1Count);
-        } else {
-          goodsUnitTitle2.setText(
-              String.format(Locale.US, "%d %s", (count1.longValue() / unit1Count), unit2Title));
-        }
-        long total = (long) (count1 * selectedGoods.getPrice() / 1000);
-        totalAmount.setText(String.format(Locale.US, "%,d %s", total, getString(
-            R.string.common_irr_currency)));
-        if (hasSaleRate(selectedUnit1)) {
-          saleRateCount.setText(String.format(Locale.US, "%d %s", saleRate, unit1Title));
+    String input = countTxt.getText().toString();
+    if (Empty.isNotEmpty(input)) {
+      try {
+        Double count1 = Double.valueOf(NumberUtil.digitsToEnglish(input));
+        if (Empty.isNotEmpty(count1) && !count1.equals(0D)) {
+          int selectedUnit1 = goodUnitsSp.getSelectedItemPosition();
+          if (selectedUnit1 == 1) {
+            goodsUnitTitle2
+                .setText(String.format(Locale.US, "%d %s", count1.intValue(), unit2Title));
+            count1 *= Double.valueOf(unit1Count);
+          } else {
+            goodsUnitTitle2.setText(
+                String.format(Locale.US, "%d %s", (count1.longValue() / unit1Count), unit2Title));
+          }
+          long total = (long) (count1 * selectedGoods.getPrice() / 1000);
+          totalAmount.setText(String.format(Locale.US, "%,d %s", total, getString(
+              R.string.common_irr_currency)));
+          if (hasSaleRate(selectedUnit1)) {
+            saleRateCount.setText(String.format(Locale.US, "%d %s", saleRate, unit1Title));
+          } else {
+            saleRateCount.setText("--");
+          }
         } else {
           saleRateCount.setText("--");
+          totalAmount.setText("0");
+          goodsUnitTitle2.setText("");
         }
-      } else {
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        Crashlytics.log(Log.ERROR, "GoodDetails Left Panel", ex.getMessage());
         saleRateCount.setText("--");
         totalAmount.setText("0");
         goodsUnitTitle2.setText("");
       }
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      Crashlytics.log(Log.ERROR, "GoodDetails Left Panel", ex.getMessage());
-      saleRateCount.setText("--");
-      totalAmount.setText("0");
-      goodsUnitTitle2.setText("");
     }
   }
 

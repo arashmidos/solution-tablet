@@ -4,7 +4,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import com.crashlytics.android.Crashlytics;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -12,8 +14,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -25,6 +29,8 @@ public class MediaUtil {
   public static final int MEDIA_TYPE_VIDEO = 2;
   public static final int MEDIA_TYPE_ZIP = 3;
   private static final int BUFFER_SIZE = 512;
+  public static final String GOODS_IMAGES_FOLDER = SolutionTabletApplication.getInstance()
+      .getCacheDir().getAbsolutePath() + "/goods/";
 
   public static Uri getOutputMediaFileUri(int type, String directoryName, String fileName) {
     return Uri.fromFile(getOutputMediaFile(type, directoryName, fileName));
@@ -124,5 +130,58 @@ public class MediaUtil {
       }
     }
     return zip;
+  }
+
+  public static boolean unpackZip(String path, MainActivity context) {
+    File root = new File(path);
+    if (!root.exists()) {
+      root.mkdir();
+    }
+    InputStream inputStream;
+    ZipInputStream zipInputStream;
+    try {
+      String filename;
+      inputStream = context.getAssets().open("zippy.zip");
+      zipInputStream = new ZipInputStream(new BufferedInputStream(inputStream));
+      ZipEntry zipEntry;
+      byte[] buffer = new byte[1024];
+      int count;
+
+      while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+
+        filename = zipEntry.getName();
+
+        FileOutputStream fout = new FileOutputStream(path + "/" + filename);
+
+        // cteni zipu a zapis
+        while ((count = zipInputStream.read(buffer)) != -1) {
+          fout.write(buffer, 0, count);
+        }
+
+        fout.close();
+        zipInputStream.closeEntry();
+      }
+
+      zipInputStream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
+    }
+
+    return true;
+  }
+
+  public static String getGoodImage(Long backendId) {
+    File image = new File(GOODS_IMAGES_FOLDER + backendId + ".png");
+    if (image.exists()) {
+      return image.getAbsolutePath();
+    }else{
+      image = new File(GOODS_IMAGES_FOLDER + backendId + ".jpg");
+      if (image.exists()) {
+        return image.getAbsolutePath();
+      }else{
+        return null;
+      }
+    }
   }
 }
