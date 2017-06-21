@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.util;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.constants.Constants;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -118,7 +119,8 @@ public class MediaUtil {
       try {
         out.close();
       } catch (IOException e) {
-
+        e.printStackTrace();
+        Crashlytics.log(Log.ERROR, "Zip images", e.getMessage());
       }
     }
     return zip;
