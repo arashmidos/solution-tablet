@@ -206,18 +206,22 @@ public class GoodsDetailDialogFragment extends DialogFragment {
             saleRateCount.setText("--");
           }
         } else {
-          saleRateCount.setText("--");
-          totalAmount.setText("0");
-          goodsUnitTitle2.setText("");
+          clearLeftPanel();
         }
       } catch (Exception ex) {
         ex.printStackTrace();
         Crashlytics.log(Log.ERROR, "GoodDetails Left Panel", ex.getMessage());
-        saleRateCount.setText("--");
-        totalAmount.setText("0");
-        goodsUnitTitle2.setText("");
+        clearLeftPanel();
       }
+    } else {
+      clearLeftPanel();
     }
+  }
+
+  private void clearLeftPanel() {
+    saleRateCount.setText("--");
+    totalAmount.setText("0");
+    goodsUnitTitle2.setText("");
   }
 
   private Goods getGoodFromLocal() {
