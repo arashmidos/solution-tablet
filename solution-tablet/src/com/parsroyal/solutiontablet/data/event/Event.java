@@ -7,6 +7,14 @@ public class Event implements Serializable {
   protected String message;
   protected int statusCode;
 
+  public Event(int statusCode, String message) {
+    this.statusCode = statusCode;
+    this.message = message;
+  }
+
+  public Event() {
+  }
+
   public int getStatusCode() {
     return statusCode;
   }

@@ -7,6 +7,7 @@ public class ErrorEvent extends Event {
     this.statusCode = statusCode;
   }
 
-  public ErrorEvent() {
+  public ErrorEvent(int statusCode) {
+    this.statusCode = statusCode;
   }
 }

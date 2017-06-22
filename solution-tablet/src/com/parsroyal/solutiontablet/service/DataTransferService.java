@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.service;
 
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
+import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 
 /**
@@ -18,4 +19,5 @@ public interface DataTransferService {
 
   void clearData(int updateType);
 
+  void getGoodsImages(ResultObserver observer);
 }

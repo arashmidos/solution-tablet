@@ -62,7 +62,7 @@ public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewH
     Goods good = goods.get(position);
     holder.setData(good, position);
     Glide.with(context)
-        .load(MediaUtil.getGoodImage(good.getBackendId()))
+        .load(MediaUtil.getGoodImage(good.getCode()))
         .error(R.drawable.goods_default)
         .into(holder.imageView);
   }
@@ -154,7 +154,7 @@ public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewH
           View view = context.getActivity().getLayoutInflater()
               .inflate(R.layout.image_fullscreen_layout, null);
           Glide.with(context)
-              .load(MediaUtil.getGoodImage(current.getBackendId()))
+              .load(MediaUtil.getGoodImage(current.getCode()))
               .into((ImageView) view.findViewById(R.id.good_image));
           settingsDialog.setContentView(view);
           settingsDialog.show();

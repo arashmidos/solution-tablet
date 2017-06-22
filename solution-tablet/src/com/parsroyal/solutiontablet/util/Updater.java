@@ -11,10 +11,21 @@ import android.util.Log;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.data.response.UpdateResponse;
+import com.parsroyal.solutiontablet.exception.BackendIsNotReachableException;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
+import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.UpdaterService;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import okhttp3.ResponseBody;
+import org.apache.commons.io.IOUtils;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,6 +39,7 @@ public class Updater {
   private static DownloadManager downloadManager;
   private static long downloadReference;
   private static BroadcastReceiver receiverDownloadComplete;
+  private static SettingService settingService;
 
   public static void checkAppUpdate(final Context context) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
@@ -53,6 +65,53 @@ public class Updater {
       @Override
       public void onFailure(Call<UpdateResponse> call, Throwable t) {
         Log.d("Updater", "Update failed");
+      }
+    });
+  }
+
+  public static void downloadGoodsImages(final Context context) {
+    if (!NetworkUtil.isNetworkAvailable(context)) {
+      throw new BackendIsNotReachableException();
+    }
+
+    settingService = new SettingServiceImpl(context);
+
+    UpdaterService updaterService = ServiceGenerator.createService(UpdaterService.class,
+        settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME),
+        settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD));
+
+    Call<ResponseBody> call = updaterService.downloadGoodsImages(String.format("%s/%s",
+        settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1), "/goods/images"));
+    call.enqueue(new Callback<ResponseBody>() {
+      @Override
+      public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+        if (response.isSuccessful()) {
+          if (response.body() != null) {
+
+            InputStream in = response.body().byteStream();
+            File path = context.getCacheDir();
+            File file = new File(path, "images.zip");
+            try {
+              FileOutputStream fileOutputStream = new FileOutputStream(file);
+              IOUtils.write(response.body().bytes(), fileOutputStream);
+              MediaUtil.unpackZip(file);
+              EventBus.getDefault().post(new Event(200, "Good images downloaded successfully"));
+
+            } catch (java.io.IOException e) {
+              e.printStackTrace();
+            }
+
+          } else {
+            EventBus.getDefault().post(new ErrorEvent(1006));
+          }
+        } else {
+          EventBus.getDefault().post(new ErrorEvent(1007));
+        }
+      }
+
+      @Override
+      public void onFailure(Call<ResponseBody> call, Throwable t) {
+        EventBus.getDefault().post(new ErrorEvent(1001));
       }
     });
   }

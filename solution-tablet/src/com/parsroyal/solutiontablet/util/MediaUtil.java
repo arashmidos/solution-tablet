@@ -6,7 +6,6 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.ui.MainActivity;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -14,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -132,17 +130,16 @@ public class MediaUtil {
     return zip;
   }
 
-  public static boolean unpackZip(String path, MainActivity context) {
-    File root = new File(path);
+  public static boolean unpackZip(File file) {
+    File root = new File(GOODS_IMAGES_FOLDER);
     if (!root.exists()) {
       root.mkdir();
     }
-    InputStream inputStream;
+
     ZipInputStream zipInputStream;
     try {
       String filename;
-      inputStream = context.getAssets().open("zippy.zip");
-      zipInputStream = new ZipInputStream(new BufferedInputStream(inputStream));
+      zipInputStream = new ZipInputStream(new FileInputStream(file));
       ZipEntry zipEntry;
       byte[] buffer = new byte[1024];
       int count;
@@ -151,9 +148,8 @@ public class MediaUtil {
 
         filename = zipEntry.getName();
 
-        FileOutputStream fout = new FileOutputStream(path + "/" + filename);
+        FileOutputStream fout = new FileOutputStream(GOODS_IMAGES_FOLDER + "/" + filename);
 
-        // cteni zipu a zapis
         while ((count = zipInputStream.read(buffer)) != -1) {
           fout.write(buffer, 0, count);
         }
@@ -171,12 +167,12 @@ public class MediaUtil {
     return true;
   }
 
-  public static String getGoodImage(Long backendId) {
-    File image = new File(GOODS_IMAGES_FOLDER + backendId + ".png");
+  public static String getGoodImage(String goodsCode) {
+    File image = new File(GOODS_IMAGES_FOLDER + goodsCode + ".png");
     if (image.exists()) {
       return image.getAbsolutePath();
     } else {
-      image = new File(GOODS_IMAGES_FOLDER + backendId + ".jpg");
+      image = new File(GOODS_IMAGES_FOLDER + goodsCode + ".jpg");
       if (image.exists()) {
         return image.getAbsolutePath();
       } else {
@@ -187,10 +183,11 @@ public class MediaUtil {
 
   public static void clearGoodsFolder() {
     File dir = new File(GOODS_IMAGES_FOLDER);
-
-    String[] files = dir.list();
-    for (String file : files) {
-      new File(dir, file).delete();
+    if (dir.exists()) {
+      String[] files = dir.list();
+      for (String file : files) {
+        new File(dir, file).delete();
+      }
     }
   }
 }

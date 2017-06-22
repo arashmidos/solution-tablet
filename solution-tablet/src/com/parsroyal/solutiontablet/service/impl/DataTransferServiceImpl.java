@@ -52,6 +52,8 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MediaUtil;
+import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.File;
 import java.util.List;
@@ -118,7 +120,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
     clearData(Constants.FULL_UPDATE);
 
-    final ResultObserver resultObserver = prepareResultObserverForGetAllData(uiObserver);
+    final ResultObserver resultObserver = prepareResultObserverForDataTransfer(uiObserver);
 
     if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER)) {
       new GoodsRequestDataTransferBizImpl(context, resultObserver).exchangeData();
@@ -141,6 +143,35 @@ public class DataTransferServiceImpl implements DataTransferService {
 
     uiObserver.finished(true);
   }
+
+  public void getGoodsImages(final ResultObserver uiObserver) {
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
+    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
+    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
+    saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
+
+    if (Empty.isEmpty(serverAddress1)) {
+      throw new InvalidServerAddressException();
+    }
+
+    if (Empty.isEmpty(username)) {
+      throw new UsernameNotProvidedForConnectingToServerException();
+    }
+
+    if (Empty.isEmpty(password)) {
+      throw new PasswordNotProvidedForConnectingToServerException();
+    }
+
+    if (Empty.isEmpty(salesmanId)) {
+      throw new SalesmanIdNotProvidedForConnectingToServerException();
+    }
+
+    MediaUtil.clearGoodsFolder();
+
+    Updater.downloadGoodsImages(context);
+  }
+
 
   private void getAllProvinces(ResultObserver observer) {
     boolean success = false;
@@ -233,7 +264,7 @@ public class DataTransferServiceImpl implements DataTransferService {
       throw new PasswordNotProvidedForConnectingToServerException();
     }
 
-    final ResultObserver resultObserver = prepareResultObserverForGetAllData(uiObserver);
+    final ResultObserver resultObserver = prepareResultObserverForDataTransfer(uiObserver);
 
     sendAllNewCustomers(resultObserver);
     sendAllCustomerPics(resultObserver);
@@ -467,7 +498,7 @@ public class DataTransferServiceImpl implements DataTransferService {
       throw new SalesmanIdNotProvidedForConnectingToServerException();
     }
 
-    final ResultObserver resultObserver = prepareResultObserverForGetAllData(uiObserver);
+    final ResultObserver resultObserver = prepareResultObserverForDataTransfer(uiObserver);
 
     return getAllRejectedGoods(resultObserver, customerId);
   }
@@ -477,7 +508,7 @@ public class DataTransferServiceImpl implements DataTransferService {
         .getAllRejectedData(serverAddress1, username, password, salesmanId, customerId);
   }
 
-  private ResultObserver prepareResultObserverForGetAllData(final ResultObserver uiObserver) {
+  private ResultObserver prepareResultObserverForDataTransfer(final ResultObserver uiObserver) {
     ResultObserver resultObserver = new ResultObserver() {
       @Override
       public void publishResult(BusinessException ex) {

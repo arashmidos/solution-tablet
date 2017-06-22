@@ -30,7 +30,7 @@
   <string name="error_stock_serial_is_not_valid">مقدار سریال انبار صحیح نیست</string>
   <string name="error_unknown_system_exception">خطای سیستمی ناشناس</string>
   <string name="message_setting_saved_successfully">اطلاعات تنظیمات با موفقیت ذخیره شد</string>
-  <string name="message_connecting_to_server_please_wait">در حال اتصال به سرور، لطفا صبر کنید...</string>
+  <string name="message_connecting_to_server_please_wait">در حال اتصال به سرور، لطفا صبر کنید…</string>
   <string name="message_please_wait">لطفا صبر کنید</string>
 
   <string name="com.parsroyal.solutiontablet.exception.InvalidServerAddressException">مقدار آدرس سرور معتبر نمی باشد</string>
@@ -55,12 +55,14 @@
 
   <string name="send_data">ارسال اطلاعات</string>
   <string name="get_data">دریافت اطلاعات</string>
-  <string name="message_downloading_data_please_wait">درحال دریافت اطلاعات...</string>
+  <string name="message_downloading_data_please_wait">درحال دریافت اطلاعات…</string>
   <string name="data_transfer">انتقال اطلاعات</string>
-  <string name="message_transferring_provinces_data">در حال انتقال اطلاعات استان ها...</string>
+  <string name="message_transferring_provinces_data">در حال انتقال اطلاعات استان ها…</string>
+  <string name="message_transferring_goods_images_data">در حال دریافت عکس کالاها…</string>
   <string name="provinces_data_transferred_successfully">اطلاعات استان ها با موفقیت دریافت شد.</string>
+  <string name="goods_images_data_transferred_successfully">عکس کالاها با موفقیت دریافت شد.</string>
   <string name="cities_data_transferred_successfully">اطلاعات شهر ها با موفقیت دریافت شد.</string>
-  <string name="message_transferring_cities_data">در حال انتقال اطلاعات شهر ها...</string>
+  <string name="message_transferring_cities_data">در حال انتقال اطلاعات شهر ها…</string>
   <string name="message_cities_information_not_found">اطلاعات شهرها یافت نشد. لطفا از قسمت تبادل اطلاعات، اطلاعات لازم
         را دریافت نمایید.
     </string>
@@ -105,10 +107,10 @@
   <string name="new_customers_data_transferred_successfully">اطلاعات مشتریان جدید با موفقیت ارسال شد</string>
   <string name="updated_customers_data_transferred_successfully">موقعیت مکانی جدید مشتریان با موفقیت ارسال شد</string>
   <string name="payments_data_transferred_successfully">ارسال موفق: %1$s - ارسال ناموفق:%2$s</string>
-  <string name="sending_new_customers_data">در حال ارسال اطلاعات مشتریان جدید ...</string>
-  <string name="sending_updated_customers_data">در حال ارسال مکان مشتریان ...</string>
-  <string name="sending_payments_data">در حال ارسال وجوه دریافتی ...</string>
-  <string name="sending_positions_data">در حال ارسال اطلاعات موقعیت یاب ...</string>
+  <string name="sending_new_customers_data">در حال ارسال اطلاعات مشتریان جدید …</string>
+  <string name="sending_updated_customers_data">در حال ارسال مکان مشتریان …</string>
+  <string name="sending_payments_data">در حال ارسال وجوه دریافتی …</string>
+  <string name="sending_positions_data">در حال ارسال اطلاعات موقعیت یاب …</string>
   <string name="message_no_new_customer_found">هیچ مشتری جدیدی یافت نشد.</string>
   <string name="message_found_no_new_customer_for_send">هیچ مشتری جدیدی برای ارسال یافت نشد.</string>
   <string name="message_found_no_updated_customer_for_send">هیچ آدرس جدیدی برای ارسال یافت نشد.</string>
@@ -126,7 +128,7 @@
   <string name="city_caption">شهر:</string>
   <string name="activity_type_caption">نوع فعالیت:</string>
   <string name="ownership_type_caption">نوع مالکیت:</string>
-  <string name="message_transferring_visit_lines_data">در حال انتقال اطلاعات خطوط بازدید...</string>
+  <string name="message_transferring_visit_lines_data">در حال انتقال اطلاعات خطوط بازدید…</string>
   <string name="message_exception_in_transferring_visit_lines_data">خطا در انتقال اطلاعات خطوط بازدید</string>
   <string name="message_no_visit_lines_data">هیچ خط بازدیدی دریافت نشد</string>
   <string name="visitlines_data_transferred_successfully">اطلاعات خطوط بازدید با موفقیت دریافت شد.</string>
@@ -138,19 +140,19 @@
   <string name="message_no_goods_group_transferred">هیچ گروه کالایی دریافت نشد.</string>
   <string name="message_exception_in_transferring_goods_groups">خطا در انتقال اطلاعات گروه های کالا</string>
   <string name="message_goods_groups_transferred_successfully">اطلاعات گروه های کالا با موفقیت منتقل شد</string>
-  <string name="message_transferring_goods_group_data">در حال انتقال اطلاعات گروه های کالا ...</string>
+  <string name="message_transferring_goods_group_data">در حال انتقال اطلاعات گروه های کالا …</string>
   <string name="message_no_goods_transferred">هیچ کالایی دریافت نشد.</string>
   <string name="message_exception_in_transferring_goods">خطا در انتقال اطلاعات کالاها</string>
   <string name="message_goods_transferred_successfully">اطلاعات کالاها با موفقیت منتقل شد.</string>
-  <string name="message_transferring_goods_data">در حال انتقال اطلاعات کالاها ...</string>
-  <string name="message_transferring_rejected_goods_data">در حال انتقال اطلاعات کالاهای مرجوعی ...</string>
-  <string name="message_transferring_kpi_data">در حال انتقال اطلاعات عملکرد ...</string>
+  <string name="message_transferring_goods_data">در حال انتقال اطلاعات کالاها …</string>
+  <string name="message_transferring_rejected_goods_data">در حال انتقال اطلاعات کالاهای مرجوعی …</string>
+  <string name="message_transferring_kpi_data">در حال انتقال اطلاعات عملکرد …</string>
   <string name="message_found_no_visit_information_for_send">هیچ اطلاعات بازدیدی برای ارسال یافت نشد.</string>
   <string name="visit_information_data_transferred_successfully">اطلاعات بازدید ها با موفقیت ارسال شد.</string>
   <string name="message_exception_in_sending_visit_information">خطا در ارسال اطلاعات بازدید.</string>
-  <string name="sending_visit_information_data">در حال انتقال اطلاعات بازدید ها...</string>
+  <string name="sending_visit_information_data">در حال انتقال اطلاعات بازدید ها…</string>
   <string name="message_found_no_answer_for_send">هیچ پاسخ پرسشنامه ای برای ارسال یافت نشد.</string>
-  <string name="sending_answers_information_data">در حال ارسال پاسخ پرسشنامه ها...</string>
+  <string name="sending_answers_information_data">در حال ارسال پاسخ پرسشنامه ها…</string>
   <string name="answers_data_transferred_successfully">اطلاعات پاسخ پرسشنامه ها با موفقیت منتقل شد.</string>
   <string name="message_exception_in_sending_answers">خطا در ارسال پاسخ پرسشنامه ها</string>
   <string name="text_about_us">شرکت پارس رویال از سال 1373 شروع به فعالیت نمود، این شرکت در سال 1386 با سرمایه
@@ -172,12 +174,12 @@
     </string>
   <string name="message_deliverable_goods_transferred_successfully">اطلاعات کالاهای قابل تحویل با موفقیت منتقل شد.</string>
   <string name="message_exception_in_transferring_deliverable_goods">خطا در انتقال کالاهای قابل تحویل</string>
-  <string name="message_transferring_deliverable_goods_data">در حال انتقال کالاهای قابل تحویل ...</string>
+  <string name="message_transferring_deliverable_goods_data">در حال انتقال کالاهای قابل تحویل …</string>
   <string name="message_exit">خروج از برنامه</string>
   <string name="message_do_you_want_to_exit">آیا می خواهید از برنامه خارج شوید؟</string>
   <string name="message_exception_in_transfering_sale_order_for_delivery">خطا در انتقال سفارشات قابل تحویل</string>
   <string name="message_found_no_deliverable_orders">هیچ سفارش قابل تحویلی وجود ندارد.</string>
-  <string name="message_transferring_deliverable_orders">در حال انتقال سفارشات قابل تحویل ...</string>
+  <string name="message_transferring_deliverable_orders">در حال انتقال سفارشات قابل تحویل …</string>
   <string name="message_deliverable_orders_transferred_successfully">سفارشات قابل تحویل با موفقیت منتقل شد.</string>
   <string name="common_irr_currency">ریال</string>
 
@@ -218,7 +220,7 @@
   <string name="message_no_invoice_found">هیچ فاکتوری برای ارسال یافت نشد.</string>
   <string name="invoices_data_transferred_successfully">اطلاعات فاکتور ها با موفقیت منتقل شد.</string>
   <string name="message_exception_in_sending_invoices">خطا در ارسال فاکتور ها</string>
-  <string name="message_transferring_invoices">در حال انتقال اطلاعات فاکتور ها ...</string>
+  <string name="message_transferring_invoices">در حال انتقال اطلاعات فاکتور ها …</string>
   <string name="message_cannot_create_order_right_now">در حال حاضر امکان سفارش گیری وجود ندارد</string>
   <string name="message_cannot_create_factor_right_now">در حال حاضر امکان ثبت فاکتور وجود ندارد</string>
   <string name="message_cannot_create_rejected_right_now">در حال حاضر امکان ارجاع کالا وجود ندارد</string>
@@ -233,8 +235,8 @@
   <string name="returned_orders_data_transferred_successfully">سند مرجوعی با موفقیت ارسال گردید.</string>
   <string name="message_exception_in_sending_orders">خطا در ارسال سفارش ها</string>
   <string name="message_exception_in_sending_returned_orders">خطا در ارسال سند مرجوعی</string>
-  <string name="message_transferring_orders">در حال انتقال اطلاعات سفارش ها ...</string>
-  <string name="message_transferring_returned_orders">در حال انتقال سند مرجوعی ...</string>
+  <string name="message_transferring_orders">در حال انتقال اطلاعات سفارش ها …</string>
+  <string name="message_transferring_returned_orders">در حال انتقال سند مرجوعی …</string>
   <string name="message_picutre_saved_successfully">تصویر گرفته شده با موفقیت ذخیره گردید.</string>
   <string name="button_ok">تایید</string>
   <string name="button_cancel">انصراف</string>
@@ -263,7 +265,7 @@
   <string name="error_invalid_login">نام کاربری و یا رمز عبور اشتباه است</string>
   <string name="login_to_setting">ورود به تنظیمات</string>
   <string name="message_please_wait_finding_your_location">لطفا صبر کنید. در حال دریافت موقعیت جغرافیایی</string>
-  <string name="message_loading_map">در حال بارگزاری نقشه...</string>
+  <string name="message_loading_map">در حال بارگزاری نقشه…</string>
   <string name="visit_location">موقعیت جغرافیایی بازدید</string>
   <string name="visit_empty_location_message">برای این بازدید هیچ موقعیت جغرافیایی ثبت نشده است. می توانید
         مجددا برای یافتن موقعیت جغرافیایی تلاش کنید. </string>
@@ -273,7 +275,7 @@
   <string name="finish_visit">اتمام بازدید</string>
   <string name="visit_found_no_location">هیچ موقعیتی یافت نشد</string>
 
-  <string name="sending_new_customers_pic_data">در حال ارسال عکس های جدید ...</string>
+  <string name="sending_new_customers_pic_data">در حال ارسال عکس های جدید …</string>
   <string name="message_found_no_new_customer_pic_for_send">هیچ عکس جدیدی برای ارسال یافت نشد.</string>
   <string name="new_customers_pic_transferred_successfully">عکس های جدید مشتریان با موفقیت ارسال شد</string>
   <string name="error_new_customers_pic_transfer">خطا در ارسال عکس. لطفاً مجددا امتحان کنید</string>
@@ -336,9 +338,9 @@
   <string name="stock_code">کد انبار</string>
   <string name="message_postal_code_is_not_valid">کد پستی وارد شده صحیح نیست</string>
   <string name="new_version">نسخه جدید</string>
-  <string name="updating_app">در حال بروز رسانی نرم افزار...</string>
+  <string name="updating_app">در حال بروز رسانی نرم افزار…</string>
   <string name="err_update_failed">خطا در بروز رسانی برنامه</string>
-  <string name="search_hint">جستجو...</string>
+  <string name="search_hint">جستجو…</string>
   <string name="message_error_wants_denied">امکان ثبت عدم برای این ویزیت وجود ندارد</string>
   <string name="message_error_no_visit_detail_found">هیچ فعالیتی برای این ویزیت ثبت نشده است. آیا میخواهید عدم ثبت کنید؟</string>
   <string name="data_transfered_result">ارسال موفق: %1$s - ارسال ناموفق:%2$s</string>
@@ -368,6 +370,8 @@
   <string name="reject_type">نوع مرجوعی</string>
   <string name="error_sale_rate_not_correct">ضریب فروش این کالا باید %1$s %2$s‌ باشد</string>
   <string name="enable_sale_rate">فروش بر اساس ضریب کالا فعال باشد</string>
+  <string name="get_catalog">دریافت عکس کالاها</string>
+  <string name="message_exception_in_data_transfer">خطا در ارتباط با سرور</string>
   <string-array name="sale_type">
     <item>فروش سرد</item>
     <item>فروش گرم</item>

@@ -176,7 +176,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
 
     fillLeftPanel();
     Glide.with(this)
-        .load(MediaUtil.getGoodImage(selectedGoods.getBackendId()))
+        .load(MediaUtil.getGoodImage(selectedGoods.getCode()))
         .error(R.drawable.no_image)
         .into(goodsImage);
     return view;
