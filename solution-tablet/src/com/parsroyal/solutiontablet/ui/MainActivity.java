@@ -430,7 +430,6 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
           } else {
             changeFragment(SETTING_FRAGMENT_ID, false);
             closeDrawer();
-
           }
           break;
         case 1:

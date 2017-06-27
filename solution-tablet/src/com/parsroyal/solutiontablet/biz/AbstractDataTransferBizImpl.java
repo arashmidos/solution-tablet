@@ -12,10 +12,10 @@ import com.parsroyal.solutiontablet.exception.InternalServerError;
 import com.parsroyal.solutiontablet.exception.TimeOutException;
 import com.parsroyal.solutiontablet.exception.URLNotFoundException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
+import com.parsroyal.solutiontablet.exception.UserNotAuthorizedException;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LoggingRequestInterceptor;
-import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -141,7 +141,11 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
       }
     } catch (HttpClientErrorException ex) {
       if (Empty.isNotEmpty(getObserver())) {
-        getObserver().publishResult(new URLNotFoundException());
+        if (ex.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+          getObserver().publishResult(new UserNotAuthorizedException());
+        } else {
+          getObserver().publishResult(new URLNotFoundException());
+        }
       }
     } catch (final BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
