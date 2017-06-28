@@ -1,8 +1,5 @@
 package com.parsroyal.solutiontablet.data.entity;
 
-import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
-import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
-import com.parsroyal.solutiontablet.util.Empty;
 import java.util.List;
 
 /**
@@ -59,53 +56,6 @@ public class SaleOrder extends BaseEntity<Long> {
   private Long rejectBackendId;
 
   private List<SaleOrderItem> orderItems;
-
-  public static String createString(SaleOrderDto order) {
-    StringBuilder stringBuilder = new StringBuilder();
-    {
-      stringBuilder.append(order.getId());
-      stringBuilder.append("&");
-    }
-    {
-//            String englishDate = order.getDate();
-//            englishDate = NumberUtil.digitsToEnglish(englishDate);
-      stringBuilder.append(order.getDate());
-      stringBuilder.append("&");
-    }
-    {
-      Long backendId = order.getBackendId();
-      stringBuilder.append(Empty.isEmpty(backendId) ? "NULL" : backendId);
-      stringBuilder.append("&");
-    }
-    {
-      stringBuilder.append(order.getCustomerBackendId());
-      stringBuilder.append("&");
-    }
-    {
-      Long amount = order.getAmount();
-      stringBuilder.append(Empty.isEmpty(amount) ? "NULL" : amount);
-      stringBuilder.append("&");
-    }
-    {
-      String desc = order.getDescription();
-      stringBuilder.append(Empty.isEmpty(desc) ? "NULL" : desc);
-      stringBuilder.append("&");
-    }
-    {
-      Long paymentTypeId = order.getPaymentTypeBackendId();
-      stringBuilder.append(Empty.isEmpty(paymentTypeId) ? "NULL" : paymentTypeId);
-      stringBuilder.append("&");
-    }
-    {
-      for (SaleOrderItemDto saleOrderItemDto : order.getOrderItems()) {
-        String itemStr = SaleOrderItem.createString(saleOrderItemDto, order.getStatus());
-        stringBuilder.append(itemStr);
-        stringBuilder.append("$");
-      }
-    }
-
-    return stringBuilder.toString();
-  }
 
   public Long getId() {
     return id;

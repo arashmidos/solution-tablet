@@ -88,7 +88,7 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
       HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<MultiValueMap<String, Object>>(
           parts, httpHeaders);
 
-      String url = makeUrl(serverAddress1.getValue(), serverAddress2.getValue(), getMethod());
+      String url = makeUrl(serverAddress1.getValue(), getMethod());
 
       ResponseEntity<String> response = restTemplate
           .exchange(url, getHttpMethod(), requestEntity, getType());

@@ -40,8 +40,8 @@ public class GoodsListForQuestionnairesFragment extends
       mainActivity = (MainActivity) getActivity();
       goodsService = new GoodsServiceImpl(mainActivity);
 
-      goodsGroupBackendId = getArguments().getLong("ggBi");
-      questionnaireBackendId = getArguments().getLong("qnId");
+      goodsGroupBackendId = getArguments().getLong(Constants.GOODS_GROUP_BACKEND_ID);
+      questionnaireBackendId = getArguments().getLong(Constants.QUESTIONAIRE_ID);
       visitId = getArguments().getLong(Constants.VISIT_ID);
       customerId = getArguments().getLong(Constants.CUSTOMER_ID);
 
@@ -81,10 +81,10 @@ public class GoodsListForQuestionnairesFragment extends
     return (parent, view, position, id) -> {
 
       Bundle args = new Bundle();
-      args.putLong("qnId", questionnaireBackendId);
+      args.putLong(Constants.QUESTIONAIRE_ID, questionnaireBackendId);
       args.putLong(Constants.VISIT_ID, visitId);
       args.putLong(Constants.CUSTOMER_ID, customerId);
-      args.putLong("goodsBackendId", dataModel.get(position).getGoodsBackendId());
+      args.putLong(Constants.GOODS_BACKEND_ID, dataModel.get(position).getGoodsBackendId());
       mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
     };
   }

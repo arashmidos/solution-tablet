@@ -2,14 +2,17 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -17,13 +20,14 @@ import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.service.GoodsService;
+import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
-import com.parsroyal.solutiontablet.util.ToastUtil;
-
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -34,25 +38,30 @@ import java.util.Locale;
 public class GoodsDetailDialogFragment extends DialogFragment {
 
   public static final String TAG = GoodsDetailDialogFragment.class.getSimpleName();
+  @BindView(R.id.goodNameTv)
+  TextView goodsNameTv;
+  @BindView(R.id.countTxt)
+  EditText countTxt;
+  @BindView(R.id.goodUnitsSp)
+  Spinner goodUnitsSp;
+  @BindView(R.id.error_msg)
+  TextView errorMsg;
 
   private MainActivity context;
   private GoodsService goodsService;
+  private SettingService settingService;
 
   private Long goodsBackendId;
   private Goods selectedGoods;
   private Double count;
   private Long selectedUnit;
 
-  private TextView goodsNameTv;
-  private EditText countTxt;
-  private Spinner goodsUnitSp;
-  private Button confirmBtn;
-  private Button cancelBtn;
-
   private GoodsDialogOnClickListener onClickListener;
   private long orderStatus;
   private GoodsDtoList rejectedGoodsList;
   private long goodsInvoiceId;
+  private long saleRate;
+  private boolean saleRateEnabled;
 
   public void setOnClickListener(GoodsDialogOnClickListener onClickListener) {
     this.onClickListener = onClickListener;
@@ -60,30 +69,31 @@ public class GoodsDetailDialogFragment extends DialogFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_goods_detail_dialog, null);
+    ButterKnife.bind(this, view);
 
     context = (MainActivity) getActivity();
-    orderStatus = getArguments().getLong(Constants.ORDER_STATUS);
-    goodsBackendId = getArguments().getLong(Constants.GOODS_BACKEND_ID);
-    count = getArguments().getDouble(Constants.COUNT);
-    selectedUnit = getArguments().getLong(Constants.SELECTED_UNIT);
+    Bundle arguments = getArguments();
+    orderStatus = arguments.getLong(Constants.ORDER_STATUS);
+    goodsBackendId = arguments.getLong(Constants.GOODS_BACKEND_ID);
+    count = arguments.getDouble(Constants.COUNT);
+    selectedUnit = arguments.getLong(Constants.SELECTED_UNIT);
+    saleRate = arguments.getLong(Constants.GOODS_SALE_RATE);
 
     goodsService = new GoodsServiceImpl(context);
+    settingService = new SettingServiceImpl(context);
+
+    saleRateEnabled = "1"
+        .equals(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE));
 
     if (orderStatus == SaleOrderStatus.REJECTED_DRAFT.getId()) {
-      rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
-      goodsInvoiceId = getArguments().getLong(Constants.GOODS_INVOICE_ID);
+      rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
+      goodsInvoiceId = arguments.getLong(Constants.GOODS_INVOICE_ID);
       selectedGoods = getGoodFromLocal();
     } else {
       selectedGoods = goodsService.getGoodsByBackendId(goodsBackendId);
     }
-
-    goodsNameTv = (TextView) view.findViewById(R.id.goodNameTv);
-    countTxt = (EditText) view.findViewById(R.id.countTxt);
-    confirmBtn = (Button) view.findViewById(R.id.confirmBtn);
-    cancelBtn = (Button) view.findViewById(R.id.cancelBtn);
-    goodsUnitSp = (Spinner) view.findViewById(R.id.goodUnitsSp);
 
     goodsNameTv.setText(selectedGoods.getTitle());
 
@@ -96,38 +106,35 @@ public class GoodsDetailDialogFragment extends DialogFragment {
       countTxt.setSelection(countTxt.getText().length());
     }
 
+    countTxt.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+      }
+
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
+        errorMsg.setVisibility(View.GONE);
+      }
+    });
+
     List<LabelValue> unitsList = new ArrayList<>();
     unitsList.add(new LabelValue(1L, selectedGoods.getUnit1Title()));
     if (Empty.isNotEmpty(selectedGoods.getUnit2Title())) {
       unitsList.add(new LabelValue(2L, selectedGoods.getUnit2Title()));
     }
-    goodsUnitSp.setAdapter(new LabelValueArrayAdapter(context, unitsList));
+    goodUnitsSp.setAdapter(new LabelValueArrayAdapter(context, unitsList));
 
     if (Empty.isNotEmpty(selectedUnit)) {
       if (selectedUnit.equals(1L)) {
-        goodsUnitSp.setSelection(0);
-      }
-      if (selectedUnit.equals(2L)) {
-        goodsUnitSp.setSelection(1);
+        goodUnitsSp.setSelection(0);
+      } else if (selectedUnit.equals(2L)) {
+        goodUnitsSp.setSelection(1);
       }
     }
-
-    confirmBtn.setOnClickListener(v -> {
-      if (Empty.isNotEmpty(onClickListener)) {
-        if (validate()) {
-          Double count1 = Double.valueOf(NumberUtil.digitsToEnglish(countTxt.getText().toString()));
-          LabelValue selectedUnitLv = (LabelValue) goodsUnitSp.getSelectedItem();
-          Long selectedUnit1 = selectedUnitLv.getValue();
-          if (selectedUnit1.equals(2L)) {
-            count1 *= Double.valueOf(selectedGoods.getUnit1Count());
-          }
-          onClickListener.onConfirmBtnClicked(count1, selectedUnit1);
-          GoodsDetailDialogFragment.this.dismiss();
-        }
-      }
-    });
-
-    cancelBtn.setOnClickListener(v -> GoodsDetailDialogFragment.this.dismiss());
 
     this.getDialog().setTitle(context.getString(R.string.message_please_enter_count));
 
@@ -149,10 +156,58 @@ public class GoodsDetailDialogFragment extends DialogFragment {
     String countValue = NumberUtil.digitsToEnglish(countTxt.getText().toString());
 
     if (Empty.isEmpty(countValue) || Double.valueOf(countValue).equals(0D)) {
-      ToastUtil.toastError(context, R.string.message_please_enter_count);
+      errorMsg.setText(R.string.message_please_enter_count);
+      errorMsg.setVisibility(View.VISIBLE);
+      return false;
+    }
+
+    int currentUnit = goodUnitsSp.getSelectedItemPosition();
+
+    //If saleRate setting is enabled & default unit is unit1 & mod unit1 is not zero
+    if (shouldApplySaleRate(countValue,currentUnit)) {
+      errorMsg.setText(String.format(context.getString(R.string.error_sale_rate_not_correct),
+          String.valueOf(selectedGoods.getSaleRate()), selectedGoods.getUnit1Title()));
+      errorMsg.setVisibility(View.VISIBLE);
       return false;
     }
     return true;
+  }
+
+  private boolean shouldApplySaleRate(String countValue,int currentUnit) {
+    return saleRateEnabled
+        && currentUnit == 0
+        && (orderStatus == SaleOrderStatus.DRAFT.getId()
+        || orderStatus == SaleOrderStatus.READY_TO_SEND.getId())
+        && (Double.valueOf(countValue) % selectedGoods.getSaleRate() != 0.0);
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+  }
+
+  @OnClick({R.id.cancelBtn, R.id.confirmBtn})
+  public void onViewClicked(View view) {
+    switch (view.getId()) {
+      case R.id.cancelBtn:
+        GoodsDetailDialogFragment.this.dismiss();
+        break;
+      case R.id.confirmBtn:
+        if (Empty.isNotEmpty(onClickListener)) {
+          if (validate()) {
+            Double count1 = Double
+                .valueOf(NumberUtil.digitsToEnglish(countTxt.getText().toString()));
+            LabelValue selectedUnitLv = (LabelValue) goodUnitsSp.getSelectedItem();
+            Long selectedUnit1 = selectedUnitLv.getValue();
+            if (selectedUnit1.equals(2L)) {
+              count1 *= Double.valueOf(selectedGoods.getUnit1Count());
+            }
+            onClickListener.onConfirmBtnClicked(count1, selectedUnit1);
+            GoodsDetailDialogFragment.this.dismiss();
+          }
+        }
+        break;
+    }
   }
 
   public interface GoodsDialogOnClickListener {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:padding="20dp"
@@ -17,7 +18,7 @@
       style="@style/TextView.Value"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="استند 20 سانتی ک"/>
+      android:text="استند 20 سانتی ک" />
 
     <TextView
       android:id="@+id/textView56"
@@ -25,7 +26,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:gravity="center_vertical|center_horizontal"
-      android:text="نام کالا"/>
+      android:text="نام کالا" />
   </LinearLayout>
 
   <LinearLayout
@@ -39,7 +40,7 @@
       android:id="@+id/goodUnitsSp"
       style="@style/Spinner"
       android:layout_width="100dp"
-      android:layout_height="wrap_content"/>
+      android:layout_height="wrap_content" />
 
     <EditText
       android:id="@+id/countTxt"
@@ -48,9 +49,9 @@
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:layout_gravity="bottom"
-      android:digits="1234567890.-۰۱۲۳۴۵۶۷۸۹"
+      android:digits="1234567890.۰۱۲۳۴۵۶۷۸۹"
       android:ems="10"
-      android:inputType="numberDecimal"/>
+      android:inputType="numberDecimal" />
 
     <TextView
       android:id="@+id/textView52"
@@ -59,9 +60,24 @@
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
       android:gravity="center_vertical|center_horizontal"
-      android:text="تعداد/مقدار کالا:"/>
+      android:text="تعداد/مقدار کالا:" />
   </LinearLayout>
 
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:gravity="right"
+    android:orientation="horizontal">
+    <TextView
+      android:id="@+id/error_msg"
+      style="@style/TextView.Value"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/red"
+      android:visibility="gone"
+      tools:text="ضریب فروش کالا باید ۶ عدد باشد" />
+  </LinearLayout>
   <LinearLayout
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -73,13 +89,15 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:drawableRight="@drawable/ic_action_cancel"
-      android:text="انصراف"/>
+      android:drawableTint="@color/red"
+      android:text="انصراف" />
 
     <Button
       android:id="@+id/confirmBtn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:drawableRight="@drawable/ic_action_tick"
-      android:text="تایید"/>
+      android:drawableTint="@color/green"
+      android:text="تایید" />
   </LinearLayout>
 </LinearLayout>

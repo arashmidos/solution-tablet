@@ -15,10 +15,8 @@
   <string name="password">رمز عبور</string>
   <string name="userCode">کد کاربر</string>
   <string name="serverAddress1">آدرس سرور 1</string>
-  <string name="serverAddress2">آدرس سرور 2</string>
   <string name="save">ذخیره</string>
   <string name="error_serverAddress1_is_required">مقدار آدرس سرور 1 ضروری است</string>
-  <string name="error_serverAddress2_is_required">مقدار آدرس سرور 2 ضروری است</string>
   <string name="error_username_is_required">مقدار نام کاربری ضروری است</string>
   <string name="error_password_is_required">مقدار رمز عبور اجباری است.</string>
   <string name="error_user_code_is_required">مقدار کد کاربری ضروری است</string>
@@ -26,6 +24,9 @@
   <string name="error_branch_serial_is_required">مقدار سریال شعبه ضروری است</string>
   <string name="error_branch_serial_is_not_valid">مقدار سریال شعبه صحیح نیست</string>
   <string name="error_stock_serial_is_required">مقدار سریال انبار ضروری است</string>
+  <string name="error_invoice_type_is_required">مقدار نوع فاکتور ضروری است</string>
+  <string name="error_order_type_is_required">مقدار نوع سفارش ضروری است</string>
+  <string name="error_reject_type_is_required">مقدار نوع مرجوعی ضروری است</string>
   <string name="error_stock_serial_is_not_valid">مقدار سریال انبار صحیح نیست</string>
   <string name="error_unknown_system_exception">خطای سیستمی ناشناس</string>
   <string name="message_setting_saved_successfully">اطلاعات تنظیمات با موفقیت ذخیره شد</string>
@@ -223,15 +224,15 @@
   <string name="title_x_list">"لیست "</string>
   <string name="message_goods_already_added_to_order">این کالا قبلا به سفارش اضافه شده است.</string>
   <string name="message_no_orders_for_sending">هیچ سفارشی برای ارسال یافت نشد.</string>
-  <string name="message_no_returned_orders_for_sending">هیچ سند مرجوعی برای ارسال یافت نشد.</string>
+  <string name="message_no_sale_reject_for_sending">هیچ سند مرجوعی برای ارسال یافت نشد.</string>
   <string name="message_no_payments_for_sending">هیچ دریافت وجهی برای ارسال یافت نشد.</string>
   <string name="message_no_positions_for_sending">هیچ موقعیت مکانی جدیدی برای ارسال یافت نشد.</string>
-  <string name="orders_data_transferred_successfully">اطلاعات سفارش ها با موفقیت منتقل شد.</string>
-  <string name="returned_orders_data_transferred_successfully">سند مرجوعی با موفقیت ارسال گردید.</string>
+  <string name="message_orders_data_transferred_successfully">اطلاعات سفارش ها با موفقیت منتقل شد.</string>
+  <string name="message_sale_reject_data_transferred_successfully">سند مرجوعی با موفقیت ارسال گردید.</string>
   <string name="message_exception_in_sending_orders">خطا در ارسال سفارش ها</string>
-  <string name="message_exception_in_sending_returned_orders">خطا در ارسال سند مرجوعی</string>
+  <string name="message_exception_in_sending_sale_rejects">خطا در ارسال سند مرجوعی</string>
   <string name="message_transferring_orders">در حال انتقال اطلاعات سفارش ها ...</string>
-  <string name="message_transferring_returned_orders">در حال انتقال سند مرجوعی ...</string>
+  <string name="message_transferring_sale_rejects">در حال انتقال سند مرجوعی ...</string>
   <string name="message_picutre_saved_successfully">تصویر گرفته شده با موفقیت ذخیره گردید.</string>
   <string name="button_ok">تایید</string>
   <string name="button_cancel">انصراف</string>
@@ -338,7 +339,7 @@
   <string name="search_hint">جستجو...</string>
   <string name="message_error_wants_denied">امکان ثبت عدم برای این ویزیت وجود ندارد</string>
   <string name="message_error_no_visit_detail_found">هیچ فعالیتی برای این ویزیت ثبت نشده است. آیا میخواهید عدم ثبت کنید؟</string>
-  <string name="visit_information_data_transfered_result">ارسال موفق: %1$s - ارسال ناموفق:%2$s</string>
+  <string name="data_transfered_result">ارسال موفق: %1$s - ارسال ناموفق:%2$s</string>
   <string name="message_sending_data">در حال ارسال اطلاعات</string>
   <string name="message_update_title">بروزرسانی</string>
   <string name="message_update_alert">نسخه جدید برنامه دریافت شد. آیا می خواهید بروزرسانی انجام شود؟</string>
@@ -360,6 +361,11 @@
   <string name="not_visited">عدم ویزیت</string>
   <string name="error_filter_is_not_correct">عدد وارد شده صحیح نیست.</string>
   <string name="warning_delete_data_after_setting_change">با تغییر تنظیمات تمام داده های قبلی برنامه حذف می شوند.\n چنانچه اطلاعات ارسال نشده ای دارید،‌ می بایست ابتدا از قسمت انتقال اطلاعات ارسال کنید. آیا از تغییر تنظیمات مطمئن هستید؟</string>
+  <string name="invoice_type">نوع فاکتور</string>
+  <string name="order_type">نوع سفارش</string>
+  <string name="reject_type">نوع مرجوعی</string>
+  <string name="error_sale_rate_not_correct">ضریب فروش این کالا باید %1$s %2$s‌ باشد</string>
+  <string name="enable_sale_rate">فروش بر اساس ضریب کالا فعال باشد</string>
   <string-array name="sale_type">
     <item>فروش سرد</item>
     <item>فروش گرم</item>

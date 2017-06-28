@@ -5,16 +5,27 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
+import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderDao;
 import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
+import com.parsroyal.solutiontablet.data.model.SaleInvoiceDocument;
+import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
+import com.parsroyal.solutiontablet.data.model.SaleRejectDocument;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
+import com.parsroyal.solutiontablet.service.SettingService;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,9 +36,11 @@ import java.util.Set;
 public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements SaleOrderDao {
 
   private Context context;
+  private SettingService settingService;
 
   public SaleOrderDaoImpl(Context context) {
     this.context = context;
+    settingService = new SettingServiceImpl(context);
   }
 
   @Override
@@ -72,14 +85,14 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         SaleOrder.COL_AMOUNT,
         SaleOrder.COL_DATE,
         SaleOrder.COL_PAYMENT_TYPE_BACKEND_ID,
-        SaleOrder.COL_SALESMAN_ID,
+        SaleOrder.COL_SALESMAN_ID,//5
         SaleOrder.COL_CUSTOMER_BACKEND_ID,
         SaleOrder.COL_DESCRIPTION,
         SaleOrder.COL_STATUS,
         SaleOrder.COL_BACKEND_ID,
         SaleOrder.COL_INVOICE_BACKEND_ID,
         SaleOrder.COL_CREATE_DATE_TIME,
-        SaleOrder.COL_UPDATE_DATE_TIME,
+        SaleOrder.COL_UPDATE_DATE_TIME
     };
     return projection;
   }
@@ -120,6 +133,46 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     saleOrder.setInvoiceBackendId(cursor.getLong(10));
     saleOrder.setCreateDateTime(cursor.getString(11));
     saleOrder.setUpdateDateTime(cursor.getString(12));
+    return saleOrder;
+  }
+
+  protected BaseSaleDocument createsaleDocumentFromCursor(Cursor cursor, Long statusId) {
+    BaseSaleDocument saleOrder = null;
+    if (SaleOrderStatus.READY_TO_SEND.getId().equals(statusId)) {
+      saleOrder = new SaleOrderDocument();
+      saleOrder.setType(
+          Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_ORDER_TYPE)));
+      //Set export date to tomorrow
+      String saleDate = cursor.getString(3);
+      Date date = DateUtil.convertStringToDate(saleDate, DateUtil.GLOBAL_FORMATTER, "FA");
+      date = DateUtil.addDaysToDate(date, 1, false);
+      ((SaleOrderDocument) saleOrder).setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
+    } else if (SaleOrderStatus.INVOICED.getId().equals(statusId)) {
+      saleOrder = new SaleInvoiceDocument();
+      saleOrder.setType(
+          Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE)));
+
+      ((SaleInvoiceDocument) saleOrder).setSaleOrderId(cursor.getLong(10));
+    } else if (SaleOrderStatus.REJECTED.getId().equals(statusId)) {
+      saleOrder = new SaleRejectDocument();
+      saleOrder.setType(
+          Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_REJECT_TYPE)));
+      ((SaleRejectDocument) saleOrder).setSaleOrderId(cursor.getLong(9));
+    }
+
+    saleOrder.setId(cursor.getLong(0));
+    saleOrder.setPrice(cursor.getLong(2));
+    saleOrder.setDate(cursor.getString(3));
+    saleOrder.setPaymentType(cursor.getLong(4));
+    saleOrder.setSalesman(cursor.getLong(5));
+    saleOrder.setCustomer(cursor.getLong(6));
+    saleOrder.setDescription(cursor.getString(7));
+    saleOrder.setCompanyId(
+        Integer.valueOf(settingService.getSettingValue(ApplicationKeys.USER_COMPANY_ID)));
+    saleOrder.setStockCode(
+        Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE)));
+    saleOrder.setOfficeCode(
+        Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE)));
     return saleOrder;
   }
 
@@ -234,21 +287,21 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
   }
 
   @Override
-  public List<SaleOrderDto> findOrderDtoByStatusId(Long statusId) {
+  public List<BaseSaleDocument> findOrderDocumentsByStatusId(Long statusId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String selection = SaleOrder.COL_STATUS + " = ?";
     String[] args = {String.valueOf(statusId)};
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
 
-    List<SaleOrderDto> saleOrderDtoList = new ArrayList<>();
+    List<BaseSaleDocument> saleOrderList = new ArrayList<>();
 
     while (cursor.moveToNext()) {
-      saleOrderDtoList.add(createOrderDtoFromCursor(cursor));
+      saleOrderList.add(createsaleDocumentFromCursor(cursor, statusId));
     }
 
     cursor.close();
-    return saleOrderDtoList;
+    return saleOrderList;
   }
 
   @Override

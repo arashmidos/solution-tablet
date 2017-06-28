@@ -29,8 +29,9 @@ import com.parsroyal.solutiontablet.data.entity.VisitLine;
 public class CommerDatabaseHelper extends SQLiteOpenHelper {
 
   public static final String TAG = CommerDatabaseHelper.class.getSimpleName();
-  public static final String DATABASE_NAME = "Commer";
-  public static final Integer DATABASE_VERSION = 3;
+  private static final String DATABASE_NAME = "Commer";
+  private static final Integer DATABASE_VERSION = 4;
+  private static final String SQL_ADD_COLUMN = "ALTER TABLE %s ADD COLUMN %s %s ";
 
   private static CommerDatabaseHelper sInstance;
 
@@ -74,6 +75,9 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
     Log.i(TAG, "on Database Upgrade");
     if (oldVersion < 3) {
       db.execSQL(VisitInformationDetail.CREATE_TABLE_SQL);
+    }
+    if (oldVersion < 4) {
+      db.execSQL(String.format(SQL_ADD_COLUMN,Goods.TABLE_NAME,Goods.COL_SALE_RATE,"INTEGER"));
     }
   }
 }

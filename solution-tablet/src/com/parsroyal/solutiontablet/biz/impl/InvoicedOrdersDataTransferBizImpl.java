@@ -1,8 +1,6 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
-import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
@@ -13,16 +11,14 @@ import com.parsroyal.solutiontablet.data.dao.SaleOrderItemDao;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderItemDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
-import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Locale;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -36,9 +32,15 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
   protected ResultObserver resultObserver;
   protected SaleOrderDao saleOrderDao;
   protected SaleOrderItemDao saleOrderItemDao;
-  protected List<SaleOrderDto> orders;
+  protected BaseSaleDocument order;
   private VisitService visitService;
   private KeyValueBiz keyValueBiz;
+  protected int success = 0;
+  protected int total = 0;
+
+  public int getSuccess() {
+    return success;
+  }
 
   public InvoicedOrdersDataTransferBizImpl(Context context, ResultObserver resultObserver) {
     super(context);
@@ -49,38 +51,26 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
     visitService = new VisitServiceImpl(context);
   }
 
-  public List<SaleOrderDto> getOrders() {
-    return orders;
+  public BaseSaleDocument getOrder() {
+    return order;
   }
 
-  public void setOrders(List<SaleOrderDto> orders) {
-    this.orders = orders;
+  public void setOrder(BaseSaleDocument order) {
+    this.order = order;
+    this.total++;
   }
 
   @Override
   public void receiveData(String response) {
     if (Empty.isNotEmpty(response)) {
-      try {
-        String[] rows = response.split("[\n]");
-        for (int i = 0; i < rows.length; i++) {
-          String row = rows[i];
-          String[] columns = row.split("[&]");
-          Long orderId = Long.parseLong(columns[0]);
-          Long invoiceBackendId = Long.parseLong(columns[1]);
+      SaleOrder saleOrder = saleOrderDao.retrieve(order.getId());
 
-          SaleOrder saleOrder = saleOrderDao.retrieve(orderId);
-
-          if (Empty.isNotEmpty(saleOrder)) {
-            updateOrderStatus(invoiceBackendId, saleOrder);
-          }
-        }
-
-        resultObserver.publishResult(getSuccessfulMessage());
-      } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving InvoicedOrders " + ex.getMessage());
-        Log.e(TAG, ex.getMessage(), ex);
-        resultObserver.publishResult(getExceptionMessage());
+      if (Empty.isNotEmpty(saleOrder)) {
+        updateOrderStatus(Long.valueOf(response), saleOrder);
+        success++;
       }
+    } else {
+      resultObserver.publishResult(getExceptionMessage());
     }
   }
 
@@ -88,8 +78,11 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
     return context.getString(R.string.message_exception_in_sending_invoices);
   }
 
-  protected String getSuccessfulMessage() {
-    return context.getString(R.string.invoices_data_transferred_successfully);
+  public String getSuccessfulMessage() {
+    return String
+        .format(Locale.US, context.getString(R.string.data_transfered_result),
+            String.valueOf(success),
+            String.valueOf(total - success));
   }
 
   protected void updateOrderStatus(Long invoiceBackendId, SaleOrder saleOrder) {
@@ -102,7 +95,6 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
 
   @Override
   public void beforeTransfer() {
-    resultObserver.publishResult(context.getString(R.string.message_transferring_invoices));
   }
 
   @Override
@@ -112,7 +104,7 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
 
   @Override
   public String getMethod() {
-    return "invoice/create";
+    return "saleinvoices";
   }
 
   @Override
@@ -127,38 +119,13 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
 
   @Override
   protected MediaType getContentType() {
-    return new MediaType("TEXT", "PLAIN", Charset.forName("UTF-8"));
+    return MediaType.APPLICATION_JSON;
   }
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    headers
-        .add("branchCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_CODE).getValue());
-    headers.add("stockCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_STOCK_CODE).getValue());
-
-    String invoicesStr = getInvoicesString(orders);
-    Log.d(TAG, "INVOICE SENDING:" + invoicesStr);
-    headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN));
-    return new HttpEntity<>(invoicesStr, headers);
-  }
-
-  protected String getInvoicesString(List<SaleOrderDto> orders) {
-    StringBuilder sb = new StringBuilder();
-    boolean firstLine = true;
-    for (SaleOrderDto order : orders) {
-      String orderStr = SaleOrder.createString(order);
-      orderStr = orderStr.trim().replaceAll("[\n]", "");
-      orderStr = orderStr.trim().replace("\n", "");
-      if (firstLine) {
-        sb.append(orderStr);
-        firstLine = false;
-        continue;
-      }
-      sb.append("\n");
-      sb.append(orderStr);
-    }
-    Log.d(TAG, "ORDERS:" + sb.toString());
-    return sb.toString();
+    HttpEntity<BaseSaleDocument> httpEntity = new HttpEntity<>(order, headers);
+    return httpEntity;
   }
 
   protected VisitInformationDetailType getVisitDetailType() {

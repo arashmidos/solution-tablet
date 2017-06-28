@@ -19,9 +19,11 @@ import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
-import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
+import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
 import com.parsroyal.solutiontablet.ui.component.TabContainer;
@@ -39,6 +41,7 @@ public class OrderDetailFragment extends BaseFragment {
   private MainActivity context;
   private SaleOrderService saleOrderService;
   private VisitServiceImpl visitService;
+  private SettingService settingService;
   private SaleOrderDto order;
 
   private Long orderId;
@@ -62,6 +65,7 @@ public class OrderDetailFragment extends BaseFragment {
       context = (MainActivity) getActivity();
       saleOrderService = new SaleOrderServiceImpl(context);
       visitService = new VisitServiceImpl(context);
+      settingService = new SettingServiceImpl(context);
 
       Bundle arguments = getArguments();
       orderId = arguments.getLong(Constants.ORDER_ID);
@@ -205,7 +209,8 @@ public class OrderDetailFragment extends BaseFragment {
       return view;
     } catch (Exception e) {
       Crashlytics
-          .log(Log.ERROR, "UI Exception", "Error in creating OrderDetailFragment " + e.getMessage());
+          .log(Log.ERROR, "UI Exception",
+              "Error in creating OrderDetailFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);
@@ -281,6 +286,8 @@ public class OrderDetailFragment extends BaseFragment {
       String description = orderInfoFrg.getDescription();
       order.setDescription(description);
 
+      order
+          .setSalesmanId(Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
       long typeId = saleOrderService.saveOrder(order);
 
       VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, getDetailType(),
@@ -290,7 +297,8 @@ public class OrderDetailFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(context, ex);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in saving new order detail " + ex.getMessage());
+      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+          "Error in saving new order detail " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(context, new UnknownSystemException(ex));
     }

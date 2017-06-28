@@ -11,6 +11,8 @@ public interface BaseDao<ENTITY extends BaseEntity, PK extends Serializable> {
 
   PK create(ENTITY entity);
 
+  void bulkInsert(List<ENTITY> list);
+
   void update(ENTITY entity);
 
   void delete(PK pk);

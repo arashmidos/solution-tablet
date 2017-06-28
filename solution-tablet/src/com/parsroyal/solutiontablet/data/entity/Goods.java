@@ -22,26 +22,28 @@ public class Goods extends BaseEntity<Long> {
   public static final String COL_BAR_CODE = "BAR_CODE";
   public static final String COL_DEFAULT_UNIT = "DEFAULT_UNIT";
   public static final String COL_RECOVERY_DATE = "RECOVERY_DATE";
+  public static final String COL_SALE_RATE = "SALE_RATE";
 
-  public static final String CREATE_TABLE_SQL = "CREATE TABLE " + Goods.TABLE_NAME + " (" +
-      " " + Goods.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-      " " + Goods.COL_BACKEND_ID + " INTEGER," +
-      " " + Goods.COL_TITLE + " TEXT," +
-      " " + Goods.COL_CODE + " TEXT," +
-      " " + Goods.COL_PRICE + " INTEGER," +
-      " " + Goods.COL_CUSTOMER_PRICE + " INTEGER," +
-      " " + Goods.COL_EXISTING + " INTEGER," +
-      " " + Goods.COL_UNIT1_TITLE + " TEXT," +
-      " " + Goods.COL_UNIT2_TITLE + " TEXT," +
-      " " + Goods.COL_REFERENCE_CODE + " TEXT," +
-      " " + Goods.COL_UNIT1_COUNT + " INTEGER," +
-      " " + Goods.COL_GROUP_BACKEND_ID + " INTEGER," +
-      " " + Goods.COL_BAR_CODE + " TEXT," +
-      " " + Goods.COL_DEFAULT_UNIT + " INTEGER," +
-      " " + Goods.COL_RECOVERY_DATE + " INTEGER," +
-      " " + Goods.COL_CREATE_DATE_TIME + " TEXT," +
-      " " + Goods.COL_UPDATE_DATE_TIME + " TEXT" +
-      " );";
+  public static final String CREATE_TABLE_SQL = "CREATE TABLE " + Goods.TABLE_NAME + " ( "
+      + Goods.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+      + Goods.COL_BACKEND_ID + " INTEGER, "
+      + Goods.COL_TITLE + " TEXT, "
+      + Goods.COL_CODE + " TEXT, "
+      + Goods.COL_PRICE + " INTEGER, "
+      + Goods.COL_CUSTOMER_PRICE + " INTEGER, "
+      + Goods.COL_EXISTING + " INTEGER, "
+      + Goods.COL_UNIT1_TITLE + " TEXT, "
+      + Goods.COL_UNIT2_TITLE + " TEXT, "
+      + Goods.COL_REFERENCE_CODE + " TEXT, "
+      + Goods.COL_UNIT1_COUNT + " INTEGER, "
+      + Goods.COL_GROUP_BACKEND_ID + " INTEGER, "
+      + Goods.COL_BAR_CODE + " TEXT, "
+      + Goods.COL_DEFAULT_UNIT + " INTEGER, "
+      + Goods.COL_RECOVERY_DATE + " INTEGER, "
+      + Goods.COL_SALE_RATE + " INTEGER, "
+      + Goods.COL_CREATE_DATE_TIME + " TEXT, "
+      + Goods.COL_UPDATE_DATE_TIME + " TEXT"
+      + " );";
 
   private Long id;
   private Long backendId;
@@ -58,7 +60,16 @@ public class Goods extends BaseEntity<Long> {
   private String barCode;
   private Integer defaultUnit;
   private String recoveryDate;
+  private Long saleRate;
   private Long invoiceBackendId;
+
+  public Long getSaleRate() {
+    return saleRate;
+  }
+
+  public void setSaleRate(Long saleRate) {
+    this.saleRate = saleRate;
+  }
 
   public Long getId() {
     return id;

@@ -25,7 +25,6 @@ public class SettingServiceImpl implements SettingService {
   private KeyValueDao keyValueDao;
 
   private KeyValue serverAddress1;
-  private KeyValue serverAddress2;
   private KeyValue username;
   private KeyValue password;
 
@@ -52,10 +51,9 @@ public class SettingServiceImpl implements SettingService {
   @Override
   public void getUserInformation(ResultObserver observer) {
     serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-    serverAddress2 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_2);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
-    if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(serverAddress2)) {
+    if (Empty.isEmpty(serverAddress1)) {
       throw new InvalidServerAddressException();
     }
 

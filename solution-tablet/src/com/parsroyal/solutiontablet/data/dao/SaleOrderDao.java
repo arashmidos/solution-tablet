@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.data.dao;
 
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import java.util.List;
@@ -19,7 +20,7 @@ public interface SaleOrderDao extends BaseDao<SaleOrder, Long> {
 
   SaleOrderDto getOrderDtoByCustomerBackendIdAndStatus(Long customerBackendId, Long statusId);
 
-  List<SaleOrderDto> findOrderDtoByStatusId(Long statusId);
+  List<BaseSaleDocument> findOrderDocumentsByStatusId(Long statusId);
 
   void deleteByCustomerBackendIdAndStatus(Long customerBackendId, Long statusId);
 }

@@ -72,7 +72,7 @@ public class KPIDataTransferBizImpl extends AbstractDataTransferBizImpl<KPIDto> 
       restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
       restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
       restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-      String url = makeUrl(serverAddress1.getValue(), serverAddress2.getValue(), getMethod());
+      String url = makeUrl(serverAddress1.getValue(), getMethod());
 
       HttpEntity httpEntity = getHttpEntity(httpHeaders);
       ResponseEntity<KPIDto> response = restTemplate

@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.parsroyal.solutiontablet.R;
@@ -35,12 +35,8 @@ import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
 
 /**
@@ -73,7 +69,7 @@ public class GoodsListFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     try {
       View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_goods_list, null);
       ButterKnife.bind(this, view);
@@ -101,8 +97,6 @@ public class GoodsListFragment extends BaseFragment {
       list.setLayoutManager(new LinearLayoutManager(getActivity()));
       list.setItemAnimator(new FadeInRightAnimator());
 
-      long start = System.currentTimeMillis();
-
       if (SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
         tvPaymentTime.setVisibility(View.GONE);
         rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
@@ -114,8 +108,6 @@ public class GoodsListFragment extends BaseFragment {
       }
 
       list.setAdapter(adapter);
-      long end = System.currentTimeMillis();
-      Toast.makeText(getActivity(), "Total:" + (end - start), Toast.LENGTH_SHORT).show();
 
       searchTxt.addTextChangedListener(new TextWatcher() {
         @Override
@@ -143,7 +135,8 @@ public class GoodsListFragment extends BaseFragment {
 
       return view;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating GoodsListFragment " + e.getMessage());
+      Crashlytics
+          .log(Log.ERROR, "UI Exception", "Error in creating GoodsListFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);
@@ -188,21 +181,29 @@ public class GoodsListFragment extends BaseFragment {
         invoiceBackendId = goods.getInvoiceBackendId();
       }
       final SaleOrderItem item = saleOrderService.findOrderItemByOrderIdAndGoodsBackendId(
-              order.getId(), goods.getBackendId(), invoiceBackendId);
+          order.getId(), goods.getBackendId(), invoiceBackendId);
 
       Bundle bundle = new Bundle();
       bundle.putLong(Constants.GOODS_BACKEND_ID, goods.getBackendId());
       bundle.putLong(Constants.GOODS_INVOICE_ID, invoiceBackendId);
       bundle.putLong(Constants.ORDER_STATUS, orderStatus);
+      bundle.putLong(Constants.GOODS_SALE_RATE, goods.getSaleRate());
       bundle.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+
+      long defaultUnit = goods.getDefaultUnit() != null ? goods.getDefaultUnit() : 1;
       if (Empty.isNotEmpty(item)) {
         Double count = item.getGoodsCount() / 1000D;
 
-        bundle.putDouble(Constants.COUNT, count);
         if (Empty.isNotEmpty(item.getSelectedUnit())) {
-          bundle.putLong(Constants.SELECTED_UNIT, item.getSelectedUnit());
+          defaultUnit = item.getSelectedUnit();
+          if (defaultUnit == 2) {
+            count = count / goods.getUnit1Count();
+          }
         }
+        bundle.putDouble(Constants.COUNT, count);
       }
+
+      bundle.putLong(Constants.SELECTED_UNIT, defaultUnit);
 
       goodsDetailDialog.setArguments(bundle);
       goodsDetailDialog.setOnClickListener((count, selectedUnit) -> {
@@ -213,14 +214,14 @@ public class GoodsListFragment extends BaseFragment {
       goodsDetailDialog.show(getActivity().getSupportFragmentManager(), "GoodsDetailDialog");
     } catch (Exception e) {
       Crashlytics.log(Log.ERROR, "Data Storage Exception",
-              "Error in confirming handling GoodsList " + e.getMessage());
+          "Error in confirming handling GoodsList " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
     }
   }
 
   private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItem item,
-                                           Goods goods) {
+      Goods goods) {
     try {
       if (Empty.isEmpty(item)) {
         if (count * 1000L > Double.valueOf(String.valueOf(goods.getExisting()))) {
@@ -239,7 +240,7 @@ public class GoodsListFragment extends BaseFragment {
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
       Crashlytics.log(Log.ERROR, "Data storage Exception",
-              "Error in confirming GoodsList " + ex.getMessage());
+          "Error in confirming GoodsList " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
