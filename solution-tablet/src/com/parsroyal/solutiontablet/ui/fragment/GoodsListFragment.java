@@ -151,7 +151,7 @@ public class GoodsListFragment extends BaseFragment {
         List<Goods> filteredList = new ArrayList<>();
         for (int i = 0; i < goodsList.size(); i++) {
           Goods good = goodsList.get(i);
-          if (Empty.isNotEmpty(constraint) && !good.getTitle().equals(constraint)) {
+          if (Empty.isNotEmpty(constraint) && !good.getTitle().equals(constraint) && !good.getCode().equals(constraint)) {
             continue;
           }
           filteredList.add(good);
