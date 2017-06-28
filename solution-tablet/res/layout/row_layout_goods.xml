@@ -1,67 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/goodsRowLayout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:gravity="right"
-    android:orientation="horizontal">
+  android:id="@+id/goodsRowLayout"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_gravity="right"
+  android:gravity="right"
+  android:orientation="horizontal">
 
   <LinearLayout
-      android:id="@+id/operationsContainer"
-      style="@style/TextView.Cell.Value"
-      android:layout_width="200dp"
-      android:layout_height="match_parent"
-      android:gravity="right"
-      android:padding="5dp"
-      android:visibility="invisible">
+    android:id="@+id/operationsContainer"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="200dp"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:gravity="right"
+    android:visibility="invisible">
 
     <ImageButton
-        android:id="@+id/addBtn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_action_add" />
+      android:id="@+id/addBtn"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_gravity="center"
+      android:src="@drawable/ic_action_add" />
   </LinearLayout>
 
   <TextView
-      android:id="@+id/recoveryDateTv"
-      style="@style/TextView.Cell.Value"
-      android:layout_width="100dp"
-      android:layout_height="match_parent"
-      android:layout_weight="0"
-      android:gravity="center_vertical|center_horizontal"
-      android:text="1,200,000" />
+    android:id="@+id/recoveryDateTv"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="100dp"
+    android:layout_height="match_parent"
+    android:layout_weight="0"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="1,200,000" />
 
   <TextView
-      android:id="@+id/unit1ExistingTv"
-      style="@style/TextView.Cell.Value"
-      android:layout_width="150dp"
-      android:layout_height="match_parent"
-      android:gravity="center_vertical|center_horizontal"
-      android:text="120 عدد" />
+    android:id="@+id/unit1ExistingTv"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="150dp"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="120 عدد" />
 
 
   <TextView
-      android:id="@+id/goodAmountTv"
-      style="@style/TextView.Cell.Value"
-      android:layout_width="105dp"
-      android:layout_height="match_parent"
-      android:gravity="center_vertical|center_horizontal"
-      android:text="200,000" />
+    android:id="@+id/goodAmountTv"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="105dp"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="200,000" />
 
   <TextView
-      android:id="@+id/goodCodeTv"
-      style="@style/TextView.Cell.Value"
-      android:layout_width="120dp"
-      android:layout_height="match_parent"
-      android:gravity="center_vertical|center_horizontal"
-      android:text="122232" />
+    android:id="@+id/goodCodeTv"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="120dp"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="122232" />
 
   <TextView
-      android:id="@+id/goodNameTv"
-      style="@style/TextView.Cell.Value"
-      android:layout_width="250dp"
-      android:layout_height="match_parent"
-      android:gravity="center_vertical|center_horizontal"
-      android:text="کالای مهم اول" />
+    android:id="@+id/goodNameTv"
+    style="@style/TextView.Cell.Value"
+    android:layout_width="250dp"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:text="کالای مهم اول" />
+
+  <ImageView
+    android:layout_width="56dp"
+    style="@style/TextView.Cell.Value"
+    android:layout_height="56dp"
+    android:id="@+id/good_image"
+    android:src="@drawable/goods_default" />
 </LinearLayout>

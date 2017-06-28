@@ -52,6 +52,8 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MediaUtil;
+import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.File;
 import java.util.List;
@@ -118,7 +120,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
     clearData(Constants.FULL_UPDATE);
 
-    final ResultObserver resultObserver = prepareResultObserverForGetAllData(uiObserver);
+    final ResultObserver resultObserver = prepareResultObserverForDataTransfer(uiObserver);
 
     if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER)) {
       new GoodsRequestDataTransferBizImpl(context, resultObserver).exchangeData();
@@ -133,41 +135,115 @@ public class DataTransferServiceImpl implements DataTransferService {
     if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER)) {
       getAllDeliverableGoods(resultObserver);
       getAllVisitLinesForDelivery(resultObserver);
+      getAllOrdersForDelivery(resultObserver);
     } else {
       getAllGoods(resultObserver);
       getAllVisitLines(resultObserver);
     }
 
-    getAllOrdersForDelivery(resultObserver);
     uiObserver.finished(true);
   }
 
-  private void cleanOldData() {
-    paymentService.clearAllSentPayment();
-    visitService.deleteAll();
-  }
+  public void getGoodsImages(final ResultObserver uiObserver) {
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
+    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
+    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
+    saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
 
-  public void clearData(int updateType) {
-    if (updateType == Constants.FULL_UPDATE) {
-      BaseInfoService infoService = new BaseInfoServiceImpl(context);
-      infoService.deleteAll();
-      infoService.deleteAllCities();
-      infoService.deleteAllProvinces();
+    if (Empty.isEmpty(serverAddress1)) {
+      throw new InvalidServerAddressException();
     }
-    customerService.deleteAll();
-    customerService.deleteAllPics();
 
-    GoodsServiceImpl goodsService = new GoodsServiceImpl(context);
-    goodsService.deleteAll();
-    goodsService.deleteAllGoodsGroup();
+    if (Empty.isEmpty(username)) {
+      throw new UsernameNotProvidedForConnectingToServerException();
+    }
 
-    paymentService.deleteAll();
-    visitService.deleteAll();
-    questionnaireService.deleteAll();
-    saleOrderService.deleteAll();
-    positionService.deleteAll();
+    if (Empty.isEmpty(password)) {
+      throw new PasswordNotProvidedForConnectingToServerException();
+    }
+
+    if (Empty.isEmpty(salesmanId)) {
+      throw new SalesmanIdNotProvidedForConnectingToServerException();
+    }
+
+    MediaUtil.clearGoodsFolder();
+
+    Updater.downloadGoodsImages(context);
   }
 
+
+  private void getAllProvinces(ResultObserver observer) {
+    boolean success = false;
+    for (int i = 0; i < 3 && !success; i++) {
+      success = new ProvinceDataTransferBizImpl(context, observer).exchangeData();
+    }
+  }
+
+  private void getAllCities(ResultObserver observer) {
+    boolean success = false;
+    for (int i = 0; i < 3 && !success; i++) {
+      success = new CityDataTransferBizImpl(context, observer).exchangeData();
+    }
+  }
+
+  private void getAllBaseInfos(ResultObserver resultObserver) {
+    boolean success = false;
+    for (int i = 0; i < 3 && !success; i++) {
+      success = new BaseInfoDataTransferBizImpl(context, resultObserver).exchangeData();
+    }
+  }
+
+  private void getAllGoodsGroups(ResultObserver resultObserver) {
+    boolean success = false;
+    for (int i = 0; i < 3 && !success; i++) {
+      success = new GoodsGroupDataTransferBizImpl(context, resultObserver).exchangeData();
+    }
+  }
+
+  private void getAllQuestionnaires(ResultObserver resultObserver) {
+    boolean success = false;
+    for (int i = 0; i < 3 && !success; i++) {
+      success = new QuestionnaireDataTransferBizImpl(context, resultObserver).exchangeData();
+    }
+  }
+
+  private void getAllDeliverableGoods(ResultObserver resultObserver) {
+    boolean success = false;
+    for (int i = 0; i < 3 && !success; i++) {
+      success = new DeliverableGoodsDataTransferBizImpl(context, resultObserver).exchangeData();
+    }
+  }
+
+  private void getAllVisitLinesForDelivery(ResultObserver resultObserver) {
+    boolean success = false;
+    for (int i = 0; i < 3 && !success; i++) {
+      success = new VisitLineForDeliveryDataTaransferBizImpl(context, resultObserver)
+          .exchangeData();
+    }
+  }
+
+  private void getAllOrdersForDelivery(ResultObserver resultObserver) {
+    boolean success = false;
+    for (int i = 0; i < 3 && !success; i++) {
+      success = new SaleOrderForDeliveryDataTaransferBizImpl(context, resultObserver)
+          .exchangeData();
+    }
+  }
+
+  private void getAllGoods(ResultObserver resultObserver) {
+    boolean success = false;
+    for (int i = 0; i < 3 && !success; i++) {
+      success = new GoodsDataTransferBizImpl(context, resultObserver).exchangeData();
+    }
+  }
+
+  private void getAllVisitLines(ResultObserver resultObserver) {
+    boolean success = false;
+    for (int i = 0; i < 3 && !success; i++) {
+      success = new VisitLineDataTaransferBizImpl(context, resultObserver).exchangeData();
+    }
+  }
 
   @Override
   public void sendAllData(final ResultObserver uiObserver) {
@@ -188,7 +264,7 @@ public class DataTransferServiceImpl implements DataTransferService {
       throw new PasswordNotProvidedForConnectingToServerException();
     }
 
-    final ResultObserver resultObserver = prepareResultObserverForGetAllData(uiObserver);
+    final ResultObserver resultObserver = prepareResultObserverForDataTransfer(uiObserver);
 
     sendAllNewCustomers(resultObserver);
     sendAllCustomerPics(resultObserver);
@@ -202,6 +278,17 @@ public class DataTransferServiceImpl implements DataTransferService {
     //Visit detail always should be the last one
     sendAllVisitInformation(resultObserver);
     uiObserver.finished(true);
+  }
+
+
+  private void sendAllNewCustomers(ResultObserver resultObserver) {
+    List<Customer> allNewCustomers = customerService.getAllNewCustomersForSend();
+    if (Empty.isEmpty(allNewCustomers)) {
+      resultObserver
+          .publishResult(context.getString(R.string.message_found_no_new_customer_for_send));
+      return;
+    }
+    new NewCustomerDataTransferBizImpl(context, resultObserver).exchangeData();
   }
 
   private void sendAllCustomerPics(ResultObserver resultObserver) {
@@ -218,99 +305,6 @@ public class DataTransferServiceImpl implements DataTransferService {
     new NewCustomerPicDataTransferBizImpl(context, resultObserver, pics).exchangeData();
   }
 
-  @Override
-  public boolean isDataTransferPossible() {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
-    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
-    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-
-    if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(username) ||
-        Empty.isEmpty(password) || Empty.isEmpty(salesmanId)) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  @Override
-  public GoodsDtoList getRejectedData(ResultObserver uiObserver, Long customerId) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
-    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
-    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-    if (Empty.isEmpty(serverAddress1)) {
-      throw new InvalidServerAddressException();
-    }
-
-    if (Empty.isEmpty(username)) {
-      throw new UsernameNotProvidedForConnectingToServerException();
-    }
-
-    if (Empty.isEmpty(password)) {
-      throw new PasswordNotProvidedForConnectingToServerException();
-    }
-
-    if (Empty.isEmpty(salesmanId)) {
-      throw new SalesmanIdNotProvidedForConnectingToServerException();
-    }
-
-    final ResultObserver resultObserver = prepareResultObserverForGetAllData(uiObserver);
-
-    return getAllRejectedGoods(resultObserver, customerId);
-  }
-
-  private GoodsDtoList getAllRejectedGoods(ResultObserver observer, Long customerId) {
-    return new RejectedGoodsDataTransferBizImpl(context, observer)
-        .getAllRejectedData(serverAddress1, username, password, salesmanId, customerId);
-  }
-
-  private ResultObserver prepareResultObserverForGetAllData(final ResultObserver uiObserver) {
-    ResultObserver resultObserver = new ResultObserver() {
-      @Override
-      public void publishResult(BusinessException ex) {
-        uiObserver.publishResult(ex);
-      }
-
-      @Override
-      public void publishResult(String message) {
-        uiObserver.publishResult(message);
-      }
-
-      @Override
-      public void finished(boolean result) {
-
-      }
-    };
-    return resultObserver;
-  }
-
-  private void getAllCities(ResultObserver observer) {
-    new CityDataTransferBizImpl(context, observer).exchangeData();
-  }
-
-  private void getAllProvinces(ResultObserver observer) {
-    new ProvinceDataTransferBizImpl(context, observer).exchangeData();
-  }
-
-  private void getAllBaseInfos(ResultObserver resultObserver) {
-    new BaseInfoDataTransferBizImpl(context, resultObserver).exchangeData();
-  }
-
-  private void getAllVisitLines(ResultObserver resultObserver) {
-    new VisitLineDataTaransferBizImpl(context, resultObserver).exchangeData();
-  }
-
-  private void sendAllNewCustomers(ResultObserver resultObserver) {
-    List<Customer> allNewCustomers = customerService.getAllNewCustomersForSend();
-    if (Empty.isEmpty(allNewCustomers)) {
-      resultObserver
-          .publishResult(context.getString(R.string.message_found_no_new_customer_for_send));
-      return;
-    }
-    new NewCustomerDataTransferBizImpl(context, resultObserver).exchangeData();
-  }
-
   private void sendAllUpdatedCustomers(ResultObserver resultObserver) {
     List<CustomerLocationDto> allUpdatedCustomerLocation = customerService
         .getAllUpdatedCustomerLocation();
@@ -322,42 +316,17 @@ public class DataTransferServiceImpl implements DataTransferService {
     new UpdatedCustomerLocationDataTransferBizImpl(context, resultObserver).exchangeData();
   }
 
-  private void getAllQuestionnaires(ResultObserver resultObserver) {
-    new QuestionnaireDataTransferBizImpl(context, resultObserver).exchangeData();
-  }
+  private void sendAllPositions(ResultObserver resultObserver) {
+    List<Position> positions = positionService.getAllPositionByStatus(SendStatus.NEW.getId());
+    if (Empty.isNotEmpty(positions)) {
+      PositionDataTransferBizImpl positionDataTransferBiz = new PositionDataTransferBizImpl(context,
+          resultObserver);
+      positionDataTransferBiz.setPositions(positions);
+      positionDataTransferBiz.sendAllData();
 
-  private void getAllGoodsGroups(ResultObserver resultObserver) {
-    new GoodsGroupDataTransferBizImpl(context, resultObserver).exchangeData();
-  }
-
-  private void getAllGoods(ResultObserver resultObserver) {
-    new GoodsDataTransferBizImpl(context, resultObserver).exchangeData();
-  }
-
-  private void sendAllVisitInformation(ResultObserver resultObserver) {
-
-    List<VisitInformationDto> visitInformationList = visitService.getAllVisitDetailForSend();
-    if (Empty.isEmpty(visitInformationList)) {
-      resultObserver
-          .publishResult(context.getString(R.string.message_found_no_visit_information_for_send));
-      return;
+    } else {
+      resultObserver.publishResult(context.getString(R.string.message_no_positions_for_sending));
     }
-    VisitInformationDataTransferBizImpl dataTransfer =
-        new VisitInformationDataTransferBizImpl(context, resultObserver);
-    resultObserver.publishResult(context.getString(R.string.sending_visit_information_data));
-    for (int i = 0; i < visitInformationList.size(); i++) {
-      VisitInformationDto visitInformationDto = visitInformationList.get(i);
-      if (visitInformationDto.getDetails() == null
-          || visitInformationDto.getDetails().size() == 0) {
-        continue;
-      }
-      dataTransfer.setData(visitInformationDto);
-      dataTransfer.exchangeData();
-    }
-    resultObserver.publishResult(String
-        .format(Locale.US, context.getString(R.string.data_transfered_result),
-            String.valueOf(dataTransfer.getSuccess()),
-            String.valueOf(visitInformationList.size() - dataTransfer.getSuccess())));
   }
 
   private void sendAllAnswers(ResultObserver resultObserver) {
@@ -369,19 +338,18 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
 
     new QAnswersDataTransferBizImpl(context, resultObserver).exchangeData();
-
   }
 
-  private void getAllDeliverableGoods(ResultObserver resultObserver) {
-    new DeliverableGoodsDataTransferBizImpl(context, resultObserver).exchangeData();
-  }
-
-  private void getAllVisitLinesForDelivery(ResultObserver resultObserver) {
-    new VisitLineForDeliveryDataTaransferBizImpl(context, resultObserver).exchangeData();
-  }
-
-  private void getAllOrdersForDelivery(ResultObserver resultObserver) {
-    new SaleOrderForDeliveryDataTaransferBizImpl(context, resultObserver).exchangeData();
+  private void sendAllPayments(ResultObserver resultObserver) {
+    List<Payment> payments = paymentService.getAllPaymentsByStatus(SendStatus.NEW.getId());
+    if (Empty.isNotEmpty(payments)) {
+      PaymentsDataTransferBizImpl paymentsDataTransferBiz = new PaymentsDataTransferBizImpl(context,
+          resultObserver);
+      paymentsDataTransferBiz.setPayments(payments);
+      paymentsDataTransferBiz.exchangeData();
+    } else {
+      resultObserver.publishResult(context.getString(R.string.message_no_payments_for_sending));
+    }
   }
 
   private void sendAllOrders(ResultObserver resultObserver) {
@@ -441,28 +409,123 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
   }
 
-  private void sendAllPayments(ResultObserver resultObserver) {
-    List<Payment> payments = paymentService.getAllPaymentsByStatus(SendStatus.NEW.getId());
-    if (Empty.isNotEmpty(payments)) {
-      PaymentsDataTransferBizImpl paymentsDataTransferBiz = new PaymentsDataTransferBizImpl(context,
-          resultObserver);
-      paymentsDataTransferBiz.setPayments(payments);
-      paymentsDataTransferBiz.exchangeData();
+  private void sendAllVisitInformation(ResultObserver resultObserver) {
+
+    List<VisitInformationDto> visitInformationList = visitService.getAllVisitDetailForSend();
+    if (Empty.isEmpty(visitInformationList)) {
+      resultObserver
+          .publishResult(context.getString(R.string.message_found_no_visit_information_for_send));
+      return;
+    }
+    VisitInformationDataTransferBizImpl dataTransfer =
+        new VisitInformationDataTransferBizImpl(context, resultObserver);
+    resultObserver.publishResult(context.getString(R.string.sending_visit_information_data));
+    for (int i = 0; i < visitInformationList.size(); i++) {
+      VisitInformationDto visitInformationDto = visitInformationList.get(i);
+      if (visitInformationDto.getDetails() == null
+          || visitInformationDto.getDetails().size() == 0) {
+        continue;
+      }
+      dataTransfer.setData(visitInformationDto);
+      dataTransfer.exchangeData();
+    }
+    resultObserver.publishResult(String
+        .format(Locale.US, context.getString(R.string.data_transfered_result),
+            String.valueOf(dataTransfer.getSuccess()),
+            String.valueOf(visitInformationList.size() - dataTransfer.getSuccess())));
+  }
+
+  private void cleanOldData() {
+    paymentService.clearAllSentPayment();
+    visitService.deleteAll();
+  }
+
+  public void clearData(int updateType) {
+    if (updateType == Constants.FULL_UPDATE) {
+      BaseInfoService infoService = new BaseInfoServiceImpl(context);
+      infoService.deleteAll();
+      infoService.deleteAllCities();
+      infoService.deleteAllProvinces();
+    }
+    customerService.deleteAll();
+    customerService.deleteAllPics();
+
+    GoodsServiceImpl goodsService = new GoodsServiceImpl(context);
+    goodsService.deleteAll();
+    goodsService.deleteAllGoodsGroup();
+
+    paymentService.deleteAll();
+    visitService.deleteAll();
+    questionnaireService.deleteAll();
+    saleOrderService.deleteAll();
+    positionService.deleteAll();
+  }
+
+  @Override
+  public boolean isDataTransferPossible() {
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
+    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
+    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
+
+    if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(username) ||
+        Empty.isEmpty(password) || Empty.isEmpty(salesmanId)) {
+      return false;
     } else {
-      resultObserver.publishResult(context.getString(R.string.message_no_payments_for_sending));
+      return true;
     }
   }
 
-  private void sendAllPositions(ResultObserver resultObserver) {
-    List<Position> positions = positionService.getAllPositionByStatus(SendStatus.NEW.getId());
-    if (Empty.isNotEmpty(positions)) {
-      PositionDataTransferBizImpl positionDataTransferBiz = new PositionDataTransferBizImpl(context,
-          resultObserver);
-      positionDataTransferBiz.setPositions(positions);
-      positionDataTransferBiz.sendAllData();
-
-    } else {
-      resultObserver.publishResult(context.getString(R.string.message_no_positions_for_sending));
+  @Override
+  public GoodsDtoList getRejectedData(ResultObserver uiObserver, Long customerId) {
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
+    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
+    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
+    if (Empty.isEmpty(serverAddress1)) {
+      throw new InvalidServerAddressException();
     }
+
+    if (Empty.isEmpty(username)) {
+      throw new UsernameNotProvidedForConnectingToServerException();
+    }
+
+    if (Empty.isEmpty(password)) {
+      throw new PasswordNotProvidedForConnectingToServerException();
+    }
+
+    if (Empty.isEmpty(salesmanId)) {
+      throw new SalesmanIdNotProvidedForConnectingToServerException();
+    }
+
+    final ResultObserver resultObserver = prepareResultObserverForDataTransfer(uiObserver);
+
+    return getAllRejectedGoods(resultObserver, customerId);
   }
+
+  private GoodsDtoList getAllRejectedGoods(ResultObserver observer, Long customerId) {
+    return new RejectedGoodsDataTransferBizImpl(context, observer)
+        .getAllRejectedData(serverAddress1, username, password, salesmanId, customerId);
+  }
+
+  private ResultObserver prepareResultObserverForDataTransfer(final ResultObserver uiObserver) {
+    ResultObserver resultObserver = new ResultObserver() {
+      @Override
+      public void publishResult(BusinessException ex) {
+        uiObserver.publishResult(ex);
+      }
+
+      @Override
+      public void publishResult(String message) {
+        uiObserver.publishResult(message);
+      }
+
+      @Override
+      public void finished(boolean result) {
+      }
+    };
+    return resultObserver;
+  }
+
+
 }

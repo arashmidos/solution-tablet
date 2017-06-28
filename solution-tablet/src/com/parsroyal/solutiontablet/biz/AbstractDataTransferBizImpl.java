@@ -12,10 +12,10 @@ import com.parsroyal.solutiontablet.exception.InternalServerError;
 import com.parsroyal.solutiontablet.exception.TimeOutException;
 import com.parsroyal.solutiontablet.exception.URLNotFoundException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
+import com.parsroyal.solutiontablet.exception.UserNotAuthorizedException;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LoggingRequestInterceptor;
-import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
     goodsRequestId = keyValueDao.retrieveByKey(ApplicationKeys.GOODS_REQUEST_ID);
   }
 
-  public void exchangeData() {
+  public boolean exchangeData() {
     boolean result = false;
     try {
       prepare();
@@ -141,7 +141,11 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
       }
     } catch (HttpClientErrorException ex) {
       if (Empty.isNotEmpty(getObserver())) {
-        getObserver().publishResult(new URLNotFoundException());
+        if (ex.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+          getObserver().publishResult(new UserNotAuthorizedException());
+        } else {
+          getObserver().publishResult(new URLNotFoundException());
+        }
       }
     } catch (final BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
@@ -159,15 +163,16 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
         getObserver().finished(result);
       }
     }
+    return result;
   }
 
   protected String makeUrl(String serverAddress1, String method) {
     Log.i(TAG, "Trying to reach url with server addresses");
-    if (NetworkUtil.isURLReachable(context, serverAddress1)) {
+    if (/*NetworkUtil.isURLReachable(context, serverAddress1)*/true) {
       Log.i(TAG, "Server address 1 is available");
       return serverAddress1 + "/" + method;
     } else {
-      Log.i(TAG, "Both server addresses are not available");
+      Log.i(TAG, "Server addresses are not available");
       throw new BackendIsNotReachableException();
     }
   }

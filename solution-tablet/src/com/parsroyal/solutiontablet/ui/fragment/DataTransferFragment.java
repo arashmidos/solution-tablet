@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,9 @@ import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
-import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
-import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.DataTransferService;
@@ -27,7 +28,8 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by Mahyar on 6/15/2015.
@@ -39,6 +41,8 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
   Button getDataBtn;
   @BindView(R.id.sendDataBtn)
   Button sendDataBtn;
+  @BindView(R.id.get_images_button)
+  Button getImagesBtn;
   @BindView(R.id.transferLogTxtV)
   TextView transferLogTxtV;
   @BindView(R.id.transferSv)
@@ -93,6 +97,9 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     getDataBtn.setEnabled(status);
     sendDataBtn.setClickable(status);
     sendDataBtn.setEnabled(status);
+    getImagesBtn.setClickable(status);
+    getImagesBtn.setEnabled(status);
+    mainActivity.setMenuEnabled(status);
   }
 
   private void invokeGetData() {
@@ -149,7 +156,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     return MainActivity.DATA_TRANSFER_FRAGMENT_ID;
   }
 
-  @OnClick({R.id.getDataBtn, R.id.sendDataBtn})
+  @OnClick({R.id.getDataBtn, R.id.sendDataBtn, R.id.get_images_button})
   public void onViewClicked(View view) {
     transferLogTxtV.setText("");
     switch (view.getId()) {
@@ -159,6 +166,75 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
       case R.id.sendDataBtn:
         invokeSendData();
         break;
+      case R.id.get_images_button:
+        publishResult(getString(R.string.message_transferring_goods_images_data));
+        getGoodsImages();
+        break;
     }
+  }
+
+  private void getGoodsImages() {
+    dataTransferPB.setVisibility(View.VISIBLE);
+    Analytics.logContentView("Get Images", "Data Transfer");
+    enableButtons(false);
+    Thread thread = new Thread(() ->
+    {
+      try {
+        dataTransferService.getGoodsImages(DataTransferFragment.this);
+      } catch (final BusinessException ex) {
+        Log.e(TAG, ex.getMessage(), ex);
+        runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
+      } catch (final Exception ex) {
+        Crashlytics.log(Log.ERROR, "Data Transfer", "Error in get images" + ex.getMessage());
+        Log.e(TAG, ex.getMessage(), ex);
+        runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
+      }
+    });
+
+    thread.start();
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+
+    if (getView() == null) {
+      return;
+    }
+
+    getView().setFocusableInTouchMode(true);
+    getView().requestFocus();
+    getView().setOnKeyListener((v, keyCode, event) ->
+    {
+      if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+        if (mainActivity.isMenuEnabled()) {
+          mainActivity.onBackPressed();
+        }
+        return true;
+      }
+      return false;
+    });
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof ErrorEvent) {
+      publishResult(getString(R.string.message_exception_in_data_transfer));
+    } else {
+      publishResult(getString(R.string.goods_images_data_transferred_successfully));
+    }
+    finished(true);
   }
 }

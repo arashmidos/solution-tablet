@@ -102,7 +102,6 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
         goodsDtoList = new GoodsDtoList();
         goodsDtoList.setGoodsDtoList(list);
       }
-
     } catch (ResourceAccessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
       getObserver().publishResult(new TimeOutException());

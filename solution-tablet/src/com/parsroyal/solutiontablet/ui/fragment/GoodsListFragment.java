@@ -101,10 +101,10 @@ public class GoodsListFragment extends BaseFragment {
         tvPaymentTime.setVisibility(View.GONE);
         rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
 
-        adapter = new GoodListAdapter(this, rejectedGoodsList.getGoodsDtoList(), readOnly);
+        adapter = new GoodListAdapter(this, rejectedGoodsList.getGoodsDtoList(), readOnly,true);
       } else {
         goodsList = goodsService.searchForGoodsList(goodsSo);
-        adapter = new GoodListAdapter(this, goodsList, readOnly);
+        adapter = new GoodListAdapter(this, goodsList, readOnly,false);
       }
 
       list.setAdapter(adapter);
@@ -151,7 +151,7 @@ public class GoodsListFragment extends BaseFragment {
         List<Goods> filteredList = new ArrayList<>();
         for (int i = 0; i < goodsList.size(); i++) {
           Goods good = goodsList.get(i);
-          if (Empty.isNotEmpty(constraint) && !good.getTitle().equals(constraint)) {
+          if (Empty.isNotEmpty(constraint) && !good.getTitle().equals(constraint) && !good.getCode().equals(constraint)) {
             continue;
           }
           filteredList.add(good);
@@ -167,6 +167,7 @@ public class GoodsListFragment extends BaseFragment {
         list.hideEmptyView();
         adapter.filter(goodsList);
       } else {
+        adapter.filter(null);
         list.showEmptyView();
       }
     }
@@ -187,7 +188,6 @@ public class GoodsListFragment extends BaseFragment {
       bundle.putLong(Constants.GOODS_BACKEND_ID, goods.getBackendId());
       bundle.putLong(Constants.GOODS_INVOICE_ID, invoiceBackendId);
       bundle.putLong(Constants.ORDER_STATUS, orderStatus);
-      bundle.putLong(Constants.GOODS_SALE_RATE, goods.getSaleRate());
       bundle.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
 
       long defaultUnit = goods.getDefaultUnit() != null ? goods.getDefaultUnit() : 1;

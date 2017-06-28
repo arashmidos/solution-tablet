@@ -20,7 +20,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
 
-  public static final String API_BASE_URL = "http://173.212.199.107:9998";
+  public static final String API_BASE_URL = "http://173.212.199.107:50003";
+//  public static final String API_BASE_URL = "http://173.212.199.107:50000";
 
   private static Retrofit retrofit;
   private static OkHttpClient.Builder httpClient =

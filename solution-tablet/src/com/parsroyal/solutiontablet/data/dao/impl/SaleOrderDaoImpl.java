@@ -152,12 +152,12 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       saleOrder.setType(
           Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE)));
 
-      ((SaleInvoiceDocument) saleOrder).setSaleOrderId(cursor.getLong(10));
+      ((SaleInvoiceDocument) saleOrder).setSaleOrderId(cursor.getLong(9));
     } else if (SaleOrderStatus.REJECTED.getId().equals(statusId)) {
       saleOrder = new SaleRejectDocument();
       saleOrder.setType(
           Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_REJECT_TYPE)));
-      ((SaleRejectDocument) saleOrder).setSaleOrderId(cursor.getLong(9));
+      ((SaleRejectDocument) saleOrder).setSaleOrderId(cursor.getLong(10));
     }
 
     saleOrder.setId(cursor.getLong(0));

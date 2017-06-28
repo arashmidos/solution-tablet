@@ -29,8 +29,8 @@ android {
         applicationId "com.parsroyal.solutiontablet"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 49
-        versionName "2.9.3"
+        versionCode 50
+        versionName "2.9.4"
         vectorDrawables.useSupportLibrary = true
         jackOptions {
             enabled true
@@ -128,13 +128,15 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.github.matecode:Snacky:1.0.2'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.0'
     compile 'com.marshalchen.ultimaterecyclerview:library:0.7.0'
+    compile 'com.github.bumptech.glide:glide:3.8.0'
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
 
 }
 

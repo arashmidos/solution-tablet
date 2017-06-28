@@ -3,6 +3,8 @@ package com.parsroyal.solutiontablet.util;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.Constants;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -13,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -24,6 +27,8 @@ public class MediaUtil {
   public static final int MEDIA_TYPE_VIDEO = 2;
   public static final int MEDIA_TYPE_ZIP = 3;
   private static final int BUFFER_SIZE = 512;
+  public static final String GOODS_IMAGES_FOLDER = SolutionTabletApplication.getInstance()
+      .getCacheDir().getAbsolutePath() + "/goods/";
 
   public static Uri getOutputMediaFileUri(int type, String directoryName, String fileName) {
     return Uri.fromFile(getOutputMediaFile(type, directoryName, fileName));
@@ -118,9 +123,71 @@ public class MediaUtil {
       try {
         out.close();
       } catch (IOException e) {
-
+        e.printStackTrace();
+        Crashlytics.log(Log.ERROR, "Zip images", e.getMessage());
       }
     }
     return zip;
+  }
+
+  public static boolean unpackZip(File file) {
+    File root = new File(GOODS_IMAGES_FOLDER);
+    if (!root.exists()) {
+      root.mkdir();
+    }
+
+    ZipInputStream zipInputStream;
+    try {
+      String filename;
+      zipInputStream = new ZipInputStream(new FileInputStream(file));
+      ZipEntry zipEntry;
+      byte[] buffer = new byte[1024];
+      int count;
+
+      while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+
+        filename = zipEntry.getName();
+
+        FileOutputStream fout = new FileOutputStream(GOODS_IMAGES_FOLDER + "/" + filename);
+
+        while ((count = zipInputStream.read(buffer)) != -1) {
+          fout.write(buffer, 0, count);
+        }
+
+        fout.close();
+        zipInputStream.closeEntry();
+      }
+
+      zipInputStream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
+    }
+
+    return true;
+  }
+
+  public static String getGoodImage(String goodsCode) {
+    File image = new File(GOODS_IMAGES_FOLDER + goodsCode + ".png");
+    if (image.exists()) {
+      return image.getAbsolutePath();
+    } else {
+      image = new File(GOODS_IMAGES_FOLDER + goodsCode + ".jpg");
+      if (image.exists()) {
+        return image.getAbsolutePath();
+      } else {
+        return null;
+      }
+    }
+  }
+
+  public static void clearGoodsFolder() {
+    File dir = new File(GOODS_IMAGES_FOLDER);
+    if (dir.exists()) {
+      String[] files = dir.list();
+      for (String file : files) {
+        new File(dir, file).delete();
+      }
+    }
   }
 }

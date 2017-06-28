@@ -47,7 +47,7 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
   @Override
   public void receiveData(SaleOrderList data) {
     try {
-      if (Empty.isNotEmpty(data)) {
+      if (Empty.isNotEmpty(data) && Empty.isNotEmpty(data.getOrderList())) {
         List<SaleOrder> deliverableOrders = saleOrderDao
             .retrieveSaleOrderByStatus(SaleOrderStatus.DELIVERABLE.getId());
         for (SaleOrder deliverableOrder : deliverableOrders) {

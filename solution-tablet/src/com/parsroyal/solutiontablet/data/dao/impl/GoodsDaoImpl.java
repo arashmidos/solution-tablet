@@ -201,7 +201,8 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     }
 
     if (Empty.isNotEmpty(goodsSo.getConstraint())) {
-      sql = sql.concat(" AND TITLE like ? ");
+      sql = sql.concat(" AND TITLE like ? OR CODE like ? ");
+      argsList.add(goodsSo.getConstraint());
       argsList.add(goodsSo.getConstraint());
     }
 

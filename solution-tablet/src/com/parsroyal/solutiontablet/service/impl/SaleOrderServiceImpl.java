@@ -244,6 +244,9 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     orderItem.setGoodsCount(count.longValue());
     orderItem.setAmount(itemAmount);
     orderItem.setSelectedUnit(selectedUnit);
+    if (Empty.isNotEmpty(goods.getUnit1Count()) && goods.getUnit1Count() != 0) {
+      orderItem.setGoodsUnit2Count(count.longValue() / goods.getUnit1Count());
+    }
     saleOrderItemDao.update(orderItem);
 
     goods.setExisting(goods.getExisting() - count.longValue());

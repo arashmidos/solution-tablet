@@ -76,7 +76,7 @@ public class OrdersListFragment extends
     View view = super.onCreateView(inflater, container, savedInstanceState);
 
     setupGeneralTabs();
-    if (ApplicationKeys.SALE_COLD.equals(saleType)) {
+    if (ApplicationKeys.SALE_COLD.equals(saleType) || ApplicationKeys.SALE_DISTRIBUTER.equals(saleType)) {
       setupColdSaleTabs();
     }
 
