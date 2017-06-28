@@ -18,7 +18,7 @@ import com.parsroyal.solutiontablet.biz.impl.ProvinceDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QuestionnaireDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.RejectedGoodsDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.ReturnedOrdersDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleOrderForDeliveryDataTaransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransferBizImpl;
@@ -198,7 +198,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     sendAllPayments(resultObserver);
     sendAllOrders(resultObserver);
     sendAllInvoicedOrders(resultObserver);
-    sendAllReturnedOrders(resultObserver);
+    sendAllSaleRejects(resultObserver);
     //Visit detail always should be the last one
     sendAllVisitInformation(resultObserver);
     uiObserver.finished(true);
@@ -420,14 +420,14 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
   }
 
-  private void sendAllReturnedOrders(ResultObserver resultObserver) {
+  private void sendAllSaleRejects(ResultObserver resultObserver) {
     List<BaseSaleDocument> saleOrders = saleOrderService
         .findOrderDocumentByStatus(SaleOrderStatus.REJECTED.getId());
     if (Empty.isNotEmpty(saleOrders)) {
-      ReturnedOrdersDataTransferBizImpl dataTransfer = new ReturnedOrdersDataTransferBizImpl(
+      SaleRejectsDataTransferBizImpl dataTransfer = new SaleRejectsDataTransferBizImpl(
           context, resultObserver);
       resultObserver
-          .publishResult(context.getString(R.string.message_transferring_returned_orders));
+          .publishResult(context.getString(R.string.message_transferring_sale_rejects));
       for (int i = 0; i < saleOrders.size(); i++) {
         BaseSaleDocument baseSaleDocument = saleOrders.get(i);
         dataTransfer.setOrder(baseSaleDocument);
@@ -437,7 +437,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
     } else {
       resultObserver
-          .publishResult(context.getString(R.string.message_no_returned_orders_for_sending));
+          .publishResult(context.getString(R.string.message_no_sale_reject_for_sending));
     }
   }
 

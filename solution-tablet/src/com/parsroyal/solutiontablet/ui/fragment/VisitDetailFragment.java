@@ -75,7 +75,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
   private static final int RESULT_CANCELED = 0;
   private static final int[] icons = {
       R.drawable.selector_add_order,
-      R.drawable.selector_add_returned,
+      R.drawable.selector_add_reject,
       R.drawable.selector_cash,
       R.drawable.selector_customer_location,
       R.drawable.selector_customer_detail,
@@ -147,7 +147,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
           openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
           contentName = "New Order/Invoice";
           break;
-        //Add returned
+        //Add reject
         case 1:
           openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
           contentName = "New Reject";

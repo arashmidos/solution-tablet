@@ -11,9 +11,9 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 /**
  * Created by Arash on 7/8/2016.
  */
-public class ReturnedOrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl {
+public class SaleRejectsDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl {
 
-  public ReturnedOrdersDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public SaleRejectsDataTransferBizImpl(Context context, ResultObserver resultObserver) {
     super(context, resultObserver);
   }
 
@@ -27,7 +27,7 @@ public class ReturnedOrdersDataTransferBizImpl extends InvoicedOrdersDataTransfe
 
   @Override
   protected String getExceptionMessage() {
-    return context.getString(R.string.message_exception_in_sending_returned_orders);
+    return context.getString(R.string.message_exception_in_sending_sale_rejects);
   }
 
   @Override
