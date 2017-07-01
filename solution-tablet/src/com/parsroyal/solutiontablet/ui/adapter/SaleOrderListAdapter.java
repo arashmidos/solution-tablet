@@ -68,8 +68,6 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
       if (Empty.isEmpty(convertView)) {
         convertView = mLayoutInflater.inflate(R.layout.row_layout_order, null);
         holder = new SaleOrderViewHolder();
-        holder.saleOrderNumberTv = (TextView) convertView.findViewById(R.id.orderNumberTv);
-        holder.saleOrderNumberLabel = (TextView) convertView.findViewById(R.id.orderNumberLabel);
         holder.dateTv = (TextView) convertView.findViewById(R.id.dateTv);
         holder.orderDateLabel = (TextView) convertView.findViewById(R.id.orderDateLabel);
         holder.amountTv = (TextView) convertView.findViewById(R.id.amountTv);
@@ -97,9 +95,6 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
 
       if (Empty.isNotEmpty(orderListModel)) {
         String title = getProperTitle(orderListModel.getStatus());
-        holder.saleOrderNumberLabel
-            .setText(String.format(Locale.US, context.getString(R.string.number_x), title));
-        holder.saleOrderNumberTv.setText(orderListModel.getSaleOrderNumber());
         holder.dateTv.setText(orderListModel.getDate());
         {
           Double displayAmount = Double.valueOf(orderListModel.getAmount()) / 1000D;
@@ -163,7 +158,6 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
   private static class SaleOrderViewHolder {
 
     public LinearLayout rowLayout;
-    public TextView saleOrderNumberTv;
     public TextView dateTv;
     public TextView orderDateLabel;
     public TextView amountTv;
@@ -171,7 +165,6 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
     public TextView paymentTypeTitleTv;
     public TextView customerNameTv;
     public TextView statusTv;
-    public TextView saleOrderNumberLabel;
     public TextView rejectOrPaymentLabel;
     public ImageButton uploadOrderBtn;
     public LinearLayout actionsLayout;

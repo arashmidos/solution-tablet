@@ -7,7 +7,6 @@ public class SaleOrderListModel extends BaseListModel {
 
   private Long id;
   private Long backendId;
-  private String saleOrderNumber;
   private String date;
   private Long amount;
   private String paymentTypeTitle;
@@ -37,14 +36,6 @@ public class SaleOrderListModel extends BaseListModel {
 
   public void setBackendId(Long backendId) {
     this.backendId = backendId;
-  }
-
-  public String getSaleOrderNumber() {
-    return saleOrderNumber;
-  }
-
-  public void setSaleOrderNumber(String saleOrderNumber) {
-    this.saleOrderNumber = saleOrderNumber;
   }
 
   public String getDate() {

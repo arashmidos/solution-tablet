@@ -5,12 +5,12 @@
   android:paddingTop="5dp"
   android:paddingBottom="5dp"
   android:paddingLeft="16dp"
-  android:descendantFocusability="blocksDescendants"
   android:paddingRight="16dp"
+  android:descendantFocusability="blocksDescendants"
   android:orientation="horizontal">
+
   <LinearLayout
     android:id="@+id/actions_layout"
-    android:visibility="gone"
     android:layout_width="150dp"
     android:layout_height="match_parent"
     android:paddingTop="5dp"
@@ -18,13 +18,15 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:visibility="gone">
+
     <ImageButton
       android:id="@+id/upload_order_btn"
       android:layout_width="48dp"
-      android:src="@mipmap/ic_upload"
+      android:layout_height="48dp"
       android:background="@color/gray_light_more"
-      android:layout_height="48dp" />
+      android:src="@mipmap/ic_upload" />
   </LinearLayout>
   <LinearLayout
     android:layout_width="match_parent"
@@ -55,21 +57,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/date_x" />
-
-      <TextView
-        android:id="@+id/orderNumberTv"
-        style="@style/TextView.Value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:text="112" />
-
-      <TextView
-        android:id="@+id/orderNumberLabel"
-        style="@style/TextView.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/number_x" />
 
       <TextView
         android:id="@+id/customerNameTv"

@@ -208,7 +208,6 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     String sql = "SELECT " +
         "o." + SaleOrder.COL_ID + "," +
         "o." + SaleOrder.COL_BACKEND_ID + "," +
-        "o." + SaleOrder.COL_NUMBER + "," +
         "o." + SaleOrder.COL_DATE + "," +
         "o." + SaleOrder.COL_AMOUNT + "," +
         "o." + SaleOrder.COL_STATUS + "," +
@@ -240,13 +239,12 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       SaleOrderListModel order = new SaleOrderListModel();
       order.setId(cursor.getLong(0));
       order.setBackendId(cursor.getLong(1));
-      order.setSaleOrderNumber(cursor.getString(2));
-      order.setDate(cursor.getString(3));
-      order.setAmount(cursor.getLong(4));
-      order.setStatus(cursor.getLong(5));
-      order.setCustomerName(cursor.getString(6));
-      order.setPaymentTypeTitle(cursor.getString(7));
-      order.setCustomerBackendId(cursor.getLong(8));
+      order.setDate(cursor.getString(2));
+      order.setAmount(cursor.getLong(3));
+      order.setStatus(cursor.getLong(4));
+      order.setCustomerName(cursor.getString(5));
+      order.setPaymentTypeTitle(cursor.getString(6));
+      order.setCustomerBackendId(cursor.getLong(7));
       orders.add(order);
     }
 
