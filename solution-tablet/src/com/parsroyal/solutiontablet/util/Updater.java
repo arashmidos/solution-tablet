@@ -11,6 +11,7 @@ import android.util.Log;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
@@ -39,7 +40,8 @@ public class Updater {
   private static DownloadManager downloadManager;
   private static long downloadReference;
   private static BroadcastReceiver receiverDownloadComplete;
-  private static SettingService settingService;
+  private static final String API_UPDATE_URL = "http://173.212.199.107:50003/pvstore/app/latest/solution-tablet";
+
 
   public static void checkAppUpdate(final Context context) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
@@ -49,7 +51,7 @@ public class Updater {
     UpdaterService updaterService = ServiceGenerator.createService(UpdaterService.class,
         Constants.UPDATE_USER, Constants.UPDATE_PASS);
 
-    Call<UpdateResponse> call = updaterService.getUpdate();
+    Call<UpdateResponse> call = updaterService.getUpdate(API_UPDATE_URL);
     call.enqueue(new Callback<UpdateResponse>() {
       @Override
       public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
@@ -71,17 +73,12 @@ public class Updater {
 
   public static void downloadGoodsImages(final Context context) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
-      throw new BackendIsNotReachableException();
+      EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
     }
 
-    settingService = new SettingServiceImpl(context);
+    UpdaterService updaterService = ServiceGenerator.createService(UpdaterService.class);
 
-    UpdaterService updaterService = ServiceGenerator.createService(UpdaterService.class,
-        settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME),
-        settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD));
-
-    Call<ResponseBody> call = updaterService.downloadGoodsImages(String.format("%s/%s",
-        settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1), "/goods/images"));
+    Call<ResponseBody> call = updaterService.downloadGoodsImages();
     call.enqueue(new Callback<ResponseBody>() {
       @Override
       public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -95,23 +92,23 @@ public class Updater {
               FileOutputStream fileOutputStream = new FileOutputStream(file);
               IOUtils.write(response.body().bytes(), fileOutputStream);
               MediaUtil.unpackZip(file);
-              EventBus.getDefault().post(new Event(200, "Good images downloaded successfully"));
+              EventBus.getDefault().post(new Event(StatusCodes.SUCCESS, "Good images downloaded successfully"));
 
             } catch (java.io.IOException e) {
               e.printStackTrace();
+              EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATS_STORE_ERROR));
             }
-
           } else {
-            EventBus.getDefault().post(new ErrorEvent(1006));
+            EventBus.getDefault().post(new ErrorEvent(StatusCodes.INVALID_DATA));
           }
         } else {
-          EventBus.getDefault().post(new ErrorEvent(1007));
+          EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
         }
       }
 
       @Override
       public void onFailure(Call<ResponseBody> call, Throwable t) {
-        EventBus.getDefault().post(new ErrorEvent(1001));
+        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
       }
     });
   }

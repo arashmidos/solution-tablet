@@ -10,16 +10,20 @@ import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.DataTransferService;
-import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
+import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SaleOrderListAdapter;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
@@ -28,6 +32,8 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by Mahyar on 8/25/2015.
@@ -51,32 +57,32 @@ public class OrdersListFragment extends
         .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
     //Set default list to show
-    {
-      saleOrderSO = new SaleOrderSO();
-      Bundle args = getArguments();
-      if (Empty.isNotEmpty(args)) {
-        Object statusId = args.get(Constants.STATUS_ID);
-        saleOrderSO.setStatusId(Empty.isNotEmpty(statusId) ? (Long) statusId : null);
-        Object customerBackendId = args.get("customerBackendId");
-        saleOrderSO.setCustomerBackendId(
-            Empty.isNotEmpty(customerBackendId) ? (Long) customerBackendId : null);
-        visitId = args.getLong(Constants.VISIT_ID);
-      }
-      if (Empty.isEmpty(saleOrderSO.getStatusId())) {
-        if (ApplicationKeys.SALE_COLD.equals(saleType)) {
-          saleOrderSO.setStatusId(SaleOrderStatus.READY_TO_SEND.getId());
-        } else {
-          saleOrderSO.setStatusId(SaleOrderStatus.INVOICED.getId());
-        }
-      }
 
-      dataModel = saleOrderService.findOrders(saleOrderSO);
+    saleOrderSO = new SaleOrderSO();
+    Bundle args = getArguments();
+    if (Empty.isNotEmpty(args)) {
+      Object statusId = args.get(Constants.STATUS_ID);
+      saleOrderSO.setStatusId(Empty.isNotEmpty(statusId) ? (Long) statusId : null);
+      Object customerBackendId = args.get("customerBackendId");
+      saleOrderSO.setCustomerBackendId(
+          Empty.isNotEmpty(customerBackendId) ? (Long) customerBackendId : null);
+      visitId = args.getLong(Constants.VISIT_ID);
     }
+    if (Empty.isEmpty(saleOrderSO.getStatusId())) {
+      if (ApplicationKeys.SALE_COLD.equals(saleType)) {
+        saleOrderSO.setStatusId(SaleOrderStatus.READY_TO_SEND.getId());
+      } else {
+        saleOrderSO.setStatusId(SaleOrderStatus.INVOICED.getId());
+      }
+    }
+
+    dataModel = saleOrderService.findOrders(saleOrderSO);
 
     View view = super.onCreateView(inflater, container, savedInstanceState);
 
     setupGeneralTabs();
-    if (ApplicationKeys.SALE_COLD.equals(saleType) || ApplicationKeys.SALE_DISTRIBUTER.equals(saleType)) {
+    if (ApplicationKeys.SALE_COLD.equals(saleType) || ApplicationKeys.SALE_DISTRIBUTER
+        .equals(saleType)) {
       setupColdSaleTabs();
     }
 
@@ -130,7 +136,6 @@ public class OrdersListFragment extends
       tab.setOnClickListener(v ->
       {
         saleOrderSO.setStatusId(SaleOrderStatus.REJECTED_SENT.getId());
-        dataModel = saleOrderService.findOrders(saleOrderSO);
         updateList();
       });
       tabContainer.addTab(tab);
@@ -143,7 +148,6 @@ public class OrdersListFragment extends
       tab.setOnClickListener(v ->
       {
         saleOrderSO.setStatusId(SaleOrderStatus.REJECTED.getId());
-        dataModel = saleOrderService.findOrders(saleOrderSO);
         updateList();
       });
       tabContainer.addTab(tab);
@@ -155,7 +159,6 @@ public class OrdersListFragment extends
       tab.setOnClickListener(v ->
       {
         saleOrderSO.setStatusId(SaleOrderStatus.CANCELED.getId());
-        dataModel = saleOrderService.findOrders(saleOrderSO);
         updateList();
       });
       tabContainer.addTab(tab);
@@ -166,7 +169,6 @@ public class OrdersListFragment extends
       tab.setOnClickListener(v ->
       {
         saleOrderSO.setStatusId(SaleOrderStatus.SENT_INVOICE.getId());
-        dataModel = saleOrderService.findOrders(saleOrderSO);
         updateList();
       });
       tabContainer.addTab(tab);
@@ -178,11 +180,16 @@ public class OrdersListFragment extends
       tab.setOnClickListener(v ->
       {
         saleOrderSO.setStatusId(SaleOrderStatus.INVOICED.getId());
-        dataModel = saleOrderService.findOrders(saleOrderSO);
         updateList();
       });
       tabContainer.addTab(tab);
     }
+  }
+
+  protected void updateList() {
+    dataModel = saleOrderService.findOrders(saleOrderSO);
+    adapter = getAdapter();
+    dataModelLv.setAdapter(adapter);
   }
 
   @Override
@@ -246,7 +253,8 @@ public class OrdersListFragment extends
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
       } catch (final Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in requesting live data " + ex.getMessage());
+        Crashlytics
+            .log(Log.ERROR, "Data transfer", "Error in requesting live data " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
       }
@@ -282,5 +290,30 @@ public class OrdersListFragment extends
 
   @Override
   public void finished(boolean result) {
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof SendOrderEvent) {
+      ToastUtil.toastMessage(getActivity(), event.getMessage());
+
+      if (event.getStatusCode().equals(StatusCodes.SUCCESS)) {
+        updateList();
+      }
+    } else if (event instanceof ErrorEvent) {
+      ToastUtil.toastError(getActivity(), event.getStatusCode().toString());
+    }
   }
 }

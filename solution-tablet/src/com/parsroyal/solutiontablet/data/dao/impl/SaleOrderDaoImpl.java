@@ -24,7 +24,6 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -136,8 +135,9 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     return saleOrder;
   }
 
-  protected BaseSaleDocument createsaleDocumentFromCursor(Cursor cursor, Long statusId) {
+  protected BaseSaleDocument createsaleDocumentFromCursor(Cursor cursor) {
     BaseSaleDocument saleOrder = null;
+    Long statusId = cursor.getLong(8);
     if (SaleOrderStatus.READY_TO_SEND.getId().equals(statusId)) {
       saleOrder = new SaleOrderDocument();
       saleOrder.setType(
@@ -146,7 +146,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       String saleDate = cursor.getString(3);
       Date date = DateUtil.convertStringToDate(saleDate, DateUtil.GLOBAL_FORMATTER, "FA");
       date = DateUtil.addDaysToDate(date, 1, false);
-      ((SaleOrderDocument) saleOrder).setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
+      ((SaleOrderDocument) saleOrder)
+          .setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
     } else if (SaleOrderStatus.INVOICED.getId().equals(statusId)) {
       saleOrder = new SaleInvoiceDocument();
       saleOrder.setType(
@@ -297,11 +298,29 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     List<BaseSaleDocument> saleOrderList = new ArrayList<>();
 
     while (cursor.moveToNext()) {
-      saleOrderList.add(createsaleDocumentFromCursor(cursor, statusId));
+      saleOrderList.add(createsaleDocumentFromCursor(cursor));
     }
 
     cursor.close();
     return saleOrderList;
+  }
+
+  @Override
+  public BaseSaleDocument findOrderDocumentByOrderId(Long orderId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String selection = SaleOrder.COL_ID + " = ? ";
+    String[] args = {String.valueOf(orderId)};
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+
+    BaseSaleDocument baseSaleDocument = null;
+
+    if (cursor.moveToNext()) {
+      baseSaleDocument=createsaleDocumentFromCursor(cursor);
+    }
+
+    cursor.close();
+    return baseSaleDocument;
   }
 
   @Override

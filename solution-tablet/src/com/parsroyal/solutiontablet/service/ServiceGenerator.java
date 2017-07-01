@@ -2,6 +2,9 @@ package com.parsroyal.solutiontablet.service;
 
 import android.text.TextUtils;
 import com.parsroyal.solutiontablet.BuildConfig;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import okhttp3.Credentials;
@@ -20,9 +23,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
 
-  public static final String API_BASE_URL = "http://173.212.199.107:50003";
-//  public static final String API_BASE_URL = "http://173.212.199.107:50000";
-
   private static Retrofit retrofit;
   private static OkHttpClient.Builder httpClient =
       new OkHttpClient.Builder()
@@ -32,22 +32,21 @@ public class ServiceGenerator {
   private static HttpLoggingInterceptor logging =
       new HttpLoggingInterceptor()
           .setLevel(HttpLoggingInterceptor.Level.BASIC);
-  private static Retrofit.Builder builder =
-      new Retrofit.Builder()
-          .baseUrl(API_BASE_URL)
-          .addConverterFactory(GsonConverterFactory.create());
+  private static Retrofit.Builder builder;
+  private static SettingService settingService = new SettingServiceImpl(
+      SolutionTabletApplication.getInstance());
 
   public static <S> S createService(Class<S> serviceClass) {
-    return createService(serviceClass, null, null);
+
+    String username = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
+    String password = settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD);
+
+    return createService(serviceClass, username, password);
   }
 
   public static <S> S createService(Class<S> serviceClass, String username, String password) {
-    if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-      String authToken = Credentials.basic(username, password);
-      return createService(serviceClass, authToken);
-    }
-
-    return createService(serviceClass, null, null);
+    String authToken = Credentials.basic(username, password);
+    return createService(serviceClass, authToken);
   }
 
   public static <S> S createService(Class<S> serviceClass, final String authToken) {
@@ -62,6 +61,10 @@ public class ServiceGenerator {
         httpClient.addInterceptor(logging);
       }
 
+      String baseUrl = new SettingServiceImpl(SolutionTabletApplication.getInstance())
+          .getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+      builder = new Retrofit.Builder().baseUrl(baseUrl + "/");
+      builder.addConverterFactory(GsonConverterFactory.create());
       builder.client(httpClient.build());
       retrofit = builder.build();
     }

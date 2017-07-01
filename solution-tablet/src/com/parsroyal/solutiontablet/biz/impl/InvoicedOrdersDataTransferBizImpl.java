@@ -70,7 +70,9 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
         success++;
       }
     } else {
-      resultObserver.publishResult(getExceptionMessage());
+      if (Empty.isNotEmpty(resultObserver)) {
+        resultObserver.publishResult(getExceptionMessage());
+      }
     }
   }
 
