@@ -3,12 +3,15 @@ package com.parsroyal.solutiontablet.ui.adapter;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
@@ -26,6 +29,7 @@ import java.util.Locale;
 public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
 
   public static final String TAG = SaleOrderListAdapter.class.getSimpleName();
+  private final OrdersDataTransferBizImpl dataTransfer;
 
   private SaleOrderSO saleOrderSO;
   private SaleOrderService saleOrderService;
@@ -35,6 +39,8 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
     super(context, dataModel);
     this.saleOrderSO = saleOrderSO;
     this.saleOrderService = new SaleOrderServiceImpl(context);
+    this.dataTransfer = new OrdersDataTransferBizImpl(context, null);
+
   }
 
   @Override
@@ -62,8 +68,6 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
       if (Empty.isEmpty(convertView)) {
         convertView = mLayoutInflater.inflate(R.layout.row_layout_order, null);
         holder = new SaleOrderViewHolder();
-        holder.saleOrderNumberTv = (TextView) convertView.findViewById(R.id.orderNumberTv);
-        holder.saleOrderNumberLabel = (TextView) convertView.findViewById(R.id.orderNumberLabel);
         holder.dateTv = (TextView) convertView.findViewById(R.id.dateTv);
         holder.orderDateLabel = (TextView) convertView.findViewById(R.id.orderDateLabel);
         holder.amountTv = (TextView) convertView.findViewById(R.id.amountTv);
@@ -73,6 +77,15 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
             .findViewById(R.id.rejectOrPaymentLabel);
         holder.statusTv = (TextView) convertView.findViewById(R.id.statusTv);
         holder.customerNameTv = (TextView) convertView.findViewById(R.id.customerNameTv);
+        holder.uploadOrderBtn = (ImageButton) convertView.findViewById(R.id.upload_order_btn);
+        holder.uploadOrderBtn.setOnClickListener(v -> {
+          BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(holder.id);
+          if (Empty.isNotEmpty(saleOrder)) {
+            ToastUtil.toastMessage(context, R.string.message_transferring_orders);
+            dataTransfer.sendSingleOrder(saleOrder);
+          }
+        });
+        holder.actionsLayout = (LinearLayout) convertView.findViewById(R.id.actions_layout);
         convertView.setTag(holder);
       } else {
         holder = (SaleOrderViewHolder) convertView.getTag();
@@ -82,9 +95,6 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
 
       if (Empty.isNotEmpty(orderListModel)) {
         String title = getProperTitle(orderListModel.getStatus());
-        holder.saleOrderNumberLabel
-            .setText(String.format(Locale.US, context.getString(R.string.number_x), title));
-        holder.saleOrderNumberTv.setText(orderListModel.getSaleOrderNumber());
         holder.dateTv.setText(orderListModel.getDate());
         {
           Double displayAmount = Double.valueOf(orderListModel.getAmount()) / 1000D;
@@ -105,11 +115,16 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
         holder.statusTv
             .setText(SaleOrderStatus.getDisplayTitle(context, orderListModel.getStatus()));
         holder.customerNameTv.setText(orderListModel.getCustomerName());
+        holder.id = orderListModel.getId();
+        if (saleOrderSO.getStatusId().equals(SaleOrderStatus.READY_TO_SEND.getId())) {
+          holder.actionsLayout.setVisibility(View.VISIBLE);
+        }
       }
 
       return convertView;
     } catch (final Exception e) {
-      Crashlytics.log(Log.ERROR, "Unknown exception", "Error in SaleOrderListAdapter.getView" + e.getMessage());
+      Crashlytics.log(Log.ERROR, "Unknown exception",
+          "Error in SaleOrderListAdapter.getView" + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       context.runOnUiThread(() -> ToastUtil.toastError(context, new UnknownSystemException(e)));
       return null;
@@ -119,6 +134,7 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
   /*
   @return Proper title for which could be "Rejected", "Order" or "Invoice"
   */
+
   private String getProperTitle(Long orderStatus) {
 
     if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
@@ -142,7 +158,6 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
   private static class SaleOrderViewHolder {
 
     public LinearLayout rowLayout;
-    public TextView saleOrderNumberTv;
     public TextView dateTv;
     public TextView orderDateLabel;
     public TextView amountTv;
@@ -150,8 +165,9 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
     public TextView paymentTypeTitleTv;
     public TextView customerNameTv;
     public TextView statusTv;
-    public TextView saleOrderNumberLabel;
     public TextView rejectOrPaymentLabel;
+    public ImageButton uploadOrderBtn;
+    public LinearLayout actionsLayout;
+    public long id;
   }
-
 }

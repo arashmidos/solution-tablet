@@ -125,6 +125,16 @@ public class SaleOrderServiceImpl implements SaleOrderService {
   }
 
   @Override
+  public BaseSaleDocument findOrderDocumentByOrderId(Long orderId) {
+    BaseSaleDocument baseSaleDocument = saleOrderDao.findOrderDocumentByOrderId(orderId);
+    if (Empty.isNotEmpty(baseSaleDocument)) {
+      baseSaleDocument.setItems(getSaleDocumentItems(baseSaleDocument.getId()));
+    }
+
+    return baseSaleDocument;
+  }
+
+  @Override
   public SaleOrderDto findOrderDtoByCustomerBackendIdAndStatus(Long backendId, Long statusId) {
     SaleOrderDto orderDto = saleOrderDao
         .getOrderDtoByCustomerBackendIdAndStatus(backendId, statusId);

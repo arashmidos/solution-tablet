@@ -12,10 +12,9 @@ import retrofit2.http.Url;
 
 public interface UpdaterService {
 
-  @GET("/pvstore/app/latest/solution-tablet")
-  Call<UpdateResponse> getUpdate();
+  @GET
+  Call<UpdateResponse> getUpdate(@Url String url);
 
-
-  @GET/*("/tabletbackend/goods/images")*/
-  Call<ResponseBody> downloadGoodsImages(@Url String url);
+  @GET("goods/images")
+  Call<ResponseBody> downloadGoodsImages();
 }

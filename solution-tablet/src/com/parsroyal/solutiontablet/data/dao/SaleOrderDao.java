@@ -22,5 +22,7 @@ public interface SaleOrderDao extends BaseDao<SaleOrder, Long> {
 
   List<BaseSaleDocument> findOrderDocumentsByStatusId(Long statusId);
 
+  BaseSaleDocument findOrderDocumentByOrderId( Long orderId);
+
   void deleteByCustomerBackendIdAndStatus(Long customerBackendId, Long statusId);
 }

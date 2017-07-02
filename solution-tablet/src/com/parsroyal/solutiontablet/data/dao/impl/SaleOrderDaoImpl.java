@@ -24,7 +24,6 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -136,8 +135,9 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     return saleOrder;
   }
 
-  protected BaseSaleDocument createsaleDocumentFromCursor(Cursor cursor, Long statusId) {
+  protected BaseSaleDocument createsaleDocumentFromCursor(Cursor cursor) {
     BaseSaleDocument saleOrder = null;
+    Long statusId = cursor.getLong(8);
     if (SaleOrderStatus.READY_TO_SEND.getId().equals(statusId)) {
       saleOrder = new SaleOrderDocument();
       saleOrder.setType(
@@ -146,7 +146,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       String saleDate = cursor.getString(3);
       Date date = DateUtil.convertStringToDate(saleDate, DateUtil.GLOBAL_FORMATTER, "FA");
       date = DateUtil.addDaysToDate(date, 1, false);
-      ((SaleOrderDocument) saleOrder).setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
+      ((SaleOrderDocument) saleOrder)
+          .setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
     } else if (SaleOrderStatus.INVOICED.getId().equals(statusId)) {
       saleOrder = new SaleInvoiceDocument();
       saleOrder.setType(
@@ -207,7 +208,6 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     String sql = "SELECT " +
         "o." + SaleOrder.COL_ID + "," +
         "o." + SaleOrder.COL_BACKEND_ID + "," +
-        "o." + SaleOrder.COL_NUMBER + "," +
         "o." + SaleOrder.COL_DATE + "," +
         "o." + SaleOrder.COL_AMOUNT + "," +
         "o." + SaleOrder.COL_STATUS + "," +
@@ -239,13 +239,12 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       SaleOrderListModel order = new SaleOrderListModel();
       order.setId(cursor.getLong(0));
       order.setBackendId(cursor.getLong(1));
-      order.setSaleOrderNumber(cursor.getString(2));
-      order.setDate(cursor.getString(3));
-      order.setAmount(cursor.getLong(4));
-      order.setStatus(cursor.getLong(5));
-      order.setCustomerName(cursor.getString(6));
-      order.setPaymentTypeTitle(cursor.getString(7));
-      order.setCustomerBackendId(cursor.getLong(8));
+      order.setDate(cursor.getString(2));
+      order.setAmount(cursor.getLong(3));
+      order.setStatus(cursor.getLong(4));
+      order.setCustomerName(cursor.getString(5));
+      order.setPaymentTypeTitle(cursor.getString(6));
+      order.setCustomerBackendId(cursor.getLong(7));
       orders.add(order);
     }
 
@@ -297,11 +296,29 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     List<BaseSaleDocument> saleOrderList = new ArrayList<>();
 
     while (cursor.moveToNext()) {
-      saleOrderList.add(createsaleDocumentFromCursor(cursor, statusId));
+      saleOrderList.add(createsaleDocumentFromCursor(cursor));
     }
 
     cursor.close();
     return saleOrderList;
+  }
+
+  @Override
+  public BaseSaleDocument findOrderDocumentByOrderId(Long orderId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String selection = SaleOrder.COL_ID + " = ? ";
+    String[] args = {String.valueOf(orderId)};
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+
+    BaseSaleDocument baseSaleDocument = null;
+
+    if (cursor.moveToNext()) {
+      baseSaleDocument=createsaleDocumentFromCursor(cursor);
+    }
+
+    cursor.close();
+    return baseSaleDocument;
   }
 
   @Override

@@ -18,7 +18,7 @@ import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
-import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
@@ -230,10 +230,10 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
 
   @Subscribe
   public void getMessage(Event event) {
-    if (event instanceof ErrorEvent) {
-      publishResult(getString(R.string.message_exception_in_data_transfer));
-    } else {
+    if (event.getStatusCode().equals(StatusCodes.SUCCESS)) {
       publishResult(getString(R.string.goods_images_data_transferred_successfully));
+    } else {
+      publishResult(getString(R.string.message_exception_in_data_transfer));
     }
     finished(true);
   }

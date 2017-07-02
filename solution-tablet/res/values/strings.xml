@@ -372,6 +372,9 @@
   <string name="enable_sale_rate">فروش بر اساس ضریب کالا فعال باشد</string>
   <string name="get_catalog">دریافت عکس کالاها</string>
   <string name="message_exception_in_data_transfer">خطا در ارتباط با سرور</string>
+  <string name="data_transfered_successfully">انتقال اطلاعات با موفقیت انجام شد</string>
+  <string name="error_no_network">خطا در اتصال به اینترنت</string>
+  <string name="message_exception_in_data_store">خطا در ذخیره سازی اطلاعات</string>
   <string-array name="sale_type">
     <item>فروش سرد</item>
     <item>فروش گرم</item>

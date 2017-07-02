@@ -1,13 +1,14 @@
 package com.parsroyal.solutiontablet.data.event;
 
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import java.io.Serializable;
 
 public class Event implements Serializable {
 
   protected String message;
-  protected int statusCode;
+  protected StatusCodes statusCode;
 
-  public Event(int statusCode, String message) {
+  public Event(StatusCodes statusCode, String message) {
     this.statusCode = statusCode;
     this.message = message;
   }
@@ -15,11 +16,11 @@ public class Event implements Serializable {
   public Event() {
   }
 
-  public int getStatusCode() {
+  public StatusCodes getStatusCode() {
     return statusCode;
   }
 
-  public void setStatusCode(int statusCode) {
+  public void setStatusCode(StatusCodes statusCode) {
     this.statusCode = statusCode;
   }
 
