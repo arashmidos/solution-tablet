@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -16,7 +17,6 @@ import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.data.response.UpdateResponse;
-import com.parsroyal.solutiontablet.exception.BackendIsNotReachableException;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.UpdaterService;
@@ -37,6 +37,7 @@ import retrofit2.Response;
  */
 public class Updater {
 
+  private static final String TAG = Updater.class.getName();
   private static DownloadManager downloadManager;
   private static long downloadReference;
   private static BroadcastReceiver receiverDownloadComplete;
@@ -48,8 +49,21 @@ public class Updater {
       return;
     }
 
-    UpdaterService updaterService = ServiceGenerator.createService(UpdaterService.class,
-        Constants.UPDATE_USER, Constants.UPDATE_PASS);
+    SettingService settingService = new SettingServiceImpl(context);
+    if (Empty.isEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1))) {
+      return;
+    }
+
+    UpdaterService updaterService = null;
+    try {
+      updaterService = ServiceGenerator.createService(UpdaterService.class,
+          Constants.UPDATE_USER, Constants.UPDATE_PASS);
+    } catch (Exception ex) {
+      Crashlytics
+          .log(Log.ERROR, "Service Generator", "can not create update service " + ex.getMessage());
+      Log.e(TAG, ex.getMessage(), ex);
+      return;
+    }
 
     Call<UpdateResponse> call = updaterService.getUpdate(API_UPDATE_URL);
     call.enqueue(new Callback<UpdateResponse>() {
@@ -57,7 +71,7 @@ public class Updater {
       public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
         if (response.body() != null) {
           UpdateResponse updateResponse = response.body();
-          if (updateResponse.isSuccess()
+          if (updateResponse!=null && updateResponse.isSuccess()
               && updateResponse.getVersion() > BuildConfig.VERSION_CODE) {
             doUpdate(context, updateResponse.getDownloadUrl(), updateResponse.getVersion());
           }
@@ -74,6 +88,7 @@ public class Updater {
   public static void downloadGoodsImages(final Context context) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
+      return;
     }
 
     UpdaterService updaterService = ServiceGenerator.createService(UpdaterService.class);
@@ -92,7 +107,8 @@ public class Updater {
               FileOutputStream fileOutputStream = new FileOutputStream(file);
               IOUtils.write(response.body().bytes(), fileOutputStream);
               MediaUtil.unpackZip(file);
-              EventBus.getDefault().post(new Event(StatusCodes.SUCCESS, "Good images downloaded successfully"));
+              EventBus.getDefault()
+                  .post(new Event(StatusCodes.SUCCESS, "Good images downloaded successfully"));
 
             } catch (java.io.IOException e) {
               e.printStackTrace();
