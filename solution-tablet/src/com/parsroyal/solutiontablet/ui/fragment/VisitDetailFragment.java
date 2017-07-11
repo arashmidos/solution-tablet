@@ -39,15 +39,15 @@ import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationService;
+import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.service.SaleOrderService;
-import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
@@ -127,7 +127,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
 
       return view;
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating VisitDetailFragment " + ex.getMessage());
+      Crashlytics.log(Log.ERROR, "UI Exception",
+          "Error in creating VisitDetailFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       return inflater.inflate(R.layout.view_error_page, null);
     }
@@ -323,7 +324,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
       } catch (final Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in getting rejected data " + ex.getMessage());
+        Crashlytics
+            .log(Log.ERROR, "Data transfer", "Error in getting rejected data " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
       }
@@ -346,7 +348,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       orderDto.setId(id);
       return orderDto;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in creating draft order " + e.getMessage());
+      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+          "Error in creating draft order " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
     }
@@ -379,15 +382,16 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_ID, customerId);
     args.putLong(Constants.VISIT_ID, visitId);
-    mainActivity.changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+    args.putInt(Constants.PARENT, MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID);
+    mainActivity.changeFragment(MainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID, args, false);
   }
 
   private void openGoodsQuestionnairesFragment() {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_ID, customerId);
     args.putLong(Constants.VISIT_ID, visitId);
-    args.putInt(Constants.PARENT, getFragmentId());
-    mainActivity.changeFragment(MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+    args.putInt(Constants.PARENT, MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID);
+    mainActivity.changeFragment(MainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID, args, false);
   }
 
   private void finishVisiting() {
@@ -408,7 +412,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
         doFinishVisiting();
       }
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
+      Crashlytics
+          .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
@@ -452,7 +457,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
           try {
             visitService.updateVisitLocation(visitId, location);
           } catch (Exception e) {
-            Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in updating visit location " + e.getMessage());
+            Crashlytics.log(Log.ERROR, "Data Storage Exception",
+                "Error in updating visit location " + e.getMessage());
             Log.e(TAG, e.getMessage(), e);
           }
 
@@ -474,7 +480,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Location Service", "Error in finding location " + ex.getMessage());
+      Crashlytics
+          .log(Log.ERROR, "Location Service", "Error in finding location " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
@@ -499,7 +506,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       mainActivity.removeFragment(this);
       mainActivity.setMenuEnabled(true);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
+      Crashlytics
+          .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
@@ -557,7 +565,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
           selectedItem.getValue());
       visitService.saveVisitDetail(visitInformationDetail);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception", "Error in updating visit result " + ex.getMessage());
+      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+          "Error in updating visit result " + ex.getMessage());
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
       Log.e(TAG, ex.getMessage(), ex);
     }

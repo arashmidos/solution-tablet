@@ -164,6 +164,7 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
           visitId = finalVisitInformations.getId();
         }
         args.putLong(Constants.VISIT_ID, visitId);
+        args.putInt(Constants.PARENT,MainActivity.NEW_CUSTOMER_FRAGMENT_ID);
         //
 
         //if question count > 0 is each category so we should display it to user.

@@ -23,18 +23,15 @@ public class GoodsQuestionnairesFragment extends GeneralQuestionnairesFragment {
 
   @Override
   protected AdapterView.OnItemClickListener getOnItemClickListener() {
-    return new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        QuestionnaireListModel questionnaireListModel = dataModel.get(position);
-        Bundle args = new Bundle();
-        args.putLong("qnId", questionnaireListModel.getBackendId());
-        args.putLong(Constants.VISIT_ID, visitId);
-        args.putLong(Constants.CUSTOMER_ID, customerId);
-        args.putLong("ggBi", questionnaireListModel.getGoodsGroupBackendId());
-        mainActivity
-            .changeFragment(MainActivity.GOODS_LIST_FOR_QUESTIONNAIRES_FRAGMENT_ID, args, false);
-      }
+    return (parent1, view, position, id) -> {
+      QuestionnaireListModel questionnaireListModel = dataModel.get(position);
+      Bundle args = new Bundle();
+      args.putLong("qnId", questionnaireListModel.getBackendId());
+      args.putLong(Constants.VISIT_ID, visitId);
+      args.putLong(Constants.CUSTOMER_ID, customerId);
+      args.putLong("ggBi", questionnaireListModel.getGoodsGroupBackendId());
+      mainActivity
+          .changeFragment(MainActivity.GOODS_LIST_FOR_QUESTIONNAIRES_FRAGMENT_ID, args, false);
     };
   }
 

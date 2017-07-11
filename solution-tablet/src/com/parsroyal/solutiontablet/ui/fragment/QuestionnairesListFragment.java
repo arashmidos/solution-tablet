@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -19,22 +20,25 @@ import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NQuestionnaireListAdapter;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
 /**
  * Created by Arash on 2017-05-08
  */
-public class NQuestionnairesFragment extends
+public class QuestionnairesListFragment extends
     BaseListFragment<QuestionnaireListModel, NQuestionnaireListAdapter> {
 
-  public static final String TAG = NQuestionnairesFragment.class.getSimpleName();
+  public static final String TAG = QuestionnairesListFragment.class.getSimpleName();
 
   protected MainActivity mainActivity;
   protected QuestionnaireService questionnaireService;
   protected int parent;
   private VisitService visitService;
   private FloatingActionButton fab;
+  private long visitId;
+  private long customerId;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,19 +47,36 @@ public class NQuestionnairesFragment extends
     questionnaireService = new QuestionnaireServiceImpl(mainActivity);
     visitService = new VisitServiceImpl(mainActivity);
 
+    Bundle arguments = getArguments();
+
+    visitId = arguments.getLong(Constants.VISIT_ID, -1);
+    customerId = arguments.getLong(Constants.CUSTOMER_ID, -1);
+    parent = arguments.getInt(Constants.PARENT, 0);
+
     try {
       QuestionnaireSo questionnaireSo = getSearchObject();
-      questionnaireSo.setAnonymous(true);
-      dataModel = questionnaireService.searchForAnonymousQuestionaire(questionnaireSo);
+
+      dataModel = questionnaireService.searchForQuestionsList(questionnaireSo);
 
       View view = super.onCreateView(inflater, container, savedInstanceState);
       fab = (FloatingActionButton) view.findViewById(R.id.fab);
       initFab();
+      if (parent != 0) {
+        buttonPanel.setVisibility(View.VISIBLE);
+        Button canclButton = (Button) buttonPanel.findViewById(R.id.cancelBtn);
+        canclButton.setOnClickListener(v ->
+        {
+          mainActivity.removeFragment(QuestionnairesListFragment.this);
+          mainActivity.changeSidebarItem(parent);
+        });
+      }
+
       return view;
 
     } catch (Exception ex) {
       Crashlytics
-          .log(Log.ERROR, "UI Exception", "Error in creating NquestionaireFragment " + ex.getMessage());
+          .log(Log.ERROR, "UI Exception",
+              "Error in creating NquestionaireFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
       return inflater.inflate(R.layout.view_error_page, null);
@@ -67,25 +88,37 @@ public class NQuestionnairesFragment extends
 
     fab.setOnClickListener(v ->
     {
-      Long visitId = visitService.startAnonymousVisit();
       MainActivity mainActivity = (MainActivity) getActivity();
       Bundle args = new Bundle();
-      args.putLong(Constants.VISIT_ID, visitId);
-      args.putInt(Constants.PARENT, MainActivity.NQUESTIONAIRE_FRAGMENT_ID);
-      mainActivity.changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+      args.putLong(Constants.VISIT_ID,
+          visitId == -1 ? visitService.startAnonymousVisit() : visitId);
+      args.putLong(Constants.CUSTOMER_ID, customerId);
+      args.putInt(Constants.PARENT, MainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID);
+      if (visitId == -1 || parent == MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID) {
+        mainActivity.changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+      } else {
+        mainActivity.changeFragment(MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+      }
     });
   }
 
   protected QuestionnaireSo getSearchObject() {
     QuestionnaireSo questionnaireSo = new QuestionnaireSo();
-    questionnaireSo.setAnonymous(true);
+    if (visitId != -1) {
+      //Its from a customer's visit
+      questionnaireSo.setGeneral(parent == MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID);
+      questionnaireSo.setVisitId(visitId);
+      questionnaireSo.setAnonymous(false);
+    } else {
+      questionnaireSo.setAnonymous(true);
+    }
     return questionnaireSo;
   }
 
   @Override
   protected List<QuestionnaireListModel> getDataModel() {
     QuestionnaireSo questionnaireSo = getSearchObject();
-    return questionnaireService.searchForAnonymousQuestionaire(questionnaireSo);
+    return questionnaireService.searchForQuestionsList(questionnaireSo);
   }
 
   @Override
@@ -106,7 +139,8 @@ public class NQuestionnairesFragment extends
       Bundle args = new Bundle();
       args.putLong(Constants.QUESTIONAIRE_ID, questionnaireListModel.getPrimaryKey());
       args.putLong(Constants.VISIT_ID, questionnaireListModel.getVisitId());
-      args.putInt(Constants.PARENT, MainActivity.NQUESTIONAIRE_FRAGMENT_ID);
+      args.putInt(Constants.PARENT,
+          parent == 0 ? MainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID : parent);
       mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
     };
   }
@@ -129,6 +163,6 @@ public class NQuestionnairesFragment extends
   @Override
   public void onResume() {
     super.onResume();
-    Log.d(TAG, "On resume");
+    updateList();
   }
 }

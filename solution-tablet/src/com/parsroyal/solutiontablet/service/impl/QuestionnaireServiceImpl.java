@@ -81,9 +81,8 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   }
 
   @Override
-  public List<QuestionnaireListModel> searchForAnonymousQuestionaire(
-      QuestionnaireSo questionnaireSo) {
-    return questionDao.searchForAnonymousQuestions(questionnaireSo);
+  public List<QuestionnaireListModel> searchForQuestionsList(QuestionnaireSo questionnaireSo) {
+    return questionnaireDao.searchForQuestionsList(questionnaireSo);
   }
 
   @Override

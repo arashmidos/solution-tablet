@@ -38,7 +38,7 @@ public class NQuestionnaireListAdapter extends BaseListAdapter<QuestionnaireList
     if (constraint.length() != 0 && Empty.isNotEmpty(constraint.toString())) {
       questionnaireSo.setConstraint(constraint.toString());
     }
-    return questionnaireService.searchForAnonymousQuestionaire(questionnaireSo);
+    return questionnaireService.searchForQuestionsList(questionnaireSo);
   }
 
   @Override

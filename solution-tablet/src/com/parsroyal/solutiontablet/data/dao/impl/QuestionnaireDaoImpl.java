@@ -139,4 +139,53 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
     cursor.close();
     return questionnaires;
   }
+
+  @Override
+  public List<QuestionnaireListModel> searchForQuestionsList(QuestionnaireSo questionnaireSo) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+    String sql = "SELECT" +
+        " q.QUESTIONNAIRE_BACKEND_ID," +
+        " qn.DESCRIPTION," +
+        " a.VISIT_ID," +
+        " a.DATE" +
+        " FROM COMMER_Q_ANSWER a " +
+        " LEFT OUTER JOIN COMMER_QUESTION q ON a.QUESTION_BACKEND_ID = q.BACKEND_ID  " +
+        " LEFT OUTER JOIN COMMER_VISIT_INFORMATION v on v._id = a.VISIT_ID " +
+        " LEFT OUTER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID = q.QUESTIONNAIRE_BACKEND_ID " +
+        " WHERE 1=1 ";
+
+    String orderBy = " ORDER BY q.qOrder";
+    String groupBy = " GROUP BY a.VISIT_ID";
+
+    if (questionnaireSo.isAnonymous()) {
+      sql = sql.concat(" AND v.CUSTOMER_BACKEND_ID = 0 AND v.CUSTOMER_ID = 0");
+    } else {
+      if (questionnaireSo.isGeneral()) {
+        sql = sql.concat(" AND " + Questionnaire.COL_GOODS_GROUP_BACKEND_ID + " = 0 ");
+      } else {
+        sql = sql.concat(" AND " + Questionnaire.COL_GOODS_GROUP_BACKEND_ID + " <> 0 ");
+      }
+      sql = sql.concat(" AND a.VISIT_ID = " + questionnaireSo.getVisitId());
+    }
+
+    sql = sql.concat(groupBy).concat(orderBy);
+
+    String[] args = null;
+    Cursor cursor = db.rawQuery(sql, args);
+
+    List<QuestionnaireListModel> questions = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      QuestionnaireListModel listModel = new QuestionnaireListModel();
+      listModel.setPrimaryKey(cursor.getLong(0));
+      listModel.setDescription(cursor.getString(1));
+      listModel.setVisitId(cursor.getLong(2));
+      listModel.setDate(cursor.getString(3));
+      questions.add(listModel);
+    }
+
+    cursor.close();
+    return questions;
+  }
 }

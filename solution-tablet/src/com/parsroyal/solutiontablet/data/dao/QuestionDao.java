@@ -19,6 +19,4 @@ public interface QuestionDao extends BaseDao<Question, Long> {
 
   QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
       Long goodsBackendId, boolean isNext);
-
-  List<QuestionnaireListModel> searchForAnonymousQuestions(QuestionnaireSo questionnaireSo);
 }

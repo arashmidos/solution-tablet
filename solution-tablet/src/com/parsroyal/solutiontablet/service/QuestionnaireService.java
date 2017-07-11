@@ -28,5 +28,5 @@ public interface QuestionnaireService extends BaseService {
 
   QAnswer getAnswerById(Long id);
 
-  List<QuestionnaireListModel> searchForAnonymousQuestionaire(QuestionnaireSo questionnaireSo);
+  List<QuestionnaireListModel> searchForQuestionsList(QuestionnaireSo questionnaireSo);
 }

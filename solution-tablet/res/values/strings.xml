@@ -375,6 +375,7 @@
   <string name="data_transfered_successfully">انتقال اطلاعات با موفقیت انجام شد</string>
   <string name="error_no_network">خطا در اتصال به اینترنت</string>
   <string name="message_exception_in_data_store">خطا در ذخیره سازی اطلاعات</string>
+  <string name="return_btn">بازگشت</string>
   <string-array name="sale_type">
     <item>فروش سرد</item>
     <item>فروش گرم</item>

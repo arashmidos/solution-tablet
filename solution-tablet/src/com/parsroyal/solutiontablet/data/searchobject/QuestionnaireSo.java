@@ -7,6 +7,15 @@ public class QuestionnaireSo extends BaseSO {
 
   private boolean general;
   private boolean anonymous;
+  private long visitId;
+
+  public long getVisitId() {
+    return visitId;
+  }
+
+  public void setVisitId(long visitId) {
+    this.visitId = visitId;
+  }
 
   public QuestionnaireSo(boolean isGeneral) {
     super();
