@@ -294,6 +294,7 @@
   <string name="set_your_location">انتخاب مکان</string>
   <string name="getting_location">در حال آدرس یابی</string>
   <string name="google_maps_key">AIzaSyCY9ip78ONBh08XxM_q8SmYQ9TKMJuEjaQ</string>
+  <string name="google_map_snap_to_roads_key">AIzaSyCaFd0Cqu8hJ9ibKfleQE-CC9I3pchRxts</string>
   <string name="error_google_play_not_available">سرویس گوگل پلی نصب نیست یا احتیاج به بروز رسانی دارد.\n\n کد خطا %1$d</string>
   <string name="location_set">ثبت شد!</string>
   <string name="tracking_no">شماره پیگیری</string>

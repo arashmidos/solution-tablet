@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.content.IntentSender;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -63,10 +64,11 @@ import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.MapServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.Analytics;
@@ -176,12 +178,7 @@ public class UserTrackingFragment extends BaseFragment implements
       if (isChecked) {
         doFilter();
       } else {
-        polylines.remove(polyline);
-        polyline.remove();
-        if (Empty.isNotEmpty(startMarker)) {
-          startMarker.remove();
-          endMarker.remove();
-        }
+        clearMapRoute();
       }
     });
 
@@ -204,6 +201,18 @@ public class UserTrackingFragment extends BaseFragment implements
         .addApi(LocationServices.API).build();
 
     return view;
+  }
+
+  private void clearMapRoute() {
+    if (Empty.isNotEmpty(polyline)) {
+      polyline.remove();
+      polylines.remove(polyline);
+    }
+
+    if (Empty.isNotEmpty(startMarker)) {
+      startMarker.remove();
+      endMarker.remove();
+    }
   }
 
   private void loadCalendars() {
@@ -305,8 +314,8 @@ public class UserTrackingFragment extends BaseFragment implements
           @Override
           public void foundLocation(Location location) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(location.getLatitude(), location.getLongitude())
-                , cameraZoom), 4000, null);
+                new LatLng(location.getLatitude(), location.getLongitude()), cameraZoom), 4000,
+                null);
           }
 
           @Override
@@ -316,7 +325,6 @@ public class UserTrackingFragment extends BaseFragment implements
       } catch (GPSIsNotEnabledException ignore) {
         NotificationUtil.showGPSDisabled(getActivity());
       }
-
     } else {
       currentLatlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
     }
@@ -400,7 +408,8 @@ public class UserTrackingFragment extends BaseFragment implements
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(context, e);
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "General Exception", "Error in entering customer from map " + e.getMessage());
+      Crashlytics.log(Log.ERROR, "General Exception",
+          "Error in entering customer from map " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(context, new UnknownSystemException(e));
     } finally {
@@ -472,27 +481,34 @@ public class UserTrackingFragment extends BaseFragment implements
       Date to = DateUtil.endOfDay(c2);
 
       List<LatLng> route = positionService.getAllPositionLatLngByDate(from, to);
-      if (route.size() > 0) {
-        startMarker = map.addMarker(new MarkerOptions()
-            .position(route.get(0))
-            .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
-                getActivity(), R.drawable.ic_place_green_48dp))));
-      }
-      if (route.size() > 1) {
-        endMarker = map.addMarker(new MarkerOptions()
-            .position(route.get(route.size() - 1))
-            .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
-                getActivity(), R.drawable.ic_place_red_48dp))));
-      }
-      PolylineOptions polyOptions = new PolylineOptions();
-      polyOptions.color(getResources().getColor(colors[3]));
-      polyOptions.width(4);
-      polyOptions.addAll(route);
-      polyline = map.addPolyline(polyOptions);
-      polylines.add(polyline);
+      drawRoute(route);
 
+      new AsyncRouteLoader().execute(route);
       Analytics.logContentView("Map Filter");
     }
+  }
+
+  private void drawRoute(List<LatLng> route) {
+    clearMapRoute();
+    if (route.size() > 0) {
+      startMarker = map.addMarker(new MarkerOptions()
+          .position(route.get(0))
+          .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+              getActivity(), R.drawable.ic_place_green_48dp))));
+    }
+    if (route.size() > 1) {
+      endMarker = map.addMarker(new MarkerOptions()
+          .position(route.get(route.size() - 1))
+          .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+              getActivity(), R.drawable.ic_place_red_48dp))));
+    }
+    PolylineOptions polyOptions = new PolylineOptions();
+    polyOptions.color(getResources().getColor(colors[3]));
+    polyOptions.width(4);
+    polyOptions.addAll(route);
+    polyline = map.addPolyline(polyOptions);
+    polylines.add(polyline);
+
   }
 
   @Override
@@ -574,4 +590,26 @@ public class UserTrackingFragment extends BaseFragment implements
       markerOptions.icon(icon);
     }
   }
+
+  private class AsyncRouteLoader extends AsyncTask<List<LatLng>, Void, List<LatLng>> {
+
+    @Override
+    protected void onPreExecute() {
+      //We can later show a smooth linear progressbar here, but not for now
+    }
+
+    @Override
+    protected List<LatLng> doInBackground(List<LatLng>... params) {
+      return MapServiceImpl.snapToRoads(getActivity(), params[0]);
+    }
+
+    @Override
+    protected void onPostExecute(List<LatLng> list) {
+//      dismiss dialog();
+      if (Empty.isNotEmpty(list)) {
+        drawRoute(list);
+      }
+    }
+  }
+
 }
