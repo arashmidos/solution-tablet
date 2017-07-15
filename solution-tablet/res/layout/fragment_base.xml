@@ -37,7 +37,7 @@
           android:paddingLeft="35dp"
           android:paddingRight="35dp"
           android:background="@drawable/rounded_button_gray"
-          android:text="@string/cancel_btn"
+          android:text="@string/return_btn"
           android:textColor="@color/white"/>
 
         <ImageButton

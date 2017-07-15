@@ -48,7 +48,7 @@ import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomersFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NQuestionnairesFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrdersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentDetailFragment;
@@ -108,7 +108,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   public static final int FUNDS_FRAGMENT_ID = 23;
   public static final int CUSTOMER_TRACKING_FRAGMENT_ID = 24;
   public static final int BASE_TRACKING_FRAGMENT_ID = 25;
-  public static final int NQUESTIONAIRE_FRAGMENT_ID = 26;
+  public static final int QUESTIONAIRE_LIST_FRAGMENT_ID = 26;
 
   private final Integer[] drawerItemTitles = {
       R.string.setting,
@@ -237,7 +237,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report_active);
         contentName = "Payment Reports";
         break;
-      case NQUESTIONAIRE_FRAGMENT_ID://26
+      case QUESTIONAIRE_LIST_FRAGMENT_ID://26
         questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_active);
         contentName = "New Questionnaire";
         break;
@@ -284,6 +284,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
 
   private BaseFragment findFragment(int fragmentId, Bundle args) {
     BaseFragment fragment = null;
+    int parent = 0;
     switch (fragmentId) {
       case CUSTOMER_LIST_FRAGMENT_ID:
         fragment = new VisitLinesFragment();
@@ -311,12 +312,13 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         break;
       case GENERAL_QUESTIONNAIRES_FRAGMENT_ID://6
         fragment = new GeneralQuestionnairesFragment();
-        int parent = args.getInt(Constants.PARENT, 0);
+        parent = args.getInt(Constants.PARENT, 0);
         changeSidebarItem(parent);
         break;
       case QUESTIONNAIRE_DETAIL_FRAGMENT_ID:
         fragment = new QuestionnaireDetailFragment();
-        changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
+        parent = args.getInt(Constants.PARENT);
+        changeSidebarItem(parent);
         break;
       case GOODS_QUESTIONNAIRES_FRAGMENT_ID://8
         fragment = new GoodsQuestionnairesFragment();
@@ -385,9 +387,12 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         fragment = new PaymentFragment();
         changeSidebarItem(FUNDS_FRAGMENT_ID);
         break;
-      case NQUESTIONAIRE_FRAGMENT_ID:
-        fragment = new NQuestionnairesFragment();
-        changeSidebarItem(NQUESTIONAIRE_FRAGMENT_ID);
+      case QUESTIONAIRE_LIST_FRAGMENT_ID:
+        fragment = new QuestionnairesListFragment();
+        if (Empty.isNotEmpty(args)) {
+          fragment.setArguments(args);
+        }
+        changeSidebarItem(args.getInt(Constants.PARENT, QUESTIONAIRE_LIST_FRAGMENT_ID));
 
     }
     Analytics.logContentView("Fragment " + String.valueOf(fragmentId));

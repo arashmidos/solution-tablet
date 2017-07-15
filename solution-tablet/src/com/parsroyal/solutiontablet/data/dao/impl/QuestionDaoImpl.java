@@ -228,38 +228,4 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
     cursor.close();
     return questionDto;
   }
-
-  @Override
-  public List<QuestionnaireListModel> searchForAnonymousQuestions(QuestionnaireSo questionnaireSo) {
-    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
-    SQLiteDatabase db = databaseHelper.getReadableDatabase();
-
-    String sql = "SELECT" +
-        " q.QUESTIONNAIRE_BACKEND_ID," +
-        " qn.DESCRIPTION," +
-        " a.VISIT_ID," +
-        " a.DATE" +
-        " FROM COMMER_Q_ANSWER a " +
-        " LEFT OUTER JOIN COMMER_QUESTION q ON a.QUESTION_BACKEND_ID = q.BACKEND_ID  " +
-        " LEFT OUTER JOIN COMMER_VISIT_INFORMATION v on v._id = a.VISIT_ID " +
-        " LEFT OUTER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID = q.QUESTIONNAIRE_BACKEND_ID " +
-        " WHERE v.CUSTOMER_BACKEND_ID = 0 AND v.CUSTOMER_ID = 0 GROUP BY a.VISIT_ID ORDER BY q.qOrder ";
-    sql = sql.concat(" ");
-
-    String[] args = null;
-    Cursor cursor = db.rawQuery(sql, args);
-
-    List<QuestionnaireListModel> questions = new ArrayList<>();
-    while (cursor.moveToNext()) {
-      QuestionnaireListModel listModel = new QuestionnaireListModel();
-      listModel.setPrimaryKey(cursor.getLong(0));
-      listModel.setDescription(cursor.getString(1));
-      listModel.setVisitId(cursor.getLong(2));
-      listModel.setDate(cursor.getString(3));
-      questions.add(listModel);
-    }
-
-    cursor.close();
-    return questions;
-  }
 }

@@ -56,7 +56,7 @@
 
     <service
       android:exported="false"
-      android:name="com.parsroyal.solutiontablet.service.TrackLocationService"></service>
+      android:name="com.parsroyal.solutiontablet.service.TrackLocationService" />
 
     <receiver android:name="com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver">
       <intent-filter>
