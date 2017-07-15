@@ -16,6 +16,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Position;
@@ -60,10 +61,8 @@ public class TrackLocationService extends Service implements GoogleApiClient.Con
       salesmanId = Long
           .parseLong(keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID).getValue());
 
-      interval = Integer
-          .valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_GPS_INTERVAL));
-      instantUpdate = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_ENABLE)
-          .equals("1");
+      interval = Constants.GPS_INTERVAL_IN_SECOND;
+      instantUpdate = true;
 
       googleApiClient = new GoogleApiClient.Builder(this)
           .addConnectionCallbacks(this)
@@ -152,16 +151,13 @@ public class TrackLocationService extends Service implements GoogleApiClient.Con
       position.setSalesmanId(salesmanId);
       long id = positionService.savePosition(position);
       position.setId(id);
-      instantUpdate = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_ENABLE)
-          .equals("1");
-      if (instantUpdate) {
-        Thread sender = new Thread(() -> {
-          if (NetworkUtil.isNetworkAvailable(getApplicationContext())) {
-            positionService.sendPosition(position);
-          }
-        });
-        sender.start();
-      }
+      Thread sender = new Thread(() -> {
+        if (NetworkUtil.isNetworkAvailable(getApplicationContext())) {
+          positionService.sendPosition(position);
+        }
+      });
+      sender.start();
+
     } catch (Exception ex) {
       Crashlytics
           .log(Log.ERROR, "Location Service", "Error in saving data into db " + ex.getMessage());

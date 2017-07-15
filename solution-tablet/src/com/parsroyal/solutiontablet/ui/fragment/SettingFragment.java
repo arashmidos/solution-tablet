@@ -51,10 +51,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
   EditText userCodeTxt;
   @BindView(R.id.saleTypeSp)
   Spinner saleTypeSp;
-  @BindView(R.id.gps_interval)
-  EditText gpsInterval;
-  @BindView(R.id.enableTrackingCb)
-  CheckBox enableTrackingCb;
   @BindView(R.id.enableCalculateDistanceCb)
   CheckBox enableCalculateDistanceCb;
   @BindView(R.id.branchSerialTxt)
@@ -85,8 +81,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
     String userCode = settingService.getSettingValue(ApplicationKeys.SETTING_USER_CODE);
     String password = settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD);
     String saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
-    String gpsIntervalValue = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_INTERVAL);
-    String gpsEnabled = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_ENABLE);
     String distanceEnabled = settingService
         .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE);
     String branchSerial = settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE);
@@ -102,8 +96,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
     passwordTxt.setText(Empty.isNotEmpty(password) ? password : "");
     userCodeTxt.setText(Empty.isNotEmpty(userCode) ? userCode : "");
     saleTypeSp.setSelection(Empty.isNotEmpty(saleType) ? Integer.parseInt(saleType) - 1 : 1);
-    gpsInterval.setText(Empty.isNotEmpty(gpsIntervalValue) ? gpsIntervalValue : "");
-    enableTrackingCb.setChecked(Empty.isNotEmpty(gpsEnabled) && gpsEnabled.equals("1"));
     enableCalculateDistanceCb
         .setChecked(Empty.isNotEmpty(distanceEnabled) && distanceEnabled.equals("1"));
     branchSerialTxt.setText(Empty.isNotEmpty(branchSerial) ? branchSerial : "");
@@ -127,8 +119,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
     usernameTxt.setText("tablet");
     passwordTxt.setText("123");
     userCodeTxt.setText("1016");
-    gpsInterval.setText("300");
-    enableTrackingCb.setChecked(true);
     enableCalculateDistanceCb.setChecked(true);
     enableSaleRateCb.setChecked(true);
     branchSerialTxt.setText("100101");
@@ -174,8 +164,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
       String password = passwordTxt.getText().toString();
       String userCode = userCodeTxt.getText().toString();
       String saleType = String.valueOf(saleTypeSp.getSelectedItemPosition() + 1);
-      String gpsIntervalValue = gpsInterval.getText().toString();
-      String gpsEnabled = enableTrackingCb.isChecked() ? "1" : "0";
       String distanceEnabled = enableCalculateDistanceCb.isChecked() ? "1" : "0";
       String stockSerial = stockSerialTxt.getText().toString();
       String branchSerial = branchSerialTxt.getText().toString();
@@ -189,8 +177,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
       settingService.saveSetting(ApplicationKeys.SETTING_USER_CODE, userCode);
       settingService.saveSetting(ApplicationKeys.SETTING_PASSWORD, password);
       settingService.saveSetting(ApplicationKeys.SETTING_SALE_TYPE, saleType);
-      settingService.saveSetting(ApplicationKeys.SETTING_GPS_INTERVAL, gpsIntervalValue);
-      settingService.saveSetting(ApplicationKeys.SETTING_GPS_ENABLE, gpsEnabled);
       settingService
           .saveSetting(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE, distanceEnabled);
       settingService.saveSetting(ApplicationKeys.SETTING_STOCK_CODE, stockSerial);
@@ -233,14 +219,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
         userCodeTxt.requestFocus();
       });
       return false;
-    } else if (Empty.isEmpty(gpsInterval.getText().toString())) {
-      runOnUiThread(() ->
-      {
-        ToastUtil.toastError(getActivity(), R.string.error_gps_interval_is_required);
-        gpsInterval.requestFocus();
-      });
-      return false;
-    } else if (Empty.isEmpty(branchSerialTxt.getText().toString())) {
+    }else if (Empty.isEmpty(branchSerialTxt.getText().toString())) {
       runOnUiThread(() ->
       {
         ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_required);
@@ -319,8 +298,6 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.removeFragment(this);
         mainActivity.updateActionbar();
-        //Start GPS Tracker
-        new TrackerAlarmReceiver().setAlarm(getContext());
       });
     }
   }

@@ -30,7 +30,6 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.exception.BusinessException;
-import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
@@ -48,12 +47,12 @@ import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomersFragment;
-import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrdersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
@@ -161,10 +160,9 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     setupActionbar();
     setupDrawer();
     initialize();
-//    if (!BuildConfig.DEBUG) {
-    logUser();
-//    }
-
+    if (!BuildConfig.DEBUG) {
+      logUser();
+    }
   }
 
   private void logUser() {
@@ -534,23 +532,6 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-    if (!GPSUtil.isGpsAvailable(this)) {
-      showGpsOffDialog();
-    }
-
-    registerReceiver(gpsReceiver, new IntentFilter("android.location.PROVIDERS_CHANGED"));
-    new TrackerAlarmReceiver().setAlarm(this);
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    unregisterReceiver(gpsReceiver);
-  }
-
-  @Override
   protected void onStart() {
     super.onStart();
     EventBus.getDefault().register(this);
@@ -560,6 +541,23 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     } else {
       Updater.checkAppUpdate(this);
     }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    if (!GPSUtil.isGpsAvailable(this)) {
+      showGpsOffDialog();
+      Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
+    }
+
+    registerReceiver(gpsReceiver, new IntentFilter("android.location.PROVIDERS_CHANGED"));
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    unregisterReceiver(gpsReceiver);
   }
 
   @Override

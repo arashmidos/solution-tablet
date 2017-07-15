@@ -6,15 +6,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 import com.crashlytics.android.Crashlytics;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.TrackLocationService;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.util.Calendar;
 
 /**
  * Created by Arash on 2016-09-10
@@ -49,23 +50,21 @@ public class TrackerAlarmReceiver extends WakefulBroadcastReceiver {
       Log.i(TAG, "required information is available. trying to set alarm");
       alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
       Intent intent = new Intent(context, TrackerAlarmReceiver.class);
-      alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-      String timeInterval = settingService.getSettingValue(ApplicationKeys.SETTING_GPS_INTERVAL);
-      if (Empty.isNotEmpty(timeInterval)) {
-        Log.d(TAG, "Alarm set successfully!");
-        alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(),
-            Integer.parseInt(timeInterval) * 1000, alarmIntent);
-      }
-
-      ComponentName receiver = new ComponentName(context, TrackerAlarmReceiver.class);
-      PackageManager pm = context.getPackageManager();
-
-      pm.setComponentEnabledSetting(receiver,
-          PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-          PackageManager.DONT_KILL_APP);
+      alarmIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 0, intent,
+          PendingIntent.FLAG_CANCEL_CURRENT);
+      alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(),
+          Constants.GPS_INTERVAL_IN_SECOND * 1000, alarmIntent);
+      Log.d(TAG, "Alarm set successfully!");
     } else {
       Log.i(TAG, "required information is not available");
     }
+
+    ComponentName receiver = new ComponentName(context, TrackerAlarmReceiver.class);
+    PackageManager pm = context.getPackageManager();
+
+    pm.setComponentEnabledSetting(receiver,
+        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+        PackageManager.DONT_KILL_APP);
   }
 
   public void cancelAlarm(Context context) {

@@ -336,47 +336,6 @@
         android:layout_marginBottom="10dp"
         android:gravity="right">
 
-        <EditText
-          android:id="@+id/gps_interval"
-          style="@style/EditBox"
-          android:layout_width="300dp"
-          android:layout_height="wrap_content"
-          android:hint="@string/seconds"
-          android:inputType="number"
-          android:maxLength="3" />
-
-        <TextView
-          android:id="@+id/textView22"
-          style="@style/TextView.Caption"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/gps_interval" />
-      </TableRow>
-
-      <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="right">
-
-        <CheckBox
-          android:id="@+id/enableTrackingCb"
-          style="@style/TextView.Caption"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="right"
-          android:gravity="left"
-          android:text="@string/enable_gps_service" />
-      </TableRow>
-
-      <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="right">
-
         <CheckBox
           android:id="@+id/enableCalculateDistanceCb"
           style="@style/TextView.Caption"
