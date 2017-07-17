@@ -219,7 +219,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
         userCodeTxt.requestFocus();
       });
       return false;
-    }else if (Empty.isEmpty(branchSerialTxt.getText().toString())) {
+    } else if (Empty.isEmpty(branchSerialTxt.getText().toString())) {
       runOnUiThread(() ->
       {
         ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_required);
@@ -298,6 +298,8 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.removeFragment(this);
         mainActivity.updateActionbar();
+        mainActivity.startGpsService();
+        new TrackerAlarmReceiver().setAlarm(getContext());
       });
     }
   }
