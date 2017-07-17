@@ -1,11 +1,15 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.content.IntentSender;
+import android.Manifest.permission;
+import android.content.IntentSender.SendIntentException;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +23,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindInt;
 import butterknife.BindView;
@@ -31,9 +36,14 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.Builder;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -89,9 +99,9 @@ import java.util.Locale;
  * Created by Arash on 2016-09-14.
  */
 public class UserTrackingFragment extends BaseFragment implements
-    GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+    ConnectionCallbacks, OnConnectionFailedListener,
     OnMapReadyCallback,
-    GoogleMap.OnCameraChangeListener, DateSetListener {
+    OnCameraChangeListener, DateSetListener {
 
   public static final String TAG = UserTrackingFragment.class.getSimpleName();
 
@@ -113,6 +123,8 @@ public class UserTrackingFragment extends BaseFragment implements
   CheckBox showCustomers;
   @BindView(R.id.show_track)
   CheckBox showTrack;
+  @BindView(R.id.mainLayout)
+  RelativeLayout mainLayout;
 
   private GoogleApiClient googleApiClient;
   private Location currentLocation;
@@ -195,7 +207,7 @@ public class UserTrackingFragment extends BaseFragment implements
 
     loadCalendars();
 
-    googleApiClient = new GoogleApiClient.Builder(context)
+    googleApiClient = new Builder(context)
         .addConnectionCallbacks(this)
         .addOnConnectionFailedListener(this)
         .addApi(LocationServices.API).build();
@@ -211,6 +223,9 @@ public class UserTrackingFragment extends BaseFragment implements
 
     if (Empty.isNotEmpty(startMarker)) {
       startMarker.remove();
+    }
+
+    if (Empty.isNotEmpty(endMarker)) {
       endMarker.remove();
     }
   }
@@ -279,7 +294,7 @@ public class UserTrackingFragment extends BaseFragment implements
       try {
         mResolvingError = true;
         result.startResolutionForResult(getActivity(), 1001);
-      } catch (IntentSender.SendIntentException e) {
+      } catch (SendIntentException e) {
         // There was an error with the resolution intent. Try again.
         googleApiClient.connect();
       }
@@ -306,6 +321,20 @@ public class UserTrackingFragment extends BaseFragment implements
 
     map = googleMap;
 
+    if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION)
+        != PackageManager.PERMISSION_GRANTED
+        && ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION)
+        != PackageManager.PERMISSION_GRANTED) {
+      Snackbar.make(mainLayout, R.string.permission_rationale,
+          Snackbar.LENGTH_INDEFINITE)
+          .setAction(R.string.ok_btn, view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(getActivity(),
+                new String[]{permission.ACCESS_FINE_LOCATION}, 34);
+          })
+          .show();
+      return;
+    }
     currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
     if (currentLocation == null) {
@@ -532,7 +561,7 @@ public class UserTrackingFragment extends BaseFragment implements
     }
   }
 
-  class CustomerMarkerAdapter implements GoogleMap.InfoWindowAdapter {
+  class CustomerMarkerAdapter implements InfoWindowAdapter {
 
     @BindView(R.id.customer_name)
     TextView customerName;
@@ -611,5 +640,4 @@ public class UserTrackingFragment extends BaseFragment implements
       }
     }
   }
-
 }
