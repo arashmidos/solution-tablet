@@ -47,6 +47,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     contentValues.put(Position.COL_BACKEND_ID, entity.getBackendId());
     contentValues.put(Position.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(Position.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
+    contentValues.put(Position.COL_ACCURACY, entity.getAccuracy());
     return contentValues;
   }
 
@@ -75,6 +76,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
         Position.COL_BACKEND_ID,
         Position.COL_CREATE_DATE_TIME,//10
         Position.COL_UPDATE_DATE_TIME,
+        Position.COL_ACCURACY
     };
     return projection;
   }
@@ -97,6 +99,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setBackendId(cursor.getLong(9));
     position.setCreateDateTime(cursor.getString(10));
     position.setUpdateDateTime(cursor.getString(11));
+    position.setAccuracy(cursor.getFloat(12));
     return position;
   }
 
