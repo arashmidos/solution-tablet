@@ -123,7 +123,7 @@ public class CustomerServiceImpl implements CustomerService {
       if (Empty.isEmpty(position)) {
         item.setDistance(0.0f);
       } else {
-        item.setDistance(LocationUtil.distanceTo(position.getLatitude(), position.getLongitude(),
+        item.setDistance(LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
             item.getXlocation(), item.getYlocation()));
       }
     }

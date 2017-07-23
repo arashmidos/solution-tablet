@@ -27,15 +27,16 @@ import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
+import com.parsroyal.solutiontablet.util.LocationUtil;
 
 /**
- * @author arash
+ * @author Arash
  *
- * This class is a long-running service for location updates. When an activity is bound to this
- * service, frequent location updates are permitted. When the activity is removed from the
- * foreground, the service promotes itself to a foreground service, and location updates
- * continue. When the activity comes back to the foreground, the foreground service stops, and the
- * notification assocaited with that service is removed.
+ *         This class is a long-running service for location updates. When an activity is bound to
+ *         this service, frequent location updates are permitted. When the activity is removed from
+ *         the foreground, the service promotes itself to a foreground service, and location updates
+ *         continue. When the activity comes back to the foreground, the foreground service stops,
+ *         and the notification assocaited with that service is removed.
  */
 public class LocationUpdatesService extends Service {
 
@@ -48,6 +49,7 @@ public class LocationUpdatesService extends Service {
   public static final String EXTRA_LOCATION = PACKAGE_NAME + ".location";
   private static final String EXTRA_STARTED_FROM_NOTIFICATION = PACKAGE_NAME +
       ".started_from_notification";
+  private static final float MAX_ACCEPTED_DISTANCE_IN_METER = 1000.0f;
 
   private final IBinder mBinder = new LocalBinder();
 
@@ -247,6 +249,7 @@ public class LocationUpdatesService extends Service {
       lastLocation.setLatitude(lastPosition.getLatitude());
       lastLocation.setLongitude(lastPosition.getLongitude());
       lastLocation.setSpeed(lastPosition.getSpeed());
+      lastLocation.setAccuracy(lastPosition.getAccuracy());
     }
   }
 
@@ -275,6 +278,10 @@ public class LocationUpdatesService extends Service {
 
     if ((Empty.isNotEmpty(lastLocation) && lastLocation.getSpeed() == 0.0
         && location.getSpeed() == 0.0)) {
+      return false;
+    }
+
+    if (LocationUtil.distanceBetween(lastLocation, location) > MAX_ACCEPTED_DISTANCE_IN_METER) {
       return false;
     }
     return true;
