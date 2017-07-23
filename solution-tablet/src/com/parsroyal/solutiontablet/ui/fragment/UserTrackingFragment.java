@@ -22,7 +22,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindInt;
@@ -118,13 +117,17 @@ public class UserTrackingFragment extends BaseFragment implements
   @BindView(R.id.fromDate)
   EditText fromDate;
   @BindView(R.id.filter_layout)
-  LinearLayout filterLayout;
+  RelativeLayout filterLayout;
   @BindView(R.id.show_customers)
   CheckBox showCustomers;
   @BindView(R.id.show_track)
   CheckBox showTrack;
   @BindView(R.id.mainLayout)
   RelativeLayout mainLayout;
+  @BindView(R.id.show_snapped_track)
+  CheckBox showSnappedTrack;
+  @BindView(R.id.show_waypoints)
+  CheckBox showWaypoints;
 
   private GoogleApiClient googleApiClient;
   private Location currentLocation;
@@ -150,12 +153,15 @@ public class UserTrackingFragment extends BaseFragment implements
   private CustomerService customerService;
   private ClusterManager<CustomerListModel> clusterManager;
   private Polyline polyline;
+  private Polyline snappedPolyline;
   private Cluster<CustomerListModel> clickedCluster;
   private CustomerListModel clickedClusterItem;
   private Marker startMarker;
   private Marker endMarker;
+  private List<Marker> waypoints = new ArrayList<>();
   private boolean distanceServiceEnabled;
   private FragmentActivity context;
+  private List<LatLng> lastRoute;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -187,10 +193,42 @@ public class UserTrackingFragment extends BaseFragment implements
 
     showTrack.setOnCheckedChangeListener((buttonView, isChecked) ->
     {
+      showSnappedTrack.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+      showWaypoints.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
       if (isChecked) {
         doFilter();
       } else {
         clearMapRoute();
+      }
+    });
+
+    showSnappedTrack.setOnCheckedChangeListener((buttonView, isChecked) ->
+    {
+      if (isChecked) {
+        new AsyncRouteLoader().execute(lastRoute);
+      } else {
+        if (Empty.isNotEmpty(snappedPolyline)) {
+          snappedPolyline.remove();
+          polylines.remove(snappedPolyline);
+        }
+      }
+    });
+
+    showWaypoints.setOnCheckedChangeListener((buttonView, isChecked) ->
+    {
+      if (isChecked) {
+        if (Empty.isNotEmpty(lastRoute) && lastRoute.size() > 2) {
+          for (int i = 1; i < lastRoute.size() - 1; i++) {
+            LatLng waypoint = lastRoute.get(i);
+
+            waypoints.add(map.addMarker(new MarkerOptions()
+                .position(waypoint)
+                .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+                    getActivity(), R.drawable.ic_point_blue_24dp)))));
+          }
+        }
+      } else {
+        clearWaypoints();
       }
     });
 
@@ -215,10 +253,22 @@ public class UserTrackingFragment extends BaseFragment implements
     return view;
   }
 
+  private void clearWaypoints() {
+    for (int i = 0; i < waypoints.size(); i++) {
+      Marker marker = waypoints.get(i);
+      marker.remove();
+    }
+  }
+
   private void clearMapRoute() {
     if (Empty.isNotEmpty(polyline)) {
       polyline.remove();
       polylines.remove(polyline);
+    }
+
+    if (Empty.isNotEmpty(snappedPolyline)) {
+      snappedPolyline.remove();
+      polylines.remove(snappedPolyline);
     }
 
     if (Empty.isNotEmpty(startMarker)) {
@@ -228,6 +278,9 @@ public class UserTrackingFragment extends BaseFragment implements
     if (Empty.isNotEmpty(endMarker)) {
       endMarker.remove();
     }
+
+    clearWaypoints();
+    waypoints.clear();
   }
 
   private void loadCalendars() {
@@ -456,13 +509,7 @@ public class UserTrackingFragment extends BaseFragment implements
   public void onCameraChange(CameraPosition cameraPosition) {
   }
 
-  @OnClick(R.id.filter)
-  public void onClick() {
-    filterLayout.setVisibility(View.VISIBLE);
-    filter.setVisibility(View.GONE);
-  }
-
-  @OnClick({R.id.cancel_btn, R.id.filter_btn, R.id.toDate, R.id.fromDate})
+  @OnClick({R.id.cancel_btn, R.id.filter_btn, R.id.toDate, R.id.fromDate, R.id.filter})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.filter_btn:
@@ -483,6 +530,10 @@ public class UserTrackingFragment extends BaseFragment implements
         builder2.future(false);
         builder2.date(startDate.getDay(), startDate.getMonth(), startDate.getYear());
         builder2.build(UserTrackingFragment.this).show(getFragmentManager(), "");
+        break;
+      case R.id.filter:
+        filterLayout.setVisibility(View.VISIBLE);
+        filter.setVisibility(View.GONE);
         break;
     }
   }
@@ -509,16 +560,21 @@ public class UserTrackingFragment extends BaseFragment implements
       Date from = DateUtil.startOfDay(c1);
       Date to = DateUtil.endOfDay(c2);
 
-      List<LatLng> route = positionService.getAllPositionLatLngByDate(from, to);
-      drawRoute(route);
+      lastRoute = positionService.getAllPositionLatLngByDate(from, to);
+      drawRoute(lastRoute);
 
-      new AsyncRouteLoader().execute(route);
+      if (showSnappedTrack.isChecked()) {
+        new AsyncRouteLoader().execute(lastRoute);
+      }
       Analytics.logContentView("Map Filter");
     }
   }
 
   private void drawRoute(List<LatLng> route) {
     clearMapRoute();
+    if (route.size() == 0) {
+      return;
+    }
     if (route.size() > 0) {
       startMarker = map.addMarker(new MarkerOptions()
           .position(route.get(0))
@@ -531,6 +587,18 @@ public class UserTrackingFragment extends BaseFragment implements
           .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
               getActivity(), R.drawable.ic_place_red_48dp))));
     }
+
+    if (route.size() > 2 && showWaypoints.isChecked()) {
+      for (int i = 1; i < route.size() - 1; i++) {
+        LatLng waypoint = route.get(i);
+
+        waypoints.add(map.addMarker(new MarkerOptions()
+            .position(waypoint)
+            .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+                getActivity(), R.drawable.ic_point_blue_24dp)))));
+      }
+    }
+
     PolylineOptions polyOptions = new PolylineOptions();
     polyOptions.color(getResources().getColor(colors[3]));
     polyOptions.width(4);
@@ -538,6 +606,19 @@ public class UserTrackingFragment extends BaseFragment implements
     polyline = map.addPolyline(polyOptions);
     polylines.add(polyline);
 
+
+  }
+
+  private void drawSnappedRoute(List<LatLng> route) {
+    //Double check if user unchecked the option
+    if (showSnappedTrack.isChecked()) {
+      PolylineOptions polyOptions = new PolylineOptions();
+      polyOptions.color(getResources().getColor(colors[4]));
+      polyOptions.width(4);
+      polyOptions.addAll(route);
+      snappedPolyline = map.addPolyline(polyOptions);
+      polylines.add(snappedPolyline);
+    }
   }
 
   @Override
@@ -634,9 +715,8 @@ public class UserTrackingFragment extends BaseFragment implements
 
     @Override
     protected void onPostExecute(List<LatLng> list) {
-//      dismiss dialog();
       if (Empty.isNotEmpty(list)) {
-        drawRoute(list);
+        drawSnappedRoute(list);
       }
     }
   }

@@ -184,7 +184,6 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   };
 
 
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
