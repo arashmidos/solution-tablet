@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="300dp"
   android:layout_height="150dp"
@@ -11,7 +12,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textSize="@dimen/text_large"
-    tools:text="آقا آرش"/>
+    tools:text="آقا آرش" />
 
   <TextView
     android:id="@+id/customer_address"
@@ -19,7 +20,7 @@
     android:layout_height="wrap_content"
     android:textColor="@color/dark_gray"
     android:textSize="@dimen/text_normal"
-    tools:text="استان البرز کرج گرمدره کوهک خ ولیعصر"/>
+    tools:text="استان البرز کرج گرمدره کوهک خ ولیعصر" />
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -36,7 +37,7 @@
       android:layout_gravity="center"
       android:textColor="@color/dark_gray"
       android:textSize="@dimen/text_normal"
-      tools:text="1396-01-19"/>
+      tools:text="1396-01-19" />
 
     <TextView
       android:id="@+id/customer_last_visit_lbl"
@@ -46,12 +47,12 @@
       android:layout_gravity="center"
       android:text="@string/last_visit_label"
       android:textColor="@color/dark_gray"
-      android:textSize="@dimen/text_normal"/>
+      android:textSize="@dimen/text_normal" />
 
     <ImageView
       android:layout_width="20dp"
       android:layout_height="20dp"
-      android:src="@drawable/ic_history_24dp"/>
+      app:srcCompat="@drawable/ic_history_24dp" />
   </LinearLayout>
 
   <Button
@@ -62,6 +63,6 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_gravity="center"
-    android:text="@string/enter"/>
+    android:text="@string/enter" />
 
 </LinearLayout>

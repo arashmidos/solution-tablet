@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -33,7 +32,6 @@ import com.alirezaafkar.sundatepicker.components.JDF;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.Builder;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -204,7 +202,7 @@ public class UserTrackingFragment extends BaseFragment implements
 
     showSnappedTrack.setOnCheckedChangeListener((buttonView, isChecked) ->
     {
-      if (isChecked) {
+      if (isChecked && Empty.isNotEmpty(lastRoute)) {
         new AsyncRouteLoader().execute(lastRoute);
       } else {
         if (Empty.isNotEmpty(snappedPolyline)) {
@@ -311,6 +309,7 @@ public class UserTrackingFragment extends BaseFragment implements
     }
   }
 
+
   @Override
   public int getFragmentId() {
     return MainActivity.USER_TRACKING_FRAGMENT_ID;
@@ -359,13 +358,8 @@ public class UserTrackingFragment extends BaseFragment implements
   }
 
   private void showErrorDialog(int errorCode) {
-    // Create a fragment for the error dialog
-    ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
-    // Pass the error that should be displayed
-    Bundle args = new Bundle();
-    args.putInt("dialog_error", errorCode);
-    dialogFragment.setArguments(args);
-    dialogFragment.show(getActivity().getFragmentManager(), "errordialog");
+    ToastUtil.toastError(getActivity(), String
+        .format(getString(R.string.error_google_play_not_available), errorCode));
   }
 
   @Override
@@ -378,14 +372,12 @@ public class UserTrackingFragment extends BaseFragment implements
         != PackageManager.PERMISSION_GRANTED
         && ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION)
         != PackageManager.PERMISSION_GRANTED) {
-      Snackbar.make(mainLayout, R.string.permission_rationale,
-          Snackbar.LENGTH_INDEFINITE)
-          .setAction(R.string.ok_btn, view -> {
+      ToastUtil.toastError(getActivity(), getString(R.string.permission_rationale),
+          view -> {
             // Request permission
             ActivityCompat.requestPermissions(getActivity(),
                 new String[]{permission.ACCESS_FINE_LOCATION}, 34);
-          })
-          .show();
+          });
       return;
     }
     currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
@@ -435,7 +427,7 @@ public class UserTrackingFragment extends BaseFragment implements
     {
       Float distance = clickedClusterItem.getDistance();
       if (distanceServiceEnabled && distance > Constants.MAX_DISTANCE) {
-        ToastUtil.toastError(getActivity(), getString(R.string.error_distance_too_far_for_action));
+        ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
         return;
       }
       doEnter();
@@ -563,7 +555,7 @@ public class UserTrackingFragment extends BaseFragment implements
       lastRoute = positionService.getAllPositionLatLngByDate(from, to);
       drawRoute(lastRoute);
 
-      if (showSnappedTrack.isChecked()) {
+      if (showSnappedTrack.isChecked() && Empty.isNotEmpty(lastRoute)) {
         new AsyncRouteLoader().execute(lastRoute);
       }
       Analytics.logContentView("Map Filter");
@@ -710,7 +702,10 @@ public class UserTrackingFragment extends BaseFragment implements
 
     @Override
     protected List<LatLng> doInBackground(List<LatLng>... params) {
-      return MapServiceImpl.snapToRoads(getActivity(), params[0]);
+      if (Empty.isNotEmpty(getActivity())) {
+        return MapServiceImpl.snapToRoads(getActivity(), params[0]);
+      }
+      return null;
     }
 
     @Override

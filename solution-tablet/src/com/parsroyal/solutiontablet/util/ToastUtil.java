@@ -6,8 +6,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.FrameLayout;
+import android.view.View.OnClickListener;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import de.mateware.snacky.Snacky;
@@ -61,10 +60,14 @@ public class ToastUtil {
 
   public static void toastError(Activity activity, int messageResource) {
     String message = activity.getString(messageResource);
-    toastError(activity, message);
+    toastError(activity, message, null);
   }
 
-  public static void toastError(final Activity activity, String message) {
+  public static void toastError(Activity activity, String message) {
+    toastError(activity, message, null);
+  }
+
+  public static void toastError(final Activity activity, String message, OnClickListener listener) {
     Snacky.Builder builder = Snacky.builder();
     builder.setActivty(activity);
     builder.setText(message);
@@ -79,7 +82,12 @@ public class ToastUtil {
     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) view.getLayoutParams();
     params.gravity = Gravity.TOP;
     view.setLayoutParams(params);
-    snack.setAction(activity.getString(R.string.button_ok), v -> snack.dismiss());
+    snack.setAction(activity.getString(R.string.button_ok), v -> {
+      snack.dismiss();
+      if (Empty.isNotEmpty(listener)) {
+        listener.onClick(null);
+      }
+    });
     snack.show();
   }
 
@@ -88,7 +96,7 @@ public class ToastUtil {
     if (Empty.isNotEmpty(message)) {
       message = MessageFormat.format(message, ex.getArgs());
     }
-    toastError(activity, message);
+    toastError(activity, message, null);
   }
 
   public static String getStringResourceByName(Activity activity, String aString) {

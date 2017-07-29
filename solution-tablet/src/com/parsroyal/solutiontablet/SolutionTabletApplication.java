@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -42,6 +43,7 @@ public class SolutionTabletApplication extends Application {
 //    }
     try {
       TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/IRANSansMobile.ttf");
+      AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     } catch (Exception e) {
       Crashlytics.log(Log.ERROR, "Resource exception", "Error in overriding fonts" + e.getMessage());
       e.printStackTrace();

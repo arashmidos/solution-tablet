@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -446,13 +445,11 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     boolean networkAvailable = NetworkUtil.isNetworkAvailable(this);
 
     if (!dataTransferPossible) {
-      ToastUtil.toastError(this,
-          getString(R.string.message_required_setting_for_data_transfer_not_found));
+      ToastUtil.toastError(this, R.string.message_required_setting_for_data_transfer_not_found);
     }
 
     if (!networkAvailable) {
-      ToastUtil.toastError(this,
-          getString(R.string.message_device_does_not_have_active_internet_connection));
+      ToastUtil.toastError(this, R.string.message_device_does_not_have_active_internet_connection);
     }
 
     return dataTransferPossible && networkAvailable;
@@ -710,7 +707,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
       }
     } catch (Exception ex) {
       Crashlytics.log(Log.ERROR, "Install Update", "Error in installing update" + ex.getMessage());
-      ToastUtil.toastError(MainActivity.this, getString(R.string.err_update_failed));
+      ToastUtil.toastError(MainActivity.this, R.string.err_update_failed);
     }
   }
 
@@ -723,15 +720,13 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     // request previously, but didn't check the "Don't ask again" checkbox.
     if (shouldProvideRationale) {
       Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      Snackbar.make(findViewById(R.id.mainLayout), R.string.permission_rationale,
-          Snackbar.LENGTH_INDEFINITE)
-          .setAction(R.string.ok_btn, view -> {
+      ToastUtil.toastError(this, getString(R.string.permission_rationale),
+          view -> {
             // Request permission
             ActivityCompat.requestPermissions(MainActivity.this,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 REQUEST_PERMISSIONS_REQUEST_CODE);
-          })
-          .show();
+          });
     } else {
       Log.i(TAG, "Requesting permission");
       // Request permission. It's possible this can be auto answered if device policy
@@ -767,11 +762,8 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         // Permission was granted.
         gpsRecieverService.requestLocationUpdates();
       } else {
-        Snackbar.make(
-            findViewById(R.id.mainLayout),
-            R.string.permission_denied_explanation,
-            Snackbar.LENGTH_INDEFINITE)
-            .setAction(R.string.setting, view -> {
+        ToastUtil.toastError(this, getString(R.string.permission_denied_explanation),
+            view -> {
               // Build intent that displays the App settings screen.
               Intent intent = new Intent();
               intent.setAction(
@@ -780,8 +772,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
               intent.setData(uri);
               intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
               startActivity(intent);
-            })
-            .show();
+            });
       }
     }
   }

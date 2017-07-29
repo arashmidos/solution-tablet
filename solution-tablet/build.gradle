@@ -29,8 +29,8 @@ android {
         applicationId "com.parsroyal.solutiontablet"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 56
-        versionName "2.10.0"
+        versionCode 59
+        versionName "2.10.3"
         vectorDrawables.useSupportLibrary = true
         jackOptions {
             enabled true
@@ -87,7 +87,6 @@ android {
         release {
 //            shrinkResources true
 //            minifyEnabled true
-            debuggable true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

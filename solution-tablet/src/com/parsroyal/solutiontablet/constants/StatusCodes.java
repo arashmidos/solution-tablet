@@ -15,7 +15,9 @@ public enum StatusCodes {
   NETWORK_ERROR(1003,
       R.string.com_parsroyal_solutiontablet_exception_BackendIsNotReachableException),
   DATS_STORE_ERROR(1004, R.string.message_exception_in_data_store),
-  SERVER_ERROR(1100, R.string.com_parsroyal_solutiontablet_exception_InternalServerError),;
+  SERVER_ERROR(1100, R.string.com_parsroyal_solutiontablet_exception_InternalServerError),
+  PERMISSION_DENIED(2001, R.string.permission_denied_explanation),
+  NEW_GPS_LOCATION(2002, R.string.message_new_gps_location);
 
   private int statusCode;
   private int message;

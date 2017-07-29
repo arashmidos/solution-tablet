@@ -22,12 +22,16 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Position;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.LocationUtil;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * @author Arash
@@ -50,19 +54,22 @@ public class LocationUpdatesService extends Service {
   private static final String EXTRA_STARTED_FROM_NOTIFICATION = PACKAGE_NAME +
       ".started_from_notification";
   private static final float MAX_ACCEPTED_DISTANCE_IN_METER = 1000.0f;
+  private static final float MIN_ACCEPTED_DISTANCE_IN_METER = 20.0f;
+  private static final float MAX_ACCEPTED_ACCURACY_IN_METER = 30.0f;
+  private static final float MIN_ACCEPTED_SPEED_IN_MS = 0.9f;
 
   private final IBinder mBinder = new LocalBinder();
 
   /**
    * The desired interval for location updates. Inexact. Updates may be more or less frequent.
    */
-  private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+  public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
 
   /**
    * The fastest rate for active location updates. Updates will never be more frequent
    * than this value.
    */
-  private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS;
+  public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS;
 
   /**
    * The identifier for the notification displayed for the foreground service.
@@ -105,23 +112,28 @@ public class LocationUpdatesService extends Service {
 
   @Override
   public void onCreate() {
-    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+    try {
+      fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-    locationCallback = new LocationCallback() {
-      @Override
-      public void onLocationResult(LocationResult locationResult) {
-        super.onLocationResult(locationResult);
-        onNewLocation(locationResult.getLastLocation());
-      }
-    };
+      locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+          super.onLocationResult(locationResult);
+          onNewLocation(locationResult.getLastLocation());
+        }
+      };
 
-    createLocationRequest();
-    getLastLocation();
+      createLocationRequest();
+      getLastLocation();
 
-    HandlerThread handlerThread = new HandlerThread(TAG);
-    handlerThread.start();
-    serviceHandler = new Handler(handlerThread.getLooper());
-    notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+      HandlerThread handlerThread = new HandlerThread(TAG);
+      handlerThread.start();
+      serviceHandler = new Handler(handlerThread.getLooper());
+      notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    } catch (SecurityException ex) {
+      ex.printStackTrace();
+      EventBus.getDefault().post(new ErrorEvent(StatusCodes.PERMISSION_DENIED));
+    }
   }
 
   @Override
@@ -256,6 +268,10 @@ public class LocationUpdatesService extends Service {
   private void onNewLocation(Location location) {
     Log.i(TAG, "New location in service: " + location);
 
+    if (Empty.isNotEmpty(location)) {
+      EventBus.getDefault().post(new GPSEvent(location));
+    }
+
     if (isAccepted(location)) {
       Log.i(TAG, "location accepted");
       this.lastLocation = location;
@@ -272,18 +288,25 @@ public class LocationUpdatesService extends Service {
   }
 
   private boolean isAccepted(Location location) {
-    if ((Empty.isEmpty(location) || location.getAccuracy() > 50)) {
+    if ((Empty.isEmpty(location) || location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER
+        || location.getSpeed() < MIN_ACCEPTED_SPEED_IN_MS)) {
       return false;
     }
 
-    if ((Empty.isNotEmpty(lastLocation) && lastLocation.getSpeed() == 0.0
-        && location.getSpeed() == 0.0)) {
-      return false;
+    if (Empty.isNotEmpty(lastLocation)) {
+
+      float distance = LocationUtil.distanceBetween(lastLocation, location);
+      if (distance
+          > MAX_ACCEPTED_DISTANCE_IN_METER /*|| distance < MIN_ACCEPTED_DISTANCE_IN_METER*/) {
+        return false;
+      }
+
+      if (distance < lastLocation.getAccuracy() + location.getAccuracy()) {
+        //Its probabely in the circle of past location
+        return false;
+      }
     }
 
-    if (LocationUtil.distanceBetween(lastLocation, location) > MAX_ACCEPTED_DISTANCE_IN_METER) {
-      return false;
-    }
     return true;
   }
 
