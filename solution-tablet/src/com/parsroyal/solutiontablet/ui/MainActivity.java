@@ -1,13 +1,20 @@
 package com.parsroyal.solutiontablet.ui;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +39,7 @@ import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.DataTransferService;
+import com.parsroyal.solutiontablet.service.LocationUpdatesService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
@@ -48,12 +56,12 @@ import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomersFragment;
-import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrdersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
@@ -139,16 +147,41 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   private DataTransferService dataTransferService;
   private SettingService settingService;
   private boolean isMenuEnabled = true;
-  private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
+  private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+  private LocationUpdatesService gpsRecieverService = null;
+
+  private boolean boundToGpsService = false;
+
+  private BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
       if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
         if (!GPSUtil.isGpsAvailable(context)) {
           showGpsOffDialog();
+          Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
         }
       }
     }
   };
+
+  // Monitors the state of the connection to the service.
+  private final ServiceConnection serviceConnection = new ServiceConnection() {
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+      LocationUpdatesService.LocalBinder binder = (LocationUpdatesService.LocalBinder) service;
+      gpsRecieverService = binder.getService();
+      boundToGpsService = true;
+      gpsRecieverService.requestLocationUpdates();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+      gpsRecieverService = null;
+      boundToGpsService = false;
+    }
+  };
+
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -157,14 +190,22 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     settingService = new SettingServiceImpl(this);
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
+
     setupSidebar();
     setupActionbar();
     setupDrawer();
     initialize();
-//    if (!BuildConfig.DEBUG) {
-    logUser();
-//    }
+    if (!BuildConfig.DEBUG) {
+      logUser();
+    }
 
+    if (!checkPermissions()) {
+      requestPermissions();
+    }
+  }
+
+  public void startGpsService() {
+    gpsRecieverService.requestLocationUpdates();
   }
 
   private void logUser() {
@@ -404,13 +445,11 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     boolean networkAvailable = NetworkUtil.isNetworkAvailable(this);
 
     if (!dataTransferPossible) {
-      ToastUtil.toastError(this,
-          getString(R.string.message_required_setting_for_data_transfer_not_found));
+      ToastUtil.toastError(this, R.string.message_required_setting_for_data_transfer_not_found);
     }
 
     if (!networkAvailable) {
-      ToastUtil.toastError(this,
-          getString(R.string.message_device_does_not_have_active_internet_connection));
+      ToastUtil.toastError(this, R.string.message_device_does_not_have_active_internet_connection);
     }
 
     return dataTransferPossible && networkAvailable;
@@ -534,26 +573,14 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-    if (!GPSUtil.isGpsAvailable(this)) {
-      showGpsOffDialog();
-    }
-
-    registerReceiver(gpsReceiver, new IntentFilter("android.location.PROVIDERS_CHANGED"));
-    new TrackerAlarmReceiver().setAlarm(this);
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    unregisterReceiver(gpsReceiver);
-  }
-
-  @Override
   protected void onStart() {
     super.onStart();
     EventBus.getDefault().register(this);
+    // Bind to the service. If the service is in foreground mode, this signals to the service
+    // that since this activity is in the foreground, the service can exit foreground mode.
+    bindService(new Intent(this, LocationUpdatesService.class), serviceConnection,
+        Context.BIND_AUTO_CREATE);
+
     if (Updater.updateExist()) {
       PreferenceHelper.setForceExit(true);
       installNewVersion();
@@ -563,7 +590,32 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   }
 
   @Override
+  protected void onResume() {
+    super.onResume();
+    if (!GPSUtil.isGpsAvailable(this)) {
+      showGpsOffDialog();
+      Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
+    }
+
+    registerReceiver(gpsStatusReceiver, new IntentFilter("android.location.PROVIDERS_CHANGED"));
+    new TrackerAlarmReceiver().setAlarm(this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    unregisterReceiver(gpsStatusReceiver);
+  }
+
+  @Override
   protected void onStop() {
+    if (boundToGpsService) {
+      // Unbind from the service. This signals to the service that this activity is no longer
+      // in the foreground, and the service can respond by promoting itself to a foreground
+      // service.
+      unbindService(serviceConnection);
+      boundToGpsService = false;
+    }
     super.onStop();
     EventBus.getDefault().unregister(this);
   }
@@ -655,7 +707,73 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
       }
     } catch (Exception ex) {
       Crashlytics.log(Log.ERROR, "Install Update", "Error in installing update" + ex.getMessage());
-      ToastUtil.toastError(MainActivity.this, getString(R.string.err_update_failed));
+      ToastUtil.toastError(MainActivity.this, R.string.err_update_failed);
+    }
+  }
+
+  private void requestPermissions() {
+    boolean shouldProvideRationale =
+        ActivityCompat.shouldShowRequestPermissionRationale(this,
+            Manifest.permission.ACCESS_FINE_LOCATION);
+
+    // Provide an additional rationale to the user. This would happen if the user denied the
+    // request previously, but didn't check the "Don't ask again" checkbox.
+    if (shouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(this, getString(R.string.permission_rationale),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                REQUEST_PERMISSIONS_REQUEST_CODE);
+          });
+    } else {
+      Log.i(TAG, "Requesting permission");
+      // Request permission. It's possible this can be auto answered if device policy
+      // sets the permission in a given state or the user denied the permission
+      // previously and checked "Never ask again".
+      ActivityCompat.requestPermissions(MainActivity.this,
+          new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+          REQUEST_PERMISSIONS_REQUEST_CODE);
+    }
+  }
+
+  /**
+   * Returns the current state of the permissions needed.
+   */
+  private boolean checkPermissions() {
+    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+        Manifest.permission.ACCESS_FINE_LOCATION);
+  }
+
+  /**
+   * Callback received when a permissions request has been completed.
+   */
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+      @NonNull int[] grantResults) {
+    Log.i(TAG, "onRequestPermissionResult");
+    if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+      if (grantResults.length <= 0) {
+        // If user interaction was interrupted, the permission request is cancelled and you
+        // receive empty arrays.
+        Log.i(TAG, "User interaction was cancelled.");
+      } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        // Permission was granted.
+        gpsRecieverService.requestLocationUpdates();
+      } else {
+        ToastUtil.toastError(this, getString(R.string.permission_denied_explanation),
+            view -> {
+              // Build intent that displays the App settings screen.
+              Intent intent = new Intent();
+              intent.setAction(
+                  Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+              Uri uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null);
+              intent.setData(uri);
+              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+              startActivity(intent);
+            });
+      }
     }
   }
 }

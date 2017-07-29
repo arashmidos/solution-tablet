@@ -8,15 +8,15 @@ import android.location.Location;
 
 public class LocationUtil {
 
-  public static float distanceTo(Location l1, Location l2) {
+  public static float distanceBetween(Location l1, Location l2) {
     return l1.distanceTo(l2);
   }
 
-  public static float distanceTo(Location l1, double lat2, double long2) {
+  public static float distanceBetween(Location l1, double lat2, double long2) {
     Location l2 = new Location("");
     l2.setLatitude(lat2);
     l2.setLongitude(long2);
-    return distanceTo(l1, l2);
+    return distanceBetween(l1, l2);
   }
 
   /**
@@ -24,7 +24,7 @@ public class LocationUtil {
    *
    * @return distance in meter, 0.0 if location not set
    */
-  public static Float distanceTo(Double lat1, Double long1, double lat2, double long2) {
+  public static Float distanceBetween(Double lat1, Double long1, double lat2, double long2) {
     //If it unknown location
     if (lat1 == 0.0f || long1 == 0.0f || lat2 == 0.0f || long2 == 0.0f) {
       //Set it to infinity
@@ -39,6 +39,6 @@ public class LocationUtil {
     l2.setLatitude(lat2);
     l2.setLongitude(long2);
 
-    return distanceTo(l1, l2);
+    return distanceBetween(l1, l2);
   }
 }

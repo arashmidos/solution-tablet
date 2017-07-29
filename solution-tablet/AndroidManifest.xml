@@ -56,17 +56,25 @@
 
     <service
       android:exported="false"
-      android:name="com.parsroyal.solutiontablet.service.TrackLocationService" />
-
-    <receiver android:name="com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver">
-      <intent-filter>
-        <action android:name="com.parsroyal.solutiontablet.TrackerAlarmReceiver"/>
-      </intent-filter>
-    </receiver>
+      android:enabled="true"
+      android:name=".service.LocationUpdatesService" />
+    <service
+      android:enabled="true"
+      android:exported="false"
+      android:name=".service.SendLocationService" />
+    <service
+      android:enabled="true"
+      android:exported="false"
+      android:name=".service.SaveLocationService" />
 
     <receiver android:name="com.parsroyal.solutiontablet.receiver.BootReceiver">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED"/>
+      </intent-filter>
+    </receiver>
+    <receiver android:name="com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver">
+      <intent-filter>
+        <action android:name="com.parsroyal.solutiontablet.TrackerAlarmReceiver"/>
       </intent-filter>
     </receiver>
 

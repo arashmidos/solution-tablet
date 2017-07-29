@@ -37,4 +37,5 @@ public class Constants {
   public static final int FULL_UPDATE = 1024;
   public static final int PARTIAL_UPDATE = 512;
   public static final int NO_UPDATE = 0;
+  public static final int GPS_SEND_INTERVAL_IN_SECOND = 60;
 }

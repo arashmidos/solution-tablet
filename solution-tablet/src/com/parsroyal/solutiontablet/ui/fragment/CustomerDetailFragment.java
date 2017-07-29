@@ -134,7 +134,7 @@ public class CustomerDetailFragment extends BaseFragment {
 
     if (Empty.isNotEmpty(position)) {
       distance = LocationUtil
-          .distanceTo(position.getLatitude(), position.getLongitude(), lat2, long2);
+          .distanceBetween(position.getLatitude(), position.getLongitude(), lat2, long2);
     } else {
       ToastUtil.toastError(getActivity(), getString(R.string.error_salesman_location_not_found));
       return false;

@@ -14,6 +14,7 @@ public class Position extends BaseEntity<Long> {
   public static final String COL_LATITUDE = "LATITUDE";
   public static final String COL_LONGITUDE = "LONGITUDE";
   public static final String COL_SPEED = "SPEED";
+  public static final String COL_ACCURACY = "ACCURACY";
   public static final String COL_STATUS = "STATUS";
   public static final String COL_GPS_DATE = "GPS_DATE";
   public static final String COL_GPS_OFF = "GPS_OFF";
@@ -32,6 +33,7 @@ public class Position extends BaseEntity<Long> {
       " " + Position.COL_MODE + " INTEGER," +
       " " + Position.COL_SALESMAN_ID + " INTEGER," +
       " " + Position.COL_BACKEND_ID + " INTEGER," +
+      " " + Position.COL_ACCURACY + " REAL," +
       " " + Position.COL_CREATE_DATE_TIME + " TEXT," +
       " " + Position.COL_UPDATE_DATE_TIME + " TEXT" +
       " );";
@@ -46,8 +48,10 @@ public class Position extends BaseEntity<Long> {
   private int mode;
   private Long salesmanId;
   private Long backendId;
+  private Float accuracy;
 
-  public Position(Double latitude, Double longitude, Float speed, Date date, int gpsOff, int mode) {
+  public Position(Double latitude, Double longitude, Float speed, Date date, int gpsOff, int mode,
+      Float accuracy) {
     this.latitude = latitude;
     this.longitude = longitude;
     this.speed = speed;
@@ -55,6 +59,7 @@ public class Position extends BaseEntity<Long> {
     this.date = date;
     this.gpsOff = gpsOff;
     this.mode = mode;
+    this.accuracy = accuracy;
   }
 
   public Position() {
@@ -65,7 +70,8 @@ public class Position extends BaseEntity<Long> {
   }
 
   public Position(Location l) {
-    this(l.getLatitude(), l.getLongitude(), l.getSpeed(), new Date(l.getTime()), 0, 0);
+    this(l.getLatitude(), l.getLongitude(), l.getSpeed(), new Date(l.getTime()), 0, 0,
+        l.getAccuracy());
   }
 
   public Long getId() {
@@ -151,6 +157,14 @@ public class Position extends BaseEntity<Long> {
   @Override
   public Long getPrimaryKey() {
     return id;
+  }
+
+  public Float getAccuracy() {
+    return accuracy;
+  }
+
+  public void setAccuracy(Float accuracy) {
+    this.accuracy = accuracy;
   }
 
 }

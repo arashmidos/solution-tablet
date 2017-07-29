@@ -1,11 +1,14 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.content.IntentSender;
+import android.Manifest.permission;
+import android.content.IntentSender.SendIntentException;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -18,7 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindInt;
 import butterknife.BindView;
@@ -29,11 +32,15 @@ import com.alirezaafkar.sundatepicker.components.JDF;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.Builder;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -89,9 +96,9 @@ import java.util.Locale;
  * Created by Arash on 2016-09-14.
  */
 public class UserTrackingFragment extends BaseFragment implements
-    GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+    ConnectionCallbacks, OnConnectionFailedListener,
     OnMapReadyCallback,
-    GoogleMap.OnCameraChangeListener, DateSetListener {
+    OnCameraChangeListener, DateSetListener {
 
   public static final String TAG = UserTrackingFragment.class.getSimpleName();
 
@@ -108,11 +115,17 @@ public class UserTrackingFragment extends BaseFragment implements
   @BindView(R.id.fromDate)
   EditText fromDate;
   @BindView(R.id.filter_layout)
-  LinearLayout filterLayout;
+  RelativeLayout filterLayout;
   @BindView(R.id.show_customers)
   CheckBox showCustomers;
   @BindView(R.id.show_track)
   CheckBox showTrack;
+  @BindView(R.id.mainLayout)
+  RelativeLayout mainLayout;
+  @BindView(R.id.show_snapped_track)
+  CheckBox showSnappedTrack;
+  @BindView(R.id.show_waypoints)
+  CheckBox showWaypoints;
 
   private GoogleApiClient googleApiClient;
   private Location currentLocation;
@@ -138,12 +151,15 @@ public class UserTrackingFragment extends BaseFragment implements
   private CustomerService customerService;
   private ClusterManager<CustomerListModel> clusterManager;
   private Polyline polyline;
+  private Polyline snappedPolyline;
   private Cluster<CustomerListModel> clickedCluster;
   private CustomerListModel clickedClusterItem;
   private Marker startMarker;
   private Marker endMarker;
+  private List<Marker> waypoints = new ArrayList<>();
   private boolean distanceServiceEnabled;
   private FragmentActivity context;
+  private List<LatLng> lastRoute;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -175,10 +191,42 @@ public class UserTrackingFragment extends BaseFragment implements
 
     showTrack.setOnCheckedChangeListener((buttonView, isChecked) ->
     {
+      showSnappedTrack.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+      showWaypoints.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
       if (isChecked) {
         doFilter();
       } else {
         clearMapRoute();
+      }
+    });
+
+    showSnappedTrack.setOnCheckedChangeListener((buttonView, isChecked) ->
+    {
+      if (isChecked && Empty.isNotEmpty(lastRoute)) {
+        new AsyncRouteLoader().execute(lastRoute);
+      } else {
+        if (Empty.isNotEmpty(snappedPolyline)) {
+          snappedPolyline.remove();
+          polylines.remove(snappedPolyline);
+        }
+      }
+    });
+
+    showWaypoints.setOnCheckedChangeListener((buttonView, isChecked) ->
+    {
+      if (isChecked) {
+        if (Empty.isNotEmpty(lastRoute) && lastRoute.size() > 2) {
+          for (int i = 1; i < lastRoute.size() - 1; i++) {
+            LatLng waypoint = lastRoute.get(i);
+
+            waypoints.add(map.addMarker(new MarkerOptions()
+                .position(waypoint)
+                .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+                    getActivity(), R.drawable.ic_point_blue_24dp)))));
+          }
+        }
+      } else {
+        clearWaypoints();
       }
     });
 
@@ -195,12 +243,19 @@ public class UserTrackingFragment extends BaseFragment implements
 
     loadCalendars();
 
-    googleApiClient = new GoogleApiClient.Builder(context)
+    googleApiClient = new Builder(context)
         .addConnectionCallbacks(this)
         .addOnConnectionFailedListener(this)
         .addApi(LocationServices.API).build();
 
     return view;
+  }
+
+  private void clearWaypoints() {
+    for (int i = 0; i < waypoints.size(); i++) {
+      Marker marker = waypoints.get(i);
+      marker.remove();
+    }
   }
 
   private void clearMapRoute() {
@@ -209,10 +264,21 @@ public class UserTrackingFragment extends BaseFragment implements
       polylines.remove(polyline);
     }
 
+    if (Empty.isNotEmpty(snappedPolyline)) {
+      snappedPolyline.remove();
+      polylines.remove(snappedPolyline);
+    }
+
     if (Empty.isNotEmpty(startMarker)) {
       startMarker.remove();
+    }
+
+    if (Empty.isNotEmpty(endMarker)) {
       endMarker.remove();
     }
+
+    clearWaypoints();
+    waypoints.clear();
   }
 
   private void loadCalendars() {
@@ -242,6 +308,7 @@ public class UserTrackingFragment extends BaseFragment implements
       googleApiClient.disconnect();
     }
   }
+
 
   @Override
   public int getFragmentId() {
@@ -279,7 +346,7 @@ public class UserTrackingFragment extends BaseFragment implements
       try {
         mResolvingError = true;
         result.startResolutionForResult(getActivity(), 1001);
-      } catch (IntentSender.SendIntentException e) {
+      } catch (SendIntentException e) {
         // There was an error with the resolution intent. Try again.
         googleApiClient.connect();
       }
@@ -291,13 +358,8 @@ public class UserTrackingFragment extends BaseFragment implements
   }
 
   private void showErrorDialog(int errorCode) {
-    // Create a fragment for the error dialog
-    ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
-    // Pass the error that should be displayed
-    Bundle args = new Bundle();
-    args.putInt("dialog_error", errorCode);
-    dialogFragment.setArguments(args);
-    dialogFragment.show(getActivity().getFragmentManager(), "errordialog");
+    ToastUtil.toastError(getActivity(), String
+        .format(getString(R.string.error_google_play_not_available), errorCode));
   }
 
   @Override
@@ -306,6 +368,18 @@ public class UserTrackingFragment extends BaseFragment implements
 
     map = googleMap;
 
+    if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION)
+        != PackageManager.PERMISSION_GRANTED
+        && ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION)
+        != PackageManager.PERMISSION_GRANTED) {
+      ToastUtil.toastError(getActivity(), getString(R.string.permission_rationale),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(getActivity(),
+                new String[]{permission.ACCESS_FINE_LOCATION}, 34);
+          });
+      return;
+    }
     currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
     if (currentLocation == null) {
@@ -353,7 +427,7 @@ public class UserTrackingFragment extends BaseFragment implements
     {
       Float distance = clickedClusterItem.getDistance();
       if (distanceServiceEnabled && distance > Constants.MAX_DISTANCE) {
-        ToastUtil.toastError(getActivity(), getString(R.string.error_distance_too_far_for_action));
+        ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
         return;
       }
       doEnter();
@@ -427,13 +501,7 @@ public class UserTrackingFragment extends BaseFragment implements
   public void onCameraChange(CameraPosition cameraPosition) {
   }
 
-  @OnClick(R.id.filter)
-  public void onClick() {
-    filterLayout.setVisibility(View.VISIBLE);
-    filter.setVisibility(View.GONE);
-  }
-
-  @OnClick({R.id.cancel_btn, R.id.filter_btn, R.id.toDate, R.id.fromDate})
+  @OnClick({R.id.cancel_btn, R.id.filter_btn, R.id.toDate, R.id.fromDate, R.id.filter})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.filter_btn:
@@ -454,6 +522,10 @@ public class UserTrackingFragment extends BaseFragment implements
         builder2.future(false);
         builder2.date(startDate.getDay(), startDate.getMonth(), startDate.getYear());
         builder2.build(UserTrackingFragment.this).show(getFragmentManager(), "");
+        break;
+      case R.id.filter:
+        filterLayout.setVisibility(View.VISIBLE);
+        filter.setVisibility(View.GONE);
         break;
     }
   }
@@ -480,16 +552,21 @@ public class UserTrackingFragment extends BaseFragment implements
       Date from = DateUtil.startOfDay(c1);
       Date to = DateUtil.endOfDay(c2);
 
-      List<LatLng> route = positionService.getAllPositionLatLngByDate(from, to);
-      drawRoute(route);
+      lastRoute = positionService.getAllPositionLatLngByDate(from, to);
+      drawRoute(lastRoute);
 
-      new AsyncRouteLoader().execute(route);
+      if (showSnappedTrack.isChecked() && Empty.isNotEmpty(lastRoute)) {
+        new AsyncRouteLoader().execute(lastRoute);
+      }
       Analytics.logContentView("Map Filter");
     }
   }
 
   private void drawRoute(List<LatLng> route) {
     clearMapRoute();
+    if (route.size() == 0) {
+      return;
+    }
     if (route.size() > 0) {
       startMarker = map.addMarker(new MarkerOptions()
           .position(route.get(0))
@@ -502,6 +579,18 @@ public class UserTrackingFragment extends BaseFragment implements
           .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
               getActivity(), R.drawable.ic_place_red_48dp))));
     }
+
+    if (route.size() > 2 && showWaypoints.isChecked()) {
+      for (int i = 1; i < route.size() - 1; i++) {
+        LatLng waypoint = route.get(i);
+
+        waypoints.add(map.addMarker(new MarkerOptions()
+            .position(waypoint)
+            .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
+                getActivity(), R.drawable.ic_point_blue_24dp)))));
+      }
+    }
+
     PolylineOptions polyOptions = new PolylineOptions();
     polyOptions.color(getResources().getColor(colors[3]));
     polyOptions.width(4);
@@ -509,6 +598,19 @@ public class UserTrackingFragment extends BaseFragment implements
     polyline = map.addPolyline(polyOptions);
     polylines.add(polyline);
 
+
+  }
+
+  private void drawSnappedRoute(List<LatLng> route) {
+    //Double check if user unchecked the option
+    if (showSnappedTrack.isChecked()) {
+      PolylineOptions polyOptions = new PolylineOptions();
+      polyOptions.color(getResources().getColor(colors[4]));
+      polyOptions.width(4);
+      polyOptions.addAll(route);
+      snappedPolyline = map.addPolyline(polyOptions);
+      polylines.add(snappedPolyline);
+    }
   }
 
   @Override
@@ -532,7 +634,7 @@ public class UserTrackingFragment extends BaseFragment implements
     }
   }
 
-  class CustomerMarkerAdapter implements GoogleMap.InfoWindowAdapter {
+  class CustomerMarkerAdapter implements InfoWindowAdapter {
 
     @BindView(R.id.customer_name)
     TextView customerName;
@@ -600,16 +702,17 @@ public class UserTrackingFragment extends BaseFragment implements
 
     @Override
     protected List<LatLng> doInBackground(List<LatLng>... params) {
-      return MapServiceImpl.snapToRoads(getActivity(), params[0]);
+      if (Empty.isNotEmpty(getActivity())) {
+        return MapServiceImpl.snapToRoads(getActivity(), params[0]);
+      }
+      return null;
     }
 
     @Override
     protected void onPostExecute(List<LatLng> list) {
-//      dismiss dialog();
       if (Empty.isNotEmpty(list)) {
-        drawRoute(list);
+        drawSnappedRoute(list);
       }
     }
   }
-
 }
