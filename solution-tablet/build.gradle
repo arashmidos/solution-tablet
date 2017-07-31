@@ -47,6 +47,7 @@ android {
         javaMaxHeapSize '4096m'
     }
 
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
