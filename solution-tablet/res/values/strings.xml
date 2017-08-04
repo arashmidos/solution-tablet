@@ -399,7 +399,12 @@
     <string name="company_code">کد شرکت</string>
     <string name="choose_your_role">نقش خود را انتخاب کنید</string>
     <string name="sale_man">ویزیتور</string>
-    <string name="delivery">عامل پخش</string>
-    <string name="chart">بازار سنج</string>
+    <string name="merchandiser">عامل پخش</string>
+    <string name="distributor">بازار سنج</string>
+    <string name="features_list">فهرست امکانات</string>
+    <string name="customers">مشتریان</string>
+    <string name="today_pathes">مسیر های امروز</string>
+    <string name="map">نقشه</string>
+    <string name="reports">گزارشات</string>
 
 </resources>

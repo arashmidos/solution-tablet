@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.ui.FeedActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,8 +50,7 @@ public class LoginFragment extends BaseFragment {
 
 
   public static LoginFragment newInstance() {
-    LoginFragment fragment = new LoginFragment();
-    return fragment;
+    return new LoginFragment();
   }
 
   @Override
@@ -80,6 +81,7 @@ public class LoginFragment extends BaseFragment {
         onSalesManTapped();
         break;
       case R.id.log_in_btn:
+        goToFeatureList();
         break;
     }
   }
@@ -136,5 +138,10 @@ public class LoginFragment extends BaseFragment {
     selectedIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.login_gray));
     selectedTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.login_gray));
     selectedView.setVisibility(View.GONE);
+  }
+
+  private void goToFeatureList() {
+    Intent intent = new Intent(getActivity(), FeedActivity.class);
+    startActivity(intent);
   }
 }

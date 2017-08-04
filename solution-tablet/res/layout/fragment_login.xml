@@ -181,7 +181,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/distributor_icon"
                         android:layout_centerHorizontal="true"
-                        android:text="@string/chart"
+                        android:text="@string/distributor"
                         android:textColor="@color/login_gray"
                         android:textSize="12sp"/>
 
@@ -223,7 +223,7 @@
                         android:layout_below="@+id/merchandiser_icon"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="10dp"
-                        android:text="@string/delivery"
+                        android:text="@string/merchandiser"
                         android:textColor="@color/login_gray"
                         android:textSize="12sp"/>
 

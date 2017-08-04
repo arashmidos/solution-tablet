@@ -44,4 +44,6 @@
     <color name="primary">#2288e1</color>
     <color name="primary_dark">#1976d2</color>
     <color name="login_gray">#8b8b8b</color>
+    <color name="features_background">#d5d5d5</color>
+    <color name="badger_background">#ef5350</color>
 </resources>
