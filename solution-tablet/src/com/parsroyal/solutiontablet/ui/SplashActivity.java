@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
 import com.parsroyal.solutiontablet.R;
 
 /**
@@ -20,9 +21,12 @@ public class SplashActivity extends BaseActivity {
 
       public void run() {
 
-        Intent iMainActivity = new Intent(getApplicationContext(),
-            MainActivity.class);
-        startActivity(iMainActivity);
+//        Intent iMainActivity = new Intent(getApplicationContext(),
+//            MainActivity.class);
+//        startActivity(iMainActivity);
+        Intent iLoginActivity = new Intent(getApplicationContext(),
+            LoginActivity.class);
+        startActivity(iLoginActivity);
 
         finish();
       }
