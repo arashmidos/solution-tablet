@@ -1,0 +1,402 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context="com.parsroyal.solutiontablet.ui.fragment.NavigationDrawerFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:background="@color/navigation_drawer_header_background">
+
+                <ImageView
+                    android:id="@+id/user_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="34dp"
+                    android:layout_marginLeft="34dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginStart="18dp"
+                    android:src="@drawable/ic_account_circle_black_24dp"
+                    android:tint="@color/primary_dark"/>
+
+                <TextView
+                    android:id="@+id/user_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="21dp"
+                    android:layout_toLeftOf="@id/user_img"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="پژمان جمشیدی"
+                    android:textColor="@color/navigation_drawer_name"
+                    android:textSize="14sp"/>
+
+                <ImageView
+                    android:id="@+id/drop_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_toLeftOf="@id/user_name_tv"
+                    android:src="@drawable/ic_arrow_drop_down"
+                    android:tint="@color/login_gray"/>
+
+                <TextView
+                    android:id="@+id/user_role_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="17dp"
+                    android:layout_toLeftOf="@id/user_img"
+                    android:text="ویزیتور"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="12sp"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/navigation_drawer_divider"/>
+
+            <LinearLayout
+                android:id="@+id/body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:id="@+id/features_list_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="23dp">
+
+                    <ImageView
+                        android:id="@+id/feature_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:src="@drawable/ic_apps_black_24dp"
+                        android:tint="@color/login_gray"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/feature_icon"
+                        android:gravity="center"
+                        android:text="@string/features_list"
+                        android:textColor="@color/navigation_drawer_name"
+                        android:textSize="14sp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/today_paths_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="23dp">
+
+                    <ImageView
+                        android:id="@+id/path_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:src="@drawable/ic_near_me_black_24dp"
+                        android:tint="@color/login_gray"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/path_icon"
+                        android:gravity="center"
+                        android:text="@string/today_paths"
+                        android:textColor="@color/navigation_drawer_name"
+                        android:textSize="14sp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/customers_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="23dp">
+
+                    <ImageView
+                        android:id="@+id/customer_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:src="@drawable/ic_group_black_24dp"
+                        android:tint="@color/login_gray"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/customer_icon"
+                        android:gravity="center"
+                        android:text="@string/cusomters"
+                        android:textColor="@color/navigation_drawer_name"
+                        android:textSize="14sp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/reports_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="23dp">
+
+                    <ImageView
+                        android:id="@+id/report_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:src="@drawable/ic_assignment_black_24dp"
+                        android:tint="@color/login_gray"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/report_icon"
+                        android:gravity="center"
+                        android:text="@string/reports"
+                        android:textColor="@color/navigation_drawer_name"
+                        android:textSize="14sp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/map_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="23dp">
+
+                    <ImageView
+                        android:id="@+id/map_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:src="@drawable/ic_map_black_24dp"
+                        android:tint="@color/login_gray"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/map_icon"
+                        android:gravity="center"
+                        android:text="@string/map"
+                        android:textColor="@color/navigation_drawer_name"
+                        android:textSize="14sp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/setting_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="22dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="23dp">
+
+                    <ImageView
+                        android:id="@+id/setting_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:src="@drawable/ic_settings_black_24dp"
+                        android:tint="@color/login_gray"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/setting_icon"
+                        android:gravity="center"
+                        android:text="@string/setting"
+                        android:textColor="@color/navigation_drawer_name"
+                        android:textSize="14sp"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/navigation_drawer_divider"/>
+
+                <TextView
+                    android:id="@+id/about_us"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/about_us"
+                    android:textColor="@color/navigation_drawer_name"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/body_log_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="23dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/exit_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginRight="32dp"
+                    android:src="@drawable/ic_logout_24dp"
+                    android:tint="@color/login_gray"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/exit_icon"
+                    android:gravity="center"
+                    android:text="@string/log_out"
+                    android:textColor="@color/navigation_drawer_name"
+                    android:textSize="14sp"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|start"
+        android:gravity="left|start"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/get_data_lay"
+            android:layout_width="128dp"
+            android:layout_height="32dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/get_data_background">
+
+            <ImageView
+                android:id="@+id/download_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/ic_file_download_white_18dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_toLeftOf="@+id/download_icon"
+                android:text="@string/get_data"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/send_data_lay"
+            android:layout_width="128dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:background="@drawable/send_data_background">
+
+            <ImageView
+                android:id="@+id/upload_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/ic_cloud_upload_black_18dp"
+                android:tint="@color/login_gray"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_toLeftOf="@+id/upload_icon"
+                android:text="@string/send_data"
+                android:textColor="@color/navigation_drawer_name"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/footer_log_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="@string/name_version"
+        android:textColor="@color/black_55"
+        android:visibility="gone"/>
+</LinearLayout>

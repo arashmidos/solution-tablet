@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
@@ -22,6 +23,7 @@ public class FeaturesFragment extends BaseFragment {
 
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
 
   private ActionBar actionBar;
   private FeaturesAdapter adapter;
@@ -56,7 +58,11 @@ public class FeaturesFragment extends BaseFragment {
     toolbar.setNavigationIcon(R.drawable.ic_menu);
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        Toast.makeText(getActivity(), "navigation drawer", Toast.LENGTH_SHORT).show();
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+          drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+          drawerLayout.openDrawer(GravityCompat.START);
+        }
       }
     });
   }

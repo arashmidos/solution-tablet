@@ -46,4 +46,9 @@
     <color name="login_gray">#8b8b8b</color>
     <color name="features_background">#d5d5d5</color>
     <color name="badger_background">#ef5350</color>
+    <color name="navigation_drawer_header_background">#fafafa</color>
+    <color name="navigation_drawer_name">#de000000</color>
+    <color name="navigation_drawer_divider">#1A040404</color>
+    <color name="send_data_border">#e8e8e8</color>
+    <color name="black_55">#8c000000</color>
 </resources>
