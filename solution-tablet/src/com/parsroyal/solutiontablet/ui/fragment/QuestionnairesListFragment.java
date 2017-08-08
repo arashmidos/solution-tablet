@@ -20,7 +20,6 @@ import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NQuestionnaireListAdapter;
-import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
@@ -54,9 +53,7 @@ public class QuestionnairesListFragment extends
     parent = arguments.getInt(Constants.PARENT, 0);
 
     try {
-      QuestionnaireSo questionnaireSo = getSearchObject();
-
-      dataModel = questionnaireService.searchForQuestionsList(questionnaireSo);
+      dataModel = getDataModel();
 
       View view = super.onCreateView(inflater, container, savedInstanceState);
       fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -141,6 +138,7 @@ public class QuestionnairesListFragment extends
       args.putLong(Constants.VISIT_ID, questionnaireListModel.getVisitId());
       args.putInt(Constants.PARENT,
           parent == 0 ? MainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID : parent);
+      args.putLong(Constants.ANSWERS_GROUP_NO,questionnaireListModel.getAnswersGroupNo());
       mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
     };
   }

@@ -15,8 +15,9 @@ public interface QuestionDao extends BaseDao<Question, Long> {
 
   List<QuestionListModel> searchForQuestions(QuestionSo questionSo);
 
-  QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId);
+  QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId,
+      Long answersGroupNo);
 
   QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
-      Long goodsBackendId, boolean isNext);
+      Long goodsBackendId, boolean isNext, Long answersGroupNo);
 }

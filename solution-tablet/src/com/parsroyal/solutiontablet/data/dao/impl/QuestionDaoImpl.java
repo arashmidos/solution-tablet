@@ -9,10 +9,8 @@ import com.parsroyal.solutiontablet.data.dao.QuestionDao;
 import com.parsroyal.solutiontablet.data.entity.Question;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
-import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
-import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,8 +102,8 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         "  q.TYPE," +
         "  a.ANSWER" +
         " FROM COMMER_QUESTION q " +
-        "  LEFT OUTER JOIN COMMER_Q_ANSWER a ON a.QUESTION_BACKEND_ID = q.BACKEND_ID  " +
-        " and a.VISIT_ID = ? and (a.GOODS_BACKEND_ID = ? or  '-1' = ?)" +
+        " LEFT OUTER JOIN COMMER_Q_ANSWER a ON a.QUESTION_BACKEND_ID = q.BACKEND_ID  " +
+        " and a.VISIT_ID = ? and (a.GOODS_BACKEND_ID = ? or  '-1' = ?) and a.ANSWERS_GROUP_NO = ?" +
         " LEFT OUTER JOIN COMMER_VISIT_INFORMATION v on v._id = a.VISIT_ID " +
         " WHERE q.QUESTIONNAIRE_BACKEND_ID = ? ORDER BY q.qOrder ";
     sql = sql.concat(" ");
@@ -115,6 +113,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
             .valueOf(questionSo.getGoodsBackendId()) : "-1",
         Empty.isNotEmpty(questionSo.getGoodsBackendId()) ? String
             .valueOf(questionSo.getGoodsBackendId()) : "-1",
+        String.valueOf(questionSo.getAnswersGroupNo()),
         String.valueOf(questionSo.getQuestionnaireBackendId())
     };
     Cursor cursor = db.rawQuery(sql, args);
@@ -135,7 +134,8 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
   }
 
   @Override
-  public QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId) {
+  public QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId,
+      Long answersGroupNo) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     QuestionDto questionDto = null;
@@ -152,12 +152,12 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         " q.TYPE" +//8
         " FROM COMMER_QUESTION q" +
         " INNER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID= q.QUESTIONNAIRE_BACKEND_ID" +
-        " Left OUTER JOIN COMMER_Q_ANSWER an on an.QUESTION_BACKEND_ID = q.BACKEND_ID and an.VISIT_ID = ?"
-        +
-        " and (an.GOODS_BACKEND_ID = ? or  '-1' = ?)" +
+        " Left OUTER JOIN COMMER_Q_ANSWER an on an.QUESTION_BACKEND_ID = q.BACKEND_ID "
+        + "and an.VISIT_ID = ? and an.ANSWERS_GROUP_NO = ?"
+        + " and (an.GOODS_BACKEND_ID = ? or  '-1' = ?)" +
         " where q._id = ?";
 
-    String[] args = {String.valueOf(visitId),
+    String[] args = {String.valueOf(visitId), String.valueOf(answersGroupNo),
         Empty.isNotEmpty(goodsBackendId) ? String.valueOf(goodsBackendId) : "-1",
         Empty.isNotEmpty(goodsBackendId) ? String.valueOf(goodsBackendId) : "-1",
         String.valueOf(questionId)};
@@ -182,7 +182,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
 
   @Override
   public QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
-      Long goodsBackendId, boolean isNext) {
+      Long goodsBackendId, boolean isNext, Long answersGroupNo) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     QuestionDto questionDto = null;
@@ -200,14 +200,15 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         " FROM COMMER_QUESTION q" +
         " INNER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID= q.QUESTIONNAIRE_BACKEND_ID" +
         " Left OUTER JOIN COMMER_Q_ANSWER an on an.QUESTION_BACKEND_ID = q.BACKEND_ID" +
-        " and an.VISIT_ID = ? and (an.GOODS_BACKEND_ID = ? or  '-1' = ?)" +
-        " where qn.BACKEND_ID = ? AND q.qOrder " +
+        " and an.VISIT_ID = ? and (an.GOODS_BACKEND_ID = ? or  '-1' = ?) and an.ANSWERS_GROUP_NO = ?"
+        + " where qn.BACKEND_ID = ? AND q.qOrder " +
         (isNext ? "> ? " : "< ? ") + "ORDER BY q.qORDER " + (isNext ? "ASC" : "DESC") + " limit 1";
 
     String[] args = {
         String.valueOf(visitId),
         Empty.isNotEmpty(goodsBackendId) ? String.valueOf(goodsBackendId) : "-1",
         Empty.isNotEmpty(goodsBackendId) ? String.valueOf(goodsBackendId) : "-1",
+        String.valueOf(answersGroupNo),
         String.valueOf(questionnaireBackendId),
         String.valueOf(order)};
     Cursor cursor = db.rawQuery(sql, args);

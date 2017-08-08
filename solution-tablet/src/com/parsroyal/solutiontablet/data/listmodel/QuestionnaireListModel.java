@@ -12,6 +12,7 @@ public class QuestionnaireListModel extends BaseListModel {
   private Long goodsGroupBackendId;
   private Long visitId;
   private String date;
+  private Long answersGroupNo;
 
   public Long getVisitId() {
     return visitId;
@@ -67,5 +68,13 @@ public class QuestionnaireListModel extends BaseListModel {
 
   public void setGoodsGroupBackendId(Long goodsGroupBackendId) {
     this.goodsGroupBackendId = goodsGroupBackendId;
+  }
+
+  public Long getAnswersGroupNo() {
+    return answersGroupNo;
+  }
+
+  public void setAnswersGroupNo(Long answersGroupNo) {
+    this.answersGroupNo = answersGroupNo;
   }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
+import com.parsroyal.solutiontablet.data.entity.QAnswer;
 import com.parsroyal.solutiontablet.data.entity.Questionnaire;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
@@ -149,7 +150,8 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
         " q.QUESTIONNAIRE_BACKEND_ID," +
         " qn.DESCRIPTION," +
         " a.VISIT_ID," +
-        " a.DATE" +
+        " a.DATE," +
+        " a.ANSWERS_GROUP_NO" +//4
         " FROM COMMER_Q_ANSWER a " +
         " LEFT OUTER JOIN COMMER_QUESTION q ON a.QUESTION_BACKEND_ID = q.BACKEND_ID  " +
         " LEFT OUTER JOIN COMMER_VISIT_INFORMATION v on v._id = a.VISIT_ID " +
@@ -157,7 +159,7 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
         " WHERE 1=1 ";
 
     String orderBy = " ORDER BY q.qOrder";
-    String groupBy = " GROUP BY a.VISIT_ID";
+    String groupBy = " GROUP BY a.ANSWERS_GROUP_NO";
 
     if (questionnaireSo.isAnonymous()) {
       sql = sql.concat(" AND v.CUSTOMER_BACKEND_ID = 0 AND v.CUSTOMER_ID = 0");
@@ -182,10 +184,24 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
       listModel.setDescription(cursor.getString(1));
       listModel.setVisitId(cursor.getLong(2));
       listModel.setDate(cursor.getString(3));
+      listModel.setAnswersGroupNo(cursor.getLong(4));
       questions.add(listModel);
     }
 
     cursor.close();
     return questions;
+  }
+
+  @Override
+  public Long getNextAnswerGroupNo() {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+    String sql = "SELECT max(" + QAnswer.COL_ANSWERS_GROUP_NO + ") FROM " + QAnswer.TABLE_NAME;
+    Cursor cursor = db.rawQuery(sql, null);
+    if (cursor.moveToNext()) {
+      return cursor.getLong(0) + 1;
+    }
+    return 0L;
   }
 }

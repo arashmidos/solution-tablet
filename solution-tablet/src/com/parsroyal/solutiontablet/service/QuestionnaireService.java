@@ -17,10 +17,11 @@ public interface QuestionnaireService extends BaseService {
 
   List<QuestionListModel> searchForQuestions(QuestionSo questionSo);
 
-  QuestionDto getQuestionDto(Long primaryKey, Long visitId, Long goodsBackendId);
+  QuestionDto getQuestionDto(Long primaryKey, Long visitId, Long goodsBackendId,
+      Long answersGroupNo);
 
   QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
-      Long goodsBackendId, boolean isNext);
+      Long goodsBackendId, boolean isNext, Long answersGroupNo);
 
   Long saveAnswer(QAnswer qAnswer);
 
@@ -29,4 +30,6 @@ public interface QuestionnaireService extends BaseService {
   QAnswer getAnswerById(Long id);
 
   List<QuestionnaireListModel> searchForQuestionsList(QuestionnaireSo questionnaireSo);
+
+  Long getNextAnswerGroupNo();
 }

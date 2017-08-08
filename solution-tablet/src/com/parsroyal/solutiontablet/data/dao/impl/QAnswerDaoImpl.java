@@ -41,6 +41,7 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     contentValues.put(QAnswer.COL_DATE, entity.getDate());
     contentValues.put(QAnswer.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(QAnswer.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
+    contentValues.put(QAnswer.COL_ANSWERS_GROUP_NO, entity.getAnswersGroupNo());
 
     return contentValues;
   }
@@ -68,7 +69,8 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
         QAnswer.COL_VISIT_ID,
         QAnswer.COL_DATE,
         QAnswer.COL_CREATE_DATE_TIME,
-        QAnswer.COL_UPDATE_DATE_TIME
+        QAnswer.COL_UPDATE_DATE_TIME,//10
+        QAnswer.COL_ANSWERS_GROUP_NO
     };
     return projection;
   }
@@ -88,6 +90,7 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     answer.setDate(cursor.getString(8));
     answer.setCreateDateTime(cursor.getString(9));
     answer.setUpdateDateTime(cursor.getString(10));
+    answer.setAnswersGroupNo(cursor.getLong(11));
 
     return answer;
   }
