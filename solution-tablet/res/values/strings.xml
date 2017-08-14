@@ -408,5 +408,7 @@
     <string name="reports">گزارشات</string>
     <string name="log_out">خروج از حساب کاربری</string>
     <string name="name_version">Solution Tablet v2.01</string>
+    <string name="search_customers_hint">در نام و کد مشتریان جستجو کنید...</string>
+    <string name="sort">مرتب سازی</string>
 
 </resources>

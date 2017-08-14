@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.ui.fragment.CustomersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 
 public class FeedActivity extends AppCompatActivity {
@@ -14,8 +15,15 @@ public class FeedActivity extends AppCompatActivity {
     setContentView(R.layout.activity_feed);
     showFeaturesFragment();
   }
-  private void showFeaturesFragment() {
+  public void showFeaturesFragment() {
     FeaturesFragment fragment = FeaturesFragment.newInstance();
+    getSupportFragmentManager().beginTransaction()
+        .replace(R.id.container, fragment, fragment.getFragmentTag())
+        .addToBackStack(fragment.getFragmentTag()).commit();
+  }
+
+  public void showCustomersListFragment() {
+    CustomersListFragment fragment = CustomersListFragment.newInstance();
     getSupportFragmentManager().beginTransaction()
         .replace(R.id.container, fragment, fragment.getFragmentTag())
         .addToBackStack(fragment.getFragmentTag()).commit();

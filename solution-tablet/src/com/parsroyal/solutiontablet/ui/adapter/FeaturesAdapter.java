@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
+import com.parsroyal.solutiontablet.ui.FeedActivity;
 
 import java.util.List;
 
@@ -48,6 +50,15 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     }
     holder.featureImg.setImageResource(feature.getImageId());
     holder.featureTitleTv.setText(feature.getTitle());
+    holder.featureLay.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        switch (position) {
+          case 1:
+            ((FeedActivity) context).showCustomersListFragment();
+            break;
+        }
+      }
+    });
   }
 
   @Override public int getItemCount() {
@@ -58,6 +69,8 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     @BindView(R.id.feature_img) ImageView featureImg;
     @BindView(R.id.badger_btn) Button badgerBtn;
     @BindView(R.id.feature_title_tv) TextView featureTitleTv;
+    @BindView(R.id.feature_lay) CardView featureLay;
+
 
     public ViewHolder(View itemView) {
       super(itemView);

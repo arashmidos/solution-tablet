@@ -66,7 +66,6 @@ public class FeaturesFragment extends BaseFragment {
       }
     });
   }
-
   //set up recycler view
   private void setUpRecyclerView() {
     adapter = new FeaturesAdapter(getActivity(), FeatureList.getFeatureList(getActivity()));
