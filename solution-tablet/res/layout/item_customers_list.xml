@@ -50,7 +50,7 @@
             android:textSize="12sp"/>
 
         <TextView
-            android:id="@+id/customer_address_tv"
+            android:id="@+id/customer_shop_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

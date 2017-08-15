@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -11,8 +12,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +53,7 @@ public class CustomersListFragment extends BaseFragment {
   private long visitLineId;
   private CustomerService customerService;
   private VisitService visitService;
+  private AlertDialog alertDialog;
 
   public static CustomersListFragment newInstance() {
     CustomersListFragment fragment = new CustomersListFragment();
@@ -133,11 +139,67 @@ public class CustomersListFragment extends BaseFragment {
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.sort_lay:
-        Toast.makeText(feedActivity, "sort", Toast.LENGTH_SHORT).show();
+        showSortDialog();
         break;
       case R.id.filter_lay:
-        Toast.makeText(feedActivity, "filter", Toast.LENGTH_SHORT).show();
+        showFilterDialog();
         break;
     }
+  }
+
+  private void showSortDialog() {
+    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(feedActivity);
+    LayoutInflater inflater = feedActivity.getLayoutInflater();
+    View dialogView = inflater.inflate(R.layout.dialog_sort, null);
+    dialogBuilder.setView(dialogView);
+
+    RadioGroup sortRadioGroup = (RadioGroup) dialogView.findViewById(R.id.sort_radio_group);
+    AlertDialog alertDialog = dialogBuilder.create();
+    alertDialog.show();
+    sortRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(RadioGroup group, int checkedId) {
+        RadioButton selectedRadio = (RadioButton) dialogView.findViewById(checkedId);
+        Toast.makeText(feedActivity, selectedRadio.getText(), Toast.LENGTH_SHORT).show();
+        alertDialog.cancel();
+      }
+    });
+  }
+
+
+  private void showFilterDialog() {
+    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(feedActivity);
+    LayoutInflater inflater = feedActivity.getLayoutInflater();
+    View dialogView = inflater.inflate(R.layout.dialog_customer_filter, null);
+    dialogBuilder.setView(dialogView);
+
+    Button doFilterBtn = (Button) dialogView.findViewById(R.id.do_filter_btn);
+    TextView closeTv = (TextView) dialogView.findViewById(R.id.close_tv);
+    Button removeFilterBtn = (Button) dialogView.findViewById(R.id.remove_filter_btn);
+    CheckBox registerNo = (CheckBox) dialogView.findViewById(R.id.register_no);
+    CheckBox registerOrder = (CheckBox) dialogView.findViewById(R.id.register_order);
+    EditText distanceEdt = (EditText) dialogView.findViewById(R.id.distance_edt);
+
+    AlertDialog alertDialog = dialogBuilder.create();
+    alertDialog.show();
+    closeTv.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        alertDialog.cancel();
+      }
+    });
+    removeFilterBtn.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        //TODO:add enter action
+        Toast.makeText(feedActivity, "remove filter " + distanceEdt.getText().toString() + "no " + String.valueOf(registerNo.isChecked()) + "order " + String.valueOf(registerOrder.isChecked()), Toast.LENGTH_SHORT).show();
+        alertDialog.dismiss();
+      }
+    });
+    doFilterBtn.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        //TODO:add no visit action
+        Toast.makeText(feedActivity, "do filter " + distanceEdt.getText().toString() + "no " + String.valueOf(registerNo.isChecked()) + "order " + String.valueOf(registerOrder.isChecked()), Toast.LENGTH_SHORT).show();
+        alertDialog.cancel();
+      }
+    });
   }
 }
