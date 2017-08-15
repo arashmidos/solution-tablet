@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -48,18 +49,21 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.View
     holder.customerIdTv.setText(customerCode);
     //set location icon
     if (model.hasLocation()) {
-      holder.hasLocationImg.setImageResource(R.drawable.ic_location_on_24dp);
+      holder.hasLocationImg.setImageResource(R.drawable.ic_gps_fixed_black_18dp);
+      holder.hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.primary));
+
     } else {
-      holder.hasLocationImg.setImageResource(R.drawable.ic_location_off_24dp);
+      holder.hasLocationImg.setImageResource(R.drawable.ic_gps_off_black_18dp);
+      holder.hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.login_gray));
     }
     //set visit icon
     if (model.isVisited()) {
-      holder.visitTodayImg.setImageResource(R.drawable.ic_visibility_24dp);
+      holder.visitTodayImg.setColorFilter(ContextCompat.getColor(context, R.color.log_in_enter_bg));
     } else {
-      holder.visitTodayImg.setImageResource(R.drawable.ic_visibility_off_24dp);
+      holder.visitTodayImg.setColorFilter(ContextCompat.getColor(context, R.color.login_gray));
     }
     if (model.hasRejection()) {
-      holder.visitTodayImg.setImageResource(R.drawable.ic_visibility_off_none_24dp);
+      holder.visitTodayImg.setColorFilter(ContextCompat.getColor(context, R.color.badger_background));
     }
 
     holder.hasOrderImg.setVisibility(model.hasOrder() ? View.VISIBLE : View.GONE);
@@ -106,18 +110,21 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.View
     customerIdTv.setText(customerCode);
     //set location icon
     if (model.hasLocation()) {
-      hasLocationImg.setImageResource(R.drawable.ic_location_on_24dp);
+      hasLocationImg.setImageResource(R.drawable.ic_gps_fixed_black_18dp);
+      hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.primary));
+
     } else {
-      hasLocationImg.setImageResource(R.drawable.ic_location_off_24dp);
+      hasLocationImg.setImageResource(R.drawable.ic_gps_off_black_18dp);
+      hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.login_gray));
     }
     //set visit icon
     if (model.isVisited()) {
-      visitTodayImg.setImageResource(R.drawable.ic_visibility_24dp);
+      visitTodayImg.setColorFilter(ContextCompat.getColor(context, R.color.log_in_enter_bg));
     } else {
-      visitTodayImg.setImageResource(R.drawable.ic_visibility_off_24dp);
+      visitTodayImg.setColorFilter(ContextCompat.getColor(context, R.color.login_gray));
     }
     if (model.hasRejection()) {
-      visitTodayImg.setImageResource(R.drawable.ic_visibility_off_none_24dp);
+      visitTodayImg.setColorFilter(ContextCompat.getColor(context, R.color.badger_background));
     }
 
     hasOrderImg.setVisibility(model.hasOrder() ? View.VISIBLE : View.GONE);

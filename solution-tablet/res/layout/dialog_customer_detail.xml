@@ -68,6 +68,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="21dp"
         android:layout_marginTop="24dp"
+        android:src="@drawable/ic_gps_fixed_black_18dp"
         />
 
     <ImageView
@@ -77,6 +78,7 @@
         android:layout_marginLeft="14dp"
         android:layout_marginTop="24dp"
         android:layout_toRightOf="@id/has_location_img"
+        android:src="@drawable/ic_visibility_black_18dp"
         />
 
     <ImageView
@@ -85,15 +87,17 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
         android:layout_marginTop="24dp"
-        android:layout_toRightOf="@+id/visit_today_img"/>
+        android:layout_toRightOf="@+id/visit_today_img"
+        android:src="@drawable/ic_cart_outline_black_18dp"
+        android:tint="@color/log_in_enter_bg"/>
 
     <ImageView
         android:id="@+id/location_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
         android:layout_below="@id/customer_shop_name_tv"
+        android:layout_marginRight="20dp"
         android:src="@drawable/ic_location_on"
         android:tint="@color/login_gray"/>
 
@@ -104,6 +108,7 @@
         android:layout_below="@id/customer_shop_name_tv"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="14dp"
+        android:layout_marginLeft="21dp"
         android:layout_toLeftOf="@id/location_img"
         android:ellipsize="end"
         android:gravity="right"
@@ -143,8 +148,8 @@
         android:layout_below="@id/location_tv"
         android:layout_marginRight="47dp"
         android:layout_toLeftOf="@id/mobile_tv"
-        android:src="@drawable/ic_phone"
         android:rotation="270"
+        android:src="@drawable/ic_phone"
         android:tint="@color/login_gray"/>
 
     <TextView
