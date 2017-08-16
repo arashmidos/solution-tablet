@@ -16,7 +16,7 @@ import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.PaymentService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentListAdapter;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -28,7 +28,7 @@ import java.util.List;
 public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentListAdapter> {
 
   public static final String TAG = PaymentFragment.class.getSimpleName();
-  private MainActivity context;
+  private OldMainActivity context;
   private PaymentService paymentService;
   private long customerId;
   private long visitId;
@@ -40,7 +40,7 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    this.context = (MainActivity) getActivity();
+    this.context = (OldMainActivity) getActivity();
     this.paymentService = new PaymentServiceImpl(context);
     this.customerService = new CustomerServiceImpl(context);
     Bundle arguments = getArguments();
@@ -79,11 +79,11 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
     } else {
       fab.setOnClickListener(v ->
       {
-        MainActivity mainActivity = (MainActivity) getActivity();
+        OldMainActivity oldMainActivity = (OldMainActivity) getActivity();
         Bundle args = new Bundle();
         args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
         args.putLong(Constants.VISIT_ID, visitId);
-        mainActivity.changeFragment(MainActivity.PAYMENT_DETAIL_FRAGMENT_ID, args, false);
+        oldMainActivity.changeFragment(OldMainActivity.PAYMENT_DETAIL_FRAGMENT_ID, args, false);
       });
     }
   }
@@ -141,9 +141,9 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
       bundle.putLong(Constants.PAYMENT_ID, listModel.getPrimaryKey());
       bundle.putLong(Constants.VISIT_ID, visitId);
       bundle.putInt(Constants.PARENT,
-          (customer != null ? MainActivity.CUSTOMER_LIST_FRAGMENT_ID
-              : MainActivity.FUNDS_FRAGMENT_ID));
-      context.changeFragment(MainActivity.PAYMENT_DETAIL_FRAGMENT_ID, bundle, true);
+          (customer != null ? OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID
+              : OldMainActivity.FUNDS_FRAGMENT_ID));
+      context.changeFragment(OldMainActivity.PAYMENT_DETAIL_FRAGMENT_ID, bundle, true);
     };
   }
 
@@ -159,6 +159,6 @@ public class PaymentFragment extends BaseListFragment<PaymentListModel, PaymentL
 
   @Override
   public int getFragmentId() {
-    return MainActivity.PAYMENT_FRAGMENT_ID;
+    return OldMainActivity.PAYMENT_FRAGMENT_ID;
   }
 }

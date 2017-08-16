@@ -13,7 +13,7 @@ import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.LocationUtil;
 import java.util.List;
 
@@ -97,7 +97,7 @@ public class TestFragment extends BaseFragment {
 
   @Override
   public int getFragmentId() {
-    return MainActivity.USER_TRACKING_FRAGMENT_ID;
+    return OldMainActivity.USER_TRACKING_FRAGMENT_ID;
   }
 
   @Override

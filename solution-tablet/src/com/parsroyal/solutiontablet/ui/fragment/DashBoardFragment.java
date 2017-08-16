@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 
 /**
  * Created by Mahyar on 8/4/2015.
@@ -21,6 +21,6 @@ public class DashBoardFragment extends BaseFragment {
 
   @Override
   public int getFragmentId() {
-    return MainActivity.DASHBOARD_FRAGMENT_ID;
+    return OldMainActivity.DASHBOARD_FRAGMENT_ID;
   }
 }

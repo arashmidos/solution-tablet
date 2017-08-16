@@ -74,12 +74,7 @@ public class BaseFragmentActivity extends AppCompatActivity {
 
   public void changeMessageDialog(final String message) {
     if (progressDialog != null) {
-      runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-          progressDialog.setMessage(message);
-        }
-      });
+      runOnUiThread(() -> progressDialog.setMessage(message));
     }
   }
 

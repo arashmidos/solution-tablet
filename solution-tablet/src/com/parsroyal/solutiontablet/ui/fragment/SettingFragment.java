@@ -24,7 +24,7 @@ import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -295,10 +295,10 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
       {
         runOnUiThread(() -> ToastUtil
             .toastSuccess(getActivity(), R.string.message_setting_saved_successfully));
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.removeFragment(this);
-        mainActivity.updateActionbar();
-        mainActivity.startGpsService();
+        OldMainActivity oldMainActivity = (OldMainActivity) getActivity();
+        oldMainActivity.removeFragment(this);
+        oldMainActivity.updateActionbar();
+        oldMainActivity.startGpsService();
         new TrackerAlarmReceiver().setAlarm(getContext());
       });
     }
@@ -306,14 +306,14 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
 
   @Override
   public int getFragmentId() {
-    return MainActivity.SETTING_FRAGMENT_ID;
+    return OldMainActivity.SETTING_FRAGMENT_ID;
   }
 
   @OnClick({R.id.cancelBtn, R.id.saveBtn})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.cancelBtn:
-        ((MainActivity) getActivity()).removeFragment(this);
+        ((OldMainActivity) getActivity()).removeFragment(this);
         break;
       case R.id.saveBtn:
         try {
@@ -331,8 +331,8 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
                     invokeGetInformationService(
                         newSalesman ? Constants.FULL_UPDATE : Constants.PARTIAL_UPDATE);
                   }, getString(R.string.no_send_data), (dialog, which) -> {
-                    ((MainActivity) getActivity())
-                        .changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, true);
+                    ((OldMainActivity) getActivity())
+                        .changeFragment(OldMainActivity.DATA_TRANSFER_FRAGMENT_ID, true);
                   }, Constants.ICON_WARNING
               );
             } else {

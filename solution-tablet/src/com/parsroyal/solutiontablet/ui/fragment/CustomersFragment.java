@@ -15,7 +15,7 @@ import com.parsroyal.solutiontablet.constants.SortType;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerListAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import java.text.Collator;
@@ -32,7 +32,7 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
   public static final String TAG = VisitLinesFragment.class.getSimpleName();
 
   private Long visitLineId;
-  private MainActivity context;
+  private OldMainActivity context;
   private CustomerService customerService;
   private ImageButton sortButton;
   private ImageButton filterButton;
@@ -41,7 +41,7 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    context = (MainActivity) getActivity();
+    context = (OldMainActivity) getActivity();
     customerService = new CustomerServiceImpl(context);
     View view = super.onCreateView(inflater, container, savedInstanceState);
     buttonPanel.setVisibility(View.VISIBLE);
@@ -167,7 +167,7 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
       CustomerListModel customerListModel = (CustomerListModel) adapter.getItem(position);
       Bundle bundle = new Bundle();
       bundle.putLong("customerId", customerListModel.getPrimaryKey());
-      context.changeFragment(MainActivity.CUSTOMER_DETAIL_FRAGMENT_ID, bundle, false);
+      context.changeFragment(OldMainActivity.CUSTOMER_DETAIL_FRAGMENT_ID, bundle, false);
     };
   }
 
@@ -183,7 +183,7 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
 
   @Override
   public int getFragmentId() {
-    return MainActivity.CUSTOMERS_FRAGMENT_ID;
+    return OldMainActivity.CUSTOMERS_FRAGMENT_ID;
   }
 
   @Override

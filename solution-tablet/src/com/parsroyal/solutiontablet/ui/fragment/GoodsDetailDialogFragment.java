@@ -29,7 +29,7 @@ import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MediaUtil;
@@ -62,7 +62,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
   @BindView(R.id.goods_image)
   ImageView goodsImage;
 
-  private MainActivity context;
+  private OldMainActivity context;
   private GoodsService goodsService;
   private SettingService settingService;
 
@@ -92,7 +92,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
     View view = inflater.inflate(R.layout.fragment_goods_detail_dialog, null);
     ButterKnife.bind(this, view);
 
-    context = (MainActivity) getActivity();
+    context = (OldMainActivity) getActivity();
     Bundle arguments = getArguments();
     orderStatus = arguments.getLong(Constants.ORDER_STATUS);
     goodsBackendId = arguments.getLong(Constants.GOODS_BACKEND_ID);

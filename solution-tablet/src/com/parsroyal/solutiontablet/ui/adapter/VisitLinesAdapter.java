@@ -11,7 +11,7 @@ import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +21,10 @@ import java.util.List;
  */
 public class VisitLinesAdapter extends BaseListAdapter<VisitLineListModel> {
 
-  private MainActivity context;
+  private OldMainActivity context;
   private VisitService visitService;
 
-  public VisitLinesAdapter(MainActivity context, List<VisitLineListModel> dataModel) {
+  public VisitLinesAdapter(OldMainActivity context, List<VisitLineListModel> dataModel) {
     super(context, dataModel);
     this.context = context;
     this.visitService = new VisitServiceImpl(context);

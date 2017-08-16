@@ -12,7 +12,7 @@ import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.component.TabContainer;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 
@@ -22,7 +22,7 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 public class TrackingBaseFragment extends BaseFragment {
 
   public static final String TAG = TrackingBaseFragment.class.getSimpleName();
-  private MainActivity context;
+  private OldMainActivity context;
 
   private TabContainer tabContainer;
   private LinearLayout actionsLayout;
@@ -34,7 +34,7 @@ public class TrackingBaseFragment extends BaseFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     try {
-      context = (MainActivity) getActivity();
+      context = (OldMainActivity) getActivity();
 
       View view = context.getLayoutInflater().inflate(R.layout.fragment_tracking_base, null);
 
@@ -52,17 +52,17 @@ public class TrackingBaseFragment extends BaseFragment {
 
   @Override
   public int getFragmentId() {
-    return MainActivity.BASE_TRACKING_FRAGMENT_ID;
+    return OldMainActivity.BASE_TRACKING_FRAGMENT_ID;
   }
 
   @OnClick({R.id.user_tracking_btn, R.id.customer_tracking_btn})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.user_tracking_btn:
-        context.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, null, false);
+        context.changeFragment(OldMainActivity.USER_TRACKING_FRAGMENT_ID, null, false);
         break;
       case R.id.customer_tracking_btn:
-        context.changeFragment(MainActivity.CUSTOMER_TRACKING_FRAGMENT_ID, null, false);
+        context.changeFragment(OldMainActivity.CUSTOMER_TRACKING_FRAGMENT_ID, null, false);
         break;
     }
   }

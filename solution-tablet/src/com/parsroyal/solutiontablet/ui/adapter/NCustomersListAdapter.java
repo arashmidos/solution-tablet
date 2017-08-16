@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -26,7 +25,7 @@ import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
@@ -41,17 +40,17 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
 
   private final QuestionnaireService questionnaireService;
   private final NCustomerSO nCustomerSO;
-  private MainActivity mainActivity;
+  private OldMainActivity oldMainActivity;
   private CustomerService customerService;
   private VisitService visitService;
 
-  public NCustomersListAdapter(MainActivity mainActivity, List<NCustomerListModel> dataModel,
+  public NCustomersListAdapter(OldMainActivity oldMainActivity, List<NCustomerListModel> dataModel,
       NCustomerSO nCustomerSO) {
-    super(mainActivity, dataModel);
-    customerService = new CustomerServiceImpl(mainActivity);
-    questionnaireService = new QuestionnaireServiceImpl(mainActivity);
+    super(oldMainActivity, dataModel);
+    customerService = new CustomerServiceImpl(oldMainActivity);
+    questionnaireService = new QuestionnaireServiceImpl(oldMainActivity);
     visitService = new VisitServiceImpl(context);
-    this.mainActivity = mainActivity;
+    this.oldMainActivity = oldMainActivity;
     this.nCustomerSO = nCustomerSO;
   }
 
@@ -95,29 +94,29 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
       holder.editBtn.setOnClickListener(v -> {
         Bundle args = new Bundle();
         args.putLong(NCustomerDetailFragment.CUSTOMER_ID_KEY, model.getPrimaryKey());
-        mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, false);
+        oldMainActivity.changeFragment(OldMainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, false);
       });
 
       holder.deleteBtn.setOnClickListener(v -> DialogUtil
-          .showConfirmDialog(mainActivity, mainActivity.getString(R.string.delete_customer),
-              mainActivity.getString(R.string.message_customer_delete_confirm),
+          .showConfirmDialog(oldMainActivity, oldMainActivity.getString(R.string.delete_customer),
+              oldMainActivity.getString(R.string.message_customer_delete_confirm),
               (dialog, which) -> {
                 try {
                   customerService.deleteCustomer(model.getPrimaryKey());
                   NCustomersListAdapter.this.dataModel.remove(model);
                   NCustomersListAdapter.this.notifyDataSetChanged();
                   NCustomersListAdapter.this.notifyDataSetInvalidated();
-                  mainActivity
-                      .runOnUiThread(() -> ToastUtil.toastSuccess(mainActivity, mainActivity
+                  oldMainActivity
+                      .runOnUiThread(() -> ToastUtil.toastSuccess(oldMainActivity, oldMainActivity
                           .getString(R.string.message_customer_deleted_successfully)));
                 } catch (BusinessException ex) {
                   Log.e(TAG, ex.getMessage(), ex);
-                  ToastUtil.toastError(mainActivity, ex);
+                  ToastUtil.toastError(oldMainActivity, ex);
                 } catch (Exception ex) {
                   Crashlytics.log(Log.ERROR, "UI Exception",
                       "Error in NCustomersListAdapter.delete " + ex.getMessage());
                   Log.e(TAG, ex.getMessage(), ex);
-                  ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+                  ToastUtil.toastError(oldMainActivity, new UnknownSystemException(ex));
                 }
               }
           ));
@@ -164,7 +163,7 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
           visitId = finalVisitInformations.getId();
         }
         args.putLong(Constants.VISIT_ID, visitId);
-        args.putInt(Constants.PARENT,MainActivity.NEW_CUSTOMER_FRAGMENT_ID);
+        args.putInt(Constants.PARENT, OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID);
         //
 
         //if question count > 0 is each category so we should display it to user.
@@ -173,16 +172,17 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
 
           Dialog dialog = new AlertDialog.Builder(context)
               .setTitle(context.getString(R.string.select_questionary))
-              .setItems(options, (dialog1, which) -> mainActivity.changeFragment(
-                  which == 0 ? MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID :
-                      MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false))
+              .setItems(options, (dialog1, which) -> oldMainActivity.changeFragment(
+                  which == 0 ? OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID :
+                      OldMainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false))
               .create();
           dialog.show();
         } else if (generalQCount > 0) {
-          mainActivity
-              .changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+          oldMainActivity
+              .changeFragment(OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
         } else if (goodsQCount > 0) {
-          mainActivity.changeFragment(MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+          oldMainActivity
+              .changeFragment(OldMainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
         } else {
           DialogUtil.showMessageDialog(context, context.getString(R.string.select_questionary),
               context.getString(R.string.error_no_questionary_found));

@@ -37,7 +37,7 @@ import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.Locale;
 
@@ -113,7 +113,7 @@ public class SaveLocationFragment extends BaseFragment implements
 
   @Override
   public int getFragmentId() {
-    return MainActivity.SAVE_LOCATION_FRAGMENT_ID;
+    return OldMainActivity.SAVE_LOCATION_FRAGMENT_ID;
   }
 
   @Override

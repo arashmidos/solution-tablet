@@ -14,7 +14,7 @@ import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsListForQuestionnairesAdapter;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class GoodsListForQuestionnairesFragment extends
 
   public static final String TAG = GoodsListForQuestionnairesFragment.class.getSimpleName();
 
-  private MainActivity mainActivity;
+  private OldMainActivity oldMainActivity;
   private GoodsService goodsService;
   private Long goodsGroupBackendId;
   private Long questionnaireBackendId;
@@ -37,8 +37,8 @@ public class GoodsListForQuestionnairesFragment extends
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     try {
-      mainActivity = (MainActivity) getActivity();
-      goodsService = new GoodsServiceImpl(mainActivity);
+      oldMainActivity = (OldMainActivity) getActivity();
+      goodsService = new GoodsServiceImpl(oldMainActivity);
 
       goodsGroupBackendId = getArguments().getLong(Constants.GOODS_GROUP_BACKEND_ID);
       questionnaireBackendId = getArguments().getLong(Constants.QUESTIONAIRE_ID);
@@ -49,13 +49,13 @@ public class GoodsListForQuestionnairesFragment extends
       buttonPanel.setVisibility(View.VISIBLE);
       Button canclButton = (Button) buttonPanel.findViewById(R.id.cancelBtn);
       canclButton.setOnClickListener(
-          v -> mainActivity.removeFragment(GoodsListForQuestionnairesFragment.this));
+          v -> oldMainActivity.removeFragment(GoodsListForQuestionnairesFragment.this));
       return view;
     } catch (Exception e) {
       Crashlytics
           .log(Log.ERROR, "UI Exception", "Error in creating GoodsListQuestionaireFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
-      return mainActivity.getLayoutInflater().inflate(R.layout.view_error_page, null);
+      return oldMainActivity.getLayoutInflater().inflate(R.layout.view_error_page, null);
     }
   }
 
@@ -73,7 +73,7 @@ public class GoodsListForQuestionnairesFragment extends
 
   @Override
   protected GoodsListForQuestionnairesAdapter getAdapter() {
-    return new GoodsListForQuestionnairesAdapter(mainActivity, dataModel, goodsGroupBackendId);
+    return new GoodsListForQuestionnairesAdapter(oldMainActivity, dataModel, goodsGroupBackendId);
   }
 
   @Override
@@ -85,7 +85,7 @@ public class GoodsListForQuestionnairesFragment extends
       args.putLong(Constants.VISIT_ID, visitId);
       args.putLong(Constants.CUSTOMER_ID, customerId);
       args.putLong(Constants.GOODS_BACKEND_ID, dataModel.get(position).getGoodsBackendId());
-      mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
+      oldMainActivity.changeFragment(OldMainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
     };
   }
 
@@ -101,6 +101,6 @@ public class GoodsListForQuestionnairesFragment extends
 
   @Override
   public int getFragmentId() {
-    return MainActivity.GOODS_LIST_FOR_QUESTIONNAIRES_FRAGMENT_ID;
+    return OldMainActivity.GOODS_LIST_FOR_QUESTIONNAIRES_FRAGMENT_ID;
   }
 }

@@ -12,7 +12,7 @@ import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class NQuestionnaireListAdapter extends BaseListAdapter<QuestionnaireList
   private QuestionnaireSo questionnaireSo;
   private QuestionnaireService questionnaireService;
 
-  public NQuestionnaireListAdapter(MainActivity context, List<QuestionnaireListModel> dataModel) {
+  public NQuestionnaireListAdapter(OldMainActivity context, List<QuestionnaireListModel> dataModel) {
     super(context, dataModel);
     this.questionnaireService = new QuestionnaireServiceImpl(context);
     this.context = context;

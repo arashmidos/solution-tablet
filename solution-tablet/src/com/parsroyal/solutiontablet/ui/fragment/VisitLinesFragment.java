@@ -10,7 +10,7 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.VisitLinesAdapter;
 import java.util.List;
 
@@ -21,13 +21,13 @@ public class VisitLinesFragment extends BaseListFragment<VisitLineListModel, Vis
 
   public static final String TAG = VisitLinesFragment.class.getSimpleName();
 
-  private MainActivity context;
+  private OldMainActivity context;
   private VisitService visitService;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    context = (MainActivity) getActivity();
+    context = (OldMainActivity) getActivity();
     visitService = new VisitServiceImpl(context);
     return super.onCreateView(inflater, container, savedInstanceState);
   }
@@ -53,7 +53,7 @@ public class VisitLinesFragment extends BaseListFragment<VisitLineListModel, Vis
       VisitLineListModel visitLine = dataModel.get(position);
       Bundle bundle = new Bundle();
       bundle.putLong(Constants.VISITLINE_BACKEND_ID, visitLine.getPrimaryKey());
-      context.changeFragment(MainActivity.CUSTOMERS_FRAGMENT_ID, bundle, true);
+      context.changeFragment(OldMainActivity.CUSTOMERS_FRAGMENT_ID, bundle, true);
     };
   }
 
@@ -70,11 +70,11 @@ public class VisitLinesFragment extends BaseListFragment<VisitLineListModel, Vis
   @Override
   public void onResume() {
     super.onResume();
-    context.changeSidebarItem(MainActivity.CUSTOMER_LIST_FRAGMENT_ID);
+    context.changeSidebarItem(OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID);
   }
 
   @Override
   public int getFragmentId() {
-    return MainActivity.CUSTOMER_LIST_FRAGMENT_ID;
+    return OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID;
   }
 }

@@ -14,6 +14,7 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
 public class SaveLocationService extends IntentService {
@@ -49,6 +50,16 @@ public class SaveLocationService extends IntentService {
     if (Empty.isEmpty(intent)) {
       return;
     }
+
+    Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
+    boolean isFirst = intent.getBooleanExtra("FIRST", false);
+    if (isFirst) {
+      Position position2 = new Position(location);
+      position2.setId(positionService.savePosition(position2));
+      position2.setMode(1);
+
+      Logger.logToFile(position2);
+    }
     //If users clears data, new user, or not entered correct information
     KeyValue salesmanIdKeyValue = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
     if (Empty.isEmpty(salesmanIdKeyValue)) {
@@ -57,17 +68,19 @@ public class SaveLocationService extends IntentService {
 
     long salesmanId = Long.parseLong(salesmanIdKeyValue.getValue());
 
-    Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
-
+    boolean isAccepted = intent.getBooleanExtra("ACCEPTED", false);
     if (Empty.isEmpty(location)) {
       return;
     }
 
     Log.i(TAG, "Saving location " + location);
-
-    final Position position = new Position(location);
+    Position position = new Position(location);
     position.setSalesmanId(salesmanId);
-    positionService.savePosition(position);
+    if (isAccepted) {
+      position.setId(positionService.savePosition(position));
+      position.setMode(1);
+    }
+    Logger.logToFile(position);
   }
 
   /**

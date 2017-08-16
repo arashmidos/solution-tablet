@@ -43,7 +43,7 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionListAdapter;
 import com.parsroyal.solutiontablet.ui.component.FlowLayout;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -65,7 +65,7 @@ public class QuestionnaireDetailFragment extends
 
   public static final String TAG = QuestionnaireDetailFragment.class.getSimpleName();
 
-  private MainActivity mainActivity;
+  private OldMainActivity oldMainActivity;
   private QuestionnaireService questionnaireService;
   private CustomerService customerService;
   private GoodsService goodsService;
@@ -87,11 +87,11 @@ public class QuestionnaireDetailFragment extends
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     try {
-      mainActivity = (MainActivity) getActivity();
-      questionnaireService = new QuestionnaireServiceImpl(mainActivity);
-      customerService = new CustomerServiceImpl(mainActivity);
-      goodsService = new GoodsServiceImpl(mainActivity);
-      visitService = new VisitServiceImpl(mainActivity);
+      oldMainActivity = (OldMainActivity) getActivity();
+      questionnaireService = new QuestionnaireServiceImpl(oldMainActivity);
+      customerService = new CustomerServiceImpl(oldMainActivity);
+      goodsService = new GoodsServiceImpl(oldMainActivity);
+      visitService = new VisitServiceImpl(oldMainActivity);
 
       Bundle arguments = getArguments();
       questionnaireBackendId = arguments.getLong(Constants.QUESTIONAIRE_ID);
@@ -113,8 +113,8 @@ public class QuestionnaireDetailFragment extends
           // List<VisitInformationDetail> detailList = visitService.searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
           visitService.finishVisiting(visitId);
         }
-        mainActivity.removeFragment(QuestionnaireDetailFragment.this);
-        mainActivity.changeSidebarItem(parent);
+        oldMainActivity.removeFragment(QuestionnaireDetailFragment.this);
+        oldMainActivity.changeSidebarItem(parent);
       });
       return view;
     } catch (Exception ex) {
@@ -142,7 +142,7 @@ public class QuestionnaireDetailFragment extends
 
   @Override
   protected QuestionListAdapter getAdapter() {
-    return new QuestionListAdapter(mainActivity, dataModel, questionnaireBackendId, visitId);
+    return new QuestionListAdapter(oldMainActivity, dataModel, questionnaireBackendId, visitId);
   }
 
   @Override
@@ -160,8 +160,8 @@ public class QuestionnaireDetailFragment extends
   }
 
   private void openQuestionDialog(final QuestionDto questionDto) {
-    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mainActivity);
-    View view = mainActivity.getLayoutInflater().inflate(R.layout.dialg_layout_question, null);
+    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(oldMainActivity);
+    View view = oldMainActivity.getLayoutInflater().inflate(R.layout.dialg_layout_question, null);
 
     TextView questionnaireTitleTv = (TextView) view.findViewById(R.id.questionnaireTitleTv);
     TextView questionTv = (TextView) view.findViewById(R.id.questionTv);
@@ -476,7 +476,7 @@ public class QuestionnaireDetailFragment extends
 
   @Override
   public int getFragmentId() {
-    return MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID;
+    return OldMainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID;
   }
 
   /**

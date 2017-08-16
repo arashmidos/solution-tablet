@@ -76,7 +76,7 @@ import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -312,7 +312,7 @@ public class UserTrackingFragment extends BaseFragment implements
 
   @Override
   public int getFragmentId() {
-    return MainActivity.USER_TRACKING_FRAGMENT_ID;
+    return OldMainActivity.USER_TRACKING_FRAGMENT_ID;
   }
 
   @Override
@@ -475,7 +475,7 @@ public class UserTrackingFragment extends BaseFragment implements
       args.putLong(Constants.VISIT_ID, visitInformationId);
       args.putLong(Constants.CUSTOMER_ID, clickedClusterItem.getPrimaryKey());
       Analytics.logContentView("Map Visit");
-      ((MainActivity) context).changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, false);
+      ((OldMainActivity) context).changeFragment(OldMainActivity.VISIT_DETAIL_FRAGMENT_ID, args, false);
 
 
     } catch (BusinessException e) {

@@ -3,7 +3,6 @@ package com.parsroyal.solutiontablet.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-
 import com.parsroyal.solutiontablet.R;
 
 /**
@@ -17,20 +16,16 @@ public class SplashActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_splash);
-    new Handler().postDelayed(new Runnable() {
-
-      public void run() {
+    new Handler().postDelayed(() -> {
 
 //        Intent iMainActivity = new Intent(getApplicationContext(),
 //            MainActivity.class);
 //        startActivity(iMainActivity);
-        Intent iLoginActivity = new Intent(getApplicationContext(),
-            LoginActivity.class);
-        startActivity(iLoginActivity);
+      Intent iLoginActivity = new Intent(getApplicationContext(),
+          LoginActivity.class);
+      startActivity(iLoginActivity);
 
-        finish();
-      }
-
+      finish();
     }, SPLASH_SCREEN_TIME);
   }
 }

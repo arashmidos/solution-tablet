@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.ui.FeedActivity;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -141,7 +141,8 @@ public class LoginFragment extends BaseFragment {
   }
 
   private void goToFeatureList() {
-    Intent intent = new Intent(getActivity(), FeedActivity.class);
+    //TODO: Check for login
+    Intent intent = new Intent(getActivity(), MainActivity.class);
     startActivity(intent);
   }
 }

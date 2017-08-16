@@ -28,7 +28,7 @@ import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
@@ -83,7 +83,7 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
   ScrollView rootView;
 
   private Context context;
-  private MainActivity mainActivity;
+  private OldMainActivity oldMainActivity;
   private CustomerService customerService;
   private BaseInfoService baseInfoService;
   private LocationService locationService;
@@ -98,7 +98,7 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
     ButterKnife.bind(this, view);
 
     context = getActivity();
-    mainActivity = (MainActivity) getActivity();
+    oldMainActivity = (OldMainActivity) getActivity();
     customerService = new CustomerServiceImpl(context);
     baseInfoService = new BaseInfoServiceImpl(context);
     locationService = new LocationServiceImpl(context);
@@ -121,7 +121,7 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
 
     if (Empty.isEmpty(customer)) {
       ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
-      mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
+      oldMainActivity.changeFragment(OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
     }
 
     initComponents();
@@ -326,7 +326,7 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
       if (validate()) {
         customerService.saveCustomer(customer);
         ToastUtil.toastSuccess(getActivity(), R.string.message_customer_save_successfully);
-        mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, false);
+        oldMainActivity.changeFragment(OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID, false);
       }
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
@@ -417,7 +417,7 @@ public class NCustomerDetailFragment extends BaseFragment implements View.OnFocu
 
   @Override
   public int getFragmentId() {
-    return MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID;
+    return OldMainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID;
   }
 
   @OnClick({R.id.getLocationBtn, R.id.saveBtn})

@@ -23,7 +23,7 @@ import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
@@ -68,7 +68,7 @@ public class OrderInfoFragment extends BaseFragment {
 
   private Long orderId;
   private Long orderStatus;
-  private MainActivity context;
+  private OldMainActivity context;
   private String saleType;
 
   public OrderInfoFragment() {
@@ -78,7 +78,7 @@ public class OrderInfoFragment extends BaseFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     try {
-      context = (MainActivity) getActivity();
+      context = (OldMainActivity) getActivity();
       saleOrderService = new SaleOrderServiceImpl(getActivity());
       baseInfoService = new BaseInfoServiceImpl(getActivity());
       orderId = getArguments().getLong("orderId");

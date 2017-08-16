@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
-import com.parsroyal.solutiontablet.ui.FeedActivity;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
       @Override public void onClick(View v) {
         switch (position) {
           case 1:
-            ((FeedActivity) context).showCustomersListFragment();
+            ((MainActivity) context).showCustomersListFragment();
             break;
         }
       }

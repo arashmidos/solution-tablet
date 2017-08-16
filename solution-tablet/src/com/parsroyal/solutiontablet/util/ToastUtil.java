@@ -23,7 +23,7 @@ public class ToastUtil {
 
     builder.setText(message);
     builder.setActionTextColor(Color.WHITE);
-    builder.setTextSize(20);
+    builder.setTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
     builder.setDuration(Snacky.LENGTH_LONG);
     final Snackbar snack = builder.info();
     View view = snack.getView();
@@ -43,7 +43,7 @@ public class ToastUtil {
     builder.setActivty(activity);
     builder.setText(message);
     builder.setActionTextColor(Color.BLACK);
-    builder.setTextSize(20);
+    builder.setTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
     builder.setDuration(Snacky.LENGTH_LONG);
     final Snackbar snack = builder.success();
     View view = snack.getView();
@@ -74,8 +74,8 @@ public class ToastUtil {
     builder.setTextColor(Color.WHITE);
     builder.setActionTextColor(Color.BLACK);
     builder.setBackgroundColor(Color.RED);
-    builder.setTextSize(20);
-    builder.setActionTextSize(20);
+    builder.setTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
+    builder.setActionTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
     builder.setDuration(Snacky.LENGTH_INDEFINITE);
     final Snackbar snack = builder.build();
     View view = snack.getView();

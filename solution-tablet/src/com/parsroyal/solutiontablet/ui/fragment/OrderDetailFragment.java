@@ -24,7 +24,7 @@ import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
 import com.parsroyal.solutiontablet.ui.component.TabContainer;
 import com.parsroyal.solutiontablet.util.DialogUtil;
@@ -38,7 +38,7 @@ import java.util.Locale;
 public class OrderDetailFragment extends BaseFragment {
 
   public static final String TAG = OrderDetailFragment.class.getSimpleName();
-  private MainActivity context;
+  private OldMainActivity context;
   private SaleOrderService saleOrderService;
   private VisitServiceImpl visitService;
   private SettingService settingService;
@@ -62,7 +62,7 @@ public class OrderDetailFragment extends BaseFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     try {
-      context = (MainActivity) getActivity();
+      context = (OldMainActivity) getActivity();
       saleOrderService = new SaleOrderServiceImpl(context);
       visitService = new VisitServiceImpl(context);
       settingService = new SettingServiceImpl(context);
@@ -333,7 +333,7 @@ public class OrderDetailFragment extends BaseFragment {
 
   @Override
   public int getFragmentId() {
-    return MainActivity.ORDER_DETAIL_FRAGMENT_ID;
+    return OldMainActivity.ORDER_DETAIL_FRAGMENT_ID;
   }
 
   private boolean isDisable() {

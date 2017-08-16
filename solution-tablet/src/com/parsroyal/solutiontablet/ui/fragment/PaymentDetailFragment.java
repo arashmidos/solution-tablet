@@ -38,7 +38,7 @@ import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -79,7 +79,7 @@ public class PaymentDetailFragment extends BaseFragment {
   EditText chequeOwner;
 
   private Context context;
-  private MainActivity mainActivity;
+  private OldMainActivity oldMainActivity;
   private CustomerService customerService;
   private BaseInfoService baseInfoService;
   private PaymentService paymentService;
@@ -100,7 +100,7 @@ public class PaymentDetailFragment extends BaseFragment {
     ButterKnife.bind(this, view);
 
     context = getActivity();
-    mainActivity = (MainActivity) getActivity();
+    oldMainActivity = (OldMainActivity) getActivity();
     customerService = new CustomerServiceImpl(context);
     baseInfoService = new BaseInfoServiceImpl(context);
     paymentService = new PaymentServiceImpl(context);
@@ -116,7 +116,7 @@ public class PaymentDetailFragment extends BaseFragment {
         ref = arguments.getInt(Constants.PARENT);
       } else {
         ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
-        mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
+        oldMainActivity.changeFragment(OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
       }
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
@@ -130,7 +130,7 @@ public class PaymentDetailFragment extends BaseFragment {
 
     if (Empty.isEmpty(customer)) {
       ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
-      mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
+      oldMainActivity.changeFragment(OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID, true);
     }
 
     loadSpinnersData();
@@ -248,7 +248,7 @@ public class PaymentDetailFragment extends BaseFragment {
       Crashlytics
           .log(Log.ERROR, "Data retrieval", "Error in loading payment data " + e.getMessage());
       e.printStackTrace();
-      mainActivity.removeFragment(this);
+      oldMainActivity.removeFragment(this);
     }
   }
 
@@ -318,15 +318,15 @@ public class PaymentDetailFragment extends BaseFragment {
 
   @Override
   public int getFragmentId() {
-    return MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID;
+    return OldMainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID;
   }
 
   @OnClick({R.id.cancelBtn, R.id.saveBtn})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.cancelBtn:
-        mainActivity.removeFragment(PaymentDetailFragment.this);
-        mainActivity.changeSidebarItem(ref);
+        oldMainActivity.removeFragment(PaymentDetailFragment.this);
+        oldMainActivity.changeSidebarItem(ref);
         break;
       case R.id.saveBtn:
         save();
@@ -371,7 +371,7 @@ public class PaymentDetailFragment extends BaseFragment {
         visitService.saveVisitDetail(visitDetail);
 
         ToastUtil.toastSuccess(getActivity(), R.string.message_payment_save_successfully);
-        mainActivity.removeFragment(PaymentDetailFragment.this);
+        oldMainActivity.removeFragment(PaymentDetailFragment.this);
       }
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);

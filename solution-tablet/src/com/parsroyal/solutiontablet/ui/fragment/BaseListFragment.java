@@ -14,7 +14,7 @@ import android.widget.ListView;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.BaseListModel;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.BaseListAdapter;
 import com.parsroyal.solutiontablet.ui.component.TabContainer;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -33,13 +33,13 @@ public abstract class BaseListFragment<T extends BaseListModel, AD extends BaseL
   protected TabContainer tabContainer;
   protected LinearLayout headerViewLayout;
   protected LinearLayout buttonPanel;
-  private MainActivity context;
+  private OldMainActivity context;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     try {
-      context = (MainActivity) getActivity();
+      context = (OldMainActivity) getActivity();
 
       View view = inflater.inflate(R.layout.fragment_base, null);
       final HorizontalScrollView view1 = (HorizontalScrollView) view.findViewById(R.id.scroll);

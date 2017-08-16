@@ -24,7 +24,7 @@ import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SaleOrderListAdapter;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
@@ -43,7 +43,7 @@ public class OrdersListFragment extends
 
   private static final String TAG = OrdersListFragment.class.getSimpleName();
 
-  private MainActivity context;
+  private OldMainActivity context;
   private SaleOrderSO saleOrderSO;
   private SaleOrderService saleOrderService;
   private long visitId;
@@ -51,7 +51,7 @@ public class OrdersListFragment extends
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    context = (MainActivity) getActivity();
+    context = (OldMainActivity) getActivity();
     this.saleOrderService = new SaleOrderServiceImpl(context);
     String saleType = new SettingServiceImpl(context)
         .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
@@ -224,7 +224,7 @@ public class OrdersListFragment extends
         requestLiveData(selectedOrder.getId(), selectedOrder.getCustomerBackendId(), orderStatus,
             saleType);
       } else {
-        context.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
+        context.changeFragment(OldMainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
       }
     };
   }
@@ -243,8 +243,8 @@ public class OrdersListFragment extends
           args.putLong(Constants.ORDER_STATUS, orderStatus);
           args.putString(Constants.SALE_TYPE, saleType);
           args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
-          getActivity().runOnUiThread(() -> ((MainActivity) getActivity())
-              .changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false));
+          getActivity().runOnUiThread(() -> ((OldMainActivity) getActivity())
+              .changeFragment(OldMainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false));
         } else {
           runOnUiThread(() -> ToastUtil.toastError(getActivity(),
               getString(R.string.err_reject_order_detail_not_accessable)));
@@ -275,7 +275,7 @@ public class OrdersListFragment extends
 
   @Override
   public int getFragmentId() {
-    return MainActivity.ORDERS_LIST_FRAGMENT;
+    return OldMainActivity.ORDERS_LIST_FRAGMENT;
   }
 
   @Override

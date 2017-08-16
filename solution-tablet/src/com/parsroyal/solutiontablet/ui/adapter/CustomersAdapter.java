@@ -8,14 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
-
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
+import java.util.List;
 
 public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.ViewHolder> {
 
@@ -29,12 +26,14 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.View
     inflater = LayoutInflater.from(context);
   }
 
-  @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override
+  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_customers_list, parent, false);
     return new ViewHolder(view);
   }
 
-  @Override public void onBindViewHolder(ViewHolder holder, int position) {
+  @Override
+  public void onBindViewHolder(ViewHolder holder, int position) {
     CustomerListModel model = customers.get(position);
     setMargin(position == customers.size() - 1, holder.customerLay);
     holder.customerAddressTv.setText(model.getAddress());
@@ -61,27 +60,38 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.View
   }
 
   private void setMargin(boolean isLastItem, CardView cardView) {
-    CardView.LayoutParams parameter = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    if (isLastItem)
+    CardView.LayoutParams parameter = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT);
+    if (isLastItem) {
       parameter.setMargins(8, 8, 8, 8);
-    else
+    } else {
       parameter.setMargins(8, 8, 8, 0);
+    }
     cardView.setLayoutParams(parameter);
 
   }
 
-  @Override public int getItemCount() {
+  @Override
+  public int getItemCount() {
     return customers.size();
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
-    @BindView(R.id.customer_name_tv) TextView customerNameTv;
-    @BindView(R.id.customer_id_tv) TextView customerIdTv;
-    @BindView(R.id.customer_address_tv) TextView customerAddressTv;
-    @BindView(R.id.has_location_img) ImageView hasLocationImg;
-    @BindView(R.id.visit_today_img) ImageView visitTodayImg;
-    @BindView(R.id.has_order_img) ImageView hasOrderImg;
-    @BindView(R.id.customer_lay) CardView customerLay;
+
+    @BindView(R.id.customer_name_tv)
+    TextView customerNameTv;
+    @BindView(R.id.customer_id_tv)
+    TextView customerIdTv;
+    @BindView(R.id.customer_address_tv)
+    TextView customerAddressTv;
+    @BindView(R.id.has_location_img)
+    ImageView hasLocationImg;
+    @BindView(R.id.visit_today_img)
+    ImageView visitTodayImg;
+    @BindView(R.id.has_order_img)
+    ImageView hasOrderImg;
+    @BindView(R.id.customer_lay)
+    CardView customerLay;
 
     public ViewHolder(View itemView) {
       super(itemView);

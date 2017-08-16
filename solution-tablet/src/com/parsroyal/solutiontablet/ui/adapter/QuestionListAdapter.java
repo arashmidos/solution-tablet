@@ -13,7 +13,7 @@ import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -30,7 +30,7 @@ public class QuestionListAdapter extends BaseListAdapter<QuestionListModel> {
   private Long questionnaireBackendId;
   private Long visitId;
 
-  public QuestionListAdapter(MainActivity context, List<QuestionListModel> dataModel,
+  public QuestionListAdapter(OldMainActivity context, List<QuestionListModel> dataModel,
       Long questionnaireBackendId, Long visitId) {
     super(context, dataModel);
     this.context = context;

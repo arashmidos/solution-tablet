@@ -27,7 +27,7 @@ import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -241,7 +241,7 @@ public class LocationUpdatesService extends Service {
 
     // The PendingIntent to launch activity.
     PendingIntent activityPendingIntent = PendingIntent.getActivity(this, 0,
-        new Intent(this, MainActivity.class), 0);
+        new Intent(this, OldMainActivity.class), 0);
 
     return new NotificationCompat.Builder(this)
         .addAction(R.drawable.ic_launch, getString(R.string.launch_activity), activityPendingIntent)
@@ -270,16 +270,25 @@ public class LocationUpdatesService extends Service {
 
     if (Empty.isNotEmpty(location)) {
       EventBus.getDefault().post(new GPSEvent(location));
+    } else {
+      return;
     }
+
+    Intent intent = new Intent(this, SaveLocationService.class);
+    intent.putExtra(EXTRA_LOCATION, location);
 
     if (isAccepted(location)) {
-      Log.i(TAG, "location accepted");
+      Log.i(TAG, "location accepted " + location);
+      if (Empty.isEmpty(lastLocation)) {
+        intent.putExtra("FIRST", true);
+      }
       this.lastLocation = location;
 
-      Intent intent = new Intent(this, SaveLocationService.class);
-      intent.putExtra(EXTRA_LOCATION, location);
-      startService(intent);
+      intent.putExtra("ACCEPTED", true);
+    } else {
+      intent.putExtra("ACCEPTED", false);
     }
+    startService(intent);
 
     // Update notification content if running as a foreground service.
     if (serviceIsRunningInForeground(this)) {
@@ -288,6 +297,9 @@ public class LocationUpdatesService extends Service {
   }
 
   private boolean isAccepted(Location location) {
+    if (Empty.isEmpty(lastLocation)) {
+      return true;
+    }
     if ((Empty.isEmpty(location) || location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER
         || location.getSpeed() < MIN_ACCEPTED_SPEED_IN_MS)) {
       return false;

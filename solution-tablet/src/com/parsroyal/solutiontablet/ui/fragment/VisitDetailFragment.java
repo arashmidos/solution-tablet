@@ -48,7 +48,7 @@ import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
@@ -86,7 +86,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       R.drawable.selector_save_reject,
       R.drawable.selector_exit
   };
-  private MainActivity mainActivity;
+  private OldMainActivity oldMainActivity;
   private GridView mainLayout;
   private CustomerService customerService;
   private SaleOrderService saleOrderService;
@@ -106,13 +106,13 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     try {
-      mainActivity = (MainActivity) getActivity();
-      customerService = new CustomerServiceImpl(mainActivity);
-      saleOrderService = new SaleOrderServiceImpl(mainActivity);
-      baseInfoService = new BaseInfoServiceImpl(mainActivity);
-      locationService = new LocationServiceImpl(mainActivity);
-      settingService = new SettingServiceImpl(mainActivity);
-      visitService = new VisitServiceImpl(mainActivity);
+      oldMainActivity = (OldMainActivity) getActivity();
+      customerService = new CustomerServiceImpl(oldMainActivity);
+      saleOrderService = new SaleOrderServiceImpl(oldMainActivity);
+      baseInfoService = new BaseInfoServiceImpl(oldMainActivity);
+      locationService = new LocationServiceImpl(oldMainActivity);
+      settingService = new SettingServiceImpl(oldMainActivity);
+      visitService = new VisitServiceImpl(oldMainActivity);
 
       visitId = (Long) getArguments().get(Constants.VISIT_ID);
       customerId = (Long) getArguments().get(Constants.CUSTOMER_ID);
@@ -205,7 +205,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
   private void openKPIFragment() {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
-    mainActivity.changeFragment(MainActivity.KPI_CUSTOMER_FRAGMENT_ID, args, false);
+    oldMainActivity.changeFragment(OldMainActivity.KPI_CUSTOMER_FRAGMENT_ID, args, false);
   }
 
   private void startCameraActivity() {
@@ -245,8 +245,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
         long typeId = customerService.savePicture(cPic);
         visitService.saveVisitDetail(
             new VisitInformationDetail(visitId, VisitInformationDetailType.TAKE_PICTURE, typeId));
-        ToastUtil.toastSuccess(mainActivity,
-            mainActivity.getString(R.string.message_picutre_saved_successfully));
+        ToastUtil.toastSuccess(oldMainActivity,
+            oldMainActivity.getString(R.string.message_picutre_saved_successfully));
 
       } else if (resultCode == RESULT_CANCELED) {
         // User cancelled the image capture
@@ -275,20 +275,20 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
         args.putLong(Constants.ORDER_ID, orderDto.getId());
         args.putString(Constants.SALE_TYPE, saleType);
         args.putLong(Constants.VISIT_ID, visitId);
-        mainActivity.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
+        oldMainActivity.changeFragment(OldMainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
       }
 
     } else {
       if (statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
-        ToastUtil.toastError(mainActivity,
-            mainActivity.getString(R.string.message_cannot_create_rejected_right_now));
+        ToastUtil.toastError(oldMainActivity,
+            oldMainActivity.getString(R.string.message_cannot_create_rejected_right_now));
       } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && saleType
           .equals(ApplicationKeys.SALE_COLD)) {
-        ToastUtil.toastError(mainActivity,
-            mainActivity.getString(R.string.message_cannot_create_order_right_now));
+        ToastUtil.toastError(oldMainActivity,
+            oldMainActivity.getString(R.string.message_cannot_create_order_right_now));
       } else {
-        ToastUtil.toastError(mainActivity,
-            mainActivity.getString(R.string.message_cannot_create_factor_right_now));
+        ToastUtil.toastError(oldMainActivity,
+            oldMainActivity.getString(R.string.message_cannot_create_factor_right_now));
       }
     }
   }
@@ -298,7 +298,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
     Thread thread = new Thread(() ->
     {
       try {
-        DataTransferService dataTransferService = new DataTransferServiceImpl(mainActivity);
+        DataTransferService dataTransferService = new DataTransferServiceImpl(oldMainActivity);
         rejectedGoodsList = dataTransferService
             .getRejectedData(VisitDetailFragment.this, customer.getBackendId());
         if (rejectedGoodsList != null) {
@@ -308,10 +308,10 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
           args.putString(Constants.SALE_TYPE, saleType);
           args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
           args.putLong(Constants.VISIT_ID, visitId);
-          mainActivity.runOnUiThread(() ->
+          oldMainActivity.runOnUiThread(() ->
           {
             dismissProgressDialog();
-            mainActivity.changeFragment(MainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
+            oldMainActivity.changeFragment(OldMainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
           });
         } else {
           runOnUiThread(() ->
@@ -351,7 +351,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       Crashlytics.log(Log.ERROR, "Data Storage Exception",
           "Error in creating draft order " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
-      ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
+      ToastUtil.toastError(oldMainActivity, new UnknownSystemException(e));
     }
     return null;
   }
@@ -361,44 +361,44 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
     args.putLong("customerBackendId", customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);
     args.putLong(Constants.STATUS_ID, SaleOrderStatus.DELIVERABLE.getId());
-    mainActivity.changeFragment(MainActivity.ORDERS_LIST_FRAGMENT, args, false);
+    oldMainActivity.changeFragment(OldMainActivity.ORDERS_LIST_FRAGMENT, args, false);
   }
 
   private void openPaymentFragment() {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_ID, customerId);
     args.putLong(Constants.VISIT_ID, visitId);
-    mainActivity.changeFragment(MainActivity.PAYMENT_FRAGMENT_ID, args, false);
+    oldMainActivity.changeFragment(OldMainActivity.PAYMENT_FRAGMENT_ID, args, false);
   }
 
   private void openSaveLocationFragment() {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_ID, customerId);
     args.putLong(Constants.VISIT_ID, visitId);
-    mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, args, false);
+    oldMainActivity.changeFragment(OldMainActivity.SAVE_LOCATION_FRAGMENT_ID, args, false);
   }
 
   private void openGeneralQuestionnairesFragment() {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_ID, customerId);
     args.putLong(Constants.VISIT_ID, visitId);
-    args.putInt(Constants.PARENT, MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID);
-    mainActivity.changeFragment(MainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID, args, false);
+    args.putInt(Constants.PARENT, OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID);
+    oldMainActivity.changeFragment(OldMainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID, args, false);
   }
 
   private void openGoodsQuestionnairesFragment() {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_ID, customerId);
     args.putLong(Constants.VISIT_ID, visitId);
-    args.putInt(Constants.PARENT, MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID);
-    mainActivity.changeFragment(MainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID, args, false);
+    args.putInt(Constants.PARENT, OldMainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID);
+    oldMainActivity.changeFragment(OldMainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID, args, false);
   }
 
   private void finishVisiting() {
     try {
       List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
       if (detailList.size() == 0) {
-        DialogUtil.showConfirmDialog(mainActivity,
+        DialogUtil.showConfirmDialog(oldMainActivity,
             getString(R.string.title_attention),
             getString(R.string.message_error_no_visit_detail_found),
             (dialogInterface, i) -> showWantsDialog());
@@ -442,7 +442,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
 
   private void tryFindingLocation() {
     try {
-      final ProgressDialog progressDialog = new ProgressDialog(mainActivity);
+      final ProgressDialog progressDialog = new ProgressDialog(oldMainActivity);
       progressDialog.setIndeterminate(true);
       progressDialog.setCancelable(Boolean.FALSE);
       progressDialog.setIcon(R.drawable.ic_action_info);
@@ -462,13 +462,13 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
             Log.e(TAG, e.getMessage(), e);
           }
 
-          mainActivity.runOnUiThread(() -> showFoundLocationDialog());
+          oldMainActivity.runOnUiThread(() -> showFoundLocationDialog());
         }
 
         @Override
         public void timeOut() {
           progressDialog.dismiss();
-          mainActivity.runOnUiThread(() ->
+          oldMainActivity.runOnUiThread(() ->
           {
             ToastUtil.toastError(getActivity(), getString(R.string.visit_found_no_location));
             showDialogForEmptyLocation();
@@ -503,45 +503,45 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       Customer customer = customerService.getCustomerById(customerId);
       saleOrderService.deleteForAllCustomerOrdersByStatus(customer.getBackendId(),
           SaleOrderStatus.DRAFT.getId());
-      mainActivity.removeFragment(this);
-      mainActivity.setMenuEnabled(true);
+      oldMainActivity.removeFragment(this);
+      oldMainActivity.setMenuEnabled(true);
     } catch (Exception ex) {
       Crashlytics
           .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+      ToastUtil.toastError(oldMainActivity, new UnknownSystemException(ex));
     }
   }
 
   @Override
   public int getFragmentId() {
-    return MainActivity.VISIT_DETAIL_FRAGMENT_ID;
+    return OldMainActivity.VISIT_DETAIL_FRAGMENT_ID;
   }
 
   private void showWantsDialog() {
     List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
     if (detailList.size() > 0) {
       ToastUtil
-          .toastError(mainActivity, mainActivity.getString(R.string.message_error_wants_denied));
+          .toastError(oldMainActivity, oldMainActivity.getString(R.string.message_error_wants_denied));
       return;
     }
-    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mainActivity);
+    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(oldMainActivity);
 
     List<LabelValue> wants = baseInfoService
         .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.WANT_TYPE.getId());
     if (Empty.isEmpty(wants)) {
-      ToastUtil.toastError(mainActivity,
-          mainActivity.getString(R.string.message_found_no_wants_information));
+      ToastUtil.toastError(oldMainActivity,
+          oldMainActivity.getString(R.string.message_found_no_wants_information));
       return;
     }
 
-    View wantsDialogView = mainActivity.getLayoutInflater().inflate(R.layout.dialog_wants, null);
+    View wantsDialogView = oldMainActivity.getLayoutInflater().inflate(R.layout.dialog_wants, null);
     final Spinner wantsSpinner = (Spinner) wantsDialogView.findViewById(R.id.wantsSP);
     CheckBox notVisitedCb = (CheckBox) wantsDialogView.findViewById((R.id.not_visited_cb));
 
     notVisitedCb.setOnCheckedChangeListener(
         (compoundButton, isChecked) -> wantsSpinner.setEnabled(!isChecked));
-    LabelValueArrayAdapter labelValueArrayAdapter = new LabelValueArrayAdapter(mainActivity, wants);
+    LabelValueArrayAdapter labelValueArrayAdapter = new LabelValueArrayAdapter(oldMainActivity, wants);
     wantsSpinner.setAdapter(labelValueArrayAdapter);
 
     dialogBuilder.setView(wantsDialogView);
@@ -567,14 +567,14 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
     } catch (Exception ex) {
       Crashlytics.log(Log.ERROR, "Data Storage Exception",
           "Error in updating visit result " + ex.getMessage());
-      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+      ToastUtil.toastError(oldMainActivity, new UnknownSystemException(ex));
       Log.e(TAG, ex.getMessage(), ex);
     }
   }
 
   @Override
   public void publishResult(final BusinessException ex) {
-    runOnUiThread(() -> ToastUtil.toastError(mainActivity, getErrorString(ex)));
+    runOnUiThread(() -> ToastUtil.toastError(oldMainActivity, getErrorString(ex)));
   }
 
   @Override
@@ -629,19 +629,19 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-      LinearLayout layout = new LinearLayout(mainActivity);
+      LinearLayout layout = new LinearLayout(oldMainActivity);
       layout.setLayoutParams(new GridView.LayoutParams(100, 100));
       layout.setGravity(Gravity.CENTER);
 
-      ImageView imageView = new ImageView(mainActivity);
+      ImageView imageView = new ImageView(oldMainActivity);
       imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
           ViewGroup.LayoutParams.WRAP_CONTENT));
 
       if (position == 0 && ApplicationKeys.SALE_HOT.equals(saleType)) {
         imageView.setImageDrawable(
-            mainActivity.getResources().getDrawable(R.drawable.selector_add_factor));
+            oldMainActivity.getResources().getDrawable(R.drawable.selector_add_factor));
       } else {
-        imageView.setImageDrawable(mainActivity.getResources().getDrawable(icons[position]));
+        imageView.setImageDrawable(oldMainActivity.getResources().getDrawable(icons[position]));
       }
 
       layout.addView(imageView);

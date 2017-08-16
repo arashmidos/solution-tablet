@@ -10,7 +10,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.service.PaymentService;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
@@ -23,10 +23,10 @@ import java.util.List;
 public class PaymentListAdapter extends BaseListAdapter<PaymentListModel> {
 
   private final Long customerBackendId;
-  private MainActivity context;
+  private OldMainActivity context;
   private PaymentService paymentService;
 
-  public PaymentListAdapter(MainActivity context, List<PaymentListModel> dataModel,
+  public PaymentListAdapter(OldMainActivity context, List<PaymentListModel> dataModel,
       Long customerBackendId) {
     super(context, dataModel);
     this.context = context;

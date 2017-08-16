@@ -12,7 +12,7 @@ import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -25,11 +25,11 @@ import java.util.List;
  */
 public class CustomerListAdapter extends BaseListAdapter<CustomerListModel> {
 
-  private MainActivity context;
+  private OldMainActivity context;
   private CustomerService customerService;
   private Long visitLineId;
 
-  public CustomerListAdapter(MainActivity context, List<CustomerListModel> dataModel,
+  public CustomerListAdapter(OldMainActivity context, List<CustomerListModel> dataModel,
       Long visitLineId) {
     super(context, dataModel);
     this.context = context;

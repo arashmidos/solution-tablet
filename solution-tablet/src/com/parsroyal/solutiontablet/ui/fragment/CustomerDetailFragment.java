@@ -29,7 +29,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -55,7 +55,7 @@ public class CustomerDetailFragment extends BaseFragment {
   @BindView(R.id.addressTv)
   TextView addressTv;
 
-  private MainActivity mainActivity;
+  private OldMainActivity oldMainActivity;
   private CustomerService customerService;
   private VisitService visitService;
   private SettingService settingService;
@@ -69,12 +69,12 @@ public class CustomerDetailFragment extends BaseFragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    mainActivity = (MainActivity) getActivity();
-    customerService = new CustomerServiceImpl(mainActivity);
-    locationService = new LocationServiceImpl(mainActivity);
-    orderService = new SaleOrderServiceImpl(mainActivity);
-    visitService = new VisitServiceImpl(mainActivity);
-    settingService = new SettingServiceImpl(mainActivity);
+    oldMainActivity = (OldMainActivity) getActivity();
+    customerService = new CustomerServiceImpl(oldMainActivity);
+    locationService = new LocationServiceImpl(oldMainActivity);
+    orderService = new SaleOrderServiceImpl(oldMainActivity);
+    visitService = new VisitServiceImpl(oldMainActivity);
+    settingService = new SettingServiceImpl(oldMainActivity);
 
     Bundle arguments = getArguments();
     customerId = arguments.getLong("customerId");
@@ -99,7 +99,7 @@ public class CustomerDetailFragment extends BaseFragment {
 
   @Override
   public int getFragmentId() {
-    return MainActivity.CUSTOMER_DETAIL_FRAGMENT_ID;
+    return OldMainActivity.CUSTOMER_DETAIL_FRAGMENT_ID;
   }
 
   @OnClick({R.id.saveEnteringBtn, R.id.performanceBtn})
@@ -116,7 +116,7 @@ public class CustomerDetailFragment extends BaseFragment {
       case R.id.performanceBtn:
         Bundle args = new Bundle();
         args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
-        mainActivity.changeFragment(MainActivity.KPI_CUSTOMER_FRAGMENT_ID, args, false);
+        oldMainActivity.changeFragment(OldMainActivity.KPI_CUSTOMER_FRAGMENT_ID, args, false);
         break;
     }
   }
@@ -168,16 +168,16 @@ public class CustomerDetailFragment extends BaseFragment {
       Bundle args = new Bundle();
       args.putLong(Constants.VISIT_ID, visitInformationId);
       args.putLong(Constants.CUSTOMER_ID, customerId);
-      mainActivity.changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, false);
+      oldMainActivity.changeFragment(OldMainActivity.VISIT_DETAIL_FRAGMENT_ID, args, false);
 
 
     } catch (BusinessException e) {
       Log.e(TAG, e.getMessage(), e);
-      ToastUtil.toastError(mainActivity, e);
+      ToastUtil.toastError(oldMainActivity, e);
     } catch (Exception e) {
       Crashlytics.log(Log.ERROR, "General Exception", "Error in entering customer " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
-      ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
+      ToastUtil.toastError(oldMainActivity, new UnknownSystemException(e));
     } finally {
       dismissProgressDialog();
     }

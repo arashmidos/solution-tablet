@@ -26,6 +26,7 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -51,7 +52,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
   @BindView(R.id.dataTransferPB)
   ProgressBar dataTransferPB;
 
-  private MainActivity mainActivity;
+  private OldMainActivity oldMainActivity;
   private DataTransferService dataTransferService;
   private KeyValueBiz keyValueBiz;
 
@@ -62,9 +63,9 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
 
     ButterKnife.bind(this, dataTransferView);
 
-    mainActivity = (MainActivity) getActivity();
-    dataTransferService = new DataTransferServiceImpl(mainActivity);
-    keyValueBiz = new KeyValueBizImpl(mainActivity);
+    oldMainActivity = (OldMainActivity) getActivity();
+    dataTransferService = new DataTransferServiceImpl(oldMainActivity);
+    keyValueBiz = new KeyValueBizImpl(oldMainActivity);
 
     transferSv.fullScroll(View.FOCUS_DOWN);
     transferLogTxtV.setMovementMethod(new ScrollingMovementMethod());
@@ -100,7 +101,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     sendDataBtn.setEnabled(status);
     getImagesBtn.setClickable(status);
     getImagesBtn.setEnabled(status);
-    mainActivity.setMenuEnabled(status);
+    oldMainActivity.setMenuEnabled(status);
   }
 
   private void invokeGetData() {
@@ -208,8 +209,8 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     getView().setOnKeyListener((v, keyCode, event) ->
     {
       if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-        if (mainActivity.isMenuEnabled()) {
-          mainActivity.onBackPressed();
+        if (oldMainActivity.isMenuEnabled()) {
+          oldMainActivity.onBackPressed();
         }
         return true;
       }

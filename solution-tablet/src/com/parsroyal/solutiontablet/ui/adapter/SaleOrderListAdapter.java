@@ -16,7 +16,7 @@ import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -34,7 +34,7 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
   private SaleOrderSO saleOrderSO;
   private SaleOrderService saleOrderService;
 
-  public SaleOrderListAdapter(MainActivity context, List<SaleOrderListModel> dataModel,
+  public SaleOrderListAdapter(OldMainActivity context, List<SaleOrderListModel> dataModel,
       SaleOrderSO saleOrderSO) {
     super(context, dataModel);
     this.saleOrderSO = saleOrderSO;

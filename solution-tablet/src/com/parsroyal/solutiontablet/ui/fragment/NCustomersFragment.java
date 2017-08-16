@@ -15,7 +15,7 @@ import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NCustomersListAdapter;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -29,7 +29,7 @@ public class NCustomersFragment extends
     BaseListFragment<NCustomerListModel, NCustomersListAdapter> {
 
   public static final String TAG = NCustomersFragment.class.getSimpleName();
-  private MainActivity context;
+  private OldMainActivity context;
   private CustomerService customerService;
   private BaseInfoService baseInfoService;
   private NCustomerSO nCustomerSO;
@@ -38,7 +38,7 @@ public class NCustomersFragment extends
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    this.context = (MainActivity) getActivity();
+    this.context = (OldMainActivity) getActivity();
     this.customerService = new CustomerServiceImpl(context);
     this.baseInfoService = new BaseInfoServiceImpl(context);
     this.nCustomerSO = new NCustomerSO();
@@ -65,8 +65,8 @@ public class NCustomersFragment extends
         ToastUtil.toastError(getActivity(), R.string.message_provinces_information_not_foun);
         return;
       }
-      MainActivity mainActivity = (MainActivity) getActivity();
-      mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
+      OldMainActivity oldMainActivity = (OldMainActivity) getActivity();
+      oldMainActivity.changeFragment(OldMainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
     });
   }
 
@@ -134,6 +134,6 @@ public class NCustomersFragment extends
 
   @Override
   public int getFragmentId() {
-    return MainActivity.NEW_CUSTOMER_FRAGMENT_ID;
+    return OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID;
   }
 }
