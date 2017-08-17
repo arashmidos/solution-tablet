@@ -262,6 +262,7 @@ public class LocationUpdatesService extends Service {
       lastLocation.setLongitude(lastPosition.getLongitude());
       lastLocation.setSpeed(lastPosition.getSpeed());
       lastLocation.setAccuracy(lastPosition.getAccuracy());
+      lastLocation.setTime(lastPosition.getDate().getTime());
     }
   }
 
@@ -288,6 +289,10 @@ public class LocationUpdatesService extends Service {
   }
 
   private boolean isAccepted(Location location) {
+    //Accept first position what ever it is
+    if (Empty.isEmpty(lastLocation) && Empty.isNotEmpty(location)) {
+      return true;
+    }
     if ((Empty.isEmpty(location) || location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER
         || location.getSpeed() < MIN_ACCEPTED_SPEED_IN_MS)) {
       return false;
@@ -298,7 +303,12 @@ public class LocationUpdatesService extends Service {
       float distance = LocationUtil.distanceBetween(lastLocation, location);
       if (distance
           > MAX_ACCEPTED_DISTANCE_IN_METER /*|| distance < MIN_ACCEPTED_DISTANCE_IN_METER*/) {
-        return false;
+        long lastTime = lastLocation.getTime();
+        long currentTime = location.getTime();
+
+        if (currentTime - lastTime < 30 * 1000) {
+          return false;
+        }
       }
 
       if (distance < lastLocation.getAccuracy() + location.getAccuracy()) {
