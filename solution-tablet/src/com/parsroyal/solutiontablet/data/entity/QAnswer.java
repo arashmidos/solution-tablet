@@ -16,6 +16,7 @@ public class QAnswer extends BaseEntity<Long> {
   public static final String COL_GOODS_BACKEND_ID = "GOODS_BACKEND_ID";
   public static final String COL_VISIT_ID = "VISIT_ID";
   public static final String COL_VISIT_BACKEND_ID = "VISIT_BACKEND_ID";
+  public static final String COL_ANSWERS_GROUP_NO = "ANSWERS_GROUP_NO";
 
   public static final String COL_DATE = "DATE";
   public static final String CREATE_TABLE_SQL = "CREATE TABLE " + QAnswer.TABLE_NAME + " (" +
@@ -29,7 +30,8 @@ public class QAnswer extends BaseEntity<Long> {
       " " + QAnswer.COL_VISIT_BACKEND_ID + " INTEGER," +
       " " + QAnswer.COL_DATE + " TEXT," +
       " " + QAnswer.COL_CREATE_DATE_TIME + " TEXT," +
-      " " + QAnswer.COL_UPDATE_DATE_TIME + " TEXT" +
+      " " + QAnswer.COL_UPDATE_DATE_TIME + " TEXT," +
+      " " + QAnswer.COL_ANSWERS_GROUP_NO + " INTEGER" +
       " );";
 
   private Long id;
@@ -41,6 +43,7 @@ public class QAnswer extends BaseEntity<Long> {
   private Long visitBackendId;
   private Long visitId;
   private String date;
+  private Long answersGroupNo; // Questionaire Number for multiple questionaire in a single visit for 1 customer
 
   public static String createString(QAnswer qAnswer) {
     StringBuilder sb = new StringBuilder();
@@ -137,4 +140,11 @@ public class QAnswer extends BaseEntity<Long> {
     return id;
   }
 
+  public Long getAnswersGroupNo() {
+    return answersGroupNo;
+  }
+
+  public void setAnswersGroupNo(Long answersGroupNo) {
+    this.answersGroupNo = answersGroupNo;
+  }
 }

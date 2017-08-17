@@ -46,15 +46,17 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   }
 
   @Override
-  public QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId) {
-    return questionDao.getQuestionDto(questionId, visitId, goodsBackendId);
+  public QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId,
+      Long answersGroupNo) {
+    return questionDao.getQuestionDto(questionId, visitId, goodsBackendId, answersGroupNo);
   }
 
   @Override
   public QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
-      Long goodsBackendId, boolean isNext) {
+      Long goodsBackendId, boolean isNext, Long answersGroupNo) {
     return questionDao
-        .getQuestionDto(questionnaireBackendId, visitId, order, goodsBackendId, isNext);
+        .getQuestionDto(questionnaireBackendId, visitId, order, goodsBackendId, isNext,
+            answersGroupNo);
   }
 
   @Override
@@ -83,6 +85,11 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   @Override
   public List<QuestionnaireListModel> searchForQuestionsList(QuestionnaireSo questionnaireSo) {
     return questionnaireDao.searchForQuestionsList(questionnaireSo);
+  }
+
+  @Override
+  public Long getNextAnswerGroupNo() {
+    return questionnaireDao.getNextAnswerGroupNo();
   }
 
   @Override
