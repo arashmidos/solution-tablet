@@ -410,5 +410,17 @@
     <string name="name_version">Solution Tablet v%1$s</string>
     <string name="search_customers_hint">در نام و کد مشتریان جستجو کنید...</string>
     <string name="sort">مرتب سازی</string>
+    <string name="do_filter">اعمال</string>
+    <string name="remove_filter">حذف فیلتر ها</string>
+    <string name="close">بستن</string>
+    <string name="filters">فیلتر ها</string>
+    <string name="distance_less_than">فاصله : کمتر از</string>
+    <string name="meter">متر</string>
+    <string name="register_no">ثبت عدم</string>
+    <string name="register_order">ثبت سفارش</string>
+    <string name="customer_code_asc">کد مشتری (صعودی)</string>
+    <string name="customer_code_desc">کد مشتری (نزولی)</string>
+    <string name="full_name_asc">نام و نام خانوادگی (الف-ی)</string>
+    <string name="full_name_desc">نام و نام خانوادگی(ی-الف)</string>
 
 </resources>
