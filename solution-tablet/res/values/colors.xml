@@ -49,9 +49,10 @@
     <color name="badger_background">#ef5350</color>
     <color name="navigation_drawer_header_background">#fafafa</color>
     <color name="customers_title_background">#f5f5f5</color>
-    <color name="navigation_drawer_name">#de000000</color>
+    <color name="black_de">#de000000</color>
     <color name="navigation_drawer_divider">#1A040404</color>
     <color name="send_data_border">#e8e8e8</color>
     <color name="black_55">#8c000000</color>
     <color name="black_85">#d9000000</color>
+    <color name="black_10">#1a000000</color>
 </resources>

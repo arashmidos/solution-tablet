@@ -45,4 +45,8 @@ public class Constants {
   public static final String SALE_MAN = "SALE_MAN";
   public static final String CHART = "CHART";
 
+  public static final String DATA_TRANSFER_ACTION = "dataTrasfer";
+  public static final String DATA_TRANSFER_GET = "dataTransfer.get";
+  public static final String DATA_TRANSFER_SEND_DATA = "dataTransfer.send.data";
+  public static final String DATA_TRANSFER_SEND_IMAGES = "dataTransfer.send.images";
 }

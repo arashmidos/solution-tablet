@@ -9,15 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by ShakibIsTheBest on 8/4/2017.
@@ -35,12 +32,14 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     inflater = LayoutInflater.from(context);
   }
 
-  @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override
+  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_features_list, parent, false);
     return new ViewHolder(view);
   }
 
-  @Override public void onBindViewHolder(ViewHolder holder, int position) {
+  @Override
+  public void onBindViewHolder(ViewHolder holder, int position) {
     FeatureList feature = features.get(position);
     if (feature.getBadger() != 0) {
       holder.badgerBtn.setText(String.valueOf(feature.getBadger()));
@@ -50,26 +49,41 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     }
     holder.featureImg.setImageResource(feature.getImageId());
     holder.featureTitleTv.setText(feature.getTitle());
-    holder.featureLay.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        switch (position) {
-          case 1:
-            ((MainActivity) context).showCustomersListFragment();
-            break;
-        }
+    holder.featureLay.setOnClickListener(v -> {
+      switch (position) {
+        case 0://Paths
+          ((MainActivity) context).changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
+          break;
+        case 1://Customers
+          ((MainActivity) context).changeFragment(MainActivity.CUSTOMER_LIST_FRAGMENT_ID, true);
+          break;
+        case 2://reports
+          break;
+        case 3://Map
+          break;
+        case 4: //Settings
+          ((MainActivity) context).changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);
+          break;
+
       }
     });
   }
 
-  @Override public int getItemCount() {
+  @Override
+  public int getItemCount() {
     return features.size();
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
-    @BindView(R.id.feature_img) ImageView featureImg;
-    @BindView(R.id.badger_btn) Button badgerBtn;
-    @BindView(R.id.feature_title_tv) TextView featureTitleTv;
-    @BindView(R.id.feature_lay) CardView featureLay;
+
+    @BindView(R.id.feature_img)
+    ImageView featureImg;
+    @BindView(R.id.badger_btn)
+    Button badgerBtn;
+    @BindView(R.id.feature_title_tv)
+    TextView featureTitleTv;
+    @BindView(R.id.feature_lay)
+    CardView featureLay;
 
 
     public ViewHolder(View itemView) {

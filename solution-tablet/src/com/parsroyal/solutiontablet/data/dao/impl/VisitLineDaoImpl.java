@@ -106,6 +106,26 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
   }
 
   @Override
+  public VisitLineListModel getVisitLineListModelByBackendId(long visitlineBackendId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+    String sql =
+        "select vl.BACKEND_ID, vl.CODE, vl.TITLE,count(cu._id) COUNT from COMMER_VISIT_LINE vl " +
+            "LEFT OUTER JOIN COMMER_CUSTOMER cu where cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
+            "AND vl.BACKEND_ID = " + visitlineBackendId +
+            " GROUP BY vl.BACKEND_ID, vl.CODE, vl.TITLE";
+
+    VisitLineListModel entity = null;
+    Cursor cursor = db.rawQuery(sql, null);
+    if (cursor.moveToNext()) {
+      entity = createListModelFromCursor(cursor);
+    }
+    cursor.close();
+    return entity;
+  }
+
+  @Override
   public VisitLine getVisitLineByBackendId(Long backendId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();

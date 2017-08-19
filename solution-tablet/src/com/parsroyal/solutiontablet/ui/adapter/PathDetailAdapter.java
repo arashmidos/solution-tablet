@@ -12,38 +12,40 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
-import com.parsroyal.solutiontablet.ui.FeedActivity;
-
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
+import com.parsroyal.solutiontablet.ui.MainActivity;
+import java.util.List;
 
-public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.ViewHolder> {
+/**
+ * @author Shakib
+ */
+public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.ViewHolder> {
 
   private LayoutInflater inflater;
   private Context context;
   private List<CustomerListModel> customers;
 
-  public CustomersAdapter(Context context, List<CustomerListModel> customers) {
+  public PathDetailAdapter(Context context, List<CustomerListModel> customers) {
     this.context = context;
     this.customers = customers;
     inflater = LayoutInflater.from(context);
   }
 
-  @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override
+  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_customers_list, parent, false);
     return new ViewHolder(view);
   }
 
-  @Override public void onBindViewHolder(ViewHolder holder, int position) {
+  @Override
+  public void onBindViewHolder(ViewHolder holder, int position) {
     CustomerListModel model = customers.get(position);
     setMargin(position == customers.size() - 1, holder.customerLay);
-    //TODO:set shop name
-    holder.customerShopNameTv.setText(model.getAddress());
+
+    holder.customerShopNameTv.setText(model.getShopName());
     holder.customerNameTv.setText(model.getTitle());
     String customerCode = "کد : " + model.getCode();
     holder.customerIdTv.setText(customerCode);
@@ -51,7 +53,6 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.View
     if (model.hasLocation()) {
       holder.hasLocationImg.setImageResource(R.drawable.ic_gps_fixed_black_18dp);
       holder.hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.primary));
-
     } else {
       holder.hasLocationImg.setImageResource(R.drawable.ic_gps_off_black_18dp);
       holder.hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.login_gray));
@@ -63,31 +64,29 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.View
       holder.visitTodayImg.setColorFilter(ContextCompat.getColor(context, R.color.login_gray));
     }
     if (model.hasRejection()) {
-      holder.visitTodayImg.setColorFilter(ContextCompat.getColor(context, R.color.badger_background));
+      holder.visitTodayImg
+          .setColorFilter(ContextCompat.getColor(context, R.color.badger_background));
     }
 
     holder.hasOrderImg.setVisibility(model.hasOrder() ? View.VISIBLE : View.GONE);
 
-    holder.customerLay.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        showCustomerDetailDialog(model);
-      }
-    });
+    holder.customerLay.setOnClickListener(v -> showCustomerDetailDialog(model));
   }
 
   private void setMargin(boolean isLastItem, CardView cardView) {
-    CardView.LayoutParams parameter = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    if (isLastItem)
+    CardView.LayoutParams parameter = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT);
+    if (isLastItem) {
       parameter.setMargins(8, 8, 8, 8);
-    else
+    } else {
       parameter.setMargins(8, 8, 8, 0);
+    }
     cardView.setLayoutParams(parameter);
-
   }
 
   private void showCustomerDetailDialog(CustomerListModel model) {
     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-    LayoutInflater inflater = ((FeedActivity) context).getLayoutInflater();
+    LayoutInflater inflater = ((MainActivity) context).getLayoutInflater();
     View dialogView = inflater.inflate(R.layout.dialog_customer_detail, null);
     dialogBuilder.setView(dialogView);
 
@@ -103,8 +102,7 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.View
     ImageView hasLocationImg = (ImageView) dialogView.findViewById(R.id.has_location_img);
     ImageView visitTodayImg = (ImageView) dialogView.findViewById(R.id.visit_today_img);
     ImageView hasOrderImg = (ImageView) dialogView.findViewById(R.id.has_order_img);
-    //TODO:set shop name
-    customerShopNameTv.setText(model.getAddress());
+    customerShopNameTv.setText(model.getShopName());
     customerNameTv.setText(model.getTitle());
     String customerCode = "کد : " + model.getCode();
     customerIdTv.setText(customerCode);
@@ -135,39 +133,48 @@ public class CustomersAdapter extends RecyclerView.Adapter<CustomersAdapter.View
 
     AlertDialog alertDialog = dialogBuilder.create();
     alertDialog.show();
-    cancelTv.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        alertDialog.cancel();
-      }
+    cancelTv.setOnClickListener(v -> alertDialog.cancel());
+    enterBtn.setOnClickListener(v -> {
+      //TODO:add enter action
+      Toast.makeText(context, "enter", Toast.LENGTH_SHORT).show();
+      alertDialog.dismiss();
     });
-    enterBtn.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        //TODO:add enter action
-        Toast.makeText(context, "enter", Toast.LENGTH_SHORT).show();
-        alertDialog.dismiss();
-      }
-    });
-    noVisitBtn.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        //TODO:add no visit action
-        Toast.makeText(context, "no visit", Toast.LENGTH_SHORT).show();
-        alertDialog.cancel();
-      }
+    noVisitBtn.setOnClickListener(v -> {
+      //TODO:add no visit action
+      Toast.makeText(context, "no visit", Toast.LENGTH_SHORT).show();
+      alertDialog.cancel();
     });
   }
 
-  @Override public int getItemCount() {
+  @Override
+  public int getItemCount() {
     return customers.size();
   }
 
+  public void setDataModel(List<CustomerListModel> dataModel) {
+    this.customers = dataModel;
+  }
+
+  public List<CustomerListModel> getDataModel() {
+    return customers;
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder {
-    @BindView(R.id.customer_name_tv) TextView customerNameTv;
-    @BindView(R.id.customer_id_tv) TextView customerIdTv;
-    @BindView(R.id.customer_shop_name_tv) TextView customerShopNameTv;
-    @BindView(R.id.has_location_img) ImageView hasLocationImg;
-    @BindView(R.id.visit_today_img) ImageView visitTodayImg;
-    @BindView(R.id.has_order_img) ImageView hasOrderImg;
-    @BindView(R.id.customer_lay) CardView customerLay;
+
+    @BindView(R.id.customer_name_tv)
+    TextView customerNameTv;
+    @BindView(R.id.customer_id_tv)
+    TextView customerIdTv;
+    @BindView(R.id.customer_shop_name_tv)
+    TextView customerShopNameTv;
+    @BindView(R.id.has_location_img)
+    ImageView hasLocationImg;
+    @BindView(R.id.visit_today_img)
+    ImageView visitTodayImg;
+    @BindView(R.id.has_order_img)
+    ImageView hasOrderImg;
+    @BindView(R.id.customer_lay)
+    CardView customerLay;
 
     public ViewHolder(View itemView) {
       super(itemView);

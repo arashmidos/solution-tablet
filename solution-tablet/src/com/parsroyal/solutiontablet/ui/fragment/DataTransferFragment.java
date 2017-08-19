@@ -3,7 +3,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.KeyValueBiz;
-import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.GPSEvent;
@@ -26,9 +24,9 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,9 +50,8 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
   @BindView(R.id.dataTransferPB)
   ProgressBar dataTransferPB;
 
-  private OldMainActivity oldMainActivity;
+  private MainActivity mainActivity;
   private DataTransferService dataTransferService;
-  private KeyValueBiz keyValueBiz;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,13 +60,28 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
 
     ButterKnife.bind(this, dataTransferView);
 
-    oldMainActivity = (OldMainActivity) getActivity();
-    dataTransferService = new DataTransferServiceImpl(oldMainActivity);
-    keyValueBiz = new KeyValueBizImpl(oldMainActivity);
+    mainActivity = (MainActivity) getActivity();
+    dataTransferService = new DataTransferServiceImpl(mainActivity);
 
     transferSv.fullScroll(View.FOCUS_DOWN);
     transferLogTxtV.setMovementMethod(new ScrollingMovementMethod());
 
+    Bundle args = getArguments();
+    if (Empty.isNotEmpty(args)) {
+      String action = args.getString(Constants.DATA_TRANSFER_ACTION);
+      switch (action) {
+        case Constants.DATA_TRANSFER_GET:
+          invokeGetData();
+          break;
+        case Constants.DATA_TRANSFER_SEND_DATA:
+          invokeSendData();
+          break;
+        case Constants.DATA_TRANSFER_SEND_IMAGES:
+          publishResult(getString(R.string.message_transferring_goods_images_data));
+          getGoodsImages();
+          break;
+      }
+    }
     return dataTransferView;
   }
 
@@ -101,7 +113,8 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     sendDataBtn.setEnabled(status);
     getImagesBtn.setClickable(status);
     getImagesBtn.setEnabled(status);
-    oldMainActivity.setMenuEnabled(status);
+    //TODO: Change this method
+//    mainActivity.setMenuEnabled(status);
   }
 
   private void invokeGetData() {
@@ -208,13 +221,15 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     getView().requestFocus();
     getView().setOnKeyListener((v, keyCode, event) ->
     {
-      if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-        if (oldMainActivity.isMenuEnabled()) {
-          oldMainActivity.onBackPressed();
+      //TODO: fix this
+      /*if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+        if (mainActivity.isMenuEnabled()) {
+          mainActivity.onBackPressed();
         }
         return true;
-      }
+      }*/
       return false;
+
     });
   }
 

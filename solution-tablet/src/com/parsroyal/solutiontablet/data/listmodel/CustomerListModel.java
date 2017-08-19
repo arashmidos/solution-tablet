@@ -21,6 +21,7 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   private Float distance;
   private Long backendId;
   private String lastVisit;
+  private String shopName;
 
   public Long getBackendId() {
     return backendId;
@@ -134,5 +135,13 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   @Override
   public String getSnippet() {
     return address;
+  }
+
+  public String getShopName() {
+    return shopName;
+  }
+
+  public void setShopName(String shopName) {
+    this.shopName = shopName;
   }
 }

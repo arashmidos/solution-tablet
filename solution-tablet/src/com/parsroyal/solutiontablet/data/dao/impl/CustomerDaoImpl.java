@@ -216,7 +216,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         "vi." + VisitInformation.COL_UPDATE_DATE_TIME,
         "vd." + VisitInformationDetail.COL_TYPE,
         "vi." + VisitInformation.COL_VISIT_DATE,//10
-        "c." + Customer.COL_BACKEND_ID};
+        "c." + Customer.COL_BACKEND_ID,//11
+        "c." + Customer.COL_SHOP_NAME//12
+    };
 
     String table = getTableName() + " c " +
         "LEFT OUTER JOIN COMMER_VISIT_INFORMATION vi on c." + Customer.COL_BACKEND_ID + " = vi."
@@ -304,6 +306,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
     customerListModel.setLastVisit(cursor.getString(10));
     customerListModel.setBackendId(cursor.getLong(11));
+    customerListModel.setShopName(cursor.getString(12));
 
     return customerListModel;
   }

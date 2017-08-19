@@ -46,7 +46,7 @@
           android:ellipsize="end"
           android:maxLines="1"
           tools:text="پژمان جمشیدی"
-          android:textColor="@color/navigation_drawer_name"
+          android:textColor="@color/black_de"
           android:textSize="@dimen/text_normal" />
 
         <ImageView
@@ -110,7 +110,7 @@
             android:layout_toLeftOf="@id/feature_icon"
             android:gravity="center"
             android:text="@string/features_list"
-            android:textColor="@color/navigation_drawer_name"
+            android:textColor="@color/black_de"
             android:textSize="14sp" />
         </RelativeLayout>
 
@@ -140,7 +140,7 @@
             android:layout_toLeftOf="@id/path_icon"
             android:gravity="center"
             android:text="@string/today_paths"
-            android:textColor="@color/navigation_drawer_name"
+            android:textColor="@color/black_de"
             android:textSize="14sp" />
         </RelativeLayout>
 
@@ -170,7 +170,7 @@
             android:layout_toLeftOf="@id/customer_icon"
             android:gravity="center"
             android:text="@string/cusomters"
-            android:textColor="@color/navigation_drawer_name"
+            android:textColor="@color/black_de"
             android:textSize="14sp" />
         </RelativeLayout>
 
@@ -200,7 +200,7 @@
             android:layout_toLeftOf="@id/report_icon"
             android:gravity="center"
             android:text="@string/reports"
-            android:textColor="@color/navigation_drawer_name"
+            android:textColor="@color/black_de"
             android:textSize="14sp" />
         </RelativeLayout>
 
@@ -230,7 +230,7 @@
             android:layout_toLeftOf="@id/map_icon"
             android:gravity="center"
             android:text="@string/map"
-            android:textColor="@color/navigation_drawer_name"
+            android:textColor="@color/black_de"
             android:textSize="14sp" />
         </RelativeLayout>
 
@@ -261,7 +261,7 @@
             android:layout_toLeftOf="@id/setting_icon"
             android:gravity="center"
             android:text="@string/setting"
-            android:textColor="@color/navigation_drawer_name"
+            android:textColor="@color/black_de"
             android:textSize="14sp" />
         </RelativeLayout>
 
@@ -278,7 +278,7 @@
           android:layout_marginStart="16dp"
           android:layout_marginLeft="16dp"
           android:text="@string/about_us"
-          android:textColor="@color/navigation_drawer_name"
+          android:textColor="@color/black_de"
           android:textSize="14sp" />
       </LinearLayout>
 
@@ -309,7 +309,7 @@
           android:layout_toLeftOf="@id/exit_icon"
           android:gravity="center"
           android:text="@string/log_out"
-          android:textColor="@color/navigation_drawer_name"
+          android:textColor="@color/black_de"
           android:textSize="14sp" />
       </RelativeLayout>
     </LinearLayout>
@@ -378,7 +378,7 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/upload_icon"
         android:text="@string/send_data"
-        android:textColor="@color/navigation_drawer_name"
+        android:textColor="@color/black_de"
         android:textSize="@dimen/text_small" />
     </RelativeLayout>
 

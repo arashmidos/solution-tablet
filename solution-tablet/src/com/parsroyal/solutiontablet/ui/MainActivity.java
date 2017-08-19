@@ -24,6 +24,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
@@ -39,10 +40,11 @@ import com.parsroyal.solutiontablet.service.LocationUpdatesService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
-import com.parsroyal.solutiontablet.ui.fragment.CustomersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
+import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
+import com.parsroyal.solutiontablet.ui.fragment.VisitLinesListFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -62,6 +64,8 @@ public class MainActivity extends BaseFragmentActivity {
   Toolbar toolbar;
   @BindView(R.id.drawer_layout)
   DrawerLayout drawerLayout;
+  @BindView(R.id.toolbar_title)
+  TextView toolbarTitle;
 
   public static final String TAG = MainActivity.class.getSimpleName();
   private ActionBar actionBar;
@@ -71,6 +75,8 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int SETTING_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
+  public static final int PATH_FRAGMENT_ID = 27;
+  public static final int PATH_DETAIL_FRAGMENT_ID = 28;
 
   private LocationUpdatesService gpsRecieverService = null;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
@@ -459,7 +465,7 @@ public class MainActivity extends BaseFragmentActivity {
         fragment = FeaturesFragment.newInstance();
         break;
       case CUSTOMER_LIST_FRAGMENT_ID://TODO it should point to Path Page
-        fragment = CustomersListFragment.newInstance();
+        fragment = PathDetailFragment.newInstance();
         break;
       /*case NEW_CUSTOMER_FRAGMENT_ID:
         fragment = new NCustomersFragment();
@@ -541,9 +547,19 @@ public class MainActivity extends BaseFragmentActivity {
         fragment = new QuestionnairesListFragment();
         if (Empty.isNotEmpty(args)) {
           fragment.setArguments(args);
-        }*/
+        }break;*/
+      case PATH_FRAGMENT_ID:
+        fragment = VisitLinesListFragment.newInstance();
+        break;
+      case PATH_DETAIL_FRAGMENT_ID:
+        fragment = PathDetailFragment.newInstance();
+        break;
     }
     Analytics.logContentView("Fragment " + String.valueOf(fragmentId));
     return fragment;
+  }
+
+  public void changeTitle(String title) {
+    toolbarTitle.setText(title);
   }
 }

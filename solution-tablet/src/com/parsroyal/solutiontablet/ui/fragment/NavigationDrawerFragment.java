@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -98,10 +99,14 @@ public class NavigationDrawerFragment extends Fragment {
             .show();//TODO: update after login
         break;
       case R.id.get_data_lay:
-        mainActivity.changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, true);
+        Bundle args = new Bundle();
+        args.putString(Constants.DATA_TRANSFER_ACTION, Constants.DATA_TRANSFER_GET);
+        mainActivity.changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, args, true);
         break;
       case R.id.send_data_lay:
-        mainActivity.changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, true);
+        Bundle args2 = new Bundle();
+        args2.putString(Constants.DATA_TRANSFER_ACTION, Constants.DATA_TRANSFER_SEND_DATA);
+        mainActivity.changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, args2, true);
         break;
     }
     mainActivity.closeDrawer();

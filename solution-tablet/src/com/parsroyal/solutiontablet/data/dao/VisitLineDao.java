@@ -13,5 +13,8 @@ public interface VisitLineDao extends BaseDao<VisitLine, Long> {
 
   List<VisitLineListModel> getAllVisitLinesListModelByConstraint(String constraint);
 
+  VisitLineListModel getVisitLineListModelByBackendId(long visitlineBackendId);
+
   VisitLine getVisitLineByBackendId(Long backendId);
+
 }
