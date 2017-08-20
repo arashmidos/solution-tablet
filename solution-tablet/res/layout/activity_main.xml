@@ -6,7 +6,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/features_background"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment">
+  tools:mainActivity="com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment">
 
   <android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
@@ -46,7 +46,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      tools:context="com.parsroyal.solutiontablet.ui.MainActivity" />
+      tools:mainActivity="com.parsroyal.solutiontablet.ui.MainActivity" />
   </android.support.design.widget.CoordinatorLayout>
 
   <fragment

@@ -46,6 +46,7 @@ import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
+import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesListFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
@@ -74,6 +75,7 @@ public class MainActivity extends BaseFragmentActivity {
 
   public static final int FEATURE_FRAGMENT_ID = 0;
   public static final int CUSTOMER_LIST_FRAGMENT_ID = 1;
+  public static final int VISIT_DETAIL_FRAGMENT_ID = 5;
   public static final int SETTING_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
@@ -486,12 +488,12 @@ public class MainActivity extends BaseFragmentActivity {
         break;
       case CUSTOMER_DETAIL_FRAGMENT_ID:
         fragment = new CustomerDetailFragment();
-        break;
+        break;*/
       case VISIT_DETAIL_FRAGMENT_ID:
         fragment = new VisitDetailFragment();
 //        setMenuEnabled(false);
         break;
-      case GENERAL_QUESTIONNAIRES_FRAGMENT_ID://6
+     /* case GENERAL_QUESTIONNAIRES_FRAGMENT_ID://6
         fragment = new GeneralQuestionnairesFragment();
         parent = args.getInt(Constants.PARENT, 0);
         break;
