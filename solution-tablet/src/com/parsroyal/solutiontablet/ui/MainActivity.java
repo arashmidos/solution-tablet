@@ -428,7 +428,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         fragment = new PaymentFragment();
         changeSidebarItem(FUNDS_FRAGMENT_ID);
         break;
-      case QUESTIONAIRE_LIST_FRAGMENT_ID:
+      case QUESTIONAIRE_LIST_FRAGMENT_ID://26
         fragment = new QuestionnairesListFragment();
         if (Empty.isNotEmpty(args)) {
           fragment.setArguments(args);

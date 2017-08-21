@@ -131,7 +131,7 @@ public class LocationUpdatesService extends Service {
       serviceHandler = new Handler(handlerThread.getLooper());
       notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     } catch (SecurityException ex) {
-      ex.printStackTrace();
+      ex.printStackTrace();//TODO: fix this
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.PERMISSION_DENIED));
     }
   }

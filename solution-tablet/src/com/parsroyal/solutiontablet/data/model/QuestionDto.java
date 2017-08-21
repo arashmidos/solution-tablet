@@ -8,14 +8,16 @@ import com.parsroyal.solutiontablet.constants.QuestionType;
 public class QuestionDto extends BaseModel {
 
   private Long questionId;
-  private Integer qOrder;
+  private Long questionnaireId;//QuestionnaireBackendId
+  private Integer order;
   private String questionnaireTitle;
   private String question;
   private String description;
   private Long answerId;
   private String answer;
   private String qAnswers;
-  private Long questionBackendId;
+  private Long status;
+  private Long id;//Its actually backendId
   private String createDateTime;
   private QuestionType type;
 
@@ -67,12 +69,12 @@ public class QuestionDto extends BaseModel {
     this.description = description;
   }
 
-  public Integer getqOrder() {
-    return qOrder;
+  public Integer getOrder() {
+    return order;
   }
 
-  public void setqOrder(Integer qOrder) {
-    this.qOrder = qOrder;
+  public void setOrder(Integer order) {
+    this.order = order;
   }
 
   public Long getAnswerId() {
@@ -91,12 +93,18 @@ public class QuestionDto extends BaseModel {
     this.answer = answer;
   }
 
-  public Long getQuestionBackendId() {
-    return questionBackendId;
+  /**
+   * @return BackendId of this question
+   */
+  public Long getId() {
+    return id;
   }
 
-  public void setQuestionBackendId(Long questionBackendId) {
-    this.questionBackendId = questionBackendId;
+  /**
+   * @param id set BackendId for this question
+   */
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getCreateDateTime() {
@@ -105,5 +113,27 @@ public class QuestionDto extends BaseModel {
 
   public void setCreateDateTime(String createDateTime) {
     this.createDateTime = createDateTime;
+  }
+
+  /**
+   * @return Questionnaire backendId which this question belongs to
+   */
+  public Long getQuestionnaireId() {
+    return questionnaireId;
+  }
+
+  /**
+   * @param questionnaireId Set questionnaire backendId for this question
+   */
+  public void setQuestionnaireId(Long questionnaireId) {
+    this.questionnaireId = questionnaireId;
+  }
+
+  public Long getStatus() {
+    return status;
+  }
+
+  public void setStatus(Long status) {
+    this.status = status;
   }
 }
