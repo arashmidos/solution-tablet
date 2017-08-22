@@ -39,4 +39,5 @@ public class Constants {
   public static final int PARTIAL_UPDATE = 512;
   public static final int NO_UPDATE = 0;
   public static final int GPS_SEND_INTERVAL_IN_SECOND = 60;
+  public static final String FIRST_POSITION = "firstPosition";
 }

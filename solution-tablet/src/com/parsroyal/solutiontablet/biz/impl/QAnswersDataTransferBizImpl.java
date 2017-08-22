@@ -57,6 +57,7 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
                     backendId);
           }
         }
+        success++;
       } catch (Exception ex) {
         Crashlytics
             .log(Log.ERROR, "Data transfer", "Error in receiving QAnswerData " + ex.getMessage());
