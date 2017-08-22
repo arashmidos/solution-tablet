@@ -30,7 +30,9 @@ import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
@@ -162,7 +164,13 @@ public class MainActivity extends BaseFragmentActivity {
   public void getMessage(Event event) {
     if (event instanceof UpdateEvent) {
       installNewVersion();
-    }//TODO: If instance of data transfer completed
+    } else if (event instanceof ErrorEvent) {
+      if (event.getStatusCode() == StatusCodes.PERMISSION_DENIED) {
+        requestPermissions();
+      }
+    }
+
+    //TODO: If instance of data transfer completed
   }
 
   @Override

@@ -241,33 +241,37 @@ public class PathDetailFragment extends BaseFragment {
       alertDialog.dismiss();
     });
     doFilterBtn.setOnClickListener(v -> {
-      String distanceText = distanceEdt.getText().toString();
+      filterDistance = distanceEdt.getText().toString();
 
-      boolean hasOrder = filterOrderCb.isChecked();
-      boolean hasNone = filterNoneCb.isChecked();
+      filterByOrder = filterOrderCb.isChecked();
+      filterByNone = filterNoneCb.isChecked();
 
       int distance;
-      if (Empty.isNotEmpty(distanceText)) {
+      if (Empty.isNotEmpty(filterDistance)) {
         try {
-          distance = Integer.parseInt(distanceText);
+          distance = Integer.parseInt(filterDistance);
 
           if (distance < 0 || distance > 500) {//TODO: change this errors to inline
             ToastUtil.toastMessage(getActivity(), R.string.error_filter_max_distance);
+            filterDistance = "";
+            distanceEdt.setText("");
             return;
           }
         } catch (NumberFormatException e) {////TODO: change this errors to inline
           ToastUtil.toastMessage(getActivity(), R.string.error_filter_is_not_correct);
+          filterDistance = "";
+          distanceEdt.setText("");
           return;
         }
       } else {
         distance = 0;
       }
 
-      if (distance == 0 && !hasOrder && !hasNone) {//TODO: change this errors to inline
+      if (distance == 0 && !filterByOrder && !filterByNone) {//TODO: change this errors to inline
         ToastUtil.toastMessage(getActivity(), R.string.error_no_filter_selected);
         return;
       }
-      doFilter(distance, hasOrder, hasNone);
+      doFilter(distance, filterByOrder, filterByNone);
 
       alertDialog.cancel();
     });

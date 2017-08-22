@@ -62,7 +62,7 @@ public class SaveLocationService extends IntentService {
     }
     //If users clears data, new user, or not entered correct information
     KeyValue salesmanIdKeyValue = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-    if (Empty.isEmpty(salesmanIdKeyValue)) {
+    if (Empty.isEmpty(salesmanIdKeyValue) && !isFirst) {
       return;
     }
 
