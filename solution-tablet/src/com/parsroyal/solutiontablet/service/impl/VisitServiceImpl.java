@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 import android.location.Location;
+import com.parsroyal.solutiontablet.constants.SaleType;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.CustomerPicDao;
@@ -24,6 +25,7 @@ import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ import java.util.Map;
  */
 public class VisitServiceImpl implements VisitService {
 
+  private final SettingServiceImpl settingService;
   private Context context;
   private CustomerDao customerDao;
   private CustomerPicDao customerPicDao;
@@ -51,6 +54,7 @@ public class VisitServiceImpl implements VisitService {
     this.visitInformationDao = new VisitInformationDaoImpl(context);
     this.visitInformationDetailDao = new VisitInformationDetailDaoImpl(context);
     this.locationService = new LocationServiceImpl(context);
+    this.settingService = new SettingServiceImpl(context);
   }
 
   @Override
@@ -174,6 +178,8 @@ public class VisitServiceImpl implements VisitService {
   @Override
   public List<VisitInformationDto> getAllVisitDetailForSend() {
     List<VisitInformationDto> visitList = visitInformationDao.getAllVisitInformationDtoForSend();
+    SaleType saleType = SaleType.getByValue(
+        Long.parseLong(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE)));
     for (VisitInformationDto visit : visitList) {
       Map<VisitInformationDetailType, VisitInformationDetailDto> map = new HashMap<>();
       List<VisitInformationDetailDto> tempDetailList = visitInformationDetailDao
@@ -195,6 +201,7 @@ public class VisitServiceImpl implements VisitService {
         }
       }
       visit.setDetails(new ArrayList<>(map.values()));
+      visit.setSaleType(saleType);
     }
     return visitList;
   }

@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.data.model;
 
+import com.parsroyal.solutiontablet.constants.SaleType;
 import java.util.List;
 
 /**
@@ -13,8 +14,9 @@ public class VisitInformationDto extends BaseModel {
   private String endTime;
   private Double xLocation;
   private Double yLocation;
-  private Long customerBackendId;
+  private Long customerId;//Its actually customerBackendId
   private Long salesmanId;
+  private SaleType saleType;
   private List<VisitInformationDetailDto> details;
 
   public Long getId() {
@@ -65,12 +67,18 @@ public class VisitInformationDto extends BaseModel {
     this.yLocation = yLocation;
   }
 
-  public Long getCustomerBackendId() {
-    return customerBackendId;
+  /**
+   * @return Customer BackendId
+   */
+  public Long getCustomerId() {
+    return customerId;
   }
 
-  public void setCustomerBackendId(Long customerBackendId) {
-    this.customerBackendId = customerBackendId;
+  /**
+   * @param customerId Set CustomerBackendId
+   */
+  public void setCustomerId(Long customerId) {
+    this.customerId = customerId;
   }
 
   public Long getSalesmanId() {
@@ -89,4 +97,11 @@ public class VisitInformationDto extends BaseModel {
     this.details = details;
   }
 
+  public SaleType getSaleType() {
+    return saleType;
+  }
+
+  public void setSaleType(SaleType saleType) {
+    this.saleType = saleType;
+  }
 }
