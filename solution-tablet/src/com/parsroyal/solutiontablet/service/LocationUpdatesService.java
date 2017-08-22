@@ -22,6 +22,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
@@ -131,7 +132,7 @@ public class LocationUpdatesService extends Service {
       serviceHandler = new Handler(handlerThread.getLooper());
       notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     } catch (SecurityException ex) {
-      ex.printStackTrace();//TODO: fix this
+      ex.printStackTrace();
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.PERMISSION_DENIED));
     }
   }
@@ -275,10 +276,15 @@ public class LocationUpdatesService extends Service {
 
     if (isAccepted(location)) {
       Log.i(TAG, "location accepted");
-      this.lastLocation = location;
 
       Intent intent = new Intent(this, SaveLocationService.class);
       intent.putExtra(EXTRA_LOCATION, location);
+
+      if (Empty.isEmpty(lastLocation)) {
+        intent.putExtra(Constants.FIRST_POSITION, true);
+      }
+      this.lastLocation = location;
+
       startService(intent);
     }
 
