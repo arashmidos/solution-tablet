@@ -18,8 +18,8 @@ import com.parsroyal.solutiontablet.biz.impl.ProvinceDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QuestionnaireDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.RejectedGoodsDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleOrderForDeliveryDataTaransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitLineDataTaransferBizImpl;
@@ -33,10 +33,10 @@ import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.entity.Position;
-import com.parsroyal.solutiontablet.data.entity.QAnswer;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
+import com.parsroyal.solutiontablet.data.model.QAnswerDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.InvalidServerAddressException;
@@ -330,14 +330,21 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   private void sendAllAnswers(ResultObserver resultObserver) {
-    List<QAnswer> answersForSend = questionnaireService.getAllAnswersForSend();
+    List<QAnswerDto> answersForSend = questionnaireService.getAllAnswersDtoForSend();
 
     if (Empty.isEmpty(answersForSend)) {
       resultObserver.publishResult(context.getString(R.string.message_found_no_answer_for_send));
       return;
     }
 
-    new QAnswersDataTransferBizImpl(context, resultObserver).exchangeData();
+    QAnswersDataTransferBizImpl qAnswersDataTransferBizImpl = new QAnswersDataTransferBizImpl(
+        context, resultObserver);
+    for (int i = 0; i < answersForSend.size(); i++) {
+      QAnswerDto qAnswerDto = answersForSend.get(i);
+      qAnswersDataTransferBizImpl.setAnswer(qAnswerDto);
+      qAnswersDataTransferBizImpl.exchangeData();
+    }
+    resultObserver.publishResult(qAnswersDataTransferBizImpl.getSuccessfulMessage());
   }
 
   private void sendAllPayments(ResultObserver resultObserver) {
