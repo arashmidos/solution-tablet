@@ -10,7 +10,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SendStatus;
-import com.parsroyal.solutiontablet.data.entity.Position;
+import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -26,7 +26,7 @@ public class TestFragment extends BaseFragment {
   @BindView(R.id.msg)
   TextView msg;
   private PositionService positionService;
-  private List<Position> allPositions;
+  private List<PositionDto> allPositions;
 
 
   @Override
@@ -39,9 +39,9 @@ public class TestFragment extends BaseFragment {
     ButterKnife.bind(this, view);
 
     positionService = new PositionServiceImpl(context);
-    allPositions = positionService.getAllPositionByStatus(SendStatus.SENT.getId());
+    allPositions = positionService.getAllPositionDtoByStatus(SendStatus.SENT.getId());
 
-    Position lastLocation = null;
+    PositionDto lastLocation = null;
     Float bestAccuracy = 1000000.0F;
     Float worstAccuracy = 0.0F;
     Float maxSpeed = 0.0F;
@@ -49,7 +49,7 @@ public class TestFragment extends BaseFragment {
     Float maxDistance = 0.0F;
     Float minDistance = 1000000.0F;
     for (int i = 0; i < allPositions.size(); i++) {
-      Position position = allPositions.get(i);
+      PositionDto position = allPositions.get(i);
       if (i == 0) {
         addMsg("Total positions: " + allPositions.size());
         addMsg(String

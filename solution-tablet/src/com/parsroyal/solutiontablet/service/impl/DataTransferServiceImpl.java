@@ -32,10 +32,10 @@ import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Payment;
-import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
+import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.data.model.QAnswerDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -317,13 +317,16 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   private void sendAllPositions(ResultObserver resultObserver) {
-    List<Position> positions = positionService.getAllPositionByStatus(SendStatus.NEW.getId());
+    List<PositionDto> positions = positionService.getAllPositionDtoByStatus(SendStatus.NEW.getId());
     if (Empty.isNotEmpty(positions)) {
       PositionDataTransferBizImpl positionDataTransferBiz = new PositionDataTransferBizImpl(context,
           resultObserver);
-      positionDataTransferBiz.setPositions(positions);
-      positionDataTransferBiz.sendAllData();
-
+      for (int i = 0; i < positions.size(); i++) {
+        PositionDto positionDto = positions.get(i);
+        positionDataTransferBiz.setPosition(positionDto);
+        positionDataTransferBiz.sendAllData();
+      }
+      resultObserver.publishResult(positionDataTransferBiz.getSuccessfulMessage());
     } else {
       resultObserver.publishResult(context.getString(R.string.message_no_positions_for_sending));
     }
@@ -533,6 +536,4 @@ public class DataTransferServiceImpl implements DataTransferService {
     };
     return resultObserver;
   }
-
-
 }

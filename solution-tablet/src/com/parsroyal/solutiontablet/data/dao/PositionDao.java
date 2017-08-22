@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.data.dao;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parsroyal.solutiontablet.data.entity.Position;
+import com.parsroyal.solutiontablet.data.model.PositionDto;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface PositionDao extends BaseDao<Position, Long> {
 
   Position getPositionById(Long positionId);
 
-  List<Position> findPositionByStatusId(Long statusId);
+  List<PositionDto> findPositionDtoByStatusId(Long statusId);
 
   List<Position> findPositionByDate(Date from, Date to);
 

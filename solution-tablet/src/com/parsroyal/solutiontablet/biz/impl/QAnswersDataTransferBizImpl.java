@@ -44,12 +44,12 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
   public void receiveData(String response) {
     if (Empty.isNotEmpty(response)) {
       try {
-      Long backendId = Long.valueOf(response);
+        Long backendId = Long.valueOf(response);
         for (int i = 0; i < answer.getAnswers().size(); i++) {
           AnswerDetailDto answerDetailDto = answer.getAnswers().get(i);
           QAnswer qAnswer = qAnswerDao.retrieve(answerDetailDto.getAnswerId());
           if (Empty.isNotEmpty(qAnswer)) {
-          qAnswer.setBackendId(backendId);
+            qAnswer.setBackendId(backendId);
             qAnswer.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
             qAnswerDao.update(qAnswer);
             visitService
