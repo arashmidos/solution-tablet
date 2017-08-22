@@ -25,8 +25,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
@@ -42,9 +41,11 @@ import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialog.NewVisitDetailFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -54,48 +55,40 @@ import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.util.Locale;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends BaseFragmentActivity {
 
+  public static final String TAG = MainActivity.class.getSimpleName();
+  public static final int FEATURE_FRAGMENT_ID = 0;
+  public static final int CUSTOMER_LIST_FRAGMENT_ID = 1;
+  public static final int VISIT_DETAIL_FRAGMENT_ID = 2;
+  public static final int CUSTOMER_ORDER_FRAGMENT_ID = 3;
+  public static final int ORDER_FRAGMENT_ID = 4;
+  public static final int SETTING_FRAGMENT_ID = 10;
+  public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
+  public static final int ABOUT_US_FRAGMENT_ID = 13;
+  public static final int PATH_FRAGMENT_ID = 27;
+  public static final int PATH_DETAIL_FRAGMENT_ID = 28;
+  private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.drawer_layout)
   DrawerLayout drawerLayout;
   @BindView(R.id.toolbar_title)
   TextView toolbarTitle;
-
-  public static final String TAG = MainActivity.class.getSimpleName();
   private ActionBar actionBar;
-
-  public static final int FEATURE_FRAGMENT_ID = 0;
-  public static final int CUSTOMER_LIST_FRAGMENT_ID = 1;
-  public static final int SETTING_FRAGMENT_ID = 10;
-  public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
-  public static final int ABOUT_US_FRAGMENT_ID = 13;
-  public static final int PATH_FRAGMENT_ID = 27;
-  public static final int PATH_DETAIL_FRAGMENT_ID = 28;
-
   private LocationUpdatesService gpsRecieverService = null;
-  private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   private DataTransferService dataTransferService;
 
   private boolean boundToGpsService = false;
-
-  private BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
-        if (!GPSUtil.isGpsAvailable(context)) {
-          showGpsOffDialog();
-          Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
-        }
-      }
-    }
-  };
-
   private final ServiceConnection serviceConnection = new ServiceConnection() {
 
     @Override
@@ -110,6 +103,17 @@ public class MainActivity extends BaseFragmentActivity {
     public void onServiceDisconnected(ComponentName name) {
       gpsRecieverService = null;
       boundToGpsService = false;
+    }
+  };
+  private BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
+        if (!GPSUtil.isGpsAvailable(context)) {
+          showGpsOffDialog();
+          Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
+        }
+      }
     }
   };
 
@@ -281,7 +285,7 @@ public class MainActivity extends BaseFragmentActivity {
    */
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-      @NonNull int[] grantResults) {
+                                         @NonNull int[] grantResults) {
     Log.i(TAG, "onRequestPermissionResult");
     if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
       if (grantResults.length <= 0) {
@@ -466,6 +470,12 @@ public class MainActivity extends BaseFragmentActivity {
         break;
       case CUSTOMER_LIST_FRAGMENT_ID://TODO it should point to Path Page
         fragment = PathDetailFragment.newInstance();
+        break;
+      case VISIT_DETAIL_FRAGMENT_ID:
+        fragment = NewVisitDetailFragment.newInstance();
+        break;
+      case ORDER_FRAGMENT_ID:
+        fragment = OrderFragment.newInstance();
         break;
       /*case NEW_CUSTOMER_FRAGMENT_ID:
         fragment = new NCustomersFragment();

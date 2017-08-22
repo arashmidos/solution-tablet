@@ -12,12 +12,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * @author Shakib
@@ -136,7 +139,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
     cancelTv.setOnClickListener(v -> alertDialog.cancel());
     enterBtn.setOnClickListener(v -> {
       //TODO:add enter action
-      Toast.makeText(context, "enter", Toast.LENGTH_SHORT).show();
+      ((MainActivity) context).changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, true);
       alertDialog.dismiss();
     });
     noVisitBtn.setOnClickListener(v -> {
@@ -151,12 +154,12 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
     return customers.size();
   }
 
-  public void setDataModel(List<CustomerListModel> dataModel) {
-    this.customers = dataModel;
-  }
-
   public List<CustomerListModel> getDataModel() {
     return customers;
+  }
+
+  public void setDataModel(List<CustomerListModel> dataModel) {
+    this.customers = dataModel;
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {

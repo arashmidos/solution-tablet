@@ -17,9 +17,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
@@ -33,11 +31,16 @@ import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author Shakib
@@ -73,7 +76,7 @@ public class PathDetailFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_path_detail, container, false);
     ButterKnife.bind(this, view);
@@ -199,8 +202,9 @@ public class PathDetailFragment extends BaseFragment {
             .compare(item2.getTitle(), item1.getTitle()));
         break;
     }
-
-    adapter.notifyDataSetChanged();
+    if (Empty.isNotEmpty(adapter)) {
+      adapter.notifyDataSetChanged();
+    }
   }
 
   private void showFilterDialog() {

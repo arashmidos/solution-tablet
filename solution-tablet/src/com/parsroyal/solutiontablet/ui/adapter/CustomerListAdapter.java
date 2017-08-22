@@ -95,7 +95,7 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel> {
 
       //set location icon
       if (model.hasLocation()) {
-        holder.locationImg.setImageResource(R.drawable.ic_location_on_24dp);
+        holder.locationImg.setImageResource(R.drawable.ic_location_on_24_dp);
       } else {
         holder.locationImg.setImageResource(R.drawable.ic_location_off_24dp);
       }
