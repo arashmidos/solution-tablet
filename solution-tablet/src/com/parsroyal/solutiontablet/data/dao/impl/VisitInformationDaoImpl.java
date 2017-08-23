@@ -163,7 +163,7 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
   private VisitInformationDto createDtoFromCursor(Cursor cursor) {
     VisitInformationDto entity = new VisitInformationDto();
     entity.setId(cursor.getLong(0));
-    entity.setCustomerId(cursor.getLong(1));
+    entity.setCustomerBackendId(cursor.getLong(1));
     entity.setVisitDate(cursor.getString(3));
     entity.setStartTime(cursor.getString(5));
     entity.setEndTime(cursor.getString(6));

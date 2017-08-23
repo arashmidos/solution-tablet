@@ -172,7 +172,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
       questionDto.setDescription(cursor.getString(4));
       questionDto.setAnswerId(cursor.isNull(5) ? null : cursor.getLong(5));
       questionDto.setAnswer(cursor.getString(6));
-      questionDto.setId(cursor.getLong(7));
+      questionDto.setBackendId(cursor.getLong(7));
       questionDto.setType(QuestionType.getByValue(cursor.getInt(8)));
     }
 
@@ -222,7 +222,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
       questionDto.setDescription(cursor.getString(4));
       questionDto.setAnswerId(cursor.isNull(5) ? null : cursor.getLong(5));
       questionDto.setAnswer(cursor.getString(6));
-      questionDto.setId(cursor.getLong(7));
+      questionDto.setBackendId(cursor.getLong(7));
       questionDto.setType(QuestionType.getByValue(cursor.getInt(8)));
     }
 

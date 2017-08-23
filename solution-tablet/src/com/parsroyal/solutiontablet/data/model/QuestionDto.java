@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.data.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.parsroyal.solutiontablet.constants.QuestionType;
 
 /**
@@ -17,7 +18,8 @@ public class QuestionDto extends BaseModel {
   private String answer;
   private String qAnswers;
   private Long status;
-  private Long id;//Its actually backendId
+  @JsonProperty("id")
+  private Long backendId;
   private String createDateTime;
   private QuestionType type;
 
@@ -96,15 +98,12 @@ public class QuestionDto extends BaseModel {
   /**
    * @return BackendId of this question
    */
-  public Long getId() {
-    return id;
+  public Long getBackendId() {
+    return backendId;
   }
 
-  /**
-   * @param id set BackendId for this question
-   */
-  public void setId(Long id) {
-    this.id = id;
+  public void setBackendId(Long backendId) {
+    this.backendId = backendId;
   }
 
   public String getCreateDateTime() {

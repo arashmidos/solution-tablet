@@ -461,7 +461,7 @@ public class QuestionnaireDetailFragment extends
         qAnswer.setGoodsBackendId(goodsBackendId);
       }
       qAnswer.setVisitId(visitId);
-      qAnswer.setQuestionBackendId(questionDto.getId());
+      qAnswer.setQuestionBackendId(questionDto.getBackendId());
       qAnswer.setAnswersGroupNo(answersGroupNo);
     } else {
       qAnswer.setAnswer(answer);

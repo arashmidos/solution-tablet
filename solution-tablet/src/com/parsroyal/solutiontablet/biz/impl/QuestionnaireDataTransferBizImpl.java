@@ -22,7 +22,6 @@ import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.util.Date;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -82,7 +81,7 @@ public class QuestionnaireDataTransferBizImpl extends
   }
 
   private Question createQuestionEntityFromDto(QuestionDto questionDto) {
-    return new Question(questionDto.getId(), questionDto.getQuestionnaireId(),
+    return new Question(questionDto.getBackendId(), questionDto.getQuestionnaireId(),
         CharacterFixUtil.fixString(questionDto.getQuestion()), questionDto.getAnswer(),
         questionDto.getStatus(),
         questionDto.getOrder(), questionDto.getType());
