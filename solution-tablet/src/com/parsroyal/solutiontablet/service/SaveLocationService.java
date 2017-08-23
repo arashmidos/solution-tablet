@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
@@ -49,19 +50,19 @@ public class SaveLocationService extends IntentService {
     if (Empty.isEmpty(intent)) {
       return;
     }
-    //If users clears data, new user, or not entered correct information
-    KeyValue salesmanIdKeyValue = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-    if (Empty.isEmpty(salesmanIdKeyValue)) {
-      return;
+
+    boolean firstPosition = intent.getBooleanExtra(Constants.FIRST_POSITION, false);
+    long salesmanId = 0;
+    if (!firstPosition) {
+      //If users clears data, new user, or not entered correct information
+      KeyValue salesmanIdKeyValue = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
+      if (Empty.isEmpty(salesmanIdKeyValue)) {
+        return;
+      }
+
+      salesmanId = Long.parseLong(salesmanIdKeyValue.getValue());
     }
-
-    long salesmanId = Long.parseLong(salesmanIdKeyValue.getValue());
-
     Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
-
-    if (Empty.isEmpty(location)) {
-      return;
-    }
 
     Log.i(TAG, "Saving location " + location);
 

@@ -1,5 +1,7 @@
 package com.parsroyal.solutiontablet.data.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.parsroyal.solutiontablet.constants.SaleType;
 import java.util.List;
 
 /**
@@ -13,8 +15,10 @@ public class VisitInformationDto extends BaseModel {
   private String endTime;
   private Double xLocation;
   private Double yLocation;
+  @JsonProperty("customerId")
   private Long customerBackendId;
   private Long salesmanId;
+  private SaleType saleType;
   private List<VisitInformationDetailDto> details;
 
   public Long getId() {
@@ -65,7 +69,7 @@ public class VisitInformationDto extends BaseModel {
     this.yLocation = yLocation;
   }
 
-  public Long getCustomerBackendId() {
+  public Long getCustomerBackendIdId() {
     return customerBackendId;
   }
 
@@ -89,4 +93,11 @@ public class VisitInformationDto extends BaseModel {
     this.details = details;
   }
 
+  public SaleType getSaleType() {
+    return saleType;
+  }
+
+  public void setSaleType(SaleType saleType) {
+    this.saleType = saleType;
+  }
 }

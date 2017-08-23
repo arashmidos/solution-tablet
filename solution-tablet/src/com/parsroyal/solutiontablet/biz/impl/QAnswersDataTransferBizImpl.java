@@ -5,15 +5,17 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.dao.impl.QAnswerDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
+import com.parsroyal.solutiontablet.data.model.AnswerDetailDto;
+import com.parsroyal.solutiontablet.data.model.QAnswerDto;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Locale;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,44 +26,57 @@ import org.springframework.http.MediaType;
  */
 public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
 
+  private final VisitServiceImpl visitService;
   private ResultObserver resultObserver;
   private QAnswerDao qAnswerDao;
+  private QAnswerDto answer;
+  private int success = 0;
+  private int total = 0;
 
   public QAnswersDataTransferBizImpl(Context context, ResultObserver resultObserver) {
     super(context);
     this.resultObserver = resultObserver;
     this.qAnswerDao = new QAnswerDaoImpl(context);
+    this.visitService = new VisitServiceImpl(context);
   }
 
   @Override
   public void receiveData(String response) {
     if (Empty.isNotEmpty(response)) {
       try {
-        String[] rows = response.split("[\n]");
-        for (int i = 0; i < rows.length; i++) {
-          String row = rows[i];
-          String[] columns = row.split("[&]");
-          Long answerId = Long.parseLong(columns[0]);
-          Long backendId = Long.parseLong(columns[1]);
-
-          QAnswer qAnswer = qAnswerDao.retrieve(answerId);
-
+        Long backendId = Long.valueOf(response);
+        for (int i = 0; i < answer.getAnswers().size(); i++) {
+          AnswerDetailDto answerDetailDto = answer.getAnswers().get(i);
+          QAnswer qAnswer = qAnswerDao.retrieve(answerDetailDto.getAnswerId());
           if (Empty.isNotEmpty(qAnswer)) {
             qAnswer.setBackendId(backendId);
             qAnswer.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
             qAnswerDao.update(qAnswer);
+            visitService
+                .updateVisitDetailId(VisitInformationDetailType.FILL_QUESTIONNAIRE, qAnswer.getId(),
+                    backendId);
           }
         }
-
-        resultObserver
-            .publishResult(context.getString(R.string.answers_data_transferred_successfully));
+        success++;
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving QAnswerData " + ex.getMessage());
+        Crashlytics
+            .log(Log.ERROR, "Data transfer", "Error in receiving QAnswerData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
-        resultObserver
-            .publishResult(context.getString(R.string.message_exception_in_sending_answers));
+        resultObserver.publishResult(getExceptionMessage());
       }
     }
+  }
+
+
+  protected String getExceptionMessage() {
+    return context.getString(R.string.message_exception_in_sending_answers);
+  }
+
+  public String getSuccessfulMessage() {
+    return String
+        .format(Locale.US, context.getString(R.string.data_transfered_result),
+            String.valueOf(success),
+            String.valueOf(total - success));
   }
 
   @Override
@@ -91,35 +106,17 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
   @Override
   protected MediaType getContentType() {
-    MediaType contentType = new MediaType("TEXT", "PLAIN", Charset.forName("UTF-8"));
-    return contentType;
+
+    return MediaType.APPLICATION_JSON;
   }
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    List<QAnswer> allAnswersForSend = qAnswerDao.getAllQAnswersForSend();
-    String qAnswerStr = getAnswersString(allAnswersForSend);
-    headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN));
-    HttpEntity<String> httpEntity = new HttpEntity<String>(qAnswerStr, headers);
-    return httpEntity;
+    return new HttpEntity<>(answer, headers);
   }
 
-  private String getAnswersString(List<QAnswer> allAnswersForSend) {
-    StringBuilder sb = new StringBuilder();
-    boolean firstLine = true;
-    for (QAnswer qAnswer : allAnswersForSend) {
-      String qAnswerStr = QAnswer.createString(qAnswer);
-      qAnswerStr = qAnswerStr.trim().replaceAll("[\n]", "");
-      qAnswerStr = qAnswerStr.trim().replace("\n", "");
-      if (firstLine) {
-        sb.append(qAnswerStr);
-        firstLine = false;
-        continue;
-      }
-      sb.append("\n");
-      sb.append(qAnswerStr);
-    }
-
-    return sb.toString();
+  public void setAnswer(QAnswerDto answer) {
+    this.answer = answer;
+    this.total++;
   }
 }

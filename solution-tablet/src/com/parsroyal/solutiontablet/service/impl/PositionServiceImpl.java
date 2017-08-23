@@ -2,14 +2,13 @@ package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 import com.google.android.gms.maps.model.LatLng;
-import com.parsroyal.solutiontablet.biz.impl.PositionDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.dao.PositionDao;
 import com.parsroyal.solutiontablet.data.dao.impl.PositionDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Position;
+import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -52,8 +51,8 @@ public class PositionServiceImpl implements PositionService {
   }
 
   @Override
-  public List<Position> getAllPositionByStatus(Long status) {
-    return positionDao.findPositionByStatusId(status);
+  public List<PositionDto> getAllPositionDtoByStatus(Long status) {
+    return positionDao.findPositionDtoByStatusId(status);
   }
 
   @Override
@@ -64,14 +63,6 @@ public class PositionServiceImpl implements PositionService {
   @Override
   public List<LatLng> getAllPositionLatLngByDate(Date from, Date to) {
     return positionDao.findPositionLatLngByDate(from, to);
-  }
-
-  @Override
-  public void sendPosition(Position position) {
-    PositionDataTransferBizImpl positionDataTransferBiz = new PositionDataTransferBizImpl(context,
-        null);
-    positionDataTransferBiz.setPositions(Collections.singletonList(position));
-    positionDataTransferBiz.sendAllData();
   }
 
   @Override

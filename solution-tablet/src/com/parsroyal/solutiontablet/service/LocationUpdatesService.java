@@ -22,6 +22,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
@@ -275,10 +276,15 @@ public class LocationUpdatesService extends Service {
 
     if (isAccepted(location)) {
       Log.i(TAG, "location accepted");
-      this.lastLocation = location;
 
       Intent intent = new Intent(this, SaveLocationService.class);
       intent.putExtra(EXTRA_LOCATION, location);
+
+      if (Empty.isEmpty(lastLocation)) {
+        intent.putExtra(Constants.FIRST_POSITION, true);
+      }
+      this.lastLocation = location;
+
       startService(intent);
     }
 

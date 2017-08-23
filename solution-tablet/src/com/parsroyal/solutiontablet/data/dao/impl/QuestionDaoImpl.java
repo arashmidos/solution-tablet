@@ -168,11 +168,11 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
       questionDto.setQuestionId(cursor.getLong(0));
       questionDto.setQuestion(cursor.getString(1));
       questionDto.setqAnswers(cursor.getString(2));
-      questionDto.setqOrder(cursor.getInt(3));
+      questionDto.setOrder(cursor.getInt(3));
       questionDto.setDescription(cursor.getString(4));
       questionDto.setAnswerId(cursor.isNull(5) ? null : cursor.getLong(5));
       questionDto.setAnswer(cursor.getString(6));
-      questionDto.setQuestionBackendId(cursor.getLong(7));
+      questionDto.setBackendId(cursor.getLong(7));
       questionDto.setType(QuestionType.getByValue(cursor.getInt(8)));
     }
 
@@ -218,11 +218,11 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
       questionDto.setQuestionId(cursor.getLong(0));
       questionDto.setQuestion(cursor.getString(1));
       questionDto.setqAnswers(cursor.getString(2));
-      questionDto.setqOrder(cursor.getInt(3));
+      questionDto.setOrder(cursor.getInt(3));
       questionDto.setDescription(cursor.getString(4));
       questionDto.setAnswerId(cursor.isNull(5) ? null : cursor.getLong(5));
       questionDto.setAnswer(cursor.getString(6));
-      questionDto.setQuestionBackendId(cursor.getLong(7));
+      questionDto.setBackendId(cursor.getLong(7));
       questionDto.setType(QuestionType.getByValue(cursor.getInt(8)));
     }
 

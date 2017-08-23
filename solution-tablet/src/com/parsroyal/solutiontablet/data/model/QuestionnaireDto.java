@@ -8,22 +8,22 @@ import java.util.List;
  */
 public class QuestionnaireDto extends BaseModel {
 
-  private Long backendId;
+  private Long id;
   private String fromDate;
   private String toDate;
-  private Long goodsGroupBackendId;
-  private Long customerGroupBackendId;
+  private Long goodsGroupId;
+  private Long customerGroupId;
   private String description;
   private Long status;
 
-  private List<Question> questions;
+  private List<QuestionDto> questions;
 
-  public Long getBackendId() {
-    return backendId;
+  public Long getId() {
+    return id;
   }
 
-  public void setBackendId(Long backendId) {
-    this.backendId = backendId;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getFromDate() {
@@ -42,20 +42,20 @@ public class QuestionnaireDto extends BaseModel {
     this.toDate = toDate;
   }
 
-  public Long getGoodsGroupBackendId() {
-    return goodsGroupBackendId;
+  public Long getGoodsGroupId() {
+    return goodsGroupId;
   }
 
-  public void setGoodsGroupBackendId(Long goodsGroupBackendId) {
-    this.goodsGroupBackendId = goodsGroupBackendId;
+  public void setGoodsGroupId(Long goodsGroupId) {
+    this.goodsGroupId = goodsGroupId;
   }
 
-  public Long getCustomerGroupBackendId() {
-    return customerGroupBackendId;
+  public Long getCustomerGroupId() {
+    return customerGroupId;
   }
 
-  public void setCustomerGroupBackendId(Long customerGroupBackendId) {
-    this.customerGroupBackendId = customerGroupBackendId;
+  public void setCustomerGroupId(Long customerGroupId) {
+    this.customerGroupId = customerGroupId;
   }
 
   public String getDescription() {
@@ -74,11 +74,11 @@ public class QuestionnaireDto extends BaseModel {
     this.status = status;
   }
 
-  public List<Question> getQuestions() {
+  public List<QuestionDto> getQuestions() {
     return questions;
   }
 
-  public void setQuestions(List<Question> questions) {
+  public void setQuestions(List<QuestionDto> questions) {
     this.questions = questions;
   }
 }
