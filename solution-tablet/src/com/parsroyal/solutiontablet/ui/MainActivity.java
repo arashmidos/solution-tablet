@@ -33,6 +33,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
@@ -44,9 +45,11 @@ import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialog.NewVisitDetailFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -167,9 +170,11 @@ public class MainActivity extends BaseFragmentActivity {
       if (event.getStatusCode() == StatusCodes.PERMISSION_DENIED) {
         requestPermissions();
       }
+    } else if (event instanceof DataTransferEvent) {
+      ToastUtil.toastSuccess(this, R.string.message_setting_saved_successfully);
+      startGpsService();
+      new TrackerAlarmReceiver().setAlarm(this);
     }
-
-    //TODO: If instance of data transfer completed
   }
 
   @Override

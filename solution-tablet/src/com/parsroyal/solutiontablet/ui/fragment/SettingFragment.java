@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.exception.BackendIsNotReachableException;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
@@ -24,12 +26,14 @@ import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by Mahyar on 6/3/2015.
@@ -67,6 +71,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
   CheckBox enableSaleRateCb;
 
   private SettingService settingService;
+  private MainActivity mainActivity;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,7 +79,8 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
     View rootView = inflater.inflate(R.layout.fragment_setting, null);
     ButterKnife.bind(this, rootView);
 
-    settingService = new SettingServiceImpl(getActivity());
+    mainActivity = (MainActivity) getActivity();
+    settingService = new SettingServiceImpl(mainActivity);
 
     String address1 = settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
     String username = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
@@ -129,29 +135,29 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
   }
 
   private void invokeGetInformationService(int updateType) {
-    showProgressDialog(getActivity().getString(R.string.message_connecting_to_server_please_wait));
+    showProgressDialog(mainActivity.getString(R.string.message_connecting_to_server_please_wait));
     new Thread(() ->
     {
       try {
         if (updateType != Constants.NO_UPDATE) {
           settingService.saveSetting(ApplicationKeys.USER_FULL_NAME, "");
           settingService.saveSetting(ApplicationKeys.USER_COMPANY_NAME, "");
-          new DataTransferServiceImpl(getActivity()).clearData(updateType);
+          new DataTransferServiceImpl(mainActivity).clearData(updateType);
         }
         if (canSave()) {
           settingService.getUserInformation(SettingFragment.this);
         }
       } catch (BackendIsNotReachableException ex) {
         Log.e(TAG, ex.getMessage(), ex);
-        runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
+        runOnUiThread(() -> ToastUtil.toastError(mainActivity, ex));
       } catch (BusinessException ex) {
         Log.e(TAG, ex.getMessage(), ex);
-        runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
+        runOnUiThread(() -> ToastUtil.toastError(mainActivity, ex));
       } catch (final Exception ex) {
         Crashlytics.log(Log.ERROR, "Data transfer",
             "Error in getting user information " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
-        runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
+        runOnUiThread(() -> ToastUtil.toastError(mainActivity, new UnknownSystemException(ex)));
       }
       runOnUiThread(() -> dismissProgressDialog());
     }).start();
@@ -194,63 +200,63 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
     if (Empty.isEmpty(serverAddress1Txt.getText().toString())) {
       runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_serverAddress1_is_required);
+        ToastUtil.toastError(mainActivity, R.string.error_serverAddress1_is_required);
         serverAddress1Txt.requestFocus();
       });
       return false;
     } else if (Empty.isEmpty(usernameTxt.getText().toString())) {
       runOnUiThread(() -> runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_serverAddress1_is_required);
+        ToastUtil.toastError(mainActivity, R.string.error_serverAddress1_is_required);
         serverAddress1Txt.requestFocus();
       }));
       return false;
     } else if (Empty.isEmpty(passwordTxt.getText().toString())) {
       runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_password_is_required);
+        ToastUtil.toastError(mainActivity, R.string.error_password_is_required);
         passwordTxt.requestFocus();
       });
       return false;
     } else if (Empty.isEmpty(userCodeTxt.getText().toString())) {
       runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_user_code_is_required);
+        ToastUtil.toastError(mainActivity, R.string.error_user_code_is_required);
         userCodeTxt.requestFocus();
       });
       return false;
     } else if (Empty.isEmpty(branchSerialTxt.getText().toString())) {
       runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_required);
+        ToastUtil.toastError(mainActivity, R.string.error_branch_serial_is_required);
         branchSerialTxt.requestFocus();
       });
       return false;
     } else if (Empty.isEmpty(stockSerialTxt.getText().toString())) {
       runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_stock_serial_is_required);
+        ToastUtil.toastError(mainActivity, R.string.error_stock_serial_is_required);
         stockSerialTxt.requestFocus();
       });
       return false;
     } else if (Empty.isEmpty(invoiceTypeTxt.getText().toString())) {
       runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_invoice_type_is_required);
+        ToastUtil.toastError(mainActivity, R.string.error_invoice_type_is_required);
         invoiceTypeTxt.requestFocus();
       });
       return false;
     } else if (Empty.isEmpty(orderTypeTxt.getText().toString())) {
       runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_order_type_is_required);
+        ToastUtil.toastError(mainActivity, R.string.error_order_type_is_required);
         orderTypeTxt.requestFocus();
       });
       return false;
     } else if (Empty.isEmpty(rejectTypeTxt.getText().toString())) {
       runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_reject_type_is_required);
+        ToastUtil.toastError(mainActivity, R.string.error_reject_type_is_required);
         rejectTypeTxt.requestFocus();
       });
       return false;
@@ -260,7 +266,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
     } catch (NumberFormatException ignore) {
       runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_branch_serial_is_not_valid);
+        ToastUtil.toastError(mainActivity, R.string.error_branch_serial_is_not_valid);
         branchSerialTxt.requestFocus();
       });
       return false;
@@ -270,7 +276,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
     } catch (NumberFormatException ignore) {
       runOnUiThread(() ->
       {
-        ToastUtil.toastError(getActivity(), R.string.error_stock_serial_is_not_valid);
+        ToastUtil.toastError(mainActivity, R.string.error_stock_serial_is_not_valid);
         stockSerialTxt.requestFocus();
       });
       return false;
@@ -280,27 +286,26 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
 
   @Override
   public void publishResult(final BusinessException ex) {
-    runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
+    runOnUiThread(() -> ToastUtil.toastError(mainActivity, ex));
   }
 
   @Override
   public void publishResult(final String message) {
-    runOnUiThread(() -> ToastUtil.toastMessage(getActivity(), message));
+    runOnUiThread(() -> ToastUtil.toastMessage(mainActivity, message));
   }
 
   @Override
   public void finished(boolean result) {
     if (result) {
-      runOnUiThread(() ->
+      EventBus.getDefault().post(new DataTransferEvent());
+
+      /*runOnUiThread(() ->
       {
         runOnUiThread(() -> ToastUtil
-            .toastSuccess(getActivity(), R.string.message_setting_saved_successfully));
-        OldMainActivity oldMainActivity = (OldMainActivity) getActivity();
-        oldMainActivity.removeFragment(this);
-        oldMainActivity.updateActionbar();
-        oldMainActivity.startGpsService();
-        new TrackerAlarmReceiver().setAlarm(getContext());
-      });
+            .toastSuccess(mainActivity, R.string.message_setting_saved_successfully));*/
+//      MainActivity mainActivity = (MainActivity) mainActivity;
+      mainActivity.removeFragment(this);
+//        oldMainActivity.updateActionbar();
     }
   }
 
@@ -313,7 +318,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.cancelBtn:
-        ((OldMainActivity) getActivity()).removeFragment(this);
+        mainActivity.removeFragment(this);
         break;
       case R.id.saveBtn:
         try {
@@ -324,15 +329,14 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
             boolean newSalesman = isNewSalesman();
             boolean saleInfoChanged = isSaleInfoChanged();
             if (newSalesman || saleInfoChanged) {
-              DialogUtil.showCustomDialog(getActivity(), getString(R.string.warning),
+              DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
                   getString(R.string.warning_delete_data_after_setting_change),
                   getString(R.string.yes),
                   (dialog, which) -> {
                     invokeGetInformationService(
                         newSalesman ? Constants.FULL_UPDATE : Constants.PARTIAL_UPDATE);
                   }, getString(R.string.no_send_data), (dialog, which) -> {
-                    ((OldMainActivity) getActivity())
-                        .changeFragment(OldMainActivity.DATA_TRANSFER_FRAGMENT_ID, true);
+                    mainActivity.changeFragment(OldMainActivity.DATA_TRANSFER_FRAGMENT_ID, true);
                   }, Constants.ICON_WARNING
               );
             } else {
@@ -344,12 +348,12 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
           }
         } catch (BusinessException ex) {
           Log.e(TAG, ex.getMessage(), ex);
-          ToastUtil.toastError(getActivity(), ex);
+          ToastUtil.toastError(mainActivity, ex);
         } catch (Exception ex) {
           Crashlytics.log(Log.ERROR, "UI Exception",
               "Error in settingFragment.onClick " + ex.getMessage());
           Log.e(TAG, ex.getMessage(), ex);
-          ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
+          ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
         }
         break;
     }

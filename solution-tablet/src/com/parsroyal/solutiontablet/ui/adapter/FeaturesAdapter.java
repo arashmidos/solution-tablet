@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
 /**
@@ -55,16 +57,17 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           ((MainActivity) context).changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
           break;
         case 1://Customers
-          ((MainActivity) context).changeFragment(MainActivity.CUSTOMER_LIST_FRAGMENT_ID, true);
+          Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show();
           break;
         case 2://reports
+          Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show();
           break;
         case 3://Map
+          Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show();
           break;
         case 4: //Settings
-          ((MainActivity) context).changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);
+          ((MainActivity) context).changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);//TODO REMOVE THIS FRAGMENT AFTER LOGIN IMPLEMENTED
           break;
-
       }
     });
   }
