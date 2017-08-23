@@ -41,6 +41,7 @@
     <!--new version-->
     <color name="log_in_enter">#fffafafa</color>
     <color name="log_in_enter_bg">#4cb050</color>
+    <color name="log_in_enter_bg_20">#804cb050</color>
     <color name="customers_number">#1d988c</color>
     <color name="primary">#2288e1</color>
     <color name="primary_dark">#1976d2</color>
@@ -55,4 +56,11 @@
     <color name="black_55">#8c000000</color>
     <color name="black_85">#d9000000</color>
     <color name="black_10">#1a000000</color>
+
+    <!-- visit detail-->
+    <color name="register_order">#388e3c</color>
+    <color name="register_payment">#009688</color>
+    <color name="register_questionnaire">#1976d2</color>
+    <color name="register_image">#673ab7</color>
+
 </resources>
