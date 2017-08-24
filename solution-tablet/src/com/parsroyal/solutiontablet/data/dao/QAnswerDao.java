@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.data.dao;
 
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
+import com.parsroyal.solutiontablet.data.model.AnswerDetailDto;
+import com.parsroyal.solutiontablet.data.model.QAnswerDto;
 import java.util.List;
 
 /**
@@ -8,8 +10,9 @@ import java.util.List;
  */
 public interface QAnswerDao extends BaseDao<QAnswer, Long> {
 
-  List<QAnswer> getAllQAnswersForSend();
+  List<QAnswerDto> getAllQAnswersDtoForSend();
 
   void updateCustomerBackendIdForAnswers(long customerId, long customerBackendId);
 
+  List<AnswerDetailDto> getAllAnswerDetailByGroupId(Long answersGroupNo);
 }

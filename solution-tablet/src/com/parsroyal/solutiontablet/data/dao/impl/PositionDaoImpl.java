@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.parsroyal.solutiontablet.data.dao.PositionDao;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
+import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -103,6 +104,24 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     return position;
   }
 
+  protected PositionDto createDtoFromCursor(Cursor cursor) {
+    PositionDto position = new PositionDto();
+
+    position.setId(cursor.getLong(0));
+    position.setLatitude(cursor.getDouble(1));
+    position.setLongitude(cursor.getDouble(2));
+    position.setSpeed(cursor.getFloat(3));
+    position.setDate(DateUtil
+        .convertStringToDate(cursor.getString(5), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
+            "EN"));
+    position.setGpsOff(cursor.getInt(6));
+    position.setMode(cursor.getInt(7));
+    position.setPersonId(cursor.getLong(8));
+    position.setAccuracy(cursor.getFloat(12));
+
+    return position;
+  }
+
   @Override
   public Position getPositionById(Long positionId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
@@ -119,17 +138,17 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
   }
 
   @Override
-  public List<Position> findPositionByStatusId(Long statusId) {
+  public List<PositionDto> findPositionDtoByStatusId(Long statusId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String selection = Position.COL_STATUS + " = ?";
     String[] args = {String.valueOf(statusId)};
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
 
-    List<Position> positionList = new ArrayList<>();
+    List<PositionDto> positionList = new ArrayList<>();
 
     while (cursor.moveToNext()) {
-      positionList.add(createEntityFromCursor(cursor));
+      positionList.add(createDtoFromCursor(cursor));
     }
 
     cursor.close();

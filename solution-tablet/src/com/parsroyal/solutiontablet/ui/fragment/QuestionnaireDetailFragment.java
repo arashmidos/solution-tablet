@@ -82,6 +82,7 @@ public class QuestionnaireDetailFragment extends
   private CompoundButton userChoice;
   private Long amountValue;
   private int parent;
+  private Long answersGroupNo;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,6 +100,7 @@ public class QuestionnaireDetailFragment extends
       customerId = arguments.getLong(Constants.CUSTOMER_ID);
       goodsBackendId = arguments.getLong(Constants.GOODS_BACKEND_ID);
       parent = arguments.getInt(Constants.PARENT, 0);
+      answersGroupNo = arguments.getLong(Constants.ANSWERS_GROUP_NO, -1);
 
       customer = customerService.getCustomerById(customerId);
 
@@ -132,6 +134,7 @@ public class QuestionnaireDetailFragment extends
     questionSo.setQuestionnaireBackendId(questionnaireBackendId);
     questionSo.setVisitId(visitId);
     questionSo.setGoodsBackendId(goodsBackendId);
+    questionSo.setAnswersGroupNo(answersGroupNo);
     return questionnaireService.searchForQuestions(questionSo);
   }
 
@@ -154,7 +157,8 @@ public class QuestionnaireDetailFragment extends
     return (parent, view, position, id) ->
     {
       QuestionDto questionDto = questionnaireService
-          .getQuestionDto(dataModel.get(position).getPrimaryKey(), visitId, goodsBackendId);
+          .getQuestionDto(dataModel.get(position).getPrimaryKey(), visitId, goodsBackendId,
+              answersGroupNo);
       openQuestionDialog(questionDto);
     };
   }
@@ -279,8 +283,8 @@ public class QuestionnaireDetailFragment extends
         adapter.notifyDataSetChanged();
         adapter.notifyDataSetInvalidated();
         QuestionDto prvQuestionDto = questionnaireService
-            .getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(),
-                goodsBackendId, false);
+            .getQuestionDto(questionnaireBackendId, visitId, questionDto.getOrder(),
+                goodsBackendId, false, answersGroupNo);
         if (Empty.isNotEmpty(prvQuestionDto)) {
           alert.dismiss();
           openQuestionDialog(prvQuestionDto);
@@ -303,8 +307,8 @@ public class QuestionnaireDetailFragment extends
           setVisitDetail();
         }
         QuestionDto nextQuestionDto = questionnaireService
-            .getQuestionDto(questionnaireBackendId, visitId, questionDto.getqOrder(),
-                goodsBackendId, true);
+            .getQuestionDto(questionnaireBackendId, visitId, questionDto.getOrder(),
+                goodsBackendId, true, answersGroupNo);
         adapter.setDataModel(dataModel);
         adapter.notifyDataSetChanged();
         adapter.notifyDataSetInvalidated();
@@ -457,7 +461,8 @@ public class QuestionnaireDetailFragment extends
         qAnswer.setGoodsBackendId(goodsBackendId);
       }
       qAnswer.setVisitId(visitId);
-      qAnswer.setQuestionBackendId(questionDto.getQuestionBackendId());
+      qAnswer.setQuestionBackendId(questionDto.getBackendId());
+      qAnswer.setAnswersGroupNo(answersGroupNo);
     } else {
       qAnswer.setAnswer(answer);
     }

@@ -10,6 +10,7 @@ public class QuestionListModel extends BaseListModel {
   private String question;
   private String answer;
   private Integer qOrder;
+  private Long answersGroupNo;
   private QuestionType type;
 
   public String getQuestion() {
@@ -42,5 +43,13 @@ public class QuestionListModel extends BaseListModel {
 
   public void setType(QuestionType type) {
     this.type = type;
+  }
+
+  public Long getAnswersGroupNo() {
+    return answersGroupNo;
+  }
+
+  public void setAnswersGroupNo(Long answersGroupNo) {
+    this.answersGroupNo = answersGroupNo;
   }
 }

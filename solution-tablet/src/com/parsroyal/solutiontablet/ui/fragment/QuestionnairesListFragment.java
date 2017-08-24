@@ -18,7 +18,7 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.OldMainActivity;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NQuestionnaireListAdapter;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
@@ -31,7 +31,7 @@ public class QuestionnairesListFragment extends
 
   public static final String TAG = QuestionnairesListFragment.class.getSimpleName();
 
-  protected OldMainActivity oldMainActivity;
+  protected MainActivity mainActivity;
   protected QuestionnaireService questionnaireService;
   protected int parent;
   private VisitService visitService;
@@ -42,9 +42,9 @@ public class QuestionnairesListFragment extends
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    oldMainActivity = (OldMainActivity) getActivity();
-    questionnaireService = new QuestionnaireServiceImpl(oldMainActivity);
-    visitService = new VisitServiceImpl(oldMainActivity);
+    mainActivity = (MainActivity) getActivity();
+    questionnaireService = new QuestionnaireServiceImpl(mainActivity);
+    visitService = new VisitServiceImpl(mainActivity);
 
     Bundle arguments = getArguments();
 
@@ -53,9 +53,7 @@ public class QuestionnairesListFragment extends
     parent = arguments.getInt(Constants.PARENT, 0);
 
     try {
-      QuestionnaireSo questionnaireSo = getSearchObject();
-
-      dataModel = questionnaireService.searchForQuestionsList(questionnaireSo);
+      dataModel = getDataModel();
 
       View view = super.onCreateView(inflater, container, savedInstanceState);
       fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -65,8 +63,8 @@ public class QuestionnairesListFragment extends
         Button canclButton = (Button) buttonPanel.findViewById(R.id.cancelBtn);
         canclButton.setOnClickListener(v ->
         {
-          oldMainActivity.removeFragment(QuestionnairesListFragment.this);
-          oldMainActivity.changeSidebarItem(parent);
+          mainActivity.removeFragment(QuestionnairesListFragment.this);
+          mainActivity.changeSidebarItem(parent);
         });
       }
 
@@ -87,17 +85,16 @@ public class QuestionnairesListFragment extends
 
     fab.setOnClickListener(v ->
     {
-      OldMainActivity oldMainActivity = (OldMainActivity) getActivity();
+      MainActivity mainActivity = (MainActivity) getActivity();
       Bundle args = new Bundle();
       args.putLong(Constants.VISIT_ID,
           visitId == -1 ? visitService.startAnonymousVisit() : visitId);
       args.putLong(Constants.CUSTOMER_ID, customerId);
-      args.putInt(Constants.PARENT, OldMainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID);
-      if (visitId == -1 || parent == OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID) {
-        oldMainActivity
-            .changeFragment(OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+      args.putInt(Constants.PARENT, MainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID);
+      if (visitId == -1 || parent == MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID) {
+        mainActivity.changeFragment(MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
       } else {
-        oldMainActivity.changeFragment(OldMainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+        mainActivity.changeFragment(MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
       }
     });
   }
@@ -106,7 +103,7 @@ public class QuestionnairesListFragment extends
     QuestionnaireSo questionnaireSo = new QuestionnaireSo();
     if (visitId != -1) {
       //Its from a customer's visit
-      questionnaireSo.setGeneral(parent == OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID);
+      questionnaireSo.setGeneral(parent == MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID);
       questionnaireSo.setVisitId(visitId);
       questionnaireSo.setAnonymous(false);
     } else {
@@ -128,7 +125,7 @@ public class QuestionnairesListFragment extends
 
   @Override
   protected NQuestionnaireListAdapter getAdapter() {
-    return new NQuestionnaireListAdapter(oldMainActivity, getDataModel());
+    return new NQuestionnaireListAdapter(mainActivity, getDataModel());
   }
 
   @Override
@@ -140,8 +137,9 @@ public class QuestionnairesListFragment extends
       args.putLong(Constants.QUESTIONAIRE_ID, questionnaireListModel.getPrimaryKey());
       args.putLong(Constants.VISIT_ID, questionnaireListModel.getVisitId());
       args.putInt(Constants.PARENT,
-          parent == 0 ? OldMainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID : parent);
-      oldMainActivity.changeFragment(OldMainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
+          parent == 0 ? MainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID : parent);
+      args.putLong(Constants.ANSWERS_GROUP_NO,questionnaireListModel.getAnswersGroupNo());
+      mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
     };
   }
 
@@ -157,7 +155,7 @@ public class QuestionnairesListFragment extends
 
   @Override
   public int getFragmentId() {
-    return OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID;
+    return MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID;
   }
 
   @Override

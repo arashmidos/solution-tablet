@@ -71,7 +71,7 @@ public class VisitInformationDataTransferBizImpl extends
 
   @Override
   public String getMethod() {
-    return "visit";
+    return "visits";
   }
 
   @Override
@@ -91,8 +91,7 @@ public class VisitInformationDataTransferBizImpl extends
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity<VisitInformationDto> httpEntity = new HttpEntity<>(data, headers);
-    return httpEntity;
+    return new HttpEntity<>(data, headers);
   }
 
   public void setData(VisitInformationDto data) {

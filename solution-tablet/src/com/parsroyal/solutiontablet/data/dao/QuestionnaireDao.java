@@ -13,4 +13,5 @@ public interface QuestionnaireDao extends BaseDao<Questionnaire, Long> {
   List<QuestionnaireListModel> searchForQuestionnaires(QuestionnaireSo questionnaireSo);
   List<QuestionnaireListModel> searchForQuestionsList(QuestionnaireSo questionnaireSo);
 
+  Long getNextAnswerGroupNo();
 }
