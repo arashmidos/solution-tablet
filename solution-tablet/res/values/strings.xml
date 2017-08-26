@@ -446,6 +446,8 @@
   <string name="carton">کارتن</string>
   <string name="total">جمع کل</string>
   <string name="none_added_successfully">ثبت عدم انجام شد.</string>
+  <string name="good_code_x">کد کالا: %s</string>
+  <string name="recovery_date_x">راس پرداخت %s</string>
 
 
 </resources>

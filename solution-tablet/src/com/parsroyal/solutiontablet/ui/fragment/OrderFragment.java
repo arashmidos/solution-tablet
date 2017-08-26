@@ -39,6 +39,8 @@ public class OrderFragment extends BaseFragment {
   RecyclerView recyclerView;
   @BindView(R.id.no_good_lay)
   LinearLayout noGoodLay;
+  @BindView(R.id.bottom_bar)
+  LinearLayout bottomBar;
 
   private boolean isClose = false;
   private List<Goods> goodsList;
@@ -46,7 +48,7 @@ public class OrderFragment extends BaseFragment {
   private GoodsAdapter adapter;
   private GoodsSo goodsSo = new GoodsSo();
   private MainActivity mainActivity;
-  private boolean viewOnly;
+  private boolean readOnly;
 
   public OrderFragment() {
     // Required empty public constructor
@@ -65,7 +67,10 @@ public class OrderFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     mainActivity.changeTitle(getString(R.string.title_goods_list));
     goodsService = new GoodsServiceImpl(getActivity());
-    viewOnly = getArguments().getBoolean(Constants.VIEW_ONLY);
+    readOnly = getArguments().getBoolean(Constants.READ_ONLY);
+    if (readOnly) {
+      bottomBar.setVisibility(View.GONE);
+    }
     setUpRecyclerView();
     addSearchListener();
     return view;
@@ -74,7 +79,7 @@ public class OrderFragment extends BaseFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     goodsSo.setConstraint("");
-    adapter = new GoodsAdapter(mainActivity, goodsService.searchForGoodsList(goodsSo));
+    adapter = new GoodsAdapter(mainActivity, goodsService.searchForGoodsList(goodsSo), readOnly);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
@@ -133,5 +138,10 @@ public class OrderFragment extends BaseFragment {
         Toast.makeText(mainActivity, "bottom", Toast.LENGTH_SHORT).show();
         break;
     }
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
   }
 }

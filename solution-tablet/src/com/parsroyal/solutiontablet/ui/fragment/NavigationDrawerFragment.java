@@ -69,9 +69,11 @@ public class NavigationDrawerFragment extends Fragment {
       R.id.customers_lay, R.id.map_lay, R.id.setting_lay, R.id.about_us, R.id.body_log_out,
       R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay})
   public void onClick(View view) {
+    boolean closeDrawer = true;
     switch (view.getId()) {
       case R.id.user_name_tv:
         changeMode();
+        closeDrawer = false;
         break;
       case R.id.features_list_lay:
         mainActivity.changeFragment(MainActivity.FEATURE_FRAGMENT_ID, true);
@@ -112,7 +114,9 @@ public class NavigationDrawerFragment extends Fragment {
         mainActivity.changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, args2, true);
         break;
     }
-    mainActivity.closeDrawer();
+    if (closeDrawer) {
+      mainActivity.closeDrawer();
+    }
   }
 
   private void changeMode() {

@@ -64,10 +64,6 @@ import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseFragmentActivity {
@@ -399,15 +395,15 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   public void closeDrawer() {
-    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-      drawerLayout.closeDrawer(GravityCompat.START);
+    if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      drawerLayout.closeDrawer(GravityCompat.END);
     }
   }
 
   @Override
   public void onBackPressed() {
-    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-      drawerLayout.closeDrawer(GravityCompat.START);
+    if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      drawerLayout.closeDrawer(GravityCompat.END);
       return;
     }
 
@@ -537,7 +533,7 @@ public class MainActivity extends BaseFragmentActivity {
         break;*/
       case GOODS_LIST_FRAGMENT_ID:
         fragment = OrderFragment.newInstance();
-        args.putBoolean(Constants.VIEW_ONLY, true);
+        args.putBoolean(Constants.READ_ONLY, true);
         fragment.setArguments(args);
         break;
       /*case SAVE_LOCATION_FRAGMENT_ID:

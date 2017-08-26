@@ -9,24 +9,29 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.ui.MainActivity;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 
 
 public class CustomerInfoFragment extends Fragment {
 
-  @BindView(R.id.store_tv) TextView storeTv;
-  @BindView(R.id.drop_img) ImageView dropImg;
-  @BindView(R.id.show_more_tv) TextView showMoreTv;
-  @BindView(R.id.location_tv) TextView locationTv;
-  @BindView(R.id.mobile_tv) TextView mobileTv;
-  @BindView(R.id.phone_tv) TextView phoneTv;
-  @BindView(R.id.customer_detail_lay) LinearLayout customerDetailLay;
+  @BindView(R.id.store_tv)
+  TextView storeTv;
+  @BindView(R.id.drop_img)
+  ImageView dropImg;
+  @BindView(R.id.show_more_tv)
+  TextView showMoreTv;
+  @BindView(R.id.location_tv)
+  TextView locationTv;
+  @BindView(R.id.mobile_tv)
+  TextView mobileTv;
+  @BindView(R.id.phone_tv)
+  TextView phoneTv;
+  @BindView(R.id.customer_detail_lay)
+  LinearLayout customerDetailLay;
 
   private boolean isShowMore = true;
 
@@ -42,7 +47,7 @@ public class CustomerInfoFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_customer_info, container, false);
     ButterKnife.bind(this, view);
@@ -58,7 +63,9 @@ public class CustomerInfoFragment extends Fragment {
     storeTv.setText("شکیب ایز د بست");
   }
 
-  @OnClick({R.id.show_more_tv, R.id.register_order_lay, R.id.register_payment_lay, R.id.register_questionnaire_lay, R.id.register_image_lay, R.id.end_and_exit_visit_lay, R.id.no_activity_lay})
+  @OnClick({R.id.show_more_tv, R.id.register_order_lay, R.id.register_payment_lay,
+      R.id.register_questionnaire_lay, R.id.register_image_lay, R.id.end_and_exit_visit_lay,
+      R.id.no_activity_lay})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_order_lay:
