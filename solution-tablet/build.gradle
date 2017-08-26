@@ -30,7 +30,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 63
-        versionName "2.10.7"
+        versionName "2.10.7-ui"
         vectorDrawables.useSupportLibrary = true
         jackOptions {
             enabled true

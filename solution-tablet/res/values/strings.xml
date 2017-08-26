@@ -439,5 +439,6 @@
   <string name="search_goods_hint">جستجو در کالا ها...</string>
   <string name="order_goods">کالاهای سفارشات</string>
   <string name="no_good">متاسفانه کالایی یافت نشد!</string>
+  <string name="none_added_successfully">ثبت عدم انجام شد.</string>
 
 </resources>

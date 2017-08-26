@@ -102,7 +102,7 @@ public class GeneralQuestionnairesFragment extends
       args.putLong(Constants.QUESTIONAIRE_ID, questionnaireListModel.getBackendId());
       args.putLong(Constants.VISIT_ID, visitId);
       args.putLong(Constants.CUSTOMER_ID, customerId);
-      args.putLong(Constants.ANSWERS_GROUP_NO, parent == MainActivity.NEW_CUSTOMER_FRAGMENT_ID ? 0
+      args.putLong(Constants.ANSWERS_GROUP_NO, parent == OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID ? 0
           : questionnaireService.getNextAnswerGroupNo());
       args.putInt(Constants.PARENT, parent);
       oldMainActivity.changeFragment(OldMainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);

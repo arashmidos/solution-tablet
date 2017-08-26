@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +18,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
@@ -30,17 +33,11 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.ToastUtil;
-
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * @author Shakib
@@ -69,6 +66,8 @@ public class PathDetailFragment extends BaseFragment {
   private boolean filterByNone = false;
   private boolean filterByOrder = false;
   private String filterDistance = "";
+  private int filterDistanceInMeter;
+  private boolean filterApplied = false;
 
   public static PathDetailFragment newInstance() {
     return new PathDetailFragment();
@@ -76,7 +75,7 @@ public class PathDetailFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_path_detail, container, false);
     ButterKnife.bind(this, view);
@@ -108,12 +107,11 @@ public class PathDetailFragment extends BaseFragment {
     pathCodeTv.setText(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
     mainActivity
         .changeTitle(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
-
   }
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new PathDetailAdapter(mainActivity, getCustomersList());
+    adapter = new PathDetailAdapter(mainActivity, getCustomersList(), visitlineBackendId);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
@@ -121,7 +119,6 @@ public class PathDetailFragment extends BaseFragment {
 
   private List<CustomerListModel> getCustomersList() {
     customerList = customerService.getAllCustomersListModelByVisitLineBackendId(visitlineBackendId);
-    sort(sortType);
     return customerList;
   }
 
@@ -129,7 +126,6 @@ public class PathDetailFragment extends BaseFragment {
     searchEdt.addTextChangedListener(new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
       }
 
       @Override
@@ -143,8 +139,7 @@ public class PathDetailFragment extends BaseFragment {
 
       @Override
       public void afterTextChanged(Editable s) {
-        //TODO FILTER DATA
-
+        new RefreshAsyncTask().execute(s.toString());
       }
     });
   }
@@ -175,16 +170,16 @@ public class PathDetailFragment extends BaseFragment {
     alertDialog.show();
     sortRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
       RadioButton selectedRadio = (RadioButton) dialogView.findViewById(checkedId);
-      String tag = (String) selectedRadio.getTag();
-      sort(tag);
-      sortType = tag;
+      sortType = (String) selectedRadio.getTag();
+
+      new RefreshAsyncTask().execute(searchEdt.getText().toString());
       alertDialog.cancel();
     });
   }
 
-  private void sort(String type) {
+  private void sort() {
 
-    switch (type) {
+    switch (sortType) {
       case "0":
         Collections.sort(customerList,
             (item1, item2) -> item1.getCodeNumber().compareTo(item2.getCodeNumber()));
@@ -202,9 +197,6 @@ public class PathDetailFragment extends BaseFragment {
             .compare(item2.getTitle(), item1.getTitle()));
         break;
     }
-    if (Empty.isNotEmpty(adapter)) {
-      adapter.notifyDataSetChanged();
-    }
   }
 
   private void showFilterDialog() {
@@ -221,6 +213,8 @@ public class PathDetailFragment extends BaseFragment {
     CheckBox filterOrderCb = (CheckBox) dialogView.findViewById(R.id.filter_order_cb);
     filterOrderCb.setChecked(filterByOrder);
     EditText distanceEdt = (EditText) dialogView.findViewById(R.id.distance_edt);
+    TextView errorMessageTv = (TextView) dialogView.findViewById(R.id.error_msg);
+
     if (Empty.isNotEmpty(filterDistance)) {
       distanceEdt.setText(filterDistance);
     }
@@ -236,8 +230,8 @@ public class PathDetailFragment extends BaseFragment {
       filterByNone = false;
       filterByOrder = false;
       filterDistance = "";
-      adapter.setDataModel(getCustomersList());
-      adapter.notifyDataSetChanged();
+      filterApplied = false;
+      new RefreshAsyncTask().execute(searchEdt.getText().toString());
       alertDialog.dismiss();
     });
     doFilterBtn.setOnClickListener(v -> {
@@ -246,54 +240,86 @@ public class PathDetailFragment extends BaseFragment {
       filterByOrder = filterOrderCb.isChecked();
       filterByNone = filterNoneCb.isChecked();
 
-      int distance;
       if (Empty.isNotEmpty(filterDistance)) {
         try {
-          distance = Integer.parseInt(filterDistance);
+          filterDistanceInMeter = Integer.parseInt(filterDistance);
 
-          if (distance < 0 || distance > 500) {//TODO: change this errors to inline
-            ToastUtil.toastMessage(getActivity(), R.string.error_filter_max_distance);
+          if (filterDistanceInMeter < 0
+              || filterDistanceInMeter > 500) {
+            errorMessageTv.setText(R.string.error_filter_max_distance);
+            errorMessageTv.setVisibility(View.VISIBLE);
             filterDistance = "";
             distanceEdt.setText("");
             return;
           }
-        } catch (NumberFormatException e) {////TODO: change this errors to inline
-          ToastUtil.toastMessage(getActivity(), R.string.error_filter_is_not_correct);
+        } catch (NumberFormatException e) {
+          errorMessageTv.setText(R.string.error_filter_is_not_correct);
+          errorMessageTv.setVisibility(View.VISIBLE);
           filterDistance = "";
           distanceEdt.setText("");
           return;
         }
       } else {
-        distance = 0;
+        filterDistanceInMeter = 0;
       }
 
-      if (distance == 0 && !filterByOrder && !filterByNone) {//TODO: change this errors to inline
-        ToastUtil.toastMessage(getActivity(), R.string.error_no_filter_selected);
+      if (filterDistanceInMeter == 0 && !filterByOrder
+          && !filterByNone) {
+        errorMessageTv.setText(R.string.error_no_filter_selected);
+        errorMessageTv.setVisibility(View.VISIBLE);
         return;
       }
-      doFilter(distance, filterByOrder, filterByNone);
 
+      filterApplied = true;
+      new RefreshAsyncTask().execute(searchEdt.getText().toString());
       alertDialog.cancel();
     });
   }
 
-  public void doFilter(int distance, boolean hasOrder, boolean hasNone) {
-    adapter.setDataModel(getCustomersList());
-
-    for (Iterator<CustomerListModel> it = adapter.getDataModel().iterator(); it.hasNext(); ) {
+  public void doFilter() {
+    if (!filterApplied) {
+      return;
+    }
+    for (Iterator<CustomerListModel> it = customerList.iterator(); it.hasNext(); ) {
       CustomerListModel listModel = it.next();
-      if (listModel.hasOrder() != hasOrder || listModel.hasRejection() != hasNone) {
+      if (listModel.hasOrder() != filterByOrder || listModel.hasRejection() != filterByNone) {
         it.remove();
-      } else if (distance != 0)//If meter filter set
+      } else if (filterDistanceInMeter != 0)//If meter filter set
       {
         //If has not location or it's greater than user filter
-        if (listModel.getDistance() == -1 || listModel.getDistance() > distance) {
+        if (listModel.getDistance() == -1 || listModel.getDistance() > filterDistanceInMeter) {
           it.remove();
         }
       }
     }
+
     Analytics.logCustom("Filter", new String[]{"Distance", "Has Order", "Has none"},
-        String.valueOf(distance), String.valueOf(hasOrder), String.valueOf(hasNone));
-    adapter.notifyDataSetChanged();
+        String.valueOf(filterDistanceInMeter), String.valueOf(filterByOrder),
+        String.valueOf(filterByNone));
+  }
+
+  private class RefreshAsyncTask extends AsyncTask<String, Void, List<CustomerListModel>> {
+
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();//TODO: Shakib,Show progressbar
+    }
+
+
+    @Override
+    protected List<CustomerListModel> doInBackground(String... params) {
+      customerList = adapter.getFilteredData(params[0]);
+      doFilter();
+      sort();
+      return customerList;
+    }
+
+    @Override
+    protected void onPostExecute(List<CustomerListModel> customerListModels) {
+      //// TODO: Shakib, hide progressbar
+      customerList = customerListModels;
+      adapter.setDataModel(customerList);
+      adapter.notifyDataSetChanged();
+    }
   }
 }

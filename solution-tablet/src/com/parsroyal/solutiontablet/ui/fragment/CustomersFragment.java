@@ -185,24 +185,4 @@ public class CustomersFragment extends BaseListFragment<CustomerListModel, Custo
   public int getFragmentId() {
     return OldMainActivity.CUSTOMERS_FRAGMENT_ID;
   }
-
-  @Override
-  public void onPause() {
-    super.onPause();
-  }
-
-  @Override
-  public void onResume() {
-    super.onResume();
-  }
-
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-  }
-
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-  }
 }
