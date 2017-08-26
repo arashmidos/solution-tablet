@@ -10,12 +10,14 @@ import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
+import com.parsroyal.solutiontablet.data.model.QAnswerDto;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 
 /**
@@ -23,6 +25,7 @@ import java.util.List;
  */
 public class QuestionnaireServiceImpl implements QuestionnaireService {
 
+  private final SettingServiceImpl settingService;
   private Context context;
   private QuestionnaireDao questionnaireDao;
   private QuestionDao questionDao;
@@ -33,6 +36,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     this.questionnaireDao = new QuestionnaireDaoImpl(context);
     this.questionDao = new QuestionDaoImpl(context);
     this.qAnswerDao = new QAnswerDaoImpl(context);
+    this.settingService = new SettingServiceImpl(context);
   }
 
   @Override
@@ -46,15 +50,17 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   }
 
   @Override
-  public QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId) {
-    return questionDao.getQuestionDto(questionId, visitId, goodsBackendId);
+  public QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId,
+      Long answersGroupNo) {
+    return questionDao.getQuestionDto(questionId, visitId, goodsBackendId, answersGroupNo);
   }
 
   @Override
   public QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
-      Long goodsBackendId, boolean isNext) {
+      Long goodsBackendId, boolean isNext, Long answersGroupNo) {
     return questionDao
-        .getQuestionDto(questionnaireBackendId, visitId, order, goodsBackendId, isNext);
+        .getQuestionDto(questionnaireBackendId, visitId, order, goodsBackendId, isNext,
+            answersGroupNo);
   }
 
   @Override
@@ -71,8 +77,17 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   }
 
   @Override
-  public List<QAnswer> getAllAnswersForSend() {
-    return qAnswerDao.getAllQAnswersForSend();
+  public List<QAnswerDto> getAllAnswersDtoForSend() {
+    List<QAnswerDto> answersGroupList = qAnswerDao.getAllQAnswersDtoForSend();
+
+    String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
+    for (int i = 0; i < answersGroupList.size(); i++) {
+      QAnswerDto qAnswerDto = answersGroupList.get(i);
+      qAnswerDto.setAnswers(qAnswerDao.getAllAnswerDetailByGroupId(qAnswerDto.getAnswersGroupNo()));
+      qAnswerDto.setSalesmanId(Long.valueOf(salesmanId));
+    }
+
+    return answersGroupList;
   }
 
   @Override
@@ -83,6 +98,11 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   @Override
   public List<QuestionnaireListModel> searchForQuestionsList(QuestionnaireSo questionnaireSo) {
     return questionnaireDao.searchForQuestionsList(questionnaireSo);
+  }
+
+  @Override
+  public Long getNextAnswerGroupNo() {
+    return questionnaireDao.getNextAnswerGroupNo();
   }
 
   @Override

@@ -80,7 +80,7 @@ public class NavigationDrawerFragment extends Fragment {
         Toast.makeText(getActivity(), "customers", Toast.LENGTH_SHORT).show();//TODO: update
         break;
       case R.id.today_paths_lay:
-        Toast.makeText(getActivity(), "path", Toast.LENGTH_SHORT).show();//TODO: update
+        mainActivity.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
         break;
       case R.id.reports_lay:
         Toast.makeText(getActivity(), "report", Toast.LENGTH_SHORT).show();//TODO: update

@@ -4,7 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:layout_margin="6dp"
-  tools:context=".ui.OldMainActivity">
+  tools:mainActivity=".ui.OldMainActivity">
 
   <TextView
     android:id="@+id/error_msg"
@@ -26,7 +26,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:name="com.google.android.gms.maps.SupportMapFragment"
-      tools:context=".ui.OldMainActivity"/>
+      tools:mainActivity=".ui.OldMainActivity"/>
 
     <LinearLayout
       android:id="@+id/locationMarker"

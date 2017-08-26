@@ -225,7 +225,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         + VisitInformation.COL_CUSTOMER_BACKEND_ID +
         " LEFT OUTER JOIN COMMER_VISIT_INFORMATION_DETAIL vd on vi._id = vd.VISIT_INFORMATION_ID ";
 
-    String orderBy = "c." + Customer.COL_ID + " ";
+    String orderBy = "c." + Customer.COL_CODE + " ASC ";
 
     String selection = "";
     String[] args = null;

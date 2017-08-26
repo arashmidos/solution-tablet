@@ -163,12 +163,26 @@
     android:textSize="12sp"
     tools:text="85 88 366 0938" />
 
+  <TextView
+    android:id="@+id/error_msg"
+    android:textStyle="bold"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:layout_alignRight="@id/customer_name_tv"
+    android:layout_below="@id/phone_tv"
+    android:gravity="right"
+    android:textColor="@color/red"
+    android:textSize="12sp"
+    android:visibility="gone"
+    tools:text="فاصله شما تا مشتری بیش از حد مجاز تعریف شده است." />
+
   <View
     android:id="@+id/devider_bottom"
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:layout_marginTop="20dp"
-    android:layout_below="@id/phone_tv"
+    android:layout_below="@id/error_msg"
     android:background="@color/navigation_drawer_divider" />
 
   <TextView

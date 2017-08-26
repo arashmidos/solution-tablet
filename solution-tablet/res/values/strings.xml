@@ -445,5 +445,7 @@
   <string name="enter_count_amount">تعداد یا مقدار کالا راوارد نمایید</string>
   <string name="carton">کارتن</string>
   <string name="total">جمع کل</string>
+  <string name="none_added_successfully">ثبت عدم انجام شد.</string>
+
 
 </resources>

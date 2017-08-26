@@ -22,12 +22,13 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
-import com.parsroyal.solutiontablet.ui.OldMainActivity;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -186,10 +187,10 @@ public class LocationUpdatesService extends Service {
     // Called when the last client (MainActivity in case of this sample) unbinds from this
     // service. If this method is called due to a configuration change in MainActivity, we
     // do nothing. Otherwise, we make this service a foreground service.
-//    if (changingConfiguration) {
+    if (changingConfiguration) {
       Log.i(TAG, "Starting foreground service");
       startForeground(NOTIFICATION_ID, getNotification());
-//    }
+    }
     return true; // Ensures onRebind() is called when a client re-binds.
   }
 
@@ -241,7 +242,7 @@ public class LocationUpdatesService extends Service {
 
     // The PendingIntent to launch activity.
     PendingIntent activityPendingIntent = PendingIntent.getActivity(this, 0,
-        new Intent(this, OldMainActivity.class), 0);
+        new Intent(this, MainActivity.class), 0);
 
     return new NotificationCompat.Builder(this)
         .addAction(R.drawable.ic_launch, getString(R.string.launch_activity), activityPendingIntent)
@@ -262,6 +263,7 @@ public class LocationUpdatesService extends Service {
       lastLocation.setLongitude(lastPosition.getLongitude());
       lastLocation.setSpeed(lastPosition.getSpeed());
       lastLocation.setAccuracy(lastPosition.getAccuracy());
+      lastLocation.setTime(lastPosition.getDate().getTime());
     }
   }
 
@@ -270,25 +272,21 @@ public class LocationUpdatesService extends Service {
 
     if (Empty.isNotEmpty(location)) {
       EventBus.getDefault().post(new GPSEvent(location));
-    } else {
-      return;
     }
 
-    Intent intent = new Intent(this, SaveLocationService.class);
-    intent.putExtra(EXTRA_LOCATION, location);
-
     if (isAccepted(location)) {
-      Log.i(TAG, "location accepted " + location);
+      Log.i(TAG, "location accepted");
+
+      Intent intent = new Intent(this, SaveLocationService.class);
+      intent.putExtra(EXTRA_LOCATION, location);
+
       if (Empty.isEmpty(lastLocation)) {
-        intent.putExtra("FIRST", true);
+        intent.putExtra(Constants.FIRST_POSITION, true);
       }
       this.lastLocation = location;
 
-      intent.putExtra("ACCEPTED", true);
-    } else {
-      intent.putExtra("ACCEPTED", false);
+      startService(intent);
     }
-    startService(intent);
 
     // Update notification content if running as a foreground service.
     if (serviceIsRunningInForeground(this)) {
@@ -297,7 +295,8 @@ public class LocationUpdatesService extends Service {
   }
 
   private boolean isAccepted(Location location) {
-    if (Empty.isEmpty(lastLocation)) {
+    //Accept first position what ever it is
+    if (Empty.isEmpty(lastLocation) && Empty.isNotEmpty(location)) {
       return true;
     }
     if ((Empty.isEmpty(location) || location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER
@@ -310,7 +309,12 @@ public class LocationUpdatesService extends Service {
       float distance = LocationUtil.distanceBetween(lastLocation, location);
       if (distance
           > MAX_ACCEPTED_DISTANCE_IN_METER /*|| distance < MIN_ACCEPTED_DISTANCE_IN_METER*/) {
-        return false;
+        long lastTime = lastLocation.getTime();
+        long currentTime = location.getTime();
+
+        if (currentTime - lastTime < 30 * 1000) {
+          return false;
+        }
       }
 
       if (distance < lastLocation.getAccuracy() + location.getAccuracy()) {

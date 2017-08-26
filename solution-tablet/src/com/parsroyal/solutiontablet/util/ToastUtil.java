@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.util;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.Gravity;
 import android.view.View;
@@ -27,10 +26,12 @@ public class ToastUtil {
     builder.setTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
     builder.setDuration(Snacky.LENGTH_LONG);
     final Snackbar snack = builder.info();
-    View view = snack.getView();
-    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-    params.gravity = Gravity.TOP;
-    view.setLayoutParams(params);
+    if (MultiScreenUtility.isTablet(activity)) {
+      View view = snack.getView();
+      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+      params.gravity = Gravity.TOP;
+      view.setLayoutParams(params);
+    }
     snack.show();
   }
 
@@ -47,10 +48,12 @@ public class ToastUtil {
     builder.setTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
     builder.setDuration(Snacky.LENGTH_LONG);
     final Snackbar snack = builder.success();
-    View view = snack.getView();
-    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-    params.gravity = Gravity.TOP;
-    view.setLayoutParams(params);
+    if (MultiScreenUtility.isTablet(activity)) {
+      View view = snack.getView();
+      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+      params.gravity = Gravity.TOP;
+      view.setLayoutParams(params);
+    }
     snack.show();
   }
 
@@ -79,10 +82,12 @@ public class ToastUtil {
     builder.setActionTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
     builder.setDuration(Snacky.LENGTH_INDEFINITE);
     final Snackbar snack = builder.build();
-    View view = snack.getView();
-    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-    params.gravity = Gravity.TOP;
-    view.setLayoutParams(params);
+    if (MultiScreenUtility.isTablet(activity)) {
+      View view = snack.getView();
+      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+      params.gravity = Gravity.TOP;
+      view.setLayoutParams(params);
+    }
     snack.setAction(activity.getString(R.string.button_ok), v -> {
       snack.dismiss();
       if (Empty.isNotEmpty(listener)) {

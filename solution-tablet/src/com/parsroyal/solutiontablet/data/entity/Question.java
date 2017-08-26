@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.data.entity;
 
 import com.parsroyal.solutiontablet.constants.QuestionType;
+import com.parsroyal.solutiontablet.util.DateUtil;
+import java.util.Date;
 
 /**
  * Created by Mahyar on 7/21/2015.
@@ -39,6 +41,25 @@ public class Question extends BaseEntity<Long> {
   private Long status;
   private Integer order;
   private QuestionType type;
+
+  public Question(Long backendId, Long questionnaireBackendId, String question,
+      String answer, Long status, Integer order,
+      QuestionType type) {
+    this.backendId = backendId;
+    this.questionnaireBackendId = questionnaireBackendId;
+    this.question = question;
+    this.answer = answer;
+    this.status = status;
+    this.order = order;
+    this.type = type;
+    this.createDateTime = DateUtil
+        .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    this.updateDateTime = DateUtil
+        .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+  }
+
+  public Question() {
+  }
 
   public QuestionType getType() {
     return type;

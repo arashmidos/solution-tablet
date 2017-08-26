@@ -8,6 +8,7 @@ public class QuestionSo extends BaseSO {
   private Long questionnaireBackendId;
   private Long visitId;
   private Long goodsBackendId;
+  private Long answersGroupNo;
 
   public Long getQuestionnaireBackendId() {
     return questionnaireBackendId;
@@ -31,5 +32,13 @@ public class QuestionSo extends BaseSO {
 
   public void setGoodsBackendId(Long goodsBackendId) {
     this.goodsBackendId = goodsBackendId;
+  }
+
+  public Long getAnswersGroupNo() {
+    return answersGroupNo;
+  }
+
+  public void setAnswersGroupNo(Long answersGroupNo) {
+    this.answersGroupNo = answersGroupNo;
   }
 }

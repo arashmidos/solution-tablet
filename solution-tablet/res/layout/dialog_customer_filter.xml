@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/customer_lay"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -121,11 +122,25 @@
     android:textColor="@color/black_85"
     android:textSize="14sp" />
 
+  <TextView
+    android:id="@+id/error_msg"
+    android:textStyle="bold"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_alignRight="@+id/filter_order_cb"
+    android:layout_below="@id/filter_order_cb"
+    android:gravity="right"
+    android:textColor="@color/red"
+    android:textSize="14sp"
+    android:visibility="gone"
+    tools:text="فاصله نمی تواند بیش از ۵۰۰ متر باشد" />
+
   <View
     android:id="@+id/devider_bottom"
     android:layout_width="match_parent"
     android:layout_height="1dp"
-    android:layout_below="@id/filter_order_cb"
+    android:layout_below="@id/error_msg"
     android:background="@color/navigation_drawer_divider" />
 
   <TextView

@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import com.parsroyal.solutiontablet.biz.impl.PositionDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SendStatus;
-import com.parsroyal.solutiontablet.data.entity.Position;
+import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -49,13 +49,18 @@ public class SendLocationService extends IntentService {
     Log.i(TAG, "Send locations...");
     String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
     if (Empty.isNotEmpty(salesmanId) && NetworkUtil.isNetworkAvailable(this)) {
-      List<Position> positions = positionService.getAllPositionByStatus(SendStatus.NEW.getId());
+
+      List<PositionDto> positions = positionService
+          .getAllPositionDtoByStatus(SendStatus.NEW.getId());
       if (Empty.isNotEmpty(positions)) {
-        Log.i(TAG, positions.size() + "Locations found ...");
+
         PositionDataTransferBizImpl positionDataTransferBiz = new PositionDataTransferBizImpl(
             this, null);
-        positionDataTransferBiz.setPositions(positions);
-        positionDataTransferBiz.sendAllData();
+        for (int i = 0; i < positions.size(); i++) {
+          PositionDto positionDto = positions.get(i);
+          positionDataTransferBiz.setPosition(positionDto);
+          positionDataTransferBiz.sendAllData();
+        }
       }
     }
   }

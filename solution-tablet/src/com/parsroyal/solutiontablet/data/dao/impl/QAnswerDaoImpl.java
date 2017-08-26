@@ -7,8 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
+import com.parsroyal.solutiontablet.data.entity.Question;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
+import com.parsroyal.solutiontablet.data.model.AnswerDetailDto;
+import com.parsroyal.solutiontablet.data.model.QAnswerDto;
+import com.parsroyal.solutiontablet.util.DateUtil;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +47,7 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     contentValues.put(QAnswer.COL_DATE, entity.getDate());
     contentValues.put(QAnswer.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(QAnswer.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
+    contentValues.put(QAnswer.COL_ANSWERS_GROUP_NO, entity.getAnswersGroupNo());
 
     return contentValues;
   }
@@ -68,7 +75,8 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
         QAnswer.COL_VISIT_ID,
         QAnswer.COL_DATE,
         QAnswer.COL_CREATE_DATE_TIME,
-        QAnswer.COL_UPDATE_DATE_TIME
+        QAnswer.COL_UPDATE_DATE_TIME,//10
+        QAnswer.COL_ANSWERS_GROUP_NO
     };
     return projection;
   }
@@ -88,15 +96,49 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     answer.setDate(cursor.getString(8));
     answer.setCreateDateTime(cursor.getString(9));
     answer.setUpdateDateTime(cursor.getString(10));
+    answer.setAnswersGroupNo(cursor.getLong(11));
 
     return answer;
   }
 
   @Override
-  public List<QAnswer> getAllQAnswersForSend() {
+  public List<QAnswerDto> getAllQAnswersDtoForSend() {
+
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+    String sql = "SELECT "
+        + " a." + QAnswer.COL_CUSTOMER_BACKEND_ID
+        + ",a." + QAnswer.COL_VISIT_ID
+        + ",a." + QAnswer.COL_UPDATE_DATE_TIME
+        + ",a." + QAnswer.COL_ANSWERS_GROUP_NO
+        + ",q." + Question.COL_QUESTIONNAIRE_BACKEND_ID
+        + ",a." + Question.COL_ID
+        + " FROM " + QAnswer.TABLE_NAME
+        + " a LEFT OUTER JOIN " + Question.TABLE_NAME + " q ON a." + QAnswer.COL_QUESTION_BACKEND_ID
+        + "=  q." + Question.COL_BACKEND_ID;
+
     String selection =
-        " " + QAnswer.COL_BACKEND_ID + " is null or " + QAnswer.COL_BACKEND_ID + " = 0";
-    return retrieveAll(selection, null, null, null, null);
+        " WHERE a." + QAnswer.COL_BACKEND_ID + " is null or a." + QAnswer.COL_BACKEND_ID + " = 0 ";
+    String groupBy = "GROUP BY a." + QAnswer.COL_ANSWERS_GROUP_NO;
+    sql = sql.concat(selection).concat(groupBy);
+
+    Cursor cursor = db.rawQuery(sql, null);
+
+    List<QAnswerDto> answersForSend = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      answersForSend.add(createDtoFromEntity(cursor));
+    }
+
+    cursor.close();
+
+    return answersForSend;
+  }
+
+  private QAnswerDto createDtoFromEntity(Cursor cursor) {
+    Date date = DateUtil.convertStringToDate(cursor.getString(2), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    return new QAnswerDto(cursor.getLong(0), cursor.getLong(1), date, cursor.getLong(4),
+        cursor.getLong(3));
   }
 
   @Override
@@ -112,5 +154,26 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     Log.d("QAnswer", "row updated " + rows);
     db.setTransactionSuccessful();
     db.endTransaction();
+  }
+
+  @Override
+  public List<AnswerDetailDto> getAllAnswerDetailByGroupId(Long answersGroupNo) {
+    String selection =
+        " (" + QAnswer.COL_BACKEND_ID + " is null or " + QAnswer.COL_BACKEND_ID + " = 0) AND "
+            + QAnswer.COL_ANSWERS_GROUP_NO + " = ?";
+    List<QAnswer> answerDetails = retrieveAll(selection,
+        new String[]{String.valueOf(answersGroupNo)}, null, null, null);
+
+    List<AnswerDetailDto> answerDetailsForSend = new ArrayList<>();
+    for (int i = 0; i < answerDetails.size(); i++) {
+      QAnswer answerDetail = answerDetails.get(i);
+      answerDetailsForSend.add(createAnswerDetailsDtoFromEntity(answerDetail));
+    }
+    return answerDetailsForSend;
+  }
+
+  private AnswerDetailDto createAnswerDetailsDtoFromEntity(QAnswer answerDetail) {
+    return new AnswerDetailDto(answerDetail.getQuestionBackendId(), answerDetail.getAnswer(),
+        answerDetail.getGoodsBackendId(),answerDetail.getId());
   }
 }
