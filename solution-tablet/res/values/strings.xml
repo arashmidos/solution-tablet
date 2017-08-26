@@ -439,6 +439,13 @@
   <string name="search_goods_hint">جستجو در کالا ها...</string>
   <string name="order_goods">کالاهای سفارشات</string>
   <string name="no_good">متاسفانه کالایی یافت نشد!</string>
+  <string name="add_to_order">افزودن به کالا های سفارش</string>
+  <string name="order_count">مقدار سفارش :</string>
+  <string name="number">عدد</string>
+  <string name="enter_count_amount">تعداد یا مقدار کالا راوارد نمایید</string>
+  <string name="carton">کارتن</string>
+  <string name="total">جمع کل</string>
   <string name="none_added_successfully">ثبت عدم انجام شد.</string>
+
 
 </resources>

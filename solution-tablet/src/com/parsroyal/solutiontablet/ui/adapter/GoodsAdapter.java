@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.Goods;
+import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.fragment.AddOrderDialogFragment;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 
 import java.util.List;
@@ -44,7 +46,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
-    Goods good = goodsList.get(0);
+    Goods good = goodsList.get(position);
     Glide.with(context)
         .load(MediaUtil.getGoodImage(good.getCode()))
         .error(R.drawable.goods_default)
@@ -59,9 +61,15 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
     holder.goodPaymentTv.setText("راس چرداخت : 1");
     holder.mainLay.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        Toast.makeText(context, "layer", Toast.LENGTH_SHORT).show();
+        showOrderDialog();
       }
     });
+  }
+
+  private void showOrderDialog() {
+    FragmentTransaction ft = ((MainActivity) context).getSupportFragmentManager().beginTransaction();
+    AddOrderDialogFragment addOrderDialogFragment = AddOrderDialogFragment.newInstance();
+    addOrderDialogFragment.show(ft, "order");
   }
 
   @Override

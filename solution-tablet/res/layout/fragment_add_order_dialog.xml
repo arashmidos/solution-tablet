@@ -1,0 +1,351 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:elevation="3dp"
+    android:orientation="vertical"
+    tools:context="com.parsroyal.solutiontablet.ui.fragment.AddOrderDialogFragment">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/toolbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@android:color/white"
+                app:title=""
+                app:titleTextColor="@color/white">
+
+            </android.support.v7.widget.Toolbar>
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/add_to_order"
+                android:textColor="@color/primary"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/close"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center|end"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/ic_close_24dp"
+                android:backgroundTint="@color/login_gray"/>
+        </FrameLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="202dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/login_gray"/>
+
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@+id/text"
+                android:layout_centerHorizontal="true"/>
+
+            <RelativeLayout
+                android:id="@+id/good_detail_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp">
+
+                <TextView
+                    android:id="@+id/good_name_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="ست پیج سر چهار سو مدل جی 26"
+                    android:textColor="@color/black_85"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/good_code_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/good_name_tv"
+                    android:layout_marginTop="10dp"
+                    android:text="کد محصول : 516565"
+                    android:textColor="@color/login_gray"
+                    android:textSize="10sp"/>
+
+                <TextView
+                    android:id="@+id/good_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/good_name_tv"
+                    android:layout_marginTop="6dp"
+                    android:layout_toLeftOf="@id/good_code_tv"
+                    android:layout_toStartOf="@id/good_code_tv"
+                    android:gravity="left"
+                    android:textColor="@color/log_in_enter_bg"
+                    android:textSize="14sp"
+                    android:text="12000 تومان"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/good_price_tv"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/login_gray"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="26dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:text="@string/order_count"
+                android:textColor="@color/black_85"
+                android:textSize="14sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent">
+
+                    <Spinner
+                        android:layout_width="122dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/spinner"
+                        android:gravity="right"
+                        android:background="@android:color/white"
+                        android:prompt="@string/number"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/login_gray"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_arrow_drop_down"
+                        android:tint="@color/login_gray"/>
+
+                </RelativeLayout>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_state_background"
+                    android:gravity="right"
+                    android:hint="@string/enter_count_amount"
+                    android:inputType="number"
+                    android:paddingBottom="6dp"
+                    android:textColor="@color/black_85"
+                    android:textColorHint="@color/login_gray"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="55dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="24dp">
+
+                <LinearLayout
+                    android:id="@+id/number_lay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="45dp"
+                    android:layout_marginRight="45dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/number_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/login_gray"
+                        android:textSize="30sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/number"
+                        android:textColor="@color/login_gray"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/carton_lay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_toLeftOf="@id/number_lay"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/carton_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/login_gray"
+                        android:textSize="30sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/carton"
+                        android:textColor="@color/login_gray"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cost_detail_lay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_toLeftOf="@id/carton_lay"
+                    android:background="@drawable/tab_shape_focused_primary"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/coefficient_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="36dp"
+                        android:layout_marginLeft="36dp"
+                        android:layout_marginRight="36dp"
+                        android:layout_marginStart="36dp"
+                        android:layout_marginTop="10dp"
+                        android:text="ضریب فروش : 4"
+                        android:textColor="@color/primary"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/each_Carton_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="36dp"
+                        android:layout_marginLeft="36dp"
+                        android:layout_marginRight="36dp"
+                        android:layout_marginStart="36dp"
+                        android:text="هرکارتن = 5عدد"
+                        android:textColor="@color/primary"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/login_gray"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp">
+
+                <Button
+                    android:id="@+id/register_order_btn"
+                    android:layout_width="196dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="8dp"
+                    android:background="@color/log_in_enter_bg"
+                    android:gravity="center"
+                    android:text="@string/register_order"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    />
+
+                <TextView
+                    android:id="@+id/total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/total"
+                    android:textColor="@color/login_gray"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/total_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/total"
+                    android:layout_toLeftOf="@id/register_order_btn"
+                    android:layout_toStartOf="@id/register_order_btn"
+                    android:gravity="left"
+                    android:textColor="@color/log_in_enter_bg"
+                    android:textSize="16sp"
+                    android:text="12000 تومان"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

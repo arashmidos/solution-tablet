@@ -24,6 +24,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,18 +64,15 @@ import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends BaseFragmentActivity {
 
-  @BindView(R.id.toolbar)
-  Toolbar toolbar;
-  @BindView(R.id.drawer_layout)
-  DrawerLayout drawerLayout;
-  @BindView(R.id.toolbar_title)
-  TextView toolbarTitle;
-
   public static final String TAG = MainActivity.class.getSimpleName();
-  private ActionBar actionBar;
-
   public static final int FEATURE_FRAGMENT_ID = 0;
   public static final int CUSTOMER_LIST_FRAGMENT_ID = 1;
   public static final int VISIT_DETAIL_FRAGMENT_ID = 2;
@@ -85,25 +83,20 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int GOODS_LIST_FRAGMENT_ID = 16;
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
-
-  private LocationUpdatesService gpsRecieverService = null;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.drawer_layout)
+  DrawerLayout drawerLayout;
+  @BindView(R.id.toolbar_title)
+  TextView toolbarTitle;
+  @BindView(R.id.navigation_img)
+  ImageView navigationImg;
+  private ActionBar actionBar;
+  private LocationUpdatesService gpsRecieverService = null;
   private DataTransferService dataTransferService;
 
   private boolean boundToGpsService = false;
-
-  private BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
-        if (!GPSUtil.isGpsAvailable(context)) {
-          showGpsOffDialog();
-          Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
-        }
-      }
-    }
-  };
-
   private final ServiceConnection serviceConnection = new ServiceConnection() {
 
     @Override
@@ -120,6 +113,17 @@ public class MainActivity extends BaseFragmentActivity {
       boundToGpsService = false;
     }
   };
+  private BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
+        if (!GPSUtil.isGpsAvailable(context)) {
+          showGpsOffDialog();
+          Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
+        }
+      }
+    }
+  };
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -128,7 +132,6 @@ public class MainActivity extends BaseFragmentActivity {
     ButterKnife.bind(this);
 
     dataTransferService = new DataTransferServiceImpl(this);
-    setUpToolbar();
 
     if (!BuildConfig.DEBUG) {
       logUser();
@@ -141,19 +144,8 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
 
-  //set up toolbar and handle toolbar back
-  private void setUpToolbar() {
-    setSupportActionBar(toolbar);
-    actionBar = getSupportActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
-    toolbar.setNavigationIcon(R.drawable.ic_menu);
-    toolbar.setNavigationOnClickListener(v -> {
-      if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-        drawerLayout.closeDrawer(GravityCompat.START);
-      } else {
-        drawerLayout.openDrawer(GravityCompat.START);
-      }
-    });
+  public void setNavigationToolbarIcon(int id) {
+    navigationImg.setImageResource(id);
   }
 
   private void showVersionDialog() {
@@ -175,6 +167,8 @@ public class MainActivity extends BaseFragmentActivity {
       startGpsService();
       new TrackerAlarmReceiver().setAlarm(this);
     }
+
+    //TODO: If instance of data transfer completed
   }
 
   @Override
@@ -297,7 +291,7 @@ public class MainActivity extends BaseFragmentActivity {
    */
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-      @NonNull int[] grantResults) {
+                                         @NonNull int[] grantResults) {
     Log.i(TAG, "onRequestPermissionResult");
     if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
       if (grantResults.length <= 0) {
@@ -476,6 +470,11 @@ public class MainActivity extends BaseFragmentActivity {
   private BaseFragment findFragment(int fragmentId, Bundle args) {
     BaseFragment fragment = null;
     int parent = 0;
+    if (fragmentId == FEATURE_FRAGMENT_ID)
+      setNavigationToolbarIcon(R.drawable.ic_menu);
+    else
+      setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
+
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
         fragment = FeaturesFragment.newInstance();
@@ -580,5 +579,18 @@ public class MainActivity extends BaseFragmentActivity {
 
   public void changeTitle(String title) {
     toolbarTitle.setText(title);
+  }
+
+  @OnClick(R.id.navigation_img) public void onClick() {
+    Fragment featureFragment = getSupportFragmentManager().findFragmentByTag(FeaturesFragment.class.getSimpleName());
+    if (featureFragment != null && featureFragment.isVisible()) {
+      if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+        drawerLayout.closeDrawer(GravityCompat.END);
+      } else {
+        drawerLayout.openDrawer(GravityCompat.END);
+      }
+    } else {
+      onBackPressed();
+    }
   }
 }
