@@ -24,6 +24,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
@@ -65,6 +66,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseFragmentActivity {
 
@@ -86,6 +88,8 @@ public class MainActivity extends BaseFragmentActivity {
   DrawerLayout drawerLayout;
   @BindView(R.id.toolbar_title)
   TextView toolbarTitle;
+  @BindView(R.id.navigation_img)
+  ImageView navigationImg;
   private ActionBar actionBar;
   private LocationUpdatesService gpsRecieverService = null;
   private DataTransferService dataTransferService;
@@ -126,7 +130,6 @@ public class MainActivity extends BaseFragmentActivity {
     ButterKnife.bind(this);
 
     dataTransferService = new DataTransferServiceImpl(this);
-    setUpToolbar();
 
     if (!BuildConfig.DEBUG) {
       logUser();
@@ -139,19 +142,8 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
 
-  //set up toolbar and handle toolbar back
-  private void setUpToolbar() {
-    setSupportActionBar(toolbar);
-    actionBar = getSupportActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
-    toolbar.setNavigationIcon(R.drawable.ic_menu);
-    toolbar.setNavigationOnClickListener(v -> {
-      if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-        drawerLayout.closeDrawer(GravityCompat.START);
-      } else {
-        drawerLayout.openDrawer(GravityCompat.START);
-      }
-    });
+  public void setNavigationToolbarIcon(int id) {
+    navigationImg.setImageResource(id);
   }
 
   private void showVersionDialog() {
@@ -472,6 +464,11 @@ public class MainActivity extends BaseFragmentActivity {
   private BaseFragment findFragment(int fragmentId, Bundle args) {
     BaseFragment fragment = null;
     int parent = 0;
+    if (fragmentId == FEATURE_FRAGMENT_ID)
+      setNavigationToolbarIcon(R.drawable.ic_menu);
+    else
+      setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
+
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
         fragment = FeaturesFragment.newInstance();
@@ -579,5 +576,18 @@ public class MainActivity extends BaseFragmentActivity {
 
   public void changeTitle(String title) {
     toolbarTitle.setText(title);
+  }
+
+  @OnClick(R.id.navigation_img) public void onClick() {
+    Fragment featureFragment = getSupportFragmentManager().findFragmentByTag(FeaturesFragment.class.getSimpleName());
+    if (featureFragment != null && featureFragment.isVisible()) {
+      if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+        drawerLayout.closeDrawer(GravityCompat.END);
+      } else {
+        drawerLayout.openDrawer(GravityCompat.END);
+      }
+    } else {
+      onBackPressed();
+    }
   }
 }

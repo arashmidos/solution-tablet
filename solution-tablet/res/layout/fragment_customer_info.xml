@@ -93,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <View
                 android:layout_width="56dp"
@@ -420,8 +420,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="18dp"
                 android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_phone_android"
-                android:tint="@color/login_gray"/>
+                android:src="@drawable/ic_run_24_dp"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -465,9 +465,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="18dp"
                 android:layout_marginEnd="18dp"
-                android:rotation="270"
-                android:src="@drawable/ic_phone"
-                android:tint="@color/login_gray"/>
+                android:src="@drawable/ic_non_action_24_dp"/>
 
             <TextView
                 android:layout_width="match_parent"

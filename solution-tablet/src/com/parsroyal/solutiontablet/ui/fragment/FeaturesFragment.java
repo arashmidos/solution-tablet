@@ -1,21 +1,19 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.FeaturesAdapter;
+import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class FeaturesFragment extends BaseFragment {
 
@@ -47,7 +45,7 @@ public class FeaturesFragment extends BaseFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     adapter = new FeaturesAdapter(getActivity(), FeatureList.getFeatureList(getActivity()));
-    GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+    RtlGridLayoutManager gridLayoutManager = new RtlGridLayoutManager(getActivity(), 2);
     recyclerView.setLayoutManager(gridLayoutManager);
     recyclerView.setAdapter(adapter);
   }
