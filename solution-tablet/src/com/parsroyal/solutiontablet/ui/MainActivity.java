@@ -79,10 +79,10 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int CUSTOMER_LIST_FRAGMENT_ID = 1;
   public static final int VISIT_DETAIL_FRAGMENT_ID = 2;
   public static final int CUSTOMER_ORDER_FRAGMENT_ID = 3;
-  public static final int ORDER_FRAGMENT_ID = 4;
   public static final int SETTING_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
+  public static final int GOODS_LIST_FRAGMENT_ID = 16;
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
 
@@ -486,9 +486,6 @@ public class MainActivity extends BaseFragmentActivity {
       case VISIT_DETAIL_FRAGMENT_ID:
         fragment = NewVisitDetailFragment.newInstance();
         break;
-      case ORDER_FRAGMENT_ID:
-        fragment = OrderFragment.newInstance();
-        break;
       /*case NEW_CUSTOMER_FRAGMENT_ID:
         fragment = new NCustomersFragment();
         break;
@@ -538,13 +535,13 @@ public class MainActivity extends BaseFragmentActivity {
         break;
       case ORDER_DETAIL_FRAGMENT_ID:
         fragment = new OrderDetailFragment();
-        break;
+        break;*/
       case GOODS_LIST_FRAGMENT_ID:
-        fragment = new GoodsListFragment();
-        args.putBoolean("view_all", true);
+        fragment = OrderFragment.newInstance();
+        args.putBoolean(Constants.VIEW_ONLY, true);
         fragment.setArguments(args);
         break;
-      case SAVE_LOCATION_FRAGMENT_ID:
+      /*case SAVE_LOCATION_FRAGMENT_ID:
         fragment = new SaveLocationFragment();
         break;
       case PAYMENT_FRAGMENT_ID://18

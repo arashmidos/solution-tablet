@@ -62,7 +62,7 @@ public class CustomerInfoFragment extends Fragment {
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_order_lay:
-        ((MainActivity) getActivity()).changeFragment(MainActivity.ORDER_FRAGMENT_ID, true);
+        ((MainActivity) getActivity()).changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, true);
         break;
       case R.id.register_payment_lay:
         Toast.makeText(getActivity(), "Payment", Toast.LENGTH_SHORT).show();

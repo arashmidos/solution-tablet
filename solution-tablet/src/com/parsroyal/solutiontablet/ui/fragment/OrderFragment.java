@@ -13,76 +13,77 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsAdapter;
+import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
-
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 public class OrderFragment extends BaseFragment {
 
-  @BindView(R.id.search_img) ImageView searchImg;
-  @BindView(R.id.search_edt) EditText searchEdt;
-  @BindView(R.id.recycler_view) RecyclerView recyclerView;
-  @BindView(R.id.no_good_lay) LinearLayout noGoodLay;
+  @BindView(R.id.search_img)
+  ImageView searchImg;
+  @BindView(R.id.search_edt)
+  EditText searchEdt;
+  @BindView(R.id.recycler_view)
+  RecyclerView recyclerView;
+  @BindView(R.id.no_good_lay)
+  LinearLayout noGoodLay;
 
   private boolean isClose = false;
   private List<Goods> goodsList;
   private GoodsService goodsService;
   private GoodsAdapter adapter;
   private GoodsSo goodsSo = new GoodsSo();
-  private MainActivity activity;
+  private MainActivity mainActivity;
+  private boolean viewOnly;
 
   public OrderFragment() {
     // Required empty public constructor
   }
 
-
   public static OrderFragment newInstance() {
-    OrderFragment fragment = new OrderFragment();
-    return fragment;
+    return new OrderFragment();
   }
-
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_order, container, false);
     ButterKnife.bind(this, view);
-    activity = (MainActivity) getActivity();
-    activity.changeTitle(getString(R.string.title_goods_list));
+    mainActivity = (MainActivity) getActivity();
+    mainActivity.changeTitle(getString(R.string.title_goods_list));
     goodsService = new GoodsServiceImpl(getActivity());
+    viewOnly = getArguments().getBoolean(Constants.VIEW_ONLY);
     setUpRecyclerView();
-    onSearchTextChanged();
+    addSearchListener();
     return view;
   }
 
   //set up recycler view
   private void setUpRecyclerView() {
-    goodsSo.setConstraint(CharacterFixUtil.fixString(""));
-    adapter = new GoodsAdapter(activity, goodsService.searchForGoodsList(goodsSo));
-    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
+    goodsSo.setConstraint("");
+    adapter = new GoodsAdapter(mainActivity, goodsService.searchForGoodsList(goodsSo));
+    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
   }
 
-  private void onSearchTextChanged() {
+  private void addSearchListener() {
     searchEdt.addTextChangedListener(new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
       }
 
       @Override
@@ -98,7 +99,8 @@ public class OrderFragment extends BaseFragment {
 
       @Override
       public void afterTextChanged(Editable s) {
-        goodsSo.setConstraint(CharacterFixUtil.fixString("%" + s.toString() + "%"));
+        String constraint = CharacterFixUtil.fixString("%" + s.toString() + "%");
+        goodsSo.setConstraint(constraint);
         goodsList = goodsService.searchForGoodsList(goodsSo);
         if (goodsList.size() > 0) {
           recyclerView.setVisibility(View.VISIBLE);
@@ -108,22 +110,27 @@ public class OrderFragment extends BaseFragment {
           recyclerView.setVisibility(View.GONE);
           noGoodLay.setVisibility(View.VISIBLE);
         }
+        Analytics.logSearch(constraint, "Type", "Goods");
+
       }
     });
   }
 
-  @Override public int getFragmentId() {
-    return MainActivity.ORDER_FRAGMENT_ID;
+  @Override
+  public int getFragmentId() {
+    return MainActivity.GOODS_LIST_FRAGMENT_ID;
   }
 
-  @OnClick({R.id.search_img, R.id.bottom_bar}) public void onClick(View view) {
+  @OnClick({R.id.search_img, R.id.bottom_bar})
+  public void onClick(View view) {
     switch (view.getId()) {
       case R.id.search_img:
-        if (isClose)
+        if (isClose) {
           searchEdt.setText("");
+        }
         break;
       case R.id.bottom_bar:
-        Toast.makeText(activity, "bottom", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mainActivity, "bottom", Toast.LENGTH_SHORT).show();
         break;
     }
   }

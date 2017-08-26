@@ -33,6 +33,9 @@ public class FeatureList {
         .add(new FeatureList(0, R.drawable.ic_map_black_48dp, context.getString(R.string.map)));
     featureList.add(
         new FeatureList(0, R.drawable.ic_settings_black_48dp, context.getString(R.string.setting)));
+    featureList.add(
+        new FeatureList(0, R.drawable.ic_sidebar_goods,
+            context.getString(R.string.title_goods_list)));//TODO Replace icon
     return featureList;
   }
 

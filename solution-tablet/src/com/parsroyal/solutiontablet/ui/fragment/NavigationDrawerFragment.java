@@ -67,7 +67,7 @@ public class NavigationDrawerFragment extends Fragment {
 
   @OnClick({R.id.user_name_tv, R.id.features_list_lay, R.id.today_paths_lay, R.id.reports_lay,
       R.id.customers_lay, R.id.map_lay, R.id.setting_lay, R.id.about_us, R.id.body_log_out,
-      R.id.get_data_lay, R.id.send_data_lay})
+      R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.user_name_tv:
@@ -78,6 +78,9 @@ public class NavigationDrawerFragment extends Fragment {
         break;
       case R.id.customers_lay:
         Toast.makeText(getActivity(), "customers", Toast.LENGTH_SHORT).show();//TODO: update
+        break;
+      case R.id.goods_lay:
+        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, true);
         break;
       case R.id.today_paths_lay:
         mainActivity.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
