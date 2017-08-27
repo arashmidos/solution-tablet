@@ -448,6 +448,7 @@
   <string name="none_added_successfully">ثبت عدم انجام شد.</string>
   <string name="good_code_x">کد کالا: %s</string>
   <string name="recovery_date_x">راس پرداخت %s</string>
+  <string name="add_none">ثبت عدم</string>
 
 
 </resources>

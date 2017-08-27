@@ -1,490 +1,488 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/features_background"
-    tools:context="com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment"
-    tools:ignore="contentDescription">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/features_background"
+  tools:context="com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment"
+  tools:ignore="contentDescription">
 
-    <LinearLayout
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="128dp"
+      android:background="@color/gray" />
+
+    <RelativeLayout
+      android:id="@+id/store_lay"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:background="@android:color/white">
+
+      <ImageView
+        android:id="@+id/store_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_store"
+        android:tint="@color/login_gray" />
+
+      <ImageView
+        android:id="@+id/drop_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20sp"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_arrow_drop_down"
+        android:tint="@color/primary" />
+
+      <TextView
+        android:id="@+id/show_more_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_toEndOf="@+id/drop_img"
+        android:layout_toRightOf="@+id/drop_img"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/show_more"
+        android:textColor="@color/primary"
+        android:textSize="12sp" />
+
+      <TextView
+        android:id="@+id/store_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="128dp"
-            android:background="@color/gray"/>
-
-        <RelativeLayout
-            android:id="@+id/store_lay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/white">
-
-            <ImageView
-                android:id="@+id/store_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="18dp"
-                android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_store"
-                android:tint="@color/login_gray"/>
-
-            <ImageView
-                android:id="@+id/drop_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20sp"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_arrow_drop_down"
-                android:tint="@color/primary"/>
-
-            <TextView
-                android:id="@+id/show_more_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_toRightOf="@+id/drop_img"
-                android:layout_toEndOf="@+id/drop_img"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="@string/show_more"
-                android:textColor="@color/primary"
-                android:textSize="12sp"/>
-
-            <TextView
-                android:id="@+id/store_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginRight="19dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="19dp"
-                android:layout_marginTop="16dp"
-                android:layout_toStartOf="@id/store_img"
-                android:layout_toRightOf="@id/show_more_tv"
-                android:layout_toLeftOf="@id/store_img"
-                android:layout_toEndOf="@id/show_more_tv"
-                android:ellipsize="end"
-                android:gravity="start"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"
-                tools:text="سوپر رفاه"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="19dp"
+        android:layout_toEndOf="@id/show_more_tv"
+        android:layout_toLeftOf="@id/store_img"
+        android:layout_toRightOf="@id/show_more_tv"
+        android:layout_toStartOf="@id/store_img"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/black_85"
+        android:textSize="14sp"
+        tools:text="سوپر رفاه" />
 
 
-        </RelativeLayout>
+    </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/customer_detail_lay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+    <LinearLayout
+      android:id="@+id/customer_detail_lay"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:visibility="gone">
 
-            <View
-                android:layout_width="56dp"
-                android:layout_height="1dp"
-                android:layout_gravity="end"
-                android:background="@android:color/white"/>
+      <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_gravity="end"
+        android:background="@android:color/white" />
 
-            <RelativeLayout
-                android:id="@+id/location_lay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white">
+      <RelativeLayout
+        android:id="@+id/location_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
 
-                <ImageView
-                    android:id="@+id/location_img"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginEnd="18dp"
-                    android:src="@drawable/ic_location_on_24_dp"
-                    android:tint="@color/login_gray"/>
+        <ImageView
+          android:id="@+id/location_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_location_on_24_dp"
+          android:tint="@color/login_gray" />
 
-                <TextView
-                    android:id="@+id/location_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginRight="19dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginEnd="19dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_toStartOf="@id/location_img"
-                    android:layout_toLeftOf="@id/location_img"
-                    android:ellipsize="end"
-                    android:gravity="start"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/black_85"
-                    android:textSize="14sp"
-                    tools:text="تهران/میدان هروی"/>
-            </RelativeLayout>
+        <TextView
+          android:id="@+id/location_tv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toLeftOf="@id/location_img"
+          android:layout_toStartOf="@id/location_img"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:textColor="@color/black_85"
+          android:textSize="14sp"
+          tools:text="تهران/میدان هروی" />
+      </RelativeLayout>
 
-            <View
-                android:layout_width="56dp"
-                android:layout_height="1dp"
-                android:layout_gravity="end"
-                android:background="@android:color/white"/>
+      <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_gravity="end"
+        android:background="@android:color/white" />
 
 
-            <RelativeLayout
-                android:id="@+id/mobile_lay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white">
+      <RelativeLayout
+        android:id="@+id/mobile_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
 
-                <ImageView
-                    android:id="@+id/mobile_img"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginEnd="18dp"
-                    android:src="@drawable/ic_phone_android_24dp"
-                    android:tint="@color/login_gray"/>
+        <ImageView
+          android:id="@+id/mobile_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_phone_android_24dp"
+          android:tint="@color/login_gray" />
 
-                <TextView
-                    android:id="@+id/mobile_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginRight="19dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginEnd="19dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_toStartOf="@id/mobile_img"
-                    android:layout_toLeftOf="@id/mobile_img"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/black_85"
-                    android:textSize="14sp"
-                    tools:text="09383668885"/>
-            </RelativeLayout>
+        <TextView
+          android:id="@+id/mobile_tv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toLeftOf="@id/mobile_img"
+          android:layout_toStartOf="@id/mobile_img"
+          android:ellipsize="end"
+          android:gravity="end"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:textColor="@color/black_85"
+          android:textSize="14sp"
+          tools:text="09383668885" />
+      </RelativeLayout>
 
-            <View
-                android:layout_width="56dp"
-                android:layout_height="1dp"
-                android:layout_gravity="end"
-                android:background="@android:color/white"/>
+      <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_gravity="end"
+        android:background="@android:color/white" />
 
-            <RelativeLayout
-                android:id="@+id/phone_lay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white">
+      <RelativeLayout
+        android:id="@+id/phone_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
 
-                <ImageView
-                    android:id="@+id/phone_img"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginEnd="18dp"
-                    android:rotation="270"
-                    android:src="@drawable/ic_phone_24dp"
-                    android:tint="@color/login_gray"/>
+        <ImageView
+          android:id="@+id/phone_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:rotation="270"
+          android:src="@drawable/ic_phone_24dp"
+          android:tint="@color/login_gray" />
 
-                <TextView
-                    android:id="@+id/phone_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginRight="19dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginEnd="19dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_toStartOf="@id/phone_img"
-                    android:layout_toLeftOf="@id/phone_img"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/black_85"
-                    android:textSize="14sp"
-                    tools:text="تهران/میدان هروی"/>
-            </RelativeLayout>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/register_order_lay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/white">
-
-            <ImageView
-                android:id="@+id/register_order_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="18dp"
-                android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_add_24dp"
-                android:tint="@color/register_order"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginRight="19dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="19dp"
-                android:layout_marginTop="16dp"
-                android:layout_toStartOf="@id/register_order_img"
-                android:layout_toLeftOf="@id/register_order_img"
-                android:ellipsize="end"
-                android:gravity="start"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="@string/register_order"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_width="56dp"
-            android:layout_height="1dp"
-            android:layout_gravity="end"
-            android:background="@android:color/white"/>
-
-        <RelativeLayout
-            android:id="@+id/register_payment_lay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white">
-
-            <ImageView
-                android:id="@+id/register_payment_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="18dp"
-                android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_attach_money_24dp"
-                android:tint="@color/register_payment"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginRight="19dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="19dp"
-                android:layout_marginTop="16dp"
-                android:layout_toStartOf="@id/register_payment_img"
-                android:layout_toLeftOf="@id/register_payment_img"
-                android:ellipsize="end"
-                android:gravity="start"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="@string/register_payment"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_width="56dp"
-            android:layout_height="1dp"
-            android:layout_gravity="end"
-            android:background="@android:color/white"/>
-
-        <RelativeLayout
-            android:id="@+id/register_questionnaire_lay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white">
-
-            <ImageView
-                android:id="@+id/register_questionnaire_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="18dp"
-                android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_assignment_24dp"
-                android:tint="@color/register_questionnaire"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginRight="19dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="19dp"
-                android:layout_marginTop="16dp"
-                android:layout_toStartOf="@id/register_questionnaire_img"
-                android:layout_toLeftOf="@id/register_questionnaire_img"
-                android:ellipsize="end"
-                android:gravity="start"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="@string/register_questionnaire"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_width="56dp"
-            android:layout_height="1dp"
-            android:layout_gravity="end"
-            android:background="@android:color/white"/>
-
-        <RelativeLayout
-            android:id="@+id/register_image_lay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white">
-
-            <ImageView
-                android:id="@+id/register_image_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="18dp"
-                android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_camera_alt_24"
-                android:tint="@color/register_image"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginRight="19dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="19dp"
-                android:layout_marginTop="16dp"
-                android:layout_toStartOf="@id/register_image_img"
-                android:layout_toLeftOf="@id/register_image_img"
-                android:ellipsize="end"
-                android:gravity="start"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="@string/register_image"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/end_and_exit_visit_lay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/white">
-
-            <ImageView
-                android:id="@+id/end_and_exit_visit_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="18dp"
-                android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_run_24_dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginRight="19dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="19dp"
-                android:layout_marginTop="16dp"
-                android:layout_toStartOf="@id/end_and_exit_visit_img"
-                android:layout_toLeftOf="@id/end_and_exit_visit_img"
-                android:ellipsize="end"
-                android:gravity="start"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="@string/exit_end_visit"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_width="56dp"
-            android:layout_height="1dp"
-            android:layout_gravity="end"
-            android:background="@android:color/white"/>
-
-        <RelativeLayout
-            android:id="@+id/no_activity_lay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
-            android:background="@android:color/white">
-
-            <ImageView
-                android:id="@+id/no_activity_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="18dp"
-                android:layout_marginEnd="18dp"
-                android:src="@drawable/ic_non_action_24_dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginRight="19dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="19dp"
-                android:layout_marginTop="16dp"
-                android:layout_toStartOf="@id/no_activity_img"
-                android:layout_toLeftOf="@id/no_activity_img"
-                android:ellipsize="end"
-                android:gravity="start"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="@string/no_activity"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"/>
-        </RelativeLayout>
+        <TextView
+          android:id="@+id/phone_tv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toLeftOf="@id/phone_img"
+          android:layout_toStartOf="@id/phone_img"
+          android:ellipsize="end"
+          android:gravity="end"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:textColor="@color/black_85"
+          android:textSize="14sp"
+          tools:text="تهران/میدان هروی" />
+      </RelativeLayout>
     </LinearLayout>
+
+    <RelativeLayout
+      android:id="@+id/register_order_lay"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:background="@android:color/white">
+
+      <ImageView
+        android:id="@+id/register_order_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_add_24dp"
+        android:tint="@color/register_order" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="19dp"
+        android:layout_toLeftOf="@id/register_order_img"
+        android:layout_toStartOf="@id/register_order_img"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/register_order"
+        android:textColor="@color/black_85"
+        android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+      android:layout_width="56dp"
+      android:layout_height="1dp"
+      android:layout_gravity="end"
+      android:background="@android:color/white" />
+
+    <RelativeLayout
+      android:id="@+id/register_payment_lay"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@android:color/white">
+
+      <ImageView
+        android:id="@+id/register_payment_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_attach_money_24dp"
+        android:tint="@color/register_payment" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="19dp"
+        android:layout_toLeftOf="@id/register_payment_img"
+        android:layout_toStartOf="@id/register_payment_img"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/register_payment"
+        android:textColor="@color/black_85"
+        android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+      android:layout_width="56dp"
+      android:layout_height="1dp"
+      android:layout_gravity="end"
+      android:background="@android:color/white" />
+
+    <RelativeLayout
+      android:id="@+id/register_questionnaire_lay"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@android:color/white">
+
+      <ImageView
+        android:id="@+id/register_questionnaire_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_assignment_24dp"
+        android:tint="@color/register_questionnaire" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="19dp"
+        android:layout_toLeftOf="@id/register_questionnaire_img"
+        android:layout_toStartOf="@id/register_questionnaire_img"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/register_questionnaire"
+        android:textColor="@color/black_85"
+        android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+      android:layout_width="56dp"
+      android:layout_height="1dp"
+      android:layout_gravity="end"
+      android:background="@android:color/white" />
+
+    <RelativeLayout
+      android:id="@+id/register_image_lay"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@android:color/white">
+
+      <ImageView
+        android:id="@+id/register_image_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_camera_alt_24"
+        android:tint="@color/register_image" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="19dp"
+        android:layout_toLeftOf="@id/register_image_img"
+        android:layout_toStartOf="@id/register_image_img"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/register_image"
+        android:textColor="@color/black_85"
+        android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+      android:id="@+id/no_activity_lay"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:background="@android:color/white">
+
+      <ImageView
+        android:id="@+id/no_activity_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_non_action_24_dp" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="19dp"
+        android:layout_toLeftOf="@id/no_activity_img"
+        android:layout_toStartOf="@id/no_activity_img"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/add_none"
+        android:textColor="@color/black_85"
+        android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+      android:layout_width="56dp"
+      android:layout_height="1dp"
+      android:layout_gravity="end"
+      android:background="@android:color/white" />
+
+    <RelativeLayout
+      android:id="@+id/end_and_exit_visit_lay"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="25dp"
+      android:background="@android:color/white">
+
+      <ImageView
+        android:id="@+id/end_and_exit_visit_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_run_24_dp" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="19dp"
+        android:layout_toLeftOf="@id/end_and_exit_visit_img"
+        android:layout_toStartOf="@id/end_and_exit_visit_img"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/exit_end_visit"
+        android:textColor="@color/black_85"
+        android:textSize="14sp" />
+    </RelativeLayout>
+  </LinearLayout>
 </ScrollView>
