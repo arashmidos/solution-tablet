@@ -14,6 +14,20 @@ public class SaleOrderListModel extends BaseListModel {
   private Long status;
   private Long customerBackendId;
 
+  public SaleOrderListModel(Long id, Long backendId, String date, Long amount, String paymentTypeTitle, String customerName, Long status, Long customerBackendId) {
+    this.id = id;
+    this.backendId = backendId;
+    this.date = date;
+    this.amount = amount;
+    this.paymentTypeTitle = paymentTypeTitle;
+    this.customerName = customerName;
+    this.status = status;
+    this.customerBackendId = customerBackendId;
+  }
+
+  public SaleOrderListModel() {
+  }
+
   public Long getCustomerBackendId() {
     return customerBackendId;
   }

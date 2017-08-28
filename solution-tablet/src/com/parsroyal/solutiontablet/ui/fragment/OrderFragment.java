@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.Goods;
@@ -123,7 +122,7 @@ public class OrderFragment extends BaseFragment {
           searchEdt.setText("");
         break;
       case R.id.bottom_bar:
-        Toast.makeText(activity, "bottom", Toast.LENGTH_SHORT).show();
+        activity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, true);
         break;
     }
   }

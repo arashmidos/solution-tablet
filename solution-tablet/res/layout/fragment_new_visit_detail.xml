@@ -16,6 +16,7 @@
         android:paddingEnd="16dp"
         android:paddingRight="16dp"
         app:tabGravity="fill"
+        android:elevation="3dp"
         app:tabIndicatorColor="@color/primary"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@color/black_85"

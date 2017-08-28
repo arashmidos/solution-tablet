@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     android:elevation="3dp"
     android:orientation="vertical"
-    tools:context="com.parsroyal.solutiontablet.ui.fragment.AddOrderDialogFragment">
+    tools:context="com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

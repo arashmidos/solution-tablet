@@ -26,8 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
@@ -46,6 +45,7 @@ import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
+import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
@@ -60,7 +60,7 @@ import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.util.Locale;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -78,6 +78,7 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int VISIT_DETAIL_FRAGMENT_ID = 2;
   public static final int CUSTOMER_ORDER_FRAGMENT_ID = 3;
   public static final int ORDER_FRAGMENT_ID = 4;
+  public static final int ORDER_INFO_FRAGMENT = 5;
   public static final int SETTING_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
@@ -484,6 +485,9 @@ public class MainActivity extends BaseFragmentActivity {
         break;
       case VISIT_DETAIL_FRAGMENT_ID:
         fragment = NewVisitDetailFragment.newInstance();
+        break;
+      case ORDER_INFO_FRAGMENT:
+        fragment = NewOrderInfoFragment.newInstance();
         break;
       case ORDER_FRAGMENT_ID:
         fragment = OrderFragment.newInstance();

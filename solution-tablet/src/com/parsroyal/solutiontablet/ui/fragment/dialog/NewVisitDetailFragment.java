@@ -13,6 +13,7 @@ import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BlankFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.NewOrderListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,7 +51,7 @@ public class NewVisitDetailFragment extends BaseFragment {
   private void setUpViewPager() {
     viewPagerAdapter = new CustomerDetailViewPagerAdapter(getActivity().getSupportFragmentManager());
     viewPagerAdapter.add(CustomerInfoFragment.newInstance(), getString(R.string.customer_information));
-    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.orders));
+    viewPagerAdapter.add(NewOrderListFragment.newInstance(), getString(R.string.orders));
     viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.payments));
     viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
     viewpager.setAdapter(viewPagerAdapter);
