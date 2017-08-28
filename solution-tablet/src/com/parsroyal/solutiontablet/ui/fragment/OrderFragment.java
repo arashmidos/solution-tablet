@@ -12,10 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.entity.Goods;
@@ -26,7 +23,12 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
+
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class OrderFragment extends BaseFragment {
@@ -135,7 +137,7 @@ public class OrderFragment extends BaseFragment {
         }
         break;
       case R.id.bottom_bar:
-        activity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, true);
+        mainActivity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, true);
         break;
     }
   }

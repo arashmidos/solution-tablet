@@ -64,6 +64,10 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseFragmentActivity {

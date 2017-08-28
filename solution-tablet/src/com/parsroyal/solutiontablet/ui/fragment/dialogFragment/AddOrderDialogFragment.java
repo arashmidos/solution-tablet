@@ -52,7 +52,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_add_order_dialog, container, false);
     ButterKnife.bind(this, view);
-//    setUpPager();
+    setUpPager();
     setUpSpinner();
     return view;
   }

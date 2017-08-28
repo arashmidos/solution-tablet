@@ -15,9 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
@@ -44,7 +42,12 @@ import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CustomerInfoFragment extends Fragment {
 
@@ -89,7 +92,7 @@ public class CustomerInfoFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_customer_info, container, false);
     ButterKnife.bind(this, view);
@@ -110,6 +113,11 @@ public class CustomerInfoFragment extends Fragment {
 
     setData();
     return view;
+  }
+
+  @Override
+  public void setUserVisibleHint(boolean isVisibleToUser) {
+//    if (isVisibleToUser && getView() == null)
   }
 
   private void setData() {
