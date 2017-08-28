@@ -6,8 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -15,6 +14,10 @@ import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BlankFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.NewOrderListFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class NewVisitDetailFragment extends BaseFragment {
@@ -38,27 +41,32 @@ public class NewVisitDetailFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_new_visit_detail, container, false);
     ButterKnife.bind(this, view);
     Bundle args = getArguments();
     customerId = args.getLong(Constants.CUSTOMER_ID);
     visitId = args.getLong(Constants.VISIT_ID);
-    setUpViewPager();
     tabs.setupWithViewPager(viewpager);
-    viewpager.setCurrentItem(0);
+    setUpViewPager();
+    viewpager.setCurrentItem(4);
     return view;
+  }
+
+  @Override public void onResume() {
+    super.onResume();
   }
 
   private void setUpViewPager() {
     viewPagerAdapter = new CustomerDetailViewPagerAdapter(
         getActivity().getSupportFragmentManager());
+    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.images));
+    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
+    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.payments));
+    viewPagerAdapter.add(NewOrderListFragment.newInstance(), getString(R.string.orders));
     viewPagerAdapter
         .add(CustomerInfoFragment.newInstance(getArguments()), getString(R.string.customer_information));
-    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.orders));
-    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.payments));
-    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
     viewpager.setAdapter(viewPagerAdapter);
   }
 

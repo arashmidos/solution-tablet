@@ -66,6 +66,12 @@ import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends BaseFragmentActivity {
 
   public static final String TAG = MainActivity.class.getSimpleName();

@@ -176,7 +176,7 @@ public class OrderFragment extends BaseFragment {
         }
         break;
       case R.id.bottom_bar:
-        activity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, true);
+        mainActivity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, true);
         break;
     }
   }

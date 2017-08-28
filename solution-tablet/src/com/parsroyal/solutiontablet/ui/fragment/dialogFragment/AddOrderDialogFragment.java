@@ -145,7 +145,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     unit1Title = selectedGoods.getUnit1Title();
     unit2Title = selectedGoods.getUnit2Title();
     saleRate = selectedGoods.getSaleRate();
-//    setUpPager();
+  //  setUpPager();
     setData();
     setListeners();
     setUpSpinner();
