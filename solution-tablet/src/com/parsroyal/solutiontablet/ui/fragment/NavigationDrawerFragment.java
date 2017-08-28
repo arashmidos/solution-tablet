@@ -82,7 +82,9 @@ public class NavigationDrawerFragment extends Fragment {
         Toast.makeText(getActivity(), "customers", Toast.LENGTH_SHORT).show();//TODO: update
         break;
       case R.id.goods_lay:
-        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, true);
+        Bundle args = new Bundle();
+        args.putBoolean(Constants.READ_ONLY, true);
+        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
         break;
       case R.id.today_paths_lay:
         mainActivity.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
@@ -104,9 +106,9 @@ public class NavigationDrawerFragment extends Fragment {
             .show();//TODO: update after login
         break;
       case R.id.get_data_lay:
-        Bundle args = new Bundle();
-        args.putString(Constants.DATA_TRANSFER_ACTION, Constants.DATA_TRANSFER_GET);
-        mainActivity.changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, args, true);
+        Bundle args3 = new Bundle();
+        args3.putString(Constants.DATA_TRANSFER_ACTION, Constants.DATA_TRANSFER_GET);
+        mainActivity.changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, args3, true);
         break;
       case R.id.send_data_lay:
         Bundle args2 = new Bundle();

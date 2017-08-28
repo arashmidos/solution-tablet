@@ -336,14 +336,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
 
   private SaleOrderDto createDraftOrder(Customer customer, Long statusID) {
     try {
-      SaleOrderDto orderDto = new SaleOrderDto();
-      orderDto.setStatus(statusID);
-      orderDto.setCustomer(customer);
-      orderDto.setDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
-      orderDto.setAmount(0L);
-      orderDto.setCustomerBackendId(customer.getBackendId());
-      orderDto.setCreateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
-      orderDto.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
+      SaleOrderDto orderDto = new SaleOrderDto(statusID, customer);
       Long id = saleOrderService.saveOrder(orderDto);
       orderDto.setId(id);
       return orderDto;

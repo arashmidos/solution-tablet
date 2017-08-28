@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
@@ -63,8 +64,6 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import butterknife.OnClick;
 
 public class MainActivity extends BaseFragmentActivity {
 
@@ -533,8 +532,6 @@ public class MainActivity extends BaseFragmentActivity {
         break;*/
       case GOODS_LIST_FRAGMENT_ID:
         fragment = OrderFragment.newInstance();
-        args.putBoolean(Constants.READ_ONLY, true);
-        fragment.setArguments(args);
         break;
       /*case SAVE_LOCATION_FRAGMENT_ID:
         fragment = new SaveLocationFragment();
@@ -585,7 +582,7 @@ public class MainActivity extends BaseFragmentActivity {
       } else {
         drawerLayout.openDrawer(GravityCompat.END);
       }
-    } else {
+    } else {//TODO if its CustomerInfoFragment, finishVisit
       onBackPressed();
     }
   }

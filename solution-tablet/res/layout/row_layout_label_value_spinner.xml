@@ -9,8 +9,8 @@
     android:id="@+id/labelTxt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
+    android:gravity="right"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:textAppearance="?android:attr/textAppearanceMedium"/>
+    android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

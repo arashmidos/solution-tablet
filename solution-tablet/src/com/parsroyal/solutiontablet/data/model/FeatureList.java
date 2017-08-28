@@ -29,13 +29,13 @@ public class FeatureList {
         new FeatureList(0, R.drawable.ic_group_black_48dp, context.getString(R.string.customers)));
     featureList.add(new FeatureList(0, R.drawable.ic_assignment_black_48dp,
         context.getString(R.string.reports)));
+    featureList.add(
+        new FeatureList(0, R.drawable.ic_products_48_dp,
+            context.getString(R.string.title_goods_list)));
     featureList
         .add(new FeatureList(0, R.drawable.ic_map_black_48dp, context.getString(R.string.map)));
     featureList.add(
         new FeatureList(0, R.drawable.ic_settings_black_48dp, context.getString(R.string.setting)));
-    featureList.add(
-        new FeatureList(0, R.drawable.ic_sidebar_goods,
-            context.getString(R.string.title_goods_list)));//TODO Replace icon
     return featureList;
   }
 

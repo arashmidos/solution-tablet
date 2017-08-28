@@ -224,7 +224,7 @@
     <string name="message_cannot_create_order_right_now">در حال حاضر امکان سفارش گیری وجود ندارد</string>
     <string name="message_cannot_create_factor_right_now">در حال حاضر امکان ثبت فاکتور وجود ندارد</string>
     <string name="message_cannot_create_rejected_right_now">در حال حاضر امکان ارجاع کالا وجود ندارد</string>
-    <string name="title_goods_list">لیست کالاها</string>
+    <string name="title_goods_list">کالاها</string>
     <string name="title_x_list">"لیست "</string>
     <string name="message_goods_already_added_to_order">این کالا قبلا به سفارش اضافه شده است.</string>
     <string name="message_no_orders_for_sending">هیچ سفارشی برای ارسال یافت نشد.</string>

@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.fragment.AddOrderDialogFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
@@ -31,14 +30,20 @@ import java.util.List;
 public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> {
 
   private final boolean readOnly;
+  private final boolean isRejectedGoods;
+  private final OrderFragment parent;
   private LayoutInflater inflater;
   private Context context;
   private List<Goods> goodsList;
 
-  public GoodsAdapter(Context context, List<Goods> goodsList, boolean readOnly) {
+  public GoodsAdapter(Context context, OrderFragment orderFragment, List<Goods> goodsList,
+      boolean readOnly,
+      boolean isRejectedGoods) {
     this.context = context;
     this.goodsList = goodsList;
     this.readOnly = readOnly;
+    this.isRejectedGoods = isRejectedGoods;
+    this.parent = orderFragment;
     inflater = LayoutInflater.from(context);
   }
 
@@ -54,12 +59,6 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
     holder.setData(position, good);
   }
 
-  private void showOrderDialog() {
-    FragmentTransaction ft = ((MainActivity) context).getSupportFragmentManager()
-        .beginTransaction();
-    AddOrderDialogFragment addOrderDialogFragment = AddOrderDialogFragment.newInstance();
-    addOrderDialogFragment.show(ft, "order");
-  }
 
   @Override
   public int getItemCount() {
@@ -137,9 +136,6 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
       //TODO: If its rejectGoods hide this
       recoveryDateTv.setText(
           String.format(context.getString(R.string.recovery_date_x), good.getRecoveryDate()));
-
-
-//      mainLay.setOnClickListener(v -> showOrderDialog());
     }
 
     @Override
@@ -155,6 +151,9 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
               .into((ImageView) view.findViewById(R.id.good_image));
           settingsDialog.setContentView(view);
           settingsDialog.show();
+          break;
+        case R.id.main_lay:
+          parent.showOrderDialog(good);
           break;
       }
     }

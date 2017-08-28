@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,12 @@ public class LabelValueArrayAdapter extends BaseAdapter {
     holder.text.setText(labelValues.get(position).getLabel());
     return convertView;
   }
-
+//TODO:
+  /*public View getDropDownView(int position, View convertView, ViewGroup parent) {
+    View v = super.getDropDownView(position, convertView, parent);
+    ((TextView) v).setGravity(Gravity.RIGHT);
+    return v;
+  }*/
   @Override
   public int getCount() {
     return labelValues.size();

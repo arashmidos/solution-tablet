@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import java.util.List;
@@ -56,20 +58,22 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           context.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
           break;
         case 1://Customers
-          Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show();
+          Toast.makeText(context, "Customers Not implemented yet", Toast.LENGTH_SHORT).show();
           break;
         case 2://reports
-          Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show();
+          Toast.makeText(context, "Reports Not implemented yet", Toast.LENGTH_SHORT).show();
           break;
-        case 3://Map
-          Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show();
+        case 3://Goods
+          Bundle args = new Bundle();
+          args.putBoolean(Constants.READ_ONLY, true);
+          context.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
           break;
-        case 4: //Settings
+        case 4: //Map
+          Toast.makeText(context, "Map Not implemented yet", Toast.LENGTH_SHORT).show();
+          break;
+        case 5://Settings
           //TODO REMOVE THIS FRAGMENT AFTER LOGIN IMPLEMENTED
           context.changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);
-          break;
-        case 5:
-          context.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, true);
           break;
       }
     });

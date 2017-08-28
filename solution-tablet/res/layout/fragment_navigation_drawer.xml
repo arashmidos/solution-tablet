@@ -206,7 +206,7 @@
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_near_me_black_24dp"
+            android:src="@drawable/ic_products_24_dp"
             android:tint="@color/login_gray" />
 
           <TextView
