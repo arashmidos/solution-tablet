@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
 /**
@@ -25,11 +24,11 @@ import java.util.List;
 public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHolder> {
 
   private LayoutInflater inflater;
-  private Context context;
+  private MainActivity context;
   private List<FeatureList> features;
 
   public FeaturesAdapter(Context context, List<FeatureList> features) {
-    this.context = context;
+    this.context = (MainActivity) context;
     this.features = features;
     inflater = LayoutInflater.from(context);
   }
@@ -54,7 +53,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     holder.featureLay.setOnClickListener(v -> {
       switch (position) {
         case 0://Paths
-          ((MainActivity) context).changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
+          context.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
           break;
         case 1://Customers
           Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show();
@@ -66,7 +65,11 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show();
           break;
         case 4: //Settings
-          ((MainActivity) context).changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);//TODO REMOVE THIS FRAGMENT AFTER LOGIN IMPLEMENTED
+          //TODO REMOVE THIS FRAGMENT AFTER LOGIN IMPLEMENTED
+          context.changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);
+          break;
+        case 5:
+          context.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, true);
           break;
       }
     });

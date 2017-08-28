@@ -51,4 +51,5 @@ public class Constants {
   public static final String DATA_TRANSFER_GET = "dataTransfer.get";
   public static final String DATA_TRANSFER_SEND_DATA = "dataTransfer.send.data";
   public static final String DATA_TRANSFER_SEND_IMAGES = "dataTransfer.send.images";
+  public static final String READ_ONLY = "readOnly";
 }

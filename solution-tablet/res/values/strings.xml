@@ -455,6 +455,8 @@
   <string name="order_submit">تایید سفارش</string>
   <string name="submit">تایید</string>
   <string name="choose_payment_method">انتخاب روش پرداخت</string>
-
+  <string name="good_code_x">کد کالا: %s</string>
+  <string name="recovery_date_x">راس پرداخت %s</string>
+  <string name="add_none">ثبت عدم</string>
 
 </resources>

@@ -64,10 +64,6 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseFragmentActivity {
@@ -82,6 +78,7 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int SETTING_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
+  public static final int GOODS_LIST_FRAGMENT_ID = 16;
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
@@ -400,15 +397,15 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   public void closeDrawer() {
-    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-      drawerLayout.closeDrawer(GravityCompat.START);
+    if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      drawerLayout.closeDrawer(GravityCompat.END);
     }
   }
 
   @Override
   public void onBackPressed() {
-    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-      drawerLayout.closeDrawer(GravityCompat.START);
+    if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      drawerLayout.closeDrawer(GravityCompat.END);
       return;
     }
 
@@ -489,9 +486,6 @@ public class MainActivity extends BaseFragmentActivity {
       case ORDER_INFO_FRAGMENT:
         fragment = NewOrderInfoFragment.newInstance();
         break;
-      case ORDER_FRAGMENT_ID:
-        fragment = OrderFragment.newInstance();
-        break;
       /*case NEW_CUSTOMER_FRAGMENT_ID:
         fragment = new NCustomersFragment();
         break;
@@ -541,13 +535,13 @@ public class MainActivity extends BaseFragmentActivity {
         break;
       case ORDER_DETAIL_FRAGMENT_ID:
         fragment = new OrderDetailFragment();
-        break;
+        break;*/
       case GOODS_LIST_FRAGMENT_ID:
-        fragment = new GoodsListFragment();
-        args.putBoolean("view_all", true);
+        fragment = OrderFragment.newInstance();
+        args.putBoolean(Constants.READ_ONLY, true);
         fragment.setArguments(args);
         break;
-      case SAVE_LOCATION_FRAGMENT_ID:
+      /*case SAVE_LOCATION_FRAGMENT_ID:
         fragment = new SaveLocationFragment();
         break;
       case PAYMENT_FRAGMENT_ID://18
