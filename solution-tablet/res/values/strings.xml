@@ -446,9 +446,17 @@
   <string name="carton">کارتن</string>
   <string name="total">جمع کل</string>
   <string name="none_added_successfully">ثبت عدم انجام شد.</string>
+  <string name="payment_info">اطلاعات پرداخت</string>
+  <string name="cost_amount">مبلغ قابل پرداخت :</string>
+  <string name="order_date">تاریخ سفارش :</string>
+  <string name="order_code">کد سفارش :</string>
+  <string name="payment_method">روش پرداخت :</string>
+  <string name="click_to_select">برای انتخاب کلیک کنید</string>
+  <string name="order_submit">تایید سفارش</string>
+  <string name="submit">تایید</string>
+  <string name="choose_payment_method">انتخاب روش پرداخت</string>
   <string name="good_code_x">کد کالا: %s</string>
   <string name="recovery_date_x">راس پرداخت %s</string>
   <string name="add_none">ثبت عدم</string>
-
 
 </resources>

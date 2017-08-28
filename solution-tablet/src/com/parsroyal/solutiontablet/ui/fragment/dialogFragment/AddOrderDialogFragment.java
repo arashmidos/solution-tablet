@@ -1,4 +1,4 @@
-package com.parsroyal.solutiontablet.ui.fragment;
+package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
