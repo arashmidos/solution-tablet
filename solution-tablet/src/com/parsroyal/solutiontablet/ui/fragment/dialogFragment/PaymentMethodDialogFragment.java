@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
@@ -15,17 +17,12 @@ import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentMethodAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
-
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class PaymentMethodDialogFragment extends DialogFragment {
 
-
-  @BindView(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.recycler_view)
+  RecyclerView recyclerView;
 
   private LabelValue selectedItem;
   private PaymentMethodAdapter adapter;
@@ -37,8 +34,8 @@ public class PaymentMethodDialogFragment extends DialogFragment {
     // Required empty public constructor
   }
 
-
-  public static PaymentMethodDialogFragment newInstance(NewOrderInfoFragment newOrderInfoFragment, LabelValue selectedItem) {
+  public static PaymentMethodDialogFragment newInstance(NewOrderInfoFragment newOrderInfoFragment,
+      LabelValue selectedItem) {
     PaymentMethodDialogFragment fragment = new PaymentMethodDialogFragment();
     fragment.newOrderInfoFragment = newOrderInfoFragment;
     fragment.selectedItem = selectedItem;
@@ -53,7 +50,7 @@ public class PaymentMethodDialogFragment extends DialogFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_payment_method_dialog, container, false);
     ButterKnife.bind(this, view);
@@ -76,7 +73,8 @@ public class PaymentMethodDialogFragment extends DialogFragment {
         .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.PAYMENT_TYPE.getId());
   }
 
-  @OnClick({R.id.close, R.id.submit_btn}) public void onClick(View view) {
+  @OnClick({R.id.close, R.id.submit_btn})
+  public void onClick(View view) {
     switch (view.getId()) {
       case R.id.close:
         getDialog().dismiss();

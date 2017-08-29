@@ -19,6 +19,8 @@ public interface BaseInfoService extends BaseService{
 
   List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long id);
 
+  LabelValue getBaseInfoByBackendId(Long backendId);
+
   List<LabelValue> getAllProvincesLabelValues();
 
   List<LabelValue> getAllCitiesLabelsValues(Long provinceId);
