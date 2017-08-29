@@ -16,7 +16,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -34,14 +36,9 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import me.relex.circleindicator.CircleIndicator;
 
 /**
@@ -123,7 +120,7 @@ public class AddOrderDialogFragment extends DialogFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_add_order_dialog, container, false);
     ButterKnife.bind(this, view);
@@ -320,11 +317,13 @@ public class AddOrderDialogFragment extends DialogFragment {
         viewPagerPositionTv.setText(pos);
       }
 
-      @Override public void onPageSelected(int position) {
+      @Override
+      public void onPageSelected(int position) {
 
       }
 
-      @Override public void onPageScrollStateChanged(int state) {
+      @Override
+      public void onPageScrollStateChanged(int state) {
 
       }
     });
@@ -380,9 +379,11 @@ public class AddOrderDialogFragment extends DialogFragment {
     super.onDestroyView();
   }
 
-  @Override public void onResume() {
+  @Override
+  public void onResume() {
     super.onResume();
-    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    getActivity().getWindow()
+        .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
   }
 
   public interface GoodsDialogOnClickListener {

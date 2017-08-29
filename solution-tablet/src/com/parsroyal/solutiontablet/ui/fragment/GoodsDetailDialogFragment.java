@@ -57,7 +57,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
   TextView goodsUnitTitle2;
   @BindView(R.id.sale_rate_count)
   TextView saleRateCount;
-  @BindView(R.id.total_amount)
+  @BindView(R.id.total_amount_title)
   TextView totalAmount;
   @BindView(R.id.goods_image)
   ImageView goodsImage;

@@ -6,17 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.parsroyal.solutiontablet.R;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.bumptech.glide.Glide;
+import com.parsroyal.solutiontablet.R;
 
 
 public class GoodImageFragment extends Fragment {
 
-  @BindView(R.id.good) ImageView goodImg;
+  @BindView(R.id.good)
+  ImageView goodImg;
 
   private String imagePath;
 
@@ -33,7 +32,7 @@ public class GoodImageFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_good_image, container, false);
     ButterKnife.bind(this, view);

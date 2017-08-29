@@ -13,10 +13,8 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-
 import com.parsroyal.solutiontablet.ui.fragment.GoodImageFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
-
 import java.util.List;
 
 public class GoodImagePagerAdapter extends FragmentStatePagerAdapter {
@@ -28,10 +26,11 @@ public class GoodImagePagerAdapter extends FragmentStatePagerAdapter {
   /**
    * Instantiates a new Intro pager adapter.
    *
-   * @param fm      the fm
+   * @param fm the fm
    * @param context the context
    */
-  public GoodImagePagerAdapter(FragmentManager fm, Context context, List<String> imagesPaths, AddOrderDialogFragment fragment) {
+  public GoodImagePagerAdapter(FragmentManager fm, Context context, List<String> imagesPaths,
+      AddOrderDialogFragment fragment) {
     super(fm);
     this.context = context;
     this.fragment = fragment;
