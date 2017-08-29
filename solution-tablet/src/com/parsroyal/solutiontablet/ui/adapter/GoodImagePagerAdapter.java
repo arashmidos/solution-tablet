@@ -15,13 +15,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.parsroyal.solutiontablet.ui.fragment.GoodImageFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 
 import java.util.List;
 
 public class GoodImagePagerAdapter extends FragmentStatePagerAdapter {
 
   private final Context context;
-  private List<Integer> imagesIds;
+  private AddOrderDialogFragment fragment;
+  private List<String> imagesPaths;
 
   /**
    * Instantiates a new Intro pager adapter.
@@ -29,20 +31,21 @@ public class GoodImagePagerAdapter extends FragmentStatePagerAdapter {
    * @param fm      the fm
    * @param context the context
    */
-  public GoodImagePagerAdapter(FragmentManager fm, Context context, List<Integer> imagesIds) {
+  public GoodImagePagerAdapter(FragmentManager fm, Context context, List<String> imagesPaths, AddOrderDialogFragment fragment) {
     super(fm);
     this.context = context;
-    this.imagesIds = imagesIds;
+    this.fragment = fragment;
+    this.imagesPaths = imagesPaths;
   }
 
   @Override
   public Fragment getItem(int position) {
-    return GoodImageFragment.newInstance(imagesIds.get(position));
+    return GoodImageFragment.newInstance(imagesPaths.get(position));
   }
 
   @Override
   public int getCount() {
-    return imagesIds.size();
+    return imagesPaths.size();
   }
 
   @Override

@@ -14,9 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -35,12 +33,18 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author Shakib
@@ -86,7 +90,7 @@ public class OrderFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_order, container, false);
     ButterKnife.bind(this, view);
@@ -176,7 +180,8 @@ public class OrderFragment extends BaseFragment {
         }
         break;
       case R.id.bottom_bar:
-        mainActivity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, true);
+        showFinalizeOrderDialog();
+//        mainActivity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, true);
         break;
     }
   }
@@ -234,6 +239,17 @@ public class OrderFragment extends BaseFragment {
     }
   }
 
+  public void showFinalizeOrderDialog() {
+    FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+    FinalizeOrderDialogFragment finalizeOrderDialogFragment = FinalizeOrderDialogFragment.newInstance();
+
+    Bundle bundle = new Bundle();
+    bundle.putLong(Constants.ORDER_ID, orderId);
+    finalizeOrderDialogFragment.setArguments(bundle);
+
+    finalizeOrderDialogFragment.show(ft, "order");
+  }
+
   private void updateGoodsDataTb() {
 
     if (SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
@@ -269,7 +285,7 @@ public class OrderFragment extends BaseFragment {
   }
 
   private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItem item,
-      Goods goods) {
+                                           Goods goods) {
     try {
       if (Empty.isEmpty(item)) {
         if (count * 1000L > Double.valueOf(String.valueOf(goods.getExisting()))) {

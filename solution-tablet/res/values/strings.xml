@@ -459,5 +459,10 @@
   <string name="recovery_date_x">راس پرداخت %s</string>
   <string name="add_none">ثبت عدم</string>
   <string name="images">تصاویر</string>
+  <string name="amount">قیمت واحد:</string>
+  <string name="total_amount">جمع کل:</string>
+  <string name="order_good">کالاهای سفارش</string>
+  <string name="finalize_order">نهایی کردن سفارشات</string>
+  <string name="orders_total_amount">جمع کل سفارشات</string>
 
 </resources>
