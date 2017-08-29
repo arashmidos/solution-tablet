@@ -145,7 +145,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     unit1Title = selectedGoods.getUnit1Title();
     unit2Title = selectedGoods.getUnit2Title();
     saleRate = selectedGoods.getSaleRate();
-  //  setUpPager();
+    //  setUpPager();
     setData();
     setListeners();
     setUpSpinner();
@@ -310,6 +310,27 @@ public class AddOrderDialogFragment extends DialogFragment {
     viewPager.setPageTransformer(true, new DepthPageTransformer());
   }
 
+  private boolean validate() {
+    String countValue = NumberUtil.digitsToEnglish(countTv.getText().toString());
+
+    if (Empty.isEmpty(countValue) || Double.valueOf(countValue).equals(0D)) {
+      errorMsg.setText(R.string.message_please_enter_count);
+      errorMsg.setVisibility(View.VISIBLE);
+      return false;
+    }
+
+    int currentUnit = spinner.getSelectedItemPosition();
+
+    //If saleRate setting is enabled & default unit is unit1 & mod unit1 is not zero
+    if (shouldApplySaleRate(countValue, currentUnit)) {
+      errorMsg.setText(String.format(getString(R.string.error_sale_rate_not_correct),
+          String.valueOf(saleRate), unit1Title));
+      errorMsg.setVisibility(View.VISIBLE);
+      return false;
+    }
+    return true;
+  }
+
   @OnClick({R.id.close, R.id.register_order_btn})
   public void onClick(View view) {
     switch (view.getId()) {
@@ -317,7 +338,20 @@ public class AddOrderDialogFragment extends DialogFragment {
         getDialog().dismiss();
         break;
       case R.id.register_order_btn:
-
+        if (Empty.isNotEmpty(onClickListener)) {
+          if (validate()) {
+            Double count1 = Double
+                .valueOf(NumberUtil.digitsToEnglish(countTv.getText().toString()));
+            LabelValue selectedUnitLv = (LabelValue) spinner.getSelectedItem();
+            Long selectedUnit1 = selectedUnitLv.getValue();
+            if (selectedUnit1.equals(2L)) {
+              count1 *= Double.valueOf(unit1Count);
+            }
+            onClickListener.onConfirmBtnClicked(count1, selectedUnit1);
+            AddOrderDialogFragment.this.dismiss();
+          }
+        }
+        break;
     }
   }
 

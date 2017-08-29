@@ -188,7 +188,8 @@
           android:background="@drawable/edit_text_state_background"
           android:gravity="right"
           android:hint="@string/enter_count_amount"
-          android:inputType="number"
+          android:digits="1234567890.۰۱۲۳۴۵۶۷۸۹"
+          android:inputType="numberDecimal"
           android:textColor="@color/black_85"
           android:textColorHint="@color/login_gray"
           android:textSize="14sp" />
@@ -217,18 +218,18 @@
             android:id="@+id/unit1_count_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="0"
             android:textColor="@color/login_gray"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            tools:text="0" />
 
           <TextView
             android:id="@+id/unit1_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            tools:text="@string/number"
             android:textColor="@color/login_gray"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="@string/number" />
         </LinearLayout>
 
         <LinearLayout
@@ -245,9 +246,9 @@
             android:id="@+id/unit2_count_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="0"
             android:textColor="@color/login_gray"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            tools:text="0" />
 
           <TextView
             android:id="@+id/unit2_title_tv"
@@ -265,9 +266,9 @@
           android:layout_height="wrap_content"
           android:layout_marginEnd="50dp"
           android:layout_marginRight="50dp"
-          android:layout_centerVertical="true"
           android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
+          android:layout_centerVertical="true"
           android:background="@drawable/tab_shape_focused_primary"
           android:gravity="center"
           android:orientation="vertical">
@@ -282,9 +283,9 @@
             android:layout_marginEnd="36dp"
             android:layout_marginLeft="36dp"
             android:layout_marginRight="36dp"
-            tools:text="ضریب فروش : 4"
             android:textColor="@color/primary"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="ضریب فروش : 4" />
 
           <TextView
             android:id="@+id/each_Carton_tv"
@@ -295,9 +296,9 @@
             android:layout_marginEnd="36dp"
             android:layout_marginLeft="36dp"
             android:layout_marginRight="36dp"
-            tools:text="هرکارتن = 5عدد"
             android:textColor="@color/primary"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="هرکارتن = 5عدد" />
         </LinearLayout>
       </RelativeLayout>
 
@@ -306,11 +307,11 @@
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:gravity="right"
         android:textColor="@color/red"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="20dp"
         android:textSize="12sp"
         tools:text="ضریب فروش رعایت نشده است" />
       <View
@@ -356,9 +357,9 @@
           android:layout_toLeftOf="@id/register_order_btn"
           android:layout_toStartOf="@id/register_order_btn"
           android:gravity="left"
-          tools:text="12000 تومان"
           android:textColor="@color/log_in_enter_bg"
-          android:textSize="16sp" />
+          android:textSize="16sp"
+          tools:text="12000 تومان" />
       </RelativeLayout>
     </LinearLayout>
   </ScrollView>

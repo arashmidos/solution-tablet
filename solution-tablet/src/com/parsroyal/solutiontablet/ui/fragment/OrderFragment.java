@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -58,6 +59,8 @@ public class OrderFragment extends BaseFragment {
   LinearLayout noGoodLay;
   @BindView(R.id.bottom_bar)
   LinearLayout bottomBar;
+  @BindView(R.id.order_count_tv)
+  TextView orderCountTv;
 
   private boolean isClose = false;
   private List<Goods> goodsList;
@@ -108,6 +111,8 @@ public class OrderFragment extends BaseFragment {
     }
     setUpRecyclerView();
     addSearchListener();
+    orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
+
     return view;
   }
 
@@ -176,14 +181,15 @@ public class OrderFragment extends BaseFragment {
         }
         break;
       case R.id.bottom_bar:
-        mainActivity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, true);
+        Bundle args = new Bundle();
+        args.putLong(Constants.ORDER_ID, orderId);
+        args.putString(Constants.SALE_TYPE, saleType);
+        args.putLong(Constants.VISIT_ID, visitId);
+        args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+
+        mainActivity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, args, true);
         break;
     }
-  }
-
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
   }
 
   public void showOrderDialog(Goods goods) {
@@ -283,6 +289,7 @@ public class OrderFragment extends BaseFragment {
       Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);
+      orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);

@@ -285,8 +285,8 @@
     <string name="select_sale_type">نوع فروش را انتخاب کنید</string>
     <string name="err_reject_order_not_possible">مرجوعی برای این مشتری امکان پذیر نیست</string>
     <string name="err_reject_order_detail_not_accessable">مشاهده جزییات مرجوعی در حال حاضر امکان پذیر نیست</string>
-    <string name="number_x">"شماره %1$s"</string>
-    <string name="date_x">"تاریخ %1$s"</string>
+    <string name="number_x">"شماره %1$s :"</string>
+    <string name="date_x">"تاریخ %1$s :"</string>
     <string name="amount_x">"مبلغ %1$s"</string>
     <string name="description_x">"توضیحات %1$s"</string>
     <string name="payment_type">نوع پرداخت:</string>
@@ -448,11 +448,9 @@
   <string name="none_added_successfully">ثبت عدم انجام شد.</string>
   <string name="payment_info">اطلاعات پرداخت</string>
   <string name="cost_amount">مبلغ قابل پرداخت :</string>
-  <string name="order_date">تاریخ سفارش :</string>
-  <string name="order_code">کد سفارش :</string>
   <string name="payment_method">روش پرداخت :</string>
   <string name="click_to_select">برای انتخاب کلیک کنید</string>
-  <string name="order_submit">تایید سفارش</string>
+  <string name="x_order_submit">تایید %s</string>
   <string name="submit">تایید</string>
   <string name="choose_payment_method">انتخاب روش پرداخت</string>
   <string name="good_code_x">کد کالا: %s</string>
