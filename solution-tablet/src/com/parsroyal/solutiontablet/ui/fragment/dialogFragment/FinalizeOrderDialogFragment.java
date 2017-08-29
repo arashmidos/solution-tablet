@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -17,6 +16,7 @@ import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderFinalizeAdapter;
+import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +33,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   private MainActivity activity;
   private SaleOrderService saleOrderService;
   private SaleOrderDto order;
+  private OrderFragment orderFragment;
   private long orderId;
 
   public FinalizeOrderDialogFragment() {
@@ -40,8 +41,9 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   }
 
 
-  public static FinalizeOrderDialogFragment newInstance() {
+  public static FinalizeOrderDialogFragment newInstance(OrderFragment orderFragment) {
     FinalizeOrderDialogFragment fragment = new FinalizeOrderDialogFragment();
+    fragment.orderFragment = orderFragment;
     return fragment;
   }
 
@@ -81,7 +83,8 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
         getDialog().dismiss();
         break;
       case R.id.submit_btn:
-        Toast.makeText(activity, "submit", Toast.LENGTH_SHORT).show();
+        orderFragment.goToOrderInfoFragment();
+        getDialog().dismiss();
         break;
     }
   }

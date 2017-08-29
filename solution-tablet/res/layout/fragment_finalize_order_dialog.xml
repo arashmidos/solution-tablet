@@ -9,7 +9,8 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="3dp">
 
         <FrameLayout
             android:id="@+id/toolbar_container"
@@ -110,6 +111,7 @@
             android:layout_toLeftOf="@id/center_view"
             android:layout_toStartOf="@id/center_view"
             android:gravity="left"
+            android:text="56.556.5605ریال"
             android:textColor="@color/green_text"
             android:textSize="16sp"/>
     </RelativeLayout>

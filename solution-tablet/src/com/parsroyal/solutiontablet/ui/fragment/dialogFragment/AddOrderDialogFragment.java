@@ -83,6 +83,7 @@ public class AddOrderDialogFragment extends DialogFragment {
   TextView errorMsg;
   @BindView(R.id.view_pager_position_tv)
   TextView viewPagerPositionTv;
+
   private GoodsDialogOnClickListener onClickListener;
   private Long goodsBackendId;
   private long orderStatus;

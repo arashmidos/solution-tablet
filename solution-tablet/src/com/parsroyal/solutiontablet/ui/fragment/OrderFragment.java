@@ -15,9 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -187,15 +185,19 @@ public class OrderFragment extends BaseFragment {
         }
         break;
       case R.id.bottom_bar:
-        Bundle args = new Bundle();
-        args.putLong(Constants.ORDER_ID, orderId);
-        args.putString(Constants.SALE_TYPE, saleType);
-        args.putLong(Constants.VISIT_ID, visitId);
-        args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
-
-        mainActivity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, args, true);
+        showFinalizeOrderDialog();
         break;
     }
+  }
+
+  public void goToOrderInfoFragment() {
+    Bundle args = new Bundle();
+    args.putLong(Constants.ORDER_ID, orderId);
+    args.putString(Constants.SALE_TYPE, saleType);
+    args.putLong(Constants.VISIT_ID, visitId);
+    args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+
+    mainActivity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, args, true);
   }
 
   public void showOrderDialog(Goods goods) {
@@ -248,7 +250,7 @@ public class OrderFragment extends BaseFragment {
 
   public void showFinalizeOrderDialog() {
     FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
-    FinalizeOrderDialogFragment finalizeOrderDialogFragment = FinalizeOrderDialogFragment.newInstance();
+    FinalizeOrderDialogFragment finalizeOrderDialogFragment = FinalizeOrderDialogFragment.newInstance(this);
 
     Bundle bundle = new Bundle();
     bundle.putLong(Constants.ORDER_ID, orderId);
