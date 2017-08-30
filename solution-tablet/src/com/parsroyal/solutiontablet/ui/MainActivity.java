@@ -26,7 +26,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
@@ -61,15 +63,9 @@ import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-
+import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends BaseFragmentActivity {
 
@@ -295,7 +291,7 @@ public class MainActivity extends BaseFragmentActivity {
    */
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                         @NonNull int[] grantResults) {
+      @NonNull int[] grantResults) {
     Log.i(TAG, "onRequestPermissionResult");
     if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
       if (grantResults.length <= 0) {
@@ -444,6 +440,11 @@ public class MainActivity extends BaseFragmentActivity {
     manager.popBackStack();
   }
 
+  public void navigateToFragment(int fragmentId) {
+    FragmentManager fm = getSupportFragmentManager();
+    fm.popBackStack(fragmentId, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+  }
+
   //TODO: Need review addTobackStack is useless
   private void commitFragment(String fragmentTag, BaseFragment fragment, boolean addToBackStack) {
     FragmentTransaction fragmentTransaction;
@@ -474,10 +475,11 @@ public class MainActivity extends BaseFragmentActivity {
   private BaseFragment findFragment(int fragmentId, Bundle args) {
     BaseFragment fragment = null;
     int parent = 0;
-    if (fragmentId == FEATURE_FRAGMENT_ID)
+    if (fragmentId == FEATURE_FRAGMENT_ID) {
       setNavigationToolbarIcon(R.drawable.ic_menu);
-    else
+    } else {
       setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
+    }
 
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
@@ -589,8 +591,10 @@ public class MainActivity extends BaseFragmentActivity {
     toolbarTitle.setText(title);
   }
 
-  @OnClick(R.id.navigation_img) public void onClick() {
-    Fragment featureFragment = getSupportFragmentManager().findFragmentByTag(FeaturesFragment.class.getSimpleName());
+  @OnClick(R.id.navigation_img)
+  public void onClick() {
+    Fragment featureFragment = getSupportFragmentManager()
+        .findFragmentByTag(FeaturesFragment.class.getSimpleName());
     if (featureFragment != null && featureFragment.isVisible()) {
       if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
         drawerLayout.closeDrawer(GravityCompat.END);

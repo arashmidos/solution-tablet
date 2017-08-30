@@ -189,7 +189,7 @@ public class NewOrderInfoFragment extends BaseFragment {
         getString(R.string.message_are_you_sure), (dialog, which) ->
         {
           saveOrder(statusId);
-          mainActivity.removeFragment(NewOrderInfoFragment.this);
+          mainActivity.navigateToFragment(MainActivity.ORDER_FRAGMENT_ID);
         });
   }
 
@@ -295,11 +295,6 @@ public class NewOrderInfoFragment extends BaseFragment {
         || orderStatus.equals(SaleOrderStatus.REJECTED.getId());
   }
 
-  @Override
-  public int getFragmentId() {
-    return MainActivity.ORDER_INFO_FRAGMENT;
-  }
-
   private void showPaymentMethodDialog() {
     if (isDisable()) {
       return;
@@ -308,5 +303,10 @@ public class NewOrderInfoFragment extends BaseFragment {
     PaymentMethodDialogFragment paymentMethodDialogFragment = PaymentMethodDialogFragment
         .newInstance(this, selectedItem);
     paymentMethodDialogFragment.show(ft, "payment method");
+  }
+
+  @Override
+  public int getFragmentId() {
+    return MainActivity.ORDER_INFO_FRAGMENT;
   }
 }
