@@ -299,8 +299,10 @@
     <string name="location_set">ثبت شد!</string>
     <string name="tracking_no">شماره پیگیری</string>
     <string name="cheque_date">تاریخ چک:</string>
+    <string name="cheque_date_payment">تاریخ چک</string>
     <string name="cheque_date_sample">95/05/31</string>
     <string name="cheque_number">شماره چک:</string>
+    <string name="cheque_number_payment">شماره چک</string>
     <string name="cheque_account_number">شماره حساب:</string>
     <string name="cheque_branch">شعبه:</string>
     <string name="cheque_bank">بانک:</string>
@@ -462,5 +464,14 @@
   <string name="order_good">کالاهای سفارش</string>
   <string name="finalize_order">نهایی کردن سفارشات</string>
   <string name="orders_total_amount">جمع کل سفارشات</string>
+  <string name="e_payment">پرداخت الکترونیکی</string>
+  <string name="cheque">چک</string>
+  <string name="cash">نقد</string>
+  <string name="choose_payment_methods">روش پرداخت را انتخاب کنید :</string>
+  <string name="payment_price">مبلغ پرداخت</string>
+  <string name="tracking_num">شماره پیگیری</string>
+  <string name="cheque_owner">صاحب چک</string>
+  <string name="account_number">شماره حساب</string>
+  <string name="branch">شعبه</string>
 
 </resources>

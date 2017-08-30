@@ -164,7 +164,7 @@ public class CustomerInfoFragment extends Fragment {
         openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
         break;
       case R.id.register_payment_lay:
-        Toast.makeText(mainActivity, "Payment", Toast.LENGTH_SHORT).show();
+        mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, false);
         break;
       case R.id.register_questionnaire_lay:
         Toast.makeText(mainActivity, "Questionnaire", Toast.LENGTH_SHORT).show();
