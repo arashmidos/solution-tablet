@@ -1,120 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/features_background"
+  android:orientation="vertical">
+
+  <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/features_background"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:elevation="3dp">
 
-    <android.support.design.widget.AppBarLayout
+    <FrameLayout
+      android:id="@+id/toolbar_container"
+      android:layout_width="match_parent"
+      android:layout_height="56dp">
+
+      <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="3dp">
+        android:layout_height="56dp"
+        android:background="@android:color/white"
+        app:title=""
+        app:titleTextColor="@color/white">
 
-        <FrameLayout
-            android:id="@+id/toolbar_container"
-            android:layout_width="match_parent"
-            android:layout_height="56dp">
+      </android.support.v7.widget.Toolbar>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:background="@android:color/white"
-                app:title=""
-                app:titleTextColor="@color/white">
-
-            </android.support.v7.widget.Toolbar>
-
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/order_good"
-                android:textColor="@color/primary"
-                android:textSize="16sp"/>
-
-            <Button
-                android:id="@+id/close"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center|end"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@drawable/ic_close_24dp"
-                android:backgroundTint="@color/login_gray"/>
-        </FrameLayout>
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+      <TextView
+        android:id="@+id/toolbar_title"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/order_good"
+        android:textColor="@color/primary"
+        android:textSize="16sp" />
 
-    <RelativeLayout
-        android:id="@+id/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:background="@android:color/white">
+      <Button
+        android:id="@+id/close"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_gravity="center|end"
+        android:background="@drawable/ic_close_24dp"
+        android:backgroundTint="@color/login_gray" />
+    </FrameLayout>
+  </android.support.design.widget.AppBarLayout>
 
-        <View
-            android:id="@+id/center_view"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"/>
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" />
 
-        <View
-            android:id="@+id/top_line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentTop="true"
-            android:background="@color/features_background"/>
+  <RelativeLayout
+    android:id="@+id/bottom_bar"
+    android:layout_width="match_parent"
+    android:layout_height="54dp"
+    android:background="@android:color/white">
 
-        <Button
-            android:id="@+id/submit_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="9dp"
-            android:layout_toEndOf="@id/center_view"
-            android:layout_toRightOf="@id/center_view"
-            android:background="@color/log_in_enter_bg"
-            android:gravity="center"
-            android:text="@string/finalize_order"
-            android:textColor="@color/log_in_enter"
-            android:textSize="14sp"/>
+    <View
+      android:id="@+id/center_view"
+      android:layout_width="1dp"
+      android:layout_height="match_parent"
+      android:layout_centerInParent="true" />
 
-        <TextView
-            android:id="@+id/total_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="9dp"
-            android:text="@string/orders_total_amount"
-            android:textColor="@color/order_red"
-            android:textSize="10sp"/>
+    <View
+      android:id="@+id/top_line"
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_alignParentTop="true"
+      android:background="@color/features_background" />
 
-        <TextView
-            android:id="@+id/total_amount_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/total_amount"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_toLeftOf="@id/center_view"
-            android:layout_toStartOf="@id/center_view"
-            android:gravity="left"
-            android:text="56.556.5605ریال"
-            android:textColor="@color/green_text"
-            android:textSize="16sp"/>
-    </RelativeLayout>
+    <Button
+      android:id="@+id/submit_btn"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="9dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_toEndOf="@id/center_view"
+      android:layout_toRightOf="@id/center_view"
+      android:background="@color/log_in_enter_bg"
+      android:gravity="center"
+      android:text="@string/finalize_order"
+      android:textColor="@color/log_in_enter"
+      android:textSize="14sp" />
+
+    <TextView
+      android:id="@+id/total_amount_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="9dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:text="@string/orders_total_amount"
+      android:textColor="@color/order_red"
+      android:textSize="10sp" />
+
+    <TextView
+      android:id="@+id/total_amount_tv"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_below="@id/total_amount_title"
+      android:layout_toLeftOf="@id/center_view"
+      android:layout_toStartOf="@id/center_view"
+      android:gravity="left"
+      android:text="56.556.5605ریال"
+      android:textColor="@color/green_text"
+      android:textSize="16sp" />
+  </RelativeLayout>
 
 
 </LinearLayout>

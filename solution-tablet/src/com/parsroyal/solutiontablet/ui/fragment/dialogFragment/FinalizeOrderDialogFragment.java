@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
@@ -17,17 +19,16 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderFinalizeAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 
 public class FinalizeOrderDialogFragment extends DialogFragment {
 
-
-  @BindView(R.id.recycler_view) RecyclerView recyclerView;
-  @BindView(R.id.total_amount) TextView totalAmount;
-  @BindView(R.id.total_amount_tv) TextView totalAmountTv;
+  @BindView(R.id.recycler_view)
+  RecyclerView recyclerView;
+  @BindView(R.id.total_amount_title)
+  TextView totalAmountTitle;
+  @BindView(R.id.total_amount_tv)
+  TextView totalAmountTv;
 
   private OrderFinalizeAdapter adapter;
   private MainActivity activity;
@@ -39,7 +40,6 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   public FinalizeOrderDialogFragment() {
     // Required empty public constructor
   }
-
 
   public static FinalizeOrderDialogFragment newInstance(OrderFragment orderFragment) {
     FinalizeOrderDialogFragment fragment = new FinalizeOrderDialogFragment();
@@ -55,7 +55,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_finalize_order_dialog, container, false);
     ButterKnife.bind(this, view);
@@ -63,21 +63,28 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     saleOrderService = new SaleOrderServiceImpl(activity);
     Bundle arguments = getArguments();
     orderId = arguments.getLong(Constants.ORDER_ID);
+    order = saleOrderService.findOrderDtoById(orderId);
 
+    setData();
     setUpRecyclerView();
     return view;
   }
 
+  private void setData() {
+    totalAmountTv.setText(NumberUtil.getCommaSeparated(order.getAmount() / 1000) + " " +
+        getString(R.string.common_irr_currency));
+  }
+
   //set up recycler view
   private void setUpRecyclerView() {
-    order = saleOrderService.findOrderDtoById(orderId);
     adapter = new OrderFinalizeAdapter(activity, order.getOrderItems());
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
   }
 
-  @OnClick({R.id.close, R.id.submit_btn}) public void onClick(View view) {
+  @OnClick({R.id.close, R.id.submit_btn})
+  public void onClick(View view) {
     switch (view.getId()) {
       case R.id.close:
         getDialog().dismiss();

@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,22 +11,33 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
+import com.parsroyal.solutiontablet.exception.BusinessException;
+import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
+import com.parsroyal.solutiontablet.service.SettingService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PaymentMethodDialogFragment;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Locale;
 
@@ -34,6 +46,7 @@ import java.util.Locale;
  */
 public class NewOrderInfoFragment extends BaseFragment {
 
+  private static final String TAG = NewOrderInfoFragment.class.getName();
   @BindView(R.id.customer_name_tv)
   TextView customerNameTv;
   @BindView(R.id.cost_tv)
@@ -64,6 +77,8 @@ public class NewOrderInfoFragment extends BaseFragment {
   private CustomerService customerService;
   private Customer customer;
   private BaseInfoService baseInfoService;
+  private SettingService settingService;
+  private VisitService visitService;
 
   public NewOrderInfoFragment() {
     // Required empty public constructor
@@ -83,13 +98,18 @@ public class NewOrderInfoFragment extends BaseFragment {
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
     customerService = new CustomerServiceImpl(mainActivity);
     baseInfoService = new BaseInfoServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl(mainActivity);
+    visitService = new VisitServiceImpl(mainActivity);
+
     Bundle args = getArguments();
+
     orderId = args.getLong(Constants.ORDER_ID, -1);
     order = saleOrderService.findOrderDtoById(orderId);
     customer = customerService.getCustomerByBackendId(order.getCustomerBackendId());
     orderStatus = order.getStatus();
     saleType = args.getString(Constants.SALE_TYPE, "");
     visitId = args.getLong(Constants.VISIT_ID, -1);
+
     setData();
     return view;
   }
@@ -143,10 +163,103 @@ public class NewOrderInfoFragment extends BaseFragment {
         showPaymentMethodDialog();
         break;
       case R.id.submit_order_btn:
-        order.setPaymentTypeBackendId(selectedItem.getValue());
+        order = saleOrderService.findOrderDtoById(orderId);
+        if (validateOrderForSave()) {
+          if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
+            showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                SaleOrderStatus.REJECTED.getId());
+          } else {
+            if (isCold()) {
+              showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                  SaleOrderStatus.READY_TO_SEND.getId());
+            } else {
+              showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                  SaleOrderStatus.INVOICED.getId());
+            }
+          }
+        }
+
         break;
     }
   }
+
+  private void showSaveOrderConfirmDialog(String title,
+      final Long statusId) {//TODO shakib old style
+    DialogUtil.showConfirmDialog(mainActivity, title,
+        getString(R.string.message_are_you_sure), (dialog, which) ->
+        {
+          saveOrder(statusId);
+          mainActivity.removeFragment(NewOrderInfoFragment.this);
+        });
+  }
+
+  private void saveOrder(Long statusId) {
+    try {
+      order.setStatus(statusId);
+
+      if (isRejected()) {
+        //Add reason or reject to orders
+      } else {
+        order.setPaymentTypeBackendId(selectedItem.getValue());
+      }
+
+//      String description = orderInfoFrg.getDescription();
+//      order.setDescription(description);
+
+      //Distributer should not enter his salesmanId.
+      if (!SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus)) {
+        order.setSalesmanId(
+            Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
+      }
+      long typeId = saleOrderService.saveOrder(order);
+
+      VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, getDetailType(),
+          typeId);
+      visitService.saveVisitDetail(visitDetail);
+    } catch (BusinessException ex) {
+      Log.e(TAG, ex.getMessage(), ex);
+      ToastUtil.toastError(mainActivity, ex);
+    } catch (Exception ex) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+          "Error in saving new order detail " + ex.getMessage());
+      Log.e(TAG, ex.getMessage(), ex);
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+    }
+  }
+
+  private VisitInformationDetailType getDetailType() {
+    if (isRejected()) {
+      return VisitInformationDetailType.CREATE_REJECT;
+    }
+    switch (saleType) {
+      case ApplicationKeys.SALE_COLD:
+        return VisitInformationDetailType.CREATE_ORDER;
+      case ApplicationKeys.SALE_HOT:
+        return VisitInformationDetailType.CREATE_INVOICE;
+      case ApplicationKeys.SALE_DISTRIBUTER:
+        return VisitInformationDetailType.DELIVER_ORDER;
+    }
+    //Should not happen
+    return null;
+  }
+
+  private boolean validateOrderForSave() {
+    if (Empty.isEmpty(selectedItem) && !isRejected()) {
+      ToastUtil.toastError(mainActivity, getString(R.string.error_no_payment_method_selected));
+      return false;
+    }
+    if (order.getOrderItems().size() == 0) {
+      ToastUtil.toastError(mainActivity,
+          getProperTitle() + getString(R.string.message_x_has_no_item_for_save));
+      return false;
+    }
+    return true;
+  }
+
+  private boolean isCold() {
+    return saleType.equals(ApplicationKeys.SALE_COLD);
+  }
+
 
   /*
    @return Proper title for which could be "Rejected", "Order" or "Invoice"
