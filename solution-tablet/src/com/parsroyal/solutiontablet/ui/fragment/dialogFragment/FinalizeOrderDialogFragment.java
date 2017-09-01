@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
@@ -20,6 +18,10 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderFinalizeAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class FinalizeOrderDialogFragment extends DialogFragment {
 
@@ -55,7 +57,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_finalize_order_dialog, container, false);
     ButterKnife.bind(this, view);

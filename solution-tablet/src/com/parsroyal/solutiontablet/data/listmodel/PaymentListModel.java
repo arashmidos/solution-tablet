@@ -11,6 +11,17 @@ public class PaymentListModel extends BaseListModel {
   protected long customerBackendId;
   private String customerFullName;
 
+  public PaymentListModel(String date, String amount, String type, long customerBackendId, String customerFullName) {
+    this.date = date;
+    this.amount = amount;
+    this.type = type;
+    this.customerBackendId = customerBackendId;
+    this.customerFullName = customerFullName;
+  }
+
+  public PaymentListModel() {
+  }
+
   public long getCustomerBackendId() {
     return customerBackendId;
   }

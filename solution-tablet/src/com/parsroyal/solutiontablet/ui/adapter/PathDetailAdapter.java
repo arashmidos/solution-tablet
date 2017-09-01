@@ -16,8 +16,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
@@ -51,8 +50,12 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+
 import java.util.Collections;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * @author Shakib
@@ -107,10 +110,12 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
   private void setMargin(boolean isLastItem, CardView cardView) {
     CardView.LayoutParams parameter = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.WRAP_CONTENT);
+    float scale = mainActivity.getResources().getDisplayMetrics().density;
+    int paddingInPx = (int) (8 * scale + 0.5f);
     if (isLastItem) {
-      parameter.setMargins(8, 8, 8, 8);
+      parameter.setMargins(paddingInPx, paddingInPx, paddingInPx, paddingInPx);
     } else {
-      parameter.setMargins(8, 8, 8, 0);
+      parameter.setMargins(paddingInPx, paddingInPx, paddingInPx, 0);
     }
     cardView.setLayoutParams(parameter);
   }
@@ -120,12 +125,12 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
     return customers.size();
   }
 
-  public void setDataModel(List<CustomerListModel> dataModel) {
-    this.customers = dataModel;
-  }
-
   public List<CustomerListModel> getDataModel() {
     return customers;
+  }
+
+  public void setDataModel(List<CustomerListModel> dataModel) {
+    this.customers = dataModel;
   }
 
   public List<CustomerListModel> getFilteredData(CharSequence constraint) {

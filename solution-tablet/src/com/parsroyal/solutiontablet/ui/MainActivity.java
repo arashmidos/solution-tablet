@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +25,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,6 +45,8 @@ import com.parsroyal.solutiontablet.service.LocationUpdatesService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
+import com.parsroyal.solutiontablet.ui.fragment.CustomerFragment;
+import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
@@ -81,6 +85,9 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int ORDER_FRAGMENT_ID = 4;
   public static final int ORDER_INFO_FRAGMENT = 5;
   public static final int REGISTER_PAYMENT_FRAGMENT = 6;
+  public static final int CUSTOMER_FRAGMENT = 7;
+  public static final int ADD_CUSTOMER_FRAGMENT = 8;
+  public static final int CUSTOMER_SEARCH_FRAGMENT = 9;
   public static final int SETTING_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
@@ -96,6 +103,10 @@ public class MainActivity extends BaseFragmentActivity {
   TextView toolbarTitle;
   @BindView(R.id.navigation_img)
   ImageView navigationImg;
+  @BindView(R.id.search_img)
+  ImageView searchImg;
+  @BindView(R.id.app_bar) AppBarLayout appBar;
+
   private ActionBar actionBar;
   private LocationUpdatesService gpsRecieverService = null;
   private DataTransferService dataTransferService;
@@ -478,6 +489,16 @@ public class MainActivity extends BaseFragmentActivity {
       setNavigationToolbarIcon(R.drawable.ic_menu);
     else
       setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
+    //show search icon in customer fragment
+    if (fragmentId == CUSTOMER_FRAGMENT)
+      searchImg.setVisibility(View.VISIBLE);
+    else
+      searchImg.setVisibility(View.GONE);
+    //hide toolbar in customer search fragment
+    if (fragmentId == CUSTOMER_SEARCH_FRAGMENT)
+      appBar.setVisibility(View.GONE);
+    else
+      appBar.setVisibility(View.VISIBLE);
 
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
@@ -494,6 +515,12 @@ public class MainActivity extends BaseFragmentActivity {
         break;
       case REGISTER_PAYMENT_FRAGMENT:
         fragment = RegisterPaymentFragment.newInstance();
+        break;
+      case CUSTOMER_FRAGMENT:
+        fragment = CustomerFragment.newInstance();
+        break;
+      case CUSTOMER_SEARCH_FRAGMENT:
+        fragment = CustomerSearchFragment.newInstance();
         break;
       /*case NEW_CUSTOMER_FRAGMENT_ID:
         fragment = new NCustomersFragment();
@@ -589,7 +616,7 @@ public class MainActivity extends BaseFragmentActivity {
     toolbarTitle.setText(title);
   }
 
-  @OnClick(R.id.navigation_img) public void onClick() {
+  public void onNavigationTapped() {
     Fragment featureFragment = getSupportFragmentManager().findFragmentByTag(FeaturesFragment.class.getSimpleName());
     if (featureFragment != null && featureFragment.isVisible()) {
       if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
@@ -599,6 +626,17 @@ public class MainActivity extends BaseFragmentActivity {
       }
     } else {//TODO if its CustomerInfoFragment, finishVisit
       onBackPressed();
+    }
+  }
+
+  @OnClick({R.id.navigation_img, R.id.search_img}) public void onClick(View view) {
+    switch (view.getId()) {
+      case R.id.navigation_img:
+        onNavigationTapped();
+        break;
+      case R.id.search_img:
+        changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
+        break;
     }
   }
 }
