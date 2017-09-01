@@ -7,6 +7,10 @@ import com.parsroyal.solutiontablet.biz.impl.UserInformationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.response.SettingDetailsResponse;
+import com.parsroyal.solutiontablet.data.response.SettingResponse;
+import com.parsroyal.solutiontablet.data.response.UserInfoDetailsResponse;
+import com.parsroyal.solutiontablet.data.response.UserInfoResponse;
 import com.parsroyal.solutiontablet.exception.InvalidServerAddressException;
 import com.parsroyal.solutiontablet.exception.PasswordNotProvidedForConnectingToServerException;
 import com.parsroyal.solutiontablet.exception.UsernameNotProvidedForConnectingToServerException;
@@ -39,6 +43,10 @@ public class SettingServiceImpl implements SettingService {
     keyValueBiz.save(new KeyValue(settingKey, settingValue));
   }
 
+  /**
+   * @param key Setting key
+   * @return Setting saved locally or null if no setting found
+   */
   @Override
   public String getSettingValue(String key) {
     KeyValue keyValue = keyValueBiz.findByKey(key);
@@ -50,7 +58,7 @@ public class SettingServiceImpl implements SettingService {
 
   @Override
   public void getUserInformation(ResultObserver observer) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     if (Empty.isEmpty(serverAddress1)) {
@@ -68,5 +76,41 @@ public class SettingServiceImpl implements SettingService {
     UserInformationDataTransferBizImpl userInformationBiz = new UserInformationDataTransferBizImpl(
         context, observer);
     userInformationBiz.exchangeData();
+  }
+
+  @Override
+  public void saveSetting(SettingResponse response) {
+    keyValueBiz.save(new KeyValue(ApplicationKeys.TOKEN, response.getToken()));
+    SettingDetailsResponse settingDetail = response.getSettings();
+    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_STOCK_CODE, settingDetail.getStockId()));
+    keyValueBiz
+        .save(new KeyValue(ApplicationKeys.SETTING_BRANCH_CODE, settingDetail.getBranchId()));
+    keyValueBiz
+        .save(new KeyValue(ApplicationKeys.SETTING_ORDER_TYPE, settingDetail.getOrderType()));
+    keyValueBiz
+        .save(new KeyValue(ApplicationKeys.SETTING_INVOICE_TYPE, settingDetail.getFactorType()));
+    keyValueBiz
+        .save(new KeyValue(ApplicationKeys.SETTING_REJECT_TYPE, settingDetail.getRejectType()));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE,
+        String.valueOf(settingDetail.isUseSaleRate())));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE,
+        String.valueOf(settingDetail.isCheckDistanceFromCustomer())));
+  }
+
+  @Override
+  public void saveUserInfo(UserInfoResponse userInfo) {
+    UserInfoDetailsResponse userInfoDetailsResponse = userInfo.getDetails();
+    keyValueBiz.save(new KeyValue(ApplicationKeys.SALESMAN_ID,
+        String.valueOf(userInfoDetailsResponse.getSalesmanId())));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_USER_CODE,
+        String.valueOf(userInfoDetailsResponse.getSalesmanCode())));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.USER_FULL_NAME,
+        String.valueOf(userInfoDetailsResponse.getSalesmanName())));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.USER_COMPANY_ID,
+        String.valueOf(userInfoDetailsResponse.getCompanyId())));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.USER_COMPANY_NAME,
+        String.valueOf(userInfoDetailsResponse.getCompanyName())));
+    keyValueBiz
+        .save(new KeyValue(ApplicationKeys.TOKEN_EXPIRE_DATE, String.valueOf(userInfo.getExp())));
   }
 }

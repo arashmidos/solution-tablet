@@ -96,7 +96,8 @@ public class NavigationDrawerFragment extends Fragment {
         Toast.makeText(getActivity(), "map", Toast.LENGTH_SHORT).show(); //TODO: update
         break;
       case R.id.setting_lay:
-        mainActivity.changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);
+        Toast.makeText(getActivity(), "There is no setting!", Toast.LENGTH_SHORT).show();
+//        mainActivity.changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);
         break;
       case R.id.about_us:
         mainActivity.changeFragment(MainActivity.ABOUT_US_FRAGMENT_ID, true);

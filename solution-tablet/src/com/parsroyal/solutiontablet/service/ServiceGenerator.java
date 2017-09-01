@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,10 @@ public class ServiceGenerator {
       }
 
       String baseUrl = new SettingServiceImpl(SolutionTabletApplication.getInstance())
-          .getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+          .getSettingValue(ApplicationKeys.BACKEND_URI);
+      if (Empty.isEmpty(baseUrl)) {
+        baseUrl = "http://www.google.com";
+      }
       builder = new Retrofit.Builder().baseUrl(baseUrl + "/");
       builder.addConverterFactory(GsonConverterFactory.create());
       builder.client(httpClient.build());

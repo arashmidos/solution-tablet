@@ -237,9 +237,8 @@ public class UserTrackingFragment extends BaseFragment implements
     locationService = new LocationServiceImpl(context);
     orderService = new SaleOrderServiceImpl(context);
 
-    String distanceEnabled = settingService
-        .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE);
-    distanceServiceEnabled = Empty.isNotEmpty(distanceEnabled) && distanceEnabled.equals("1");
+    distanceServiceEnabled = Boolean.valueOf(settingService
+        .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE));
 
     loadCalendars();
 

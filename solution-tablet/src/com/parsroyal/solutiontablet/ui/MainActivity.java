@@ -149,7 +149,7 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void showVersionDialog() {
-    //TODO OLd code, need new style
+    //TODO shakib, need new style
     DialogUtil.showMessageDialog(this, getString(R.string.version),
         String.format(Locale.US, getString(R.string.your_version), BuildConfig.VERSION_NAME));
   }
@@ -199,7 +199,7 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void installNewVersion() {
-    //TODO: Old code, update new style
+    //TODO: shakib, update new style
     DialogUtil.showCustomDialog(this, getString(R.string.message_update_title),
         getString(R.string.message_update_alert), "", (dialogInterface, i) ->
         {
@@ -318,7 +318,7 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void showGpsOffDialog() {
-    //TODO: Old code, need new style
+    //TODO: shakib, need new style
     Dialog dialog = new AlertDialog.Builder(this)
         .setTitle(getString(R.string.error_gps_is_disabled))
 

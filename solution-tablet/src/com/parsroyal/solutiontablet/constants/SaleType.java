@@ -6,7 +6,7 @@ package com.parsroyal.solutiontablet.constants;
 public enum SaleType {
   COLD(1L, "COLD"),
   HOT(2L, "HOT"),
-  DISTRIBUTER(3L, "DISTRIBUTER");
+  DISTRIBUTOR(3L, "DISTRIBUTOR");
 
   private long value;
   private String title;

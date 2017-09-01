@@ -30,8 +30,8 @@ public class Constants {
   public static final String ORDER_STATUS = "orderStatus";
   public static final String REJECTED_LIST = "rejectedList";
   public static final String STATUS_ID = "statusId";
-  public static final String UPDATE_USER = "pvstore";
-  public static final String UPDATE_PASS = "pvstore1234";
+  public static final String UPDATE_USER = "center";
+  public static final String UPDATE_PASS = "center1234";
   public static final int ICON_MESSAGE = R.drawable.ic_info_outline_black_24dp;
   public static final int ICON_WARNING = R.drawable.ic_warning_24dp;
   public static final Float MAX_DISTANCE = 200.0f;
@@ -52,4 +52,5 @@ public class Constants {
   public static final String DATA_TRANSFER_SEND_DATA = "dataTransfer.send.data";
   public static final String DATA_TRANSFER_SEND_IMAGES = "dataTransfer.send.images";
   public static final String READ_ONLY = "readOnly";
+  public static final String ApplicationKey = "solution-tablet";
 }

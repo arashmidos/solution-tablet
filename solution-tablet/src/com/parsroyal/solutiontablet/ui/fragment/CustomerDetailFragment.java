@@ -20,15 +20,15 @@ import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.LocationService;
+import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.service.SaleOrderService;
-import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -91,9 +91,8 @@ public class CustomerDetailFragment extends BaseFragment {
     activityTv.setText(
         Empty.isNotEmpty(customer.getActivityTitle()) ? customer.getActivityTitle() : "--");
 
-    String distanceEnabled = settingService
-        .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE);
-    distanceServiceEnabled = Empty.isNotEmpty(distanceEnabled) && distanceEnabled.equals("1");
+    distanceServiceEnabled = Boolean.valueOf(settingService
+        .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE));
     return view;
   }
 
@@ -175,7 +174,8 @@ public class CustomerDetailFragment extends BaseFragment {
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(oldMainActivity, e);
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "General Exception", "Error in entering customer " + e.getMessage());
+      Crashlytics
+          .log(Log.ERROR, "General Exception", "Error in entering customer " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(oldMainActivity, new UnknownSystemException(e));
     } finally {

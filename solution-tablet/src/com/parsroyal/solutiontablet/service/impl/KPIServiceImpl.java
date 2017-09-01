@@ -33,7 +33,7 @@ public class KPIServiceImpl implements KPIService {
 
   @Override
   public KPIDto getCustomerKPI(long customerBackendId, ResultObserver observer) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     if (Empty.isEmpty(serverAddress1)) {

@@ -72,8 +72,8 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           Toast.makeText(context, "Map Not implemented yet", Toast.LENGTH_SHORT).show();
           break;
         case 5://Settings
-          //TODO REMOVE THIS FRAGMENT AFTER LOGIN IMPLEMENTED
-          context.changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);
+//          context.changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);
+          Toast.makeText(context, "There is no setting!", Toast.LENGTH_SHORT).show();
           break;
       }
     });

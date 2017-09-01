@@ -84,9 +84,8 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
 
     this.visitlineBackendId = visitlineBackendId;
 
-    String distanceEnabled = settingService
-        .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE);
-    distanceServiceEnabled = Empty.isNotEmpty(distanceEnabled) && distanceEnabled.equals("1");
+    distanceServiceEnabled = Boolean.valueOf(settingService
+        .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE));
   }
 
   @Override
