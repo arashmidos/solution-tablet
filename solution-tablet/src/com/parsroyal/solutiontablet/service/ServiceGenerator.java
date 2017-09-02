@@ -88,11 +88,13 @@ public class ServiceGenerator {
     public Response intercept(Chain chain) throws IOException {
       Request original = chain.request();
 
+      String token = new SettingServiceImpl(
+          SolutionTabletApplication.getInstance()).getSettingValue(ApplicationKeys.TOKEN);
       String encodedRequest = original.url().toString();
       encodedRequest = encodedRequest.replace("|", "%7c");
       Request.Builder builder = original.newBuilder()
-          .header("Authorization", authToken);
-
+//          .header("Authorization", authToken);
+          .addHeader("Authorization", "Bearer " + token);
       Request request = builder.url(encodedRequest).build();
       return chain.proceed(request);
     }

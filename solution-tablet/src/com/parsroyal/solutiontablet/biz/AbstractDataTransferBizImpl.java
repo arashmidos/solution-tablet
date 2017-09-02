@@ -53,6 +53,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
   protected KeyValueDao keyValueDao;
   protected KeyValue salesmanCode;
   private KeyValue goodsRequestId;
+  private KeyValue token;
 
   public AbstractDataTransferBizImpl(Context context) {
     this.context = context;
@@ -67,6 +68,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
     salesmanCode = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USER_CODE);
     goodsRequestId = keyValueDao.retrieveByKey(ApplicationKeys.GOODS_REQUEST_ID);
+    token = keyValueDao.retrieveByKey(ApplicationKeys.TOKEN);
   }
 
   public boolean exchangeData() {
@@ -78,9 +80,9 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
 
       HttpHeaders httpHeaders = new HttpHeaders();
       httpHeaders.setContentType(getContentType());
-      HttpBasicAuthentication authentication = new HttpBasicAuthentication(username.getValue(),
+      /*HttpBasicAuthentication authentication = new HttpBasicAuthentication(username.getValue(),
           password.getValue());
-      httpHeaders.setAuthorization(authentication);
+      httpHeaders.setAuthorization(authentication);*/
       httpHeaders.add("saleType",
           Empty.isEmpty(saleType) ? ApplicationKeys.SALE_COLD : saleType.getValue());
 
@@ -91,7 +93,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
       if (Empty.isNotEmpty(goodsRequestId)) {
         httpHeaders.add("goodsRequestId", goodsRequestId.getValue());
       }
-
+      httpHeaders.add("Authorization", "Bearer " + token.getValue());
       //Make RestTemplate loggable
       System.setProperty("org.apache.commons.logging.Log",
           "org.apache.commons.logging.impl.SimpleLog");

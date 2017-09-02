@@ -207,7 +207,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_products_24_dp"
-            android:tint="@color/login_gray" />
+            android:tint="@color/black_21" />
 
           <TextView
             android:layout_width="wrap_content"

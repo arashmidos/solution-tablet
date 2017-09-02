@@ -12,6 +12,9 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 
+/**
+ * @author Shakib
+ */
 public class CustomerFragment extends BaseFragment {
 
   @BindView(R.id.tabs)
@@ -20,7 +23,7 @@ public class CustomerFragment extends BaseFragment {
   ViewPager viewpager;
 
   private CustomerDetailViewPagerAdapter viewPagerAdapter;
-  private MainActivity activity;
+  private MainActivity mainActivity;
 
   public CustomerFragment() {
     // Required empty public constructor
@@ -36,8 +39,8 @@ public class CustomerFragment extends BaseFragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_customer, container, false);
     ButterKnife.bind(this, view);
-    activity = (MainActivity) getActivity();
-    activity.changeTitle(getString(R.string.cusomters));
+    mainActivity = (MainActivity) getActivity();
+    mainActivity.changeTitle(getString(R.string.cusomters));
     tabs.setupWithViewPager(viewpager);
     setUpViewPager();
     viewpager.setCurrentItem(viewPagerAdapter.getCount());

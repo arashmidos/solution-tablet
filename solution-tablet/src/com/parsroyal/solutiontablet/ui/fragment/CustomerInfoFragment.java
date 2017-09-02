@@ -351,7 +351,7 @@ public class CustomerInfoFragment extends Fragment {
   private void finishVisiting() {
     try {
       List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
-      if (detailList.size() == 0) {//TODO shakib old style
+      if (detailList.size() == 0) {
         DialogUtil.showConfirmDialog(mainActivity, getString(R.string.title_attention),
             getString(R.string.message_error_no_visit_detail_found),
             (dialogInterface, i) -> showWantsDialog());

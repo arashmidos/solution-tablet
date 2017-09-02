@@ -469,7 +469,6 @@ public class MainActivity extends BaseFragmentActivity {
     fm.popBackStack(fragmentId, FragmentManager.POP_BACK_STACK_INCLUSIVE);
   }
 
-  //TODO: Need review addTobackStack is useless
   private void commitFragment(String fragmentTag, BaseFragment fragment, boolean addToBackStack) {
     FragmentTransaction fragmentTransaction;
     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -477,7 +476,7 @@ public class MainActivity extends BaseFragmentActivity {
     fragmentTransaction.replace(R.id.container, fragment, fragmentTag);
     fragmentTransaction.addToBackStack(fragmentTag);
     fragmentTransaction.commit();
-  }//TODO: Need review addTobackStack is useless
+  }
 
 
   public void changeFragment(int fragmentId, boolean addToBackStack) {

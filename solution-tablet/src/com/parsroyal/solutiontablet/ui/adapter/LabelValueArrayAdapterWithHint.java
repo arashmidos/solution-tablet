@@ -11,14 +11,14 @@ import com.parsroyal.solutiontablet.data.model.LabelValue;
 import java.util.List;
 
 /**
- * Created by Mahyar on 8/28/2015.
+ * Created by Arash on 2/09/2017.
  */
-public class LabelValueArrayAdapter extends BaseAdapter {
+public class LabelValueArrayAdapterWithHint extends BaseAdapter {
 
   private LayoutInflater mLayoutInflater;
   private List<LabelValue> labelValues;
 
-  public LabelValueArrayAdapter(Context context, List labelValues) {
+  public LabelValueArrayAdapterWithHint(Context context, List labelValues) {
     this.labelValues = labelValues;
     mLayoutInflater = (LayoutInflater) context.getSystemService(
         Context.LAYOUT_INFLATER_SERVICE);

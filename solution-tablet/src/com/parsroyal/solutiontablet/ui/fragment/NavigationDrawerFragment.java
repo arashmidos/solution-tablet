@@ -80,6 +80,9 @@ public class NavigationDrawerFragment extends Fragment {
       case R.id.features_list_lay:
         mainActivity.changeFragment(MainActivity.FEATURE_FRAGMENT_ID, true);
         break;
+      case R.id.today_paths_lay:
+        mainActivity.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
+        break;
       case R.id.customers_lay:
         mainActivity.changeFragment(MainActivity.CUSTOMER_FRAGMENT, true);
         break;
@@ -87,9 +90,6 @@ public class NavigationDrawerFragment extends Fragment {
         Bundle args = new Bundle();
         args.putBoolean(Constants.READ_ONLY, true);
         mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
-        break;
-      case R.id.today_paths_lay:
-        mainActivity.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
         break;
       case R.id.reports_lay:
         Toast.makeText(getActivity(), "report", Toast.LENGTH_SHORT).show();//TODO: update

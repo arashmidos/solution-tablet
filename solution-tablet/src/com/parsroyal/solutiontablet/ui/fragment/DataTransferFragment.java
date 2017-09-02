@@ -113,8 +113,6 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     sendDataBtn.setEnabled(status);
     getImagesBtn.setClickable(status);
     getImagesBtn.setEnabled(status);
-    //TODO: Change this method
-//    mainActivity.setMenuEnabled(status);
   }
 
   private void invokeGetData() {
@@ -136,6 +134,8 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     });
 
     thread.start();
+    publishResult(getString(R.string.message_transferring_goods_images_data));
+    getGoodsImages();
   }
 
   @Override
@@ -221,7 +221,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     getView().requestFocus();
     getView().setOnKeyListener((v, keyCode, event) ->
     {
-      //TODO: fix this
+
       /*if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
         if (mainActivity.isMenuEnabled()) {
           mainActivity.onBackPressed();

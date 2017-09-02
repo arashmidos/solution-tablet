@@ -12,15 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
@@ -28,16 +25,13 @@ import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
-import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
-import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
-import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
@@ -47,6 +41,7 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -178,8 +173,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       this.position = position;
       customerShopNameTv.setText(model.getShopName());
       customerNameTv.setText(model.getTitle());
-      String customerCode = "کد : " + model.getCode();
-      customerIdTv.setText(customerCode);
+      customerIdTv.setText(String.format(mainActivity.getString(R.string.code_x), model.getCode()));
       //set location icon
       if (model.hasLocation()) {
         hasLocationImg.setImageResource(R.drawable.ic_gps_fixed_black_18dp);
@@ -200,7 +194,6 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       }
 
       hasOrderImg.setVisibility(model.hasOrder() ? View.VISIBLE : View.GONE);
-
     }
 
     public void setListeners() {
@@ -271,51 +264,23 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
         }
       });
       noVisitBtn.setOnClickListener(v -> {
-        showWantsDialog(errorMessageTv);
+        showWantsDialog();
         alertDialog.cancel();
       });
     }
 
-    private void showWantsDialog(TextView errorMessageTv) {
-      AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mainActivity);
-      BaseInfoService baseInfoService = new BaseInfoServiceImpl(mainActivity);
-      List<LabelValue> wants = baseInfoService
-          .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.WANT_TYPE.getId());
-      if (Empty.isEmpty(wants)) {
-        errorMessageTv.setText(R.string.message_found_no_wants_information);
-        errorMessageTv.setVisibility(View.VISIBLE);
-        return;
-      }
-//TODO Shakib, OLD STYLE dialog
-      View wantsDialogView = mainActivity.getLayoutInflater().inflate(R.layout.dialog_wants, null);
-      final Spinner wantsSpinner = (Spinner) wantsDialogView.findViewById(R.id.wantsSP);
-      CheckBox notVisitedCb = (CheckBox) wantsDialogView.findViewById((R.id.not_visited_cb));
-
-      notVisitedCb.setOnCheckedChangeListener(
-          (compoundButton, isChecked) -> wantsSpinner.setEnabled(!isChecked));
-      LabelValueArrayAdapter labelValueArrayAdapter = new LabelValueArrayAdapter(mainActivity,
-          wants);
-      wantsSpinner.setAdapter(labelValueArrayAdapter);
-
-      dialogBuilder.setView(wantsDialogView);
-      dialogBuilder.setPositiveButton(R.string.button_ok, (dialog, which) ->
-      {
-        LabelValue selectedItem = (LabelValue) wantsSpinner.getSelectedItem();
-        addNotVisited(selectedItem, notVisitedCb.isChecked());
-      });
-      dialogBuilder.setNegativeButton(R.string.button_cancel, (dialog, which) ->
-      {
-      });
-      dialogBuilder.setTitle(R.string.title_save_want);
-      dialogBuilder.create().show();
+    private void showWantsDialog() {
+      DialogUtil.showConfirmDialog(mainActivity, "", "آیا از ثبت عدم ویزیت اطمینان دارید؟",
+          (dialog, which) -> {
+            addNotVisited();
+            dialog.dismiss();
+          });
     }
 
-    private void addNotVisited(LabelValue selectedItem, boolean notVisited) {
+    private void addNotVisited() {
       Long visitId = visitService.startVisiting(model.getBackendId());
       VisitInformationDetail visitInformationDetail = new VisitInformationDetail(
-          visitId,
-          notVisited ? VisitInformationDetailType.NONE : VisitInformationDetailType.NO_ORDER,
-          selectedItem.getValue());
+          visitId, VisitInformationDetailType.NONE, 0);
       visitService.saveVisitDetail(visitInformationDetail);
       visitService.finishVisiting(visitId);
       ToastUtil.toastMessage(mainActivity, R.string.none_added_successfully);

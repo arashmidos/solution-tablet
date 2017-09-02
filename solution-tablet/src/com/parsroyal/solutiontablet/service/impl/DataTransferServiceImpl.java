@@ -77,7 +77,7 @@ public class DataTransferServiceImpl implements DataTransferService {
   private PositionService positionService;
   private VisitServiceImpl visitService;
 
-  private KeyValue serverAddress1;
+  private KeyValue backendUri;
   private KeyValue username;
   private KeyValue password;
   private KeyValue salesmanId;
@@ -96,13 +96,13 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   @Override
   public void getAllData(final ResultObserver uiObserver) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
+    backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
     saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
 
-    if (Empty.isEmpty(serverAddress1)) {
+    if (Empty.isEmpty(backendUri)) {
       throw new InvalidServerAddressException();
     }
 
@@ -145,13 +145,13 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   public void getGoodsImages(final ResultObserver uiObserver) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
+    backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
     saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
 
-    if (Empty.isEmpty(serverAddress1)) {
+    if (Empty.isEmpty(backendUri)) {
       throw new InvalidServerAddressException();
     }
 
@@ -247,12 +247,12 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   @Override
   public void sendAllData(final ResultObserver uiObserver) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
+    backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
 
-    if (Empty.isEmpty(serverAddress1)) {
+    if (Empty.isEmpty(backendUri)) {
       throw new InvalidServerAddressException();
     }
 
@@ -473,26 +473,22 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   @Override
   public boolean isDataTransferPossible() {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
+    backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
 
-    if (Empty.isEmpty(serverAddress1) || Empty.isEmpty(username) ||
-        Empty.isEmpty(password) || Empty.isEmpty(salesmanId)) {
-      return false;
-    } else {
-      return true;
-    }
+    return !(Empty.isEmpty(backendUri) || Empty.isEmpty(username) ||
+        Empty.isEmpty(password) || Empty.isEmpty(salesmanId));
   }
 
   @Override
   public GoodsDtoList getRejectedData(ResultObserver uiObserver, Long customerId) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
+    backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-    if (Empty.isEmpty(serverAddress1)) {
+    if (Empty.isEmpty(backendUri)) {
       throw new InvalidServerAddressException();
     }
 
@@ -515,7 +511,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   private GoodsDtoList getAllRejectedGoods(ResultObserver observer, Long customerId) {
     return new RejectedGoodsDataTransferBizImpl(context, observer)
-        .getAllRejectedData(serverAddress1, username, password, salesmanId, customerId);
+        .getAllRejectedData(backendUri, username, password, salesmanId, customerId);
   }
 
   private ResultObserver prepareResultObserverForDataTransfer(final ResultObserver uiObserver) {
