@@ -11,13 +11,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by ShakibIsTheBest on 8/4/2017.
@@ -58,7 +61,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           context.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
           break;
         case 1://Customers
-          Toast.makeText(context, "Customers Not implemented yet", Toast.LENGTH_SHORT).show();
+          context.changeFragment(MainActivity.CUSTOMER_FRAGMENT, true);
           break;
         case 2://reports
           Toast.makeText(context, "Reports Not implemented yet", Toast.LENGTH_SHORT).show();

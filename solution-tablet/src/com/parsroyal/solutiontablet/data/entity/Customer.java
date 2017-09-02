@@ -84,6 +84,16 @@ public class Customer extends BaseEntity<Long> {
   private String municipalityCode;
   private boolean approved = true;
 
+  public Customer(Double xLocation, String fullName, String shopName, String code) {
+    this.xLocation = xLocation;
+    this.fullName = fullName;
+    this.shopName = shopName;
+    this.code = code;
+  }
+
+  public Customer() {
+  }
+
   public boolean isApproved() {
     return approved;
   }
