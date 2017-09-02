@@ -23,6 +23,11 @@ public class KeyValueDaoImpl implements KeyValueDao {
   }
 
   @Override
+  public void clearAllKeys() {
+    PreferenceHelper.clearAllKeys();
+  }
+
+  @Override
   public Long create(KeyValue entity) {
     PreferenceHelper.saveKey(entity);
     return 0L;

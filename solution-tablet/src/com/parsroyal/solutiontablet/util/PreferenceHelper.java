@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.util;
 
+import android.content.SharedPreferences;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 
@@ -45,5 +46,11 @@ public class PreferenceHelper {
       return null;
     }
     return new KeyValue(0L, settingKey, value);
+  }
+
+  public static void clearAllKeys() {
+    SharedPreferences.Editor editor = SolutionTabletApplication.getPreference().edit();
+    editor.clear();
+    editor.apply();
   }
 }

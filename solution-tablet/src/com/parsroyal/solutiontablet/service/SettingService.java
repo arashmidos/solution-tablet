@@ -18,4 +18,6 @@ public interface SettingService {
   void saveSetting(SettingResponse response);
 
   void saveUserInfo(UserInfoResponse userInfo);
+
+  void clearAllSettings();
 }

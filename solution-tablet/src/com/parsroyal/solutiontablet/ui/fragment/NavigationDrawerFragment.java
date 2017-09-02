@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -18,6 +19,7 @@ import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.ui.LoginActivity;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -103,8 +105,9 @@ public class NavigationDrawerFragment extends Fragment {
         mainActivity.changeFragment(MainActivity.ABOUT_US_FRAGMENT_ID, true);
         break;
       case R.id.body_log_out:
-        Toast.makeText(getActivity(), "log out", Toast.LENGTH_SHORT)
-            .show();//TODO: update after login
+        settingService.clearAllSettings();
+        startActivity(new Intent(getActivity(), LoginActivity.class));
+        getActivity().finish();
         break;
       case R.id.get_data_lay:
         Bundle args3 = new Bundle();

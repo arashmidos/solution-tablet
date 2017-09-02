@@ -113,4 +113,9 @@ public class SettingServiceImpl implements SettingService {
     keyValueBiz
         .save(new KeyValue(ApplicationKeys.TOKEN_EXPIRE_DATE, String.valueOf(userInfo.getExp())));
   }
+
+  @Override
+  public void clearAllSettings() {
+    keyValueDao.clearAllKeys();
+  }
 }

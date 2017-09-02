@@ -110,11 +110,14 @@ public class NetworkUtil {
     return userInfoResponse;
   }
 
-  public boolean isTokenExpired() {
+  public static boolean isTokenExpired() {
     SettingService settingService = new SettingServiceImpl(SolutionTabletApplication.getInstance());
     String expire = settingService.getSettingValue(ApplicationKeys.TOKEN_EXPIRE_DATE);
+    if (Empty.isEmpty(expire)) {
+      return true;
+    }
+    Date expireDate = new Date(Long.valueOf(expire)*1000);
 
-    Date expireDate = new Date(expire);
     return (expireDate.compareTo(new Date()) < 0);
   }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.util.NetworkUtil;
 
 /**
  * Created by m.sefidi on 5/24/14.
@@ -21,9 +22,14 @@ public class SplashActivity extends BaseActivity {
 //        Intent iMainActivity = new Intent(getApplicationContext(),
 //            MainActivity.class);
 //        startActivity(iMainActivity);
-      Intent iLoginActivity = new Intent(getApplicationContext(),
-          LoginActivity.class);
-      startActivity(iLoginActivity);
+
+      if (!NetworkUtil.isTokenExpired()) {
+        startActivity(new Intent(this, MainActivity.class));
+      } else {
+        Intent iLoginActivity = new Intent(getApplicationContext(),
+            LoginActivity.class);
+        startActivity(iLoginActivity);
+      }
 
       finish();
     }, SPLASH_SCREEN_TIME);
