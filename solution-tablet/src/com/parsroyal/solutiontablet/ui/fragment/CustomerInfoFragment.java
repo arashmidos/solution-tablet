@@ -8,12 +8,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +46,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.RegisterNoLabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -51,6 +54,7 @@ import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+
 import java.util.Date;
 import java.util.List;
 
@@ -61,6 +65,9 @@ import butterknife.OnClick;
 public class CustomerInfoFragment extends Fragment {
 
   private static final String TAG = CustomerInfoFragment.class.getName();
+  private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+  private static final int RESULT_OK = -1;
+  private static final int RESULT_CANCELED = 0;
   @BindView(R.id.store_tv)
   TextView storeTv;
   @BindView(R.id.drop_img)
@@ -79,7 +86,6 @@ public class CustomerInfoFragment extends Fragment {
   TextView addOrderTv;
   @BindView(R.id.register_order_lay)
   RelativeLayout registerOrderLay;
-
   private boolean isShowMore = true;
   private long customerId;
   private long visitId;
@@ -92,9 +98,6 @@ public class CustomerInfoFragment extends Fragment {
   private String saleType;
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
-  private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-  private static final int RESULT_OK = -1;
-  private static final int RESULT_CANCELED = 0;
   private Uri fileUri;
   private SaleOrderDto orderDto;
 
@@ -164,7 +167,7 @@ public class CustomerInfoFragment extends Fragment {
         openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
         break;
       case R.id.register_payment_lay:
-        mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, false);
+        goToRegisterPaymentFragment();
         break;
       case R.id.register_questionnaire_lay:
         Toast.makeText(mainActivity, "Questionnaire", Toast.LENGTH_SHORT).show();
@@ -176,7 +179,7 @@ public class CustomerInfoFragment extends Fragment {
         finishVisiting();
         break;
       case R.id.no_activity_lay:
-        showWantsDialog();
+        showNoDialog();
         break;
       case R.id.show_more_tv:
         onShowMoreTapped();
@@ -214,7 +217,7 @@ public class CustomerInfoFragment extends Fragment {
 
   /**
    * @param statusID Could be DRAFT for both AddInvoice/AddOrder or REJECTED_DRAFT for
-   * ReturnedOrder
+   *                 ReturnedOrder
    */
   private void openOrderDetailFragment(Long statusID) {
 
@@ -246,6 +249,13 @@ public class CustomerInfoFragment extends Fragment {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_factor_right_now);
       }
     }
+  }
+
+  private void goToRegisterPaymentFragment() {
+    Bundle args = new Bundle();
+    args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
+    args.putLong(Constants.VISIT_ID, visitId);
+    mainActivity.changeFragment(mainActivity.REGISTER_PAYMENT_FRAGMENT, args, false);
   }
 
   private void invokeGetRejectedData() {
@@ -398,6 +408,42 @@ public class CustomerInfoFragment extends Fragment {
     });
     dialogBuilder.setTitle(R.string.title_save_want);
     dialogBuilder.create().show();
+  }
+
+  private void showNoDialog() {
+    List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
+    if (detailList.size() > 0) {
+      ToastUtil.toastError(mainActivity, R.string.message_error_wants_denied);
+      return;
+    }
+    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mainActivity);
+
+    List<LabelValue> wants = baseInfoService
+        .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.WANT_TYPE.getId());
+    if (Empty.isEmpty(wants)) {
+      ToastUtil.toastError(mainActivity, R.string.message_found_no_wants_information);
+      return;
+    }
+    LayoutInflater inflater = mainActivity.getLayoutInflater();
+    View dialogView = inflater.inflate(R.layout.dialog_register_no, null);
+    dialogBuilder.setView(dialogView);
+
+    Button registerNoBtn = (Button) dialogView.findViewById(R.id.register_btn);
+    TextView cancelTv = (TextView) dialogView.findViewById(R.id.cancel_tv);
+    Spinner noSpinner = (Spinner) dialogView.findViewById(R.id.no_spinner);
+    AlertDialog alertDialog = dialogBuilder.create();
+
+    wants.add(new LabelValue(-1l, getString(R.string.reason_register_no)));
+    RegisterNoLabelValueArrayAdapter labelValueArrayAdapter = new RegisterNoLabelValueArrayAdapter(mainActivity,
+        wants);
+    noSpinner.setAdapter(labelValueArrayAdapter);
+    noSpinner.setSelection(wants.size() - 1);
+    alertDialog.show();
+    registerNoBtn.setOnClickListener(v -> {
+      LabelValue selectedItem = (LabelValue) noSpinner.getSelectedItem();
+      updateVisitResult(selectedItem, false);
+    });
+    cancelTv.setOnClickListener(v -> alertDialog.cancel());
   }
 
   private void updateVisitResult(LabelValue selectedItem, boolean notVisited) {
