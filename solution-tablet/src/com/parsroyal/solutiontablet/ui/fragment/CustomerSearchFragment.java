@@ -94,7 +94,7 @@ public class CustomerSearchFragment extends BaseFragment {
   }
 
   private List<CustomerListModel> getCustomersList() {
-    return customerService.getAllCustomersListModelByVisitLineBackendId(3911l);
+    return customerService.getFilteredCustomerList(null,"");
   }
 
   @Override public int getFragmentId() {

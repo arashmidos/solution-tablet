@@ -103,8 +103,8 @@ public class GoodsDetailDialogFragment extends DialogFragment {
     settingService = new SettingServiceImpl(context);
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
-    saleRateEnabled = "1"
-        .equals(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE));
+    saleRateEnabled = Boolean
+        .valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE));
 
     if (orderStatus == SaleOrderStatus.REJECTED_DRAFT.getId()) {
       rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);

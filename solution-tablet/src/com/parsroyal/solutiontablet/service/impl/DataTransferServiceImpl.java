@@ -96,7 +96,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   @Override
   public void getAllData(final ResultObserver uiObserver) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
@@ -145,7 +145,7 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   public void getGoodsImages(final ResultObserver uiObserver) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
@@ -247,7 +247,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   @Override
   public void sendAllData(final ResultObserver uiObserver) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
@@ -473,7 +473,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   @Override
   public boolean isDataTransferPossible() {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
@@ -488,7 +488,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   @Override
   public GoodsDtoList getRejectedData(ResultObserver uiObserver, Long customerId) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);

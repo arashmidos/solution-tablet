@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,6 @@ import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.exception.BackendIsNotReachableException;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
-import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
@@ -82,7 +80,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
     mainActivity = (MainActivity) getActivity();
     settingService = new SettingServiceImpl(mainActivity);
 
-    String address1 = settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    String address1 = settingService.getSettingValue(ApplicationKeys.BACKEND_URI);
     String username = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
     String userCode = settingService.getSettingValue(ApplicationKeys.SETTING_USER_CODE);
     String password = settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD);
@@ -178,7 +176,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
       String rejectType = rejectTypeTxt.getText().toString();
       String saleRateEnabled = enableSaleRateCb.isChecked() ? "1" : "0";
 
-      settingService.saveSetting(ApplicationKeys.SETTING_SERVER_ADDRESS_1, serverAddress1);
+      settingService.saveSetting(ApplicationKeys.BACKEND_URI, serverAddress1);
       settingService.saveSetting(ApplicationKeys.SETTING_USERNAME, username);
       settingService.saveSetting(ApplicationKeys.SETTING_USER_CODE, userCode);
       settingService.saveSetting(ApplicationKeys.SETTING_PASSWORD, password);
@@ -377,7 +375,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
     String username = usernameTxt.getText().toString();
     String userCode = userCodeTxt.getText().toString();
 
-    String oldAddress1 = settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    String oldAddress1 = settingService.getSettingValue(ApplicationKeys.BACKEND_URI);
     String oldUsername = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
     String oldUserCode = settingService.getSettingValue(ApplicationKeys.SETTING_USER_CODE);
 

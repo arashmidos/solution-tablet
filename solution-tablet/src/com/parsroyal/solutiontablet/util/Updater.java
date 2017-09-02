@@ -41,7 +41,7 @@ public class Updater {
   private static DownloadManager downloadManager;
   private static long downloadReference;
   private static BroadcastReceiver receiverDownloadComplete;
-  private static final String API_UPDATE_URL = "http://173.212.199.107:50003/pvstore/app/latest/solution-tablet";
+  private static final String API_UPDATE_URL = "http://173.212.199.107:50004/appcenter/app/latest/solution-tablet";
 
 
   public static void checkAppUpdate(final Context context) {
@@ -50,7 +50,7 @@ public class Updater {
     }
 
     SettingService settingService = new SettingServiceImpl(context);
-    if (Empty.isEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1))) {
+    if (Empty.isEmpty(settingService.getSettingValue(ApplicationKeys.BACKEND_URI))) {
       return;
     }
 
@@ -71,7 +71,7 @@ public class Updater {
       public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
         if (response.body() != null) {
           UpdateResponse updateResponse = response.body();
-          if (updateResponse!=null && updateResponse.isSuccess()
+          if (updateResponse != null && updateResponse.isSuccess()
               && updateResponse.getVersion() > BuildConfig.VERSION_CODE) {
             doUpdate(context, updateResponse.getDownloadUrl(), updateResponse.getVersion());
           }

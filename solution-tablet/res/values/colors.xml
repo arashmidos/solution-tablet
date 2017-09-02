@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--
-    100% — FF
-    95% — F2
-    90% — E6
-    85% — D9
-    80% — CC
-    75% — BF
-    70% — B3
-    65% — A6
-    60% — 99
-    55% — 8C
-    50% — 80
-    45% — 73
-    40% — 66
-    35% — 59
-    30% — 4D
-    25% — 40
-    20% — 33
-    15% — 26
-    10% — 1A
-    5% — 0D
-    0% — 00-->
-    <color name="light_orange">#fff69436</color>
-    <color name="dark_blue">#ff2d6b9e</color>
-    <color name="dark_gray">#ff727174</color>
-    <color name="light_gray">#ffdbdcde</color>
-    <color name="wight">#ffffff</color>
-    <color name="white30">#deffffff</color>
-    <color name="red">#ffdf2c42</color>
-    <color name="green">#2dcb74</color>
-    <color name="gray">#a0a0a0</color>
-    <color name="violet">#8576ca</color>
-    <color name="orange">#ffae22</color>
-    <color name="blue">#00b4ea</color>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="gray_light_more">#dfdddd</color>
-    <color name="splash_background">#E0EEF0</color>
-    <color name="pink">#FF4081</color>
-    <!--new version-->
-    <color name="log_in_enter">#fffafafa</color>
-    <color name="log_in_enter_bg">#4cb050</color>
-    <color name="green_text">#2e7d32</color>
-    <color name="payment_bottom_line">#4caf50</color>
+  <!--
+  100% — FF
+  95% — F2
+  90% — E6
+  85% — D9
+  80% — CC
+  75% — BF
+  70% — B3
+  65% — A6
+  60% — 99
+  55% — 8C
+  50% — 80
+  45% — 73
+  40% — 66
+  35% — 59
+  30% — 4D
+  25% — 40
+  20% — 33
+  15% — 26
+  10% — 1A
+  5% — 0D
+  0% — 00-->
+  <color name="light_orange">#fff69436</color>
+  <color name="dark_blue">#ff2d6b9e</color>
+  <color name="dark_gray">#ff727174</color>
+  <color name="light_gray">#ffdbdcde</color>
+  <color name="wight">#ffffff</color>
+  <color name="white30">#deffffff</color>
+  <color name="red">#ffdf2c42</color>
+  <color name="green">#2dcb74</color>
+  <color name="gray">#a0a0a0</color>
+  <color name="violet">#8576ca</color>
+  <color name="orange">#ffae22</color>
+  <color name="blue">#00b4ea</color>
+  <color name="colorPrimary">#3F51B5</color>
+  <color name="gray_light_more">#dfdddd</color>
+  <color name="splash_background">#E0EEF0</color>
+  <color name="pink">#FF4081</color>
+  <!--new version-->
+  <color name="log_in_enter">#fffafafa</color>
+  <color name="log_in_enter_bg">#4cb050</color>
+  <color name="green_text">#2e7d32</color>
+  <color name="payment_bottom_line">#4caf50</color>
 
     <color name="log_in_enter_bg_20">#804cb050</color>
     <color name="customers_number">#1d988c</color>
@@ -66,10 +66,9 @@
     <color name="black_10">#1a000000</color>
     <color name="black_21">#212121</color>
 
-    <!-- visit detail-->
-    <color name="register_order">#388e3c</color>
-    <color name="register_payment">#009688</color>
-    <color name="register_questionnaire">#1976d2</color>
-    <color name="register_image">#673ab7</color>
-
+  <!-- visit detail-->
+  <color name="register_order">#388e3c</color>
+  <color name="register_payment">#009688</color>
+  <color name="register_questionnaire">#1976d2</color>
+  <color name="register_image">#673ab7</color>
 </resources>

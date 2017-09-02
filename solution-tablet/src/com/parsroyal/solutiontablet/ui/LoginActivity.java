@@ -1,10 +1,12 @@
 package com.parsroyal.solutiontablet.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.ui.fragment.LoginFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
   @Override
   public void onBackPressed() {
-    //TODO old code, update with new style
+    //TODO shakib update with new style
     DialogUtil.showConfirmDialog(this, getString(R.string.message_exit),
         getString(R.string.message_do_you_want_to_exit),
         (dialog, which) ->
@@ -32,5 +34,10 @@ public class LoginActivity extends AppCompatActivity {
           dialog.dismiss();
           finish();
         });
+  }
+
+  @Override
+  protected void attachBaseContext(Context newBase) {
+    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
   }
 }

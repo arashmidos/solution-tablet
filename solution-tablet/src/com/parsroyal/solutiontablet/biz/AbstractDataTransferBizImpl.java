@@ -60,7 +60,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
   }
 
   public void prepare() {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);

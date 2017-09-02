@@ -9,6 +9,7 @@ public class User extends BaseModel {
   private String userCode;
   private String companyName;
   private String salesmanId;
+  private long companyId;
 
   public long getCompanyId() {
     return companyId;
@@ -18,7 +19,6 @@ public class User extends BaseModel {
     this.companyId = companyId;
   }
 
-  private long companyId;
 
   public String getFullName() {
     return fullName;

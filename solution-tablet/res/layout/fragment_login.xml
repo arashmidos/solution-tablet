@@ -72,15 +72,16 @@
 
           <EditText
             android:id="@+id/company_code_edt"
+            android:text="parsroyal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/edit_text_state_background"
             android:gravity="right|center_vertical"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_normal"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_normal"
             tools:text="sunstar" />
 
         </android.support.design.widget.TextInputLayout>
@@ -120,11 +121,12 @@
             android:layout_height="match_parent"
             android:background="@drawable/edit_text_state_background"
             android:gravity="right|center_vertical"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:maxLines="1"
             android:imeOptions="actionNext"
             android:inputType="text"
+            android:maxLines="1"
+            android:text="afshin"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
             tools:text="آقا آٰرش" />
 
         </android.support.design.widget.TextInputLayout>
@@ -140,6 +142,50 @@
           android:tint="@color/login_gray" />
       </LinearLayout>
 
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+          android:id="@+id/password_lay"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:layout_marginStart="32dp"
+          android:layout_marginLeft="32dp"
+          android:gravity="right"
+          android:hint="@string/password"
+          android:textColorHint="@color/login_gray"
+          app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+          <EditText
+            android:id="@+id/password_edt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/edit_text_state_background"
+            android:gravity="right|center_vertical"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:text="123"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            tools:text="123456" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+          android:id="@+id/password_icon"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_marginLeft="19dp"
+          android:layout_marginRight="34dp"
+          android:layout_gravity="right|center"
+          android:src="@drawable/ic_vpn_key_black_24dp"
+          android:tint="@color/login_gray" />
+      </LinearLayout>
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -148,7 +194,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:gravity="right"
-        android:text="@string/choose_your_role"
+        android:text="@string/choose_sale_type"
         android:textColor="@color/login_gray"
         android:textSize="12sp" />
 
@@ -176,7 +222,7 @@
             android:layout_marginTop="11dp"
             android:layout_marginBottom="10dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_chart_pie_black_24dp"
+            android:src="@drawable/ic_truck_delivery_black_24dp"
             android:tint="@color/login_gray" />
 
           <TextView
@@ -185,7 +231,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/distributor_icon"
             android:layout_centerHorizontal="true"
-            android:text="@string/distributor"
+            android:text="@string/sale_type_distributor"
             android:textColor="@color/login_gray"
             android:textSize="12sp" />
 
@@ -227,7 +273,7 @@
             android:layout_marginBottom="10dp"
             android:layout_below="@+id/merchandiser_icon"
             android:layout_centerHorizontal="true"
-            android:text="@string/merchandiser"
+            android:text="@string/sale_type_hot"
             android:textColor="@color/login_gray"
             android:textSize="12sp" />
 
@@ -269,7 +315,7 @@
             android:layout_marginBottom="10dp"
             android:layout_below="@+id/sales_man_icon"
             android:layout_centerHorizontal="true"
-            android:text="@string/sale_man"
+            android:text="@string/sale_type_cold"
             android:textColor="@color/login_gray"
             android:textSize="12sp" />
 
