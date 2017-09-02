@@ -490,5 +490,6 @@
   <string name="has_sent">ارسال شده</string>
   <string name="has_not_sent">ارسال نشده</string>
   <string name="search_customer_hint">جستجو در اسم، نام فروشگاه و کد مشتری...</string>
+  <string name="search">جستجو</string>
 
 </resources>

@@ -53,6 +53,7 @@ public class CustomerSearchFragment extends BaseFragment {
     View view = inflater.inflate(R.layout.fragment_customer_search, container, false);
     ButterKnife.bind(this, view);
     activity = (MainActivity) getActivity();
+    activity.changeTitle(getString(R.string.search));
     customerService = new CustomerServiceImpl(activity);
     setUpRecyclerView();
     onSearchTextChanged();
