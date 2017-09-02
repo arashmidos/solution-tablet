@@ -51,7 +51,7 @@ public class NewVisitDetailFragment extends BaseFragment {
     visitId = args.getLong(Constants.VISIT_ID);
     tabs.setupWithViewPager(viewpager);
     setUpViewPager();
-    viewpager.setCurrentItem(4);
+    viewpager.setCurrentItem(viewPagerAdapter.getCount());
     return view;
   }
 

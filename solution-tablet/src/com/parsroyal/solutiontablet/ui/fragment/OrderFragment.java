@@ -78,7 +78,6 @@ public class OrderFragment extends BaseFragment {
   private Long orderStatus;
   private GoodsDtoList rejectedGoodsList;
   private String constraint;
-  private int orderCount = 0;
 
   public OrderFragment() {
     // Required empty public constructor
@@ -166,11 +165,6 @@ public class OrderFragment extends BaseFragment {
         }
       }
     });
-  }
-
-  @Override
-  public int getFragmentId() {
-    return MainActivity.GOODS_LIST_FRAGMENT_ID;
   }
 
   @OnClick({R.id.search_img, R.id.bottom_bar})
@@ -324,5 +318,10 @@ public class OrderFragment extends BaseFragment {
     Long orderItemId = saleOrderService.saveOrderItem(saleOrderItem);
     saleOrderItem.setId(orderItemId);
     return saleOrderItem;
+  }
+
+  @Override
+  public int getFragmentId() {
+    return MainActivity.GOODS_LIST_FRAGMENT_ID;
   }
 }
