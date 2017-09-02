@@ -247,6 +247,8 @@ public class LoginFragment extends BaseFragment implements TextWatcher {
 
       settingService.saveSetting((SettingResponse) response);
       settingService.saveUserInfo(userInfo);
+      settingService.saveSetting(ApplicationKeys.SETTING_SALE_TYPE,
+          String.valueOf(selectedRole.getValue()));
 
       Intent intent = new Intent(getActivity(), MainActivity.class);
       startActivity(intent);

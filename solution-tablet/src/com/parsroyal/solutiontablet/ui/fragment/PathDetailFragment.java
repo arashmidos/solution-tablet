@@ -121,7 +121,7 @@ public class PathDetailFragment extends BaseFragment {
   }
 
   private List<CustomerListModel> getCustomersList() {
-    customerList = customerService.getAllCustomersListModelByVisitLineBackendId(visitlineBackendId);
+    customerList = customerService.getFilteredCustomerList(visitlineBackendId,"");
     return customerList;
   }
 

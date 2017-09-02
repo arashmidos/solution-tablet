@@ -16,7 +16,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
@@ -50,12 +51,8 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-
 import java.util.Collections;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * @author Shakib
@@ -134,14 +131,12 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
 
   public List<CustomerListModel> getFilteredData(CharSequence constraint) {
     try {
+      String keyword = "";
       if (constraint.length() != 0 && !constraint.toString().equals("")) {
-        String keyword = CharacterFixUtil.fixString(constraint.toString());
-
-        return customerService.getFilteredCustomerList(visitlineBackendId, keyword);
-
-      } else {
-        return customerService.getAllCustomersListModelByVisitLineBackendId(visitlineBackendId);
+        keyword = CharacterFixUtil.fixString(constraint.toString());
       }
+      return customerService.getFilteredCustomerList(visitlineBackendId, keyword);
+
     } catch (final Exception ex) {
       Crashlytics
           .log(Log.ERROR, "Filter data", "Error in filtering customer list" + ex.getMessage());

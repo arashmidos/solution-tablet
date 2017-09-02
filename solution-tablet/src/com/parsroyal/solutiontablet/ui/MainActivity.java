@@ -48,6 +48,7 @@ import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationUpdatesService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
+import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
@@ -72,19 +73,20 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends BaseFragmentActivity {
 
   public static final String TAG = MainActivity.class.getSimpleName();
   public static final int FEATURE_FRAGMENT_ID = 0;
   public static final int CUSTOMER_LIST_FRAGMENT_ID = 1;
-  public static final int VISIT_DETAIL_FRAGMENT_ID = 2;
+  public static final int NEW_CUSTOMER_DETAIL_FRAGMENT_ID = 2;
   public static final int CUSTOMER_ORDER_FRAGMENT_ID = 3;
   public static final int ORDER_FRAGMENT_ID = 4;
-  public static final int ORDER_INFO_FRAGMENT = 5;
+  public static final int VISIT_DETAIL_FRAGMENT_ID = 5;
   public static final int REGISTER_PAYMENT_FRAGMENT = 6;
   public static final int CUSTOMER_FRAGMENT = 7;
-  public static final int ADD_CUSTOMER_FRAGMENT = 8;
+  public static final int ORDER_INFO_FRAGMENT = 8;
   public static final int CUSTOMER_SEARCH_FRAGMENT = 9;
   public static final int SETTING_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
@@ -103,8 +105,10 @@ public class MainActivity extends BaseFragmentActivity {
   ImageView navigationImg;
   @BindView(R.id.search_img)
   ImageView searchImg;
-  @BindView(R.id.app_bar) AppBarLayout appBar;
-  @BindView(R.id.container) FrameLayout container;
+  @BindView(R.id.app_bar)
+  AppBarLayout appBar;
+  @BindView(R.id.container)
+  FrameLayout container;
 
   private ActionBar actionBar;
   private LocationUpdatesService gpsRecieverService = null;
@@ -305,7 +309,7 @@ public class MainActivity extends BaseFragmentActivity {
    */
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                         @NonNull int[] grantResults) {
+      @NonNull int[] grantResults) {
     Log.i(TAG, "onRequestPermissionResult");
     if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
       if (grantResults.length <= 0) {
@@ -332,7 +336,8 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void hideKeyboard() {
-    InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+    InputMethodManager imm = (InputMethodManager) this
+        .getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(container.getWindowToken(), 0);
   }
 
@@ -495,17 +500,18 @@ public class MainActivity extends BaseFragmentActivity {
   private BaseFragment findFragment(int fragmentId, Bundle args) {
     BaseFragment fragment = null;
     int parent = 0;
-    if (fragmentId == FEATURE_FRAGMENT_ID)
+    if (fragmentId == FEATURE_FRAGMENT_ID) {
       setNavigationToolbarIcon(R.drawable.ic_menu);
-    else
+    } else {
       setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
     }
+
     //show search icon in customer fragment
     if (fragmentId == CUSTOMER_FRAGMENT) {
       searchImg.setVisibility(View.VISIBLE);
     } else {
       searchImg.setVisibility(View.GONE);
-
+    }
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
         fragment = FeaturesFragment.newInstance();
@@ -528,12 +534,11 @@ public class MainActivity extends BaseFragmentActivity {
       case CUSTOMER_SEARCH_FRAGMENT:
         fragment = CustomerSearchFragment.newInstance();
         break;
-      /*case NEW_CUSTOMER_FRAGMENT_ID:
-        fragment = new NCustomersFragment();
-        break;
+
       case NEW_CUSTOMER_DETAIL_FRAGMENT_ID:
-        fragment = new NCustomerDetailFragment();
+        fragment = AddCustomerFragment.newInstance();
         break;
+      /*
       case CUSTOMERS_FRAGMENT_ID:
         fragment = new CustomersFragment();
         break;

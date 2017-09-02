@@ -94,6 +94,6 @@ public class AddCustomerFragment extends BaseFragment {
 
   @Override
   public int getFragmentId() {
-    return MainActivity.ADD_CUSTOMER_FRAGMENT;
+    return MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID;
   }
 }

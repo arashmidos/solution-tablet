@@ -9,25 +9,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SystemCustomerAdapter;
-
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 
 public class SystemCustomerFragment extends Fragment {
 
-  @BindView(R.id.recycler_view) RecyclerView recyclerView;
-  @BindView(R.id.fab_add_customer) FloatingActionButton fabAddCustomer;
+  @BindView(R.id.recycler_view)
+  RecyclerView recyclerView;
+  @BindView(R.id.fab_add_customer)
+  FloatingActionButton fabAddCustomer;
 
   private MainActivity activity;
   private CustomerService customerService;
@@ -38,13 +36,12 @@ public class SystemCustomerFragment extends Fragment {
   }
 
   public static SystemCustomerFragment newInstance() {
-    SystemCustomerFragment fragment = new SystemCustomerFragment();
-    return fragment;
+    return new SystemCustomerFragment();
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_system_customer, container, false);
     ButterKnife.bind(this, view);
@@ -61,7 +58,8 @@ public class SystemCustomerFragment extends Fragment {
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
     recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+      @Override
+      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         if (dy > 0) {
           fabAddCustomer.setVisibility(View.GONE);
@@ -73,10 +71,11 @@ public class SystemCustomerFragment extends Fragment {
   }
 
   private List<CustomerListModel> getCustomersList() {
-    return customerService.getAllCustomersListModelByVisitLineBackendId(3911l);
+    return customerService.getFilteredCustomerList(null, "");
   }
 
-  @OnClick({R.id.sort_lay, R.id.filter_lay, R.id.fab_add_customer}) public void onClick(View view) {
+  @OnClick({R.id.sort_lay, R.id.filter_lay, R.id.fab_add_customer})
+  public void onClick(View view) {
     switch (view.getId()) {
       case R.id.sort_lay:
         Toast.makeText(activity, "sort", Toast.LENGTH_SHORT).show();
@@ -85,9 +84,8 @@ public class SystemCustomerFragment extends Fragment {
         Toast.makeText(activity, "filter", Toast.LENGTH_SHORT).show();
         break;
       case R.id.fab_add_customer:
-        activity.changeFragment(MainActivity.ADD_CUSTOMER_FRAGMENT, true);
+        activity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
         break;
     }
   }
-
 }

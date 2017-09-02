@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -228,15 +229,18 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     String orderBy = "c." + Customer.COL_CODE + " ASC ";
 
     String selection = "";
-    String[] args = null;
+    ArrayList<String> args = new ArrayList<>();
     if (Empty.isNotEmpty(visitLineId)) {
-      //Load all customers for Map
+
       selection = " c." + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
-      args = new String[]{String.valueOf(visitLineId)};
+      args.add(String.valueOf(visitLineId));
     } else {
-      selection =
-          "c." + Customer.COL_X_LOCATION + " is not null AND " + "c." + Customer.COL_X_LOCATION
-              + " != 0";
+      //Load all customers has location for Map or ALLCustomerList
+      if (constraint == null) {
+        selection =
+            "c." + Customer.COL_X_LOCATION + " is not null AND " + "c." + Customer.COL_X_LOCATION
+                + " != 0";
+      }
     }
 
     Cursor cursor;
@@ -247,16 +251,21 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
           "c." + Customer.COL_PHONE_NUMBER + " like ? or c." + Customer.COL_CELL_PHONE
           + " like ? or c." + Customer.COL_CODE + " like ? )";
       constraint = "%" + constraint + "%";
-      String[] args2 = {String.valueOf(visitLineId), constraint, constraint, constraint, constraint,
-          constraint};
-      cursor = db.query(table, projection, selection, args2, null, null, orderBy);
-    } else {
-      cursor = db.query(table, projection, selection, args, null, null, orderBy);
+      String[] args2 = {constraint, constraint, constraint, constraint, constraint};
+      args.addAll(Arrays.asList(args2));
+//      cursor = db.query(table, projection, selection, args, null, null, orderBy);
+//    } else {
     }
+    String[] argsArray = new String[args.size()];
+    argsArray = args.toArray(argsArray);
+
+    cursor = db.query(table, projection, selection, argsArray, null, null, orderBy);
 
     Map<Long, CustomerListModel> entitiesMap = new HashMap<>();
 
-    while (cursor.moveToNext()) {
+    while (cursor.moveToNext())
+
+    {
       CustomerListModel listModel = createListModelFromCursor(cursor);
       if (entitiesMap.containsKey(listModel.getPrimaryKey())) {
         if ((listModel.hasOrder() || listModel.hasRejection())) {
