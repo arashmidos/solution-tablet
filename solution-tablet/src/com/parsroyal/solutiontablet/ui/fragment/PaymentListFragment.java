@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -76,7 +77,7 @@ public class PaymentListFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new PaymentAdapter(activity, getPaymentList(), visitId);
+    adapter = new PaymentAdapter(activity, getPaymentList());
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
@@ -93,16 +94,16 @@ public class PaymentListFragment extends BaseFragment {
   }
 
   private List<PaymentListModel> getPaymentList() {
-//    List<PaymentListModel> list = new ArrayList<>();
-//    list.add(new PaymentListModel("جمعه 2 مرداد 96", "158.500 تومان", "چک", 0l, null));
-//    list.add(new PaymentListModel("پنجشنبه 23 مرداد 96", "156465650 تومان", "نقد", 0l, null));
-//    list.add(new PaymentListModel("چهارشنبه 12 تیر 96", "345345.500 تومان", "پرداخت الکترونیکی", 0l, null));
-//    list.add(new PaymentListModel("سه شنبه 6 اسفند 96", "158.500 تومان", "نقد", 0l, null));
-//    list.add(new PaymentListModel("دوشنبه 30 شهریور 96", "19825.300 تومان", "چک", 0l, null));
-//    list.add(new PaymentListModel("شنبه 29 مرداد 96", "56325512 تومان", "چک", 0l, null));
-//    list.add(new PaymentListModel("یکشنبه 2 آبان 96", "158.500 تومان", "پرداخت الکترونیکی", 0l, null));
-//    return list;
-    return paymentService.searchForPayments(paymentSO);
+    List<PaymentListModel> list = new ArrayList<>();
+    list.add(new PaymentListModel("جمعه 2 مرداد 96", "158.500 تومان", "چک", 0l, null));
+    list.add(new PaymentListModel("پنجشنبه 23 مرداد 96", "156465650 تومان", "نقد", 0l, null));
+    list.add(new PaymentListModel("چهارشنبه 12 تیر 96", "345345.500 تومان", "پرداخت الکترونیکی", 0l, null));
+    list.add(new PaymentListModel("سه شنبه 6 اسفند 96", "158.500 تومان", "نقد", 0l, null));
+    list.add(new PaymentListModel("دوشنبه 30 شهریور 96", "19825.300 تومان", "چک", 0l, null));
+    list.add(new PaymentListModel("شنبه 29 مرداد 96", "56325512 تومان", "چک", 0l, null));
+    list.add(new PaymentListModel("یکشنبه 2 آبان 96", "158.500 تومان", "پرداخت الکترونیکی", 0l, null));
+    return list;
+//    return paymentService.searchForPayments(paymentSO);
   }
 
   @Override public int getFragmentId() {

@@ -497,8 +497,6 @@
   <string name="has_not_sent">ارسال نشده</string>
   <string name="search_customer_hint">جستجو در اسم، نام فروشگاه و کد مشتری...</string>
   <string name="search">جستجو</string>
-  <string name="register">ثبت</string>
-  <string name="reason_register_no">دلیل ثبت عدم را انتخاب کنید</string>
   <string name="code_x">کد : %s</string>
 
 </resources>

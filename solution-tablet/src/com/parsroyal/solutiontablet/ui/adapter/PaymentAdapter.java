@@ -1,18 +1,16 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
-import com.parsroyal.solutiontablet.ui.MainActivity;
 
 import java.util.List;
 
@@ -27,15 +25,11 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
 
   private LayoutInflater inflater;
   private Context context;
-  private long visitId;
-  private MainActivity mainActivity;
   private List<PaymentListModel> payments;
 
-  public PaymentAdapter(Context context, List<PaymentListModel> payments, long visitId) {
+  public PaymentAdapter(Context context, List<PaymentListModel> payments) {
     this.context = context;
-    this.visitId = visitId;
     this.payments = payments;
-    mainActivity = (MainActivity) context;
     inflater = LayoutInflater.from(context);
   }
 
@@ -48,15 +42,14 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     PaymentListModel payment = payments.get(position);
-    holder.paymentMethodTv.setText(getPaymentType(payment.getType()));
+    holder.paymentMethodTv.setText(payment.getType());
     holder.paymentDateTv.setText(payment.getDate());
-    long amount = Long.parseLong(payment.getAmount())/ 1000;
-    holder.paymentTv.setText(String.valueOf(amount));
+    holder.paymentTv.setText(payment.getAmount());
     //TODO:add bank and branch
 //    holder.bankDetailTv.setText(payment.get);
     holder.mainLay.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        goToRegisterPaymentFragment(payment);
+        Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
       }
     });
   }
@@ -69,26 +62,6 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
   public void update(List<PaymentListModel> payments) {
     this.payments = payments;
     notifyDataSetChanged();
-  }
-
-  private String getPaymentType(String paymentType) {
-    switch (paymentType) {
-      case "6":
-        return mainActivity.getString(R.string.cheque);
-      case "1":
-        return mainActivity.getString(R.string.cash);
-      case "2":
-        return mainActivity.getString(R.string.e_payment);
-    }
-    return null;
-  }
-
-  private void goToRegisterPaymentFragment(PaymentListModel payment) {
-    Bundle args = new Bundle();
-    args.putLong(Constants.VISIT_ID, visitId);
-    args.putLong(Constants.CUSTOMER_BACKEND_ID, payment.getCustomerBackendId());
-    args.putLong(Constants.PAYMENT_ID, payment.getPrimaryKey());
-    mainActivity.changeFragment(mainActivity.REGISTER_PAYMENT_FRAGMENT, args, false);
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
