@@ -19,10 +19,6 @@ public class SplashActivity extends BaseActivity {
     setContentView(R.layout.activity_splash);
     new Handler().postDelayed(() -> {
 
-//        Intent iMainActivity = new Intent(getApplicationContext(),
-//            MainActivity.class);
-//        startActivity(iMainActivity);
-
       if (!NetworkUtil.isTokenExpired()) {
         startActivity(new Intent(this, MainActivity.class));
       } else {

@@ -4,12 +4,9 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
-import com.parsroyal.solutiontablet.util.TypefaceUtil;
-
 import io.fabric.sdk.android.Fabric;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by Mahyar on 7/8/2015.
@@ -27,7 +24,7 @@ public class SolutionTabletApplication extends Application {
   public static SharedPreferences getPreference() {
     if (sPreference == null) {
       sPreference = PreferenceManager.getDefaultSharedPreferences(
-              sInstance.getApplicationContext());
+          sInstance.getApplicationContext());
     }
 
     return sPreference;
@@ -38,15 +35,13 @@ public class SolutionTabletApplication extends Application {
     super.onCreate();
     sInstance = this;
 
-//    if (!BuildConfig.DEBUG) {
-      Fabric.with(this, new Crashlytics());
-//    }
-    try {
-      TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/IRANSansMobile.ttf");
-      AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Resource exception", "Error in overriding fonts" + e.getMessage());
-      e.printStackTrace();
-    }
+    Fabric.with(this, new Crashlytics());
+
+    CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+        .setFontAttrId(R.attr.fontPath)
+        .build());
+
+    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
   }
 }

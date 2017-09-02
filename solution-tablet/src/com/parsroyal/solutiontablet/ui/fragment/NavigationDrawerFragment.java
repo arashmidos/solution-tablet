@@ -81,7 +81,7 @@ public class NavigationDrawerFragment extends Fragment {
         mainActivity.changeFragment(MainActivity.FEATURE_FRAGMENT_ID, true);
         break;
       case R.id.customers_lay:
-        Toast.makeText(getActivity(), "customers", Toast.LENGTH_SHORT).show();//TODO: update
+        mainActivity.changeFragment(MainActivity.CUSTOMER_FRAGMENT, true);
         break;
       case R.id.goods_lay:
         Bundle args = new Bundle();

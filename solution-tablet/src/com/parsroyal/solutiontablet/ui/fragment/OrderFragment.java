@@ -108,10 +108,10 @@ public class OrderFragment extends BaseFragment {
       orderStatus = order.getStatus();
       saleType = args.getString(Constants.SALE_TYPE, "");
       visitId = args.getLong(Constants.VISIT_ID, -1);
+      orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
     }
     setUpRecyclerView();
     addSearchListener();
-    orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
 
     return view;
   }

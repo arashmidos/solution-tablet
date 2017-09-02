@@ -70,6 +70,7 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends BaseFragmentActivity {
 
@@ -101,7 +102,8 @@ public class MainActivity extends BaseFragmentActivity {
   ImageView navigationImg;
   @BindView(R.id.search_img)
   ImageView searchImg;
-  @BindView(R.id.app_bar) AppBarLayout appBar;
+  @BindView(R.id.app_bar)
+  AppBarLayout appBar;
 
   private ActionBar actionBar;
   private LocationUpdatesService gpsRecieverService = null;
@@ -405,7 +407,7 @@ public class MainActivity extends BaseFragmentActivity {
     changeFragment(MainActivity.FEATURE_FRAGMENT_ID, true);
   }
 
-  public void showCustomersListFragment() {//TODO: change to Path page
+  public void showCustomersListFragment() {
     changeFragment(MainActivity.CUSTOMER_LIST_FRAGMENT_ID, true);
   }
 
@@ -490,22 +492,25 @@ public class MainActivity extends BaseFragmentActivity {
       setNavigationToolbarIcon(R.drawable.ic_menu);
     } else {
       setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
+    }
     //show search icon in customer fragment
-    if (fragmentId == CUSTOMER_FRAGMENT)
+    if (fragmentId == CUSTOMER_FRAGMENT) {
       searchImg.setVisibility(View.VISIBLE);
-    else
+    } else {
       searchImg.setVisibility(View.GONE);
+    }
     //hide toolbar in customer search fragment
-    if (fragmentId == CUSTOMER_SEARCH_FRAGMENT)
+    if (fragmentId == CUSTOMER_SEARCH_FRAGMENT) {
       appBar.setVisibility(View.GONE);
-    else
+    } else {
       appBar.setVisibility(View.VISIBLE);
+    }
 
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
         fragment = FeaturesFragment.newInstance();
         break;
-      case CUSTOMER_LIST_FRAGMENT_ID://TODO it should point to Path Page
+      case CUSTOMER_LIST_FRAGMENT_ID:
         fragment = PathDetailFragment.newInstance();
         break;
       case VISIT_DETAIL_FRAGMENT_ID:
@@ -618,7 +623,8 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   public void onNavigationTapped() {
-    Fragment featureFragment = getSupportFragmentManager().findFragmentByTag(FeaturesFragment.class.getSimpleName());
+    Fragment featureFragment = getSupportFragmentManager()
+        .findFragmentByTag(FeaturesFragment.class.getSimpleName());
     if (featureFragment != null && featureFragment.isVisible()) {
       if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
         drawerLayout.closeDrawer(GravityCompat.END);
@@ -630,7 +636,8 @@ public class MainActivity extends BaseFragmentActivity {
     }
   }
 
-  @OnClick({R.id.navigation_img, R.id.search_img}) public void onClick(View view) {
+  @OnClick({R.id.navigation_img, R.id.search_img})
+  public void onClick(View view) {
     switch (view.getId()) {
       case R.id.navigation_img:
         onNavigationTapped();
@@ -639,5 +646,10 @@ public class MainActivity extends BaseFragmentActivity {
         changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
         break;
     }
+  }
+
+  @Override
+  protected void attachBaseContext(Context newBase) {
+    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
   }
 }

@@ -1,10 +1,12 @@
 package com.parsroyal.solutiontablet.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.ui.fragment.LoginFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,5 +34,10 @@ public class LoginActivity extends AppCompatActivity {
           dialog.dismiss();
           finish();
         });
+  }
+
+  @Override
+  protected void attachBaseContext(Context newBase) {
+    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
   }
 }
