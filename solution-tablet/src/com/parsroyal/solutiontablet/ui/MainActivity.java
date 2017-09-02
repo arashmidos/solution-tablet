@@ -26,6 +26,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -70,7 +72,6 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends BaseFragmentActivity {
 
@@ -102,8 +103,8 @@ public class MainActivity extends BaseFragmentActivity {
   ImageView navigationImg;
   @BindView(R.id.search_img)
   ImageView searchImg;
-  @BindView(R.id.app_bar)
-  AppBarLayout appBar;
+  @BindView(R.id.app_bar) AppBarLayout appBar;
+  @BindView(R.id.container) FrameLayout container;
 
   private ActionBar actionBar;
   private LocationUpdatesService gpsRecieverService = null;
@@ -304,7 +305,7 @@ public class MainActivity extends BaseFragmentActivity {
    */
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-      @NonNull int[] grantResults) {
+                                         @NonNull int[] grantResults) {
     Log.i(TAG, "onRequestPermissionResult");
     if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
       if (grantResults.length <= 0) {
@@ -328,6 +329,11 @@ public class MainActivity extends BaseFragmentActivity {
             });
       }
     }
+  }
+
+  private void hideKeyboard() {
+    InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(container.getWindowToken(), 0);
   }
 
   private void showGpsOffDialog() {
@@ -423,7 +429,7 @@ public class MainActivity extends BaseFragmentActivity {
       drawerLayout.closeDrawer(GravityCompat.END);
       return;
     }
-
+    hideKeyboard();
     try {
       FragmentManager supportFragmentManager = getSupportFragmentManager();
 
@@ -466,7 +472,8 @@ public class MainActivity extends BaseFragmentActivity {
     fragmentTransaction.replace(R.id.container, fragment, fragmentTag);
     fragmentTransaction.addToBackStack(fragmentTag);
     fragmentTransaction.commit();
-  }
+  }//TODO: Need review addTobackStack is useless
+
 
   public void changeFragment(int fragmentId, boolean addToBackStack) {
     BaseFragment fragment = findFragment(fragmentId, new Bundle());
@@ -488,9 +495,9 @@ public class MainActivity extends BaseFragmentActivity {
   private BaseFragment findFragment(int fragmentId, Bundle args) {
     BaseFragment fragment = null;
     int parent = 0;
-    if (fragmentId == FEATURE_FRAGMENT_ID) {
+    if (fragmentId == FEATURE_FRAGMENT_ID)
       setNavigationToolbarIcon(R.drawable.ic_menu);
-    } else {
+    else
       setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
     }
     //show search icon in customer fragment
@@ -498,13 +505,6 @@ public class MainActivity extends BaseFragmentActivity {
       searchImg.setVisibility(View.VISIBLE);
     } else {
       searchImg.setVisibility(View.GONE);
-    }
-    //hide toolbar in customer search fragment
-    if (fragmentId == CUSTOMER_SEARCH_FRAGMENT) {
-      appBar.setVisibility(View.GONE);
-    } else {
-      appBar.setVisibility(View.VISIBLE);
-    }
 
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
