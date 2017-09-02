@@ -335,7 +335,7 @@ public class MainActivity extends BaseFragmentActivity {
     }
   }
 
-  private void hideKeyboard() {
+  public void hideKeyboard() {
     InputMethodManager imm = (InputMethodManager) this
         .getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(container.getWindowToken(), 0);
