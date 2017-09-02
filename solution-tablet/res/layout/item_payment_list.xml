@@ -1,67 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main_lay"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/main_lay"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@android:color/white">
+
+  <TextView
+    android:id="@+id/payment_method_tv"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:layout_marginTop="14dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:textColor="@color/black_de"
+    android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/payment_method_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="14dp"
-        android:textColor="@color/black_de"
-        android:textSize="12sp"/>
+  <TextView
+    android:id="@+id/payment_date_tv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:textColor="@color/black_de"
+    android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/payment_date_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="14dp"
-        android:textColor="@color/black_de"
-        android:textSize="12sp"/>
+  <TextView
+    android:id="@+id/payment_tv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_below="@id/payment_method_tv"
+    android:textColor="@color/register_order"
+    android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/payment_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/payment_method_tv"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
-        android:textColor="@color/register_order"
-        android:textSize="12sp"/>
+  <TextView
+    android:id="@+id/bank_detail_tv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_below="@id/payment_date_tv"
+    android:textColor="@color/black_de"
+    android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/bank_detail_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/payment_date_tv"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="12dp"
-        android:textColor="@color/black_de"
-        android:textSize="12sp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/payment_tv"
-        android:background="@color/navigation_drawer_divider"/>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_below="@id/payment_tv"
+    android:background="@color/navigation_drawer_divider" />
 
 </RelativeLayout>

@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SendStatus;
@@ -21,17 +23,17 @@ import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
-
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
+/**
+ * @author Shakib
+ */
 public class PaymentListFragment extends BaseFragment {
 
-  @BindView(R.id.recycler_view) RecyclerView recyclerView;
-  @BindView(R.id.fab_add_Payment) FloatingActionButton fabAddPayment;
+  @BindView(R.id.recycler_view)
+  RecyclerView recyclerView;
+  @BindView(R.id.fab_add_Payment)
+  FloatingActionButton fabAddPayment;
 
   private PaymentService paymentService;
   private long customerId;
@@ -54,7 +56,7 @@ public class PaymentListFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_payment_list, container, false);
     ButterKnife.bind(this, view);
@@ -81,7 +83,8 @@ public class PaymentListFragment extends BaseFragment {
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
     recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+      @Override
+      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         if (dy > 0) {
           fabAddPayment.setVisibility(View.GONE);
@@ -93,23 +96,21 @@ public class PaymentListFragment extends BaseFragment {
   }
 
   private List<PaymentListModel> getPaymentList() {
-//    List<PaymentListModel> list = new ArrayList<>();
-//    list.add(new PaymentListModel("جمعه 2 مرداد 96", "158.500 تومان", "چک", 0l, null));
-//    list.add(new PaymentListModel("پنجشنبه 23 مرداد 96", "156465650 تومان", "نقد", 0l, null));
-//    list.add(new PaymentListModel("چهارشنبه 12 تیر 96", "345345.500 تومان", "پرداخت الکترونیکی", 0l, null));
-//    list.add(new PaymentListModel("سه شنبه 6 اسفند 96", "158.500 تومان", "نقد", 0l, null));
-//    list.add(new PaymentListModel("دوشنبه 30 شهریور 96", "19825.300 تومان", "چک", 0l, null));
-//    list.add(new PaymentListModel("شنبه 29 مرداد 96", "56325512 تومان", "چک", 0l, null));
-//    list.add(new PaymentListModel("یکشنبه 2 آبان 96", "158.500 تومان", "پرداخت الکترونیکی", 0l, null));
-//    return list;
     return paymentService.searchForPayments(paymentSO);
   }
 
-  @Override public int getFragmentId() {
+  @Override
+  public int getFragmentId() {
     return 0;
   }
 
-  @OnClick(R.id.fab_add_Payment) public void onClick() {
-    ((MainActivity) getActivity()).changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, true);
+  @OnClick(R.id.fab_add_Payment)
+  public void onClick() {
+    Bundle args = new Bundle();
+    args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
+    args.putLong(Constants.VISIT_ID, visitId);
+    ((MainActivity) getActivity())
+        .changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true)
+    ;
   }
 }

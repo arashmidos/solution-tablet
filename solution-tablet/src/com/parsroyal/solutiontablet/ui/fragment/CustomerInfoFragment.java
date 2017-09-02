@@ -255,7 +255,7 @@ public class CustomerInfoFragment extends Fragment {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);
-    mainActivity.changeFragment(mainActivity.REGISTER_PAYMENT_FRAGMENT, args, false);
+    mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, false);
   }
 
   private void invokeGetRejectedData() {

@@ -8,16 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by ShakibIsTheBest on 8/27/2017.
@@ -50,15 +47,11 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
     PaymentListModel payment = payments.get(position);
     holder.paymentMethodTv.setText(getPaymentType(payment.getType()));
     holder.paymentDateTv.setText(payment.getDate());
-    long amount = Long.parseLong(payment.getAmount())/ 1000;
+    long amount = Long.parseLong(payment.getAmount()) / 1000;
     holder.paymentTv.setText(String.valueOf(amount));
     //TODO:add bank and branch
 //    holder.bankDetailTv.setText(payment.get);
-    holder.mainLay.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        goToRegisterPaymentFragment(payment);
-      }
-    });
+    holder.mainLay.setOnClickListener(v -> goToRegisterPaymentFragment(payment));
   }
 
   @Override
@@ -93,11 +86,16 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.payment_method_tv) TextView paymentMethodTv;
-    @BindView(R.id.payment_date_tv) TextView paymentDateTv;
-    @BindView(R.id.payment_tv) TextView paymentTv;
-    @BindView(R.id.bank_detail_tv) TextView bankDetailTv;
-    @BindView(R.id.main_lay) RelativeLayout mainLay;
+    @BindView(R.id.payment_method_tv)
+    TextView paymentMethodTv;
+    @BindView(R.id.payment_date_tv)
+    TextView paymentDateTv;
+    @BindView(R.id.payment_tv)
+    TextView paymentTv;
+    @BindView(R.id.bank_detail_tv)
+    TextView bankDetailTv;
+    @BindView(R.id.main_lay)
+    RelativeLayout mainLay;
 
     public ViewHolder(View itemView) {
       super(itemView);

@@ -15,7 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
@@ -44,43 +46,64 @@ import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-
 import java.util.List;
 import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 public class RegisterPaymentFragment extends BaseFragment {
 
-  @BindView(R.id.e_payment_tv) TextView ePaymentTv;
-  @BindView(R.id.e_payment_bottom_line) View ePaymentBottomLine;
-  @BindView(R.id.e_payment_lay) RelativeLayout ePaymentLay;
-  @BindView(R.id.cheque_tv) TextView chequeTv;
-  @BindView(R.id.cheque_bottom_line) View chequeBottomLine;
-  @BindView(R.id.cheque_lay) RelativeLayout chequeLay;
-  @BindView(R.id.cash_tv) TextView cashTv;
-  @BindView(R.id.cash_bottom_line) View cashBottomLine;
-  @BindView(R.id.cash_lay) RelativeLayout cashLay;
-  @BindView(R.id.payment_price_edt) EditText paymentPriceEdt;
-  @BindView(R.id.tracking_num_edt) EditText trackingNumEdt;
-  @BindView(R.id.tracking_num_lay) TextInputLayout trackingNumLay;
-  @BindView(R.id.cheque_num_edt) EditText chequeNumEdt;
-  @BindView(R.id.cheque_date_edt) EditText chequeDateEdt;
-  @BindView(R.id.cheque_owner_edt) EditText chequeOwnerEdt;
-  @BindView(R.id.account_num_edt) EditText accountNumEdt;
-  @BindView(R.id.branch_edt) EditText branchEdt;
-  @BindView(R.id.spinner) Spinner spinner;
-  @BindView(R.id.cheque_detail_lay) LinearLayout chequeDetailLay;
-  @BindView(R.id.payment_price_lay) TextInputLayout paymentPriceLay;
-  @BindView(R.id.cheque_num_lay) TextInputLayout chequeNumLay;
-  @BindView(R.id.cheque_date_lay) TextInputLayout chequeDateLay;
-  @BindView(R.id.cheque_owner_lay) TextInputLayout chequeOwnerLay;
-  @BindView(R.id.account_num_lay) TextInputLayout accountNumLay;
-  @BindView(R.id.branch_lay) TextInputLayout branchLay;
-  @BindView(R.id.register_btn) Button registerBtn;
+  @BindView(R.id.e_payment_tv)
+  TextView ePaymentTv;
+  @BindView(R.id.e_payment_bottom_line)
+  View ePaymentBottomLine;
+  @BindView(R.id.e_payment_lay)
+  RelativeLayout ePaymentLay;
+  @BindView(R.id.cheque_tv)
+  TextView chequeTv;
+  @BindView(R.id.cheque_bottom_line)
+  View chequeBottomLine;
+  @BindView(R.id.cheque_lay)
+  RelativeLayout chequeLay;
+  @BindView(R.id.cash_tv)
+  TextView cashTv;
+  @BindView(R.id.cash_bottom_line)
+  View cashBottomLine;
+  @BindView(R.id.cash_lay)
+  RelativeLayout cashLay;
+  @BindView(R.id.payment_price_edt)
+  EditText paymentPriceEdt;
+  @BindView(R.id.tracking_num_edt)
+  EditText trackingNumEdt;
+  @BindView(R.id.tracking_num_lay)
+  TextInputLayout trackingNumLay;
+  @BindView(R.id.cheque_num_edt)
+  EditText chequeNumEdt;
+  @BindView(R.id.cheque_date_edt)
+  EditText chequeDateEdt;
+  @BindView(R.id.cheque_owner_edt)
+  EditText chequeOwnerEdt;
+  @BindView(R.id.account_num_edt)
+  EditText accountNumEdt;
+  @BindView(R.id.branch_edt)
+  EditText branchEdt;
+  @BindView(R.id.spinner)
+  Spinner spinner;
+  @BindView(R.id.cheque_detail_lay)
+  LinearLayout chequeDetailLay;
+  @BindView(R.id.payment_price_lay)
+  TextInputLayout paymentPriceLay;
+  @BindView(R.id.cheque_num_lay)
+  TextInputLayout chequeNumLay;
+  @BindView(R.id.cheque_date_lay)
+  TextInputLayout chequeDateLay;
+  @BindView(R.id.cheque_owner_lay)
+  TextInputLayout chequeOwnerLay;
+  @BindView(R.id.account_num_lay)
+  TextInputLayout accountNumLay;
+  @BindView(R.id.branch_lay)
+  TextInputLayout branchLay;
+  @BindView(R.id.register_btn)
+  Button registerBtn;
 
   private MainActivity mainActivity;
   private CustomerService customerService;
@@ -109,7 +132,7 @@ public class RegisterPaymentFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_register_payment, container, false);
     ButterKnife.bind(this, view);
@@ -283,19 +306,23 @@ public class RegisterPaymentFragment extends BaseFragment {
     });
   }
 
-  private void onItemSelected(RelativeLayout selectedLay, TextView selectedTextView, View selectedView) {
+  private void onItemSelected(RelativeLayout selectedLay, TextView selectedTextView,
+      View selectedView) {
     selectedLay.setBackgroundResource(R.drawable.role_selected);
-    selectedTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.payment_bottom_line));
+    selectedTextView
+        .setTextColor(ContextCompat.getColor(getActivity(), R.color.payment_bottom_line));
     selectedView.setVisibility(View.VISIBLE);
   }
 
-  private void onItemDeSelected(RelativeLayout selectedLay, TextView selectedTextView, View selectedView) {
+  private void onItemDeSelected(RelativeLayout selectedLay, TextView selectedTextView,
+      View selectedView) {
     selectedLay.setBackgroundResource(R.drawable.role_default);
     selectedTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.gray_75));
     selectedView.setVisibility(View.GONE);
   }
 
-  @Override public int getFragmentId() {
+  @Override
+  public int getFragmentId() {
     return MainActivity.REGISTER_PAYMENT_FRAGMENT;
   }
 
@@ -330,16 +357,19 @@ public class RegisterPaymentFragment extends BaseFragment {
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.e_payment_lay:
-        if (!isDisabled())
+        if (!isDisabled()) {
           onEPaySelected();
+        }
         break;
       case R.id.cheque_lay:
-        if (!isDisabled())
+        if (!isDisabled()) {
           onChequeSelected();
+        }
         break;
       case R.id.cash_lay:
-        if (!isDisabled())
+        if (!isDisabled()) {
           onCashSelected();
+        }
         break;
       case R.id.register_btn:
         save();
