@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.util;
 
+import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,6 +16,7 @@ import org.springframework.http.client.ClientHttpResponse;
  */
 public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 
+  private String TAG = LoggingRequestInterceptor.class.getName();
   final static Logger logger = LoggerFactory.getLogger(LoggingRequestInterceptor.class);
 
   @Override
@@ -28,13 +30,14 @@ public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
   }
 
   private void traceRequest(HttpRequest request, byte[] body) throws IOException {
-    logger.debug(
+    Log.i(TAG,
         "===========================request begin================================================");
 
-    logger.debug("URI : " + request.getURI());
-    logger.debug("Method : " + request.getMethod());
-    logger.debug("Request Body : " + new String(body, "UTF-8"));
-    logger.debug(
+    Log.i(TAG,"URI : " + request.getURI());
+    Log.i(TAG,"Method : " + request.getMethod());
+    Log.i(TAG,"Request Body : " + new String(body, "UTF-8"));
+
+    Log.i(TAG,
         "==========================request end================================================");
   }
 
@@ -48,12 +51,12 @@ public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
       inputStringBuilder.append('\n');
       line = bufferedReader.readLine();
     }
-    logger.debug(
+    Log.i(TAG,
         "============================response begin==========================================");
-    logger.debug("status code: " + response.getStatusCode());
-    logger.debug("status text: " + response.getStatusText());
-    logger.debug("Response Body : " + inputStringBuilder.toString());
-    logger.debug(
+    Log.i(TAG,"status code: " + response.getStatusCode());
+    Log.i(TAG,"status text: " + response.getStatusText());
+    Log.i(TAG,"Response Body : " + inputStringBuilder.toString());
+    Log.i(TAG,
         "=======================response end=================================================");
   }
 }

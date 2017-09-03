@@ -255,6 +255,10 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
       args.addAll(Arrays.asList(args2));
 //      cursor = db.query(table, projection, selection, args, null, null, orderBy);
 //    } else {
+    } else {
+      selection =
+          selection + (selection.equals("") ? "" : " and ") + Customer.COL_STATUS + " <> ? ";
+      args.add(String.valueOf(CustomerStatus.NEW.getId()));
     }
     String[] argsArray = new String[args.size()];
     argsArray = args.toArray(argsArray);
@@ -370,9 +374,16 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-    String[] projection = {Customer.COL_ID, Customer.COL_FULL_NAME, Customer.COL_PHONE_NUMBER,
-        Customer.COL_CELL_PHONE, Customer.COL_STATUS, Customer.COL_CREATE_DATE_TIME,
-        Customer.COL_BACKEND_ID};
+    String[] projection = {
+        Customer.COL_ID,
+        Customer.COL_FULL_NAME,
+        Customer.COL_PHONE_NUMBER,
+        Customer.COL_CELL_PHONE,
+        Customer.COL_STATUS,
+        Customer.COL_CREATE_DATE_TIME,//5
+        Customer.COL_BACKEND_ID,
+        Customer.COL_SHOP_NAME
+    };
     String selection = " 1 = 1";
     List<String> argList = new ArrayList<>();
 
@@ -388,7 +399,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     }
 
     if (Empty.isNotEmpty(nCustomerSO.getSent())) {
-      if (nCustomerSO.getSent().equals(Integer.valueOf(1))) {
+      if (nCustomerSO.getSent().equals(1)) {
         selection = selection.concat(
             " AND " + Customer.COL_BACKEND_ID + " is not null AND " + Customer.COL_BACKEND_ID +
                 " != 0");
@@ -406,14 +417,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
             orderBy);
     List<NCustomerListModel> nCustomers = new ArrayList<>();
     while (cursor.moveToNext()) {
-      NCustomerListModel nCustomer = new NCustomerListModel();
-      nCustomer.setPrimaryKey(cursor.getLong(0));
-      nCustomer.setTitle(cursor.getString(1));
-      nCustomer.setPhoneNumber(cursor.getString(2));
-      nCustomer.setCellPhone(cursor.getString(3));
-      nCustomer.setStatus(cursor.getLong(4));
-      nCustomer.setCreateDateTime(cursor.getString(5));
-      nCustomer.setBackendId(cursor.getLong(6));
+      NCustomerListModel nCustomer = new NCustomerListModel(cursor.getLong(0), cursor.getString(1),
+          cursor.getString(2), cursor.getString(3), cursor.getLong(4), cursor.getString(5),
+          cursor.getLong(6), cursor.getString(7));
       nCustomers.add(nCustomer);
     }
 

@@ -68,7 +68,7 @@
     android:text="@string/choose_one"
     android:textColor="@color/red"
     android:textSize="12sp"
-    android:visibility="visible"/>
+    android:visibility="invisible"/>
   <Button
     android:id="@+id/register_btn"
     style="@style/IranSans.Medium"

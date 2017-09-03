@@ -4,7 +4,7 @@
   android:layout_height="match_parent"
   android:background="@color/features_background"
   android:orientation="vertical"
-  tools:mainActivity="com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment">
+  tools:context="com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment">
 
   <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"

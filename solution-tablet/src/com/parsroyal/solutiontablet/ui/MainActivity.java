@@ -167,7 +167,6 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void showVersionDialog() {
-    //TODO shakib, need new style
     DialogUtil.showMessageDialog(this, getString(R.string.version),
         String.format(Locale.US, getString(R.string.your_version), BuildConfig.VERSION_NAME));
   }
@@ -217,7 +216,6 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void installNewVersion() {
-    //TODO: shakib, update new style
     DialogUtil.showCustomDialog(this, getString(R.string.message_update_title),
         getString(R.string.message_update_alert), "", (dialogInterface, i) ->
         {
@@ -635,8 +633,14 @@ public class MainActivity extends BaseFragmentActivity {
       } else {
         drawerLayout.openDrawer(GravityCompat.END);
       }
-    } else {//TODO if its CustomerInfoFragment, finishVisit
-      onBackPressed();
+    } else {
+      Fragment visitFragment = getSupportFragmentManager()
+          .findFragmentByTag(NewVisitDetailFragment.class.getSimpleName());
+      if (visitFragment != null && visitFragment.isVisible()) {
+
+      } else {
+        onBackPressed();
+      }
     }
   }
 

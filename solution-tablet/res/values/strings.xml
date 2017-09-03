@@ -500,6 +500,6 @@
   <string name="register">ثبت</string>
   <string name="reason_register_no">دلیل ثبت عدم را انتخاب کنید</string>
   <string name="code_x">کد : %s</string>
-  <string name="choose_one">باید یکی از گزینه های بالا را انتخاب کنید</string>
+  <string name="choose_one">هیچ گزینه ای انتخاب نشده است</string>
 
 </resources>
