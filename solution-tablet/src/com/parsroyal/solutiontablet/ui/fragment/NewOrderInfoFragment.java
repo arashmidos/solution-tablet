@@ -184,7 +184,7 @@ public class NewOrderInfoFragment extends BaseFragment {
   }
 
   private void showSaveOrderConfirmDialog(String title,
-      final Long statusId) {//TODO shakib old style
+      final Long statusId) {
     DialogUtil.showConfirmDialog(mainActivity, title,
         getString(R.string.message_are_you_sure), (dialog, which) ->
         {

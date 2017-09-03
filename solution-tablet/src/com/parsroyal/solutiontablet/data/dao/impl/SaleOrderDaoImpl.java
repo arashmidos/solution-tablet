@@ -213,7 +213,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         "o." + SaleOrder.COL_STATUS + "," +
         "c." + Customer.COL_FULL_NAME + "," +
         "i." + BaseInfo.COL_TITLE + "," +
-        "c." + Customer.COL_BACKEND_ID +
+        "c." + Customer.COL_BACKEND_ID + "," +
+        "o." + SaleOrder.COL_CREATE_DATE_TIME +
         " FROM " + SaleOrder.TABLE_NAME + " o " +
         " INNER JOIN " + Customer.TABLE_NAME + " c on c." + Customer.COL_BACKEND_ID + " = o."
         + SaleOrder.COL_CUSTOMER_BACKEND_ID +
@@ -245,6 +246,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       order.setCustomerName(cursor.getString(5));
       order.setPaymentTypeTitle(cursor.getString(6));
       order.setCustomerBackendId(cursor.getLong(7));
+      order.setCreatedDateTime(cursor.getString(8));
       orders.add(order);
     }
 
@@ -314,7 +316,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     BaseSaleDocument baseSaleDocument = null;
 
     if (cursor.moveToNext()) {
-      baseSaleDocument=createsaleDocumentFromCursor(cursor);
+      baseSaleDocument = createsaleDocumentFromCursor(cursor);
     }
 
     cursor.close();

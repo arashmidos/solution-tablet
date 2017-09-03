@@ -205,7 +205,7 @@
         داده شده باشد.
     </string>
     <string name="title_delete_order_item">حذف آیتم سفارش</string>
-    <string name="message_are_you_sure">آیا مطئنید؟</string>
+    <string name="message_are_you_sure">آیا مطمئن هستید؟</string>
     <string name="title_cancel">انصراف</string>
     <string name="title_cancel_sale_order">ابطال سفارش</string>
     <string name="title_cancel_sale_x">"ابطال %1$s"</string>

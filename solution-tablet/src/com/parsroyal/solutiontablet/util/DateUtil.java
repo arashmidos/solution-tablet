@@ -298,7 +298,7 @@ public class DateUtil {
   }
 
   public static Date convertStringToDate(String date, SimpleDateFormat formatter, String locale) {
-    if (date.length() == 8) {
+    if (date.length() == 8 && !date.startsWith("13")) {
       date = "13" + date;
     }
     if (locale.equalsIgnoreCase("EN")) {

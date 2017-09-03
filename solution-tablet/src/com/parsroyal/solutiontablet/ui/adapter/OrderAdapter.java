@@ -10,7 +10,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ShakibIsTheBest on 8/27/2017.
@@ -38,11 +42,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
   public void onBindViewHolder(ViewHolder holder, int position) {
     SaleOrderListModel order = orders.get(position);
     String orderCode = "کد سفارش : " + String.valueOf(order.getId());
-    String orderAmount = String.valueOf(order.getAmount()) + " تومان";
     holder.orderCodeTv.setText(orderCode);
     holder.orderCountTv.setText("--");
     holder.orderDateTv.setText(order.getDate());
-    holder.orderTotalPrice.setText(orderAmount);
+
+    String number = String.format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
+        R.string.common_irr_currency));
+    holder.orderTotalPrice.setText(number);
     holder.orderPaymentMethodTv.setText(order.getPaymentTypeTitle());
   }
 
