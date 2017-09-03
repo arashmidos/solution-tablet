@@ -38,6 +38,9 @@
         android:background="@android:color/transparent"
         android:gravity="center|right"
         android:hint="@string/search_goods_hint"
+        android:imeOptions="actionSearch"
+        android:maxLines="1"
+        android:singleLine="true"
         android:textColorHint="@color/login_gray"
         android:textSize="14sp"/>
 

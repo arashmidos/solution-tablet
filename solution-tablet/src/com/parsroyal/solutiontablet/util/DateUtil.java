@@ -15,6 +15,15 @@ import java.util.TimeZone;
  */
 public class DateUtil {
 
+  //days of week
+  public static final String SATURDAY = "شنبه";
+  public static final String SUNDAY = "یکشنبه";
+  public static final String MONDAY = "دوشنبه";
+  public static final String TUESDAY = "سه شنبه";
+  public static final String WEDNESDAY = "چهارشنبه";
+  public static final String THURSDAY = "پنجشنبه";
+  public static final String FRIDAY = "جمعه";
+
   public static final String DATE_DEFINER_TODAY = "today";
   public static final String DATE_DEFINER_YESTERDAY = "yesterday";
   public static final String DATE_DEFINER_TOMORROW = "tomorrow";
@@ -37,6 +46,19 @@ public class DateUtil {
   public static final SimpleDateFormat FULL_FORMATTER_GREGORIAN_WITH_TIME = new SimpleDateFormat(
       "yyyy-MM-dd - HH:mm:ss");
   public static final SimpleDateFormat TIME_24 = new SimpleDateFormat("HH:mm:ss");
+  static String[] monthNames = {"فروردین",
+      "اردیبهشت",
+      "خرداد",
+      "تیر",
+      "مرداد",
+      "شهریور",
+      "مهر",
+      "آبان",
+      "آذر",
+      "دی",
+      "بهمن",
+      "اسفند"
+  };
 
   static {
     FULL_FORMATTER.setCalendar(new HijriShamsiCalendar());
@@ -330,6 +352,37 @@ public class DateUtil {
         convertStringToDate(date2, FULL_FORMATTER, "FA").getTime() - convertStringToDate(date1,
             FULL_FORMATTER, "FA").getTime();
     return Integer.parseInt(String.valueOf((difference) / (1000 * 60 * 60 * 24)));
+  }
+
+  public static String getPersianDayOfWeek(int day) {
+    switch (day) {
+      case Calendar.SATURDAY:
+        return SATURDAY;
+      case Calendar.SUNDAY:
+        return SUNDAY;
+      case Calendar.MONDAY:
+        return MONDAY;
+      case Calendar.TUESDAY:
+        return TUESDAY;
+      case Calendar.WEDNESDAY:
+        return WEDNESDAY;
+      case Calendar.THURSDAY:
+        return THURSDAY;
+      case Calendar.FRIDAY:
+        return FRIDAY;
+    }
+    return "";
+  }
+
+  public static String getFullPersianDate(Date date) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+    String dateString = DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA");
+    String[] splitDate = dateString.split("/");
+    String monthName = monthNames[Integer.parseInt(splitDate[1]) - 1];
+    return String.format("%s %s %s %s", getPersianDayOfWeek(dayOfWeek), splitDate[2], monthName,
+        splitDate[0], monthName);
   }
 
   public static String moveDate(String date1, Integer count) {

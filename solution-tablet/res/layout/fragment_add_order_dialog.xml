@@ -5,6 +5,8 @@
   android:layout_height="match_parent"
   android:background="@android:color/white"
   android:elevation="3dp"
+  android:focusable="true"
+  android:focusableInTouchMode="true"
   android:orientation="vertical"
   tools:context="com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment">
 
@@ -155,16 +157,16 @@
         style="@style/IranSans.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="26dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/order_count"
         android:textColor="@color/black_85"
         android:textSize="14sp"/>
 
       <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
@@ -205,13 +207,13 @@
           android:id="@+id/count_tv"
           style="@style/IranSans"
           android:layout_width="0dp"
-          android:layout_height="wrap_content"
+          android:layout_height="match_parent"
           android:layout_weight="1"
           android:layout_marginStart="16dp"
           android:layout_marginLeft="16dp"
           android:paddingBottom="6dp"
           android:background="@drawable/edit_text_state_background"
-          android:gravity="right"
+          android:gravity="right|bottom"
           android:hint="@string/enter_count_amount"
           android:inputType="number"
           android:textColor="@color/black_85"

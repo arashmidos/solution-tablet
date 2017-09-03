@@ -15,7 +15,6 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
-import com.parsroyal.solutiontablet.ui.fragment.BlankFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NewOrderListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentListFragment;
@@ -81,8 +80,10 @@ public class NewVisitDetailFragment extends BaseFragment {
   private void setUpViewPager() {
     viewPagerAdapter = new CustomerDetailViewPagerAdapter(
         getActivity().getSupportFragmentManager());
-    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.images));
-    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
+//    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.images));
+//    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
+    viewPagerAdapter.add(PaymentListFragment.newInstance(getArguments()), getString(R.string.payments));
+    viewPagerAdapter.add(NewOrderListFragment.newInstance(), getString(R.string.orders));
     viewPagerAdapter
         .add(PaymentListFragment.newInstance(getArguments()), getString(R.string.payments));
     viewPagerAdapter.add(NewOrderListFragment.newInstance(this), getString(R.string.orders));

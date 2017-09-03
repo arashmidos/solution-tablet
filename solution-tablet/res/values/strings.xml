@@ -501,5 +501,8 @@
   <string name="reason_register_no">دلیل ثبت عدم را انتخاب کنید</string>
   <string name="code_x">کد : %s</string>
   <string name="choose_one">هیچ گزینه ای انتخاب نشده است</string>
+  <string name="message_cheque_account_number_is_required">وارد کردن شماره حساب اجباریست.</string>
+  <string name="message_cheque_amount_is_required">وارد کردن مبلغ اجباریست.</string>
+  <string name="message_cheque_account_owner_is_required">وترد کردن صاحب چک اجباریست.</string>
 
 </resources>
