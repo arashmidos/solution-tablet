@@ -29,6 +29,7 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.Arrays;
@@ -156,32 +157,9 @@ public class AddCustomerFragment extends BaseFragment {
   }
 
   private void initSpinner(Spinner spinner, List<LabelValue> items, String hint) {
-    ArrayAdapter<String> adapter = new ArrayAdapter<String>(mainActivity,
-        android.R.layout.simple_spinner_dropdown_item) {
 
-      @Override
-      public View getView(int position, View convertView, ViewGroup parent) {
-
-        View v = super.getView(position, convertView, parent);
-        if (position == getCount()) {
-          ((TextView) v.findViewById(android.R.id.text1)).setText("");
-          ((TextView) v.findViewById(android.R.id.text1))
-              .setHintTextColor(ContextCompat.getColor(mainActivity, android.R.color.black));
-          ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount()));
-        }
-        return v;
-      }
-
-      @Override
-      public int getCount() {
-        return super.getCount() - 1;
-      }
-    };
-//    adapter.addAll(items);
-    spinner.setAdapter(new LabelValueArrayAdapter(mainActivity, items));
-
-    //TODO:add this on the end of the list. its spinner hint
-    adapter.add(hint);
+    items.add(new LabelValue(-1L, hint));
+    LabelValueArrayAdapterWithHint adapter = new LabelValueArrayAdapterWithHint(getActivity(), items);
     spinner.setAdapter(adapter);
     spinner.setSelection(adapter.getCount());
   }

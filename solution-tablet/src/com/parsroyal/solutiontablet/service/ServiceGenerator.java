@@ -39,39 +39,43 @@ public class ServiceGenerator {
 
   public static <S> S createService(Class<S> serviceClass) {
 
-    String username = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
-    String password = settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD);
+//    String username = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
+//    String password = settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD);
 
-    return createService(serviceClass, username, password);
+    return createService(serviceClass, null, null);
   }
 
   public static <S> S createService(Class<S> serviceClass, String username, String password) {
-    String authToken = Credentials.basic(username, password);
+    String authToken = null;
+    if (Empty.isNotEmpty(username) && Empty.isNotEmpty(password)) {
+      authToken = Credentials.basic(username, password);
+    }
     return createService(serviceClass, authToken);
   }
 
   public static <S> S createService(Class<S> serviceClass, final String authToken) {
+    AuthenticationInterceptor interceptor;
     if (!TextUtils.isEmpty(authToken)) {
-      AuthenticationInterceptor interceptor =
-          new AuthenticationInterceptor(authToken);
-
-      if (!httpClient.interceptors().contains(interceptor)) {
-        httpClient.addInterceptor(interceptor);
-      }
-      if (BuildConfig.DEBUG) {
-        httpClient.addInterceptor(logging);
-      }
-
-      String baseUrl = new SettingServiceImpl(SolutionTabletApplication.getInstance())
-          .getSettingValue(ApplicationKeys.BACKEND_URI);
-      if (Empty.isEmpty(baseUrl)) {
-        baseUrl = "http://www.google.com";
-      }
-      builder = new Retrofit.Builder().baseUrl(baseUrl + "/");
-      builder.addConverterFactory(GsonConverterFactory.create());
-      builder.client(httpClient.build());
-      retrofit = builder.build();
+      interceptor = new AuthenticationInterceptor(authToken);
+    } else {
+      interceptor = new AuthenticationInterceptor(null);
     }
+    if (!httpClient.interceptors().contains(interceptor)) {
+      httpClient.addInterceptor(interceptor);
+    }
+    if (BuildConfig.DEBUG) {
+      httpClient.addInterceptor(logging);
+    }
+
+    String baseUrl = new SettingServiceImpl(SolutionTabletApplication.getInstance())
+        .getSettingValue(ApplicationKeys.BACKEND_URI);
+    if (Empty.isEmpty(baseUrl)) {
+      baseUrl = "http://www.google.com";
+    }
+    builder = new Retrofit.Builder().baseUrl(baseUrl + "/");
+    builder.addConverterFactory(GsonConverterFactory.create());
+    builder.client(httpClient.build());
+    retrofit = builder.build();
 
     return retrofit.create(serviceClass);
   }
@@ -88,13 +92,17 @@ public class ServiceGenerator {
     public Response intercept(Chain chain) throws IOException {
       Request original = chain.request();
 
-      String token = new SettingServiceImpl(
-          SolutionTabletApplication.getInstance()).getSettingValue(ApplicationKeys.TOKEN);
       String encodedRequest = original.url().toString();
       encodedRequest = encodedRequest.replace("|", "%7c");
-      Request.Builder builder = original.newBuilder()
-//          .header("Authorization", authToken);
-          .addHeader("Authorization", "Bearer " + token);
+
+      Request.Builder builder;
+      if (Empty.isEmpty(authToken)) {
+        String token = new SettingServiceImpl(
+            SolutionTabletApplication.getInstance()).getSettingValue(ApplicationKeys.TOKEN);
+        builder = original.newBuilder().addHeader("Authorization", "Bearer " + token);
+      } else {
+        builder = original.newBuilder().header("Authorization", authToken);
+      }
       Request request = builder.url(encodedRequest).build();
       return chain.proceed(request);
     }

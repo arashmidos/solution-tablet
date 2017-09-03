@@ -46,7 +46,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
-import com.parsroyal.solutiontablet.ui.adapter.RegisterNoLabelValueArrayAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -434,7 +434,7 @@ public class CustomerInfoFragment extends Fragment {
     AlertDialog alertDialog = dialogBuilder.create();
 
     wants.add(new LabelValue(-1l, getString(R.string.reason_register_no)));
-    RegisterNoLabelValueArrayAdapter labelValueArrayAdapter = new RegisterNoLabelValueArrayAdapter(mainActivity,
+    LabelValueArrayAdapterWithHint labelValueArrayAdapter = new LabelValueArrayAdapterWithHint(mainActivity,
         wants);
     noSpinner.setAdapter(labelValueArrayAdapter);
     noSpinner.setSelection(wants.size() - 1);

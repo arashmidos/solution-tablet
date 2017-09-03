@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
+
 import java.util.List;
 
 /**
- * Created by Arash on 2/09/2017.
+ * Created by Shakib on 03/09/2017
  */
 public class LabelValueArrayAdapterWithHint extends BaseAdapter {
 
@@ -36,14 +38,24 @@ public class LabelValueArrayAdapterWithHint extends BaseAdapter {
     } else {
       holder = (LabelValueViewHolder) convertView.getTag();
     }
-
-    holder.text.setText(labelValues.get(position).getLabel());
+    if (position == getCount()) {
+      holder.text.setText("");
+      holder.text.setHint(labelValues.get(getCount()).getLabel());
+    } else {
+      holder.text.setText(labelValues.get(position).getLabel());
+    }
     return convertView;
   }
 
+  //TODO:
+  /*public View getDropDownView(int position, View convertView, ViewGroup parent) {
+    View v = super.getDropDownView(position, convertView, parent);
+    ((TextView) v).setGravity(Gravity.RIGHT);
+    return v;
+  }*/
   @Override
   public int getCount() {
-    return labelValues.size();
+    return labelValues.size() - 1;
   }
 
   @Override

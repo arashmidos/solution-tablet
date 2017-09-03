@@ -106,11 +106,7 @@ public class GoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<String
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    headers
-        .add("branchCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_CODE).getValue());
-    headers.add("stockCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_STOCK_CODE).getValue());
 
-    HttpEntity<String> entity = new HttpEntity<>("No Params", headers);
-    return entity;
+    return new HttpEntity<>("No Params", headers);
   }
 }

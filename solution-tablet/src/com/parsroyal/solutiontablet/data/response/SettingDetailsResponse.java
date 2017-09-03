@@ -15,6 +15,12 @@ public class SettingDetailsResponse extends Response {
   @SerializedName("branch.id")
   @Expose
   private String branchId;
+  @SerializedName("stock.code")
+  @Expose
+  private String stockCode;
+  @SerializedName("branch.code")
+  @Expose
+  private String branchCode;
   @SerializedName("factor.type")
   @Expose
   private String factorType;
@@ -30,6 +36,22 @@ public class SettingDetailsResponse extends Response {
   @SerializedName("check.distance.from.customer")
   @Expose
   private boolean checkDistanceFromCustomer;
+
+  public String getStockCode() {
+    return stockCode;
+  }
+
+  public void setStockCode(String stockCode) {
+    this.stockCode = stockCode;
+  }
+
+  public String getBranchCode() {
+    return branchCode;
+  }
+
+  public void setBranchCode(String branchCode) {
+    this.branchCode = branchCode;
+  }
 
   public String getBranchId() {
     return branchId;

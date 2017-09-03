@@ -11,7 +11,9 @@ public class ApplicationKeys {
   public static final String SETTING_USER_CODE = "setting.user.code";
   public static final String SETTING_SALE_TYPE = "setting.sale.type";
   public static final String SETTING_CALCULATE_DISTANCE_ENABLE = "setting.distance.enable";
+  public static final String SETTING_STOCK_ID = "setting.stock.id";
   public static final String SETTING_STOCK_CODE = "setting.stock.code";
+  public static final String SETTING_BRANCH_ID = "setting.branch.id";
   public static final String SETTING_BRANCH_CODE = "setting.branch.code";
   public static final String SETTING_INVOICE_TYPE = "setting.invoice.type";
   public static final String SETTING_ORDER_TYPE = "setting.order.type";

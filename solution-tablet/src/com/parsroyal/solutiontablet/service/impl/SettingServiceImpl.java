@@ -82,9 +82,14 @@ public class SettingServiceImpl implements SettingService {
   public void saveSetting(SettingResponse response) {
     keyValueBiz.save(new KeyValue(ApplicationKeys.TOKEN, response.getToken()));
     SettingDetailsResponse settingDetail = response.getSettings();
-    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_STOCK_CODE, settingDetail.getStockId()));
     keyValueBiz
-        .save(new KeyValue(ApplicationKeys.SETTING_BRANCH_CODE, settingDetail.getBranchId()));
+        .save(new KeyValue(ApplicationKeys.SETTING_STOCK_CODE, settingDetail.getStockCode()));
+    keyValueBiz
+        .save(new KeyValue(ApplicationKeys.SETTING_BRANCH_CODE, settingDetail.getBranchCode()));
+    keyValueBiz
+        .save(new KeyValue(ApplicationKeys.SETTING_STOCK_ID, settingDetail.getStockId()));
+    keyValueBiz
+        .save(new KeyValue(ApplicationKeys.SETTING_BRANCH_ID, settingDetail.getBranchId()));
     keyValueBiz
         .save(new KeyValue(ApplicationKeys.SETTING_ORDER_TYPE, settingDetail.getOrderType()));
     keyValueBiz
