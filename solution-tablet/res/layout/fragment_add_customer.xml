@@ -1,4 +1,5 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -33,6 +34,7 @@
 
         <EditText
           android:id="@+id/full_name_edt"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/edit_text_state_background"
@@ -42,7 +44,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
-          tools:text="sunstar" />
+          tools:text="sunstar"/>
 
       </android.support.design.widget.TextInputLayout>
 
@@ -56,7 +58,7 @@
         android:layout_marginRight="20dp"
         android:layout_gravity="right|center"
         android:src="@drawable/ic_perm_identity"
-        android:tint="@color/gray_75" />
+        android:tint="@color/gray_75"/>
     </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -76,6 +78,7 @@
 
       <EditText
         android:id="@+id/national_code_edt"
+        style="@style/IranSans"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/edit_text_state_background"
@@ -85,7 +88,7 @@
         android:maxLines="1"
         android:textColor="@android:color/black"
         android:textSize="@dimen/text_normal"
-        tools:text="sunstar" />
+        tools:text="sunstar"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -110,6 +113,7 @@
 
         <EditText
           android:id="@+id/shop_name_edt"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/edit_text_state_background"
@@ -119,7 +123,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
-          tools:text="sunstar" />
+          tools:text="sunstar"/>
 
       </android.support.design.widget.TextInputLayout>
 
@@ -133,7 +137,7 @@
         android:layout_marginRight="20dp"
         android:layout_gravity="right|center"
         android:src="@drawable/ic_store"
-        android:tint="@color/gray_75" />
+        android:tint="@color/gray_75"/>
     </LinearLayout>
 
     <LinearLayout
@@ -157,6 +161,7 @@
 
         <EditText
           android:id="@+id/phone_number_edt"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/edit_text_state_background"
@@ -166,7 +171,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
-          tools:text="sunstar" />
+          tools:text="sunstar"/>
 
       </android.support.design.widget.TextInputLayout>
 
@@ -181,7 +186,7 @@
         android:layout_gravity="right|center"
         android:rotation="270"
         android:src="@drawable/ic_phone_24dp"
-        android:tint="@color/gray_75" />
+        android:tint="@color/gray_75"/>
     </LinearLayout>
 
     <LinearLayout
@@ -205,6 +210,7 @@
 
         <EditText
           android:id="@+id/mobile_edt"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/edit_text_state_background"
@@ -214,7 +220,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
-          tools:text="sunstar" />
+          tools:text="sunstar"/>
 
       </android.support.design.widget.TextInputLayout>
 
@@ -228,7 +234,7 @@
         android:layout_marginRight="20dp"
         android:layout_gravity="right|center"
         android:src="@drawable/ic_phone_android_24dp"
-        android:tint="@color/gray_75" />
+        android:tint="@color/gray_75"/>
     </LinearLayout>
 
     <LinearLayout
@@ -249,17 +255,18 @@
 
         <Spinner
           android:id="@+id/city_spinner"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@android:color/white"
           android:gravity="right"
-          android:prompt="@string/city" />
+          android:prompt="@string/city"/>
 
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_alignParentBottom="true"
-          android:background="@color/gray_9e" />
+          android:background="@color/gray_9e"/>
 
         <ImageView
           android:layout_width="wrap_content"
@@ -268,7 +275,7 @@
           android:layout_alignParentStart="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_arrow_drop_down"
-          android:tint="@color/gray_9e" />
+          android:tint="@color/gray_9e"/>
 
       </RelativeLayout>
 
@@ -282,17 +289,18 @@
 
         <Spinner
           android:id="@+id/state_spinner"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@android:color/white"
           android:gravity="right"
-          android:prompt="@string/state" />
+          android:prompt="@string/state"/>
 
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_alignParentBottom="true"
-          android:background="@color/gray_9e" />
+          android:background="@color/gray_9e"/>
 
         <ImageView
           android:layout_width="wrap_content"
@@ -301,7 +309,7 @@
           android:layout_alignParentStart="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_arrow_drop_down"
-          android:tint="@color/gray_9e" />
+          android:tint="@color/gray_9e"/>
 
       </RelativeLayout>
 
@@ -328,6 +336,7 @@
 
         <EditText
           android:id="@+id/address_edt"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/edit_text_state_background"
@@ -337,7 +346,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
-          tools:text="sunstar" />
+          tools:text="sunstar"/>
 
       </android.support.design.widget.TextInputLayout>
 
@@ -351,7 +360,7 @@
         android:layout_marginRight="20dp"
         android:layout_gravity="right|center"
         android:src="@drawable/ic_location_on_24_dp"
-        android:tint="@color/gray_75" />
+        android:tint="@color/gray_75"/>
     </LinearLayout>
 
     <LinearLayout
@@ -378,6 +387,7 @@
 
         <EditText
           android:id="@+id/postal_code_edt"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:paddingTop="8dp"
@@ -388,7 +398,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
-          tools:text="422543526" />
+          tools:text="422543526"/>
       </android.support.design.widget.TextInputLayout>
 
       <android.support.design.widget.TextInputLayout
@@ -405,6 +415,7 @@
 
         <EditText
           android:id="@+id/regional_municipality_edt"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:paddingTop="8dp"
@@ -415,7 +426,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
-          tools:text="422543526" />
+          tools:text="422543526"/>
 
       </android.support.design.widget.TextInputLayout>
 
@@ -425,7 +436,7 @@
       android:layout_width="match_parent"
       android:layout_height="1dp"
       android:layout_marginTop="24dp"
-      android:background="@color/gray_e0" />
+      android:background="@color/gray_e0"/>
 
     <LinearLayout
       android:id="@+id/location_lay"
@@ -434,13 +445,14 @@
       android:orientation="horizontal">
 
       <TextView
+        style="@style/IranSans"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="right|center_vertical"
         android:text="@string/location_on_map"
         android:textColor="@color/primary"
-        android:textSize="@dimen/text_normal" />
+        android:textSize="@dimen/text_normal"/>
 
       <ImageView
         android:id="@+id/location_icon"
@@ -450,14 +462,14 @@
         android:layout_marginRight="17dp"
         android:layout_gravity="right|center"
         android:src="@drawable/ic_gps_fixed_black_18dp"
-        android:tint="@color/primary" />
+        android:tint="@color/primary"/>
     </LinearLayout>
 
     <View
       android:layout_width="match_parent"
       android:layout_height="1dp"
       android:layout_marginBottom="35dp"
-      android:background="@color/gray_e0" />
+      android:background="@color/gray_e0"/>
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -476,17 +488,17 @@
 
         <Spinner
           android:id="@+id/ownership_spinner"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@android:color/white"
-          android:gravity="right"
-          android:prompt="@string/ownership_type_caption" />
+          android:gravity="right"/>
 
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_alignParentBottom="true"
-          android:background="@color/gray_9e" />
+          android:background="@color/gray_9e"/>
 
         <ImageView
           android:layout_width="wrap_content"
@@ -495,7 +507,7 @@
           android:layout_alignParentStart="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_arrow_drop_down"
-          android:tint="@color/gray_9e" />
+          android:tint="@color/gray_9e"/>
 
       </RelativeLayout>
 
@@ -509,17 +521,17 @@
 
         <Spinner
           android:id="@+id/activity_spinner"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@android:color/white"
-          android:gravity="right"
-          android:prompt="@string/activity_type_caption" />
+          android:gravity="right"/>
 
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_alignParentBottom="true"
-          android:background="@color/gray_9e" />
+          android:background="@color/gray_9e"/>
 
         <ImageView
           android:layout_width="wrap_content"
@@ -528,7 +540,7 @@
           android:layout_alignParentStart="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_arrow_drop_down"
-          android:tint="@color/gray_9e" />
+          android:tint="@color/gray_9e"/>
 
       </RelativeLayout>
 
@@ -557,6 +569,7 @@
 
         <EditText
           android:id="@+id/store_meter_edt"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:paddingTop="8dp"
@@ -567,7 +580,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
-          tools:text="422543526" />
+          tools:text="422543526"/>
       </android.support.design.widget.TextInputLayout>
 
       <RelativeLayout
@@ -579,17 +592,18 @@
 
         <Spinner
           android:id="@+id/customer_class_spinner"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@android:color/white"
           android:gravity="right"
-          android:prompt="@string/store_meter" />
+          android:prompt="@string/store_meter"/>
 
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_alignParentBottom="true"
-          android:background="@color/gray_9e" />
+          android:background="@color/gray_9e"/>
 
         <ImageView
           android:layout_width="wrap_content"
@@ -598,7 +612,7 @@
           android:layout_alignParentStart="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_arrow_drop_down"
-          android:tint="@color/gray_9e" />
+          android:tint="@color/gray_9e"/>
 
       </RelativeLayout>
 
@@ -606,6 +620,7 @@
 
     <Button
       android:id="@+id/create_btn"
+      style="@style/IranSans.Medium"
       android:layout_width="match_parent"
       android:layout_height="36dp"
       android:layout_marginTop="120dp"
@@ -618,6 +633,6 @@
       android:gravity="center"
       android:text="@string/create_save"
       android:textColor="@android:color/white"
-      android:textSize="14sp" />
+      android:textSize="14sp"/>
   </LinearLayout>
 </ScrollView>

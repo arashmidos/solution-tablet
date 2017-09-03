@@ -15,10 +15,11 @@
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
-    android:tint="@color/black_8a" />
+    android:tint="@color/black_8a"/>
 
   <TextView
     android:id="@+id/title_tv"
+    style="@style/IranSans.Bold"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
@@ -31,10 +32,11 @@
     android:layout_toStartOf="@id/icon_img"
     android:gravity="right"
     android:textColor="@color/black_de"
-    android:textSize="@dimen/text_large" />
+    android:textSize="@dimen/text_large"/>
 
   <TextView
     android:id="@+id/body_tv"
+    style="@style/IranSans"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
@@ -44,10 +46,11 @@
     android:layout_marginRight="20dp"
     android:layout_below="@id/title_tv"
     android:gravity="right"
-    android:textSize="@dimen/text_normal" />
+    android:textSize="@dimen/text_normal"/>
 
   <Button
     android:id="@+id/positive_btn"
+    style="@style/IranSans.Medium"
     android:layout_width="wrap_content"
     android:layout_height="36dp"
     android:layout_marginTop="26dp"
@@ -63,10 +66,11 @@
     android:background="@drawable/get_data_background"
     android:gravity="center"
     android:textColor="@android:color/white"
-    android:textSize="14sp" />
+    android:textSize="14sp"/>
 
   <TextView
     android:id="@+id/negative_tv"
+    style="@style/IranSans.Medium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="35dp"
@@ -75,5 +79,5 @@
     android:layout_alignParentLeft="true"
     android:layout_below="@id/body_tv"
     android:textColor="@color/primary"
-    android:textSize="14sp" />
+    android:textSize="14sp"/>
 </RelativeLayout>

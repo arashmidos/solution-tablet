@@ -38,7 +38,7 @@ public class SolutionTabletApplication extends Application {
     Fabric.with(this, new Crashlytics());
 
     CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-        .setDefaultFontPath("fonts/IRANSansMobile2.ttf")
+        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
         .setFontAttrId(R.attr.fontPath)
         .build());
 

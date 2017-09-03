@@ -18,6 +18,7 @@
       android:orientation="vertical">
 
       <TextView
+        style="@style/IranSans.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
@@ -26,7 +27,7 @@
         android:layout_marginRight="16dp"
         android:text="@string/choose_payment_methods"
         android:textColor="@color/black_21"
-        android:textSize="12sp" />
+        android:textSize="12sp"/>
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -47,13 +48,14 @@
 
           <TextView
             android:id="@+id/e_payment_tv"
+            style="@style/IranSans.Medium"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/e_payment"
             android:textColor="@color/gray_75"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
           <View
             android:id="@+id/e_payment_bottom_line"
@@ -61,13 +63,13 @@
             android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:background="@color/payment_bottom_line"
-            android:visibility="gone" />
+            android:visibility="gone"/>
         </RelativeLayout>
 
         <View
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:layout_weight="1" />
+          android:layout_weight="1"/>
 
         <RelativeLayout
           android:id="@+id/cheque_lay"
@@ -78,13 +80,14 @@
 
           <TextView
             android:id="@+id/cheque_tv"
+            style="@style/IranSans.Medium"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/cheque"
             android:textColor="@color/gray_75"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
           <View
             android:id="@+id/cheque_bottom_line"
@@ -92,13 +95,13 @@
             android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:background="@color/payment_bottom_line"
-            android:visibility="gone" />
+            android:visibility="gone"/>
         </RelativeLayout>
 
         <View
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:layout_weight="1" />
+          android:layout_weight="1"/>
 
         <RelativeLayout
           android:id="@+id/cash_lay"
@@ -109,13 +112,14 @@
 
           <TextView
             android:id="@+id/cash_tv"
+            style="@style/IranSans.Medium"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/cash"
             android:textColor="@color/gray_75"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
           <View
             android:id="@+id/cash_bottom_line"
@@ -123,7 +127,7 @@
             android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:background="@color/payment_bottom_line"
-            android:visibility="gone" />
+            android:visibility="gone"/>
         </RelativeLayout>
 
       </LinearLayout>
@@ -133,10 +137,11 @@
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="24dp"
-        android:background="@color/gray_e0" />
+        android:background="@color/gray_e0"/>
 
       <android.support.design.widget.TextInputLayout
         android:id="@+id/payment_price_lay"
+        style="@style/IranSans"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -153,20 +158,22 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:paddingTop="8dp"
-          android:digits="1234567890,۰۱۲۳۴۵۶۷۸۹"
+          android:paddingBottom="7dp"
           android:background="@drawable/edit_text_state_background"
+          android:digits="1234567890,۰۱۲۳۴۵۶۷۸۹"
           android:gravity="right|center_vertical"
           android:imeOptions="actionNext"
           android:inputType="numberDecimal"
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_x_large"
-          tools:text="10000000" />
+          tools:text="10000000"/>
 
       </android.support.design.widget.TextInputLayout>
 
       <android.support.design.widget.TextInputLayout
         android:id="@+id/tracking_num_lay"
+        style="@style/IranSans"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="42dp"
@@ -182,9 +189,11 @@
 
         <EditText
           android:id="@+id/tracking_num_edt"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:paddingTop="8dp"
+          android:paddingBottom="7dp"
           android:background="@drawable/edit_text_state_background"
           android:gravity="right|center_vertical"
           android:imeOptions="actionDone"
@@ -192,7 +201,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
-          tools:text="422543526" />
+          tools:text="422543526"/>
 
       </android.support.design.widget.TextInputLayout>
 
@@ -224,9 +233,11 @@
 
             <EditText
               android:id="@+id/cheque_num_edt"
+              style="@style/IranSans"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:paddingTop="8dp"
+              android:paddingBottom="7dp"
               android:background="@drawable/edit_text_state_background"
               android:gravity="right|center_vertical"
               android:imeOptions="actionNext"
@@ -234,7 +245,7 @@
               android:maxLines="1"
               android:textColor="@android:color/black"
               android:textSize="@dimen/text_normal"
-              tools:text="422543526" />
+              tools:text="422543526"/>
 
           </android.support.design.widget.TextInputLayout>
 
@@ -254,16 +265,18 @@
 
             <EditText
               android:id="@+id/cheque_date_edt"
+              style="@style/IranSans"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:paddingTop="8dp"
+              android:paddingBottom="7dp"
               android:background="@drawable/edit_text_state_background"
+              android:focusable="false"
               android:gravity="right|center_vertical"
               android:maxLines="1"
-              android:focusable="false"
               android:textColor="@android:color/black"
               android:textSize="@dimen/text_normal"
-              tools:text="422543526" />
+              tools:text="422543526"/>
           </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
@@ -284,9 +297,11 @@
 
           <EditText
             android:id="@+id/cheque_owner_edt"
+            style="@style/IranSans"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="8dp"
+            android:paddingBottom="7dp"
             android:background="@drawable/edit_text_state_background"
             android:gravity="right|center_vertical"
             android:imeOptions="actionNext"
@@ -294,7 +309,7 @@
             android:maxLines="1"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_normal"
-            tools:text="422543526" />
+            tools:text="422543526"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -314,9 +329,11 @@
 
           <EditText
             android:id="@+id/account_num_edt"
+            style="@style/IranSans"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="8dp"
+            android:paddingBottom="7dp"
             android:background="@drawable/edit_text_state_background"
             android:gravity="right|center_vertical"
             android:imeOptions="actionNext"
@@ -324,7 +341,7 @@
             android:maxLines="1"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_normal"
-            tools:text="422543526" />
+            tools:text="422543526"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -351,9 +368,11 @@
 
             <EditText
               android:id="@+id/branch_edt"
+              style="@style/IranSans"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:paddingTop="8dp"
+              android:paddingBottom="7dp"
               android:background="@drawable/edit_text_state_background"
               android:gravity="right|center_vertical"
               android:imeOptions="actionDone"
@@ -361,7 +380,7 @@
               android:maxLines="1"
               android:textColor="@android:color/black"
               android:textSize="@dimen/text_normal"
-              tools:text="422543526" />
+              tools:text="422543526"/>
           </android.support.design.widget.TextInputLayout>
 
           <RelativeLayout
@@ -377,13 +396,13 @@
               android:layout_height="match_parent"
               android:background="@android:color/white"
               android:gravity="right"
-              android:prompt="@string/number" />
+              android:prompt="@string/number"/>
 
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
               android:layout_alignParentBottom="true"
-              android:background="@color/login_gray" />
+              android:background="@color/login_gray"/>
 
             <ImageView
               android:layout_width="wrap_content"
@@ -392,7 +411,7 @@
               android:layout_alignParentStart="true"
               android:layout_centerVertical="true"
               android:src="@drawable/ic_arrow_drop_down"
-              android:tint="@color/login_gray" />
+              android:tint="@color/login_gray"/>
 
           </RelativeLayout>
 
@@ -404,6 +423,7 @@
 
   <Button
     android:id="@+id/register_btn"
+    style="@style/IranSans.Medium"
     android:layout_width="match_parent"
     android:layout_height="36dp"
     android:layout_marginTop="16dp"
@@ -416,6 +436,6 @@
     android:gravity="center"
     android:text="@string/submit"
     android:textColor="@android:color/white"
-    android:textSize="14sp" />
+    android:textSize="14sp"/>
 
 </LinearLayout>

@@ -52,6 +52,7 @@
                 android:id="@+id/sort_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+              style="@style/IranSans"
                 android:layout_marginRight="10dp"
                 android:text="@string/sort"
                 android:textColor="@color/login_gray"
@@ -85,7 +86,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:text="@string/filter"
-                android:textColor="@color/login_gray"
+              style="@style/IranSans"
+              android:textColor="@color/login_gray"
                 android:textSize="14sp"/>
 
             <ImageView

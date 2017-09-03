@@ -18,6 +18,7 @@
 
     <TextView
       android:id="@+id/feature_title_tv"
+      style="@style/IranSans.Medium"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="20dp"
@@ -25,7 +26,7 @@
       android:layout_centerHorizontal="true"
       android:gravity="center"
       android:textColor="@color/primary_dark"
-      android:textSize="14sp" />
+      android:textSize="14sp"/>
 
     <ImageView
       android:id="@+id/feature_img"
@@ -33,10 +34,11 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="28dp"
       android:layout_centerHorizontal="true"
-      tools:src="@drawable/ic_assignment_black_48dp" />
+      tools:src="@drawable/ic_assignment_black_48dp"/>
 
     <Button
       android:id="@+id/badger_btn"
+      style="@style/IranSans.Medium"
       android:layout_width="21dp"
       android:layout_height="21dp"
       android:layout_marginTop="14dp"
@@ -48,8 +50,6 @@
       android:gravity="center"
       android:textColor="@android:color/white"
       android:textSize="12sp"
-      android:visibility="gone" />
-
-
+      android:visibility="gone"/>
   </RelativeLayout>
 </android.support.v7.widget.CardView>

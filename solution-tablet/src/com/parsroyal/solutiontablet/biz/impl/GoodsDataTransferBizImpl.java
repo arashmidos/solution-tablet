@@ -82,7 +82,7 @@ public class GoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<String
   public String getMethod() {
     String url = String.format("goods/%s/%s/%s/%s",
         settingService.getSettingValue(ApplicationKeys.USER_COMPANY_ID),
-        settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE),
+        settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_ID),
         settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE),
         settingService.getSettingValue(ApplicationKeys.SALESMAN_ID));
     Log.d(TAG, "Calling service:" + url);

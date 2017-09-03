@@ -26,12 +26,13 @@
       </android.support.v7.widget.Toolbar>
 
       <TextView
+        style="@style/IranSans.Medium"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/enter_system"
         android:textColor="@android:color/white"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
     </FrameLayout>
   </android.support.design.widget.AppBarLayout>
 
@@ -49,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="39dp"
-        android:src="@drawable/logo" />
+        android:src="@drawable/logo"/>
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -60,6 +61,7 @@
 
         <android.support.design.widget.TextInputLayout
           android:id="@+id/company_code_lay"
+          style="@style/IranSans"
           android:layout_width="0dp"
           android:layout_height="match_parent"
           android:layout_weight="1"
@@ -72,7 +74,6 @@
 
           <EditText
             android:id="@+id/company_code_edt"
-            android:text="parsroyal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/edit_text_state_background"
@@ -80,9 +81,10 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLines="1"
+            android:text="parsroyal"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_normal"
-            tools:text="sunstar" />
+            tools:text="sunstar"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -94,7 +96,7 @@
           android:layout_marginRight="34dp"
           android:layout_gravity="right|center"
           android:src="@drawable/ic_business"
-          android:tint="@color/login_gray" />
+          android:tint="@color/login_gray"/>
       </LinearLayout>
 
       <LinearLayout
@@ -117,6 +119,7 @@
 
           <EditText
             android:id="@+id/user_name_edt"
+            style="@style/IranSans"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/edit_text_state_background"
@@ -127,7 +130,7 @@
             android:text="afshin"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            tools:text="آقا آٰرش" />
+            tools:text="آقا آٰرش"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -139,7 +142,7 @@
           android:layout_marginRight="34dp"
           android:layout_gravity="right|center"
           android:src="@drawable/ic_person"
-          android:tint="@color/login_gray" />
+          android:tint="@color/login_gray"/>
       </LinearLayout>
 
       <LinearLayout
@@ -162,6 +165,7 @@
 
           <EditText
             android:id="@+id/password_edt"
+            style="@style/IranSans"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/edit_text_state_background"
@@ -172,7 +176,7 @@
             android:text="123"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            tools:text="123456" />
+            tools:text="123456"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -184,9 +188,10 @@
           android:layout_marginRight="34dp"
           android:layout_gravity="right|center"
           android:src="@drawable/ic_vpn_key_black_24dp"
-          android:tint="@color/login_gray" />
+          android:tint="@color/login_gray"/>
       </LinearLayout>
       <TextView
+        style="@style/IranSans.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
@@ -196,7 +201,7 @@
         android:gravity="right"
         android:text="@string/choose_sale_type"
         android:textColor="@color/login_gray"
-        android:textSize="12sp" />
+        android:textSize="12sp"/>
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -223,17 +228,18 @@
             android:layout_marginBottom="10dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_truck_delivery_black_24dp"
-            android:tint="@color/login_gray" />
+            android:tint="@color/login_gray"/>
 
           <TextView
             android:id="@+id/distributor_tv"
+            style="@style/IranSans.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/distributor_icon"
             android:layout_centerHorizontal="true"
             android:text="@string/sale_type_distributor"
             android:textColor="@color/login_gray"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
           <View
             android:id="@+id/distributor_bottom_line"
@@ -241,13 +247,13 @@
             android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:background="@color/primary"
-            android:visibility="gone" />
+            android:visibility="gone"/>
         </RelativeLayout>
 
         <View
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:layout_weight="1" />
+          android:layout_weight="1"/>
 
         <RelativeLayout
           android:id="@+id/merchandiser_lay"
@@ -264,10 +270,11 @@
             android:layout_marginBottom="10dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_truck_delivery_black_24dp"
-            android:tint="@color/login_gray" />
+            android:tint="@color/login_gray"/>
 
           <TextView
             android:id="@+id/merchandiser_tv"
+            style="@style/IranSans.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -275,7 +282,7 @@
             android:layout_centerHorizontal="true"
             android:text="@string/sale_type_hot"
             android:textColor="@color/login_gray"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
           <View
             android:id="@+id/merchandiser_bottom_line"
@@ -283,13 +290,13 @@
             android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:background="@color/primary"
-            android:visibility="gone" />
+            android:visibility="gone"/>
         </RelativeLayout>
 
         <View
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:layout_weight="1" />
+          android:layout_weight="1"/>
 
         <RelativeLayout
           android:id="@+id/sales_man_lay"
@@ -306,10 +313,11 @@
             android:layout_marginBottom="10dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_assignment_black_24dp"
-            android:tint="@color/login_gray" />
+            android:tint="@color/login_gray"/>
 
           <TextView
             android:id="@+id/sales_man_tv"
+            style="@style/IranSans.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -317,7 +325,7 @@
             android:layout_centerHorizontal="true"
             android:text="@string/sale_type_cold"
             android:textColor="@color/login_gray"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
           <View
             android:id="@+id/sales_man_bottom_line"
@@ -325,7 +333,7 @@
             android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:background="@color/primary"
-            android:visibility="gone" />
+            android:visibility="gone"/>
         </RelativeLayout>
 
       </LinearLayout>
@@ -334,6 +342,7 @@
 
   <Button
     android:id="@+id/log_in_btn"
+    style="@style/IranSans.Medium"
     android:layout_width="match_parent"
     android:layout_height="41dp"
     android:layout_marginTop="32dp"
@@ -346,6 +355,6 @@
     android:gravity="center"
     android:text="@string/enter"
     android:textColor="@color/log_in_enter"
-    android:textSize="14sp" />
+    android:textSize="14sp"/>
 
 </LinearLayout>

@@ -21,7 +21,7 @@
       <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="73dp"
+        android:layout_height="wrap_content"
         android:background="@color/navigation_drawer_header_background">
 
         <ImageView
@@ -36,10 +36,11 @@
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_account_circle_black_24dp"
-          android:tint="@color/primary_dark" />
+          android:tint="@color/primary_dark"/>
 
         <TextView
           android:id="@+id/user_name_tv"
+          style="@style/IranSans.Medium"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="21dp"
@@ -50,7 +51,7 @@
           android:maxLines="1"
           android:textColor="@color/black_de"
           android:textSize="@dimen/text_normal"
-          tools:text="پژمان جمشیدی" />
+          tools:text="پژمان جمشیدی"/>
 
         <ImageView
           android:id="@+id/drop_img"
@@ -62,25 +63,27 @@
           android:layout_toLeftOf="@id/user_name_tv"
           android:layout_toStartOf="@id/user_name_tv"
           android:src="@drawable/ic_arrow_drop_down"
-          android:tint="@color/login_gray" />
+          android:tint="@color/login_gray"/>
 
         <TextView
           android:id="@+id/user_role_tv"
+          style="@style/IranSans"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
           android:layout_marginBottom="17dp"
-          android:layout_alignParentBottom="true"
+          android:layout_below="@id/user_name_tv"
           android:layout_toLeftOf="@id/user_img"
           android:layout_toStartOf="@id/user_img"
           android:text="ویزیتور"
           android:textColor="@color/primary_dark"
-          android:textSize="12sp" />
+          android:textSize="12sp"/>
       </RelativeLayout>
 
       <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/navigation_drawer_divider" />
+        android:background="@color/navigation_drawer_divider"/>
 
       <LinearLayout
         android:id="@+id/body"
@@ -108,9 +111,10 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_apps_black_24dp"
-            android:tint="@color/login_gray" />
+            android:tint="@color/login_gray"/>
 
           <TextView
+            style="@style/IranSans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -119,7 +123,7 @@
             android:gravity="center"
             android:text="@string/features_list"
             android:textColor="@color/black_de"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -141,9 +145,10 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_near_me_black_24dp"
-            android:tint="@color/login_gray" />
+            android:tint="@color/login_gray"/>
 
           <TextView
+            style="@style/IranSans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -152,7 +157,7 @@
             android:gravity="center"
             android:text="@string/today_paths"
             android:textColor="@color/black_de"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -174,9 +179,10 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_group_black_24dp"
-            android:tint="@color/login_gray" />
+            android:tint="@color/login_gray"/>
 
           <TextView
+            style="@style/IranSans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -185,7 +191,7 @@
             android:gravity="center"
             android:text="@string/cusomters"
             android:textColor="@color/black_de"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -210,6 +216,7 @@
             android:tint="@color/black_21" />
 
           <TextView
+            style="@style/IranSans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -218,7 +225,7 @@
             android:gravity="center"
             android:text="@string/title_goods_list"
             android:textColor="@color/black_de"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -240,9 +247,10 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_assignment_black_24dp"
-            android:tint="@color/login_gray" />
+            android:tint="@color/login_gray"/>
 
           <TextView
+            style="@style/IranSans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -251,7 +259,7 @@
             android:gravity="center"
             android:text="@string/reports"
             android:textColor="@color/black_de"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -273,9 +281,10 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_map_black_24dp"
-            android:tint="@color/login_gray" />
+            android:tint="@color/login_gray"/>
 
           <TextView
+            style="@style/IranSans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -284,7 +293,7 @@
             android:gravity="center"
             android:text="@string/map"
             android:textColor="@color/black_de"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -307,9 +316,10 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_settings_black_24dp"
-            android:tint="@color/login_gray" />
+            android:tint="@color/login_gray"/>
 
           <TextView
+            style="@style/IranSans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -318,16 +328,17 @@
             android:gravity="center"
             android:text="@string/setting"
             android:textColor="@color/black_de"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
         </RelativeLayout>
 
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
-          android:background="@color/navigation_drawer_divider" />
+          android:background="@color/navigation_drawer_divider"/>
 
         <TextView
           android:id="@+id/about_us"
+          style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="24dp"
@@ -335,7 +346,7 @@
           android:layout_marginRight="16dp"
           android:text="@string/about_us"
           android:textColor="@color/black_de"
-          android:textSize="14sp" />
+          android:textSize="14sp"/>
       </LinearLayout>
 
       <RelativeLayout
@@ -343,9 +354,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:visibility="gone">
 
@@ -355,12 +366,13 @@
           android:layout_height="match_parent"
           android:layout_marginStart="32dp"
           android:layout_marginLeft="32dp"
-          android:layout_alignParentRight="true"
           android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
           android:src="@drawable/ic_logout_24dp"
-          android:tint="@color/login_gray" />
+          android:tint="@color/login_gray"/>
 
         <TextView
+          style="@style/IranSans"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
@@ -369,7 +381,7 @@
           android:gravity="center"
           android:text="@string/log_out"
           android:textColor="@color/black_de"
-          android:textSize="14sp" />
+          android:textSize="14sp"/>
       </RelativeLayout>
     </LinearLayout>
   </ScrollView>
@@ -399,9 +411,10 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_cloud_upload_black_18dp"
-        android:tint="@color/login_gray" />
+        android:tint="@color/login_gray"/>
 
       <TextView
+        style="@style/IranSans.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -411,7 +424,7 @@
         android:layout_toStartOf="@+id/upload_icon"
         android:text="@string/send_data"
         android:textColor="@color/black_de"
-        android:textSize="@dimen/text_small" />
+        android:textSize="@dimen/text_small"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -430,9 +443,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_file_download_white_18dp" />
+        android:src="@drawable/ic_file_download_white_18dp"/>
 
       <TextView
+        style="@style/IranSans.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -442,17 +456,18 @@
         android:layout_toStartOf="@+id/download_icon"
         android:text="@string/get_data"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/text_small" />
+        android:textSize="@dimen/text_small"/>
     </RelativeLayout>
   </LinearLayout>
 
   <TextView
     android:id="@+id/footer_log_out"
+    style="@style/IranSans"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
     android:gravity="center"
     android:text="@string/name_version"
     android:textColor="@color/black_55"
-    android:visibility="gone" />
+    android:visibility="gone"/>
 </LinearLayout>

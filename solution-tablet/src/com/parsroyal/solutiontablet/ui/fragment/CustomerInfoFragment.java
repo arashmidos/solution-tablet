@@ -442,6 +442,7 @@ public class CustomerInfoFragment extends Fragment {
     registerNoBtn.setOnClickListener(v -> {
       LabelValue selectedItem = (LabelValue) noSpinner.getSelectedItem();
       updateVisitResult(selectedItem, false);
+      alertDialog.dismiss();
     });
     cancelTv.setOnClickListener(v -> alertDialog.cancel());
   }

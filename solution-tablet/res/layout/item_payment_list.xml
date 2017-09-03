@@ -7,6 +7,7 @@
 
   <TextView
     android:id="@+id/payment_method_tv"
+    style="@style/IranSans.Medium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="14dp"
@@ -15,10 +16,11 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:textColor="@color/black_de"
-    android:textSize="12sp" />
+    android:textSize="12sp"/>
 
   <TextView
     android:id="@+id/payment_date_tv"
+    style="@style/IranSans.Medium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="14dp"
@@ -27,10 +29,11 @@
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
     android:textColor="@color/black_de"
-    android:textSize="12sp" />
+    android:textSize="12sp"/>
 
   <TextView
     android:id="@+id/payment_tv"
+    style="@style/IranSans.Medium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="18dp"
@@ -41,10 +44,11 @@
     android:layout_alignParentStart="true"
     android:layout_below="@id/payment_method_tv"
     android:textColor="@color/register_order"
-    android:textSize="12sp" />
+    android:textSize="12sp"/>
 
   <TextView
     android:id="@+id/bank_detail_tv"
+    style="@style/IranSans.Light"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="12dp"
@@ -55,12 +59,12 @@
     android:layout_alignParentRight="true"
     android:layout_below="@id/payment_date_tv"
     android:textColor="@color/black_de"
-    android:textSize="12sp" />
+    android:textSize="12sp"/>
 
   <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:layout_below="@id/payment_tv"
-    android:background="@color/navigation_drawer_divider" />
+    android:background="@color/navigation_drawer_divider"/>
 
 </RelativeLayout>

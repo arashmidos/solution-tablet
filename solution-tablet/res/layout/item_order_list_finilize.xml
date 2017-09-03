@@ -29,10 +29,11 @@
       android:layout_marginRight="17dp"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
-      android:layout_alignParentTop="true" />
+      android:layout_alignParentTop="true"/>
 
     <TextView
       android:id="@+id/good_title_tv"
+      style="@style/IranSans.Medium"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="19dp"
@@ -41,10 +42,11 @@
       android:layout_toLeftOf="@id/good_img"
       android:layout_toStartOf="@id/good_img"
       android:textColor="@color/black_85"
-      android:textSize="12sp" />
+      android:textSize="12sp"/>
 
     <TextView
       android:id="@+id/price_tv"
+      style="@style/IranSans"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="10dp"
@@ -53,10 +55,11 @@
       android:layout_toStartOf="@id/good_img"
       android:text="@string/amount"
       android:textColor="@color/gray_75"
-      android:textSize="12sp" />
+      android:textSize="12sp"/>
 
     <TextView
       android:id="@+id/amount_tv"
+      style="@style/IranSans"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="10dp"
@@ -67,10 +70,11 @@
       android:layout_toStartOf="@id/price_tv"
       android:gravity="left"
       android:textColor="@color/gray_75"
-      android:textSize="12sp" />
+      android:textSize="12sp"/>
 
     <TextView
       android:id="@+id/total_price_tv"
+      style="@style/IranSans"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="11dp"
@@ -79,10 +83,11 @@
       android:layout_toStartOf="@id/good_img"
       android:text="@string/total_amount"
       android:textColor="@color/gray_75"
-      android:textSize="12sp" />
+      android:textSize="12sp"/>
 
     <TextView
       android:id="@+id/total_amount_tv"
+      style="@style/IranSans.Bold"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="10dp"
@@ -93,7 +98,7 @@
       android:layout_toStartOf="@id/total_price_tv"
       android:gravity="left"
       android:textColor="@color/green_text"
-      android:textSize="16sp" />
+      android:textSize="16sp"/>
 
     <ImageView
       android:id="@+id/delete_img"
@@ -107,7 +112,7 @@
       android:layout_alignParentStart="true"
       android:layout_below="@id/total_amount_tv"
       android:src="@drawable/ic_delete_24_black"
-      android:tint="@color/gray_75" />
+      android:tint="@color/gray_75"/>
 
     <ImageView
       android:id="@+id/edit_img"
@@ -121,10 +126,11 @@
       android:layout_toEndOf="@id/delete_img"
       android:layout_toRightOf="@id/delete_img"
       android:src="@drawable/ic_edit_24_black"
-      android:tint="@color/gray_75" />
+      android:tint="@color/gray_75"/>
 
     <TextView
       android:id="@+id/count_tv"
+      style="@style/IranSans.Light"
       android:layout_width="96dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="23dp"
@@ -133,10 +139,11 @@
       android:layout_toRightOf="@id/devider"
       android:gravity="center"
       android:textColor="@color/black_21"
-      android:textSize="18sp" />
+      android:textSize="18sp"/>
 
     <TextView
       android:id="@+id/unit1_title_tv"
+      style="@style/IranSans.Medium"
       android:layout_width="96dp"
       android:layout_height="wrap_content"
       android:layout_marginBottom="18dp"
@@ -144,9 +151,9 @@
       android:layout_alignParentRight="true"
       android:layout_below="@id/count_tv"
       android:gravity="center"
-      tools:text="@string/number"
       android:textColor="@color/gray_75"
-      android:textSize="10sp" />
+      android:textSize="10sp"
+      tools:text="@string/number"/>
 
     <View
       android:id="@+id/devider"
@@ -157,10 +164,11 @@
       android:layout_below="@id/total_price_tv"
       android:layout_toLeftOf="@id/unit1_title_tv"
       android:layout_toStartOf="@id/unit1_title_tv"
-      android:background="@color/navigation_drawer_divider" />
+      android:background="@color/navigation_drawer_divider"/>
 
     <TextView
       android:id="@+id/unit2_count_tv"
+      style="@style/IranSans.Light"
       android:layout_width="96dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="23dp"
@@ -169,10 +177,11 @@
       android:layout_toStartOf="@id/devider"
       android:gravity="center"
       android:textColor="@color/black_21"
-      android:textSize="18sp" />
+      android:textSize="18sp"/>
 
     <TextView
       android:id="@+id/unit2_title_tv"
+      style="@style/IranSans.Bold"
       android:layout_width="96dp"
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"
@@ -180,8 +189,8 @@
       android:layout_toLeftOf="@id/devider"
       android:layout_toStartOf="@id/devider"
       android:gravity="center"
-      tools:text="@string/carton"
       android:textColor="@color/gray_75"
-      android:textSize="10sp" />
+      android:textSize="10sp"
+      tools:text="@string/carton"/>
   </RelativeLayout>
 </android.support.v7.widget.CardView>
