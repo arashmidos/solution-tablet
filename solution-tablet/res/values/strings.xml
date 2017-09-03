@@ -504,5 +504,7 @@
   <string name="message_cheque_account_number_is_required">وارد کردن شماره حساب اجباریست.</string>
   <string name="message_cheque_amount_is_required">وارد کردن مبلغ اجباریست.</string>
   <string name="message_cheque_account_owner_is_required">وترد کردن صاحب چک اجباریست.</string>
+  <string name="updating_user_info">در حال دریافت اطلاعات کاربری</string>
+  <string name="authenticate_user">در حال تایید کاربر</string>
 
 </resources>

@@ -208,6 +208,7 @@ public class LoginFragment extends BaseFragment implements TextWatcher {
   }
 
   private void doLogin() {
+    showProgressDialog(getString(R.string.authenticate_user));
     RestAuthenticateServiceImpl.getCompanyInfo(getActivity(), companyCodeEdt.getText().toString());
   }
 
@@ -236,7 +237,7 @@ public class LoginFragment extends BaseFragment implements TextWatcher {
       settingService
           .saveSetting(ApplicationKeys.USER_COMPANY_NAME, companyInfoResponse.getCompanyName());
       settingService.saveSetting(ApplicationKeys.BACKEND_URI, companyInfoResponse.getBackendUri());
-
+      showProgressDialog(getString(R.string.updating_user_info));
       RestAuthenticateServiceImpl
           .getCompanySetting(getActivity(), companyInfoResponse.getBackendUri(),
               userNameEdt.getText().toString(), passwordEdt.getText().toString(), selectedRole);
