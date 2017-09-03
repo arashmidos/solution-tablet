@@ -10,6 +10,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
@@ -46,10 +47,10 @@ public class OrderItemsFragment extends BaseFragment {
       Bundle savedInstanceState) {
     try {
 
-      orderId = getArguments().getLong("orderId");
-      disabled = getArguments().getBoolean("disabled");
-      orderStatus = getArguments().getLong("orderStatus");
-      rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable("rejectedList");
+      orderId = getArguments().getLong(Constants.ORDER_ID);
+      disabled = getArguments().getBoolean(Constants.DISABLED);
+      orderStatus = getArguments().getLong(Constants.ORDER_STATUS);
+      rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
 
       saleOrderService = new SaleOrderServiceImpl(getActivity());
 

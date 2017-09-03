@@ -24,6 +24,9 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.event.UpdateEvent;
+import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
@@ -43,6 +46,8 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * @author Shakib
@@ -167,6 +172,24 @@ public class OrderFragment extends BaseFragment {
     });
   }
 
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(UpdateListEvent event) {
+    order = saleOrderService.findOrderDtoById(orderId);
+    orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
+  }
+
   @OnClick({R.id.search_img, R.id.bottom_bar})
   public void onClick(View view) {
     switch (view.getId()) {
@@ -176,6 +199,9 @@ public class OrderFragment extends BaseFragment {
         }
         break;
       case R.id.bottom_bar:
+        if (order.getOrderItems().size() == 0) {
+          return;
+        }
         showFinalizeOrderDialog();
         break;
     }
@@ -246,6 +272,8 @@ public class OrderFragment extends BaseFragment {
 
     Bundle bundle = new Bundle();
     bundle.putLong(Constants.ORDER_ID, orderId);
+    bundle.putLong(Constants.ORDER_STATUS, orderStatus);
+    bundle.putSerializable(Constants.REJECTED_LIST,rejectedGoodsList);
     finalizeOrderDialogFragment.setArguments(bundle);
 
     finalizeOrderDialogFragment.show(ft, "order");

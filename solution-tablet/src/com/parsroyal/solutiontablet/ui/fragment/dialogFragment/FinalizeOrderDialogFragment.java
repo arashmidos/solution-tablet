@@ -8,9 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.data.event.UpdateEvent;
+import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
+import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
@@ -18,10 +23,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderFinalizeAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.util.NumberUtil;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import org.greenrobot.eventbus.EventBus;
 
 public class FinalizeOrderDialogFragment extends DialogFragment {
 
@@ -38,6 +40,8 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   private SaleOrderDto order;
   private OrderFragment orderFragment;
   private long orderId;
+  private long orderStatus;
+  private GoodsDtoList rejectedGoodsList;
 
   public FinalizeOrderDialogFragment() {
     // Required empty public constructor
@@ -57,7 +61,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_finalize_order_dialog, container, false);
     ButterKnife.bind(this, view);
@@ -65,7 +69,9 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     saleOrderService = new SaleOrderServiceImpl(activity);
     Bundle arguments = getArguments();
     orderId = arguments.getLong(Constants.ORDER_ID);
+    orderStatus = arguments.getLong(Constants.ORDER_STATUS);
     order = saleOrderService.findOrderDtoById(orderId);
+    rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
 
     setData();
     setUpRecyclerView();
@@ -77,9 +83,15 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
         getString(R.string.common_irr_currency));
   }
 
+  public void updateList() {
+    order = saleOrderService.findOrderDtoById(orderId);
+    setData();
+    EventBus.getDefault().post(new UpdateListEvent());
+  }
+
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new OrderFinalizeAdapter(activity, order.getOrderItems());
+    adapter = new OrderFinalizeAdapter(this, activity, order, rejectedGoodsList);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);

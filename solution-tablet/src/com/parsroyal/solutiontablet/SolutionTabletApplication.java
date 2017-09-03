@@ -49,18 +49,11 @@ public class SolutionTabletApplication extends Application {
 
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
-setLanguage();
+    setLanguage();
   }
 
-  public void setLanguage()
-  {
-    String systemLocale = getResources().getConfiguration().locale.getLanguage();
-
+  public void setLanguage() {
     Locale locale = new Locale(Constants.DEFAULT_LANGUAGE);
-    if (systemLocale.equalsIgnoreCase("it"))
-    {
-      locale = new Locale("it");
-    }
 
     Resources res = getResources();
     DisplayMetrics dm = res.getDisplayMetrics();
