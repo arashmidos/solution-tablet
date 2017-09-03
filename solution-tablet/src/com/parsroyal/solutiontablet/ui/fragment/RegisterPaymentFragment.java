@@ -165,7 +165,7 @@ public class RegisterPaymentFragment extends BaseFragment {
       }
       builder.build((id, calendar, day, month, year) ->
       {
-        chequeDateEdt.setHint(
+        chequeDateEdt.setText(
             String.format(Locale.ENGLISH, "%02d/%02d/%02d", year % 100, month, day));
         dateModified = true;
       }).show(getFragmentManager(), "");
@@ -244,7 +244,7 @@ public class RegisterPaymentFragment extends BaseFragment {
           break;
         case 6:
           onChequeSelected();
-          chequeDateEdt.setHint(payment.getChequeDate());
+          chequeDateEdt.setText(payment.getChequeDate());
           chequeNumEdt.setText(payment.getChequeNumber());
           String chequeNo = payment.getChequeAccountNumber();
           accountNumEdt.setText(Empty.isNotEmpty(chequeNo) ? chequeNo : "--");
@@ -406,6 +406,21 @@ public class RegisterPaymentFragment extends BaseFragment {
         chequeNumEdt.requestFocus();
         return false;
       }
+      if (Empty.isEmpty(paymentPriceEdt.getText().toString())) {
+        ToastUtil.toastError(getActivity(), R.string.message_cheque_amount_is_required);
+        paymentPriceEdt.requestFocus();
+        return false;
+      }
+      if (Empty.isEmpty(accountNumEdt.getText().toString())) {
+        ToastUtil.toastError(getActivity(), R.string.message_cheque_account_number_is_required);
+        accountNumEdt.requestFocus();
+        return false;
+      }
+      if (Empty.isEmpty(chequeOwnerEdt.getText().toString())) {
+        ToastUtil.toastError(getActivity(), R.string.message_cheque_account_owner_is_required);
+        chequeOwnerEdt.requestFocus();
+        return false;
+      }
     }
 
     return true;
@@ -435,7 +450,7 @@ public class RegisterPaymentFragment extends BaseFragment {
           payment.setChequeBank(spinner.getSelectedItemId());
           payment.setChequeBranch(NumberUtil
               .digitsToEnglish(CharacterFixUtil.fixString(branchEdt.getText().toString())));
-          payment.setChequeDate(chequeDateEdt.getHint().toString());
+          payment.setChequeDate(chequeDateEdt.getText().toString());
           payment.setChequeNumber(NumberUtil
               .digitsToEnglish(CharacterFixUtil.fixString(chequeNumEdt.getText().toString())));
         }

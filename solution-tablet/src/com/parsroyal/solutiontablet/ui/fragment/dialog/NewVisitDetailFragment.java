@@ -6,19 +6,16 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
-import com.parsroyal.solutiontablet.ui.fragment.BlankFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NewOrderListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentListFragment;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 public class NewVisitDetailFragment extends BaseFragment {
@@ -62,8 +59,8 @@ public class NewVisitDetailFragment extends BaseFragment {
   private void setUpViewPager() {
     viewPagerAdapter = new CustomerDetailViewPagerAdapter(
         getActivity().getSupportFragmentManager());
-    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.images));
-    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
+//    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.images));
+//    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
     viewPagerAdapter.add(PaymentListFragment.newInstance(getArguments()), getString(R.string.payments));
     viewPagerAdapter.add(NewOrderListFragment.newInstance(), getString(R.string.orders));
     viewPagerAdapter

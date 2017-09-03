@@ -14,7 +14,11 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ShakibIsTheBest on 8/27/2017.
@@ -46,9 +50,17 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
   public void onBindViewHolder(ViewHolder holder, int position) {
     PaymentListModel payment = payments.get(position);
     holder.paymentMethodTv.setText(getPaymentType(payment.getType()));
-    holder.paymentDateTv.setText(payment.getDate());
-    long amount = Long.parseLong(payment.getAmount()) / 1000;
-    holder.paymentTv.setText(String.valueOf(amount));
+    Date createDate = DateUtil
+        .convertStringToDate(payment.getDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
+            "FA");
+
+    String dateString = DateUtil.getFullPersianDate(createDate);
+    holder.paymentDateTv.setText(dateString);
+    long amountValue = Long
+        .parseLong(NumberUtil.digitsToEnglish(payment.getAmount().replaceAll(",", "")));
+    String number = String.format(Locale.US, "%,d %s", amountValue / 1000, context.getString(
+        R.string.common_irr_currency));
+    holder.paymentTv.setText(number);
     //TODO:add bank and branch
 //    holder.bankDetailTv.setText(payment.get);
     holder.mainLay.setOnClickListener(v -> goToRegisterPaymentFragment(payment));
