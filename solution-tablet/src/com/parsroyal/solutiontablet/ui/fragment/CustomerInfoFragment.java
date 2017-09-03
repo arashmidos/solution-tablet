@@ -23,7 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
@@ -54,13 +56,8 @@ import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-
 import java.util.Date;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class CustomerInfoFragment extends Fragment {
 
@@ -114,7 +111,7 @@ public class CustomerInfoFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_customer_info, container, false);
     ButterKnife.bind(this, view);
@@ -217,7 +214,7 @@ public class CustomerInfoFragment extends Fragment {
 
   /**
    * @param statusID Could be DRAFT for both AddInvoice/AddOrder or REJECTED_DRAFT for
-   *                 ReturnedOrder
+   * ReturnedOrder
    */
   private void openOrderDetailFragment(Long statusID) {
 
@@ -430,19 +427,26 @@ public class CustomerInfoFragment extends Fragment {
 
     Button registerNoBtn = (Button) dialogView.findViewById(R.id.register_btn);
     TextView cancelTv = (TextView) dialogView.findViewById(R.id.cancel_tv);
+    TextView errorMessage = (TextView) dialogView.findViewById(R.id.error_msg);
     Spinner noSpinner = (Spinner) dialogView.findViewById(R.id.no_spinner);
     AlertDialog alertDialog = dialogBuilder.create();
 
     wants.add(new LabelValue(-1l, getString(R.string.reason_register_no)));
-    LabelValueArrayAdapterWithHint labelValueArrayAdapter = new LabelValueArrayAdapterWithHint(mainActivity,
+    LabelValueArrayAdapterWithHint labelValueArrayAdapter = new LabelValueArrayAdapterWithHint(
+        mainActivity,
         wants);
     noSpinner.setAdapter(labelValueArrayAdapter);
     noSpinner.setSelection(wants.size() - 1);
     alertDialog.show();
     registerNoBtn.setOnClickListener(v -> {
       LabelValue selectedItem = (LabelValue) noSpinner.getSelectedItem();
-      updateVisitResult(selectedItem, false);
-      alertDialog.dismiss();
+      if (selectedItem.getValue() != -1l) {
+        errorMessage.setVisibility(View.INVISIBLE);
+        updateVisitResult(selectedItem, false);
+        alertDialog.dismiss();
+      } else {
+        errorMessage.setVisibility(View.VISIBLE);
+      }
     });
     cancelTv.setOnClickListener(v -> alertDialog.cancel());
   }

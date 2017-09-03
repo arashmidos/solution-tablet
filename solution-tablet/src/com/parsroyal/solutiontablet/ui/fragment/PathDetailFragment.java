@@ -18,7 +18,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
@@ -31,16 +33,11 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
-
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * @author Shakib
@@ -71,6 +68,7 @@ public class PathDetailFragment extends BaseFragment {
   private String filterDistance = "";
   private int filterDistanceInMeter;
   private boolean filterApplied = false;
+  private boolean isClose = false;
 
   public static PathDetailFragment newInstance() {
     return new PathDetailFragment();
@@ -78,7 +76,7 @@ public class PathDetailFragment extends BaseFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_path_detail, container, false);
     ButterKnife.bind(this, view);
@@ -121,7 +119,7 @@ public class PathDetailFragment extends BaseFragment {
   }
 
   private List<CustomerListModel> getCustomersList() {
-    customerList = customerService.getFilteredCustomerList(visitlineBackendId,"");
+    customerList = customerService.getFilteredCustomerList(visitlineBackendId, "");
     return customerList;
   }
 
@@ -134,9 +132,11 @@ public class PathDetailFragment extends BaseFragment {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (TextUtils.isEmpty(s.toString())) {
-          searchImg.setVisibility(View.VISIBLE);
+          isClose = false;
+          searchImg.setImageResource(R.drawable.ic_search);
         } else {
-          searchImg.setVisibility(View.GONE);
+          isClose = true;
+          searchImg.setImageResource(R.drawable.ic_close_24dp);
         }
       }
 
@@ -147,7 +147,8 @@ public class PathDetailFragment extends BaseFragment {
     });
   }
 
-  @OnClick({R.id.path_code_tv, R.id.customers_number_lay, R.id.sort_lay, R.id.filter_lay})
+  @OnClick({R.id.path_code_tv, R.id.customers_number_lay, R.id.sort_lay, R.id.filter_lay,
+      R.id.search_img})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.sort_lay:
@@ -155,6 +156,11 @@ public class PathDetailFragment extends BaseFragment {
         break;
       case R.id.filter_lay:
         showFilterDialog();
+        break;
+      case R.id.search_img:
+        if (isClose) {
+          searchEdt.setText("");
+        }
         break;
     }
   }
