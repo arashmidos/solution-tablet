@@ -7,9 +7,9 @@ import com.parsroyal.solutiontablet.data.model.BaseModel;
  */
 public abstract class BaseListModel extends BaseModel {
 
-  private Long primaryKey;
-  private String title;
-  private String code;
+  protected Long primaryKey;
+  protected String title;
+  protected String code;
 
   public Long getPrimaryKey() {
     return primaryKey;
@@ -33,5 +33,25 @@ public abstract class BaseListModel extends BaseModel {
 
   public void setCode(String code) {
     this.code = code;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    BaseListModel that = (BaseListModel) o;
+
+    return primaryKey != null ? primaryKey.equals(that.primaryKey) : that.primaryKey == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    return primaryKey != null ? primaryKey.hashCode() : 0;
   }
 }

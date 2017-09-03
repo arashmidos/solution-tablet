@@ -1,18 +1,18 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
@@ -28,14 +28,16 @@ import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
+import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
+import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddCustomerFragment extends BaseFragment {
+public class AddCustomerFragment extends BaseFragment implements View.OnFocusChangeListener {
 
   private static final String TAG = AddCustomerFragment.class.getName();
   @BindView(R.id.city_spinner)
@@ -149,24 +151,206 @@ public class AddCustomerFragment extends BaseFragment {
 
     if (Empty.isNotEmpty(provinceList)) {
       initSpinner(stateSpinner, provinceList, getString(R.string.state));
+      stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+          LabelValue selectedProvince = provinceList.get(position);
+          if (Empty.isNotEmpty(selectedProvince)) {
+            loadCitySpinnerData(selectedProvince.getValue());
+          }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+      });
+
+      if (Empty.isNotEmpty(customer.getProvinceBackendId())) {
+        int position = 0;
+        for (LabelValue labelValue : provinceList) {
+          if (labelValue.getValue().equals(customer.getProvinceBackendId())) {
+            stateSpinner.setSelection(position);
+            break;
+          }
+          position++;
+        }
+      }
     }
-//    initSpinner(citySpinner, list, getString(R.string.city));
-    initSpinner(ownershipSpinner, ownershipList, getString(R.string.ownership_type));
-    initSpinner(activitySpinner, activityList, getString(R.string.activity_type));
-    initSpinner(customerClassSpinner, customerClassList, getString(R.string.customer_class));
+
+    if (Empty.isNotEmpty(activityList)) {
+      initSpinner(activitySpinner, activityList, getString(R.string.activity_type));
+
+      if (Empty.isNotEmpty(customer.getActivityBackendId())) {
+        int position = 0;
+        for (LabelValue labelValue : activityList) {
+          if (labelValue.getValue().equals(customer.getActivityBackendId())) {
+            activitySpinner.setSelection(position);
+            break;
+          }
+          position++;
+        }
+      }
+    }
+    if (Empty.isNotEmpty(ownershipList)) {
+      initSpinner(ownershipSpinner, ownershipList, getString(R.string.ownership_type));
+
+      if (Empty.isNotEmpty(customer.getStoreLocationTypeBackendId())) {
+        int position = 0;
+        for (LabelValue labelValue : ownershipList) {
+          if (labelValue.getValue().equals(customer.getStoreLocationTypeBackendId())) {
+            ownershipSpinner.setSelection(position);
+            break;
+          }
+          position++;
+        }
+      }
+    }
+
+    if (Empty.isNotEmpty(customerClassList)) {
+      initSpinner(customerClassSpinner, customerClassList, getString(R.string.customer_class));
+
+      if (Empty.isNotEmpty(customer.getClassBackendId())) {
+        int position = 0;
+        for (LabelValue labelValue : customerClassList) {
+          if (labelValue.getValue().equals(customer.getClassBackendId())) {
+            customerClassSpinner.setSelection(position);
+            break;
+          }
+          position++;
+        }
+      }
+    }
+
+    LabelValue provinceLabelValue = (LabelValue) stateSpinner.getSelectedItem();
+    loadCitySpinnerData(provinceLabelValue.getValue());
+
+    stateSpinner.setFocusableInTouchMode(true);
+    stateSpinner.setOnFocusChangeListener(this);
+    citySpinner.setFocusableInTouchMode(true);
+    citySpinner.setOnFocusChangeListener(this);
+    activitySpinner.setFocusableInTouchMode(true);
+    activitySpinner.setOnFocusChangeListener(this);
+    customerClassSpinner.setFocusableInTouchMode(true);
+    customerClassSpinner.setOnFocusChangeListener(this);
+    ownershipSpinner.setFocusableInTouchMode(true);
+    ownershipSpinner.setOnFocusChangeListener(this);
+  }
+
+  private void save() {
+    try {
+      customer.setFullName(CharacterFixUtil.fixString(fullNameEdt.getText().toString()));
+      customer.setPhoneNumber(NumberUtil.digitsToEnglish(phoneNumberEdt.getText().toString()));
+      customer.setCellPhone(NumberUtil.digitsToEnglish(mobileEdt.getText().toString()));
+      customer.setAddress(CharacterFixUtil.fixString(addressEdt.getText().toString()));
+      if (Empty.isNotEmpty(storeMeterEdt.getText()) && !storeMeterEdt.getText().toString()
+          .equals("")) {
+        customer.setStoreSurface(
+            Integer.parseInt(NumberUtil.digitsToEnglish(storeMeterEdt.getText().toString())));
+      }
+      customer.setProvinceBackendId(stateSpinner.getSelectedItemId());
+      customer.setCityBackendId(citySpinner.getSelectedItemId());
+      customer.setActivityBackendId(activitySpinner.getSelectedItemId());
+      customer.setStoreLocationTypeBackendId(ownershipSpinner.getSelectedItemId());
+      customer.setClassBackendId(customerClassSpinner.getSelectedItemId());
+      customer.setShopName(CharacterFixUtil.fixString(shopNameEdt.getText().toString()));
+      customer.setNationalCode(NumberUtil.digitsToEnglish(nationalCodeEdt.getText().toString()));
+      customer.setMunicipalityCode(
+          NumberUtil.digitsToEnglish(regionalMunicipalityEdt.getText().toString()));
+      customer.setPostalCode(NumberUtil.digitsToEnglish(postalCodeEdt.getText().toString()));
+      customer.setApproved(false);
+
+      if (validate()) {
+        customerService.saveCustomer(customer);
+        ToastUtil.toastSuccess(getActivity(), R.string.message_customer_save_successfully);
+        mainActivity.changeFragment(MainActivity.CUSTOMER_FRAGMENT, false);
+      }
+    } catch (BusinessException ex) {
+      Log.e(TAG, ex.getMessage(), ex);
+      ToastUtil.toastError(getActivity(), ex);
+    } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+          "Error in saving new customer data " + e.getMessage());
+      Log.e(TAG, e.getMessage(), e);
+      ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
+    }
+  }
+
+  private boolean validate() {
+    if (Empty.isEmpty(customer)) {
+      return false;
+    }
+    if (Empty.isEmpty(customer.getFullName())) {
+      ToastUtil.toastError(getActivity(), R.string.message_customer_name_is_required);
+      fullNameEdt.requestFocus();
+      return false;
+    }
+
+    if (Empty.isEmpty(customer.getPhoneNumber())) {
+      ToastUtil.toastError(getActivity(), R.string.message_phone_is_required);
+      phoneNumberEdt.requestFocus();
+      return false;
+    }
+
+    if (Empty.isEmpty(customer.getCellPhone())) {
+      ToastUtil.toastError(getActivity(), R.string.message_cell_phone_is_required);
+      mobileEdt.requestFocus();
+      return false;
+    }
+
+    if (Empty.isEmpty(customer.getShopName())) {
+      ToastUtil.toastError(getActivity(), R.string.message_shop_name_is_required);
+      shopNameEdt.requestFocus();
+      return false;
+    }
+
+    String nationalCode = NumberUtil.digitsToEnglish(customer.getNationalCode());
+    if (!Empty.isEmpty(nationalCode) && (!isValidNationalCode(nationalCode))) {
+      ToastUtil.toastError(getActivity(), R.string.message_national_code_is_not_valid);
+      nationalCodeEdt.requestFocus();
+      return false;
+    }
+
+    String postalCode = customer.getPostalCode().trim();
+    if (!Empty.isEmpty(postalCode) && postalCode.length() != 10) {
+      ToastUtil.toastError(getActivity(), R.string.message_postal_code_is_not_valid);
+      postalCodeEdt.requestFocus();
+      return false;
+    }
+
+    if (Empty.isEmpty(customer.getAddress())) {
+      ToastUtil.toastError(getActivity(), R.string.message_address_is_required);
+      addressEdt.requestFocus();
+      return false;
+    }
+
+    return true;
+  }
+
+  private void loadCitySpinnerData(Long provinceId) {
+    List<LabelValue> cityLabelValues = baseInfoService.getAllCitiesLabelsValues(provinceId);
+    if (Empty.isNotEmpty(cityLabelValues)) {
+      initSpinner(citySpinner, cityLabelValues, getString(R.string.city));
+    }
+
+    if (Empty.isNotEmpty(customer.getCityBackendId())) {
+      int position = 0;
+      for (LabelValue labelValue : cityLabelValues) {
+        if (labelValue.getValue().equals(customer.getCityBackendId())) {
+          citySpinner.setSelection(position);
+          break;
+        }
+        position++;
+      }
+    }
   }
 
   private void initSpinner(Spinner spinner, List<LabelValue> items, String hint) {
 
     items.add(new LabelValue(-1L, hint));
-    LabelValueArrayAdapterWithHint adapter = new LabelValueArrayAdapterWithHint(getActivity(), items);
+    LabelValueArrayAdapterWithHint adapter = new LabelValueArrayAdapterWithHint(getActivity(),
+        items);
     spinner.setAdapter(adapter);
     spinner.setSelection(adapter.getCount());
-  }
-
-  @Override
-  public int getFragmentId() {
-    return MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID;
   }
 
   private boolean isValidNationalCode(String nationalCode) {
@@ -193,5 +377,68 @@ public class AddCustomerFragment extends BaseFragment {
       }
 
     }
+  }
+
+  /**
+   * Called when the focus state of a view has changed.
+   *
+   * @param v The view whose state has changed.
+   * @param hasFocus The new focus state of v.
+   */
+  @Override
+  public void onFocusChange(View v, boolean hasFocus) {
+    if (hasFocus) {
+      v.performClick();
+    }
+  }
+
+  @OnClick({R.id.create_btn, R.id.location_lay})
+  public void onClick(View view) {
+    switch (view.getId()) {
+      case R.id.location_lay:
+        getLocation();
+        break;
+      case R.id.create_btn:
+        save();
+        break;
+    }
+  }
+
+  private void getLocation() {
+    showProgressDialog(getString(R.string.message_finding_location));
+
+    try {
+      locationService.findCurrentLocation(new FindLocationListener() {
+        @Override
+        public void foundLocation(Location location) {
+          customer.setyLocation(location.getLatitude());
+          customer.setxLocation(location.getLongitude());
+          ToastUtil.toastMessage(getActivity(), R.string.message_found_location_successfully);
+          dismissProgressDialog();
+        }
+
+        @Override
+        public void timeOut() {
+          runOnUiThread(() -> {
+            ToastUtil.toastError(getActivity(), R.string.message_finding_location_timeout);
+            dismissProgressDialog();
+          });
+        }
+      });
+    } catch (BusinessException ex) {
+      ToastUtil.toastError(getActivity(), ex);
+      dismissProgressDialog();
+    } catch (Exception e) {
+      Crashlytics
+          .log(Log.ERROR, "Location Service", "Error in finding location " + e.getMessage());
+      ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
+      Log.e(TAG, e.getMessage(), e);
+      dismissProgressDialog();
+    }
+  }
+
+  @Override
+  public int getFragmentId() {
+    return MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID;
   }
 }

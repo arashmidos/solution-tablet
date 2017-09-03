@@ -21,6 +21,12 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
@@ -33,6 +39,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.OnMapAndViewReadyListener;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Iterator;
@@ -42,7 +49,8 @@ import java.util.Locale;
 /**
  * @author Shakib
  */
-public class PathDetailFragment extends BaseFragment {
+public class PathDetailFragment extends BaseFragment implements
+    OnMapAndViewReadyListener.OnGlobalLayoutAndMapReadyListener {
 
   @BindView(R.id.search_img)
   ImageView searchImg;
@@ -54,6 +62,8 @@ public class PathDetailFragment extends BaseFragment {
   RecyclerView recyclerView;
   @BindView(R.id.search_edt)
   EditText searchEdt;
+
+  private GoogleMap mMap;
 
   private PathDetailAdapter adapter;
   private MainActivity mainActivity;
@@ -69,6 +79,9 @@ public class PathDetailFragment extends BaseFragment {
   private int filterDistanceInMeter;
   private boolean filterApplied = false;
   private boolean isClose = false;
+
+  private LatLng loation = new LatLng(35.6892, 51.3890);
+
 
   public static PathDetailFragment newInstance() {
     return new PathDetailFragment();
@@ -89,10 +102,46 @@ public class PathDetailFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     customerService = new CustomerServiceImpl(mainActivity);
     visitService = new VisitServiceImpl(mainActivity);
+    SupportMapFragment mapFragment =
+        (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+    new OnMapAndViewReadyListener(mapFragment, this);
+
     setData();
     onSearchTextChanged();
     setUpRecyclerView();
     return view;
+  }
+
+  @Override
+  public void onMapReady(GoogleMap googleMap) {
+    mMap = googleMap;
+    addMarkers();
+    showBound();
+  }
+
+  private void showBound() {
+// Wait until map is ready
+    if (mMap == null) {
+      return;
+    }
+
+    // Create bounds that include all locations of the map
+    LatLngBounds.Builder boundsBuilder = LatLngBounds.builder()
+        .include(loation)
+        .include(loation)
+        .include(loation)
+        .include(loation)
+        .include(loation)
+        .include(loation);
+
+    // Move camera to show all markers and locations
+    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 20));
+  }
+
+  private void addMarkers() {
+    mMap.addMarker(new MarkerOptions()
+        .position(loation)
+        .title("تهران"));
   }
 
   @Override

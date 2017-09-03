@@ -5,7 +5,7 @@
   android:layout_height="match_parent"
   android:layout_margin="6dp"
   android:id="@+id/mainLayout"
-  tools:mainActivity=".ui.OldMainActivity">
+  tools:context=".ui.OldMainActivity">
 
   <TextView
     android:id="@+id/msg"

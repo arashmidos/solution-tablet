@@ -46,7 +46,9 @@ import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationUpdatesService;
+import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
@@ -167,7 +169,6 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void showVersionDialog() {
-    //TODO shakib, need new style
     DialogUtil.showMessageDialog(this, getString(R.string.version),
         String.format(Locale.US, getString(R.string.your_version), BuildConfig.VERSION_NAME));
   }
@@ -217,7 +218,6 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void installNewVersion() {
-    //TODO: shakib, update new style
     DialogUtil.showCustomDialog(this, getString(R.string.message_update_title),
         getString(R.string.message_update_alert), "", (dialogInterface, i) ->
         {
@@ -357,8 +357,9 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void logUser() {
-    Crashlytics.setUserName(userFullNameTxt.getText().toString());
-    Crashlytics.setString("Company", companyNameTxt.getText().toString());
+    SettingService settingService = new SettingServiceImpl(this);
+    Crashlytics.setUserName(settingService.getSettingValue(ApplicationKeys.USER_FULL_NAME));
+    Crashlytics.setString("Company",settingService.getSettingValue(ApplicationKeys.USER_COMPANY_NAME));
 
     KeyValue saleType = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
     Crashlytics.setString("Sale Type", saleType == null ? "" : saleType.getValue());
@@ -635,8 +636,14 @@ public class MainActivity extends BaseFragmentActivity {
       } else {
         drawerLayout.openDrawer(GravityCompat.END);
       }
-    } else {//TODO if its CustomerInfoFragment, finishVisit
-      onBackPressed();
+    } else {
+      Fragment visitFragment = getSupportFragmentManager()
+          .findFragmentByTag(NewVisitDetailFragment.class.getSimpleName());
+      if (visitFragment != null && visitFragment.isVisible()) {
+
+      } else {
+        onBackPressed();
+      }
     }
   }
 

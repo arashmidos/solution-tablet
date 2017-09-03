@@ -6,10 +6,19 @@ package com.parsroyal.solutiontablet.data.listmodel;
 public class NCustomerListModel extends CustomerListModel {
 
   private Long status;
-  private Long backendId;
-  private String phoneNumber;
-  private String cellPhone;
   private String createDateTime;
+
+  public NCustomerListModel(long primaryKey, String title, String phoneNumber, String cellPhone,
+      long status, String createDateTime, long backendId, String shopName) {
+    this.primaryKey = primaryKey;
+    this.title = title;
+    this.phoneNumber = phoneNumber;
+    this.cellPhone = cellPhone;
+    this.status = status;
+    this.createDateTime = createDateTime;
+    this.backendId = backendId;
+    this.shopName = shopName;
+  }
 
   public Long getStatus() {
     return status;
@@ -17,34 +26,6 @@ public class NCustomerListModel extends CustomerListModel {
 
   public void setStatus(Long status) {
     this.status = status;
-  }
-
-  public Long getBackendId() {
-    return backendId;
-  }
-
-  public void setBackendId(Long backendId) {
-    this.backendId = backendId;
-  }
-
-  @Override
-  public String getPhoneNumber() {
-    return phoneNumber;
-  }
-
-  @Override
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
-
-  @Override
-  public String getCellPhone() {
-    return cellPhone;
-  }
-
-  @Override
-  public void setCellPhone(String cellPhone) {
-    this.cellPhone = cellPhone;
   }
 
   public String getCreateDateTime() {

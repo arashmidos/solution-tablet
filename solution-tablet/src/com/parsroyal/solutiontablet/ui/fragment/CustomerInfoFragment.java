@@ -351,7 +351,7 @@ public class CustomerInfoFragment extends Fragment {
       if (detailList.size() == 0) {
         DialogUtil.showConfirmDialog(mainActivity, getString(R.string.title_attention),
             getString(R.string.message_error_no_visit_detail_found),
-            (dialogInterface, i) -> showWantsDialog());
+            (dialogInterface, i) -> showNoDialog());
         return;
       }
       VisitInformation visitInformation = visitService.getVisitInformationById(visitId);
@@ -367,44 +367,6 @@ public class CustomerInfoFragment extends Fragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
-  }
-
-  private void showWantsDialog() {//TODO shakib old style
-    List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
-    if (detailList.size() > 0) {
-      ToastUtil.toastError(mainActivity, R.string.message_error_wants_denied);
-      return;
-    }
-    Builder dialogBuilder = new Builder(mainActivity);
-
-    List<LabelValue> wants = baseInfoService
-        .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.WANT_TYPE.getId());
-    if (Empty.isEmpty(wants)) {
-      ToastUtil.toastError(mainActivity, R.string.message_found_no_wants_information);
-      return;
-    }
-
-    View wantsDialogView = mainActivity.getLayoutInflater().inflate(R.layout.dialog_wants, null);
-    final Spinner wantsSpinner = (Spinner) wantsDialogView.findViewById(R.id.wantsSP);
-    CheckBox notVisitedCb = (CheckBox) wantsDialogView.findViewById((R.id.not_visited_cb));
-
-    notVisitedCb.setOnCheckedChangeListener(
-        (compoundButton, isChecked) -> wantsSpinner.setEnabled(!isChecked));
-    LabelValueArrayAdapter labelValueArrayAdapter = new LabelValueArrayAdapter(mainActivity,
-        wants);
-    wantsSpinner.setAdapter(labelValueArrayAdapter);
-
-    dialogBuilder.setView(wantsDialogView);
-    dialogBuilder.setPositiveButton(R.string.button_ok, (dialog, which) ->
-    {
-      LabelValue selectedItem = (LabelValue) wantsSpinner.getSelectedItem();
-      updateVisitResult(selectedItem, notVisitedCb.isChecked());
-    });
-    dialogBuilder.setNegativeButton(R.string.button_cancel, (dialog, which) ->
-    {
-    });
-    dialogBuilder.setTitle(R.string.title_save_want);
-    dialogBuilder.create().show();
   }
 
   private void showNoDialog() {

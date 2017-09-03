@@ -26,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
 
   @Override
   public void onBackPressed() {
-    //TODO shakib update with new style
     DialogUtil.showConfirmDialog(this, getString(R.string.message_exit),
         getString(R.string.message_do_you_want_to_exit),
         (dialog, which) ->
