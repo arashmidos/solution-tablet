@@ -2,6 +2,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  xmlns:map="http://schemas.android.com/apk/res-auto"
   android:background="@color/features_background"
   android:orientation="vertical"
   tools:context="com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment">
@@ -24,7 +25,7 @@
         android:layout_marginLeft="19dp"
         android:layout_gravity="left|center"
         android:src="@drawable/ic_search"
-        android:tint="@color/login_gray"/>
+        android:tint="@color/login_gray" />
 
       <EditText
         android:id="@+id/search_edt"
@@ -37,20 +38,23 @@
         android:gravity="center|right"
         android:hint="@string/search_customers_hint"
         android:textColorHint="@color/login_gray"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
     </LinearLayout>
   </android.support.design.widget.AppBarLayout>
 
-  <View
-    android:id="@+id/map_view"
+  <!-- MapFragment with lite mode enabled -->
+  <fragment
+    android:id="@+id/map"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
-    android:layout_height="184dp"/>
+    android:layout_height="184dp"
+    map:liteMode="true" />
 
   <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
-    android:background="@color/navigation_drawer_divider"/>
+    android:background="@color/navigation_drawer_divider" />
 
   <LinearLayout
     android:id="@+id/detail_lay"
@@ -69,13 +73,13 @@
       android:gravity="center"
       android:textColor="@color/black_85"
       android:textSize="12sp"
-      tools:text="کد مسیر: ۱۲۳۴۵۶"/>
+      tools:text="کد مسیر: ۱۲۳۴۵۶" />
 
     <View
       android:layout_width="1dp"
       android:layout_height="match_parent"
       android:layout_margin="5dp"
-      android:background="@color/features_background"/>
+      android:background="@color/features_background" />
 
     <RelativeLayout
       android:id="@+id/customers_number_lay"
@@ -94,14 +98,14 @@
         android:gravity="center"
         android:textColor="@color/customers_number"
         android:textSize="12sp"
-        tools:text="۹ مشتری"/>
+        tools:text="۹ مشتری" />
 
       <ImageView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/customers_number_tv"
-        android:src="@drawable/ic_customer_point_24dp"/>
+        android:src="@drawable/ic_customer_point_24dp" />
     </RelativeLayout>
   </LinearLayout>
 
@@ -115,7 +119,7 @@
     android:gravity="right|center"
     android:text="@string/cusomters"
     android:textColor="@color/black_85"
-    android:textSize="12sp"/>
+    android:textSize="12sp" />
 
   <android.support.v7.widget.RecyclerView
     android:id="@+id/recycler_view"
@@ -128,7 +132,7 @@
   <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
-    android:background="@color/navigation_drawer_divider"/>
+    android:background="@color/navigation_drawer_divider" />
 
   <LinearLayout
     android:id="@+id/bottom_bar"
@@ -153,14 +157,14 @@
         android:layout_marginRight="10dp"
         android:text="@string/sort"
         android:textColor="@color/login_gray"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
       <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/sort_tv"
         android:src="@drawable/ic_sort_black_18dp"
-        android:tint="@color/login_gray"/>
+        android:tint="@color/login_gray" />
     </RelativeLayout>
 
     <View
@@ -168,7 +172,7 @@
       android:layout_height="match_parent"
       android:layout_margin="5dp"
       android:layout_centerInParent="true"
-      android:background="@color/features_background"/>
+      android:background="@color/features_background" />
 
     <RelativeLayout
       android:id="@+id/filter_lay"
@@ -185,14 +189,14 @@
         android:layout_marginRight="10dp"
         android:text="@string/filter"
         android:textColor="@color/login_gray"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
       <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/filter_tv"
         android:src="@drawable/ic_filter_list_black_18dp"
-        android:tint="@color/login_gray"/>
+        android:tint="@color/login_gray" />
     </RelativeLayout>
   </LinearLayout>
 
