@@ -60,9 +60,10 @@ public class ServiceGenerator {
     } else {
       interceptor = new AuthenticationInterceptor(null);
     }
-    if (!httpClient.interceptors().contains(interceptor)) {
+    httpClient.interceptors().clear();
+//    if (!httpClient.interceptors().contains(interceptor)) {
       httpClient.addInterceptor(interceptor);
-    }
+//    }
     if (BuildConfig.DEBUG) {
       httpClient.addInterceptor(logging);
     }
