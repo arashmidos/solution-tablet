@@ -69,6 +69,8 @@ public class NewVisitDetailFragment extends BaseFragment {
     tabs.setupWithViewPager(viewpager);
     setUpViewPager();
     viewpager.setCurrentItem(viewPagerAdapter.getCount());
+    viewpager.setOffscreenPageLimit(viewPagerAdapter.getCount());
+
     return view;
   }
 
@@ -82,8 +84,6 @@ public class NewVisitDetailFragment extends BaseFragment {
         getActivity().getSupportFragmentManager());
 //    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.images));
 //    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
-    viewPagerAdapter.add(PaymentListFragment.newInstance(getArguments()), getString(R.string.payments));
-    viewPagerAdapter.add(NewOrderListFragment.newInstance(), getString(R.string.orders));
     viewPagerAdapter
         .add(PaymentListFragment.newInstance(getArguments()), getString(R.string.payments));
     viewPagerAdapter.add(NewOrderListFragment.newInstance(this), getString(R.string.orders));

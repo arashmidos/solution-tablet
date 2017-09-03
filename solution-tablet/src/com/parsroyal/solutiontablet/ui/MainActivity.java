@@ -39,6 +39,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
@@ -359,7 +360,8 @@ public class MainActivity extends BaseFragmentActivity {
   private void logUser() {
     SettingService settingService = new SettingServiceImpl(this);
     Crashlytics.setUserName(settingService.getSettingValue(ApplicationKeys.USER_FULL_NAME));
-    Crashlytics.setString("Company",settingService.getSettingValue(ApplicationKeys.USER_COMPANY_NAME));
+    Crashlytics
+        .setString("Company", settingService.getSettingValue(ApplicationKeys.USER_COMPANY_NAME));
 
     KeyValue saleType = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
     Crashlytics.setString("Sale Type", saleType == null ? "" : saleType.getValue());
@@ -640,7 +642,7 @@ public class MainActivity extends BaseFragmentActivity {
       Fragment visitFragment = getSupportFragmentManager()
           .findFragmentByTag(NewVisitDetailFragment.class.getSimpleName());
       if (visitFragment != null && visitFragment.isVisible()) {
-
+        EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_EXIT_VISIT));
       } else {
         onBackPressed();
       }

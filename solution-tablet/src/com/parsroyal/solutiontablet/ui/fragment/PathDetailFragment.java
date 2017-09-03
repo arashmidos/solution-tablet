@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -354,6 +355,15 @@ public class PathDetailFragment extends BaseFragment implements
     Analytics.logCustom("Filter", new String[]{"Distance", "Has Order", "Has none"},
         String.valueOf(filterDistanceInMeter), String.valueOf(filterByOrder),
         String.valueOf(filterByNone));
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    Fragment f = getChildFragmentManager().findFragmentById(R.id.map);
+    if (f != null) {
+      getChildFragmentManager().beginTransaction().remove(f).commitAllowingStateLoss();
+    }
   }
 
   private class RefreshAsyncTask extends AsyncTask<String, Void, List<CustomerListModel>> {

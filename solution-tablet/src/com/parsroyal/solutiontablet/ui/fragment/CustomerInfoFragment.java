@@ -555,6 +555,8 @@ public class CustomerInfoFragment extends Fragment {
       openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
     } else if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
       goToRegisterPaymentFragment();
+    } else if (event.getStatusCode() == StatusCodes.ACTION_EXIT_VISIT) {
+      finishVisiting();
     }
   }
 }
