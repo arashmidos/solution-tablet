@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
-
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import java.util.List;
 
 /**
  * Created by ShakibIsTheBest on 8/27/2017.
@@ -43,7 +40,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     String orderCode = "کد سفارش : " + String.valueOf(order.getId());
     String orderAmount = String.valueOf(order.getAmount()) + " تومان";
     holder.orderCodeTv.setText(orderCode);
-    holder.orderCountTv.setText("23");
+    holder.orderCountTv.setText("--");
     holder.orderDateTv.setText(order.getDate());
     holder.orderTotalPrice.setText(orderAmount);
     holder.orderPaymentMethodTv.setText(order.getPaymentTypeTitle());
@@ -61,11 +58,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.order_code_tv) TextView orderCodeTv;
-    @BindView(R.id.order_date_tv) TextView orderDateTv;
-    @BindView(R.id.order_total_price) TextView orderTotalPrice;
-    @BindView(R.id.order_count_tv) TextView orderCountTv;
-    @BindView(R.id.order_payment_method_tv) TextView orderPaymentMethodTv;
+    @BindView(R.id.order_code_tv)
+    TextView orderCodeTv;
+    @BindView(R.id.order_date_tv)
+    TextView orderDateTv;
+    @BindView(R.id.order_total_price)
+    TextView orderTotalPrice;
+    @BindView(R.id.order_count_tv)
+    TextView orderCountTv;
+    @BindView(R.id.order_payment_method_tv)
+    TextView orderPaymentMethodTv;
 
     public ViewHolder(View itemView) {
       super(itemView);

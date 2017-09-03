@@ -109,8 +109,6 @@ public class PaymentListFragment extends BaseFragment {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);
-    ((MainActivity) getActivity())
-        .changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true)
-    ;
+    activity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true);
   }
 }

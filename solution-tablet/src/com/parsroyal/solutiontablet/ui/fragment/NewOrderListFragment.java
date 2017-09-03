@@ -11,11 +11,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
+import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
-import java.util.ArrayList;
+import com.parsroyal.solutiontablet.ui.fragment.dialog.NewVisitDetailFragment;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 
 public class NewOrderListFragment extends BaseFragment {
 
@@ -24,16 +29,20 @@ public class NewOrderListFragment extends BaseFragment {
   @BindView(R.id.fab_add_order)
   FloatingActionButton fabAddOrder;
   private OrderAdapter adapter;
-  private MainActivity activity;
+  private MainActivity mainActivity;
+  private SaleOrderServiceImpl saleOrderService;
+  private SaleOrderSO saleOrderSO = new SaleOrderSO();
+  private NewVisitDetailFragment parent;
 
   public NewOrderListFragment() {
     // Required empty public constructor
   }
 
 
-  public static NewOrderListFragment newInstance() {
-    NewOrderListFragment fragment = new NewOrderListFragment();
-    return fragment;
+  public static NewOrderListFragment newInstance(NewVisitDetailFragment newVisitDetailFragment) {
+    NewOrderListFragment newOrderListFragment = new NewOrderListFragment();
+    newOrderListFragment.parent = newVisitDetailFragment;
+    return newOrderListFragment;
   }
 
   @Override
@@ -41,15 +50,17 @@ public class NewOrderListFragment extends BaseFragment {
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_new_order_list, container, false);
-    activity = (MainActivity) getActivity();
+    mainActivity = (MainActivity) getActivity();
     ButterKnife.bind(this, view);
+    this.saleOrderService = new SaleOrderServiceImpl(mainActivity);
+
     setUpRecyclerView();
     return view;
   }
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new OrderAdapter(activity, getOrderList());
+    adapter = new OrderAdapter(mainActivity, getOrderList());
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
@@ -67,32 +78,8 @@ public class NewOrderListFragment extends BaseFragment {
   }
 
   private List<SaleOrderListModel> getOrderList() {
-    List<SaleOrderListModel> list = new ArrayList<>();
-    list.add(
-        new SaleOrderListModel(524525l, 234l, "پنجشنبه 2 مرداد 96", 25000000l, "چک 15 روزه", "",
-            2555l, 4554l));
-    list.add(new SaleOrderListModel(32543254l, 234l, "شنبه 3 مرداد 96", 23500000l, "نقد", "", 2555l,
-        4554l));
-    list.add(
-        new SaleOrderListModel(56465l, 234l, "جمعه 4 مرداد 96", 4275000l, "چک 40 روزه", "", 2555l,
-            4554l));
-    list.add(
-        new SaleOrderListModel(568665l, 234l, "چهارشنبه 5 مرداد 96", 6325600l, "رسید", "", 2555l,
-            4554l));
-    list.add(new SaleOrderListModel(5465l, 234l, "دوشنبه 30 مرداد 96", 75000000l, "نقد", "", 2555l,
-        4554l));
-    list.add(
-        new SaleOrderListModel(7365256465l, 234l, "سه شنبه 23 تیر 96", 6582122l, "چک 10 روزه", "",
-            2555l, 4554l));
-    list.add(
-        new SaleOrderListModel(378645l, 234l, "پنجشنبه 2 شهریور 96", 632000000l, "نقد", "", 2555l,
-            4554l));
-    list.add(
-        new SaleOrderListModel(678265l, 234l, "یکشنبه 2 اسفند 96", 248215623l, "رسید", "", 2555l,
-            4554l));
-    list.add(new SaleOrderListModel(8968l, 234l, "شنبه 20 فروردین 96", 5263452l, "نقد", "", 2555l,
-        4554l));
-    return list;
+    saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
+    return saleOrderService.findOrders(saleOrderSO);
   }
 
   @Override
@@ -102,6 +89,6 @@ public class NewOrderListFragment extends BaseFragment {
 
   @OnClick(R.id.fab_add_order)
   public void onClick() {
-    ((MainActivity) getActivity()).changeFragment(MainActivity.ORDER_FRAGMENT_ID, true);
+    EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_ADD_ORDER));
   }
 }

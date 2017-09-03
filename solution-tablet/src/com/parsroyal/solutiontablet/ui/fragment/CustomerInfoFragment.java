@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -31,11 +30,13 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -47,7 +48,6 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DialogUtil;
@@ -58,6 +58,8 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class CustomerInfoFragment extends Fragment {
 
@@ -524,6 +526,7 @@ public class CustomerInfoFragment extends Fragment {
   @Override
   public void onResume() {
     super.onResume();
+    EventBus.getDefault().register(this);
     if (getView() == null) {
       return;
     }
@@ -540,4 +543,18 @@ public class CustomerInfoFragment extends Fragment {
     });
   }
 
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(ActionEvent event) {
+    if (event.getStatusCode() == StatusCodes.ACTION_ADD_ORDER) {
+      openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+    } else if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
+      goToRegisterPaymentFragment();
+    }
+  }
 }

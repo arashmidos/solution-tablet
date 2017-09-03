@@ -17,7 +17,9 @@ public enum StatusCodes {
   DATS_STORE_ERROR(1004, R.string.message_exception_in_data_store),
   SERVER_ERROR(1100, R.string.com_parsroyal_solutiontablet_exception_InternalServerError),
   PERMISSION_DENIED(2001, R.string.permission_denied_explanation),
-  NEW_GPS_LOCATION(2002, R.string.message_new_gps_location);
+  NEW_GPS_LOCATION(2002, R.string.message_new_gps_location),
+  ACTION_ADD_ORDER(901, R.string.register_order),
+  ACTION_ADD_PAYMENT(902, R.string.register_payment);
 
   private int statusCode;
   private int message;
