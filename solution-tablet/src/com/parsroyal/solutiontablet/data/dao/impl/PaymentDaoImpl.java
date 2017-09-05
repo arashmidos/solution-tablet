@@ -170,6 +170,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
     if (!simpleModel) {
       paymentListModel.setCustomerFullName(cursor.getString(5));
     }
+    paymentListModel.setStatus(cursor.getLong(6));
     return paymentListModel;
   }
 
@@ -217,7 +218,8 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         "p." + Payment.COL_CREATE_DATE_TIME,
         "p." + Payment.COL_PAYMENT_TYPE_ID,
         "p." + Payment.COL_CUSTOMER_BACKEND_ID,
-        "cu." + Customer.COL_FULL_NAME};
+        "cu." + Customer.COL_FULL_NAME,
+        "p." + Payment.COL_STATUS};
 
     String selection =
         " " + "p." + Payment.COL_CUSTOMER_BACKEND_ID + " = ? and " + "p." + Payment.COL_STATUS

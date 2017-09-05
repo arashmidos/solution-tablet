@@ -61,9 +61,10 @@ import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment;
+import com.parsroyal.solutiontablet.ui.fragment.ReportFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesListFragment;
-import com.parsroyal.solutiontablet.ui.fragment.dialog.NewVisitDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.NewVisitDetailFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -94,6 +95,7 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int SETTING_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
+  public static final int REPORT_FRAGMENT = 14;
   public static final int GOODS_LIST_FRAGMENT_ID = 16;
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
@@ -538,6 +540,9 @@ public class MainActivity extends BaseFragmentActivity {
 
       case NEW_CUSTOMER_DETAIL_FRAGMENT_ID:
         fragment = AddCustomerFragment.newInstance();
+        break;
+      case REPORT_FRAGMENT:
+        fragment = ReportFragment.newInstance();
         break;
       /*
       case GENERAL_QUESTIONNAIRES_FRAGMENT_ID://6

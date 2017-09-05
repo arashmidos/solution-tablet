@@ -1,4 +1,4 @@
-package com.parsroyal.solutiontablet.ui.fragment.dialog;
+package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -14,10 +14,6 @@ import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
-import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
-import com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NewOrderListFragment;
-import com.parsroyal.solutiontablet.ui.fragment.PaymentListFragment;
 
 
 public class NewVisitDetailFragment extends BaseFragment {

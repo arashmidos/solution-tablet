@@ -8,6 +8,7 @@ public class PaymentListModel extends BaseListModel {
   protected String date;
   protected String amount;
   protected String type;
+  private Long status;
   protected long customerBackendId;
   private String customerFullName;
 
@@ -28,6 +29,14 @@ public class PaymentListModel extends BaseListModel {
 
   public void setCustomerBackendId(long customerBackendId) {
     this.customerBackendId = customerBackendId;
+  }
+
+  public Long getStatus() {
+    return status;
+  }
+
+  public void setStatus(Long status) {
+    this.status = status;
   }
 
   public String getAmount() {

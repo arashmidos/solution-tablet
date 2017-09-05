@@ -5,15 +5,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
+import com.parsroyal.solutiontablet.service.VisitService;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.FeaturesAdapter;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import java.util.List;
 
 public class FeaturesFragment extends BaseFragment {
 
@@ -22,6 +23,7 @@ public class FeaturesFragment extends BaseFragment {
 
   private FeaturesAdapter adapter;
   private MainActivity mainActivity;
+  private VisitService visitService;
 
   public FeaturesFragment() {
     // Required empty public constructor
@@ -38,6 +40,7 @@ public class FeaturesFragment extends BaseFragment {
     View view = inflater.inflate(R.layout.fragment_features, container, false);
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
+    visitService = new VisitServiceImpl(mainActivity);
     setUpRecyclerView();
     mainActivity.changeTitle(getString(R.string.features_list));
     return view;
@@ -45,10 +48,16 @@ public class FeaturesFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new FeaturesAdapter(getActivity(), FeatureList.getFeatureList(getActivity()));
+    List<FeatureList> featureList = FeatureList.getFeatureList(getActivity());
+    featureList.get(0).setBadger(getVisitLineSize());
+    adapter = new FeaturesAdapter(getActivity(), featureList);
     RtlGridLayoutManager gridLayoutManager = new RtlGridLayoutManager(getActivity(), 2);
     recyclerView.setLayoutManager(gridLayoutManager);
     recyclerView.setAdapter(adapter);
+  }
+
+  private int getVisitLineSize() {
+    return visitService.getAllVisitLinesListModel().size();
   }
 
   @Override
