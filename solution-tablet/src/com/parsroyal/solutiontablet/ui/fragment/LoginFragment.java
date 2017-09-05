@@ -257,12 +257,13 @@ public class LoginFragment extends BaseFragment implements TextWatcher {
 
       Intent intent = new Intent(getActivity(), MainActivity.class);
       startActivity(intent);
+      getActivity().finish();
     }
   }
 
   @Override
-  public void onStart() {
-    super.onStart();
+  public void onResume() {
+    super.onResume();
     EventBus.getDefault().register(this);
   }
 

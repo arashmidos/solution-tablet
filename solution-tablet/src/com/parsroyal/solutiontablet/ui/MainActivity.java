@@ -481,7 +481,6 @@ public class MainActivity extends BaseFragmentActivity {
     fragmentTransaction.commit();
   }
 
-
   public void changeFragment(int fragmentId, boolean addToBackStack) {
     BaseFragment fragment = findFragment(fragmentId, new Bundle());
     if (Empty.isNotEmpty(fragment) && !fragment.isVisible()) {
