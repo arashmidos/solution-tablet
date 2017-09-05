@@ -81,7 +81,6 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLines="1"
-            android:text="parsroyal"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_normal"
             tools:text="sunstar"/>
@@ -127,7 +126,6 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLines="1"
-            android:text="afshin"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             tools:text="آقا آٰرش"/>
@@ -173,7 +171,6 @@
             android:imeOptions="actionNext"
             android:inputType="textPassword"
             android:maxLines="1"
-            android:text="123"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             tools:text="123456"/>
