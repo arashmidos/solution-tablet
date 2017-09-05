@@ -39,6 +39,7 @@ public class FeaturesFragment extends BaseFragment {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     setUpRecyclerView();
+    mainActivity.changeTitle(getString(R.string.features_list));
     return view;
   }
 
