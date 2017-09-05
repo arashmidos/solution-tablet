@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface BaseInfoDao extends BaseDao<BaseInfo, Long> {
 
-  List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long typeId);
+  List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long typeId, Long backendId);
 }

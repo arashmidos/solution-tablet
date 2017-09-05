@@ -63,7 +63,7 @@ public class OrdersListFragment extends
     if (Empty.isNotEmpty(args)) {
       Object statusId = args.get(Constants.STATUS_ID);
       saleOrderSO.setStatusId(Empty.isNotEmpty(statusId) ? (Long) statusId : null);
-      Object customerBackendId = args.get("customerBackendId");
+      Object customerBackendId = args.get(Constants.CUSTOMER_BACKEND_ID);
       saleOrderSO.setCustomerBackendId(
           Empty.isNotEmpty(customerBackendId) ? (Long) customerBackendId : null);
       visitId = args.getLong(Constants.VISIT_ID);

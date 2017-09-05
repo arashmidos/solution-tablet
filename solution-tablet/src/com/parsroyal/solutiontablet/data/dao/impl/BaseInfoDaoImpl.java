@@ -68,7 +68,7 @@ public class BaseInfoDaoImpl extends AbstractDao<BaseInfo, Long> implements Base
   }
 
   @Override
-  public List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long typeId) {
+  public List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long typeId, Long backendId) {
     String selection = " " + BaseInfo.COL_TYPE + " = ?";
     String[] args = {String.valueOf(typeId)};
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());

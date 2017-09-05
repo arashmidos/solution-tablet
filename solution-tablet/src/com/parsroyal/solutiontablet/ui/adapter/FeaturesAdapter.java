@@ -17,6 +17,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
 /**
@@ -55,6 +56,10 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     holder.featureLay.setOnClickListener(v -> {
       switch (position) {
         case 0://Paths
+          if (features.get(0).getBadger() == 0) {
+            ToastUtil.toastError(context, R.string.error_no_visitline);
+            return;
+          }
           context.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
           break;
         case 1://Customers

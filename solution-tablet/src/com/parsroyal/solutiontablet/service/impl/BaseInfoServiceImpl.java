@@ -11,7 +11,6 @@ import com.parsroyal.solutiontablet.data.dao.impl.BaseInfoDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.CityDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.ProvinceDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.City;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Province;
@@ -64,13 +63,17 @@ public class BaseInfoServiceImpl implements BaseInfoService {
       }
       return entities;
     }
-    return baseInfoDao.getAllBaseInfosLabelValuesByTypeId(typeId);
+    return baseInfoDao.getAllBaseInfosLabelValuesByTypeId(typeId, null);
   }
 
   @Override
-  public LabelValue getBaseInfoByBackendId(Long backendId) {
-    BaseInfo baseInfo = baseInfoDao.retrieve(backendId);
-    return new LabelValue(baseInfo.getBackendId(), baseInfo.getTitle());
+  public LabelValue getBaseInfoByBackendId(Long typeId, Long backendId) {
+    List<LabelValue> baseInfoList = baseInfoDao
+        .getAllBaseInfosLabelValuesByTypeId(typeId, backendId);
+    if (baseInfoList.size() > 0) {
+      return baseInfoList.get(0);
+    }
+    return null;
   }
 
   @Override

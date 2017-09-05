@@ -99,6 +99,7 @@ public class NewOrderListFragment extends BaseFragment {
     if (parent != null) {
       saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
     }
+    saleOrderSO.setIgnoreDraft(true);
     return saleOrderService.findOrders(saleOrderSO);
   }
 

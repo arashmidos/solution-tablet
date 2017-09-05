@@ -13,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
@@ -120,7 +121,7 @@ public class NewOrderInfoFragment extends BaseFragment {
     } else {
       Long paymentTypeBackendId = order.getPaymentTypeBackendId();
       if (Empty.isNotEmpty(paymentTypeBackendId) && paymentTypeBackendId != 0L) {
-        selectedItem = baseInfoService.getBaseInfoByBackendId(paymentTypeBackendId);
+        selectedItem = baseInfoService.getBaseInfoByBackendId(BaseInfoTypes.PAYMENT_TYPE.getId(),paymentTypeBackendId);
         paymentMethodTv.setText(selectedItem.getLabel());
       }
     }

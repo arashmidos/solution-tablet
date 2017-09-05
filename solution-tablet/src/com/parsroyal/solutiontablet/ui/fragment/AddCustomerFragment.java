@@ -247,11 +247,15 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
         customer.setStoreSurface(
             Integer.parseInt(NumberUtil.digitsToEnglish(storeMeterEdt.getText().toString())));
       }
-      customer.setProvinceBackendId(stateSpinner.getSelectedItemId());
-      customer.setCityBackendId(citySpinner.getSelectedItemId());
+      customer.setProvinceBackendId(
+          stateSpinner.getSelectedItemId() <= 0 ? null : stateSpinner.getSelectedItemId());
+      customer.setCityBackendId(
+          citySpinner.getSelectedItemId() <= 0 ? null : citySpinner.getSelectedItemId());
       customer.setActivityBackendId(activitySpinner.getSelectedItemId());
-      customer.setStoreLocationTypeBackendId(ownershipSpinner.getSelectedItemId());
-      customer.setClassBackendId(customerClassSpinner.getSelectedItemId());
+      customer.setStoreLocationTypeBackendId(
+          ownershipSpinner.getSelectedItemId() == -1L ? null : ownershipSpinner.getSelectedItemId());
+      customer.setClassBackendId(customerClassSpinner.getSelectedItemId() == -1L ? null
+          : customerClassSpinner.getSelectedItemId());
       customer.setShopName(CharacterFixUtil.fixString(shopNameEdt.getText().toString()));
       customer.setNationalCode(NumberUtil.digitsToEnglish(nationalCodeEdt.getText().toString()));
       customer.setMunicipalityCode(
@@ -320,6 +324,21 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     if (Empty.isEmpty(customer.getAddress())) {
       ToastUtil.toastError(getActivity(), R.string.message_address_is_required);
       addressEdt.requestFocus();
+      return false;
+    }
+
+    if (stateSpinner.getSelectedItemId() == -1L) {
+      ToastUtil.toastError(getActivity(), R.string.message_province_is_required);
+      return false;
+    }
+
+    if (citySpinner.getSelectedItemId() <= 0) {
+      ToastUtil.toastError(getActivity(), R.string.message_city_is_required);
+      return false;
+    }
+
+    if (activitySpinner.getSelectedItemId() == -1L) {
+      ToastUtil.toastError(getActivity(), R.string.message_activity_type_is_required);
       return false;
     }
 

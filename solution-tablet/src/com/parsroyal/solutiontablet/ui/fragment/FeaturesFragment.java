@@ -42,6 +42,7 @@ public class FeaturesFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     visitService = new VisitServiceImpl(mainActivity);
     setUpRecyclerView();
+    mainActivity.changeTitle(getString(R.string.features_list));
     return view;
   }
 

@@ -283,44 +283,44 @@ public class Customer extends BaseEntity<Long> {
 
     sb.append(this.getId());
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.fullName) ? this.fullName : "NULL");
+    sb.append(Empty.isNotEmpty(fullName) ? fullName : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.phoneNumber) ? this.phoneNumber : "NULL");
+    sb.append(Empty.isNotEmpty(phoneNumber) ? phoneNumber : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.cellPhone) ? this.cellPhone : "NULL");
+    sb.append(Empty.isNotEmpty(cellPhone) ? cellPhone : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.provinceBackendId) ? this.provinceBackendId : "NULL");
+    sb.append(
+        Empty.isNotEmpty(provinceBackendId) && provinceBackendId != 0 ? provinceBackendId : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.cityBackendId) ? this.cityBackendId : "NULL");
+    sb.append(Empty.isNotEmpty(cityBackendId) && cityBackendId != 0 ? cityBackendId : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.address) ? this.address : "NULL");
+    sb.append(Empty.isNotEmpty(address) ? address : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.activityBackendId) ? this.activityBackendId : "NULL");
+    sb.append(Empty.isNotEmpty(activityBackendId) ? activityBackendId : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.storeSurface) ? this.storeSurface : "NULL");
+    sb.append(Empty.isNotEmpty(storeSurface) ? storeSurface : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.storeLocationTypeBackendId) ? this.storeLocationTypeBackendId
+    sb.append(Empty.isNotEmpty(storeLocationTypeBackendId) ? storeLocationTypeBackendId
         : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.createDateTime) ? this.createDateTime : "NULL");
+    sb.append(Empty.isNotEmpty(createDateTime) ? createDateTime : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.updateDateTime) ? this.updateDateTime : "NULL");
+    sb.append(Empty.isNotEmpty(updateDateTime) ? updateDateTime : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.xLocation) ? this.xLocation : "NULL");
+    sb.append(Empty.isNotEmpty(xLocation) ? xLocation : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.yLocation) ? this.yLocation : "NULL");
+    sb.append(Empty.isNotEmpty(yLocation) ? yLocation : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.classBackendId) ? this.classBackendId : "NULL");
+    sb.append(Empty.isNotEmpty(classBackendId) && classBackendId != 0 ? classBackendId : "NULL");
     //New
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.shopName) ? this.shopName : "NULL");
+    sb.append(Empty.isNotEmpty(shopName) ? shopName : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.postalCode) ? this.postalCode : "NULL");
+    sb.append(Empty.isNotEmpty(postalCode) ? postalCode : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.nationalCode) ? this.nationalCode : "NULL");
+    sb.append(Empty.isNotEmpty(nationalCode) ? nationalCode : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(this.municipalityCode) ? this.municipalityCode
-        : "NULL");
+    sb.append(Empty.isNotEmpty(municipalityCode) ? municipalityCode : "NULL");
     return sb.toString();
   }
 
