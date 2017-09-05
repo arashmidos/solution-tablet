@@ -2,7 +2,9 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +14,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.adapter.PaymentAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
@@ -24,16 +28,19 @@ import java.util.Locale;
  * Created by ShakibIsTheBest on 8/27/2017.
  */
 
-public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHolder> {
+public class PaymentAdapter extends Adapter<ViewHolder> {
 
   private LayoutInflater inflater;
   private Context context;
   private long visitId;
+  private boolean isFromReport;
   private MainActivity mainActivity;
   private List<PaymentListModel> payments;
 
-  public PaymentAdapter(Context context, List<PaymentListModel> payments, long visitId) {
+  public PaymentAdapter(Context context, List<PaymentListModel> payments, long visitId,
+      boolean isFromReport) {
     this.context = context;
+    this.isFromReport = isFromReport;
     this.visitId = visitId;
     this.payments = payments;
     mainActivity = (MainActivity) context;
@@ -42,13 +49,21 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view = inflater.inflate(R.layout.item_payment_list, parent, false);
+    View view;
+    if (isFromReport) {
+      view = inflater.inflate(R.layout.item_payment_report_list, parent, false);
+    } else {
+      view = inflater.inflate(R.layout.item_payment_list, parent, false);
+    }
     return new ViewHolder(view);
   }
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     PaymentListModel payment = payments.get(position);
+    if (isFromReport) {
+      holder.paymentStatusTv.setText(SendStatus.getDisplayTitle(context, payment.getStatus()));
+    }
     holder.paymentMethodTv.setText(getPaymentType(payment.getType()));
     Date createDate = DateUtil
         .convertStringToDate(payment.getDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
@@ -98,6 +113,9 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
+    @Nullable
+    @BindView(R.id.payment_status_tv)
+    TextView paymentStatusTv;
     @BindView(R.id.payment_method_tv)
     TextView paymentMethodTv;
     @BindView(R.id.payment_date_tv)

@@ -70,6 +70,7 @@ public class PaymentListFragment extends BaseFragment {
       customer = customerService.getCustomerById(customerId);
       paymentSO = new PaymentSO(customer.getBackendId(), SendStatus.NEW.getId());
     } else {
+      fabAddPayment.setVisibility(View.GONE);
       paymentSO = new PaymentSO(SendStatus.NEW.getId());
     }
     setUpRecyclerView();
@@ -78,7 +79,8 @@ public class PaymentListFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new PaymentAdapter(activity, getPaymentList(), visitId);
+    adapter = new PaymentAdapter(activity, getPaymentList(), visitId,
+        paymentSO.getCustomerBackendId() == -1);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);

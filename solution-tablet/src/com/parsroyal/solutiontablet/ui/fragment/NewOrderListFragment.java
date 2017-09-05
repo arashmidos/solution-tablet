@@ -18,7 +18,6 @@ import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
-import com.parsroyal.solutiontablet.ui.fragment.dialog.NewVisitDetailFragment;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 
@@ -53,14 +52,16 @@ public class NewOrderListFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     ButterKnife.bind(this, view);
     this.saleOrderService = new SaleOrderServiceImpl(mainActivity);
-
+    if (parent == null) {
+      fabAddOrder.setVisibility(View.GONE);
+    }
     setUpRecyclerView();
     return view;
   }
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new OrderAdapter(mainActivity, getOrderList());
+    adapter = new OrderAdapter(mainActivity, getOrderList(), parent == null);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
@@ -78,7 +79,9 @@ public class NewOrderListFragment extends BaseFragment {
   }
 
   private List<SaleOrderListModel> getOrderList() {
-    saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
+    if (parent != null) {
+      saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
+    }
     return saleOrderService.findOrders(saleOrderSO);
   }
 
