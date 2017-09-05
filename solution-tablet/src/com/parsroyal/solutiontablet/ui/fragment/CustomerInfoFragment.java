@@ -66,10 +66,6 @@ import org.greenrobot.eventbus.Subscribe;
  */
 public class CustomerInfoFragment extends Fragment {
 
-  private static final String TAG = CustomerInfoFragment.class.getName();
-  private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-  private static final int RESULT_OK = -1;
-  private static final int RESULT_CANCELED = 0;
   @BindView(R.id.store_tv)
   TextView storeTv;
   @BindView(R.id.drop_img)
@@ -88,6 +84,12 @@ public class CustomerInfoFragment extends Fragment {
   TextView addOrderTv;
   @BindView(R.id.register_order_lay)
   RelativeLayout registerOrderLay;
+
+  private static final String TAG = CustomerInfoFragment.class.getName();
+  private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+  private static final int RESULT_OK = -1;
+  private static final int RESULT_CANCELED = 0;
+
   private boolean isShowMore = true;
   private long customerId;
   private long visitId;

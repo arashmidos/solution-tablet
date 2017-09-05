@@ -20,7 +20,6 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

@@ -619,7 +619,7 @@ public class MainActivity extends BaseFragmentActivity {
       }
     } else {
       Fragment visitFragment = getSupportFragmentManager()
-          .findFragmentByTag(NewVisitDetailFragment.class.getSimpleName());
+          .findFragmentByTag(NewVisitDetailFragment.class.getSimpleName());//TODO ARASH
       if (visitFragment != null && visitFragment.isVisible()) {
         EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_EXIT_VISIT));
       } else {

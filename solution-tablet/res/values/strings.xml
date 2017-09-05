@@ -510,5 +510,9 @@
   <string name="message_cheque_account_owner_is_required">وترد کردن صاحب چک اجباریست.</string>
   <string name="updating_user_info">در حال دریافت اطلاعات کاربری</string>
   <string name="authenticate_user">در حال تایید کاربر</string>
+  <string name="message_province_is_required">وارد کردن استان اجباریست.</string>
+  <string name="message_city_is_required">وارد کردن شهر اجباریست.</string>
+  <string name="message_customer_class_is_required">وارد کردن کلاس مشتری اجباریست.</string>
+  <string name="message_activity_type_is_required">وارد کردن نوع فعالیت اجباریست.</string>
 
 </resources>
