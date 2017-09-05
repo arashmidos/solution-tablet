@@ -79,6 +79,7 @@ public class NewOrderListFragment extends BaseFragment {
 
   private List<SaleOrderListModel> getOrderList() {
     saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
+    saleOrderSO.setIgnoreDraft(true);
     return saleOrderService.findOrders(saleOrderSO);
   }
 

@@ -61,6 +61,9 @@ import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+/**
+ * @author Shakib
+ */
 public class CustomerInfoFragment extends Fragment {
 
   private static final String TAG = CustomerInfoFragment.class.getName();

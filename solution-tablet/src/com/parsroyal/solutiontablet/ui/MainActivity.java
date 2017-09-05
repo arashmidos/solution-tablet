@@ -540,16 +540,6 @@ public class MainActivity extends BaseFragmentActivity {
         fragment = AddCustomerFragment.newInstance();
         break;
       /*
-      case CUSTOMERS_FRAGMENT_ID:
-        fragment = new CustomersFragment();
-        break;
-      case CUSTOMER_DETAIL_FRAGMENT_ID:
-        fragment = new CustomerDetailFragment();
-        break;
-      case VISIT_DETAIL_FRAGMENT_ID:
-        fragment = new VisitDetailFragment();
-//        setMenuEnabled(false);
-        break;
       case GENERAL_QUESTIONNAIRES_FRAGMENT_ID://6
         fragment = new GeneralQuestionnairesFragment();
         parent = args.getInt(Constants.PARENT, 0);
@@ -572,29 +562,14 @@ public class MainActivity extends BaseFragmentActivity {
           fragment = new DataTransferFragment();
         }
         break;
-      /*case DASHBOARD_FRAGMENT_ID:
-        fragment = new UserTrackingFragment();
-        break;*/
       case ABOUT_US_FRAGMENT_ID:
         fragment = new AboutUsFragment();
         break;
-      /*case ORDERS_LIST_FRAGMENT:
-        fragment = new OrdersListFragment();
-        break;
-      case ORDER_DETAIL_FRAGMENT_ID:
-        fragment = new OrderDetailFragment();
-        break;*/
       case GOODS_LIST_FRAGMENT_ID:
         fragment = OrderFragment.newInstance();
         break;
       /*case SAVE_LOCATION_FRAGMENT_ID:
         fragment = new SaveLocationFragment();
-        break;
-      case PAYMENT_FRAGMENT_ID://18
-        fragment = new PaymentFragment();
-        break;
-      case PAYMENT_DETAIL_FRAGMENT_ID://19
-        fragment = new PaymentDetailFragment();
         break;
       case USER_TRACKING_FRAGMENT_ID://20
         fragment = new UserTrackingFragment();

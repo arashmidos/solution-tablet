@@ -7,6 +7,7 @@ public class SaleOrderSO extends BaseSO {
 
   private Long statusId;
   private Long customerBackendId;
+  private boolean ignoreDraft;
 
   public Long getStatusId() {
     return statusId;
@@ -22,5 +23,13 @@ public class SaleOrderSO extends BaseSO {
 
   public void setCustomerBackendId(Long customerBackendId) {
     this.customerBackendId = customerBackendId;
+  }
+
+  public boolean isIgnoreDraft() {
+    return ignoreDraft;
+  }
+
+  public void setIgnoreDraft(boolean ignoreDraft) {
+    this.ignoreDraft = ignoreDraft;
   }
 }

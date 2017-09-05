@@ -49,7 +49,9 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * @author Shakib
+ */
 public class RegisterPaymentFragment extends BaseFragment {
 
   @BindView(R.id.e_payment_tv)

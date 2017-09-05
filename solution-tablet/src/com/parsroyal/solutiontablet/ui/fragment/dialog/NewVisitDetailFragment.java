@@ -87,9 +87,8 @@ public class NewVisitDetailFragment extends BaseFragment {
     viewPagerAdapter
         .add(PaymentListFragment.newInstance(getArguments()), getString(R.string.payments));
     viewPagerAdapter.add(NewOrderListFragment.newInstance(this), getString(R.string.orders));
-    viewPagerAdapter
-        .add(CustomerInfoFragment.newInstance(getArguments()),
-            getString(R.string.customer_information));
+    viewPagerAdapter.add(CustomerInfoFragment.newInstance(getArguments()),
+        getString(R.string.customer_information));
     viewpager.setAdapter(viewPagerAdapter);
   }
 

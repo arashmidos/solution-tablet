@@ -233,6 +233,13 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       argsList.add(String.valueOf(saleOrderSO.getCustomerBackendId()));
     }
 
+    if (Empty.isNotEmpty(saleOrderSO) && saleOrderSO.isIgnoreDraft()) {
+      sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_STATUS + " != ?")
+          .concat(" AND o." + SaleOrder.COL_STATUS + " != ?");
+      argsList.add(String.valueOf(SaleOrderStatus.DRAFT.getId()));
+      argsList.add(String.valueOf(SaleOrderStatus.REJECTED_DRAFT.getId()));
+    }
+
     String[] args = {};
     Cursor cursor = db.rawQuery(sql, argsList.toArray(args));
 
