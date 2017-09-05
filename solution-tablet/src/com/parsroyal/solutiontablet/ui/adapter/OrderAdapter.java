@@ -1,18 +1,23 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import java.util.Date;
@@ -25,15 +30,21 @@ import java.util.Locale;
 
 public class OrderAdapter extends Adapter<ViewHolder> {
 
-  @BindView(R.id.order_status_tv) TextView orderStatusTv;
   private LayoutInflater inflater;
   private Context context;
   private boolean isFromOrder;
+  private MainActivity mainActivity;
   private List<SaleOrderListModel> orders;
+  private long visitId;
+  private String saleType;
 
-  public OrderAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromOrder) {
+  public OrderAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromOrder,
+      Long visitId, String saleType) {
     this.context = context;
+    this.visitId = visitId;
     this.orders = orders;
+    this.saleType = saleType;
+    this.mainActivity = (MainActivity) context;
     this.isFromOrder = isFromOrder;
     inflater = LayoutInflater.from(context);
   }
@@ -52,22 +63,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     SaleOrderListModel order = orders.get(position);
-    if (isFromOrder) {
-      holder.orderStatusTv.setText(SaleOrderStatus.getDisplayTitle(context, order.getStatus()));
-    }
-    String orderCode = "کد سفارش : " + String.valueOf(order.getId());
-    holder.orderCodeTv.setText(orderCode);
-    holder.orderCountTv.setText("--");
-    Date createDate = DateUtil
-        .convertStringToDate(order.getDate().replace('/', '-'), DateUtil.FULL_FORMATTER_GREGORIAN,
-            "FA");
-
-    String dateString = DateUtil.getFullPersianDate(createDate);
-    holder.orderDateTv.setText(dateString);
-    String number = String.format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
-        R.string.common_irr_currency));
-    holder.orderTotalPrice.setText(number);
-    holder.orderPaymentMethodTv.setText(order.getPaymentTypeTitle());
+    holder.setData(position, order);
   }
 
   @Override
@@ -80,7 +76,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     notifyDataSetChanged();
   }
 
-  public class ViewHolder extends RecyclerView.ViewHolder {
+  public class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
     @BindView(R.id.order_code_tv)
     TextView orderCodeTv;
@@ -92,13 +88,56 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     TextView orderCountTv;
     @BindView(R.id.order_payment_method_tv)
     TextView orderPaymentMethodTv;
+    @BindView(R.id.main_lay)
+    RelativeLayout mainLay;
     @Nullable
     @BindView(R.id.order_status_tv)
     TextView orderStatusTv;
 
+    private int position;
+    private SaleOrderListModel order;
+
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+      mainLay.setOnClickListener(this);
+    }
+
+    public void setData(int position, SaleOrderListModel order) {
+      this.position = position;
+      this.order = order;
+      if (isFromOrder) {
+        orderStatusTv.setText(SaleOrderStatus.getDisplayTitle(context, order.getStatus()));
+      }
+      String orderCode = "کد سفارش : " + String.valueOf(order.getId());
+      orderCodeTv.setText(orderCode);
+      orderCountTv.setText("--");
+      Date createDate = DateUtil
+          .convertStringToDate(order.getDate().replace('/', '-'), DateUtil.FULL_FORMATTER_GREGORIAN,
+              "FA");
+
+      String dateString = DateUtil.getFullPersianDate(createDate);
+      orderDateTv.setText(dateString);
+      String number = String
+          .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
+              R.string.common_irr_currency));
+      orderTotalPrice.setText(number);
+      orderPaymentMethodTv.setText(order.getPaymentTypeTitle());
+    }
+
+    @Override
+    public void onClick(View v) {
+      switch (v.getId()) {
+        case R.id.main_lay:
+          Bundle args = new Bundle();
+          args.putLong(Constants.ORDER_ID, order.getId());
+          args.putString(Constants.SALE_TYPE, saleType);
+          args.putLong(Constants.VISIT_ID, visitId);
+          args.putBoolean(Constants.READ_ONLY, false);
+          args.putString(Constants.PAGE_STATUS, Constants.EDIT);
+          mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
+          break;
+      }
     }
   }
 }

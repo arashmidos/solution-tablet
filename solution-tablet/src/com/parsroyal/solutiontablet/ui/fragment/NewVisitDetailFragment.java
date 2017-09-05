@@ -82,7 +82,7 @@ public class NewVisitDetailFragment extends BaseFragment {
 //    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
     viewPagerAdapter
         .add(PaymentListFragment.newInstance(getArguments()), getString(R.string.payments));
-    viewPagerAdapter.add(NewOrderListFragment.newInstance(this), getString(R.string.orders));
+    viewPagerAdapter.add(NewOrderListFragment.newInstance(getArguments(),this), getString(R.string.orders));
     viewPagerAdapter
         .add(CustomerInfoFragment.newInstance(getArguments()),
             getString(R.string.customer_information));

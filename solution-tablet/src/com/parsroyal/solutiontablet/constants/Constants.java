@@ -15,6 +15,9 @@ public class Constants {
   public static final String PARENT = "PARENT";
   public static final String CUSTOMER_ID = "customerId";
   public static final String QUESTIONAIRE_ID = "qnId";
+  public static final String PAGE_STATUS = "pageStatus";
+  public static final String NEW= "view";
+  public static final String EDIT= "edit";
   public static final String GOODS_BACKEND_ID = "goodsBackendId";
   public static final String GOODS_INVOICE_ID = "goodsInvoiceId";
   public static final String GOODS_SALE_RATE = "goodsSaleRate";
@@ -54,4 +57,5 @@ public class Constants {
   public static final String READ_ONLY = "readOnly";
   public static final String ApplicationKey = "solution-tablet";
   public static final String DEFAULT_LANGUAGE = "fa";
+
 }

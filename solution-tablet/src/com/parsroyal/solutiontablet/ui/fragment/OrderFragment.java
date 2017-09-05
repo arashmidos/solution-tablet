@@ -24,8 +24,6 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
-import com.parsroyal.solutiontablet.data.event.Event;
-import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
@@ -83,6 +81,7 @@ public class OrderFragment extends BaseFragment {
   private Long orderStatus;
   private GoodsDtoList rejectedGoodsList;
   private String constraint;
+  private String pageStatus;
 
   public OrderFragment() {
     // Required empty public constructor
@@ -113,11 +112,14 @@ public class OrderFragment extends BaseFragment {
       orderStatus = order.getStatus();
       saleType = args.getString(Constants.SALE_TYPE, "");
       visitId = args.getLong(Constants.VISIT_ID, -1);
+      pageStatus = args.getString(Constants.PAGE_STATUS, "");
       orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
     }
     setUpRecyclerView();
     addSearchListener();
-
+    if (pageStatus.equals(Constants.EDIT)) {
+      showFinalizeOrderDialog();
+    }
     return view;
   }
 
@@ -273,7 +275,7 @@ public class OrderFragment extends BaseFragment {
     Bundle bundle = new Bundle();
     bundle.putLong(Constants.ORDER_ID, orderId);
     bundle.putLong(Constants.ORDER_STATUS, orderStatus);
-    bundle.putSerializable(Constants.REJECTED_LIST,rejectedGoodsList);
+    bundle.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
     finalizeOrderDialogFragment.setArguments(bundle);
 
     finalizeOrderDialogFragment.show(ft, "order");
