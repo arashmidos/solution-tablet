@@ -245,7 +245,10 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
     Cursor cursor;
     if (Empty.isNotEmpty(constraint)) {
-      selection = selection + " and ( " +
+      if (!selection.equals("")) {
+        selection = selection + " and ";
+      }
+      selection = selection + " ( " +
           "c." + Customer.COL_FULL_NAME + " like ? or " + "c." + Customer.COL_ADDRESS
           + " like ? or " +
           "c." + Customer.COL_PHONE_NUMBER + " like ? or c." + Customer.COL_CELL_PHONE

@@ -11,26 +11,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SystemCustomerAdapter;
-
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-
+/**
+ * @author Shakib
+ */
 public class CustomerSearchFragment extends BaseFragment {
 
-  @BindView(R.id.search_img) ImageView searchImg;
-  @BindView(R.id.search_edt) EditText searchEdt;
-  @BindView(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.search_img)
+  ImageView searchImg;
+  @BindView(R.id.search_edt)
+  EditText searchEdt;
+  @BindView(R.id.recycler_view)
+  RecyclerView recyclerView;
 
   private CustomerService customerService;
   private MainActivity activity;
@@ -42,13 +44,12 @@ public class CustomerSearchFragment extends BaseFragment {
   }
 
   public static CustomerSearchFragment newInstance() {
-    CustomerSearchFragment fragment = new CustomerSearchFragment();
-    return fragment;
+    return new CustomerSearchFragment();
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_customer_search, container, false);
     ButterKnife.bind(this, view);
@@ -87,21 +88,24 @@ public class CustomerSearchFragment extends BaseFragment {
 
       @Override
       public void afterTextChanged(Editable s) {
-        //TODO:PLEASE ADD SEARCH LOGIC
-//        new PathDetailFragment.RefreshAsyncTask().execute(s.toString());
+        List<CustomerListModel> customerList = adapter.getFilteredData(s.toString());
+
+        adapter.update(customerList);
       }
     });
   }
 
   private List<CustomerListModel> getCustomersList() {
-    return customerService.getFilteredCustomerList(null,"");
+    return customerService.getFilteredCustomerList(null, "");
   }
 
-  @Override public int getFragmentId() {
+  @Override
+  public int getFragmentId() {
     return MainActivity.CUSTOMER_SEARCH_FRAGMENT;
   }
 
-  @OnClick({R.id.search_img, R.id.back_img}) public void onClick(View view) {
+  @OnClick({R.id.search_img, R.id.back_img})
+  public void onClick(View view) {
     switch (view.getId()) {
       case R.id.search_img:
         if (isClose) {
