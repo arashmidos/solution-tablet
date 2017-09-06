@@ -148,6 +148,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
               .inflate(R.layout.image_fullscreen_layout, null);
           Glide.with(context)
               .load(MediaUtil.getGoodImage(good.getCode()))
+              .error(R.drawable.goods_default)
               .into((ImageView) view.findViewById(R.id.good_image));
           settingsDialog.setContentView(view);
           settingsDialog.show();

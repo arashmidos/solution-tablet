@@ -110,7 +110,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
       case R.id.close:
         getDialog().dismiss();
         if (pageStatus.equals(Constants.VIEW)) {
-          activity.navigateToFragment(MainActivity.ORDER_FRAGMENT_ID);
+          activity.navigateToFragment(OrderFragment.class.getSimpleName());
         }
         break;
       case R.id.submit_btn:

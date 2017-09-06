@@ -205,11 +205,10 @@ public class NewOrderInfoFragment extends BaseFragment {
             saveOrder(statusId);
           }
           if (visitId != 0l) {
-            mainActivity.navigateToFragment(MainActivity.ORDER_FRAGMENT_ID);
+            mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
           } else {
-            mainActivity.navigateToFragment(MainActivity.REPORT_FRAGMENT);
+            mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
           }
-
         });
   }
 

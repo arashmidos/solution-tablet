@@ -78,8 +78,6 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
         case 3://Goods
           Bundle args = new Bundle();
           args.putBoolean(Constants.READ_ONLY, true);
-          //TODO:check
-          args.putString(Constants.PAGE_STATUS, Constants.NEW);
           context.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
           break;
         case 4: //Map

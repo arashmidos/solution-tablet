@@ -96,10 +96,10 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
   public static final int SYSTEM_CUSTOMER_FRAGMENT = 29;
-  private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   public static final int NEW_CUSTOMER_FRAGMENT_ID = 30;
   public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
   public static final int CUSTOMER_INFO_FRAGMENT = 32;
+  private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.drawer_layout)
@@ -114,6 +114,7 @@ public class MainActivity extends BaseFragmentActivity {
   AppBarLayout appBar;
   @BindView(R.id.container)
   FrameLayout container;
+
   private BaseFragment currentFragment;
 
   private LocationUpdatesService gpsRecieverService = null;
@@ -470,9 +471,9 @@ public class MainActivity extends BaseFragmentActivity {
     manager.popBackStack();
   }
 
-  public void navigateToFragment(int fragmentId) {
+  public void navigateToFragment(String fragmentName) {
     FragmentManager fm = getSupportFragmentManager();
-    fm.popBackStack(fragmentId, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    fm.popBackStack(fragmentName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
   }
 
   private void commitFragment(String fragmentTag, BaseFragment fragment, boolean addToBackStack) {

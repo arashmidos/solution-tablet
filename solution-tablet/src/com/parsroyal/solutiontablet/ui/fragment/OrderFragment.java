@@ -117,7 +117,8 @@ public class OrderFragment extends BaseFragment {
     }
     setUpRecyclerView();
     addSearchListener();
-    if (pageStatus.equals(Constants.EDIT) || pageStatus.equals(Constants.VIEW)) {
+    if (!TextUtils.isEmpty(pageStatus) && (pageStatus.equals(Constants.EDIT) || pageStatus
+        .equals(Constants.VIEW))) {
       showFinalizeOrderDialog();
     }
     return view;
