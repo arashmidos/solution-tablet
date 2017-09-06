@@ -100,9 +100,10 @@ public class PathDetailFragment extends BaseFragment implements
     mainActivity = (MainActivity) getActivity();
     customerService = new CustomerServiceImpl(mainActivity);
     visitService = new VisitServiceImpl(mainActivity);
-    SupportMapFragment mapFragment =
+    //TODO MAP
+    /*SupportMapFragment mapFragment =
         (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-    new OnMapAndViewReadyListener(mapFragment, this);
+    new OnMapAndViewReadyListener(mapFragment, this);*/
 
     setData();
     onSearchTextChanged();

@@ -7,7 +7,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
 import android.util.Log;
@@ -352,7 +351,7 @@ public class CustomerInfoFragment extends BaseFragment {
     }
   }
 
-  private void finishVisiting() {
+  public void finishVisiting() {
     try {
       List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
       if (detailList.size() == 0) {
@@ -548,8 +547,6 @@ public class CustomerInfoFragment extends BaseFragment {
       openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
     } else if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
       goToRegisterPaymentFragment();
-    } else if (event.getStatusCode() == StatusCodes.ACTION_EXIT_VISIT) {
-      finishVisiting();
     }
   }
 

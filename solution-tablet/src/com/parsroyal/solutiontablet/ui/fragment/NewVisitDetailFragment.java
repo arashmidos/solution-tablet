@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,6 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 
-
 public class NewVisitDetailFragment extends BaseFragment {
 
   @BindView(R.id.tabs)
@@ -25,6 +25,10 @@ public class NewVisitDetailFragment extends BaseFragment {
 
   private CustomerDetailViewPagerAdapter viewPagerAdapter;
   private CustomerServiceImpl customerService;
+  private CustomerInfoFragment customerInfoFragment;
+  private FragmentActivity mainActivity;
+  private NewOrderListFragment orderListFragment;
+  private PaymentListFragment paymentListFragment;
 
   public Customer getCustomer() {
     return customer;
@@ -59,10 +63,12 @@ public class NewVisitDetailFragment extends BaseFragment {
     ButterKnife.bind(this, view);
     Bundle args = getArguments();
     customerId = args.getLong(Constants.CUSTOMER_ID);
-    this.customerService = new CustomerServiceImpl(getActivity());
+    mainActivity = getActivity();
+    customerService = new CustomerServiceImpl(mainActivity);
     customer = customerService.getCustomerById(customerId);
     visitId = args.getLong(Constants.VISIT_ID);
     tabs.setupWithViewPager(viewpager);
+    initFragments();
     setUpViewPager();
     viewpager.setCurrentItem(viewPagerAdapter.getCount());
     viewpager.setOffscreenPageLimit(viewPagerAdapter.getCount());
@@ -70,26 +76,28 @@ public class NewVisitDetailFragment extends BaseFragment {
     return view;
   }
 
-  @Override
-  public void onResume() {
-    super.onResume();
+  private void initFragments() {
+    paymentListFragment = PaymentListFragment.newInstance(getArguments());
+    orderListFragment = NewOrderListFragment.newInstance(this);
+    customerInfoFragment = CustomerInfoFragment.newInstance(getArguments());
   }
 
   private void setUpViewPager() {
-    viewPagerAdapter = new CustomerDetailViewPagerAdapter(
-        getActivity().getSupportFragmentManager());
+    viewPagerAdapter = new CustomerDetailViewPagerAdapter(mainActivity.getSupportFragmentManager());
 //    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.images));
 //    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
-    viewPagerAdapter
-        .add(PaymentListFragment.newInstance(getArguments()), getString(R.string.payments));
-    viewPagerAdapter.add(NewOrderListFragment.newInstance(this), getString(R.string.orders));
-    viewPagerAdapter.add(CustomerInfoFragment.newInstance(getArguments()),
-        getString(R.string.customer_information));
+    viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
+    viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
+    viewPagerAdapter.add(customerInfoFragment, getString(R.string.customer_information));
     viewpager.setAdapter(viewPagerAdapter);
   }
 
   @Override
   public int getFragmentId() {
     return MainActivity.VISIT_DETAIL_FRAGMENT_ID;
+  }
+
+  public void exit() {
+    customerInfoFragment.finishVisiting();
   }
 }

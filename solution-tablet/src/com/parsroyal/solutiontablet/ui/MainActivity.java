@@ -36,7 +36,6 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
-import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
@@ -115,6 +114,7 @@ public class MainActivity extends BaseFragmentActivity {
   AppBarLayout appBar;
   @BindView(R.id.container)
   FrameLayout container;
+  private BaseFragment currentFragment;
 
   private LocationUpdatesService gpsRecieverService = null;
   private DataTransferService dataTransferService;
@@ -485,19 +485,19 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   public void changeFragment(int fragmentId, boolean addToBackStack) {
-    BaseFragment fragment = findFragment(fragmentId, new Bundle());
-    if (Empty.isNotEmpty(fragment) && !fragment.isVisible()) {
-      commitFragment(fragment.getFragmentTag(), fragment, addToBackStack);
+    currentFragment = findFragment(fragmentId, new Bundle());
+    if (Empty.isNotEmpty(currentFragment) && !currentFragment.isVisible()) {
+      commitFragment(currentFragment.getFragmentTag(), currentFragment, addToBackStack);
     }
   }
 
   public void changeFragment(int fragmentId, Bundle args, boolean addToBackStack) {
-    BaseFragment fragment = findFragment(fragmentId, args);
-    if (Empty.isNotEmpty(fragment) && !fragment.isVisible()) {
+    currentFragment = findFragment(fragmentId, args);
+    if (Empty.isNotEmpty(currentFragment) && !currentFragment.isVisible()) {
       if (Empty.isNotEmpty(args)) {
-        fragment.setArguments(args);
+        currentFragment.setArguments(args);
       }
-      commitFragment(fragment.getFragmentTag(), fragment, addToBackStack);
+      commitFragment(currentFragment.getFragmentTag(), currentFragment, addToBackStack);
     }
   }
 
@@ -617,9 +617,9 @@ public class MainActivity extends BaseFragmentActivity {
       }
     } else {
       Fragment visitFragment = getSupportFragmentManager()
-          .findFragmentByTag(NewVisitDetailFragment.class.getSimpleName());//TODO ARASH
+          .findFragmentByTag(NewVisitDetailFragment.class.getSimpleName());
       if (visitFragment != null && visitFragment.isVisible()) {
-        EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_EXIT_VISIT));
+        ((NewVisitDetailFragment) currentFragment).exit();
       } else {
         onBackPressed();
       }
