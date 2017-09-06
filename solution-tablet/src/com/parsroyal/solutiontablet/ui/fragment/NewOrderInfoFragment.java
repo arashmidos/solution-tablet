@@ -80,6 +80,7 @@ public class NewOrderInfoFragment extends BaseFragment {
   private BaseInfoService baseInfoService;
   private SettingService settingService;
   private VisitService visitService;
+  private String pageStatus;
 
   public NewOrderInfoFragment() {
     // Required empty public constructor
@@ -105,6 +106,7 @@ public class NewOrderInfoFragment extends BaseFragment {
     Bundle args = getArguments();
 
     orderId = args.getLong(Constants.ORDER_ID, -1);
+    pageStatus = args.getString(Constants.PAGE_STATUS);
     order = saleOrderService.findOrderDtoById(orderId);
     customer = customerService.getCustomerByBackendId(order.getCustomerBackendId());
     orderStatus = order.getStatus();
@@ -121,8 +123,10 @@ public class NewOrderInfoFragment extends BaseFragment {
     } else {
       Long paymentTypeBackendId = order.getPaymentTypeBackendId();
       if (Empty.isNotEmpty(paymentTypeBackendId) && paymentTypeBackendId != 0L) {
-        selectedItem = baseInfoService.getBaseInfoByBackendId(BaseInfoTypes.PAYMENT_TYPE.getId(),paymentTypeBackendId);
+        selectedItem = baseInfoService
+            .getBaseInfoByBackendId(BaseInfoTypes.PAYMENT_TYPE.getId(), paymentTypeBackendId);
         paymentMethodTv.setText(selectedItem.getLabel());
+        setPaymentMethod(selectedItem);
       }
     }
 
@@ -147,8 +151,14 @@ public class NewOrderInfoFragment extends BaseFragment {
 
     if (isRejected()) {
       paymentMethodTv.setText(R.string.reject_reason_title);
+    } else if (selectedItem != null) {
+      setPaymentMethod(selectedItem);
+
     } else {
-      paymentMethodTv.setText(R.string.payment_type);
+      paymentMethodTv.setText(R.string.payment_type_spinner_hint);
+    }
+    if (pageStatus.equals(Constants.VIEW)) {
+      submitOrderBtn.setText(getString(R.string.close));
     }
   }
 
@@ -161,7 +171,9 @@ public class NewOrderInfoFragment extends BaseFragment {
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.payment_method_tv:
-        showPaymentMethodDialog();
+        if (!pageStatus.equals(Constants.VIEW)) {
+          showPaymentMethodDialog();
+        }
         break;
       case R.id.submit_order_btn:
         order = saleOrderService.findOrderDtoById(orderId);
@@ -189,8 +201,15 @@ public class NewOrderInfoFragment extends BaseFragment {
     DialogUtil.showConfirmDialog(mainActivity, title,
         getString(R.string.message_are_you_sure), (dialog, which) ->
         {
-          saveOrder(statusId);
-          mainActivity.navigateToFragment(MainActivity.ORDER_FRAGMENT_ID);
+          if (!pageStatus.equals(Constants.VIEW)) {
+            saveOrder(statusId);
+          }
+          if (visitId != 0l) {
+            mainActivity.navigateToFragment(MainActivity.ORDER_FRAGMENT_ID);
+          } else {
+            mainActivity.navigateToFragment(MainActivity.REPORT_FRAGMENT);
+          }
+
         });
   }
 
@@ -213,10 +232,11 @@ public class NewOrderInfoFragment extends BaseFragment {
             Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
       }
       long typeId = saleOrderService.saveOrder(order);
-
-      VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, getDetailType(),
-          typeId);
-      visitService.saveVisitDetail(visitDetail);
+      if (visitId != 0l) {
+        VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, getDetailType(),
+            typeId);
+        visitService.saveVisitDetail(visitDetail);
+      }
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, ex);

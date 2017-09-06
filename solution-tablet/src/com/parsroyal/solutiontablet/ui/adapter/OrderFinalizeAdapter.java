@@ -49,14 +49,16 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
   private final FinalizeOrderDialogFragment parent;
   private LayoutInflater inflater;
   private MainActivity mainActivity;
+  private String pageStatus;
   private List<SaleOrderItemDto> orderItems;
 
   public OrderFinalizeAdapter(FinalizeOrderDialogFragment finalizeOrderDialogFragment,
       MainActivity mainActivity, SaleOrderDto order,
-      GoodsDtoList rejectedGoodsList) {
+      GoodsDtoList rejectedGoodsList, String pageStatus) {
     this.parent = finalizeOrderDialogFragment;
     this.mainActivity = mainActivity;
     this.order = order;
+    this.pageStatus = pageStatus;
     this.orderItems = order.getOrderItems();
     inflater = LayoutInflater.from(mainActivity);
     this.rejectedGoodsList = rejectedGoodsList;
@@ -107,6 +109,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
     TextView unit1TitleTv;
     @BindView(R.id.unit2_title_tv)
     TextView unit2TitleTv;
+
     private SaleOrderItemDto item;
     private int position;
     private Goods goods;
@@ -135,6 +138,10 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       this.item = item;
       this.goods = item.getGoods();
       this.position = position;
+      if (pageStatus.equals(Constants.VIEW)) {
+        editImg.setVisibility(View.GONE);
+        deleteImg.setVisibility(View.GONE);
+      }
     }
 
     @OnClick({R.id.edit_img, R.id.delete_img})

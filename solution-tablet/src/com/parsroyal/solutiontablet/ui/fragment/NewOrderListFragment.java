@@ -78,7 +78,7 @@ public class NewOrderListFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new OrderAdapter(mainActivity, getOrderList(), parent == null, visitId,saleType);
+    adapter = new OrderAdapter(mainActivity, getOrderList(), parent == null, visitId, saleType);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);

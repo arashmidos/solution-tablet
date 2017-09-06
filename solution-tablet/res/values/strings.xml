@@ -292,6 +292,7 @@
   <string name="amount_x">"مبلغ %1$s"</string>
   <string name="description_x">"توضیحات %1$s"</string>
   <string name="payment_type">نوع پرداخت:</string>
+  <string name="payment_type_spinner_hint">نوع پرداخت</string>
   <string name="reject_reason_title">علت مرجوعی:</string>
   <string name="set_your_location">انتخاب مکان</string>
   <string name="getting_location">در حال آدرس یابی</string>
@@ -515,5 +516,6 @@
   <string name="message_customer_class_is_required">وارد کردن کلاس مشتری اجباریست.</string>
   <string name="message_activity_type_is_required">وارد کردن نوع فعالیت اجباریست.</string>
   <string name="error_no_visitline">هیچ خط ویزیتی یافت نشد. به قسمت دریافت اطلاعات مراجعه کنید</string>
+  <string name="payment_detail">جزییات پرداخت</string>
 
 </resources>

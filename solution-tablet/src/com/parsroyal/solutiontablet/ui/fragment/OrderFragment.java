@@ -117,7 +117,7 @@ public class OrderFragment extends BaseFragment {
     }
     setUpRecyclerView();
     addSearchListener();
-    if (pageStatus.equals(Constants.EDIT)) {
+    if (pageStatus.equals(Constants.EDIT) || pageStatus.equals(Constants.VIEW)) {
       showFinalizeOrderDialog();
     }
     return view;
@@ -213,6 +213,7 @@ public class OrderFragment extends BaseFragment {
     Bundle args = new Bundle();
     args.putLong(Constants.ORDER_ID, orderId);
     args.putString(Constants.SALE_TYPE, saleType);
+    args.putString(Constants.PAGE_STATUS, pageStatus);
     args.putLong(Constants.VISIT_ID, visitId);
     args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
 
@@ -275,6 +276,7 @@ public class OrderFragment extends BaseFragment {
     Bundle bundle = new Bundle();
     bundle.putLong(Constants.ORDER_ID, orderId);
     bundle.putLong(Constants.ORDER_STATUS, orderStatus);
+    bundle.putString(Constants.PAGE_STATUS, pageStatus);
     bundle.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
     finalizeOrderDialogFragment.setArguments(bundle);
 

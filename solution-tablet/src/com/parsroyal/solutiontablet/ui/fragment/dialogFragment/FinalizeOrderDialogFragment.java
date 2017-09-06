@@ -7,13 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
@@ -33,6 +33,8 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   TextView totalAmountTitle;
   @BindView(R.id.total_amount_tv)
   TextView totalAmountTv;
+  @BindView(R.id.submit_btn)
+  Button submitBtn;
 
   private OrderFinalizeAdapter adapter;
   private MainActivity activity;
@@ -41,6 +43,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   private OrderFragment orderFragment;
   private long orderId;
   private long orderStatus;
+  private String pageStatus;
   private GoodsDtoList rejectedGoodsList;
 
   public FinalizeOrderDialogFragment() {
@@ -70,6 +73,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     Bundle arguments = getArguments();
     orderId = arguments.getLong(Constants.ORDER_ID);
     orderStatus = arguments.getLong(Constants.ORDER_STATUS);
+    pageStatus = arguments.getString(Constants.PAGE_STATUS);
     order = saleOrderService.findOrderDtoById(orderId);
     rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
 
@@ -81,6 +85,9 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   private void setData() {
     totalAmountTv.setText(NumberUtil.getCommaSeparated(order.getAmount() / 1000) + " " +
         getString(R.string.common_irr_currency));
+    if (pageStatus.equals(Constants.VIEW)) {
+      submitBtn.setText(R.string.payment_detail);
+    }
   }
 
   public void updateList() {
@@ -91,7 +98,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new OrderFinalizeAdapter(this, activity, order, rejectedGoodsList);
+    adapter = new OrderFinalizeAdapter(this, activity, order, rejectedGoodsList, pageStatus);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
@@ -102,6 +109,9 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     switch (view.getId()) {
       case R.id.close:
         getDialog().dismiss();
+        if (pageStatus.equals(Constants.VIEW)) {
+          activity.navigateToFragment(MainActivity.ORDER_FRAGMENT_ID);
+        }
         break;
       case R.id.submit_btn:
         orderFragment.goToOrderInfoFragment();

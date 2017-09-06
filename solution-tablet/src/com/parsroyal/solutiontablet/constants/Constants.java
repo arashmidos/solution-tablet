@@ -16,8 +16,9 @@ public class Constants {
   public static final String CUSTOMER_ID = "customerId";
   public static final String QUESTIONAIRE_ID = "qnId";
   public static final String PAGE_STATUS = "pageStatus";
-  public static final String NEW= "view";
+  public static final String NEW= "new";
   public static final String EDIT= "edit";
+  public static final String VIEW= "view";
   public static final String GOODS_BACKEND_ID = "goodsBackendId";
   public static final String GOODS_INVOICE_ID = "goodsInvoiceId";
   public static final String GOODS_SALE_RATE = "goodsSaleRate";

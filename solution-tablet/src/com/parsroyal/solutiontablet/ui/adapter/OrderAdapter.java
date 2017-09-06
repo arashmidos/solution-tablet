@@ -35,13 +35,13 @@ public class OrderAdapter extends Adapter<ViewHolder> {
   private boolean isFromOrder;
   private MainActivity mainActivity;
   private List<SaleOrderListModel> orders;
-  private long visitId;
+  private Long visitId;
   private String saleType;
 
   public OrderAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromOrder,
       Long visitId, String saleType) {
     this.context = context;
-    this.visitId = visitId;
+    this.visitId = visitId == null ? 0 : visitId;
     this.orders = orders;
     this.saleType = saleType;
     this.mainActivity = (MainActivity) context;
@@ -134,9 +134,20 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           args.putString(Constants.SALE_TYPE, saleType);
           args.putLong(Constants.VISIT_ID, visitId);
           args.putBoolean(Constants.READ_ONLY, false);
-          args.putString(Constants.PAGE_STATUS, Constants.EDIT);
+          setPageStatus(args);
           mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
           break;
+      }
+    }
+
+    private void setPageStatus(Bundle args) {
+      if (SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT
+          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.CANCELED
+          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT_INVOICE
+          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.REJECTED_SENT) {
+        args.putString(Constants.PAGE_STATUS, Constants.VIEW);
+      } else {
+        args.putString(Constants.PAGE_STATUS, Constants.EDIT);
       }
     }
   }

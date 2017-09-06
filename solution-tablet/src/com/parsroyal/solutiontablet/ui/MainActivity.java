@@ -58,13 +58,13 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.NewVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.ReportFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesListFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NewVisitDetailFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -100,6 +100,7 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.drawer_layout)

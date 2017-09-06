@@ -37,7 +37,7 @@ public enum SaleOrderStatus {
     }
   }
 
-  private static SaleOrderStatus findById(Long statusId) {
+  public static SaleOrderStatus findById(Long statusId) {
     for (SaleOrderStatus saleOrderStatus : SaleOrderStatus.values()) {
       if (saleOrderStatus.getId().equals(statusId)) {
         return saleOrderStatus;
