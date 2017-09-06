@@ -77,9 +77,10 @@ public class NewVisitDetailFragment extends BaseFragment {
   }
 
   private void initFragments() {
-    paymentListFragment = PaymentListFragment.newInstance(getArguments());
-    orderListFragment = NewOrderListFragment.newInstance(this);
-    customerInfoFragment = CustomerInfoFragment.newInstance(getArguments());
+    Bundle arguments = getArguments();
+    paymentListFragment = PaymentListFragment.newInstance(arguments);
+    orderListFragment = NewOrderListFragment.newInstance(arguments,this);
+    customerInfoFragment = CustomerInfoFragment.newInstance(arguments);
   }
 
   private void setUpViewPager() {

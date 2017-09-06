@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
+import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.List;
 
 public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHolder> {
 
+  private final BaseInfoServiceImpl baseInfoService;
   private LayoutInflater inflater;
   private MainActivity context;
   private List<FeatureList> features;
@@ -34,6 +36,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     this.context = (MainActivity) context;
     this.features = features;
     inflater = LayoutInflater.from(context);
+    baseInfoService = new BaseInfoServiceImpl(context);
   }
 
   @Override
@@ -54,6 +57,10 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     holder.featureImg.setImageResource(feature.getImageId());
     holder.featureTitleTv.setText(feature.getTitle());
     holder.featureLay.setOnClickListener(v -> {
+      if (baseInfoService.getAllProvinces().size() == 0) {
+        ToastUtil.toastError(context, R.string.error_message_no_data);
+        return;
+      }
       switch (position) {
         case 0://Paths
           if (features.get(0).getBadger() == 0) {
@@ -71,6 +78,8 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
         case 3://Goods
           Bundle args = new Bundle();
           args.putBoolean(Constants.READ_ONLY, true);
+          //TODO:check
+          args.putString(Constants.PAGE_STATUS, Constants.NEW);
           context.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
           break;
         case 4: //Map

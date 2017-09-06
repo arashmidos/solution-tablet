@@ -18,6 +18,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SaleType;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.response.CompanyInfoResponse;
 import com.parsroyal.solutiontablet.data.response.Response;
 import com.parsroyal.solutiontablet.data.response.SettingResponse;
@@ -28,6 +30,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -228,7 +231,8 @@ public class LoginFragment extends BaseFragment implements TextWatcher {
   }
 
   @Subscribe
-  public void getMessage(Response response) {
+  public void getMessage(Object response) {
+    dismissProgressDialog();
     if (response instanceof CompanyInfoResponse) {
 
       CompanyInfoResponse companyInfoResponse = (CompanyInfoResponse) response;
@@ -258,6 +262,12 @@ public class LoginFragment extends BaseFragment implements TextWatcher {
       Intent intent = new Intent(getActivity(), MainActivity.class);
       startActivity(intent);
       getActivity().finish();
+    } else if (response instanceof ErrorEvent) {
+      if (((ErrorEvent) response).getStatusCode() == StatusCodes.NETWORK_ERROR) {
+        ToastUtil.toastError(getActivity(),R.string.error_no_network);
+      }else{
+        ToastUtil.toastError(getActivity(),R.string.error_invalid_login_info);
+      }
     }
   }
 

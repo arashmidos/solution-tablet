@@ -30,6 +30,7 @@ public class RestAuthenticateServiceImpl {
 
   public static void getCompanyInfo(final Context context, String companyKey) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
+      EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
       return;
     }
 

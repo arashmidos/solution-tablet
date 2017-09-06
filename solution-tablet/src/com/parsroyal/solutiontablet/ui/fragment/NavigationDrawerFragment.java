@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +17,12 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.LoginActivity;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
 public class NavigationDrawerFragment extends BaseFragment {
@@ -42,6 +43,8 @@ public class NavigationDrawerFragment extends BaseFragment {
   private boolean isLogOutMode = false;
   private MainActivity mainActivity;
   private SettingServiceImpl settingService;
+  private BaseInfoServiceImpl baseInfoService;
+  private boolean hasData = true;
 
   public NavigationDrawerFragment() {
     // Required empty public constructor
@@ -64,6 +67,8 @@ public class NavigationDrawerFragment extends BaseFragment {
     footerLogOut.setText(String.format(getString(R.string.name_version), BuildConfig.VERSION_NAME));
     String fullName = settingService.getSettingValue(ApplicationKeys.USER_FULL_NAME);
     userNameTv.setText(Empty.isNotEmpty(fullName) ? fullName : "");
+    baseInfoService = new BaseInfoServiceImpl(mainActivity);
+
     return view;
   }
 
@@ -72,6 +77,8 @@ public class NavigationDrawerFragment extends BaseFragment {
       R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay})
   public void onClick(View view) {
     boolean closeDrawer = true;
+    hasData = baseInfoService.getAllProvinces().size() != 0;
+
     switch (view.getId()) {
       case R.id.user_name_tv:
         changeMode();
@@ -81,24 +88,41 @@ public class NavigationDrawerFragment extends BaseFragment {
         mainActivity.changeFragment(MainActivity.FEATURE_FRAGMENT_ID, true);
         break;
       case R.id.today_paths_lay:
+        if (!hasData) {
+          ToastUtil.toastError(mainActivity, R.string.error_message_no_data);
+          break;
+        }
         mainActivity.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
         break;
       case R.id.customers_lay:
+        if (!hasData) {
+          ToastUtil.toastError(mainActivity, R.string.error_message_no_data);
+          break;
+        }
         mainActivity.changeFragment(MainActivity.CUSTOMER_FRAGMENT, true);
         break;
       case R.id.goods_lay:
+        if (!hasData) {
+          ToastUtil.toastError(mainActivity, R.string.error_message_no_data);
+          break;
+        }
         Bundle args = new Bundle();
         args.putBoolean(Constants.READ_ONLY, true);
         mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
         break;
       case R.id.reports_lay:
+        if (!hasData) {
+          ToastUtil.toastError(mainActivity, R.string.error_message_no_data);
+          break;
+        }
         mainActivity.changeFragment(MainActivity.REPORT_FRAGMENT, true);
         break;
       case R.id.map_lay:
         Toast.makeText(getActivity(), R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
         break;
       case R.id.setting_lay:
-        Toast.makeText(getActivity(), R.string.error_message_there_is_no_settings, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.error_message_there_is_no_settings,
+            Toast.LENGTH_SHORT).show();
         break;
       case R.id.about_us:
         mainActivity.changeFragment(MainActivity.ABOUT_US_FRAGMENT_ID, true);

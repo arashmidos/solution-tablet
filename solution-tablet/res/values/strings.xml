@@ -517,5 +517,7 @@
   <string name="not_implemented_yet">در این نسخه فعال نیست</string>
   <string name="error_message_there_is_no_settings">هیچ تنظیم قابل نمایشی وجود ندارد</string>
   <string name="payment_detail">جزییات پرداخت</string>
+  <string name="error_invalid_login_info">اطلاعات وارد شده صحیح نیست</string>
+  <string name="error_message_no_data">اطلاعات لازم یافت نشد. به قسمت دریافت اطلاعات مراجعه کنید</string>
 
 </resources>
