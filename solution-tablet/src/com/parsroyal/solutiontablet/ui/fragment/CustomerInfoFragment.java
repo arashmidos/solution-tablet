@@ -239,7 +239,7 @@ public class CustomerInfoFragment extends BaseFragment {
         args.putString(Constants.SALE_TYPE, saleType);
         args.putLong(Constants.VISIT_ID, visitId);
         args.putBoolean(Constants.READ_ONLY, false);
-        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
+        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
       }
 
     } else {
@@ -258,7 +258,7 @@ public class CustomerInfoFragment extends BaseFragment {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);
-    mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, false);
+    mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true);
   }
 
   private void invokeGetRejectedData() {

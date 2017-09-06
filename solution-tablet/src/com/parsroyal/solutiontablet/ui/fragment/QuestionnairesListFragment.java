@@ -93,9 +93,9 @@ public class QuestionnairesListFragment extends
       args.putLong(Constants.CUSTOMER_ID, customerId);
       args.putInt(Constants.PARENT, OldMainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID);
       if (visitId == -1 || parent == OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID) {
-        mainActivity.changeFragment(OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+        mainActivity.changeFragment(OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID, args, true);
       } else {
-        mainActivity.changeFragment(OldMainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+        mainActivity.changeFragment(OldMainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID, args, true);
       }
     });
   }
