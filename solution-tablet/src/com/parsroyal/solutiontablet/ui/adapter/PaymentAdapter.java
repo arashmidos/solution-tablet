@@ -76,7 +76,7 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
     String number = String.format(Locale.US, "%,d %s", amountValue / 1000, context.getString(
         R.string.common_irr_currency));
     holder.paymentTv.setText(number);
-    //TODO:add bank and branch
+    //TODO: arash add bank and branch
 //    holder.bankDetailTv.setText(payment.get);
     holder.mainLay.setOnClickListener(v -> goToRegisterPaymentFragment(payment));
   }

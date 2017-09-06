@@ -64,7 +64,7 @@ import org.greenrobot.eventbus.Subscribe;
 /**
  * @author Shakib
  */
-public class CustomerInfoFragment extends Fragment {
+public class CustomerInfoFragment extends BaseFragment {
 
   @BindView(R.id.store_tv)
   TextView storeTv;
@@ -435,25 +435,13 @@ public class CustomerInfoFragment extends Fragment {
     }
   }
 
-  private void showDialogForEmptyLocation() {//TODO Shakib old style
-    Builder builder = new Builder(getActivity());
-    builder.setTitle(getString(R.string.visit_location));
-    builder.setMessage(getString(R.string.visit_empty_location_message));
-    builder.setPositiveButton(getString(R.string.visit_empty_location_dialog_try_again),
-        (dialogInterface, i) ->
-        {
-          dialogInterface.dismiss();
-          tryFindingLocation();
-        });
-
-    builder.setNegativeButton(getString(R.string.visit_empty_location_dialog_finish),
-        (dialogInterface, i) ->
-        {
-          dialogInterface.dismiss();
-          doFinishVisiting();
-        });
-
-    builder.create().show();
+  private void showDialogForEmptyLocation() {
+    DialogUtil.showCustomDialog(mainActivity, getString(R.string.visit_location),
+        getString(R.string.visit_empty_location_message),
+        getString(R.string.visit_empty_location_dialog_try_again),
+        (dialog, which) -> tryFindingLocation(),
+        getString(R.string.visit_empty_location_dialog_finish),
+        (dialog, which) -> doFinishVisiting(), Constants.ICON_MESSAGE);
   }
 
   private void tryFindingLocation() {
@@ -563,5 +551,10 @@ public class CustomerInfoFragment extends Fragment {
     } else if (event.getStatusCode() == StatusCodes.ACTION_EXIT_VISIT) {
       finishVisiting();
     }
+  }
+
+  @Override
+  public int getFragmentId() {
+    return MainActivity.CUSTOMER_INFO_FRAGMENT;
   }
 }

@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.ui;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,7 +20,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -98,7 +96,11 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int GOODS_LIST_FRAGMENT_ID = 16;
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
+  public static final int SYSTEM_CUSTOMER_FRAGMENT = 29;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+  public static final int NEW_CUSTOMER_FRAGMENT_ID = 30;
+  public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
+  public static final int CUSTOMER_INFO_FRAGMENT = 32;
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.drawer_layout)
@@ -190,7 +192,7 @@ public class MainActivity extends BaseFragmentActivity {
       ToastUtil.toastSuccess(this, R.string.message_setting_saved_successfully);
       if (!checkPermissions()) {
         requestPermissions();
-      }else {
+      } else {
         startGpsService();
       }
       new TrackerAlarmReceiver().setAlarm(this);
@@ -351,18 +353,11 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void showGpsOffDialog() {
-    //TODO: shakib, need new style
-    Dialog dialog = new AlertDialog.Builder(this)
-        .setTitle(getString(R.string.error_gps_is_disabled))
-
-        .setNegativeButton(getString(R.string.no), (dialog1, which) -> finish())
-        .setPositiveButton(getString(R.string.yes), (dialog12, which) ->
-        {
+    DialogUtil.showCustomDialog(this, getString(R.string.warning),
+        getString(R.string.error_gps_is_disabled), "", (dialog, which) -> {
           Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
           startActivity(intent);
-        })
-        .create();
-    dialog.show();
+        }, "", (dialog, which) -> finish(), Constants.ICON_MESSAGE);
   }
 
   private void logUser() {

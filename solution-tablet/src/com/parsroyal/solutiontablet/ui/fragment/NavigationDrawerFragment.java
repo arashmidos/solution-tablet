@@ -24,7 +24,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends BaseFragment {
 
   @BindView(R.id.body)
   LinearLayout body;
@@ -92,14 +92,13 @@ public class NavigationDrawerFragment extends Fragment {
         mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
         break;
       case R.id.reports_lay:
-        Toast.makeText(getActivity(), "report", Toast.LENGTH_SHORT).show();//TODO: update
+        mainActivity.changeFragment(MainActivity.REPORT_FRAGMENT, true);
         break;
       case R.id.map_lay:
-        Toast.makeText(getActivity(), "map", Toast.LENGTH_SHORT).show(); //TODO: update
+        Toast.makeText(getActivity(), R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
         break;
       case R.id.setting_lay:
-        Toast.makeText(getActivity(), "There is no setting!", Toast.LENGTH_SHORT).show();
-//        mainActivity.changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);
+        Toast.makeText(getActivity(), R.string.error_message_there_is_no_settings, Toast.LENGTH_SHORT).show();
         break;
       case R.id.about_us:
         mainActivity.changeFragment(MainActivity.ABOUT_US_FRAGMENT_ID, true);
@@ -147,5 +146,10 @@ public class NavigationDrawerFragment extends Fragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+  }
+
+  @Override
+  public int getFragmentId() {
+    return MainActivity.NAVIGATION_DRAWER_FRAGMENT;
   }
 }

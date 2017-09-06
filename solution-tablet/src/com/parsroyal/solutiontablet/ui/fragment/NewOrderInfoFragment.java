@@ -190,7 +190,7 @@ public class NewOrderInfoFragment extends BaseFragment {
         getString(R.string.message_are_you_sure), (dialog, which) ->
         {
           saveOrder(statusId);
-          mainActivity.navigateToFragment(MainActivity.ORDER_FRAGMENT_ID);
+          mainActivity.navigateToFragment(MainActivity.GOODS_LIST_FRAGMENT_ID);
         });
   }
 

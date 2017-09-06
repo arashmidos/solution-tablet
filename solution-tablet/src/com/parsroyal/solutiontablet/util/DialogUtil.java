@@ -60,7 +60,7 @@ public class DialogUtil {
       alertDialog.dismiss();
     });
   }
-
+//Todo shakib: Change style
   /**
    * Show an Alert Dialog with Ok button
    */
