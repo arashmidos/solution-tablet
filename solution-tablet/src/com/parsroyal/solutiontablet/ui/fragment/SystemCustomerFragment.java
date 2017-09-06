@@ -33,7 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-public class SystemCustomerFragment extends Fragment {
+public class SystemCustomerFragment extends BaseFragment {
 
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
@@ -249,6 +249,11 @@ public class SystemCustomerFragment extends Fragment {
             .compare(item2.getTitle(), item1.getTitle()));
         break;
     }
+  }
+
+  @Override
+  public int getFragmentId() {
+    return MainActivity.SYSTEM_CUSTOMER_FRAGMENT;
   }
 
   private class RefreshAsyncTask extends AsyncTask<String, Void, List<CustomerListModel>> {

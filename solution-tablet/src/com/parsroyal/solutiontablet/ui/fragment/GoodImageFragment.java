@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.parsroyal.solutiontablet.R;
 
 
-public class GoodImageFragment extends Fragment {
+public class GoodImageFragment extends BaseFragment {
 
   @BindView(R.id.good)
   ImageView goodImg;
@@ -41,5 +41,10 @@ public class GoodImageFragment extends Fragment {
         .error(R.drawable.goods_default)
         .into(goodImg);
     return view;
+  }
+
+  @Override
+  public int getFragmentId() {
+    return 0;
   }
 }

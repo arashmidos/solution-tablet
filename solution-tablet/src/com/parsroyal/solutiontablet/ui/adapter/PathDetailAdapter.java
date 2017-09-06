@@ -315,7 +315,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
         Bundle args = new Bundle();
         args.putLong(Constants.VISIT_ID, visitInformationId);
         args.putLong(Constants.CUSTOMER_ID, customer.getId());
-        mainActivity.changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, false);
+        mainActivity.changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, true);
 
       } catch (BusinessException e) {
         Log.e(TAG, e.getMessage(), e);

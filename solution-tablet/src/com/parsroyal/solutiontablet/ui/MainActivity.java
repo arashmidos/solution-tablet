@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.ui;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,8 +20,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -39,7 +36,6 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
-import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
@@ -99,8 +95,11 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int GOODS_LIST_FRAGMENT_ID = 16;
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
+  public static final int SYSTEM_CUSTOMER_FRAGMENT = 29;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-
+  public static final int NEW_CUSTOMER_FRAGMENT_ID = 30;
+  public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
+  public static final int CUSTOMER_INFO_FRAGMENT = 32;
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.drawer_layout)
@@ -115,8 +114,8 @@ public class MainActivity extends BaseFragmentActivity {
   AppBarLayout appBar;
   @BindView(R.id.container)
   FrameLayout container;
+  private BaseFragment currentFragment;
 
-  private ActionBar actionBar;
   private LocationUpdatesService gpsRecieverService = null;
   private DataTransferService dataTransferService;
 
@@ -128,7 +127,11 @@ public class MainActivity extends BaseFragmentActivity {
       LocationUpdatesService.LocalBinder binder = (LocationUpdatesService.LocalBinder) service;
       gpsRecieverService = binder.getService();
       boundToGpsService = true;
-      gpsRecieverService.requestLocationUpdates();
+      if (!checkPermissions()) {
+        requestPermissions();
+      } else {
+        gpsRecieverService.requestLocationUpdates();
+      }
     }
 
     @Override
@@ -187,7 +190,11 @@ public class MainActivity extends BaseFragmentActivity {
       }
     } else if (event instanceof DataTransferEvent) {
       ToastUtil.toastSuccess(this, R.string.message_setting_saved_successfully);
-      startGpsService();
+      if (!checkPermissions()) {
+        requestPermissions();
+      } else {
+        startGpsService();
+      }
       new TrackerAlarmReceiver().setAlarm(this);
     }
 
@@ -346,18 +353,11 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   private void showGpsOffDialog() {
-    //TODO: shakib, need new style
-    Dialog dialog = new AlertDialog.Builder(this)
-        .setTitle(getString(R.string.error_gps_is_disabled))
-
-        .setNegativeButton(getString(R.string.no), (dialog1, which) -> finish())
-        .setPositiveButton(getString(R.string.yes), (dialog12, which) ->
-        {
+    DialogUtil.showCustomDialog(this, getString(R.string.warning),
+        getString(R.string.error_gps_is_disabled), "", (dialog, which) -> {
           Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
           startActivity(intent);
-        })
-        .create();
-    dialog.show();
+        }, "", (dialog, which) -> finish(), Constants.ICON_MESSAGE);
   }
 
   private void logUser() {
@@ -485,19 +485,19 @@ public class MainActivity extends BaseFragmentActivity {
   }
 
   public void changeFragment(int fragmentId, boolean addToBackStack) {
-    BaseFragment fragment = findFragment(fragmentId, new Bundle());
-    if (Empty.isNotEmpty(fragment) && !fragment.isVisible()) {
-      commitFragment(fragment.getFragmentTag(), fragment, addToBackStack);
+    currentFragment = findFragment(fragmentId, new Bundle());
+    if (Empty.isNotEmpty(currentFragment) && !currentFragment.isVisible()) {
+      commitFragment(currentFragment.getFragmentTag(), currentFragment, addToBackStack);
     }
   }
 
   public void changeFragment(int fragmentId, Bundle args, boolean addToBackStack) {
-    BaseFragment fragment = findFragment(fragmentId, args);
-    if (Empty.isNotEmpty(fragment) && !fragment.isVisible()) {
+    currentFragment = findFragment(fragmentId, args);
+    if (Empty.isNotEmpty(currentFragment) && !currentFragment.isVisible()) {
       if (Empty.isNotEmpty(args)) {
-        fragment.setArguments(args);
+        currentFragment.setArguments(args);
       }
-      commitFragment(fragment.getFragmentTag(), fragment, addToBackStack);
+      commitFragment(currentFragment.getFragmentTag(), currentFragment, addToBackStack);
     }
   }
 
@@ -586,9 +586,6 @@ public class MainActivity extends BaseFragmentActivity {
       case KPI_SALESMAN_FRAGMENT_ID: //22
         fragment = new KPIFragment();
         break;
-      case FUNDS_FRAGMENT_ID: //23
-        fragment = new PaymentFragment();
-        break;
       case QUESTIONAIRE_LIST_FRAGMENT_ID:
         fragment = new QuestionnairesListFragment();
         if (Empty.isNotEmpty(args)) {
@@ -620,9 +617,9 @@ public class MainActivity extends BaseFragmentActivity {
       }
     } else {
       Fragment visitFragment = getSupportFragmentManager()
-          .findFragmentByTag(NewVisitDetailFragment.class.getSimpleName());//TODO ARASH
+          .findFragmentByTag(NewVisitDetailFragment.class.getSimpleName());
       if (visitFragment != null && visitFragment.isVisible()) {
-        EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_EXIT_VISIT));
+        ((NewVisitDetailFragment) currentFragment).exit();
       } else {
         onBackPressed();
       }

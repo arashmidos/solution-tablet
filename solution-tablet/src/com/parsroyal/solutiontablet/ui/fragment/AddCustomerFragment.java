@@ -37,6 +37,9 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Shakib
+ */
 public class AddCustomerFragment extends BaseFragment implements View.OnFocusChangeListener {
 
   private static final String TAG = AddCustomerFragment.class.getName();

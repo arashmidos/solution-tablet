@@ -15,7 +15,6 @@ public class AboutUsFragment extends BaseFragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-//TODO: Old code, need new style
     return inflater.inflate(R.layout.fragment_about_us, null);
   }
 

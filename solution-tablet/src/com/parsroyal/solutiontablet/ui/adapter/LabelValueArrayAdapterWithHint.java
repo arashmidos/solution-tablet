@@ -47,12 +47,6 @@ public class LabelValueArrayAdapterWithHint extends BaseAdapter {
     return convertView;
   }
 
-  //TODO:
-  /*public View getDropDownView(int position, View convertView, ViewGroup parent) {
-    View v = super.getDropDownView(position, convertView, parent);
-    ((TextView) v).setGravity(Gravity.RIGHT);
-    return v;
-  }*/
   @Override
   public int getCount() {
     return labelValues.size() - 1;

@@ -8,6 +8,7 @@ import com.parsroyal.solutiontablet.data.dao.BaseInfoDao;
 import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
+import com.parsroyal.solutiontablet.util.Empty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +72,10 @@ public class BaseInfoDaoImpl extends AbstractDao<BaseInfo, Long> implements Base
   public List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long typeId, Long backendId) {
     String selection = " " + BaseInfo.COL_TYPE + " = ?";
     String[] args = {String.valueOf(typeId)};
+    if (Empty.isNotEmpty(backendId)) {
+      selection = selection + " and " + BaseInfo.COL_BACKEND_ID + " = ? ";
+      args = new String[]{String.valueOf(typeId), String.valueOf(backendId)};
+    }
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);

@@ -20,7 +20,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NewCustomerAdapter;
 import java.util.List;
 
-public class NewCustomerFragment extends Fragment {
+public class NewCustomerFragment extends BaseFragment {
 
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
@@ -87,5 +87,10 @@ public class NewCustomerFragment extends Fragment {
   @OnClick(R.id.fab_add_customer)
   public void onClick() {
     activity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
+  }
+
+  @Override
+  public int getFragmentId() {
+    return MainActivity.NEW_CUSTOMER_FRAGMENT_ID;
   }
 }

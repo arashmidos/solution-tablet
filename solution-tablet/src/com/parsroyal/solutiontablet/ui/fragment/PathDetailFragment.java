@@ -96,16 +96,14 @@ public class PathDetailFragment extends BaseFragment implements
     ButterKnife.bind(this, view);
     Bundle args = getArguments();
     visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID, -1);
-    if (visitlineBackendId == -1) {
-      //TODO: LOG ERROR
-    }
 
     mainActivity = (MainActivity) getActivity();
     customerService = new CustomerServiceImpl(mainActivity);
     visitService = new VisitServiceImpl(mainActivity);
-    SupportMapFragment mapFragment =
+    //TODO MAP
+    /*SupportMapFragment mapFragment =
         (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-    new OnMapAndViewReadyListener(mapFragment, this);
+    new OnMapAndViewReadyListener(mapFragment, this);*/
 
     setData();
     onSearchTextChanged();

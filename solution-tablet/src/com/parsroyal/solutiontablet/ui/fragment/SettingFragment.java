@@ -297,13 +297,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
     if (result) {
       EventBus.getDefault().post(new DataTransferEvent());
 
-      /*runOnUiThread(() ->
-      {
-        runOnUiThread(() -> ToastUtil
-            .toastSuccess(mainActivity, R.string.message_setting_saved_successfully));*/
-//      MainActivity mainActivity = (MainActivity) mainActivity;
       mainActivity.removeFragment(this);
-//        oldMainActivity.updateActionbar();
     }
   }
 

@@ -7,7 +7,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
 import android.util.Log;
@@ -64,7 +63,7 @@ import org.greenrobot.eventbus.Subscribe;
 /**
  * @author Shakib
  */
-public class CustomerInfoFragment extends Fragment {
+public class CustomerInfoFragment extends BaseFragment {
 
   @BindView(R.id.store_tv)
   TextView storeTv;
@@ -240,7 +239,7 @@ public class CustomerInfoFragment extends Fragment {
         args.putString(Constants.SALE_TYPE, saleType);
         args.putLong(Constants.VISIT_ID, visitId);
         args.putBoolean(Constants.READ_ONLY, false);
-        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
+        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
       }
 
     } else {
@@ -259,7 +258,7 @@ public class CustomerInfoFragment extends Fragment {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);
-    mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, false);
+    mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true);
   }
 
   private void invokeGetRejectedData() {
@@ -352,7 +351,7 @@ public class CustomerInfoFragment extends Fragment {
     }
   }
 
-  private void finishVisiting() {
+  public void finishVisiting() {
     try {
       List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
       if (detailList.size() == 0) {
@@ -435,25 +434,13 @@ public class CustomerInfoFragment extends Fragment {
     }
   }
 
-  private void showDialogForEmptyLocation() {//TODO Shakib old style
-    Builder builder = new Builder(getActivity());
-    builder.setTitle(getString(R.string.visit_location));
-    builder.setMessage(getString(R.string.visit_empty_location_message));
-    builder.setPositiveButton(getString(R.string.visit_empty_location_dialog_try_again),
-        (dialogInterface, i) ->
-        {
-          dialogInterface.dismiss();
-          tryFindingLocation();
-        });
-
-    builder.setNegativeButton(getString(R.string.visit_empty_location_dialog_finish),
-        (dialogInterface, i) ->
-        {
-          dialogInterface.dismiss();
-          doFinishVisiting();
-        });
-
-    builder.create().show();
+  private void showDialogForEmptyLocation() {
+    DialogUtil.showCustomDialog(mainActivity, getString(R.string.visit_location),
+        getString(R.string.visit_empty_location_message),
+        getString(R.string.visit_empty_location_dialog_try_again),
+        (dialog, which) -> tryFindingLocation(),
+        getString(R.string.visit_empty_location_dialog_finish),
+        (dialog, which) -> doFinishVisiting(), Constants.ICON_MESSAGE);
   }
 
   private void tryFindingLocation() {
@@ -560,8 +547,11 @@ public class CustomerInfoFragment extends Fragment {
       openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
     } else if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
       goToRegisterPaymentFragment();
-    } else if (event.getStatusCode() == StatusCodes.ACTION_EXIT_VISIT) {
-      finishVisiting();
     }
+  }
+
+  @Override
+  public int getFragmentId() {
+    return MainActivity.CUSTOMER_INFO_FRAGMENT;
   }
 }

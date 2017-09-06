@@ -23,7 +23,7 @@ public abstract class BaseFragment extends Fragment {
       this.progressDialog = new ProgressDialog(getActivity());
       this.progressDialog.setIndeterminate(true);
       this.progressDialog.setCancelable(Boolean.FALSE);
-    }//TODO: UPDATE ICON
+    }
     this.progressDialog.setIcon(R.drawable.ic_info_outline_24dp);
     this.progressDialog.setTitle(R.string.message_please_wait);
     this.progressDialog.setMessage(message);
