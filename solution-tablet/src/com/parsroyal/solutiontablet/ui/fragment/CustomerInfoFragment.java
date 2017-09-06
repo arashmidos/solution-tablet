@@ -1,24 +1,17 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AlertDialog.Builder;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
@@ -26,19 +19,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
-import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
-import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
-import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
@@ -47,16 +36,12 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
-import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
-import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
-import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -100,6 +85,7 @@ public class CustomerInfoFragment extends BaseFragment {
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
   private Uri fileUri;
+  private NewVisitDetailFragment parent;
   private SaleOrderDto orderDto;
 
 
@@ -107,9 +93,11 @@ public class CustomerInfoFragment extends BaseFragment {
     // Required empty public constructor
   }
 
-  public static CustomerInfoFragment newInstance(Bundle arguments) {
+  public static CustomerInfoFragment newInstance(Bundle arguments,
+      NewVisitDetailFragment newVisitDetailFragment) {
     CustomerInfoFragment fragment = new CustomerInfoFragment();
     fragment.setArguments(arguments);
+    fragment.parent = newVisitDetailFragment;
     return fragment;
   }
 
@@ -177,10 +165,10 @@ public class CustomerInfoFragment extends BaseFragment {
         startCameraActivity();
         break;
       case R.id.end_and_exit_visit_lay:
-        finishVisiting();
+        parent.finishVisiting();
         break;
       case R.id.no_activity_lay:
-        showNoDialog();
+        parent.showNoDialog();
         break;
       case R.id.show_more_tv:
         onShowMoreTapped();
@@ -349,188 +337,11 @@ public class CustomerInfoFragment extends BaseFragment {
     }
   }
 
-  public void finishVisiting() {
-    try {
-      List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
-      if (detailList.size() == 0) {
-        DialogUtil.showConfirmDialog(mainActivity, getString(R.string.title_attention),
-            getString(R.string.message_error_no_visit_detail_found),
-            (dialogInterface, i) -> showNoDialog());
-        return;
-      }
-      VisitInformation visitInformation = visitService.getVisitInformationById(visitId);
-      if (Empty.isEmpty(visitInformation.getxLocation()) || Empty
-          .isEmpty(visitInformation.getyLocation())) {
-        showDialogForEmptyLocation();
-      } else {
-        doFinishVisiting();
-      }
-    } catch (Exception ex) {
-      Crashlytics
-          .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-    }
-  }
-
-  private void showNoDialog() {
-    List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
-    if (detailList.size() > 0) {
-      ToastUtil.toastError(mainActivity, R.string.message_error_wants_denied);
-      return;
-    }
-    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mainActivity);
-
-    List<LabelValue> wants = baseInfoService
-        .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.WANT_TYPE.getId());
-    if (Empty.isEmpty(wants)) {
-      ToastUtil.toastError(mainActivity, R.string.message_found_no_wants_information);
-      return;
-    }
-    LayoutInflater inflater = mainActivity.getLayoutInflater();
-    View dialogView = inflater.inflate(R.layout.dialog_register_no, null);
-    dialogBuilder.setView(dialogView);
-
-    Button registerNoBtn = (Button) dialogView.findViewById(R.id.register_btn);
-    TextView cancelTv = (TextView) dialogView.findViewById(R.id.cancel_tv);
-    TextView errorMessage = (TextView) dialogView.findViewById(R.id.error_msg);
-    Spinner noSpinner = (Spinner) dialogView.findViewById(R.id.no_spinner);
-    AlertDialog alertDialog = dialogBuilder.create();
-
-    wants.add(new LabelValue(-1l, getString(R.string.reason_register_no)));
-    LabelValueArrayAdapterWithHint labelValueArrayAdapter = new LabelValueArrayAdapterWithHint(
-        mainActivity,
-        wants);
-    noSpinner.setAdapter(labelValueArrayAdapter);
-    noSpinner.setSelection(wants.size() - 1);
-    alertDialog.show();
-    registerNoBtn.setOnClickListener(v -> {
-      LabelValue selectedItem = (LabelValue) noSpinner.getSelectedItem();
-      if (selectedItem.getValue() != -1l) {
-        errorMessage.setVisibility(View.INVISIBLE);
-        updateVisitResult(selectedItem, false);
-        alertDialog.dismiss();
-      } else {
-        errorMessage.setVisibility(View.VISIBLE);
-      }
-    });
-    cancelTv.setOnClickListener(v -> alertDialog.cancel());
-  }
-
-  private void updateVisitResult(LabelValue selectedItem, boolean notVisited) {
-    try {
-      VisitInformationDetail visitInformationDetail = new VisitInformationDetail(
-          visitId,
-          notVisited ? VisitInformationDetailType.NONE : VisitInformationDetailType.NO_ORDER,
-          selectedItem.getValue());
-      visitService.saveVisitDetail(visitInformationDetail);
-    } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
-          "Error in updating visit result " + ex.getMessage());
-      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
-      Log.e(TAG, ex.getMessage(), ex);
-    }
-  }
-
-  private void showDialogForEmptyLocation() {
-    DialogUtil.showCustomDialog(mainActivity, getString(R.string.visit_location),
-        getString(R.string.visit_empty_location_message),
-        getString(R.string.visit_empty_location_dialog_try_again),
-        (dialog, which) -> tryFindingLocation(),
-        getString(R.string.visit_empty_location_dialog_finish),
-        (dialog, which) -> doFinishVisiting(), Constants.ICON_MESSAGE);
-  }
-
-  private void tryFindingLocation() {
-    try {
-      final ProgressDialog progressDialog = new ProgressDialog(mainActivity);
-      progressDialog.setIndeterminate(true);
-      progressDialog.setCancelable(Boolean.FALSE);
-      progressDialog.setIcon(R.drawable.ic_action_info);
-      progressDialog.setTitle(R.string.message_please_wait);
-      progressDialog.setMessage(getString(R.string.message_please_wait_finding_your_location));
-      progressDialog.show();
-
-      locationService.findCurrentLocation(new FindLocationListener() {
-        @Override
-        public void foundLocation(Location location) {
-          progressDialog.dismiss();
-          try {
-            visitService.updateVisitLocation(visitId, location);
-          } catch (Exception e) {
-            Crashlytics.log(Log.ERROR, "Data Storage Exception",
-                "Error in updating visit location " + e.getMessage());
-            Log.e(TAG, e.getMessage(), e);
-          }
-
-          mainActivity.runOnUiThread(() -> showFoundLocationDialog());
-        }
-
-        @Override
-        public void timeOut() {
-          progressDialog.dismiss();
-          mainActivity.runOnUiThread(() ->
-          {
-            ToastUtil.toastError(getActivity(), getString(R.string.visit_found_no_location));
-            showDialogForEmptyLocation();
-          });
-        }
-      });
-
-    } catch (BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), ex);
-    } catch (Exception ex) {
-      Crashlytics
-          .log(Log.ERROR, "Location Service", "Error in finding location " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-    }
-  }
-
-  private void showFoundLocationDialog() {//TODO shakib old style
-    Builder builder = new Builder(getActivity());
-    builder.setTitle(getString(R.string.visit_location));
-    builder.setMessage(getString(R.string.visit_found_location_message));
-    builder.setPositiveButton(getString(R.string.finish_visit),
-        (dialogInterface, i) -> doFinishVisiting());
-
-    builder.create().show();
-  }
-
-  private void doFinishVisiting() {
-    try {
-      visitService.finishVisiting(visitId);
-      Customer customer = customerService.getCustomerById(customerId);
-      saleOrderService.deleteForAllCustomerOrdersByStatus(customer.getBackendId(),
-          SaleOrderStatus.DRAFT.getId());
-      mainActivity.removeFragment(this);
-    } catch (Exception ex) {
-      Crashlytics
-          .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
-    }
-  }
 
   @Override
   public void onResume() {
     super.onResume();
     EventBus.getDefault().register(this);
-    if (getView() == null) {
-      return;
-    }
-
-    getView().setFocusableInTouchMode(true);
-    getView().requestFocus();
-    getView().setOnKeyListener((v, keyCode, event) ->
-    {
-      if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-        finishVisiting();
-        return true;
-      }
-      return false;
-    });
   }
 
   @Override

@@ -444,7 +444,6 @@ public class MainActivity extends BaseFragmentActivity {
     hideKeyboard();
     try {
       FragmentManager supportFragmentManager = getSupportFragmentManager();
-
       if (supportFragmentManager.getBackStackEntryCount() > 1) {
         FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager
             .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 2);
@@ -452,6 +451,13 @@ public class MainActivity extends BaseFragmentActivity {
         BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
         if (Empty.isNotEmpty(lastFragment)) {
           findFragment(lastFragment.getFragmentId(), new Bundle());
+        }
+        BaseFragment lastItem = getLastFragment();
+        if (Empty.isNotEmpty(lastFragment)) {
+          if (lastItem instanceof NewVisitDetailFragment) {
+            ((NewVisitDetailFragment) lastItem).finishVisiting();
+            return;
+          }
         }
         super.onBackPressed();
       } else {
@@ -461,6 +467,18 @@ public class MainActivity extends BaseFragmentActivity {
       Crashlytics.log(Log.ERROR, "UI Exception", "Error in backPressed " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
     }
+  }
+
+  private BaseFragment getLastFragment() {
+    FragmentManager supportFragmentManager = getSupportFragmentManager();
+    if (supportFragmentManager.getBackStackEntryCount() > 1) {
+      FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager
+          .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 1);
+      String tag = backStackEntryAt.getName();
+      BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
+      return lastFragment;
+    }
+    return null;
   }
 
   public void removeFragment(Fragment fragment) {
@@ -617,13 +635,7 @@ public class MainActivity extends BaseFragmentActivity {
         drawerLayout.openDrawer(GravityCompat.END);
       }
     } else {
-      Fragment visitFragment = getSupportFragmentManager()
-          .findFragmentByTag(NewVisitDetailFragment.class.getSimpleName());
-      if (visitFragment != null && visitFragment.isVisible()) {
-        ((NewVisitDetailFragment) currentFragment).exit();
-      } else {
-        onBackPressed();
-      }
+      onBackPressed();
     }
   }
 
