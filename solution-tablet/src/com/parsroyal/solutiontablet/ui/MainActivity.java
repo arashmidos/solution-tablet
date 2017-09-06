@@ -21,7 +21,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -58,13 +57,13 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.NewVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.ReportFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesListFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NewVisitDetailFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -115,7 +114,6 @@ public class MainActivity extends BaseFragmentActivity {
   @BindView(R.id.container)
   FrameLayout container;
 
-  private ActionBar actionBar;
   private LocationUpdatesService gpsRecieverService = null;
   private DataTransferService dataTransferService;
 
@@ -127,7 +125,11 @@ public class MainActivity extends BaseFragmentActivity {
       LocationUpdatesService.LocalBinder binder = (LocationUpdatesService.LocalBinder) service;
       gpsRecieverService = binder.getService();
       boundToGpsService = true;
-      gpsRecieverService.requestLocationUpdates();
+      if (!checkPermissions()) {
+        requestPermissions();
+      } else {
+        gpsRecieverService.requestLocationUpdates();
+      }
     }
 
     @Override
@@ -186,7 +188,11 @@ public class MainActivity extends BaseFragmentActivity {
       }
     } else if (event instanceof DataTransferEvent) {
       ToastUtil.toastSuccess(this, R.string.message_setting_saved_successfully);
-      startGpsService();
+      if (!checkPermissions()) {
+        requestPermissions();
+      }else {
+        startGpsService();
+      }
       new TrackerAlarmReceiver().setAlarm(this);
     }
 
@@ -584,9 +590,6 @@ public class MainActivity extends BaseFragmentActivity {
         break;
       case KPI_SALESMAN_FRAGMENT_ID: //22
         fragment = new KPIFragment();
-        break;
-      case FUNDS_FRAGMENT_ID: //23
-        fragment = new PaymentFragment();
         break;
       case QUESTIONAIRE_LIST_FRAGMENT_ID:
         fragment = new QuestionnairesListFragment();

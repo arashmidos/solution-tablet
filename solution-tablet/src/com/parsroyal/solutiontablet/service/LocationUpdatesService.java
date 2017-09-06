@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.service;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Binder;
@@ -14,6 +16,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -114,6 +117,9 @@ public class LocationUpdatesService extends Service {
   @Override
   public void onCreate() {
     try {
+      if (!checkPermissions()) {
+        EventBus.getDefault().post(new ErrorEvent(StatusCodes.PERMISSION_DENIED));
+      }
       fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
       locationCallback = new LocationCallback() {
@@ -135,6 +141,14 @@ public class LocationUpdatesService extends Service {
       ex.printStackTrace();
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.PERMISSION_DENIED));
     }
+  }
+
+  /**
+   * Returns the current state of the permissions needed.
+   */
+  private boolean checkPermissions() {
+    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+        Manifest.permission.ACCESS_FINE_LOCATION);
   }
 
   @Override
@@ -187,10 +201,9 @@ public class LocationUpdatesService extends Service {
     // Called when the last client (MainActivity in case of this sample) unbinds from this
     // service. If this method is called due to a configuration change in MainActivity, we
     // do nothing. Otherwise, we make this service a foreground service.
-    if (changingConfiguration) {
-      Log.i(TAG, "Starting foreground service");
-      startForeground(NOTIFICATION_ID, getNotification());
-    }
+    Log.i(TAG, "Starting foreground service");
+    startForeground(NOTIFICATION_ID, getNotification());
+
     return true; // Ensures onRebind() is called when a client re-binds.
   }
 
