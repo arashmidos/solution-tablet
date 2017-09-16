@@ -30,7 +30,7 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
     ContentValues contentValues = new ContentValues();
     contentValues.put(CustomerPic.COL_ID, entity.getId());
     contentValues.put(CustomerPic.COL_BACKEND_ID, entity.getBackendId());
-    contentValues.put(CustomerPic.COL_CUSTOMER_BACKEND_ID, entity.getCustomer_backend_id());
+    contentValues.put(CustomerPic.COL_CUSTOMER_BACKEND_ID, entity.getCustomerBackendId());
     contentValues.put(CustomerPic.COL_TITLE, entity.getTitle());
     contentValues.put(CustomerPic.COL_STATUS, entity.getStatus());
     return contentValues;
@@ -66,7 +66,7 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
     CustomerPic customerPic = new CustomerPic();
     customerPic.setId(cursor.getLong(0));
     customerPic.setBackendId(cursor.getLong(1));
-    customerPic.setCustomer_backend_id(cursor.getLong(2));
+    customerPic.setCustomerBackendId(cursor.getLong(2));
     customerPic.setTitle(cursor.getString(3));
     customerPic.setCreateDateTime(cursor.getString(4));
     customerPic.setStatus(cursor.getLong(5));
@@ -90,4 +90,11 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
     return retVal;
   }
 
+  @Override
+  public List<CustomerPic> getAllCustomerPicturesByBackendId(long customerBackendId) {
+    String selection = " " + CustomerPic.COL_BACKEND_ID + " = ? ";
+    String[] args = {String.valueOf(customerBackendId)};
+
+    return retrieveAll(selection, args, null, null, null);
+  }
 }

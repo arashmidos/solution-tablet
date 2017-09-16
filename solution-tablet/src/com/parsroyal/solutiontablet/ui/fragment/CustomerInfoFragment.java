@@ -322,7 +322,7 @@ public class CustomerInfoFragment extends BaseFragment {
 
         CustomerPic cPic = new CustomerPic();
         cPic.setTitle(s);
-        cPic.setCustomer_backend_id(customer.getBackendId());
+        cPic.setCustomerBackendId(customer.getBackendId());
 
         long typeId = customerService.savePicture(cPic);
         visitService.saveVisitDetail(

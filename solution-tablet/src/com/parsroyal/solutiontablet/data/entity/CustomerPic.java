@@ -23,7 +23,7 @@ public class CustomerPic extends BaseEntity<Long> {
 
   private Long id;
   private Long backendId;
-  private Long customer_backend_id;
+  private Long customerBackendId;
   private String title;
   private Long status;
 
@@ -48,12 +48,12 @@ public class CustomerPic extends BaseEntity<Long> {
     return id;
   }
 
-  public Long getCustomer_backend_id() {
-    return customer_backend_id;
+  public Long getCustomerBackendId() {
+    return customerBackendId;
   }
 
-  public void setCustomer_backend_id(Long customer_backend_id) {
-    this.customer_backend_id = customer_backend_id;
+  public void setCustomerBackendId(Long customerBackendId) {
+    this.customerBackendId = customerBackendId;
   }
 
   public Long getStatus() {

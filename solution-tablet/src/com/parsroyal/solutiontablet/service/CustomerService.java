@@ -42,6 +42,8 @@ public interface CustomerService extends BaseService {
 
   long savePicture(CustomerPic customerPic);
 
+  List<CustomerPic> getAllPicturesByCustomerBackendId(long customerBackendId);
+
   File getAllCustomerPicForSend();
 
   List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);

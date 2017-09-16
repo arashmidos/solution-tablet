@@ -157,6 +157,12 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
+  public List<CustomerPic> getAllPicturesByCustomerBackendId(long customerBackendId) {
+
+    return customerPicDao.getAllCustomerPicturesByBackendId(customerBackendId);
+  }
+
+  @Override
   public File getAllCustomerPicForSend() {
     List<String> pics = customerPicDao.getAllCustomerPicForSend();
     if (pics.size() == 0) {

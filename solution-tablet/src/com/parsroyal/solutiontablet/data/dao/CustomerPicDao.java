@@ -10,4 +10,5 @@ public interface CustomerPicDao extends BaseDao<CustomerPic, Long> {
 
   List<String> getAllCustomerPicForSend();
 
+  List<CustomerPic> getAllCustomerPicturesByBackendId(long customerBackendId);
 }

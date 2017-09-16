@@ -53,7 +53,6 @@ import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
-import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
@@ -240,7 +239,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
 
         CustomerPic cPic = new CustomerPic();
         cPic.setTitle(s);
-        cPic.setCustomer_backend_id(customer.getBackendId());
+        cPic.setCustomerBackendId(customer.getBackendId());
 
         long typeId = customerService.savePicture(cPic);
         visitService.saveVisitDetail(
