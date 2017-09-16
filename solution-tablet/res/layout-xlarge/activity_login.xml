@@ -35,35 +35,39 @@
         android:textSize="16sp"/>
     </FrameLayout>
   </android.support.design.widget.AppBarLayout>
+
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:weightSum="2">
+
     <ImageView
       android:layout_width="0dp"
       android:layout_height="match_parent"
       android:layout_weight="1"
       android:scaleType="center"
       android:src="@drawable/logo"/>
+
     <ScrollView
       android:layout_width="0dp"
       android:layout_height="match_parent"
       android:layout_weight="1"
       android:layout_marginTop="24dp"
-      android:layout_marginEnd="96dp"
-      android:layout_marginRight="96dp"
-      android:paddingTop="32dp"
-      android:paddingStart="48dp"
-      android:paddingEnd="48dp"
-      android:paddingLeft="48dp"
-      android:paddingRight="48dp"
-      android:background="@android:color/white"
-      android:elevation="3dp">
+      android:paddingEnd="96dp"
+      android:paddingRight="96dp"
+      android:elevation="3dp"
+      android:fillViewport="true">
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="32dp"
+        android:paddingStart="48dp"
+        android:paddingEnd="48dp"
+        android:paddingLeft="48dp"
+        android:paddingRight="48dp"
+        android:background="@android:color/white"
         android:orientation="vertical">
 
 
@@ -72,7 +76,6 @@
           android:layout_height="45dp"
           android:layout_marginTop="32dp"
           android:orientation="horizontal">
-
 
           <android.support.design.widget.TextInputLayout
             android:id="@+id/company_code_lay"
@@ -213,7 +216,7 @@
           <RelativeLayout
             android:id="@+id/distributor_lay"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="9"
             android:background="@drawable/role_default">
 
@@ -232,6 +235,7 @@
               style="@style/IranSans.Medium"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:layout_marginBottom="10dp"
               android:layout_below="@+id/distributor_icon"
               android:layout_centerHorizontal="true"
               android:text="@string/sale_type_distributor"
@@ -255,7 +259,7 @@
           <RelativeLayout
             android:id="@+id/merchandiser_lay"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="9"
             android:background="@drawable/role_default">
 
@@ -298,7 +302,7 @@
           <RelativeLayout
             android:id="@+id/sales_man_lay"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="9"
             android:background="@drawable/role_default">
 
@@ -341,7 +345,6 @@
           android:layout_height="41dp"
           android:layout_marginTop="32dp"
           android:layout_marginBottom="32dp"
-
           android:background="@color/log_in_enter_bg"
           android:gravity="center"
           android:text="@string/enter"
