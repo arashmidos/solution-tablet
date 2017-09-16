@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.util;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -19,16 +19,18 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
  */
 public class DialogUtil {
 
+  private static ProgressDialog progressDialog;
+
   public static void showConfirmDialog(Context context, String title, String message,
-                                       DialogInterface.OnClickListener positiveBtnOnClickListener) {
+      DialogInterface.OnClickListener positiveBtnOnClickListener) {
     showCustomDialog(context, title, message, "", positiveBtnOnClickListener, "",
         (dialog, i) -> dialog.dismiss(), Constants.ICON_MESSAGE);
   }
 
   public static void showCustomDialog(Context context, String title, String message,
-                                      String positiveChoice, DialogInterface.OnClickListener positiveBtnOnClickListener,
-                                      String negativeChoice, DialogInterface.OnClickListener negativeBtnOnClickListener,
-                                      int iconType)
+      String positiveChoice, DialogInterface.OnClickListener positiveBtnOnClickListener,
+      String negativeChoice, DialogInterface.OnClickListener negativeBtnOnClickListener,
+      int iconType)
 
   {
     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
@@ -45,8 +47,10 @@ public class DialogUtil {
     titleTv.setText(title);
     icon.setImageResource(iconType);
     bodyTv.setText(message);
-    positiveBtn.setText(Empty.isEmpty(positiveChoice) ? context.getString(R.string.yes) : positiveChoice);
-    negativeTv.setText(Empty.isEmpty(negativeChoice) ? context.getString(R.string.no) : negativeChoice);
+    positiveBtn
+        .setText(Empty.isEmpty(positiveChoice) ? context.getString(R.string.yes) : positiveChoice);
+    negativeTv
+        .setText(Empty.isEmpty(negativeChoice) ? context.getString(R.string.no) : negativeChoice);
 
     AlertDialog alertDialog = dialogBuilder.create();
     alertDialog.show();
@@ -61,6 +65,7 @@ public class DialogUtil {
     });
   }
 //Todo shakib: Change style
+
   /**
    * Show an Alert Dialog with Ok button
    */
@@ -72,5 +77,23 @@ public class DialogUtil {
             (dialog1, which) -> dialog1.dismiss())
         .create();
     dialog.show();
+  }
+
+  public static void showProgressDialog(Context context, CharSequence message) {
+    if (progressDialog == null) {
+      progressDialog = new ProgressDialog(context);
+      progressDialog.setIndeterminate(true);
+      progressDialog.setCancelable(Boolean.FALSE);
+    }
+    progressDialog.setIcon(R.drawable.ic_info_outline_24dp);
+    progressDialog.setTitle(R.string.message_please_wait);
+    progressDialog.setMessage(message);
+    progressDialog.show();
+  }
+
+  public static void dismissProgressDialog() {
+    if (progressDialog != null) {
+      progressDialog.dismiss();
+    }
   }
 }

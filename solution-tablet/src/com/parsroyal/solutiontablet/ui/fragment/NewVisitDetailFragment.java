@@ -46,18 +46,18 @@ import java.util.List;
 public class NewVisitDetailFragment extends BaseFragment {
 
   private static final String TAG = NewVisitDetailFragment.class.getName();
-  private  CustomerServiceImpl customerService;
-  private  MainActivity mainActivity;
-  private  SaleOrderServiceImpl saleOrderService;
-  private  long customerId;
-  private  long visitId;
-  private  VisitServiceImpl visitService;
-  private  BaseInfoServiceImpl baseInfoService;
-  private  LocationService locationService;
   @BindView(R.id.tabs)
   TabLayout tabs;
   @BindView(R.id.viewpager)
   ViewPager viewpager;
+  private CustomerServiceImpl customerService;
+  private MainActivity mainActivity;
+  private SaleOrderServiceImpl saleOrderService;
+  private long customerId;
+  private long visitId;
+  private VisitServiceImpl visitService;
+  private BaseInfoServiceImpl baseInfoService;
+  private LocationService locationService;
   private CustomerDetailViewPagerAdapter viewPagerAdapter;
   private CustomerInfoFragment customerInfoFragment;
   private NewOrderListFragment orderListFragment;
@@ -96,7 +96,7 @@ public class NewVisitDetailFragment extends BaseFragment {
     }
   }
 
-  public  void showNoDialog() {
+  public void showNoDialog() {
     List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
     if (detailList.size() > 0) {
       ToastUtil.toastError(mainActivity, R.string.message_error_wants_denied);
