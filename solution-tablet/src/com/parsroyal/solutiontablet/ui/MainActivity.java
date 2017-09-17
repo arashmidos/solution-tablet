@@ -1,26 +1,26 @@
 package com.parsroyal.solutiontablet.ui;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +29,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
@@ -66,20 +65,20 @@ import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
-import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends BaseFragmentActivity {
+/**
+ * Created by Arash 2017-09-16
+ */
+public abstract class MainActivity extends AppCompatActivity {
 
-  public static final String TAG = MainActivity.class.getSimpleName();
   public static final int FEATURE_FRAGMENT_ID = 0;
   public static final int CUSTOMER_LIST_FRAGMENT_ID = 1;
   public static final int NEW_CUSTOMER_DETAIL_FRAGMENT_ID = 2;
@@ -102,29 +101,25 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
   public static final int CUSTOMER_INFO_FRAGMENT = 32;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-
+  private static final String TAG = MainActivity.class.getName();
+  protected ProgressDialog progressDialog;
   @BindView(R.id.toolbar)
   Toolbar toolbar;
-  @BindView(R.id.drawer_layout)
-  DrawerLayout drawerLayout;
   @BindView(R.id.toolbar_title)
   TextView toolbarTitle;
-  @BindView(R.id.navigation_img)
-  ImageView navigationImg;
   @BindView(R.id.search_img)
   ImageView searchImg;
-  @BindView(R.id.app_bar)
-  AppBarLayout appBar;
   @BindView(R.id.container)
   FrameLayout container;
+  @BindView(R.id.navigation_img)
+  ImageView navigationImg;
+  protected BaseFragment currentFragment;
 
-  private BaseFragment currentFragment;
+  protected LocationUpdatesService gpsRecieverService = null;
+  protected DataTransferService dataTransferService;
 
-  private LocationUpdatesService gpsRecieverService = null;
-  private DataTransferService dataTransferService;
-
-  private boolean boundToGpsService = false;
-  private final ServiceConnection serviceConnection = new ServiceConnection() {
+  protected boolean boundToGpsService = false;
+  protected final ServiceConnection serviceConnection = new ServiceConnection() {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
@@ -144,7 +139,7 @@ public class MainActivity extends BaseFragmentActivity {
       boundToGpsService = false;
     }
   };
-  private BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
+  protected BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
       if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
@@ -156,21 +151,10 @@ public class MainActivity extends BaseFragmentActivity {
     }
   };
 
-
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    setContentView(R.layout.activity_main);
-    if (MultiScreenUtility.isTablet(this)) {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-
-    } else {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-    }
-    ButterKnife.bind(this);
+  public void onCreate(@Nullable Bundle savedInstanceState,
+      @Nullable PersistableBundle persistentState) {
+    super.onCreate(savedInstanceState, persistentState);
 
     dataTransferService = new DataTransferServiceImpl(this);
 
@@ -181,18 +165,8 @@ public class MainActivity extends BaseFragmentActivity {
     if (!checkPermissions()) {
       requestPermissions();
     }
-    showFeaturesFragment();
   }
 
-
-  public void setNavigationToolbarIcon(int id) {
-    navigationImg.setImageResource(id);
-  }
-
-  private void showVersionDialog() {
-    DialogUtil.showMessageDialog(this, getString(R.string.version),
-        String.format(Locale.US, getString(R.string.your_version), BuildConfig.VERSION_NAME));
-  }
 
   @Subscribe
   public void getMessage(Event event) {
@@ -229,6 +203,24 @@ public class MainActivity extends BaseFragmentActivity {
       installNewVersion();
     } else {
       Updater.checkAppUpdate(this);
+    }
+  }
+
+  public void showProgressDialog(CharSequence message) {
+    if (this.progressDialog == null) {
+      this.progressDialog = new ProgressDialog(this);
+      this.progressDialog.setIndeterminate(true);
+      this.progressDialog.setCancelable(Boolean.FALSE);
+    }
+    this.progressDialog.setIcon(R.drawable.ic_action_info);
+    this.progressDialog.setTitle(R.string.message_please_wait);
+    this.progressDialog.setMessage(message);
+    this.progressDialog.show();
+  }
+
+  public void dismissProgressDialog() {
+    if (this.progressDialog != null) {
+      this.progressDialog.dismiss();
     }
   }
 
@@ -318,6 +310,7 @@ public class MainActivity extends BaseFragmentActivity {
 
   @Override
   protected void onStop() {
+    super.onStop();
     if (boundToGpsService) {
       // Unbind from the service. This signals to the service that this activity is no longer
       // in the foreground, and the service can respond by promoting itself to a foreground
@@ -442,18 +435,73 @@ public class MainActivity extends BaseFragmentActivity {
     changeFragment(MainActivity.CUSTOMER_LIST_FRAGMENT_ID, true);
   }
 
-  public void closeDrawer() {
-    if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-      drawerLayout.closeDrawer(GravityCompat.END);
+  protected BaseFragment getLastFragment() {
+    FragmentManager supportFragmentManager = getSupportFragmentManager();
+    if (supportFragmentManager.getBackStackEntryCount() > 1) {
+      FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager
+          .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 1);
+      String tag = backStackEntryAt.getName();
+      BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
+      return lastFragment;
+    }
+    return null;
+  }
+
+  public void removeFragment(Fragment fragment) {
+    FragmentManager manager = getSupportFragmentManager();
+    FragmentTransaction trans = manager.beginTransaction();
+    trans.remove(fragment);
+    trans.commit();
+    manager.popBackStack();
+  }
+
+  public void navigateToFragment(String fragmentName) {
+    FragmentManager fm = getSupportFragmentManager();
+    fm.popBackStack(fragmentName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+  }
+
+  protected void commitFragment(String fragmentTag, BaseFragment fragment, boolean addToBackStack) {
+    FragmentTransaction fragmentTransaction;
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    fragmentTransaction = fragmentManager.beginTransaction();
+    fragmentTransaction.replace(R.id.container, fragment, fragmentTag);
+    fragmentTransaction.addToBackStack(fragmentTag);
+    fragmentTransaction.commit();
+  }
+
+  public void changeFragment(int fragmentId, boolean addToBackStack) {
+    currentFragment = findFragment(fragmentId, new Bundle());
+    if (Empty.isNotEmpty(currentFragment) && !currentFragment.isVisible()) {
+      commitFragment(currentFragment.getFragmentTag(), currentFragment, addToBackStack);
+    }
+  }
+
+  public void changeFragment(int fragmentId, Bundle args, boolean addToBackStack) {
+    currentFragment = findFragment(fragmentId, args);
+    if (Empty.isNotEmpty(currentFragment) && !currentFragment.isVisible()) {
+      if (Empty.isNotEmpty(args)) {
+        currentFragment.setArguments(args);
+      }
+      commitFragment(currentFragment.getFragmentTag(), currentFragment, addToBackStack);
+    }
+  }
+
+  public abstract void onNavigationTapped();
+
+  @OnClick({R.id.navigation_img, R.id.search_img})
+  public void onClick(View view) {
+    switch (view.getId()) {
+      case R.id.navigation_img:
+        onNavigationTapped();
+        break;
+      case R.id.search_img:
+        changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
+        break;
     }
   }
 
   @Override
   public void onBackPressed() {
-    if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-      drawerLayout.closeDrawer(GravityCompat.END);
-      return;
-    }
     hideKeyboard();
     try {
       FragmentManager supportFragmentManager = getSupportFragmentManager();
@@ -482,58 +530,13 @@ public class MainActivity extends BaseFragmentActivity {
     }
   }
 
-  private BaseFragment getLastFragment() {
-    FragmentManager supportFragmentManager = getSupportFragmentManager();
-    if (supportFragmentManager.getBackStackEntryCount() > 1) {
-      FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager
-          .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 1);
-      String tag = backStackEntryAt.getName();
-      BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
-      return lastFragment;
-    }
-    return null;
+  public void setNavigationToolbarIcon(int id) {
+    navigationImg.setImageResource(id);
   }
 
-  public void removeFragment(Fragment fragment) {
-    FragmentManager manager = getSupportFragmentManager();
-    FragmentTransaction trans = manager.beginTransaction();
-    trans.remove(fragment);
-    trans.commit();
-    manager.popBackStack();
-  }
+  public abstract void changeTitle(String title);
 
-  public void navigateToFragment(String fragmentName) {
-    FragmentManager fm = getSupportFragmentManager();
-    fm.popBackStack(fragmentName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-  }
-
-  private void commitFragment(String fragmentTag, BaseFragment fragment, boolean addToBackStack) {
-    FragmentTransaction fragmentTransaction;
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.container, fragment, fragmentTag);
-    fragmentTransaction.addToBackStack(fragmentTag);
-    fragmentTransaction.commit();
-  }
-
-  public void changeFragment(int fragmentId, boolean addToBackStack) {
-    currentFragment = findFragment(fragmentId, new Bundle());
-    if (Empty.isNotEmpty(currentFragment) && !currentFragment.isVisible()) {
-      commitFragment(currentFragment.getFragmentTag(), currentFragment, addToBackStack);
-    }
-  }
-
-  public void changeFragment(int fragmentId, Bundle args, boolean addToBackStack) {
-    currentFragment = findFragment(fragmentId, args);
-    if (Empty.isNotEmpty(currentFragment) && !currentFragment.isVisible()) {
-      if (Empty.isNotEmpty(args)) {
-        currentFragment.setArguments(args);
-      }
-      commitFragment(currentFragment.getFragmentTag(), currentFragment, addToBackStack);
-    }
-  }
-
-  private BaseFragment findFragment(int fragmentId, Bundle args) {
+  protected BaseFragment findFragment(int fragmentId, Bundle args) {
     BaseFragment fragment = null;
     int parent = 0;
     if (fragmentId == FEATURE_FRAGMENT_ID) {
@@ -634,35 +637,8 @@ public class MainActivity extends BaseFragmentActivity {
     return fragment;
   }
 
-  public void changeTitle(String title) {
-    toolbarTitle.setText(title);
-  }
 
-  public void onNavigationTapped() {
-    Fragment featureFragment = getSupportFragmentManager()
-        .findFragmentByTag(FeaturesFragment.class.getSimpleName());
-    if (featureFragment != null && featureFragment.isVisible()) {
-      if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-        drawerLayout.closeDrawer(GravityCompat.END);
-      } else {
-        drawerLayout.openDrawer(GravityCompat.END);
-      }
-    } else {
-      onBackPressed();
-    }
-  }
-
-  @OnClick({R.id.navigation_img, R.id.search_img})
-  public void onClick(View view) {
-    switch (view.getId()) {
-      case R.id.navigation_img:
-        onNavigationTapped();
-        break;
-      case R.id.search_img:
-        changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
-        break;
-    }
-  }
+  public abstract void closeDrawer();
 
   @Override
   protected void attachBaseContext(Context newBase) {

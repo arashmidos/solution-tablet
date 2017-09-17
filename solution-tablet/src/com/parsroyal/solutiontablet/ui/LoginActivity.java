@@ -262,7 +262,12 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
       settingService
           .saveSetting(ApplicationKeys.SETTING_PASSWORD, passwordEdt.getText().toString());
 
-      Intent intent = new Intent(this, MainActivity.class);
+      Intent intent;
+      if (MultiScreenUtility.isTablet(this)) {
+        intent = new Intent(this, TabletMainActivity.class);
+      } else {
+        intent = new Intent(this, MobileMainActivity.class);
+      }
       startActivity(intent);
       finish();
     } else if (response instanceof ErrorEvent) {
