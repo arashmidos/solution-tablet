@@ -3,31 +3,31 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.parsroyal.solutiontablet">
 
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-  <uses-permission android:name="android.permission.INTERNET"/>
-  <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-  <uses-permission android:name="android.permission.WAKE_LOCK"/>
-  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-  <uses-permission android:name="android.permission.CAMERA"/>
-  <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-  <uses-feature android:name="android.hardware.camera"/>
+  <uses-feature android:name="android.hardware.camera" />
   <uses-feature
     android:name="android.hardware.location.gps"
-    android:required="false"/>
+    android:required="false" />
   <uses-feature
     android:name="android.hardware.location.network"
-    android:required="false"/>
+    android:required="false" />
   <uses-feature
     android:name="android.hardware.location"
-    android:required="false"/>
+    android:required="false" />
   <uses-feature
     android:name="android.hardware.LOCATION"
-    android:required="false"/>
+    android:required="false" />
 
   <application
     android:allowBackup="true"
@@ -42,55 +42,60 @@
       android:theme="@style/NoActionBar"
       android:windowSoftInputMode="adjustPan">
       <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
+        <action android:name="android.intent.action.MAIN" />
 
-        <category android:name="android.intent.category.LAUNCHER"/>
+        <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
     <activity
       android:name=".ui.OldMainActivity"
       android:screenOrientation="landscape"
-      android:windowSoftInputMode="adjustPan"/>
+      android:windowSoftInputMode="adjustPan" />
     <activity
       android:name=".ui.LoginActivity"
       android:theme="@style/NoActionBar"
-      android:windowSoftInputMode="adjustNothing"/>
+      android:windowSoftInputMode="adjustNothing" />
     <activity
       android:label=""
-      android:name=".ui.MainActivity"
+      android:name=".ui.MobileMainActivity"
       android:screenOrientation="portrait"
-      android:theme="@style/NoActionBar"/>
+      android:theme="@style/NoActionBar" />
+    <activity
+      android:label=""
+      android:name=".ui.TabletMainActivity"
+      android:screenOrientation="landscape"
+      android:theme="@style/NoActionBar" />
 
     <service
       android:enabled="true"
       android:exported="false"
-      android:name=".service.LocationUpdatesService"/>
+      android:name=".service.LocationUpdatesService" />
     <service
       android:enabled="true"
       android:exported="false"
-      android:name=".service.SendLocationService"/>
+      android:name=".service.SendLocationService" />
     <service
       android:enabled="true"
       android:exported="false"
-      android:name=".service.SaveLocationService"/>
+      android:name=".service.SaveLocationService" />
 
     <receiver android:name=".receiver.BootReceiver">
       <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
       </intent-filter>
     </receiver>
     <receiver android:name=".receiver.TrackerAlarmReceiver">
       <intent-filter>
-        <action android:name="com.parsroyal.solutiontablet.TrackerAlarmReceiver"/>
+        <action android:name="com.parsroyal.solutiontablet.TrackerAlarmReceiver" />
       </intent-filter>
     </receiver>
 
     <meta-data
       android:name="com.google.android.maps.v2.API_KEY"
-      android:value="@string/google_maps_key"/>
+      android:value="@string/google_maps_key" />
     <meta-data
       android:name="io.fabric.ApiKey"
-      android:value="bf939acb1b76ea3f52f26b54a1d8f266e5f6fea4"/>
+      android:value="bf939acb1b76ea3f52f26b54a1d8f266e5f6fea4" />
   </application>
 
 </manifest>
