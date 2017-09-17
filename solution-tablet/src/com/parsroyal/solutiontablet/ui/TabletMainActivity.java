@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui;
 
 import android.os.Bundle;
+import android.view.View;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 
@@ -24,14 +25,25 @@ public class TabletMainActivity extends MainActivity {
   @Override
   public void onNavigationTapped() {
     //TODO: Implement
+    super.onBackPressed();
   }
 
   @Override
   public void changeTitle(String title) {
+    toolbarTitle.setText(title);
   }
 
   @Override
   public void closeDrawer() {
 
+  }
+
+  @Override
+  public void customizeToolbar(int fragmentId) {
+    if (fragmentId == VISIT_DETAIL_FRAGMENT_ID) {
+      detailTv.setVisibility(View.VISIBLE);
+    } else {
+      detailTv.setVisibility(View.GONE);
+    }
   }
 }

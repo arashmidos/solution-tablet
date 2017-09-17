@@ -103,6 +103,7 @@ public abstract class MainActivity extends AppCompatActivity {
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   private static final String TAG = MainActivity.class.getName();
   protected ProgressDialog progressDialog;
+
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.toolbar_title)
@@ -113,8 +114,11 @@ public abstract class MainActivity extends AppCompatActivity {
   FrameLayout container;
   @BindView(R.id.navigation_img)
   ImageView navigationImg;
-  protected BaseFragment currentFragment;
+  @Nullable
+  @BindView(R.id.detail_tv)
+  TextView detailTv;
 
+  protected BaseFragment currentFragment;
   protected LocationUpdatesService gpsRecieverService = null;
   protected DataTransferService dataTransferService;
 
@@ -536,6 +540,14 @@ public abstract class MainActivity extends AppCompatActivity {
 
   public abstract void changeTitle(String title);
 
+  public void changeDetailContent(String content) {
+    detailTv.setText(content);
+  }
+
+  ;
+
+  public abstract void customizeToolbar(int fragmentId);
+
   protected BaseFragment findFragment(int fragmentId, Bundle args) {
     BaseFragment fragment = null;
     int parent = 0;
@@ -551,6 +563,7 @@ public abstract class MainActivity extends AppCompatActivity {
     } else {
       searchImg.setVisibility(View.GONE);
     }
+    customizeToolbar(fragmentId);
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
         fragment = FeaturesFragment.newInstance();

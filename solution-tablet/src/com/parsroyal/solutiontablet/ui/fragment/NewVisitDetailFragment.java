@@ -40,16 +40,19 @@ import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
 public class NewVisitDetailFragment extends BaseFragment {
 
   private static final String TAG = NewVisitDetailFragment.class.getName();
+
   @BindView(R.id.tabs)
   TabLayout tabs;
   @BindView(R.id.viewpager)
   ViewPager viewpager;
+
   private CustomerServiceImpl customerService;
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
@@ -271,7 +274,9 @@ public class NewVisitDetailFragment extends BaseFragment {
     setUpViewPager();
     viewpager.setCurrentItem(viewPagerAdapter.getCount());
     viewpager.setOffscreenPageLimit(viewPagerAdapter.getCount());
-
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      mainActivity.changeTitle("");
+    }
     return view;
   }
 

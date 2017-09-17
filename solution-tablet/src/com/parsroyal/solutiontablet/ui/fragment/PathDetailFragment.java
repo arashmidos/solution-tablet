@@ -184,10 +184,11 @@ public class PathDetailFragment extends BaseFragment implements
 
   private void setTabletData() {
     visitline = visitService.getVisitLineListModelByBackendId(visitlineBackendId);
+    mainActivity.changeDetailContent(
+        String.format(getString(R.string.visitline_code_x), visitline.getCode()));
 
     customerCountBtn
         .setText(String.format(getString(R.string.x_customers), visitline.getCustomerCount()));
-//    pathCodeTv.setText(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
     mainActivity
         .changeTitle(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
   }

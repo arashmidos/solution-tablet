@@ -70,6 +70,11 @@ public class MobileMainActivity extends MainActivity {
     toolbarTitle.setText(title);
   }
 
+  @Override
+  public void customizeToolbar(int fragmentId) {
+
+  }
+
   public void onNavigationTapped() {
     Fragment featureFragment = getSupportFragmentManager()
         .findFragmentByTag(FeaturesFragment.class.getSimpleName());
