@@ -1,9 +1,12 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -16,12 +19,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -40,7 +45,9 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.OnMapAndViewReadyListener;
+import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Iterator;
@@ -53,19 +60,33 @@ import java.util.Locale;
 public class PathDetailFragment extends BaseFragment implements
     OnMapAndViewReadyListener.OnGlobalLayoutAndMapReadyListener {
 
+  @Nullable
   @BindView(R.id.search_img)
   ImageView searchImg;
+  @Nullable
   @BindView(R.id.path_code_tv)
   TextView pathCodeTv;
+  @Nullable
   @BindView(R.id.customers_number_tv)
   TextView customersNumberTv;
+  @Nullable
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
+  @Nullable
   @BindView(R.id.search_edt)
   EditText searchEdt;
+  @Nullable
+  @BindView(R.id.customer_count_btn)
+  Button customerCountBtn;
+  @Nullable
+  @BindView(R.id.search_bar_lay)
+  LinearLayout searchBarLay;
+  @Nullable
+  @BindView(R.id.no_customer_lay)
+  LinearLayout noCustomerLay;
 
   private GoogleMap mMap;
-
+  private boolean isSearchBarVisible = false;
   private PathDetailAdapter adapter;
   private MainActivity mainActivity;
   private CustomerService customerService;
@@ -104,8 +125,11 @@ public class PathDetailFragment extends BaseFragment implements
     /*SupportMapFragment mapFragment =
         (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
     new OnMapAndViewReadyListener(mapFragment, this);*/
-
-    setData();
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      setTabletData();
+    } else {
+      setMobileData();
+    }
     onSearchTextChanged();
     setUpRecyclerView();
     return view;
@@ -148,7 +172,7 @@ public class PathDetailFragment extends BaseFragment implements
     return MainActivity.PATH_DETAIL_FRAGMENT_ID;
   }
 
-  private void setData() {
+  private void setMobileData() {
     visitline = visitService.getVisitLineListModelByBackendId(visitlineBackendId);
 
     customersNumberTv
@@ -158,11 +182,27 @@ public class PathDetailFragment extends BaseFragment implements
         .changeTitle(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
   }
 
+  private void setTabletData() {
+    visitline = visitService.getVisitLineListModelByBackendId(visitlineBackendId);
+
+    customerCountBtn
+        .setText(String.format(getString(R.string.x_customers), visitline.getCustomerCount()));
+//    pathCodeTv.setText(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
+    mainActivity
+        .changeTitle(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
+  }
+
   //set up recycler view
   private void setUpRecyclerView() {
     adapter = new PathDetailAdapter(mainActivity, getCustomersList(), visitlineBackendId);
-    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
-    recyclerView.setLayoutManager(linearLayoutManager);
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      RtlGridLayoutManager gridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
+      recyclerView.setLayoutManager(gridLayoutManager);
+
+    } else {
+      LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+      recyclerView.setLayoutManager(linearLayoutManager);
+    }
     recyclerView.setAdapter(adapter);
   }
 
@@ -195,8 +235,8 @@ public class PathDetailFragment extends BaseFragment implements
     });
   }
 
-  @OnClick({R.id.path_code_tv, R.id.customers_number_lay, R.id.sort_lay, R.id.filter_lay,
-      R.id.search_img})
+  @Optional
+  @OnClick({R.id.sort_lay, R.id.filter_lay, R.id.search_lay, R.id.search_img})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.sort_lay:
@@ -205,11 +245,23 @@ public class PathDetailFragment extends BaseFragment implements
       case R.id.filter_lay:
         showFilterDialog();
         break;
+      case R.id.search_lay:
+        setSearchBarVisibility();
+        break;
       case R.id.search_img:
         if (isClose) {
           searchEdt.setText("");
         }
         break;
+    }
+  }
+
+  private void setSearchBarVisibility() {
+    isSearchBarVisible = !isSearchBarVisible;
+    if (isSearchBarVisible) {
+      searchBarLay.setVisibility(View.VISIBLE);
+    } else {
+      searchBarLay.setVisibility(View.GONE);
     }
   }
 
@@ -384,8 +436,18 @@ public class PathDetailFragment extends BaseFragment implements
     protected void onPostExecute(List<CustomerListModel> customerListModels) {
       //// TODO: Shakib, hide progressbar
       customerList = customerListModels;
+      if (customerList == null || customerList.size() == 0) {
+        noCustomerLay.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+      } else {
+        recyclerView.setVisibility(View.VISIBLE);
+        noCustomerLay.setVisibility(View.GONE);
+        adapter.setDataModel(customerList);
+        adapter.notifyDataSetChanged();
+      }
       adapter.setDataModel(customerList);
       adapter.notifyDataSetChanged();
     }
   }
 }
+

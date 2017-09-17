@@ -519,5 +519,9 @@
   <string name="payment_detail">جزییات پرداخت</string>
   <string name="error_invalid_login_info">اطلاعات وارد شده صحیح نیست</string>
   <string name="error_message_no_data">اطلاعات لازم یافت نشد. به قسمت دریافت اطلاعات مراجعه کنید</string>
+  <string name="cusomter">مشتری</string>
+  <string name="no_customer">متاسفانه مشتری مورد نظر یافت نشد!</string>
+  <string name="no_location">موقعیت جغرافیایی کاربر ثبت نشده است!</string>
+  <string name="register_location">ثبت موقعیت مکانی</string>
 
 </resources>

@@ -102,6 +102,7 @@ public class MainActivity extends BaseFragmentActivity {
   public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
   public static final int CUSTOMER_INFO_FRAGMENT = 32;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.drawer_layout)
@@ -161,7 +162,14 @@ public class MainActivity extends BaseFragmentActivity {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_main);
+    if (MultiScreenUtility.isTablet(this)) {
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
+    } else {
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+    }
     ButterKnife.bind(this);
 
     dataTransferService = new DataTransferServiceImpl(this);

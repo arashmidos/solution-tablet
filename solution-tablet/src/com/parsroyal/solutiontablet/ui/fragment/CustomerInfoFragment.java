@@ -5,10 +5,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -54,24 +57,38 @@ public class CustomerInfoFragment extends BaseFragment {
   private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
   private static final int RESULT_OK = -1;
   private static final int RESULT_CANCELED = 0;
+
+  @Nullable
   @BindView(R.id.store_tv)
   TextView storeTv;
+  @Nullable
   @BindView(R.id.drop_img)
   ImageView dropImg;
+  @Nullable
   @BindView(R.id.show_more_tv)
   TextView showMoreTv;
+  @Nullable
   @BindView(R.id.location_tv)
   TextView locationTv;
+  @Nullable
   @BindView(R.id.mobile_tv)
   TextView mobileTv;
+  @Nullable
   @BindView(R.id.phone_tv)
   TextView phoneTv;
+  @Nullable
   @BindView(R.id.customer_detail_lay)
   LinearLayout customerDetailLay;
+  @Nullable
   @BindView(R.id.add_order_tv)
   TextView addOrderTv;
+  @Nullable
   @BindView(R.id.register_order_lay)
   RelativeLayout registerOrderLay;
+  @Nullable
+  @BindView(R.id.register_location_btn)
+  Button registerLocationBtn;
+
   private boolean isShowMore = true;
   private long customerId;
   private long visitId;
@@ -147,13 +164,17 @@ public class CustomerInfoFragment extends BaseFragment {
     }
   }
 
+  @Optional
   @OnClick({R.id.show_more_tv, R.id.register_order_lay, R.id.register_payment_lay,
       R.id.register_questionnaire_lay, R.id.register_image_lay, R.id.end_and_exit_visit_lay,
-      R.id.no_activity_lay})
+      R.id.no_activity_lay, R.id.register_location_btn})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_order_lay:
         openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+        break;
+      case R.id.register_location_btn:
+        Toast.makeText(mainActivity, "location", Toast.LENGTH_SHORT).show();
         break;
       case R.id.register_payment_lay:
         goToRegisterPaymentFragment();

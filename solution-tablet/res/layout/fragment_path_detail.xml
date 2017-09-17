@@ -128,7 +128,32 @@
     android:layout_weight="1">
 
   </android.support.v7.widget.RecyclerView>
+  <LinearLayout
+    android:id="@+id/no_customer_lay"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:visibility="gone">
 
+    <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="50dp"
+      android:layout_marginBottom="25dp"
+      android:layout_gravity="center_vertical|top"
+      android:gravity="center"
+      android:src="@drawable/im_customer_not_found" />
+
+    <TextView
+      style="@style/IranSans"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:text="@string/no_customer"
+      android:textColor="@color/gray_75"
+      android:textSize="14sp" />
+  </LinearLayout>
   <View
     android:layout_width="match_parent"
     android:layout_height="1dp"

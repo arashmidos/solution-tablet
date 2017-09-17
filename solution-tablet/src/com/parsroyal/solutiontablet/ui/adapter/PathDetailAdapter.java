@@ -44,6 +44,7 @@ import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Collections;
@@ -93,7 +94,6 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
   public void onBindViewHolder(ViewHolder holder, int position) {
     CustomerListModel model = customers.get(position);
     setMargin(position == customers.size() - 1, holder.customerLay);
-
     holder.setData(model, position);
     holder.setListeners();
   }
@@ -106,7 +106,11 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
     if (isLastItem) {
       parameter.setMargins(paddingInPx, paddingInPx, paddingInPx, paddingInPx);
     } else {
-      parameter.setMargins(paddingInPx, paddingInPx, paddingInPx, 0);
+      if (MultiScreenUtility.isTablet(mainActivity)) {
+        parameter.setMargins(paddingInPx, paddingInPx, paddingInPx, paddingInPx);
+      } else {
+        parameter.setMargins(paddingInPx, paddingInPx, paddingInPx, 0);
+      }
     }
     cardView.setLayoutParams(parameter);
   }
