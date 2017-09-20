@@ -45,24 +45,6 @@ public class QAnswer extends BaseEntity<Long> {
   private String date;
   private Long answersGroupNo; // Questionaire Number for multiple questionaire in a single visit for 1 customer
 
-  public static String createString(QAnswer qAnswer) {
-    StringBuilder sb = new StringBuilder();
-
-    sb.append(qAnswer.getId());
-    sb.append("&");
-    sb.append(qAnswer.getQuestionBackendId());
-    sb.append("&");
-    sb.append(qAnswer.getAnswer());
-    sb.append("&");
-    sb.append(qAnswer.getCustomerBackendId());
-    sb.append("&");
-    sb.append(Empty.isEmpty(qAnswer.getGoodsBackendId()) ? "NULL" : qAnswer.getGoodsBackendId());
-    sb.append("&");
-    sb.append(qAnswer.getCreateDateTime());
-
-    return sb.toString();
-  }
-
   public Long getId() {
     return id;
   }

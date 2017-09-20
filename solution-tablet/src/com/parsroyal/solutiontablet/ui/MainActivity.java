@@ -33,7 +33,9 @@ import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -428,7 +430,7 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         fragment = new PaymentFragment();
         changeSidebarItem(FUNDS_FRAGMENT_ID);
         break;
-      case QUESTIONAIRE_LIST_FRAGMENT_ID:
+      case QUESTIONAIRE_LIST_FRAGMENT_ID://26
         fragment = new QuestionnairesListFragment();
         if (Empty.isNotEmpty(args)) {
           fragment.setArguments(args);
@@ -624,6 +626,10 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
   public void getMessage(Event event) {
     if (event instanceof UpdateEvent) {
       installNewVersion();
+    } else if (event instanceof ErrorEvent) {
+      if (event.getStatusCode() == StatusCodes.PERMISSION_DENIED) {
+        requestPermissions();
+      }
     }
   }
 

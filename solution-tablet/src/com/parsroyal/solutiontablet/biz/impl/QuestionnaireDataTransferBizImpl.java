@@ -13,13 +13,15 @@ import com.parsroyal.solutiontablet.data.dao.impl.QuestionDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Question;
 import com.parsroyal.solutiontablet.data.entity.Questionnaire;
+import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.data.model.QuestionnaireDto;
 import com.parsroyal.solutiontablet.data.model.QuestionnaireDtoList;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import java.util.Date;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,6 +34,7 @@ public class QuestionnaireDataTransferBizImpl extends
     AbstractDataTransferBizImpl<QuestionnaireDtoList> {
 
   public static final String TAG = QuestionnaireDataTransferBizImpl.class.getSimpleName();
+  private final SettingServiceImpl settingService;
 
   private Context context;
   private QuestionnaireDao questionnaireDao;
@@ -46,35 +49,30 @@ public class QuestionnaireDataTransferBizImpl extends
     this.questionDao = new QuestionDaoImpl(context);
     this.qAnswerDao = new QAnswerDaoImpl(context);
     this.resultObserver = resultObserver;
+    this.settingService = new SettingServiceImpl(context);
   }
 
   @Override
   public void receiveData(QuestionnaireDtoList data) {
-    if (Empty.isNotEmpty(data) && Empty.isNotEmpty(data.getQuestionnaireDtoList())) {
+    if (Empty.isNotEmpty(data) && Empty.isNotEmpty(data.getQuestionnaires())) {
       try {
         questionDao.deleteAll();
         qAnswerDao.deleteAll();
         questionnaireDao.deleteAll();
-        for (QuestionnaireDto questionnaireDto : data.getQuestionnaireDtoList()) {
+        for (QuestionnaireDto questionnaireDto : data.getQuestionnaires()) {
           Questionnaire questionnaire = createQuestionnaireEntityFromDto(questionnaireDto);
-          questionnaire.setCreateDateTime(
-              DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-          questionnaire.setUpdateDateTime(
-              DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+
           questionnaireDao.create(questionnaire);
-          for (Question question : questionnaireDto.getQuestions()) {
-            question.setQuestion(CharacterFixUtil.fixString(question.getQuestion()));
-            question.setCreateDateTime(DateUtil
-                .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-            question.setUpdateDateTime(DateUtil
-                .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+          for (QuestionDto questionDto : questionnaireDto.getQuestions()) {
+            Question question = createQuestionEntityFromDto(questionDto);
             questionDao.create(question);
           }
         }
         getObserver().publishResult(
             context.getString(R.string.message_questionnaires_transferred_successfully));
       } catch (Exception e) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving QuestionaireData " + e.getMessage());
+        Crashlytics.log(Log.ERROR, "Data transfer",
+            "Error in receiving QuestionaireData " + e.getMessage());
         Log.e(TAG, e.getMessage(), e);
         getObserver().publishResult(
             context.getString(R.string.message_exception_in_transferring_questionnaires));
@@ -82,16 +80,20 @@ public class QuestionnaireDataTransferBizImpl extends
     }
   }
 
+  private Question createQuestionEntityFromDto(QuestionDto questionDto) {
+    return new Question(questionDto.getBackendId(), questionDto.getQuestionnaireId(),
+        CharacterFixUtil.fixString(questionDto.getQuestion()), questionDto.getAnswer(),
+        questionDto.getStatus(),
+        questionDto.getOrder(), questionDto.getType());
+
+  }
+
   private Questionnaire createQuestionnaireEntityFromDto(QuestionnaireDto questionnaireDto) {
-    Questionnaire questionnaire = new Questionnaire();
-    questionnaire.setBackendId(questionnaireDto.getBackendId());
-    questionnaire.setFromDate(questionnaireDto.getFromDate());
-    questionnaire.setToDate(questionnaireDto.getToDate());
-    questionnaire.setGoodsGroupBackendId(questionnaireDto.getGoodsGroupBackendId());
-    questionnaire.setCustomerGroupBackendId(questionnaireDto.getCustomerGroupBackendId());
-    questionnaire.setDescription(questionnaireDto.getDescription());
-    questionnaire.setStatus(questionnaireDto.getStatus());
-    return questionnaire;
+
+    return new Questionnaire(questionnaireDto.getId(),
+        questionnaireDto.getFromDate(), questionnaireDto.getToDate(),
+        questionnaireDto.getGoodsGroupId(), questionnaireDto.getCustomerGroupId(),
+        questionnaireDto.getDescription(), questionnaireDto.getStatus());
   }
 
   @Override
@@ -107,7 +109,9 @@ public class QuestionnaireDataTransferBizImpl extends
 
   @Override
   public String getMethod() {
-    return "questionnaire/all";
+    String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
+    String today = DateUtil.getCurrentGregorianFullWithDate();
+    return String.format("questionnaire/%s/%s", salesmanId, today);
   }
 
   @Override
@@ -117,18 +121,16 @@ public class QuestionnaireDataTransferBizImpl extends
 
   @Override
   public HttpMethod getHttpMethod() {
-    return HttpMethod.POST;
+    return HttpMethod.GET;
   }
 
   @Override
   protected MediaType getContentType() {
-    return MediaType.TEXT_PLAIN;
+    return MediaType.APPLICATION_JSON;
   }
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity requestEntity = new HttpEntity<>(
-        DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"), headers);
-    return requestEntity;
+    return new HttpEntity<>(headers);
   }
 }

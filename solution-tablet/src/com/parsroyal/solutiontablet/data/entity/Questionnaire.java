@@ -1,5 +1,8 @@
 package com.parsroyal.solutiontablet.data.entity;
 
+import com.parsroyal.solutiontablet.util.DateUtil;
+import java.util.Date;
+
 /**
  * Created by Mahyar on 7/21/2015.
  */
@@ -37,6 +40,25 @@ public class Questionnaire extends BaseEntity<Long> {
   private Long customerGroupBackendId;
   private String description;
   private Long status;
+
+  public Questionnaire(Long backendId, String fromDate, String toDate,
+      Long goodsGroupBackendId, Long customerGroupBackendId, String description,
+      Long status) {
+    this.backendId = backendId;
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+    this.goodsGroupBackendId = goodsGroupBackendId;
+    this.customerGroupBackendId = customerGroupBackendId;
+    this.description = description;
+    this.status = status;
+    this.createDateTime = DateUtil
+        .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    this.updateDateTime = DateUtil
+        .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+  }
+
+  public Questionnaire() {
+  }
 
   public Long getId() {
     return id;

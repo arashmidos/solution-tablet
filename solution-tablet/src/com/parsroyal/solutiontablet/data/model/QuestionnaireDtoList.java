@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class QuestionnaireDtoList extends BaseModel {
 
-  private List<QuestionnaireDto> questionnaireDtoList;
+  private List<QuestionnaireDto> questionnaires;
 
-  public List<QuestionnaireDto> getQuestionnaireDtoList() {
-    return questionnaireDtoList;
+  public List<QuestionnaireDto> getQuestionnaires() {
+    return questionnaires;
   }
 
-  public void setQuestionnaireDtoList(List<QuestionnaireDto> questionnaireDtoList) {
-    this.questionnaireDtoList = questionnaireDtoList;
+  public void setQuestionnaires(List<QuestionnaireDto> questionnaires) {
+    this.questionnaires = questionnaires;
   }
 }
