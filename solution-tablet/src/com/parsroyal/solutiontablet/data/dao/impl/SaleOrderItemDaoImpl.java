@@ -197,9 +197,9 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     int selectedUnit = cursor.getInt(6);
     Goods goods = goodsService.getGoodsByBackendId(cursor.getLong(1));
     long count2;
-    if (Empty.isNotEmpty(goods)) {
+    if (Empty.isNotEmpty(goods) && goods.getUnit1Count() != 0L) {
       count2 = count1 / goods.getUnit1Count();
-    }else{
+    } else {
       count2 = cursor.getLong(11);
     }
 
