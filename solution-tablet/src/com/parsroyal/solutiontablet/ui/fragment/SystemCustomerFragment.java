@@ -19,6 +19,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.service.CustomerService;
@@ -27,6 +28,8 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SystemCustomerAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Iterator;
@@ -74,8 +77,13 @@ public class SystemCustomerFragment extends BaseFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     adapter = new SystemCustomerAdapter(mainActivity, getCustomersList());
-    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-    recyclerView.setLayoutManager(linearLayoutManager);
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
+      recyclerView.setLayoutManager(rtlGridLayoutManager);
+    } else {
+      LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+      recyclerView.setLayoutManager(linearLayoutManager);
+    }
     recyclerView.setAdapter(adapter);
     recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
       @Override
@@ -94,6 +102,7 @@ public class SystemCustomerFragment extends BaseFragment {
     return customerService.getFilteredCustomerList(null, "");
   }
 
+  @Optional
   @OnClick({R.id.sort_lay, R.id.filter_lay, R.id.fab_add_customer})
   public void onClick(View view) {
     switch (view.getId()) {

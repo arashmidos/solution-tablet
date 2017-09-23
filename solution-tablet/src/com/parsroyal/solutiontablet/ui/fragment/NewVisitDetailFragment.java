@@ -65,6 +65,7 @@ public class NewVisitDetailFragment extends BaseFragment {
   private CustomerInfoFragment customerInfoFragment;
   private NewOrderListFragment orderListFragment;
   private PaymentListFragment paymentListFragment;
+  private PictureFragment pictureFragment;
   private Customer customer;
 
   public NewVisitDetailFragment() {
@@ -283,14 +284,15 @@ public class NewVisitDetailFragment extends BaseFragment {
   private void initFragments() {
     Bundle arguments = getArguments();
     paymentListFragment = PaymentListFragment.newInstance(arguments);
+    pictureFragment = PictureFragment.newInstance(this);
     orderListFragment = NewOrderListFragment.newInstance(arguments, this);
     customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
   }
 
   private void setUpViewPager() {
     viewPagerAdapter = new CustomerDetailViewPagerAdapter(mainActivity.getSupportFragmentManager());
-//    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.images));
 //    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
+    viewPagerAdapter.add(pictureFragment, getString(R.string.images));
     viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
     viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
     viewPagerAdapter.add(customerInfoFragment, getString(R.string.customer_information));

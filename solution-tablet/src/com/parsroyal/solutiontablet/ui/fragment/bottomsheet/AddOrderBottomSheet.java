@@ -1,10 +1,17 @@
-package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
+package com.parsroyal.solutiontablet.ui.fragment.bottomsheet;
 
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,6 +38,8 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.GoodImagePagerAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment.GoodsDialogOnClickListener;
 import com.parsroyal.solutiontablet.util.DepthPageTransformer;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MediaUtil;
@@ -40,10 +50,8 @@ import java.util.List;
 import java.util.Locale;
 import me.relex.circleindicator.CircleIndicator;
 
-/**
- * @author Shakib
- */
-public class AddOrderDialogFragment extends DialogFragment {
+
+public class AddOrderBottomSheet extends BottomSheetDialogFragment {
 
   @BindView(R.id.pager)
   ViewPager viewPager;
@@ -80,7 +88,7 @@ public class AddOrderDialogFragment extends DialogFragment {
   @BindView(R.id.view_pager_position_tv)
   TextView viewPagerPositionTv;
 
-  private GoodsDialogOnClickListener onClickListener;
+  private AddOrderDialogFragment.GoodsDialogOnClickListener onClickListener;
   private Long goodsBackendId;
   private long orderStatus;
   private long goodsInvoiceId;
@@ -98,30 +106,36 @@ public class AddOrderDialogFragment extends DialogFragment {
   private String unit2Title;
   private Long saleRate;
 
-  public AddOrderDialogFragment() {
-    // Required empty public constructor
+  public static AddOrderBottomSheet newInstance() {
+    AddOrderBottomSheet chatListBottomSheet = new AddOrderBottomSheet();
+    return chatListBottomSheet;
   }
 
-
-  public static AddOrderDialogFragment newInstance() {
-    return new AddOrderDialogFragment();
-  }
-
-  public void setOnClickListener(GoodsDialogOnClickListener onClickListener) {
+  public void setOnClickListener(
+      AddOrderDialogFragment.GoodsDialogOnClickListener onClickListener) {
     this.onClickListener = onClickListener;
   }
 
+  @Nullable
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
-  }
+  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    getDialog().setOnShowListener(dialog -> {
+      BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog;
+      FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog
+          .findViewById(android.support.design.R.id.design_bottom_sheet);
+      CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) bottomSheet
+          .getLayoutParams();
+      DisplayMetrics displayMetrics = new DisplayMetrics();
+      getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+      int width = displayMetrics.widthPixels;
+      params.setMargins(width / 4, 48, width / 4, 0);
+      bottomSheet.setLayoutParams(params);
+      BottomSheetBehavior.from(bottomSheet)
+          .setState(BottomSheetBehavior.STATE_EXPANDED);
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.fragment_add_order_dialog, container, false);
+    });
+    View view = inflater.inflate(R.layout.fragment_add_order_bottom_sheet, container, false);
     ButterKnife.bind(this, view);
     this.mainActivity = (MainActivity) getActivity();
     Bundle arguments = getArguments();
@@ -226,8 +240,9 @@ public class AddOrderDialogFragment extends DialogFragment {
 
       @Override
       public void afterTextChanged(Editable s) {
+        //TODO why this method change the size of screen?
         fillLeftPanel();
-        errorMsg.setVisibility(View.GONE);
+        errorMsg.setVisibility(View.INVISIBLE);
       }
     });
 
@@ -366,7 +381,7 @@ public class AddOrderDialogFragment extends DialogFragment {
               count1 *= Double.valueOf(unit1Count);
             }
             onClickListener.onConfirmBtnClicked(count1, selectedUnit1);
-            AddOrderDialogFragment.this.dismiss();
+            getDialog().dismiss();
           }
         }
         break;

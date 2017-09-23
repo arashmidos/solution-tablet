@@ -22,7 +22,9 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderFinalizeAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import org.greenrobot.eventbus.EventBus;
 
 public class FinalizeOrderDialogFragment extends DialogFragment {
@@ -99,8 +101,13 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     adapter = new OrderFinalizeAdapter(this, activity, order, rejectedGoodsList, pageStatus);
-    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-    recyclerView.setLayoutManager(linearLayoutManager);
+    if (MultiScreenUtility.isTablet(activity)) {
+      RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(activity, 2);
+      recyclerView.setLayoutManager(rtlGridLayoutManager);
+    } else {
+      LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+      recyclerView.setLayoutManager(linearLayoutManager);
+    }
     recyclerView.setAdapter(adapter);
   }
 

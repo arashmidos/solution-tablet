@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -88,8 +89,12 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     TextView orderCountTv;
     @BindView(R.id.order_payment_method_tv)
     TextView orderPaymentMethodTv;
+    @Nullable
     @BindView(R.id.main_lay)
-    RelativeLayout mainLay;
+    RelativeLayout mainLayRel;
+    @Nullable
+    @BindView(R.id.main_lay_linear)
+    LinearLayout mainLayLin;
     @Nullable
     @BindView(R.id.order_status_tv)
     TextView orderStatusTv;
@@ -100,7 +105,11 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-      mainLay.setOnClickListener(this);
+      if (mainLayLin != null) {
+        mainLayLin.setOnClickListener(this);
+      } else {
+        mainLayRel.setOnClickListener(this);
+      }
     }
 
     public void setData(int position, SaleOrderListModel order) {
@@ -128,6 +137,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     @Override
     public void onClick(View v) {
       switch (v.getId()) {
+        case R.id.main_lay_linear:
         case R.id.main_lay:
           Bundle args = new Bundle();
           args.putLong(Constants.ORDER_ID, order.getId());

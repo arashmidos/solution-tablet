@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -78,7 +79,11 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
     holder.paymentTv.setText(number);
     //TODO: arash add bank and branch
 //    holder.bankDetailTv.setText(payment.get);
-    holder.mainLay.setOnClickListener(v -> goToRegisterPaymentFragment(payment));
+    if (holder.mainLayLin != null) {
+      holder.mainLayLin.setOnClickListener(v -> goToRegisterPaymentFragment(payment));
+    } else {
+      holder.mainLayRel.setOnClickListener(v -> goToRegisterPaymentFragment(payment));
+    }
   }
 
   @Override
@@ -124,8 +129,12 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
     TextView paymentTv;
     @BindView(R.id.bank_detail_tv)
     TextView bankDetailTv;
+    @Nullable
     @BindView(R.id.main_lay)
-    RelativeLayout mainLay;
+    RelativeLayout mainLayRel;
+    @Nullable
+    @BindView(R.id.main_lay_linear)
+    LinearLayout mainLayLin;
 
     public ViewHolder(View itemView) {
       super(itemView);

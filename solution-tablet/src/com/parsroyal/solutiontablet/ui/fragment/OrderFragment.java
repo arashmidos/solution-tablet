@@ -36,11 +36,14 @@ import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsAdapter;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.AddOrderBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -137,8 +140,13 @@ public class OrderFragment extends BaseFragment {
     adapter = new GoodsAdapter(mainActivity, this, goodsService.searchForGoodsList(goodsSo),
         readOnly,
         false);
-    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
-    recyclerView.setLayoutManager(linearLayoutManager);
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
+      recyclerView.setLayoutManager(rtlGridLayoutManager);
+    } else {
+      LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+      recyclerView.setLayoutManager(linearLayoutManager);
+    }
     recyclerView.setAdapter(adapter);
   }
 
@@ -223,8 +231,14 @@ public class OrderFragment extends BaseFragment {
 
   public void showOrderDialog(Goods goods) {
     try {
+      AddOrderDialogFragment addOrderDialogFragment = null;
+      AddOrderBottomSheet addOrderBottomSheet = null;
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
-      AddOrderDialogFragment addOrderDialogFragment = AddOrderDialogFragment.newInstance();
+      if (MultiScreenUtility.isTablet(mainActivity)) {
+        addOrderBottomSheet = AddOrderBottomSheet.newInstance();
+      } else {
+        addOrderDialogFragment = AddOrderDialogFragment.newInstance();
+      }
 
       Long invoiceBackendId = 0L;
       if (SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
@@ -253,14 +267,22 @@ public class OrderFragment extends BaseFragment {
       }
 
       bundle.putLong(Constants.SELECTED_UNIT, defaultUnit);
+      if (MultiScreenUtility.isTablet(mainActivity)) {
+        addOrderBottomSheet.setArguments(bundle);
+        addOrderBottomSheet.setOnClickListener((count, selectedUnit) -> {
+          handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
+          updateGoodsDataTb();
+        });
+        addOrderBottomSheet.show(mainActivity.getSupportFragmentManager(), "order");
+      } else {
+        addOrderDialogFragment.setArguments(bundle);
+        addOrderDialogFragment.setOnClickListener((count, selectedUnit) -> {
+          handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
+          updateGoodsDataTb();
+        });
 
-      addOrderDialogFragment.setArguments(bundle);
-      addOrderDialogFragment.setOnClickListener((count, selectedUnit) -> {
-        handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
-        updateGoodsDataTb();
-      });
-
-      addOrderDialogFragment.show(ft, "order");
+        addOrderDialogFragment.show(ft, "order");
+      }
     } catch (Exception e) {
       Crashlytics.log(Log.ERROR, "Data Storage Exception",
           "Error in confirming handling GoodsList " + e.getMessage());

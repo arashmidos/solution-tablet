@@ -20,6 +20,8 @@ import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SystemCustomerAdapter;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.util.List;
 
 /**
@@ -64,8 +66,13 @@ public class CustomerSearchFragment extends BaseFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     adapter = new SystemCustomerAdapter(activity, getCustomersList());
-    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-    recyclerView.setLayoutManager(linearLayoutManager);
+    if (MultiScreenUtility.isTablet(activity)) {
+      RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(activity, 2);
+      recyclerView.setLayoutManager(rtlGridLayoutManager);
+    } else {
+      LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+      recyclerView.setLayoutManager(linearLayoutManager);
+    }
     recyclerView.setAdapter(adapter);
   }
 

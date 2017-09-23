@@ -13,6 +13,7 @@ import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.FeaturesAdapter;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.util.List;
 
@@ -51,7 +52,12 @@ public class FeaturesFragment extends BaseFragment {
     List<FeatureList> featureList = FeatureList.getFeatureList(getActivity());
     featureList.get(0).setBadger(getVisitLineSize());
     adapter = new FeaturesAdapter(getActivity(), featureList);
-    RtlGridLayoutManager gridLayoutManager = new RtlGridLayoutManager(getActivity(), 2);
+    RtlGridLayoutManager gridLayoutManager;
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      gridLayoutManager = new RtlGridLayoutManager(getActivity(), 3);
+    } else {
+      gridLayoutManager = new RtlGridLayoutManager(getActivity(), 2);
+    }
     recyclerView.setLayoutManager(gridLayoutManager);
     recyclerView.setAdapter(adapter);
   }
