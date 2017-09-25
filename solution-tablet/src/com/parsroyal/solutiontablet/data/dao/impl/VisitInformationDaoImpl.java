@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Location;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
@@ -103,15 +102,15 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
   }
 
   @Override
-  public void updateLocation(Long visitInformationId, Location location) {
+  public void updateLocation(Long visitInformationId, Double lat, Double lng) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     db.beginTransaction();
     String whereClause = VisitInformation.COL_ID + " = ?";
     String[] args = {String.valueOf(visitInformationId)};
     ContentValues contentValues = new ContentValues();
-    contentValues.put(VisitInformation.COL_X_LOCATION, location.getLatitude());
-    contentValues.put(VisitInformation.COL_Y_LOCATION, location.getLongitude());
+    contentValues.put(VisitInformation.COL_X_LOCATION, lat);
+    contentValues.put(VisitInformation.COL_Y_LOCATION, lng);
     db.update(getTableName(), contentValues, whereClause, args);
     db.setTransactionSuccessful();
     db.endTransaction();

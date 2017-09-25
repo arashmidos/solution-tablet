@@ -144,8 +144,14 @@ public class VisitServiceImpl implements VisitService {
 
   @Override
   public void updateVisitLocation(Long visitInformationId, Location location) {
-    visitInformationDao.updateLocation(visitInformationId, location);
+    visitInformationDao.updateLocation(visitInformationId, location.getLatitude(), location.getLongitude());
   }
+
+  @Override
+  public void updateVisitLocation(Long visitInformationId, Position position) {
+    visitInformationDao.updateLocation(visitInformationId, position.getLatitude(),position.getLongitude());
+  }
+
 
   @Override
   public void saveVisitDetail(VisitInformationDetail visitDetail) {

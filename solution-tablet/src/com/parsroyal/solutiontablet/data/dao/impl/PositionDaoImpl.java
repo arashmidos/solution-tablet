@@ -10,6 +10,7 @@ import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.Empty;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -177,6 +178,10 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String selection = Position.COL_CREATE_DATE_TIME + " between ? and ? ";
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss", Locale.US);
+
+    if (Empty.isEmpty(to)) {
+      to = new Date();
+    }
 
     String[] args = {sdf.format(from), sdf.format(to)};
     String orderBy = Position.COL_CREATE_DATE_TIME;

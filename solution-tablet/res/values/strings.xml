@@ -321,7 +321,7 @@
   <string name="seconds">( ثانیه )</string>
   <string name="gps_setting">تنظیمات موقعیت یاب</string>
   <string name="enable_gps_service">سرویس موقعیت یاب فعال باشد</string>
-  <string name="sinse_date">از تاریخ:</string>
+  <string name="sinse_date">تاریخ:</string>
   <string name="toDate">الی :</string>
   <string name="filter">فیلتر</string>
   <string name="error_gps_is_disabled">موقعیت یاب دستگاه فعال نیست. آیا میخواهید GPS را روشن کنید؟</string>
