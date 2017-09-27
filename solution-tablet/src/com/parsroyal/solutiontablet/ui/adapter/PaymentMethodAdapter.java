@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 
+import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.NewOrderListFragment;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,11 +31,16 @@ public class PaymentMethodAdapter extends RecyclerView.Adapter<PaymentMethodAdap
   private LabelValue selectedItem;
   private Context context;
   private List<LabelValue> paymentMethods;
+  private NewOrderInfoFragment newOrderInfoFragment;
+  private boolean isEditable;
 
-  public PaymentMethodAdapter(Context context, List<LabelValue> paymentMethods, LabelValue selectedItem) {
+  public PaymentMethodAdapter(Context context, List<LabelValue> paymentMethods,
+      LabelValue selectedItem, NewOrderInfoFragment newOrderInfoFragment, boolean isEditable) {
     this.context = context;
+    this.isEditable = isEditable;
     this.selectedItem = selectedItem;
     this.paymentMethods = paymentMethods;
+    this.newOrderInfoFragment = newOrderInfoFragment;
     inflater = LayoutInflater.from(context);
   }
 
@@ -53,17 +61,26 @@ public class PaymentMethodAdapter extends RecyclerView.Adapter<PaymentMethodAdap
       holder.mainLay.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
       holder.paymentMethodTv.setTextColor(ContextCompat.getColor(context, R.color.black_85));
     }
-    lastItem(position == paymentMethods.size() - 1, holder);
+    if (!MultiScreenUtility.isTablet(context)) {
+      lastItem(position == paymentMethods.size() - 1, holder);
+    }
     holder.mainLay.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        selectedItem = paymentMethod;
-        notifyDataSetChanged();
+      @Override
+      public void onClick(View v) {
+        if (isEditable) {
+          selectedItem = paymentMethod;
+          notifyDataSetChanged();
+          if (newOrderInfoFragment != null) {
+            newOrderInfoFragment.setPaymentMethod(selectedItem);
+          }
+        }
       }
     });
   }
 
   private void lastItem(boolean isLastItem, ViewHolder holder) {
-    LinearLayout.LayoutParams parameter = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    LinearLayout.LayoutParams parameter = new LinearLayout.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     if (isLastItem) {
       parameter.setMargins(0, 0, 0, 160);
     } else {
@@ -84,9 +101,12 @@ public class PaymentMethodAdapter extends RecyclerView.Adapter<PaymentMethodAdap
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.payment_method_tv) TextView paymentMethodTv;
-    @BindView(R.id.main_lay) RelativeLayout mainLay;
-    @BindView(R.id.bottom_line) View bottomLine;
+    @BindView(R.id.payment_method_tv)
+    TextView paymentMethodTv;
+    @BindView(R.id.main_lay)
+    RelativeLayout mainLay;
+    @BindView(R.id.bottom_line)
+    View bottomLine;
 
     public ViewHolder(View itemView) {
       super(itemView);

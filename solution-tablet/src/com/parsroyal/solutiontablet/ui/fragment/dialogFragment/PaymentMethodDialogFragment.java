@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -62,7 +63,8 @@ public class PaymentMethodDialogFragment extends DialogFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new PaymentMethodAdapter(activity, getPaymentMethodList(), selectedItem);
+    adapter = new PaymentMethodAdapter(activity, getPaymentMethodList(), selectedItem, null,
+        true);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
