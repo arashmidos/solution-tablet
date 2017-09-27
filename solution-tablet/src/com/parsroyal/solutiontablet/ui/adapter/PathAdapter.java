@@ -24,7 +24,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import java.util.HashSet;
 import java.util.List;
 
-public class VisitLineListAdapter extends Adapter<VisitLineListAdapter.ViewHolder> {
+public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
 
   private List<VisitLineListModel> visitLineList;
   private LayoutInflater inflater;
@@ -33,7 +33,7 @@ public class VisitLineListAdapter extends Adapter<VisitLineListAdapter.ViewHolde
   private LatLng loation = new LatLng(35.6892, 51.3890);
 
 
-  public VisitLineListAdapter(MainActivity mainActivity, List<VisitLineListModel> visitLineList) {
+  public PathAdapter(MainActivity mainActivity, List<VisitLineListModel> visitLineList) {
     this.mainActivity = mainActivity;
     this.visitLineList = visitLineList;
     inflater = LayoutInflater.from(mainActivity);

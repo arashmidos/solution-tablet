@@ -17,6 +17,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
+import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -259,7 +260,8 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       enterBtn.setOnClickListener(v -> {
 
         CustomerDto customer = customerService.getCustomerDtoById(model.getPrimaryKey());
-        if (!distanceServiceEnabled || hasAcceptableDistance(customer, errorMessageTv)) {
+        if (!distanceServiceEnabled || hasAcceptableDistance(customer, errorMessageTv)
+            || BuildConfig.DEBUG) {
           doEnter(customer);
           alertDialog.dismiss();
         } else {

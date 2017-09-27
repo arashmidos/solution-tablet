@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.google.android.gms.maps.model.ButtCap;
+import com.bumptech.glide.Glide;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.ui.adapter.PictureAdapter.ViewHolder;
+import com.parsroyal.solutiontablet.util.MediaUtil;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public class PictureAdapter extends Adapter<ViewHolder> {
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view = inflater.inflate(R.layout.item_pic_list, parent);
+    View view = inflater.inflate(R.layout.item_pic_list, parent, false);
     return new ViewHolder(view);
   }
 
@@ -45,6 +46,11 @@ public class PictureAdapter extends Adapter<ViewHolder> {
   @Override
   public int getItemCount() {
     return customerPics.size();
+  }
+
+  public void updateList(List<CustomerPic> customerPics) {
+    this.customerPics = customerPics;
+    notifyDataSetChanged();
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
@@ -61,7 +67,10 @@ public class PictureAdapter extends Adapter<ViewHolder> {
 
     public void setData(CustomerPic customerPic) {
       this.customerPic = customerPic;
-      customerPic.getTitle();
+      Glide.with(context)
+          .load(customerPic.getTitle())
+          .error(R.drawable.goods_default)
+          .into(picImg);
     }
   }
 }

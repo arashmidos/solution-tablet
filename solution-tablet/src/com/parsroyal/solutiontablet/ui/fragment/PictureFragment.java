@@ -4,18 +4,14 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -89,6 +85,10 @@ public class PictureFragment extends BaseFragment {
 
   @OnClick(R.id.fab_add_pic)
   public void onViewClicked() {
-    Toast.makeText(mainActivity, "add pic", Toast.LENGTH_SHORT).show();
+    parent.startCameraActivity();
+  }
+
+  public void update() {
+    adapter.updateList(customerService.getAllPicturesByCustomerBackendId(parent.getCustomer().getBackendId()));
   }
 }

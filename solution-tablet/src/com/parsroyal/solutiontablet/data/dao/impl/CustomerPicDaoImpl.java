@@ -92,7 +92,7 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
 
   @Override
   public List<CustomerPic> getAllCustomerPicturesByBackendId(long customerBackendId) {
-    String selection = " " + CustomerPic.COL_BACKEND_ID + " = ? ";
+    String selection = " " + CustomerPic.COL_CUSTOMER_BACKEND_ID + " = ? ";
     String[] args = {String.valueOf(customerBackendId)};
 
     return retrieveAll(selection, args, null, null, null);

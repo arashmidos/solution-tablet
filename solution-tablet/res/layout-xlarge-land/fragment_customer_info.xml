@@ -1,16 +1,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  xmlns:map="http://schemas.android.com/apk/res-auto"
   android:background="@color/features_background"
   android:orientation="horizontal"
   tools:context="com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment"
   tools:ignore="contentDescription">
-  <RelativeLayout
+
+  <com.google.android.gms.maps.MapView
+    android:id="@+id/map_item"
     android:layout_width="0dp"
     android:layout_height="match_parent"
-    android:layout_weight=".6"
+    android:layout_weight="0.6"
+    map:liteMode="true"
+    android:visibility="gone"
+    map:mapType="none" />
+
+  <RelativeLayout
+    android:id="@+id/map_layout"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="0.6"
     android:background="@color/features_background">
     <View
       android:id="@+id/center_view"
