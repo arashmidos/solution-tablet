@@ -71,9 +71,11 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
       String action = args.getString(Constants.DATA_TRANSFER_ACTION);
       switch (action) {
         case Constants.DATA_TRANSFER_GET:
+          mainActivity.changeTitle(getString(R.string.get_data));
           invokeGetData();
           break;
         case Constants.DATA_TRANSFER_SEND_DATA:
+          mainActivity.changeTitle(getString(R.string.send_data));
           invokeSendData();
           break;
         case Constants.DATA_TRANSFER_SEND_IMAGES:
