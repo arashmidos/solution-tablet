@@ -13,9 +13,11 @@ import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Position;
+import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import org.greenrobot.eventbus.EventBus;
 
 public class SaveLocationService extends IntentService {
 
@@ -69,6 +71,7 @@ public class SaveLocationService extends IntentService {
     final Position position = new Position(location);
     position.setSalesmanId(salesmanId);
     positionService.savePosition(position);
+    EventBus.getDefault().post(new GPSEvent(location));
   }
 
   /**

@@ -1,17 +1,14 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.Manifest.permission;
 import android.content.IntentSender.SendIntentException;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,12 +51,16 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
+import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.entity.Position;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.GPSIsNotEnabledException;
@@ -76,7 +77,7 @@ import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.OldMainActivity;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -91,6 +92,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by Arash on 2016-09-14.
@@ -158,25 +161,57 @@ public class UserTrackingFragment extends BaseFragment implements
   private Marker endMarker;
   private List<Marker> waypoints = new ArrayList<>();
   private boolean distanceServiceEnabled;
-  private FragmentActivity context;
+  private MainActivity context;
   private List<LatLng> lastRoute;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    context = getActivity();
-    keyValueBiz = new KeyValueBizImpl(context);
+    context = (MainActivity) getActivity();
+    context.changeTitle(getString(R.string.map));
+
+    initServices();
     salesmanId = keyValueBiz.findByKey(ApplicationKeys.SALESMAN_ID);
     if (Empty.isEmpty(salesmanId)) {
       View view = inflater.inflate((R.layout.view_error_page), null);
       TextView errorView = (TextView) view.findViewById(R.id.error_msg);
-      errorView.setText(errorView.getText() + "\n\n" + "به قسمت تنظیمات مراجعه کنید");
+      errorView.setText(errorView.getText() + "\n\n" + "اطلاعات کاربری یافت نشد!");
       return view;
     }
 
     View view = inflater.inflate(R.layout.fragment_user_tracking, null);
 
     ButterKnife.bind(this, view);
+
+    setListeners();
+
+    distanceServiceEnabled = Boolean.valueOf(settingService
+        .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE));
+    if (BuildConfig.DEBUG) {
+      distanceServiceEnabled = false;
+    }
+
+    loadCalendars();
+
+    googleApiClient = new Builder(context)
+        .addConnectionCallbacks(this)
+        .addOnConnectionFailedListener(this)
+        .addApi(LocationServices.API).build();
+
+    return view;
+  }
+
+  private void initServices() {
+    keyValueBiz = new KeyValueBizImpl(context);
+    positionService = new PositionServiceImpl(context);
+    customerService = new CustomerServiceImpl(context);
+    settingService = new SettingServiceImpl(context);
+    visitService = new VisitServiceImpl(context);
+    locationService = new LocationServiceImpl(context);
+    orderService = new SaleOrderServiceImpl(context);
+  }
+
+  private void setListeners() {
     showCustomers.setOnCheckedChangeListener((buttonView, isChecked) ->
     {
       if (isChecked) {
@@ -222,32 +257,13 @@ public class UserTrackingFragment extends BaseFragment implements
             waypoints.add(map.addMarker(new MarkerOptions()
                 .position(waypoint)
                 .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
-                    getActivity(), R.drawable.ic_point_blue_24dp)))));
+                    getActivity(), R.drawable.ic_stay_point_24dp)))));
           }
         }
       } else {
         clearWaypoints();
       }
     });
-
-    positionService = new PositionServiceImpl(context);
-    customerService = new CustomerServiceImpl(context);
-    settingService = new SettingServiceImpl(context);
-    visitService = new VisitServiceImpl(context);
-    locationService = new LocationServiceImpl(context);
-    orderService = new SaleOrderServiceImpl(context);
-
-    distanceServiceEnabled = Boolean.valueOf(settingService
-        .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE));
-
-    loadCalendars();
-
-    googleApiClient = new Builder(context)
-        .addConnectionCallbacks(this)
-        .addOnConnectionFailedListener(this)
-        .addApi(LocationServices.API).build();
-
-    return view;
   }
 
   private void clearWaypoints() {
@@ -255,6 +271,7 @@ public class UserTrackingFragment extends BaseFragment implements
       Marker marker = waypoints.get(i);
       marker.remove();
     }
+    waypoints.clear();
   }
 
   private void clearMapRoute() {
@@ -277,7 +294,6 @@ public class UserTrackingFragment extends BaseFragment implements
     }
 
     clearWaypoints();
-    waypoints.clear();
   }
 
   private void loadCalendars() {
@@ -298,6 +314,7 @@ public class UserTrackingFragment extends BaseFragment implements
         googleApiClient.connect();
       }
     }
+    EventBus.getDefault().register(this);
   }
 
   @Override
@@ -306,12 +323,22 @@ public class UserTrackingFragment extends BaseFragment implements
     if (googleApiClient != null && googleApiClient.isConnected()) {
       googleApiClient.disconnect();
     }
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof GPSEvent) {
+      if (showTrack.isChecked()) {
+        runOnUiThread(this::doFilter);
+      }
+    }
   }
 
 
   @Override
   public int getFragmentId() {
-    return OldMainActivity.USER_TRACKING_FRAGMENT_ID;
+    return MainActivity.USER_TRACKING_FRAGMENT_ID;
   }
 
   @Override
@@ -367,18 +394,6 @@ public class UserTrackingFragment extends BaseFragment implements
 
     map = googleMap;
 
-    if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION)
-        != PackageManager.PERMISSION_GRANTED
-        && ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION)
-        != PackageManager.PERMISSION_GRANTED) {
-      ToastUtil.toastError(getActivity(), getString(R.string.permission_rationale),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(getActivity(),
-                new String[]{permission.ACCESS_FINE_LOCATION}, 34);
-          });
-      return;
-    }
     currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
     if (currentLocation == null) {
@@ -451,22 +466,11 @@ public class UserTrackingFragment extends BaseFragment implements
     try {
       final Long visitInformationId = visitService.startVisiting(clickedClusterItem.getBackendId());
 
-      locationService.findCurrentLocation(new FindLocationListener() {
-        @Override
-        public void foundLocation(Location location) {
-          try {
-            visitService.updateVisitLocation(visitInformationId, location);
-          } catch (Exception e) {
-            Crashlytics
-                .log(Log.ERROR, "Location Service", "Error in finding location " + e.getMessage());
-            Log.e(TAG, e.getMessage(), e);
-          }
-        }
+      Position position = positionService.getLastPosition();
 
-        @Override
-        public void timeOut() {
-        }
-      });
+      if (Empty.isNotEmpty(position)) {
+        visitService.updateVisitLocation(visitInformationId, position);
+      }
 
       orderService.deleteForAllCustomerOrdersByStatus(clickedClusterItem.getBackendId(),
           SaleOrderStatus.DRAFT.getId());
@@ -474,8 +478,7 @@ public class UserTrackingFragment extends BaseFragment implements
       args.putLong(Constants.VISIT_ID, visitInformationId);
       args.putLong(Constants.CUSTOMER_ID, clickedClusterItem.getPrimaryKey());
       Analytics.logContentView("Map Visit");
-      ((OldMainActivity) context).changeFragment(OldMainActivity.VISIT_DETAIL_FRAGMENT_ID, args, false);
-
+      context.changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, false);
 
     } catch (BusinessException e) {
       Log.e(TAG, e.getMessage(), e);
@@ -530,26 +533,12 @@ public class UserTrackingFragment extends BaseFragment implements
   }
 
   private void doFilter() {
-    if (fromDate.getHint().equals("--")) {
-      ToastUtil.toastError(getActivity(), getString(R.string.error_tracking_cal1_empty));
-      return;
-    }
-    if (toDate.getHint().equals("--")) {
-      ToastUtil.toastError(getActivity(), getString(R.string.error_tracking_cal2_empty));
-      return;
-    }
     Calendar c1 = startDate.getCalendar();
     Calendar c2 = endDate.getCalendar();
+    if (validate(c1, c2)) {
 
-    long days = DateUtil.compareDatesInDays(c1, c2);
-
-    if (days + 1 > 5) {
-      ToastUtil.toastError(getActivity(), getString(R.string.error_report_is_huge));
-    } else if (days < 0) {
-      ToastUtil.toastError(getActivity(), getString(R.string.error_report_date_invalid));
-    } else {
       Date from = DateUtil.startOfDay(c1);
-      Date to = DateUtil.endOfDay(c2);
+      Date to = DateUtil.endOfDay(from);
 
       lastRoute = positionService.getAllPositionLatLngByDate(from, to);
       drawRoute(lastRoute);
@@ -561,6 +550,28 @@ public class UserTrackingFragment extends BaseFragment implements
     }
   }
 
+  private boolean validate(Calendar c1, Calendar c2) {
+    if (fromDate.getHint().equals("--")) {
+      ToastUtil.toastError(getActivity(), getString(R.string.error_tracking_cal1_empty));
+      return false;
+    }
+    /*if (toDate.getHint().equals("--")) {
+      ToastUtil.toastError(getActivity(), getString(R.string.error_tracking_cal2_empty));
+      return false;
+    }*/
+    /*
+    long days = DateUtil.compareDatesInDays(c1, c2);
+
+    if (days + 1 > 5) {
+      ToastUtil.toastError(getActivity(), getString(R.string.error_report_is_huge));
+      return false;
+    } else if (days < 0) {
+      ToastUtil.toastError(getActivity(), getString(R.string.error_report_date_invalid));
+      return false;
+    } else {*/
+    return true;
+  }
+
   private void drawRoute(List<LatLng> route) {
     clearMapRoute();
     if (route.size() == 0) {
@@ -569,14 +580,12 @@ public class UserTrackingFragment extends BaseFragment implements
     if (route.size() > 0) {
       startMarker = map.addMarker(new MarkerOptions()
           .position(route.get(0))
-          .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
-              getActivity(), R.drawable.ic_place_green_48dp))));
+          .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_start_marker_36dp)));
     }
     if (route.size() > 1) {
       endMarker = map.addMarker(new MarkerOptions()
           .position(route.get(route.size() - 1))
-          .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
-              getActivity(), R.drawable.ic_place_red_48dp))));
+          .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_end_marker_36dp)));
     }
 
     if (route.size() > 2 && showWaypoints.isChecked()) {
@@ -585,19 +594,16 @@ public class UserTrackingFragment extends BaseFragment implements
 
         waypoints.add(map.addMarker(new MarkerOptions()
             .position(waypoint)
-            .icon(BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
-                getActivity(), R.drawable.ic_point_blue_24dp)))));
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_stay_point_24dp))));
       }
     }
 
     PolylineOptions polyOptions = new PolylineOptions();
-    polyOptions.color(getResources().getColor(colors[3]));
+    polyOptions.color(ContextCompat.getColor(context, colors[3]));
     polyOptions.width(4);
     polyOptions.addAll(route);
     polyline = map.addPolyline(polyOptions);
     polylines.add(polyline);
-
-
   }
 
   private void drawSnappedRoute(List<LatLng> route) {
@@ -673,19 +679,14 @@ public class UserTrackingFragment extends BaseFragment implements
       super.onBeforeClusterItemRendered(item, markerOptions);
       markerOptions.title(item.getTitle());
 
-      BitmapDescriptor icon = BitmapDescriptorFactory
-          .fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
-              getActivity(), R.drawable.ic_location_on_red_36dp));
+      BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_red_36dp);
 
       if (item.hasOrder()) {
-        icon = BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
-            getActivity(), R.drawable.ic_location_on_green_36dp));
+        icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green_36dp);
       } else if (item.hasRejection()) {
-        icon = BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
-            getActivity(), R.drawable.ic_location_on_black_36dp));
+        icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_black_36dp);
       } else if (item.isVisited()) {
-        icon = BitmapDescriptorFactory.fromBitmap(ImageUtil.getBitmapFromVectorDrawable(
-            getActivity(), R.drawable.ic_location_on_blue_36dp));
+        icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_blue_36dp);
       }
 
       markerOptions.icon(icon);

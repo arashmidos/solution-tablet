@@ -18,6 +18,7 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
@@ -81,7 +82,11 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           context.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
           break;
         case 4: //Map
-          Toast.makeText(context, "Map Not implemented yet", Toast.LENGTH_SHORT).show();
+          if (MultiScreenUtility.isTablet(context)) {
+            context.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
+          } else {
+            Toast.makeText(context, "این قابلیت هنوز در نسخه موبایل پیاده سازی نشده است", Toast.LENGTH_SHORT).show();
+          }
           break;
         case 5://Settings
 //          context.changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);

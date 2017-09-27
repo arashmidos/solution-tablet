@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.service;
 
 import android.location.Location;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
@@ -37,6 +38,8 @@ public interface VisitService extends BaseService {
   Long saveVisit(VisitInformation visit);
 
   void updateVisitLocation(Long visitInformationId, Location location);
+
+  void updateVisitLocation(Long visitInformationId, Position position);
 
   void saveVisitDetail(VisitInformationDetail visitDetail);
 

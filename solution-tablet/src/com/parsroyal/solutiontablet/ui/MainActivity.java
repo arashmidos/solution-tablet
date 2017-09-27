@@ -60,6 +60,7 @@ import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.ReportFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
+import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesListFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
@@ -91,6 +92,7 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int CUSTOMER_SEARCH_FRAGMENT = 9;
   public static final int SETTING_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
+  public static final int USER_TRACKING_FRAGMENT_ID = 12;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
   public static final int REPORT_FRAGMENT = 14;
   public static final int GOODS_LIST_FRAGMENT_ID = 16;
@@ -155,10 +157,8 @@ public abstract class MainActivity extends AppCompatActivity {
     }
   };
 
-  @Override
-  public void onCreate(@Nullable Bundle savedInstanceState,
-      @Nullable PersistableBundle persistentState) {
-    super.onCreate(savedInstanceState, persistentState);
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
     dataTransferService = new DataTransferServiceImpl(this);
 
@@ -624,11 +624,11 @@ public abstract class MainActivity extends AppCompatActivity {
         break;
       /*case SAVE_LOCATION_FRAGMENT_ID:
         fragment = new SaveLocationFragment();
-        break;
+        break;*/
       case USER_TRACKING_FRAGMENT_ID://20
         fragment = new UserTrackingFragment();
         break;
-      case KPI_CUSTOMER_FRAGMENT_ID: //21
+      /*case KPI_CUSTOMER_FRAGMENT_ID: //21
         fragment = new KPIFragment();
         break;
       case KPI_SALESMAN_FRAGMENT_ID: //22
