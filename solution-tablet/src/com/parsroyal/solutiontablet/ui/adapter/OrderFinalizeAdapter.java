@@ -27,11 +27,13 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderFinalizeAdapter.ViewHolder;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.AddOrderBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MediaUtil;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
@@ -198,9 +200,14 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
 
     private void editItem() {
 
+      AddOrderDialogFragment addOrderDialogFragment = null;
+      AddOrderBottomSheet addOrderBottomSheet = null;
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
-      AddOrderDialogFragment addOrderDialogFragment = AddOrderDialogFragment.newInstance();
-
+      if (MultiScreenUtility.isTablet(mainActivity)) {
+        addOrderBottomSheet = AddOrderBottomSheet.newInstance();
+      } else {
+        addOrderDialogFragment = AddOrderDialogFragment.newInstance();
+      }
       Bundle bundle = new Bundle();
       bundle.putLong(Constants.GOODS_BACKEND_ID, goods.getBackendId());
       Double count = Double.valueOf(item.getGoodsCount()) / 1000D;
@@ -217,13 +224,20 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       bundle.putDouble(Constants.COUNT, count);
 //      bundle.putLong(Constants.GOODS_INVOICE_ID, invoiceBackendId);
 
-      addOrderDialogFragment.setArguments(bundle);
-      addOrderDialogFragment.setOnClickListener((goodsCount, selectedUnit) -> {
-        handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
-      });
+      if (MultiScreenUtility.isTablet(mainActivity)) {
+        addOrderBottomSheet.setArguments(bundle);
+        addOrderBottomSheet.setOnClickListener((goodsCount, selectedUnit) -> {
+          handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
+        });
+        addOrderBottomSheet.show(mainActivity.getSupportFragmentManager(), "order");
+      } else {
+        addOrderDialogFragment.setArguments(bundle);
+        addOrderDialogFragment.setOnClickListener((goodsCount, selectedUnit) -> {
+          handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
+        });
 
-      addOrderDialogFragment.show(ft, "order");
-
+        addOrderDialogFragment.show(ft, "order");
+      }
     }
 
     private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItemDto item,

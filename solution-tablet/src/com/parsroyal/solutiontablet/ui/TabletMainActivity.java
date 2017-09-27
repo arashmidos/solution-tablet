@@ -1,7 +1,10 @@
 package com.parsroyal.solutiontablet.ui;
 
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 
@@ -11,6 +14,9 @@ import com.parsroyal.solutiontablet.R;
 public class TabletMainActivity extends MainActivity {
 
   public static final String TAG = TabletMainActivity.class.getSimpleName();
+
+  @BindView(R.id.drawer_layout)
+  DrawerLayout drawerLayout;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -33,9 +39,10 @@ public class TabletMainActivity extends MainActivity {
     toolbarTitle.setText(title);
   }
 
-  @Override
   public void closeDrawer() {
-
+    if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      drawerLayout.closeDrawer(GravityCompat.END);
+    }
   }
 
   @Override
