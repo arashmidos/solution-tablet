@@ -256,7 +256,8 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
           citySpinner.getSelectedItemId() <= 0 ? null : citySpinner.getSelectedItemId());
       customer.setActivityBackendId(activitySpinner.getSelectedItemId());
       customer.setStoreLocationTypeBackendId(
-          ownershipSpinner.getSelectedItemId() == -1L ? null : ownershipSpinner.getSelectedItemId());
+          ownershipSpinner.getSelectedItemId() == -1L ? null
+              : ownershipSpinner.getSelectedItemId());
       customer.setClassBackendId(customerClassSpinner.getSelectedItemId() == -1L ? null
           : customerClassSpinner.getSelectedItemId());
       customer.setShopName(CharacterFixUtil.fixString(shopNameEdt.getText().toString()));
@@ -342,6 +343,11 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
     if (activitySpinner.getSelectedItemId() == -1L) {
       ToastUtil.toastError(getActivity(), R.string.message_activity_type_is_required);
+      return false;
+    }
+
+    if (customerClassSpinner.getSelectedItemId() == -1L) {
+      ToastUtil.toastError(getActivity(), R.string.message_customer_class_is_required);
       return false;
     }
 

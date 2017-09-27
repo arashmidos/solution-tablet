@@ -2,11 +2,16 @@ package com.parsroyal.solutiontablet.ui;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mikepenz.crossfader.Crossfader;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -32,6 +37,11 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 public class TabletMainActivity extends MainActivity {
 
   public static final String TAG = TabletMainActivity.class.getSimpleName();
+  @BindView(R.id.drawer_layout)
+  DrawerLayout drawerLayout;
+  @BindView(R.id.app_bar)
+  AppBarLayout appBar;
+
   private Drawer drawer;
   private AccountHeader headerResult;
   private SettingServiceImpl settingService;
@@ -46,7 +56,8 @@ public class TabletMainActivity extends MainActivity {
 
     settingService = new SettingServiceImpl(this);
     showFeaturesFragment();
-    setupToolbar(savedInstanceState);
+//    setupToolbar(savedInstanceState);
+
   }
 
   private void setupToolbar(Bundle savedInstanceState) {
@@ -67,7 +78,8 @@ public class TabletMainActivity extends MainActivity {
         .withOnAccountHeaderListener((view, profile, currentProfile) -> false)
         .build();
     //if you want to update the items at a later time it is recommended to keep it in a variable
-    PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("Home");
+    PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("Home")
+        .withTextColor(ContextCompat.getColor(this, R.color.black));
     SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName("Settings");
 
     drawer = new DrawerBuilder()
@@ -122,12 +134,26 @@ public class TabletMainActivity extends MainActivity {
         .setShadowResourceLeft(R.drawable.material_drawer_shadow_left);
   }
 
-  @Override
+  /*@Override
   public void onNavigationTapped() {
     Fragment featureFragment = getSupportFragmentManager()
         .findFragmentByTag(FeaturesFragment.class.getSimpleName());
     if (featureFragment != null && featureFragment.isVisible() && crossFader != null) {
       crossFader.crossFade();
+    } else {
+      onBackPressed();
+    }
+
+  }*/
+  public void onNavigationTapped() {
+    Fragment featureFragment = getSupportFragmentManager()
+        .findFragmentByTag(FeaturesFragment.class.getSimpleName());
+    if (featureFragment != null && featureFragment.isVisible()) {
+      if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+        drawerLayout.closeDrawer(GravityCompat.END);
+      } else {
+        drawerLayout.openDrawer(GravityCompat.END);
+      }
     } else {
       onBackPressed();
     }
@@ -138,10 +164,16 @@ public class TabletMainActivity extends MainActivity {
     toolbarTitle.setText(title);
   }
 
-  @Override
+ /* @Override
   public void closeDrawer() {
     if (crossFader != null && crossFader.isCrossFaded()) {
       crossFader.crossFade();
+    }
+  }*/
+
+  public void closeDrawer() {
+    if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      drawerLayout.closeDrawer(GravityCompat.END);
     }
   }
 
@@ -157,18 +189,26 @@ public class TabletMainActivity extends MainActivity {
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     //add the values which need to be saved from the drawer to the bundle
-    outState = drawer.saveInstanceState(outState);
+    /*outState = drawer.saveInstanceState(outState);
     //add the values which need to be saved from the accountHeader to the bundle
     outState = headerResult.saveInstanceState(outState);
     //add the values which need to be saved from the crossFader to the bundle
-    outState = crossFader.saveInstanceState(outState);
+    outState = crossFader.saveInstanceState(outState);*/
     super.onSaveInstanceState(outState);
   }
 
+  /*  @Override
+    public void onBackPressed() {
+      if (crossFader != null && crossFader.isCrossFaded()) {
+        crossFader.crossFade();
+        return;
+      }
+      super.onBackPressed();
+    }*/
   @Override
   public void onBackPressed() {
-    if (crossFader != null && crossFader.isCrossFaded()) {
-      crossFader.crossFade();
+    if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      drawerLayout.closeDrawer(GravityCompat.END);
       return;
     }
     super.onBackPressed();

@@ -85,12 +85,12 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           if (MultiScreenUtility.isTablet(context)) {
             context.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
           } else {
-            Toast.makeText(context, "این قابلیت هنوز در نسخه موبایل پیاده سازی نشده است", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "این قابلیت هنوز در نسخه موبایل پیاده سازی نشده است",
+                Toast.LENGTH_SHORT).show();
           }
           break;
         case 5://Settings
-//          context.changeFragment(MainActivity.SETTING_FRAGMENT_ID, true);
-          Toast.makeText(context, "There is no setting!", Toast.LENGTH_SHORT).show();
+          ToastUtil.toastMessage(context, R.string.error_message_there_is_no_settings);
           break;
       }
     });

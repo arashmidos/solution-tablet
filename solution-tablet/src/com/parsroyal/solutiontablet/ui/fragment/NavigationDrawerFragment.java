@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.LoginActivity;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
@@ -118,19 +119,23 @@ public class NavigationDrawerFragment extends BaseFragment {
         mainActivity.changeFragment(MainActivity.REPORT_FRAGMENT, true);
         break;
       case R.id.map_lay:
-        Toast.makeText(getActivity(), R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
+        if (MultiScreenUtility.isTablet(mainActivity)) {
+          mainActivity.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
+        } else {
+          Toast.makeText(mainActivity, "این قابلیت هنوز در نسخه موبایل پیاده سازی نشده است",
+              Toast.LENGTH_SHORT).show();
+        }
         break;
       case R.id.setting_lay:
-        Toast.makeText(getActivity(), R.string.error_message_there_is_no_settings,
-            Toast.LENGTH_SHORT).show();
+        ToastUtil.toastMessage(mainActivity, R.string.error_message_there_is_no_settings);
         break;
       case R.id.about_us:
         mainActivity.changeFragment(MainActivity.ABOUT_US_FRAGMENT_ID, true);
         break;
       case R.id.body_log_out:
         settingService.clearAllSettings();
-        startActivity(new Intent(getActivity(), LoginActivity.class));
-        getActivity().finish();
+        startActivity(new Intent(mainActivity, LoginActivity.class));
+        mainActivity.finish();
         break;
       case R.id.get_data_lay:
         Bundle args3 = new Bundle();
@@ -152,14 +157,14 @@ public class NavigationDrawerFragment extends BaseFragment {
     isLogOutMode = !isLogOutMode;
     if (isLogOutMode) {
       dropImg.setImageResource(R.drawable.ic_arrow_drop_up);
-      dropImg.setColorFilter(ContextCompat.getColor(getActivity(), R.color.login_gray));
+      dropImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.login_gray));
       body.setVisibility(View.GONE);
       bodyLogOut.setVisibility(View.VISIBLE);
       footer.setVisibility(View.GONE);
       footerLogOut.setVisibility(View.VISIBLE);
     } else {
       dropImg.setImageResource(R.drawable.ic_arrow_drop_down);
-      dropImg.setColorFilter(ContextCompat.getColor(getActivity(), R.color.login_gray));
+      dropImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.login_gray));
       body.setVisibility(View.VISIBLE);
       bodyLogOut.setVisibility(View.GONE);
       footer.setVisibility(View.VISIBLE);

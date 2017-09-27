@@ -121,11 +121,14 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       String orderCode = "کد سفارش : " + String.valueOf(order.getId());
       orderCodeTv.setText(orderCode);
       orderCountTv.setText("--");
-      Date createDate = DateUtil
-          .convertStringToDate(order.getDate().replace('/', '-'), DateUtil.FULL_FORMATTER_GREGORIAN,
+      /*Date createDate = DateUtil
+          .convertStringToDate(order.getCreatedDateTime(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
               "FA");
+      String dateString = DateUtil.getFullPersianDate(createDate);*/
+      //96/7/5
+      Date createdDate = DateUtil.convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
+      String dateString = DateUtil.getFullPersianDate(createdDate);
 
-      String dateString = DateUtil.getFullPersianDate(createDate);
       orderDateTv.setText(dateString);
       String number = String
           .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(

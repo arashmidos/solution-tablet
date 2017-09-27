@@ -13,7 +13,7 @@
     android:layout_marginBottom="17dp"
     android:gravity="end"
     android:orientation="horizontal"
-    android:weightSum="10">
+    android:weightSum="11">
 
     <TextView
       android:id="@+id/order_total_price"
@@ -24,6 +24,16 @@
       android:textColor="@color/register_order"
       android:textSize="12sp"
       tools:text="price" />
+
+    <TextView
+      android:id="@+id/order_status_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:textColor="@color/black_de"
+      android:textSize="12sp"
+      tools:text="status" />
 
     <TextView
       android:id="@+id/order_payment_method_tv"

@@ -4,78 +4,62 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <RelativeLayout
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:orientation="vertical">
-
-    <Button
-      android:id="@+id/getDataBtn"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="31dp"
-      android:layout_marginRight="15dp"
-      android:layout_alignBottom="@+id/sendDataBtn"
-      android:layout_toLeftOf="@+id/sendDataBtn"
-      android:layout_toStartOf="@+id/sendDataBtn"
-      android:drawableRight="@drawable/ic_action_download"
-      android:text="@string/get_data"
-      android:textAppearance="?android:attr/textAppearanceSmall"/>
-
-    <Button
-      android:id="@+id/sendDataBtn"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="15dp"
-      android:layout_marginEnd="38dp"
-      android:layout_marginRight="38dp"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      android:layout_alignParentTop="true"
-      android:drawableRight="@drawable/ic_action_upload"
-      android:text="@string/send_data"
-      android:textAppearance="?android:attr/textAppearanceSmall"/>
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal">
 
     <Button
       android:id="@+id/get_images_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="31dp"
-      android:layout_marginRight="60dp"
-      android:layout_alignBottom="@+id/sendDataBtn"
-      android:layout_toLeftOf="@+id/getDataBtn"
-      android:layout_toStartOf="@+id/getDataBtn"
+      android:layout_marginRight="16dp"
       android:drawableRight="@drawable/ic_action_download"
       android:text="@string/get_catalog"
-      android:textAppearance="?android:attr/textAppearanceSmall"/>
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:visibility="gone" />
 
-    <ProgressBar
-      android:id="@+id/dataTransferPB"
+    <Button
+      android:id="@+id/sendDataBtn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="54dp"
-      android:layout_marginRight="54dp"
-      android:layout_alignTop="@+id/getDataBtn"
-      android:layout_toLeftOf="@+id/get_images_button"
-      android:layout_toStartOf="@+id/get_images_button"
-      android:visibility="invisible"/>
+      android:drawableRight="@drawable/ic_action_upload"
+      android:text="@string/send_data"
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:visibility="gone" />
 
-  </RelativeLayout>
+    <Button
+      android:id="@+id/getDataBtn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:drawableRight="@drawable/ic_action_download"
+      android:text="@string/get_data"
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:visibility="gone" />
+
+  </LinearLayout>
+
+  <ProgressBar
+    android:id="@+id/dataTransferPB"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_gravity="center"
+    android:visibility="invisible" />
 
   <ScrollView
     android:id="@+id/transferSv"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:padding="15dp">
 
     <TextView
       android:id="@+id/transferLogTxtV"
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="20dp"
-      android:layout_marginLeft="50dp"
       android:scrollbars="vertical"
-      android:textAppearance="?android:attr/textAppearanceSmall"/>
+      android:textAppearance="?android:attr/textAppearanceSmall" />
 
   </ScrollView>
 </LinearLayout>

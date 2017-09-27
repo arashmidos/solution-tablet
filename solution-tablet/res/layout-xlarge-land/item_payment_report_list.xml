@@ -20,10 +20,11 @@
       style="@style/IranSans.Light"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight=".5"
+      android:layout_weight=".4"
       android:textColor="@color/black_de"
       android:textSize="12sp"
       tools:text="bank" />
+
     <TextView
       android:id="@+id/payment_tv"
       style="@style/IranSans.Medium"
@@ -33,6 +34,18 @@
       android:textColor="@color/register_order"
       android:textSize="12sp"
       tools:text="amount" />
+
+    <TextView
+      android:id="@+id/payment_status_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.1"
+
+      android:textColor="@color/black_de"
+      android:textSize="12sp"
+      tools:text="status" />
+
     <TextView
       android:id="@+id/payment_method_tv"
       style="@style/IranSans.Medium"

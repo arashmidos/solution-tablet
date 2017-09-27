@@ -444,4 +444,6 @@ public class DateUtil {
     long diff = c2.getTimeInMillis() - c1.getTimeInMillis();
     return diff / (24 * 60 * 60 * 1000);
   }
+
+
 }

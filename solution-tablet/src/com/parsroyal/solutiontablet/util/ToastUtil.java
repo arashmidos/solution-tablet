@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import de.mateware.snacky.Snacky;
@@ -30,6 +31,7 @@ public class ToastUtil {
       View view = snack.getView();
       FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
       params.gravity = Gravity.TOP;
+      params.width = LayoutParams.MATCH_PARENT;
       view.setLayoutParams(params);
     }
     snack.show();
@@ -52,6 +54,7 @@ public class ToastUtil {
       View view = snack.getView();
       FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
       params.gravity = Gravity.TOP;
+      params.width = LayoutParams.MATCH_PARENT;
       view.setLayoutParams(params);
     }
     snack.show();
@@ -86,6 +89,7 @@ public class ToastUtil {
       View view = snack.getView();
       FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
       params.gravity = Gravity.TOP;
+      params.width = LayoutParams.MATCH_PARENT;
       view.setLayoutParams(params);
     }
     snack.setAction(activity.getString(R.string.button_ok), v -> {
