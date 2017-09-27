@@ -1,10 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,14 +17,18 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
-import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
-import com.parsroyal.solutiontablet.data.entity.CustomerPic;
-import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
@@ -40,24 +40,19 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.ImageUtil;
-import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.util.Date;
+import java.util.HashSet;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 /**
  * @author Shakib
  */
-public class CustomerInfoFragment extends BaseFragment {
+public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCallback {
 
   private static final String TAG = CustomerInfoFragment.class.getName();
-  private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-  private static final int RESULT_OK = -1;
-  private static final int RESULT_CANCELED = 0;
-
+  private final HashSet<MapView> mMaps = new HashSet<>();
   @Nullable
   @BindView(R.id.store_tv)
   TextView storeTv;
@@ -88,7 +83,11 @@ public class CustomerInfoFragment extends BaseFragment {
   @Nullable
   @BindView(R.id.register_location_btn)
   Button registerLocationBtn;
-
+  @BindView(R.id.map_layout)
+  RelativeLayout mapLayout;
+  @BindView(R.id.map_item)
+  MapView mapView;
+  GoogleMap map;
   private boolean isShowMore = true;
   private long customerId;
   private long visitId;
@@ -101,7 +100,6 @@ public class CustomerInfoFragment extends BaseFragment {
   private String saleType;
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
-  private Uri fileUri;
   private NewVisitDetailFragment parent;
   private SaleOrderDto orderDto;
 
@@ -116,6 +114,15 @@ public class CustomerInfoFragment extends BaseFragment {
     fragment.setArguments(arguments);
     fragment.parent = newVisitDetailFragment;
     return fragment;
+  }
+
+  private static void setMapLocation(GoogleMap map, LatLng data) {
+    // Add a marker for this item and set the camera
+    map.moveCamera(CameraUpdateFactory.newLatLngZoom(data, 15f));
+    map.addMarker(new MarkerOptions().position(data));
+
+    // Set the map type back to normal.
+    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
   }
 
   @Override
@@ -141,7 +148,30 @@ public class CustomerInfoFragment extends BaseFragment {
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
     setData();
+
     return view;
+  }
+
+  @Override
+  public void onMapReady(GoogleMap googleMap) {
+    MapsInitializer.initialize(mainActivity.getApplicationContext());
+    map = googleMap;
+    LatLng data = (LatLng) mapView.getTag();
+    if (data != null) {
+      setMapLocation(map, data);
+    }
+  }
+
+  /**
+   * Initialises the MapView by calling its lifecycle methods.
+   */
+  public void initializeMapView() {
+    if (mapView != null) {
+      // Initialise the MapView
+      mapView.onCreate(null);
+      // Set the map ready callback to receive the GoogleMap object
+      mapView.getMapAsync(this);
+    }
   }
 
   @Override
@@ -162,6 +192,27 @@ public class CustomerInfoFragment extends BaseFragment {
     if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
       registerOrderLay.setVisibility(View.GONE);
     }
+
+    if (customer.getxLocation() != null && customer.getxLocation() != 0.0) {
+      mapLayout.setVisibility(View.GONE);
+      mapView.setVisibility(View.VISIBLE);
+      initializeMapView();
+      mMaps.add(mapView);
+
+      LatLng loation = new LatLng(customer.getxLocation(), customer.getyLocation());
+      mapView.setTag(loation);
+
+      // Ensure the map has been initialised by the on map ready callback in ViewHolder.
+      // If it is not ready yet, it will be initialised with the NamedLocation set as its tag
+      // when the callback is received.
+      if (map != null) {
+        // The map is already ready to be used
+        setMapLocation(map, loation);
+      }
+    } else {
+      mapLayout.setVisibility(View.VISIBLE);
+      mapView.setVisibility(View.GONE);
+    }
   }
 
   @Optional
@@ -174,7 +225,7 @@ public class CustomerInfoFragment extends BaseFragment {
         openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
         break;
       case R.id.register_location_btn:
-        Toast.makeText(mainActivity, "location", Toast.LENGTH_SHORT).show();
+        mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, getArguments(), true);
         break;
       case R.id.register_payment_lay:
         goToRegisterPaymentFragment();
@@ -183,7 +234,7 @@ public class CustomerInfoFragment extends BaseFragment {
         Toast.makeText(mainActivity, "Questionnaire", Toast.LENGTH_SHORT).show();
         break;
       case R.id.register_image_lay:
-        startCameraActivity();
+        parent.startCameraActivity();
         break;
       case R.id.end_and_exit_visit_lay:
         parent.finishVisiting();
@@ -310,54 +361,6 @@ public class CustomerInfoFragment extends BaseFragment {
 
     thread.start();*/
   }
-
-  private void startCameraActivity() {
-    try {
-      Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-      // Create a media file name
-      String postfix = String.valueOf((new Date().getTime()) % 1000);
-      fileUri = MediaUtil.getOutputMediaFileUri(MediaUtil.MEDIA_TYPE_IMAGE,
-          Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-          "IMG_" + customer.getCode() + "_" + postfix); // create a file to save the image
-      intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-      if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-      }
-    } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "General Exception", "Error in opening camera " + e.getMessage());
-      e.printStackTrace();
-    }
-  }
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-      if (resultCode == RESULT_OK) {
-        Bitmap bitmap = ImageUtil.decodeSampledBitmapFromUri(getActivity(), fileUri);
-        bitmap = ImageUtil.getScaledBitmap(getActivity(), bitmap);
-
-        String s = ImageUtil.saveTempImage(bitmap, MediaUtil
-            .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
-                Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-                "IMG_" + customer.getCode() + "_" + new Date().getTime()));
-
-        CustomerPic cPic = new CustomerPic();
-        cPic.setTitle(s);
-        cPic.setCustomerBackendId(customer.getBackendId());
-
-        long typeId = customerService.savePicture(cPic);
-        visitService.saveVisitDetail(
-            new VisitInformationDetail(visitId, VisitInformationDetailType.TAKE_PICTURE, typeId));
-        ToastUtil.toastSuccess(mainActivity, R.string.message_picutre_saved_successfully);
-
-      } else if (resultCode == RESULT_CANCELED) {
-        // User cancelled the image capture
-      } else {
-        // Image capture failed, advise user
-      }
-    }
-  }
-
 
   @Override
   public void onResume() {

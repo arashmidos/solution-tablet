@@ -1,8 +1,12 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +27,7 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
@@ -40,19 +45,24 @@ import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ImageUtil;
+import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import java.util.Date;
 import java.util.List;
 
 public class NewVisitDetailFragment extends BaseFragment {
 
   private static final String TAG = NewVisitDetailFragment.class.getName();
-
+  private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+  private static final int RESULT_OK = -1;
+  private static final int RESULT_CANCELED = 0;
   @BindView(R.id.tabs)
   TabLayout tabs;
   @BindView(R.id.viewpager)
   ViewPager viewpager;
-
+  private Uri fileUri;
   private CustomerServiceImpl customerService;
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
@@ -307,4 +317,53 @@ public class NewVisitDetailFragment extends BaseFragment {
   public void exit() {
     finishVisiting();
   }
+
+  public void startCameraActivity() {
+    try {
+      Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+      // Create a media file name
+      String postfix = String.valueOf((new Date().getTime()) % 1000);
+      fileUri = MediaUtil.getOutputMediaFileUri(MediaUtil.MEDIA_TYPE_IMAGE,
+          Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
+          "IMG_" + customer.getCode() + "_" + postfix); // create a file to save the image
+      intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+      if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+      }
+    } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "General Exception", "Error in opening camera " + e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+      if (resultCode == RESULT_OK) {
+        Bitmap bitmap = ImageUtil.decodeSampledBitmapFromUri(getActivity(), fileUri);
+        bitmap = ImageUtil.getScaledBitmap(getActivity(), bitmap);
+
+        String s = ImageUtil.saveTempImage(bitmap, MediaUtil
+            .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
+                Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
+                "IMG_" + customer.getCode() + "_" + new Date().getTime()));
+
+        CustomerPic cPic = new CustomerPic();
+        cPic.setTitle(s);
+        cPic.setCustomerBackendId(customer.getBackendId());
+
+        long typeId = customerService.savePicture(cPic);
+        visitService.saveVisitDetail(
+            new VisitInformationDetail(visitId, VisitInformationDetailType.TAKE_PICTURE, typeId));
+        ToastUtil.toastSuccess(mainActivity, R.string.message_picutre_saved_successfully);
+        pictureFragment.update();
+
+      } else if (resultCode == RESULT_CANCELED) {
+        // User cancelled the image capture
+      } else {
+        // Image capture failed, advise user
+      }
+    }
+  }
+
 }

@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,7 @@ import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.VisitLineListAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.PathAdapter;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.util.List;
@@ -22,17 +21,17 @@ import java.util.List;
 /**
  * @author Arash 2017-08-18
  */
-public class VisitLinesListFragment extends BaseFragment {
+public class PathFragment extends BaseFragment {
 
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
 
-  private VisitLineListAdapter adapter;
+  private PathAdapter adapter;
   private MainActivity mainActivity;
   private VisitService visitService;
 
-  public static VisitLinesListFragment newInstance() {
-    return new VisitLinesListFragment();
+  public static PathFragment newInstance() {
+    return new PathFragment();
   }
 
   @Override
@@ -51,7 +50,7 @@ public class VisitLinesListFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new VisitLineListAdapter(mainActivity, getVisitLineList());
+    adapter = new PathAdapter(mainActivity, getVisitLineList());
     if (MultiScreenUtility.isTablet(mainActivity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);

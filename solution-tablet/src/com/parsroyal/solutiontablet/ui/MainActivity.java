@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -57,11 +56,12 @@ import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NewVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.PathFragment;
 import com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.ReportFragment;
+import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
-import com.parsroyal.solutiontablet.ui.fragment.VisitLinesListFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -96,34 +96,20 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int ABOUT_US_FRAGMENT_ID = 13;
   public static final int REPORT_FRAGMENT = 14;
   public static final int GOODS_LIST_FRAGMENT_ID = 16;
+  public static final int SAVE_LOCATION_FRAGMENT_ID = 17;
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
   public static final int SYSTEM_CUSTOMER_FRAGMENT = 29;
   public static final int NEW_CUSTOMER_FRAGMENT_ID = 30;
   public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
   public static final int CUSTOMER_INFO_FRAGMENT = 32;
+
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   private static final String TAG = MainActivity.class.getName();
   protected ProgressDialog progressDialog;
-
-  @BindView(R.id.toolbar)
-  Toolbar toolbar;
-  @BindView(R.id.toolbar_title)
-  TextView toolbarTitle;
-  @BindView(R.id.search_img)
-  ImageView searchImg;
-  @BindView(R.id.container)
-  FrameLayout container;
-  @BindView(R.id.navigation_img)
-  ImageView navigationImg;
-  @Nullable
-  @BindView(R.id.detail_tv)
-  TextView detailTv;
-
   protected BaseFragment currentFragment;
   protected LocationUpdatesService gpsRecieverService = null;
   protected DataTransferService dataTransferService;
-
   protected boolean boundToGpsService = false;
   protected final ServiceConnection serviceConnection = new ServiceConnection() {
 
@@ -156,6 +142,19 @@ public abstract class MainActivity extends AppCompatActivity {
       }
     }
   };
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.toolbar_title)
+  TextView toolbarTitle;
+  @BindView(R.id.search_img)
+  ImageView searchImg;
+  @BindView(R.id.container)
+  FrameLayout container;
+  @BindView(R.id.navigation_img)
+  ImageView navigationImg;
+  @Nullable
+  @BindView(R.id.detail_tv)
+  TextView detailTv;
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -622,9 +621,9 @@ public abstract class MainActivity extends AppCompatActivity {
       case GOODS_LIST_FRAGMENT_ID:
         fragment = OrderFragment.newInstance();
         break;
-      /*case SAVE_LOCATION_FRAGMENT_ID:
+      case SAVE_LOCATION_FRAGMENT_ID:
         fragment = new SaveLocationFragment();
-        break;*/
+        break;
       case USER_TRACKING_FRAGMENT_ID://20
         fragment = new UserTrackingFragment();
         break;
@@ -640,7 +639,7 @@ public abstract class MainActivity extends AppCompatActivity {
           fragment.setArguments(args);
         }break;*/
       case PATH_FRAGMENT_ID:
-        fragment = VisitLinesListFragment.newInstance();
+        fragment = PathFragment.newInstance();
         break;
       case PATH_DETAIL_FRAGMENT_ID:
         fragment = PathDetailFragment.newInstance();
