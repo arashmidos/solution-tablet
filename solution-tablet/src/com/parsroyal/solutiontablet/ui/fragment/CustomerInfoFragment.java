@@ -246,6 +246,7 @@ public class CustomerInfoFragment extends BaseFragment {
         args.putString(Constants.SALE_TYPE, saleType);
         args.putLong(Constants.VISIT_ID, visitId);
         args.putBoolean(Constants.READ_ONLY, false);
+        args.putString(Constants.PAGE_STATUS, Constants.NEW);
         mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
       }
 

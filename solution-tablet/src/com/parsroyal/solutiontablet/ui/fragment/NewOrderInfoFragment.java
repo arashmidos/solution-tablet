@@ -1,7 +1,10 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,12 +37,15 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.adapter.PaymentMethodAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PaymentMethodDialogFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -66,6 +72,9 @@ public class NewOrderInfoFragment extends BaseFragment {
   Button submitOrderBtn;
   @BindView(R.id.payment_type_tv)
   TextView paymentTypeTv;
+  @Nullable
+  @BindView(R.id.recycler_view)
+  RecyclerView recyclerView;
 
   private LabelValue selectedItem = null;
   private MainActivity mainActivity;
@@ -81,6 +90,7 @@ public class NewOrderInfoFragment extends BaseFragment {
   private SettingService settingService;
   private VisitService visitService;
   private String pageStatus;
+  private PaymentMethodAdapter adapter;
 
   public NewOrderInfoFragment() {
     // Required empty public constructor
@@ -160,6 +170,9 @@ public class NewOrderInfoFragment extends BaseFragment {
     if (pageStatus.equals(Constants.VIEW)) {
       submitOrderBtn.setText(getString(R.string.close));
     }
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      setUpRecyclerView();
+    }
   }
 
   public void setPaymentMethod(LabelValue paymentMethod) {
@@ -171,7 +184,7 @@ public class NewOrderInfoFragment extends BaseFragment {
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.payment_method_tv:
-        if (!pageStatus.equals(Constants.VIEW)) {
+        if (!pageStatus.equals(Constants.VIEW) && !MultiScreenUtility.isTablet(mainActivity)) {
           showPaymentMethodDialog();
         }
         break;
@@ -323,6 +336,22 @@ public class NewOrderInfoFragment extends BaseFragment {
     PaymentMethodDialogFragment paymentMethodDialogFragment = PaymentMethodDialogFragment
         .newInstance(this, selectedItem);
     paymentMethodDialogFragment.show(ft, "payment method");
+  }
+
+  //set up recycler view
+  private void setUpRecyclerView() {
+    List<LabelValue> paymentMethodList = getPaymentMethodList();
+    adapter = new PaymentMethodAdapter(mainActivity, paymentMethodList, selectedItem, this,
+        !pageStatus.equals(Constants.VIEW));
+    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+    recyclerView.setLayoutManager(linearLayoutManager);
+    recyclerView.setAdapter(adapter);
+    recyclerView.scrollToPosition(paymentMethodList.indexOf(selectedItem));
+  }
+
+  private List<LabelValue> getPaymentMethodList() {
+    return baseInfoService
+        .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.PAYMENT_TYPE.getId());
   }
 
   @Override
