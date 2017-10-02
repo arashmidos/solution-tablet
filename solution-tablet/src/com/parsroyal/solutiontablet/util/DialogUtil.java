@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +35,7 @@ public class DialogUtil {
 
   {
     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-    LayoutInflater inflater = ((MainActivity) context).getLayoutInflater();
+    LayoutInflater inflater = ((AppCompatActivity) context).getLayoutInflater();
     View dialogView = inflater.inflate(R.layout.dialog_custom, null);
     dialogBuilder.setView(dialogView);
 

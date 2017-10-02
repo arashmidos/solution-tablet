@@ -84,8 +84,10 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   @Nullable
   @BindView(R.id.register_location_btn)
   Button registerLocationBtn;
+  @Nullable
   @BindView(R.id.map_layout)
   RelativeLayout mapLayout;
+  @Nullable
   @BindView(R.id.map_item)
   MapView mapView;
   GoogleMap map;
