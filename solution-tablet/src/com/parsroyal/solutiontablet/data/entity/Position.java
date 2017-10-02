@@ -70,8 +70,7 @@ public class Position extends BaseEntity<Long> {
   }
 
   public Position(Location l) {
-    this(l.getLatitude(), l.getLongitude(), l.getSpeed(), new Date(l.getTime()), 0, 0,
-        l.getAccuracy());
+    this(l.getLatitude(), l.getLongitude(), l.getSpeed(), new Date(), 0, 0, l.getAccuracy());
   }
 
   public Long getId() {
