@@ -387,7 +387,7 @@
   <string name="permission_rationale">مجوز دریافت موقعیت باید فعال باشد</string>
   <string name="permission_denied_explanation">دسترسی موقعیت یاب داده نشد. برای عملکرد صحیح برنامه این دسترسی لازم است</string>
   <string name="notification_message_gps_service_active">سرویس موقعیت یاب فعال است</string>
-  <string name="show_waypoints">نمایش نقاط بر روی مسیر</string>
+  <string name="show_waypoints">نمایش نقاط</string>
   <string name="show_optimized_route">بهبود نمایش مسیر</string>
   <string name="show_route">نمایش مسیر</string>
   <string name="show_customers">نمایش مشتریان</string>

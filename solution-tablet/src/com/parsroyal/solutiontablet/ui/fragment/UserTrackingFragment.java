@@ -118,7 +118,7 @@ public class UserTrackingFragment extends BaseFragment implements
   @BindView(R.id.fromDate)
   EditText fromDate;
   @BindView(R.id.filter_layout)
-  RelativeLayout filterLayout;
+  ViewGroup filterLayout;
   @BindView(R.id.show_customers)
   CheckBox showCustomers;
   @BindView(R.id.show_track)

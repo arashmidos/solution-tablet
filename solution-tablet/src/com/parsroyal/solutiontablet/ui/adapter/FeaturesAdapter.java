@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
@@ -18,7 +17,6 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
@@ -82,12 +80,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           context.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
           break;
         case 4: //Map
-          if (MultiScreenUtility.isTablet(context)) {
-            context.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
-          } else {
-            Toast.makeText(context, "این قابلیت هنوز در نسخه موبایل پیاده سازی نشده است",
-                Toast.LENGTH_SHORT).show();
-          }
+          context.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
           break;
         case 5://Settings
           ToastUtil.toastMessage(context, R.string.error_message_there_is_no_settings);
