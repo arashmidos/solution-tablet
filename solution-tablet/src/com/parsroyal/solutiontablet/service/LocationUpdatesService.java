@@ -301,7 +301,7 @@ public class LocationUpdatesService extends Service {
       return true;
     }
     if ((Empty.isEmpty(location) || location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER
-        /*|| location.getSpeed() < MIN_ACCEPTED_SPEED_IN_MS*/)) {//TODO: Important, uncomment this line
+        || location.getSpeed() < MIN_ACCEPTED_SPEED_IN_MS)) {
       return false;
     }
 

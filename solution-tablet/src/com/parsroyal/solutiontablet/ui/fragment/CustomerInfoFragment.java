@@ -40,6 +40,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
@@ -193,7 +194,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       registerOrderLay.setVisibility(View.GONE);
     }
 
-    if (customer.getxLocation() != null && customer.getxLocation() != 0.0) {
+    if (customer.getxLocation() != null && customer.getxLocation() != 0.0 && MultiScreenUtility.isTablet(mainActivity)) {
       mapLayout.setVisibility(View.GONE);
       mapView.setVisibility(View.VISIBLE);
       initializeMapView();
