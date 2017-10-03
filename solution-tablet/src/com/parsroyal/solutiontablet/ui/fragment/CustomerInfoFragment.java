@@ -91,6 +91,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   @BindView(R.id.map_item)
   MapView mapView;
   GoogleMap map;
+
   private boolean isShowMore = true;
   private long customerId;
   private long visitId;
@@ -196,7 +197,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       registerOrderLay.setVisibility(View.GONE);
     }
 
-    if (customer.getxLocation() != null && customer.getxLocation() != 0.0 && MultiScreenUtility.isTablet(mainActivity)) {
+    if (customer.getxLocation() != null && customer.getxLocation() != 0.0 && MultiScreenUtility
+        .isTablet(mainActivity)) {
       mapLayout.setVisibility(View.GONE);
       mapView.setVisibility(View.VISIBLE);
       initializeMapView();
@@ -212,7 +214,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         // The map is already ready to be used
         setMapLocation(map, loation);
       }
-    } else {
+    } else if (MultiScreenUtility.isTablet(mainActivity)) {
       mapLayout.setVisibility(View.VISIBLE);
       mapView.setVisibility(View.GONE);
     }
