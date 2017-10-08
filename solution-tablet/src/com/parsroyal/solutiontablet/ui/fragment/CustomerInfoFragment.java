@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
@@ -85,12 +86,24 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   @BindView(R.id.register_location_btn)
   Button registerLocationBtn;
   @Nullable
+  @BindView(R.id.no_map_layout)
+  RelativeLayout noMapLayout;
+  @Nullable
   @BindView(R.id.map_layout)
   RelativeLayout mapLayout;
   @Nullable
   @BindView(R.id.map_item)
   MapView mapView;
   GoogleMap map;
+  @Nullable
+  @BindView(R.id.edit_map)
+  ImageView editMapButton;
+  @Nullable
+  @BindView(R.id.fullscreen_map)
+  ImageView fullscreenMapButton;
+  @Nullable
+  @BindView(R.id.item_bar_lay)
+  ScrollView itemBarLayout;
 
   private boolean isShowMore = true;
   private long customerId;
@@ -106,6 +119,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   private SaleOrderServiceImpl saleOrderService;
   private NewVisitDetailFragment parent;
   private SaleOrderDto orderDto;
+  private boolean expandedMap = false;
 
 
   public CustomerInfoFragment() {
@@ -160,6 +174,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   public void onMapReady(GoogleMap googleMap) {
     MapsInitializer.initialize(mainActivity.getApplicationContext());
     map = googleMap;
+    map.getUiSettings().setMapToolbarEnabled(false);
     LatLng data = (LatLng) mapView.getTag();
     if (data != null) {
       setMapLocation(map, data);
@@ -199,8 +214,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
 
     if (customer.getxLocation() != null && customer.getxLocation() != 0.0 && MultiScreenUtility
         .isTablet(mainActivity)) {
-      mapLayout.setVisibility(View.GONE);
-      mapView.setVisibility(View.VISIBLE);
+      noMapLayout.setVisibility(View.GONE);
+      mapLayout.setVisibility(View.VISIBLE);
       initializeMapView();
       mMaps.add(mapView);
 
@@ -215,15 +230,15 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         setMapLocation(map, loation);
       }
     } else if (MultiScreenUtility.isTablet(mainActivity)) {
-      mapLayout.setVisibility(View.VISIBLE);
-      mapView.setVisibility(View.GONE);
+      noMapLayout.setVisibility(View.VISIBLE);
+      mapLayout.setVisibility(View.GONE);
     }
   }
 
   @Optional
   @OnClick({R.id.show_more_tv, R.id.register_order_lay, R.id.register_payment_lay,
       R.id.register_questionnaire_lay, R.id.register_image_lay, R.id.end_and_exit_visit_lay,
-      R.id.no_activity_lay, R.id.register_location_btn})
+      R.id.no_activity_lay, R.id.register_location_btn, R.id.edit_map, R.id.fullscreen_map})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_order_lay:
@@ -249,6 +264,16 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         break;
       case R.id.show_more_tv:
         onShowMoreTapped();
+        break;
+      case R.id.edit_map:
+        mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, getArguments(), true);
+        break;
+      case R.id.fullscreen_map:
+        expandedMap = !expandedMap;
+        itemBarLayout.setVisibility(expandedMap?View.GONE:View.VISIBLE);
+
+        fullscreenMapButton.setImageResource(
+            expandedMap ? R.drawable.ic_zoom_in_24dp : R.drawable.ic_zoom_out_24dp);
         break;
     }
   }

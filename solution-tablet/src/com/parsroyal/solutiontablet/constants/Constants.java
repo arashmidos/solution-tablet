@@ -58,5 +58,4 @@ public class Constants {
   public static final String READ_ONLY = "readOnly";
   public static final String ApplicationKey = "solution-tablet";
   public static final String DEFAULT_LANGUAGE = "fa";
-
 }
