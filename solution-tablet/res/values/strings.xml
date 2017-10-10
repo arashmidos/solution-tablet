@@ -522,5 +522,5 @@
   <string name="cusomter">مشتری</string>
   <string name="no_customer">متاسفانه مشتری مورد نظر یافت نشد!</string>
   <string name="no_location">موقعیت جغرافیایی کاربر ثبت نشده است!</string>
-  <string name="register_location">ثبت موقعیت مکانی</string>
+  <string name="register_location">ثبت موقعیت جغرافیایی</string>
 </resources>

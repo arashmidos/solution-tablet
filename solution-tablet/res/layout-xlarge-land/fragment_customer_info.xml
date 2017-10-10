@@ -6,7 +6,8 @@
   android:background="@color/features_background"
   android:orientation="horizontal"
   tools:context="com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment"
-  tools:ignore="contentDescription">
+  tools:ignore="contentDescription"
+  android:baselineAligned="false">
 
   <RelativeLayout
     android:id="@+id/map_layout"

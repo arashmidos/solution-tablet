@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,53 +54,37 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
 
   private static final String TAG = CustomerInfoFragment.class.getName();
   private final HashSet<MapView> mMaps = new HashSet<>();
-  @Nullable
   @BindView(R.id.store_tv)
   TextView storeTv;
-  @Nullable
   @BindView(R.id.drop_img)
   ImageView dropImg;
-  @Nullable
   @BindView(R.id.show_more_tv)
   TextView showMoreTv;
-  @Nullable
   @BindView(R.id.location_tv)
   TextView locationTv;
-  @Nullable
   @BindView(R.id.mobile_tv)
   TextView mobileTv;
-  @Nullable
   @BindView(R.id.phone_tv)
   TextView phoneTv;
-  @Nullable
   @BindView(R.id.customer_detail_lay)
   LinearLayout customerDetailLay;
-  @Nullable
   @BindView(R.id.add_order_tv)
   TextView addOrderTv;
-  @Nullable
   @BindView(R.id.register_order_lay)
   RelativeLayout registerOrderLay;
-  @Nullable
   @BindView(R.id.register_location_btn)
   Button registerLocationBtn;
-  @Nullable
   @BindView(R.id.no_map_layout)
-  RelativeLayout noMapLayout;
-  @Nullable
+  ViewGroup noMapLayout;
   @BindView(R.id.map_layout)
   RelativeLayout mapLayout;
-  @Nullable
   @BindView(R.id.map_item)
   MapView mapView;
   GoogleMap map;
-  @Nullable
   @BindView(R.id.edit_map)
   ImageView editMapButton;
-  @Nullable
   @BindView(R.id.fullscreen_map)
   ImageView fullscreenMapButton;
-  @Nullable
   @BindView(R.id.item_bar_lay)
   ScrollView itemBarLayout;
 
@@ -199,6 +182,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   }
 
   private void setData() {
+    mainActivity.changeTitle(customer.getFullName());
     phoneTv.setText(customer.getPhoneNumber());
     mobileTv.setText(customer.getCellPhone());
     locationTv.setText(customer.getAddress());
@@ -212,8 +196,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       registerOrderLay.setVisibility(View.GONE);
     }
 
-    if (customer.getxLocation() != null && customer.getxLocation() != 0.0 && MultiScreenUtility
-        .isTablet(mainActivity)) {
+    if (customer.getxLocation() != null && customer.getxLocation() != 0.0) {
       noMapLayout.setVisibility(View.GONE);
       mapLayout.setVisibility(View.VISIBLE);
       initializeMapView();
@@ -270,7 +253,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         break;
       case R.id.fullscreen_map:
         expandedMap = !expandedMap;
-        itemBarLayout.setVisibility(expandedMap?View.GONE:View.VISIBLE);
+        itemBarLayout.setVisibility(expandedMap ? View.GONE : View.VISIBLE);
 
         fullscreenMapButton.setImageResource(
             expandedMap ? R.drawable.ic_zoom_in_24dp : R.drawable.ic_zoom_out_24dp);

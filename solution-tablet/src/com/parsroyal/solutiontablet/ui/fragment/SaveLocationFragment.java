@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.Locale;
@@ -71,6 +73,7 @@ public class SaveLocationFragment extends BaseFragment implements
   private VisitService visitService;
   private Customer customer;
   private boolean firstTime = true;
+  private MainActivity mainActivity;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,8 +83,10 @@ public class SaveLocationFragment extends BaseFragment implements
 
     Bundle arguments = getArguments();
 
-    customerService = new CustomerServiceImpl(getActivity());
-    visitService = new VisitServiceImpl(getActivity());
+    mainActivity = (MainActivity) getActivity();
+    mainActivity.changeTitle(getString(R.string.register_location));
+    customerService = new CustomerServiceImpl(mainActivity);
+    visitService = new VisitServiceImpl(mainActivity);
     customerId = arguments.getLong(Constants.CUSTOMER_ID);
     visitId = arguments.getLong(Constants.VISIT_ID);
     customer = customerService.getCustomerById(customerId);
@@ -89,7 +94,7 @@ public class SaveLocationFragment extends BaseFragment implements
     customerLat = customer.getxLocation();
     customerLng = customer.getyLocation();
 
-    googleApiClient = new GoogleApiClient.Builder(getActivity())
+    googleApiClient = new GoogleApiClient.Builder(mainActivity)
         .addConnectionCallbacks(this)
         .addOnConnectionFailedListener(this)
         .addApi(LocationServices.API).build();
@@ -144,6 +149,8 @@ public class SaveLocationFragment extends BaseFragment implements
   @Override
   public void onMapReady(GoogleMap googleMap) {
     map = googleMap;
+
+    //TODO: Again check for permission
     currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
     map.setMyLocationEnabled(true);
@@ -177,9 +184,7 @@ public class SaveLocationFragment extends BaseFragment implements
     map.setOnCameraIdleListener(() -> {
 
       currentLatlng = map.getCameraPosition().target;
-      if (customerLat != 0 && customerLng != 0) {
-
-      } else {
+      if (customerLat == 0 || customerLng == 0) {
         markerLayout.setVisibility(View.VISIBLE);
       }
       if (firstTime) {
