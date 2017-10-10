@@ -457,7 +457,7 @@
   <string name="submit">تایید</string>
   <string name="choose_payment_method">انتخاب روش پرداخت</string>
   <string name="good_code_x">کد کالا: %s</string>
-  <string name="recovery_date_x">راس پرداخت %s</string>
+  <string name="recovery_date_x">راس پرداخت : %s</string>
   <string name="add_none">ثبت عدم</string>
   <string name="images">تصاویر</string>
   <string name="amount">قیمت واحد:</string>
@@ -522,5 +522,6 @@
   <string name="cusomter">مشتری</string>
   <string name="no_customer">متاسفانه مشتری مورد نظر یافت نشد!</string>
   <string name="no_location">موقعیت جغرافیایی کاربر ثبت نشده است!</string>
+  <string name="register_return">ثبت مرجوعی</string>
   <string name="register_location">ثبت موقعیت جغرافیایی</string>
 </resources>

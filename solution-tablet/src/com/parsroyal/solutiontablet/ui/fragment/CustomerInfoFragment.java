@@ -221,9 +221,14 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   @Optional
   @OnClick({R.id.show_more_tv, R.id.register_order_lay, R.id.register_payment_lay,
       R.id.register_questionnaire_lay, R.id.register_image_lay, R.id.end_and_exit_visit_lay,
-      R.id.no_activity_lay, R.id.register_location_btn, R.id.edit_map, R.id.fullscreen_map})
+      R.id.no_activity_lay, R.id.register_location_btn, R.id.edit_map, R.id.fullscreen_map,R.id.register_return_lay})
   public void onClick(View view) {
     switch (view.getId()) {
+      case R.id.register_return_lay:
+        //TODO":ADD RETURN LOGIC
+        Toast.makeText(mainActivity, getString(R.string.register_return), Toast.LENGTH_SHORT)
+            .show();
+        break;
       case R.id.register_order_lay:
         openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
         break;

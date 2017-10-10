@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,8 +34,8 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   TextView totalAmountTitle;
   @BindView(R.id.total_amount_tv)
   TextView totalAmountTv;
-  @BindView(R.id.submit_btn)
-  Button submitBtn;
+  @BindView(R.id.submit_tv)
+  TextView submitTv;
 
   private OrderFinalizeAdapter adapter;
   private MainActivity activity;
@@ -88,7 +87,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     totalAmountTv.setText(NumberUtil.getCommaSeparated(order.getAmount() / 1000) + " " +
         getString(R.string.common_irr_currency));
     if (pageStatus.equals(Constants.VIEW)) {
-      submitBtn.setText(R.string.payment_detail);
+      submitTv.setText(R.string.payment_detail);
     }
   }
 

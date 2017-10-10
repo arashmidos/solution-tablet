@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/main_lay"
   android:layout_width="match_parent"
@@ -14,7 +13,7 @@
     android:layout_margin="16dp"
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
-    tools:src="@drawable/goods_research"/>
+    tools:src="@drawable/goods_research" />
 
   <TextView
     android:id="@+id/good_name_tv"
@@ -27,7 +26,7 @@
     android:layout_toLeftOf="@id/good_img"
     android:textColor="@color/black_85"
     android:textSize="12sp"
-    tools:text="پیج سر چهار سو مدل جی 25"/>
+    tools:text="پیج سر چهار سو مدل جی 25" />
 
   <TextView
     android:id="@+id/good_code_tv"
@@ -42,7 +41,7 @@
     android:singleLine="true"
     android:textColor="@color/gray_75"
     android:textSize="10sp"
-    tools:text="کد محصول : 516548"/>
+    tools:text="کد محصول : 516548" />
 
   <TextView
     android:id="@+id/good_number_tv"
@@ -55,10 +54,10 @@
     android:singleLine="true"
     android:textColor="@color/gray_75"
     android:textSize="10sp"
-    tools:text="6684 عدد"/>
+    tools:text="6684 عدد" />
 
   <View
-    android:id="@+id/devider"
+    android:id="@+id/divider"
     android:layout_width="1dp"
     android:layout_height="14dp"
     android:layout_marginTop="11dp"
@@ -68,7 +67,7 @@
     android:layout_marginRight="9dp"
     android:layout_below="@+id/good_code_tv"
     android:layout_toLeftOf="@id/good_number_tv"
-    android:background="@color/gray_e0"/>
+    android:background="@color/gray_e0" />
 
   <TextView
     android:id="@+id/good_box_tv"
@@ -77,30 +76,30 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="12dp"
     android:layout_below="@+id/good_code_tv"
-    android:layout_toLeftOf="@id/devider"
-    android:layout_toStartOf="@id/devider"
+    android:layout_toLeftOf="@id/divider"
+    android:layout_toStartOf="@id/divider"
     android:singleLine="true"
     android:textColor="@color/gray_75"
     android:textSize="10sp"
-    tools:text="6684 کرتن"/>
+    tools:text="6684 کرتن" />
 
   <TextView
     android:id="@+id/good_price_tv"
     style="@style/IranSans.Medium"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:layout_marginStart="16dp"
     android:layout_marginLeft="16dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginEnd="8dp"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:layout_below="@+id/good_code_tv"
-    android:layout_toLeftOf="@id/good_box_tv"
-    android:layout_toStartOf="@id/good_box_tv"
+    android:layout_below="@id/good_box_tv"
     android:gravity="left"
     android:textColor="@color/log_in_enter_bg"
     android:textSize="14sp"
-    tools:text="12000 تومان"/>
+    tools:text="12000 تومان" />
 
   <TextView
     android:id="@+id/good_recovery_date_tv"
@@ -113,17 +112,17 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_below="@+id/good_name_tv"
-    android:layout_toLeftOf="@id/good_box_tv"
-    android:layout_toStartOf="@id/good_box_tv"
+    android:layout_toLeftOf="@id/good_code_tv"
+    android:layout_toStartOf="@id/good_code_tv"
     android:gravity="left"
     android:textColor="@color/gray_75"
     android:textSize="10sp"
-    tools:text="راس پرداخت : 1"/>
+    tools:text="راس پرداخت : 1" />
 
   <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:layout_marginTop="17dp"
     android:layout_below="@id/good_price_tv"
-    android:background="@color/gray_e0"/>
+    android:background="@color/gray_e0" />
 </RelativeLayout>

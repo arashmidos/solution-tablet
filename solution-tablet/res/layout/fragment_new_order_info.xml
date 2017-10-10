@@ -124,7 +124,7 @@
           tools:text="تاریخ سفارش: "/>
 
         <View
-          android:id="@+id/devider"
+          android:id="@+id/divider"
           android:layout_width="1dp"
           android:layout_height="match_parent"
           android:layout_marginTop="8dp"
@@ -145,8 +145,8 @@
           android:layout_marginRight="8dp"
           android:layout_toEndOf="@id/date_title_tv"
           android:layout_toLeftOf="@id/date_title_tv"
-          android:layout_toRightOf="@id/devider"
-          android:layout_toStartOf="@id/devider"
+          android:layout_toRightOf="@id/divider"
+          android:layout_toStartOf="@id/divider"
           android:gravity="center|start"
           android:textColor="@color/black_85"
           android:textSize="12sp"/>
@@ -156,8 +156,8 @@
           style="@style/IranSans.Medium"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:layout_toLeftOf="@id/devider"
-          android:layout_toStartOf="@id/devider"
+          android:layout_toLeftOf="@id/divider"
+          android:layout_toStartOf="@id/divider"
           android:gravity="center"
           android:text="@string/number_x"
           android:textColor="@color/login_gray"
