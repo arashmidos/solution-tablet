@@ -135,8 +135,8 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="23dp"
       android:layout_below="@id/total_price_tv"
-      android:layout_toEndOf="@id/devider"
-      android:layout_toRightOf="@id/devider"
+      android:layout_toEndOf="@id/divider"
+      android:layout_toRightOf="@id/divider"
       android:gravity="center"
       android:textColor="@color/black_21"
       android:textSize="18sp"/>
@@ -156,7 +156,7 @@
       tools:text="@string/number"/>
 
     <View
-      android:id="@+id/devider"
+      android:id="@+id/divider"
       android:layout_width="1dp"
       android:layout_height="33dp"
       android:layout_marginTop="21dp"
@@ -173,8 +173,8 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="23dp"
       android:layout_below="@id/total_price_tv"
-      android:layout_toLeftOf="@id/devider"
-      android:layout_toStartOf="@id/devider"
+      android:layout_toLeftOf="@id/divider"
+      android:layout_toStartOf="@id/divider"
       android:gravity="center"
       android:textColor="@color/black_21"
       android:textSize="18sp"/>
@@ -186,8 +186,8 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"
       android:layout_below="@id/unit2_count_tv"
-      android:layout_toLeftOf="@id/devider"
-      android:layout_toStartOf="@id/devider"
+      android:layout_toLeftOf="@id/divider"
+      android:layout_toStartOf="@id/divider"
       android:gravity="center"
       android:textColor="@color/gray_75"
       android:textSize="10sp"

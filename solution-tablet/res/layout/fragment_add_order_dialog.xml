@@ -37,7 +37,7 @@
         android:gravity="center"
         android:text="@string/add_to_order"
         android:textColor="@color/primary"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
       <Button
         android:id="@+id/close"
@@ -47,13 +47,14 @@
         android:layout_marginRight="16dp"
         android:layout_gravity="center|end"
         android:background="@drawable/ic_close_24dp"
-        android:backgroundTint="@color/login_gray"/>
+        android:backgroundTint="@color/login_gray" />
     </FrameLayout>
   </android.support.design.widget.AppBarLayout>
 
   <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="0dp"
+    android:layout_weight="1">
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -63,12 +64,12 @@
       <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="202dp"/>
+        android:layout_height="202dp" />
 
       <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/login_gray"/>
+        android:background="@color/login_gray" />
 
       <RelativeLayout
         android:id="@+id/good_detail_lay"
@@ -88,7 +89,7 @@
           android:layout_centerHorizontal="true"
           android:gravity="top"
           app:ci_drawable="@drawable/ic_lens_blue"
-          app:ci_drawable_unselected="@drawable/ic_lens_gray"/>
+          app:ci_drawable_unselected="@drawable/ic_lens_gray" />
 
         <TextView
           android:id="@+id/view_pager_position_tv"
@@ -98,7 +99,7 @@
           android:layout_alignParentRight="true"
           android:layout_alignParentTop="true"
           android:textColor="@color/login_gray"
-          android:textSize="12sp"/>
+          android:textSize="12sp" />
 
         <TextView
           android:id="@+id/good_name_tv"
@@ -114,7 +115,7 @@
           android:singleLine="true"
           android:textColor="@color/black_85"
           android:textSize="12sp"
-          tools:text="ست پیج سر چهار سو مدل جی 26"/>
+          tools:text="ست پیج سر چهار سو مدل جی 26" />
 
         <TextView
           android:id="@+id/good_code_tv"
@@ -127,7 +128,7 @@
           android:layout_below="@id/good_name_tv"
           android:textColor="@color/gray_75"
           android:textSize="10sp"
-          tools:text="کد محصول : 516565"/>
+          tools:text="کد محصول : 516565" />
 
         <TextView
           android:id="@+id/good_price_tv"
@@ -143,26 +144,27 @@
           android:gravity="left"
           android:textColor="@color/green_text"
           android:textSize="14sp"
-          tools:text="12000 تومان"/>
+          tools:text="12000 تومان" />
 
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_marginTop="16dp"
           android:layout_below="@id/good_price_tv"
-          android:background="@color/login_gray"/>
+          android:background="@color/login_gray" />
       </RelativeLayout>
 
       <TextView
         style="@style/IranSans.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="10dp"
         android:text="@string/order_count"
         android:textColor="@color/black_85"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
+
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -171,26 +173,28 @@
         android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <RelativeLayout
-          android:layout_width="122dp"
-          android:layout_height="match_parent">
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight=".5">
 
           <Spinner
             android:id="@+id/spinner"
             style="@style/IranSans"
-            android:layout_width="122dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
             android:gravity="right"
-            android:prompt="@string/number"/>
+            android:prompt="@string/number" />
 
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/login_gray"/>
+            android:background="@color/login_gray" />
 
           <ImageView
             android:layout_width="wrap_content"
@@ -199,7 +203,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_drop_down"
-            android:tint="@color/login_gray"/>
+            android:tint="@color/login_gray" />
 
         </RelativeLayout>
 
@@ -208,36 +212,38 @@
           style="@style/IranSans"
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:layout_weight="1"
+          android:layout_weight=".5"
           android:layout_marginStart="16dp"
           android:layout_marginLeft="16dp"
           android:paddingBottom="6dp"
-          android:digits="1234567890.۰۱۲۳۴۵۶۷۸۹"
           android:background="@drawable/edit_text_state_background"
+          android:digits="1234567890.۰۱۲۳۴۵۶۷۸۹"
           android:gravity="bottom"
+          android:maxLines="1"
           android:hint="@string/enter_count_amount"
           android:inputType="numberDecimal"
           android:textColor="@color/black_85"
           android:textColorHint="@color/gray_9e"
-          android:textSize="@dimen/text_normal"/>
+          android:textSize="@dimen/text_normal" />
       </LinearLayout>
 
-      <RelativeLayout
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="55dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginLeft="18dp">
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <LinearLayout
           android:id="@+id/number_lay"
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginEnd="20dp"
-          android:layout_marginRight="20dp"
-          android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
+          android:layout_weight=".5"
           android:gravity="center"
           android:orientation="vertical">
 
@@ -248,7 +254,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/gray_75"
             android:textSize="24sp"
-            tools:text="0"/>
+            tools:text="0" />
 
           <TextView
             android:id="@+id/unit1_title_tv"
@@ -258,17 +264,14 @@
             android:layout_marginTop="20dp"
             android:textColor="@color/gray_75"
             android:textSize="12sp"
-            tools:text="@string/number"/>
+            tools:text="@string/number" />
         </LinearLayout>
 
         <LinearLayout
           android:id="@+id/carton_lay"
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginEnd="50dp"
-          android:layout_marginRight="50dp"
-          android:layout_toLeftOf="@id/number_lay"
-          android:layout_toStartOf="@id/number_lay"
+          android:layout_weight=".5"
           android:gravity="center"
           android:orientation="vertical">
 
@@ -279,7 +282,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/gray_75"
             android:textSize="24sp"
-            tools:text="0"/>
+            tools:text="0" />
 
           <TextView
             android:id="@+id/unit2_title_tv"
@@ -289,115 +292,137 @@
             android:layout_marginTop="20dp"
             android:text="@string/carton"
             android:textColor="@color/gray_75"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
         </LinearLayout>
-        <LinearLayout
-          android:id="@+id/cost_detail_lay"
+
+      </LinearLayout>
+      <LinearLayout
+        android:id="@+id/cost_detail_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:background="@drawable/tab_shape_focused_primary"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+          android:id="@+id/coefficient_tv"
+          style="@style/IranSans"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginEnd="50dp"
-          android:layout_marginRight="50dp"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true"
-          android:layout_centerVertical="true"
-          android:background="@drawable/tab_shape_focused_primary"
-          android:gravity="center"
-          android:orientation="vertical">
+          android:layout_marginTop="10dp"
+          android:layout_marginStart="17dp"
+          android:layout_marginEnd="17dp"
+          android:layout_marginLeft="17dp"
+          android:layout_marginRight="17dp"
+          android:textColor="@color/primary"
+          android:textSize="12sp"
+          tools:text="ضریب فروش : 4" />
 
-          <TextView
-            android:id="@+id/coefficient_tv"
-            style="@style/IranSans"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="17dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginLeft="17dp"
-            android:layout_marginRight="17dp"
-            android:textColor="@color/primary"
-            android:textSize="12sp"
-            tools:text="ضریب فروش : 4"/>
-
-          <TextView
-            android:id="@+id/each_Carton_tv"
-            style="@style/IranSans"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="17dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginLeft="17dp"
-            android:layout_marginRight="17dp"
-            android:textColor="@color/primary"
-            android:textSize="12sp"
-            tools:text="هرکارتن = 5عدد"/>
-        </LinearLayout>
-
-      </RelativeLayout>
-
+        <TextView
+          android:id="@+id/each_Carton_tv"
+          style="@style/IranSans"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="10dp"
+          android:layout_marginStart="17dp"
+          android:layout_marginEnd="17dp"
+          android:layout_marginLeft="17dp"
+          android:layout_marginRight="17dp"
+          android:textColor="@color/primary"
+          android:textSize="12sp"
+          tools:text="هرکارتن = 5عدد" />
+      </LinearLayout>
       <TextView
         android:id="@+id/error_msg"
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_below="@id/cost_detail_lay"
         android:gravity="right"
         android:textColor="@color/red"
         android:textSize="12sp"
-        tools:text="ضریب فروش رعایت نشده است"/>
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/login_gray"/>
-
-      <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp">
-
-        <Button
-          android:id="@+id/register_order_btn"
-          style="@style/IranSans.Medium"
-          android:layout_width="196dp"
-          android:layout_height="36dp"
-          android:layout_margin="8dp"
-          android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
-          android:background="@color/log_in_enter_bg"
-          android:gravity="center"
-          android:text="@string/register_order"
-          android:textColor="@android:color/white"
-          android:textSize="14sp"/>
-
-        <TextView
-          android:id="@+id/total"
-          style="@style/IranSans"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:text="@string/total"
-          android:textColor="@color/gray_75"
-          android:textSize="12sp"/>
-
-        <TextView
-          android:id="@+id/total_price_tv"
-          style="@style/IranSans.Bold"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true"
-          android:layout_below="@+id/total"
-          android:layout_toLeftOf="@id/register_order_btn"
-          android:layout_toStartOf="@id/register_order_btn"
-          android:gravity="left"
-          android:textColor="@color/log_in_enter_bg"
-          android:textSize="16sp"
-          tools:text="12000 تومان"/>
-      </RelativeLayout>
+        android:visibility="invisible"
+        tools:text="ضریب فروش رعایت نشده است" />
     </LinearLayout>
   </ScrollView>
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/payment_bottom_line">
+
+    <LinearLayout
+      android:id="@+id/register_order_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:paddingTop="20dp"
+      android:paddingBottom="20dp"
+      android:paddingStart="34dp"
+      android:paddingEnd="34dp"
+      android:paddingLeft="34dp"
+      android:paddingRight="34dp"
+      android:orientation="horizontal">
+      <TextView
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register_order"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:src="@drawable/ic_cart_plus_24_dp"
+        android:tint="@color/white" />
+    </LinearLayout>
+
+    <TextView
+      android:id="@+id/total"
+      style="@style/IranSans"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginStart="24dp"
+      android:layout_marginLeft="24dp"
+      android:text="@string/total"
+      android:textColor="@color/black_8a"
+      android:textSize="12sp" />
+    <View
+      android:id="@+id/divider"
+      android:layout_width="1dp"
+      android:layout_height="40dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      android:layout_centerVertical="true"
+      android:layout_toLeftOf="@id/register_order_btn"
+      android:layout_toStartOf="@id/register_order_btn"
+      android:background="@color/black_10" />
+    <TextView
+      android:id="@+id/total_price_tv"
+      style="@style/IranSans.Bold"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="24dp"
+      android:layout_marginLeft="24dp"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_below="@+id/total"
+      android:layout_toLeftOf="@id/divider"
+      android:layout_toStartOf="@id/divider"
+      android:gravity="left"
+      android:textColor="@color/white"
+      android:textSize="16sp"
+      tools:text="12000 تومان" />
+  </RelativeLayout>
 </LinearLayout>
