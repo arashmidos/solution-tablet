@@ -510,7 +510,7 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   private GoodsDtoList getAllRejectedGoods(ResultObserver observer, Long customerId) {
-    return new RejectedGoodsDataTransferBizImpl(context, observer)
+    return new RejectedGoodsDataTransferBizImpl(context)
         .getAllRejectedData(backendUri, username, password, salesmanId, customerId);
   }
 

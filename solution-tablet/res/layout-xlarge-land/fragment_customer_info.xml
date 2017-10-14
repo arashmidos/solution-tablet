@@ -395,7 +395,7 @@
           android:layout_alignParentEnd="true"
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
-          android:src="@drawable/ic_attach_money_24dp"
+          android:src="@drawable/ic_return_24_dp"
           android:tint="@color/register_return" />
 
         <TextView

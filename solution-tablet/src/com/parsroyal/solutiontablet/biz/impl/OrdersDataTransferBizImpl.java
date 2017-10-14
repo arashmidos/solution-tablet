@@ -61,8 +61,8 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl
   public void sendSingleOrder(BaseSaleDocument baseSaleDocument) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
-
     }
+
     this.order = baseSaleDocument;
 
     RestService restService = ServiceGenerator.createService(RestService.class);

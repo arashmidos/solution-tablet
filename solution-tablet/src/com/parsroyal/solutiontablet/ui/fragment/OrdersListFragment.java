@@ -235,8 +235,9 @@ public class OrdersListFragment extends
     {
       try {
         DataTransferService dataTransferService = new DataTransferServiceImpl(getActivity());
-        GoodsDtoList rejectedGoodsList = dataTransferService
-            .getRejectedData(OrdersListFragment.this, customerBackendId);
+        GoodsDtoList rejectedGoodsList = null;/*dataTransferService
+            .getRejectedData(OrdersListFragment.this, customerBackendId);*/
+        //TODO ARASH Implement it for new ui
         if (rejectedGoodsList != null) {
           final Bundle args = new Bundle();
           args.putLong(Constants.ORDER_ID, id);

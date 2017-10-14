@@ -88,11 +88,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     super.onCreate(savedInstanceState);
     if (MultiScreenUtility.isTablet(this)) {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-
     } else {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
     }
     setContentView(R.layout.activity_login);
     ButterKnife.bind(this);

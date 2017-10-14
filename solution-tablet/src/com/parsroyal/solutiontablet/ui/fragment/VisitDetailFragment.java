@@ -298,8 +298,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
     {
       try {
         DataTransferService dataTransferService = new DataTransferServiceImpl(oldMainActivity);
-        rejectedGoodsList = dataTransferService
-            .getRejectedData(VisitDetailFragment.this, customer.getBackendId());
+        rejectedGoodsList = null;/*dataTransferService
+            .getRejectedData(VisitDetailFragment.this, customer.getBackendId());*/
         if (rejectedGoodsList != null) {
 
           final Bundle args = new Bundle();

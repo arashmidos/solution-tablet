@@ -68,9 +68,9 @@
   <color name="black_21">#212121</color>
 
   <!-- visit detail-->
-  <color name="register_order">#f57f17</color>
+  <color name="register_order">#558b2f</color>
   <color name="register_payment">#009688</color>
   <color name="register_questionnaire">#1976d2</color>
   <color name="register_image">#673ab7</color>
-  <color name="register_return">#558b2f</color>
+  <color name="register_return">#f57f17</color>
 </resources>
