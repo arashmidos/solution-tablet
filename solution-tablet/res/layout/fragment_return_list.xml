@@ -12,14 +12,14 @@
     android:layout_height="match_parent" />
 
   <android.support.design.widget.FloatingActionButton
-    android:id="@+id/fab_add_order"
+    android:id="@+id/fab_add_return"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     android:layout_alignParentBottom="true"
     android:layout_alignParentLeft="true"
     android:src="@drawable/ic_add_24_dp_white"
-    app:backgroundTint="@color/register_order"
+    app:backgroundTint="@color/register_return"
     app:borderWidth="0dp"
     app:fabSize="normal" />
 </RelativeLayout>

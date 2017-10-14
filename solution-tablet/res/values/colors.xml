@@ -43,6 +43,7 @@
   <color name="log_in_enter_bg">#4cb050</color>
   <color name="green_text">#2e7d32</color>
   <color name="payment_bottom_line">#4caf50</color>
+  <color name="green_return">#388e3c</color>
 
   <color name="log_in_enter_bg_20">#804cb050</color>
   <color name="customers_number">#1d988c</color>

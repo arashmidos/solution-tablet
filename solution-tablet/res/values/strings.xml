@@ -524,5 +524,8 @@
   <string name="no_location">موقعیت جغرافیایی کاربر ثبت نشده است!</string>
   <string name="register_return">ثبت مرجوعی</string>
   <string name="register_location">ثبت موقعیت جغرافیایی</string>
-  <string name="returnes">مرجوعی ها</string>
+  <string name="returns">مرجوعی ها</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

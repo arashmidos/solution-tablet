@@ -75,6 +75,7 @@ public class NewVisitDetailFragment extends BaseFragment {
   private CustomerInfoFragment customerInfoFragment;
   private NewOrderListFragment orderListFragment;
   private PaymentListFragment paymentListFragment;
+  private ReturnListFragment returnListFragment;
   private PictureFragment pictureFragment;
   private Customer customer;
 
@@ -296,6 +297,7 @@ public class NewVisitDetailFragment extends BaseFragment {
     paymentListFragment = PaymentListFragment.newInstance(arguments);
     pictureFragment = PictureFragment.newInstance(this);
     orderListFragment = NewOrderListFragment.newInstance(arguments, this);
+    returnListFragment = ReturnListFragment.newInstance(arguments, this);
     customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
   }
 
@@ -304,6 +306,7 @@ public class NewVisitDetailFragment extends BaseFragment {
 //    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
     viewPagerAdapter.add(pictureFragment, getString(R.string.images));
     viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
+    viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
     viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
     viewPagerAdapter.add(customerInfoFragment, getString(R.string.customer_information));
     viewpager.setAdapter(viewPagerAdapter);
