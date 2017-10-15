@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,13 +24,12 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.LongSummaryStatistics;
 
 /**
  * Created by ShakibIsTheBest on 8/27/2017.
  */
 
-public class OrderAdapter extends Adapter<ViewHolder> {
+public class ReturnAdapter extends RecyclerView.Adapter<ReturnAdapter.ViewHolder> {
 
   private LayoutInflater inflater;
   private Context context;
@@ -40,26 +38,22 @@ public class OrderAdapter extends Adapter<ViewHolder> {
   private List<SaleOrderListModel> orders;
   private Long visitId;
   private String saleType;
-  private Long status;
 
-  public OrderAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromOrder,
-      Long visitId, String saleType, Long status) {
+  public ReturnAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromOrder,
+      Long visitId, String saleType) {
     this.context = context;
     this.visitId = visitId == null ? 0 : visitId;
     this.orders = orders;
     this.saleType = saleType;
     this.mainActivity = (MainActivity) context;
     this.isFromOrder = isFromOrder;
-    this.status = status;
     inflater = LayoutInflater.from(context);
   }
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view;
-    if (status.equals(SaleOrderStatus.REJECTED.getId())) {
-      view = inflater.inflate(R.layout.item_return_list, parent, false);
-    } else if (isFromOrder) {
+    if (isFromOrder) {
       view = inflater.inflate(R.layout.item_order_report_list, parent, false);
     } else {
       view = inflater.inflate(R.layout.item_order_list, parent, false);
@@ -70,11 +64,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     SaleOrderListModel order = orders.get(position);
-    if (status.equals(SaleOrderStatus.REJECTED.getId())) {
-      holder.setReturnData(position, order);
-    } else {
-      holder.setOrderData(position, order);
-    }
+    holder.setData(position, order);
   }
 
   @Override
@@ -89,23 +79,18 @@ public class OrderAdapter extends Adapter<ViewHolder> {
 
   public class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
-    @Nullable
     @BindView(R.id.order_code_tv)
     TextView orderCodeTv;
-    @Nullable
     @BindView(R.id.order_date_tv)
     TextView orderDateTv;
-    @Nullable
     @BindView(R.id.order_total_price)
     TextView orderTotalPrice;
-    @Nullable
     @BindView(R.id.order_count_tv)
     TextView orderCountTv;
-    @Nullable
     @BindView(R.id.order_payment_method_tv)
     TextView orderPaymentMethodTv;
     @Nullable
-    @BindView(R.id.main_lay_rel)
+    @BindView(R.id.main_lay)
     RelativeLayout mainLayRel;
     @Nullable
     @BindView(R.id.main_lay_linear)
@@ -113,24 +98,6 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     @Nullable
     @BindView(R.id.order_status_tv)
     TextView orderStatusTv;
-    @Nullable
-    @BindView(R.id.delete_img)
-    ImageView deleteImg;
-    @Nullable
-    @BindView(R.id.edit_img)
-    ImageView editImg;
-    @Nullable
-    @BindView(R.id.return_reason_tv)
-    TextView returnReasonTv;
-    @Nullable
-    @BindView(R.id.total_amount_tv)
-    TextView totalAmountTv;
-    @Nullable
-    @BindView(R.id.return_count_tv)
-    TextView returnCountTv;
-    @Nullable
-    @BindView(R.id.return_date_tv)
-    TextView returnDateTv;
 
     private int position;
     private SaleOrderListModel order;
@@ -138,16 +105,14 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-      deleteImg.setOnClickListener(this);
-      editImg.setOnClickListener(this);
       if (mainLayLin != null) {
         mainLayLin.setOnClickListener(this);
-      } else if (mainLayRel != null) {
+      } else {
         mainLayRel.setOnClickListener(this);
       }
     }
 
-    public void setOrderData(int position, SaleOrderListModel order) {
+    public void setData(int position, SaleOrderListModel order) {
       this.position = position;
       this.order = order;
       if (isFromOrder) {
@@ -161,8 +126,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
               "FA");
       String dateString = DateUtil.getFullPersianDate(createDate);*/
       //96/7/5
-      Date createdDate = DateUtil
-          .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
+      Date createdDate = DateUtil.convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
 
       orderDateTv.setText(dateString);
@@ -173,33 +137,9 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       orderPaymentMethodTv.setText(order.getPaymentTypeTitle());
     }
 
-    public void setReturnData(int position, SaleOrderListModel order) {
-      //TODO:set return data here
-      this.position = position;
-      this.order = order;
-      String returnCode = "کد مرجوعی : " + String.valueOf(order.getId());
-      returnCountTv.setText("--");
-      Date createdDate = DateUtil
-          .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
-      String dateString = DateUtil.getFullPersianDate(createdDate);
-
-      returnDateTv.setText(dateString);
-      String number = String
-          .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
-              R.string.common_irr_currency));
-      totalAmountTv.setText(number);
-      returnReasonTv.setText("فرا رسیدن میلاد با سعادت انقضای محصول");
-    }
-
     @Override
     public void onClick(View v) {
       switch (v.getId()) {
-        case R.id.delete_img:
-          //TODO:DELET ACTION
-          break;
-        case R.id.edit_img:
-          //TODO:EDIT ACTION
-          break;
         case R.id.main_lay_linear:
         case R.id.main_lay:
           Bundle args = new Bundle();

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/main_lay"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@android:color/white"
+  android:orientation="vertical">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:weightSum="10">
+    <ImageView
+      android:id="@+id/delete_img"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".5"
+      android:src="@drawable/ic_delete_24_black"
+      android:tint="@color/black_de" />
+    <ImageView
+      android:id="@+id/edit_img"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".5"
+      android:src="@drawable/ic_edit_24_black"
+      android:tint="@color/black_de" />
+    <TextView
+      android:id="@+id/return_reason_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="4.5"
+      android:gravity="right"
+      android:textColor="@color/primary_dark"
+      android:textSize="12sp" />
+    <TextView
+      android:id="@+id/total_amount_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1.5"
+      android:gravity="right"
+      android:textColor="@color/green_return"
+      android:textSize="12sp" />
+    <TextView
+      android:id="@+id/return_count_tv"
+      style="@style/IranSans.Light"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="right"
+      android:layout_marginRight="9dp"
+      android:layout_marginEnd="9dp"
+      android:textSize="12sp"
+      android:textColor="@color/black_de" />
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/ic_return_24_dp"
+      android:tint="@color/black_de" />
+
+    <TextView
+      android:id="@+id/return_date_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="2"
+      android:layout_marginTop="21dp"
+      android:layout_marginBottom="17dp"
+      android:layout_marginEnd="15dp"
+      android:layout_marginRight="15dp"
+      android:gravity="right"
+      android:textColor="@color/black_de"
+      android:textSize="12sp" />
+  </LinearLayout>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/navigation_drawer_divider" />
+
+</LinearLayout>

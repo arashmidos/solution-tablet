@@ -120,6 +120,10 @@ dependencies {
         transitive = true;
     }
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    compile('com.mikepenz:materialdrawer:5.9.2@aar') {
+        transitive = true
+    }
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
@@ -141,13 +145,9 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+    compile 'com.mikepenz:crossfader:1.5.0@aar'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.1.0'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.0'
-    compile('com.mikepenz:materialdrawer:5.9.2@aar') {
-        transitive = true
-    }
-    compile 'com.mikepenz:crossfader:1.5.0@aar'
-
 }
 
 android {
