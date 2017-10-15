@@ -1,13 +1,12 @@
 package com.parsroyal.solutiontablet.ui.fragment.bottomsheet;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,7 +19,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -39,7 +40,6 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.GoodImagePagerAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
-import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment.GoodsDialogOnClickListener;
 import com.parsroyal.solutiontablet.util.DepthPageTransformer;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MediaUtil;
@@ -87,10 +87,20 @@ public class AddOrderBottomSheet extends BottomSheetDialogFragment {
   TextView errorMsg;
   @BindView(R.id.view_pager_position_tv)
   TextView viewPagerPositionTv;
+  @BindView(R.id.toolbar_title)
+  TextView toolbarText;
+  @BindView(R.id.add_order_btn_text)
+  TextView addButtonText;
+  @BindView(R.id.bottom_bar)
+  RelativeLayout bottomLayout;
+  @BindView(R.id.register_order_image)
+  ImageView registerButtonImage;
+  @BindView(R.id.order_count_tv)
+  TextView orderCountTv;
 
   private AddOrderDialogFragment.GoodsDialogOnClickListener onClickListener;
   private Long goodsBackendId;
-  private long orderStatus;
+  private Long orderStatus;
   private long goodsInvoiceId;
   private GoodsDtoList rejectedGoodsList;
   private MainActivity mainActivity;
@@ -151,7 +161,7 @@ public class AddOrderBottomSheet extends BottomSheetDialogFragment {
     saleRateEnabled = Boolean
         .valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE));
 
-    if (orderStatus == SaleOrderStatus.REJECTED_DRAFT.getId()) {
+    if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
       rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
       goodsInvoiceId = arguments.getLong(Constants.GOODS_INVOICE_ID);
       selectedGoods = getGoodFromLocal();
@@ -167,11 +177,11 @@ public class AddOrderBottomSheet extends BottomSheetDialogFragment {
     setData();
     setListeners();
     setUpSpinner();
-    fillLeftPanel();
+    fillDetailPanel();
     return view;
   }
 
-  private void fillLeftPanel() {
+  private void fillDetailPanel() {
     String input = countTv.getText().toString();
     if (Empty.isNotEmpty(input)) {
       try {
@@ -190,15 +200,15 @@ public class AddOrderBottomSheet extends BottomSheetDialogFragment {
           totalPriceTv.setText(String.format(Locale.US, "%,d %s", total, getString(
               R.string.common_irr_currency)));
         } else {
-          clearLeftPanel();
+          clearDetailPanel();
         }
       } catch (Exception ex) {
         ex.printStackTrace();
         Crashlytics.log(Log.ERROR, "GoodDetails Left Panel", ex.getMessage());
-        clearLeftPanel();
+        clearDetailPanel();
       }
     } else {
-      clearLeftPanel();
+      clearDetailPanel();
     }
   }
 
@@ -213,15 +223,15 @@ public class AddOrderBottomSheet extends BottomSheetDialogFragment {
     }
     if (saleType.equals(ApplicationKeys.SALE_COLD)) {
 
-      if (orderStatus == SaleOrderStatus.DRAFT.getId()
-          || orderStatus == SaleOrderStatus.READY_TO_SEND.getId()) {
+      if (orderStatus.equals(SaleOrderStatus.DRAFT.getId())
+          || orderStatus.equals(SaleOrderStatus.READY_TO_SEND.getId())) {
         return true;
       }
     }
     return false;
   }
 
-  private void clearLeftPanel() {
+  private void clearDetailPanel() {
     unit1CountTv.setText("0");
     unit2CountTv.setText("0");
     totalPriceTv.setText(String.format(Locale.US, "%,d %s", 0, getString(
@@ -241,7 +251,7 @@ public class AddOrderBottomSheet extends BottomSheetDialogFragment {
       @Override
       public void afterTextChanged(Editable s) {
         //TODO why this method change the size of screen?
-        fillLeftPanel();
+        fillDetailPanel();
         errorMsg.setVisibility(View.INVISIBLE);
       }
     });
@@ -249,7 +259,7 @@ public class AddOrderBottomSheet extends BottomSheetDialogFragment {
     spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        fillLeftPanel();
+        fillDetailPanel();
       }
 
       @Override
@@ -281,11 +291,31 @@ public class AddOrderBottomSheet extends BottomSheetDialogFragment {
         R.string.common_irr_currency)));
 
     if (saleRateEnabled) {
-      coefficientTv.setText(String.format("ضریب فروش: %s %s", saleRate, unit1Title));
+      coefficientTv.setText(
+          Empty.isNotEmpty(saleRate) ? String.format("ضریب فروش: %s %s", saleRate, unit1Title)
+              : getString(R.string.no_sale_rate));
       eachCartonTv.setText(String.format("هر %s = %s %s", unit2Title, unit1Count, unit1Title));
     } else {
       costDetailLay.setVisibility(View.GONE);
     }
+
+    if (isRejected()) {
+      toolbarText.setText(R.string.add_to_return_goods);
+      addButtonText.setText(R.string.register_return);
+      bottomLayout
+          .setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
+      registerButtonImage.setImageResource(R.drawable.ic_check_white_18_dp);
+      orderCountTv.setText(R.string.return_count);
+    }
+  }
+
+  /*
+  @return true if it's one of the REJECTED states
+  */
+  private boolean isRejected() {
+    return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
   }
 
   private Goods getGoodFromLocal() {

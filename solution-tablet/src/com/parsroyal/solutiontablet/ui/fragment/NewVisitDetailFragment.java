@@ -22,15 +22,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.biz.impl.RejectedGoodsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
+import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
+import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.LocationService;
@@ -38,6 +46,7 @@ import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
@@ -49,8 +58,11 @@ import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class NewVisitDetailFragment extends BaseFragment {
 
@@ -77,9 +89,41 @@ public class NewVisitDetailFragment extends BaseFragment {
   private PaymentListFragment paymentListFragment;
   private PictureFragment pictureFragment;
   private Customer customer;
+  private SaleOrderDto orderDto;
+  private String saleType;
+
 
   public NewVisitDetailFragment() {
     // Required empty public constructor
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    // Inflate the layout for this fragment
+    View view = inflater.inflate(R.layout.fragment_new_visit_detail, container, false);
+    ButterKnife.bind(this, view);
+    Bundle args = getArguments();
+    customerId = args.getLong(Constants.CUSTOMER_ID);
+    mainActivity = (MainActivity) getActivity();
+    baseInfoService = new BaseInfoServiceImpl(mainActivity);
+    customerService = new CustomerServiceImpl(mainActivity);
+    locationService = new LocationServiceImpl(mainActivity);
+    visitService = new VisitServiceImpl(mainActivity);
+    customer = customerService.getCustomerById(customerId);
+    saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    visitId = args.getLong(Constants.VISIT_ID);
+    saleType = new SettingServiceImpl(mainActivity).getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+
+    tabs.setupWithViewPager(viewpager);
+    initFragments();
+    setUpViewPager();
+    viewpager.setCurrentItem(viewPagerAdapter.getCount());
+    viewpager.setOffscreenPageLimit(viewPagerAdapter.getCount());
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      mainActivity.changeTitle("");
+    }
+    return view;
   }
 
   public static NewVisitDetailFragment newInstance() {
@@ -264,33 +308,6 @@ public class NewVisitDetailFragment extends BaseFragment {
     return visitId;
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.fragment_new_visit_detail, container, false);
-    ButterKnife.bind(this, view);
-    Bundle args = getArguments();
-    customerId = args.getLong(Constants.CUSTOMER_ID);
-    mainActivity = (MainActivity) getActivity();
-    baseInfoService = new BaseInfoServiceImpl(mainActivity);
-    customerService = new CustomerServiceImpl(mainActivity);
-    locationService = new LocationServiceImpl(mainActivity);
-    visitService = new VisitServiceImpl(mainActivity);
-    customer = customerService.getCustomerById(customerId);
-    saleOrderService = new SaleOrderServiceImpl(mainActivity);
-    visitId = args.getLong(Constants.VISIT_ID);
-    tabs.setupWithViewPager(viewpager);
-    initFragments();
-    setUpViewPager();
-    viewpager.setCurrentItem(viewPagerAdapter.getCount());
-    viewpager.setOffscreenPageLimit(viewPagerAdapter.getCount());
-    if (MultiScreenUtility.isTablet(mainActivity)) {
-      mainActivity.changeTitle("");
-    }
-    return view;
-  }
-
   private void initFragments() {
     Bundle arguments = getArguments();
     paymentListFragment = PaymentListFragment.newInstance(arguments);
@@ -366,4 +383,108 @@ public class NewVisitDetailFragment extends BaseFragment {
     }
   }
 
+  /**
+   * @param statusID Could be DRAFT for both AddInvoice/AddOrder or REJECTED_DRAFT for
+   * ReturnedOrder
+   */
+  public void openOrderDetailFragment(Long statusID) {
+
+    orderDto = saleOrderService
+        .findOrderDtoByCustomerBackendIdAndStatus(customer.getBackendId(), statusID);
+    if (Empty.isEmpty(orderDto) || statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
+      orderDto = createDraftOrder(customer, statusID);
+    }
+
+    if (Empty.isNotEmpty(orderDto) && Empty.isNotEmpty(orderDto.getId())) {
+      if (statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
+        invokeGetRejectedData();
+      } else {
+        Bundle args = new Bundle();
+        args.putLong(Constants.ORDER_ID, orderDto.getId());
+        args.putString(Constants.SALE_TYPE, saleType);
+        args.putLong(Constants.VISIT_ID, visitId);
+        args.putBoolean(Constants.READ_ONLY, false);
+        args.putString(Constants.PAGE_STATUS, Constants.NEW);
+        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
+      }
+
+    } else {
+      if (statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
+        ToastUtil.toastError(mainActivity, R.string.message_cannot_create_rejected_right_now);
+      } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && saleType
+          .equals(ApplicationKeys.SALE_COLD)) {
+        ToastUtil.toastError(mainActivity, R.string.message_cannot_create_order_right_now);
+      } else {
+        ToastUtil.toastError(mainActivity, R.string.message_cannot_create_factor_right_now);
+      }
+    }
+  }
+
+  private SaleOrderDto createDraftOrder(Customer customer, Long statusID) {
+    try {
+      SaleOrderDto orderDto = new SaleOrderDto(statusID, customer);
+      Long id = saleOrderService.saveOrder(orderDto);
+      orderDto.setId(id);
+      return orderDto;
+    } catch (Exception e) {
+      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+          "Error in creating draft order " + e.getMessage());
+      Log.e(TAG, e.getMessage(), e);
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
+    }
+    return null;
+  }
+
+  private void invokeGetRejectedData() {
+
+    DialogUtil.showProgressDialog(mainActivity,
+        getString(R.string.message_transferring_rejected_goods_data));
+
+    new RejectedGoodsDataTransferBizImpl(mainActivity).getAllRejectedData(customer.getBackendId());
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof ActionEvent) {
+      if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
+//        goToRegisterPaymentFragment();TODO:
+      }
+    } else if (event instanceof ErrorEvent) {
+      Log.i(TAG, "Fucking error");
+      DialogUtil.dismissProgressDialog();
+      //TODO Show error message
+    }
+  }
+
+  @Subscribe
+  public void getMessage(GoodsDtoList goodsDtoList) {
+    DialogUtil.dismissProgressDialog();
+
+    List<Goods> goodsList = goodsDtoList.getGoodsDtoList();
+    if (goodsList != null) {
+      final Bundle args = new Bundle();
+      args.putLong(Constants.ORDER_ID, orderDto.getId());
+      args.putString(Constants.SALE_TYPE, saleType);
+      args.putSerializable(Constants.REJECTED_LIST, goodsDtoList);
+      args.putLong(Constants.VISIT_ID, visitId);
+      args.putBoolean(Constants.READ_ONLY, false);
+      args.putString(Constants.PAGE_STATUS, Constants.NEW);
+
+      mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
+    } else {
+      ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_not_possible));
+    }
+  }
 }

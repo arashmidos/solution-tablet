@@ -12,8 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.constants.StatusCodes;
-import com.parsroyal.solutiontablet.data.event.ActionEvent;
+import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
@@ -22,7 +21,6 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
 
 public class NewOrderListFragment extends BaseFragment {
 
@@ -110,6 +108,6 @@ public class NewOrderListFragment extends BaseFragment {
 
   @OnClick(R.id.fab_add_order)
   public void onClick() {
-    EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_ADD_ORDER));
+    parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
   }
 }

@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -45,6 +46,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -68,6 +70,11 @@ public class OrderFragment extends BaseFragment {
   LinearLayout bottomBar;
   @BindView(R.id.order_count_tv)
   TextView orderCountTv;
+  @BindView(R.id.bottom_bar_text)
+  TextView bottomBarText;
+  @BindView(R.id.goods_cart_image)
+  ImageView goodsCartImage;
+
 
   private boolean isClose = false;
   private List<Goods> goodsList;
@@ -101,7 +108,6 @@ public class OrderFragment extends BaseFragment {
     View view = inflater.inflate(R.layout.fragment_order, container, false);
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
-    mainActivity.changeTitle(getString(R.string.title_goods_list));
     goodsService = new GoodsServiceImpl(mainActivity);
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
 
@@ -118,28 +124,35 @@ public class OrderFragment extends BaseFragment {
       pageStatus = args.getString(Constants.PAGE_STATUS, "");
       orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
     }
-    setUpRecyclerView();
+
+    mainActivity.changeTitle(getProperTitle());
+    setData();
     addSearchListener();
     if (!TextUtils.isEmpty(pageStatus) && (pageStatus.equals(Constants.EDIT) || pageStatus
         .equals(Constants.VIEW))) {
       showFinalizeOrderDialog();
     }
+
     return view;
   }
 
   //set up recycler view
-  private void setUpRecyclerView() {
-    if (SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
+  private void setData() {
+    if (isRejected()) {
       rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
 
       adapter = new GoodsAdapter(mainActivity, this, rejectedGoodsList.getGoodsDtoList(), readOnly,
           true);
+      bottomBar.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
+      bottomBarText.setText(R.string.reject_goods);
+      goodsCartImage.setVisibility(View.GONE);
 
+    } else {
+      goodsSo.setConstraint("");
+      adapter = new GoodsAdapter(mainActivity, this, goodsService.searchForGoodsList(goodsSo),
+          readOnly, false);
     }
-    goodsSo.setConstraint("");
-    adapter = new GoodsAdapter(mainActivity, this, goodsService.searchForGoodsList(goodsSo),
-        readOnly,
-        false);
+
     if (MultiScreenUtility.isTablet(mainActivity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);
@@ -148,6 +161,32 @@ public class OrderFragment extends BaseFragment {
       recyclerView.setLayoutManager(linearLayoutManager);
     }
     recyclerView.setAdapter(adapter);
+  }
+
+  /*
+   @return Proper title for which could be "Rejected", "Order" or "Invoice"
+   */
+  private String getProperTitle() {
+    if (isRejected()) {
+      return getString(R.string.title_reject_list);
+    } else if (isCold()) {
+      return getString(R.string.title_goods_list);
+    } else {
+      return getString(R.string.title_factor);
+    }
+  }
+
+  private boolean isCold() {
+    return saleType.equals(ApplicationKeys.SALE_COLD);
+  }
+
+  /*
+  @return true if it's one of the REJECTED states
+   */
+  private boolean isRejected() {
+    return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
   }
 
   private void addSearchListener() {
@@ -241,7 +280,8 @@ public class OrderFragment extends BaseFragment {
       }
 
       Long invoiceBackendId = 0L;
-      if (SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
+      if (SaleOrderStatus.REJECTED_DRAFT.getId()
+          .equals(orderStatus)) {//TODO: Maybe add REJECTED too
         invoiceBackendId = goods.getInvoiceBackendId();
       }
       final SaleOrderItem item = saleOrderService.findOrderItemByOrderIdAndGoodsBackendId(
@@ -308,36 +348,46 @@ public class OrderFragment extends BaseFragment {
 
   private void updateGoodsDataTb() {
 
-    if (SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
+    if (isRejected()) {
       if (Empty.isNotEmpty(rejectedGoodsList)) {
         List<Goods> goodsList = rejectedGoodsList.getGoodsDtoList();
         List<Goods> filteredList = new ArrayList<>();
         for (int i = 0; i < goodsList.size(); i++) {
           Goods good = goodsList.get(i);
-          if (Empty.isNotEmpty(constraint) && !good.getTitle().equals(constraint) && !good.getCode()
-              .equals(constraint)) {
+          if (Empty.isNotEmpty(constraint) && !good.getTitle().contains(constraint) && !good
+              .getCode().contains(constraint)) {
             continue;
           }
           filteredList.add(good);
         }
-        recyclerView.setVisibility(View.VISIBLE);
-        noGoodLay.setVisibility(View.GONE);
-        adapter.update(filteredList);
+        if (filteredList.size() > 0) {//Found something
+          showGoodsList();
+          adapter.update(filteredList);
+        } else {
+          showEmptyList();
+        }
       } else {
-        recyclerView.setVisibility(View.GONE);
-        noGoodLay.setVisibility(View.VISIBLE);
+        showEmptyList();
       }
     } else {
       goodsList = goodsService.searchForGoodsList(goodsSo);
       if (goodsList.size() > 0) {
-        recyclerView.setVisibility(View.VISIBLE);
-        noGoodLay.setVisibility(View.GONE);
+        showGoodsList();
         adapter.update(goodsList);
       } else {
-        recyclerView.setVisibility(View.GONE);
-        noGoodLay.setVisibility(View.VISIBLE);
+        showEmptyList();
       }
     }
+  }
+
+  private void showGoodsList() {
+    recyclerView.setVisibility(View.VISIBLE);
+    noGoodLay.setVisibility(View.GONE);
+  }
+
+  private void showEmptyList() {
+    recyclerView.setVisibility(View.GONE);
+    noGoodLay.setVisibility(View.VISIBLE);
   }
 
   private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItem item,

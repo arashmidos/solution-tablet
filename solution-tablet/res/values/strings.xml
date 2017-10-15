@@ -440,7 +440,7 @@
   <string name="show_more">مشاهده بیشتر</string>
   <string name="show_less">مشاهده کمتر</string>
   <string name="search_goods_hint">جستجو در کالا ها...</string>
-  <string name="order_goods">کالاهای سفارشات</string>
+  <string name="order_goods">کالاهای سفارش</string>
   <string name="no_good">متاسفانه کالایی یافت نشد!</string>
   <string name="add_to_order">افزودن به کالا های سفارش</string>
   <string name="order_count">مقدار سفارش :</string>
@@ -462,7 +462,6 @@
   <string name="images">تصاویر</string>
   <string name="amount">قیمت واحد:</string>
   <string name="total_amount">جمع کل:</string>
-  <string name="order_good">کالاهای سفارش</string>
   <string name="finalize_order">نهایی کردن سفارشات</string>
   <string name="orders_total_amount">جمع کل سفارشات</string>
   <string name="e_payment">پرداخت الکترونیکی</string>
@@ -525,4 +524,9 @@
   <string name="register_return">ثبت مرجوعی</string>
   <string name="register_location">ثبت موقعیت جغرافیایی</string>
   <string name="returnes">مرجوعی ها</string>
+  <string name="title_reject_list">فهرست کالا های قابل مرجوع</string>
+  <string name="reject_goods">کالاهای مرجوعی</string>
+  <string name="add_to_return_goods">افزودن به کالاهای مرجوعی</string>
+  <string name="no_sale_rate">ضریب فروش ندارد</string>
+  <string name="return_count">مقدار مرجوعی</string>
 </resources>

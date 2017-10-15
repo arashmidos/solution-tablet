@@ -98,13 +98,13 @@
       style="@style/IranSans"
       android:layout_width="20dp"
       android:layout_height="20dp"
-      android:background="@drawable/oval"
       android:gravity="center"
       android:textColor="@android:color/white"
       android:textSize="12sp"
       tools:text="3" />
 
     <TextView
+      android:id="@+id/bottom_bar_text"
       style="@style/IranSans.Medium"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -115,6 +115,7 @@
       android:tint="@android:color/white" />
 
     <ImageView
+      android:id="@+id/goods_cart_image"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:src="@drawable/ic_cart_outline_black_18dp"

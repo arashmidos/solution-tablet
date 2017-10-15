@@ -37,8 +37,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
   private List<Goods> goodsList;
 
   public GoodsAdapter(Context context, OrderFragment orderFragment, List<Goods> goodsList,
-      boolean readOnly,
-      boolean isRejectedGoods) {
+      boolean readOnly, boolean isRejectedGoods) {
     this.context = context;
     this.goodsList = goodsList;
     this.readOnly = readOnly;
@@ -133,9 +132,12 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
       goodPriceTv.setText(NumberUtil.getCommaSeparated(goodsAmount) + " " +
           context.getString(R.string.common_irr_currency));
 
-      //TODO: If its rejectGoods hide this
-      recoveryDateTv.setText(
-          String.format(context.getString(R.string.recovery_date_x), good.getRecoveryDate()));
+      if (isRejectedGoods) {
+        recoveryDateTv.setVisibility(View.GONE);
+      } else {
+        recoveryDateTv.setText(
+            String.format(context.getString(R.string.recovery_date_x), good.getRecoveryDate()));
+      }
     }
 
     @Override
