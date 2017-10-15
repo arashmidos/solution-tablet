@@ -271,10 +271,10 @@ public class OrderFragment extends BaseFragment {
   public void showOrderDialog(Goods goods) {
     try {
       AddOrderDialogFragment addOrderDialogFragment = null;
-      AddOrderBottomSheet addOrderBottomSheet = null;
+//      AddOrderBottomSheet addOrderBottomSheet = null;
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
       if (MultiScreenUtility.isTablet(mainActivity)) {
-        addOrderBottomSheet = AddOrderBottomSheet.newInstance();
+        addOrderDialogFragment = AddOrderBottomSheet.newInstance();
       } else {
         addOrderDialogFragment = AddOrderDialogFragment.newInstance();
       }
@@ -308,12 +308,12 @@ public class OrderFragment extends BaseFragment {
 
       bundle.putLong(Constants.SELECTED_UNIT, defaultUnit);
       if (MultiScreenUtility.isTablet(mainActivity)) {
-        addOrderBottomSheet.setArguments(bundle);
-        addOrderBottomSheet.setOnClickListener((count, selectedUnit) -> {
+        addOrderDialogFragment.setArguments(bundle);
+        addOrderDialogFragment.setOnClickListener((count, selectedUnit) -> {
           handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
           updateGoodsDataTb();
         });
-        addOrderBottomSheet.show(mainActivity.getSupportFragmentManager(), "order");
+        addOrderDialogFragment.show(mainActivity.getSupportFragmentManager(), "order");
       } else {
         addOrderDialogFragment.setArguments(bundle);
         addOrderDialogFragment.setOnClickListener((count, selectedUnit) -> {
