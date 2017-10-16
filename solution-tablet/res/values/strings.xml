@@ -530,4 +530,8 @@
   <string name="add_to_return_goods">افزودن به کالاهای مرجوعی</string>
   <string name="no_sale_rate">ضریب فروش ندارد</string>
   <string name="return_count">مقدار مرجوعی</string>
+  <string name="amount_to_return">مبلغ قابل بازگشت:</string>
+  <string name="return_info">اطلاعات مرجوع کالا</string>
+  <string name="select_reason_to_return">انتخاب دلیل مرجوع کالا</string>
+  <string name="reason_to_return">دلیل مرجوع کالا</string>
 </resources>

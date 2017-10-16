@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,6 +77,13 @@ public class NewOrderInfoFragment extends BaseFragment {
   @Nullable
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
+  @BindView(R.id.amount_tv)
+  TextView amountTv;
+  @Nullable
+  @BindView(R.id.payment_type_title)
+  TextView paymentTypeTitle;
+  @BindView(R.id.payment_type_layout)
+  RelativeLayout paymentTypeLayout;
 
   private LabelValue selectedItem = null;
   private MainActivity mainActivity;
@@ -140,7 +149,8 @@ public class NewOrderInfoFragment extends BaseFragment {
       }
     }
 
-    mainActivity.changeTitle(getString(R.string.payment_info));
+    mainActivity.changeTitle(
+        isRejected() ? getString(R.string.return_info) : getString(R.string.payment_info));
     customerNameTv.setText(customer.getFullName());
 
     Double total = Double.valueOf(order.getAmount()) / 1000D;
@@ -160,18 +170,23 @@ public class NewOrderInfoFragment extends BaseFragment {
     submitOrderBtn.setText(String.format(Locale.US, getString(R.string.x_order_submit), title));
 
     if (isRejected()) {
-      paymentMethodTv.setText(R.string.reject_reason_title);
+      amountTv.setText(R.string.amount_to_return);
+      paymentTypeTv.setText(R.string.reason_to_return);
+      submitOrderBtn
+          .setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
     } else if (selectedItem != null) {
       setPaymentMethod(selectedItem);
-
     } else {
-      paymentMethodTv.setText(R.string.payment_type_spinner_hint);
+      paymentMethodTv.setText(R.string.click_to_select);
     }
     if (pageStatus.equals(Constants.VIEW)) {
       submitOrderBtn.setText(getString(R.string.close));
     }
     if (MultiScreenUtility.isTablet(mainActivity)) {
       setUpRecyclerView();
+      paymentTypeTv.setVisibility(View.GONE);
+      paymentTypeLayout.setVisibility(View.GONE);
+      paymentTypeTitle.setText(R.string.select_reason_to_return);
     }
   }
 
@@ -204,13 +219,11 @@ public class NewOrderInfoFragment extends BaseFragment {
             }
           }
         }
-
         break;
     }
   }
 
-  private void showSaveOrderConfirmDialog(String title,
-      final Long statusId) {
+  private void showSaveOrderConfirmDialog(String title, final Long statusId) {
     DialogUtil.showConfirmDialog(mainActivity, title,
         getString(R.string.message_are_you_sure), (dialog, which) ->
         {
@@ -231,12 +244,10 @@ public class NewOrderInfoFragment extends BaseFragment {
 
       if (isRejected()) {
         //Add reason or reject to orders
+        order.setDescription(selectedItem.getLabel());
       } else {
         order.setPaymentTypeBackendId(selectedItem.getValue());
       }
-
-//      String description = orderInfoFrg.getDescription();
-//      order.setDescription(description);
 
       //Distributer should not enter his salesmanId.
       if (!SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus)) {
@@ -324,8 +335,7 @@ public class NewOrderInfoFragment extends BaseFragment {
         || orderStatus.equals(SaleOrderStatus.INVOICED.getId())
         || orderStatus.equals(SaleOrderStatus.SENT.getId())
         || orderStatus.equals(SaleOrderStatus.SENT_INVOICE.getId())
-        || orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId())
-        || orderStatus.equals(SaleOrderStatus.REJECTED.getId());
+        || orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId());
   }
 
   private void showPaymentMethodDialog() {
@@ -334,24 +344,24 @@ public class NewOrderInfoFragment extends BaseFragment {
     }
     FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
     PaymentMethodDialogFragment paymentMethodDialogFragment = PaymentMethodDialogFragment
-        .newInstance(this, selectedItem);
+        .newInstance(this, selectedItem, isRejected());
     paymentMethodDialogFragment.show(ft, "payment method");
   }
 
   //set up recycler view
   private void setUpRecyclerView() {
-    List<LabelValue> paymentMethodList = getPaymentMethodList();
-    adapter = new PaymentMethodAdapter(mainActivity, paymentMethodList, selectedItem, this,
+    List<LabelValue> dataModel = getModel();
+    adapter = new PaymentMethodAdapter(mainActivity, dataModel, selectedItem, this,
         !pageStatus.equals(Constants.VIEW));
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
-    recyclerView.scrollToPosition(paymentMethodList.indexOf(selectedItem));
+    recyclerView.scrollToPosition(dataModel.indexOf(selectedItem));
   }
 
-  private List<LabelValue> getPaymentMethodList() {
-    return baseInfoService
-        .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.PAYMENT_TYPE.getId());
+  private List<LabelValue> getModel() {
+    return baseInfoService.getAllBaseInfosLabelValuesByTypeId(
+        isRejected() ? BaseInfoTypes.REJECT_TYPE.getId() : BaseInfoTypes.PAYMENT_TYPE.getId());
   }
 
   @Override

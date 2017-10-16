@@ -48,7 +48,7 @@ public class ReportFragment extends BaseFragment {
         getActivity().getSupportFragmentManager());
     viewPagerAdapter
         .add(PaymentListFragment.newInstance(null), getString(R.string.payments));
-    viewPagerAdapter.add(NewOrderListFragment.newInstance(getArguments(), null), getString(R.string.orders));
+    viewPagerAdapter.add(OrderListFragment.newInstance(getArguments(), null), getString(R.string.orders));
     viewpager.setAdapter(viewPagerAdapter);
   }
 

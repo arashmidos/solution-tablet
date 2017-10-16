@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.ui.MainActivity;
 
 /**
  * Created by Mahyar on 6/23/2015.
@@ -81,11 +80,11 @@ public class DialogUtil {
   }
 
   public static void showProgressDialog(Context context, CharSequence message) {
-    if (progressDialog == null) {
-      progressDialog = new ProgressDialog(context.getApplicationContext());
-      progressDialog.setIndeterminate(true);
-      progressDialog.setCancelable(Boolean.FALSE);
-    }
+    dismissProgressDialog();
+    progressDialog = new ProgressDialog(context);
+    progressDialog.setIndeterminate(true);
+    progressDialog.setCancelable(Boolean.FALSE);
+
     progressDialog.setIcon(R.drawable.ic_info_outline_24dp);
     progressDialog.setTitle(R.string.message_please_wait);
     progressDialog.setMessage(message);

@@ -25,7 +25,6 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.LongSummaryStatistics;
 
 /**
  * Created by ShakibIsTheBest on 8/27/2017.
@@ -138,8 +137,10 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-      deleteImg.setOnClickListener(this);
-      editImg.setOnClickListener(this);
+      if (deleteImg != null) {
+        deleteImg.setOnClickListener(this);
+        editImg.setOnClickListener(this);
+      }
       if (mainLayLin != null) {
         mainLayLin.setOnClickListener(this);
       } else if (mainLayRel != null) {
@@ -156,11 +157,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       String orderCode = "کد سفارش : " + String.valueOf(order.getId());
       orderCodeTv.setText(orderCode);
       orderCountTv.setText("--");
-      /*Date createDate = DateUtil
-          .convertStringToDate(order.getCreatedDateTime(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
-              "FA");
-      String dateString = DateUtil.getFullPersianDate(createDate);*/
-      //96/7/5
+
       Date createdDate = DateUtil
           .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);

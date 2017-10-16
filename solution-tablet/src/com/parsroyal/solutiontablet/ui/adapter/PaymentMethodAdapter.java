@@ -14,7 +14,6 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 
 import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NewOrderListFragment;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import java.util.List;
 
@@ -53,29 +52,11 @@ public class PaymentMethodAdapter extends RecyclerView.Adapter<PaymentMethodAdap
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     LabelValue paymentMethod = paymentMethods.get(position);
-    holder.paymentMethodTv.setText(paymentMethod.getLabel());
-    if (selectedItem != null && paymentMethod.getLabel().equals(selectedItem.getLabel())) {
-      holder.mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_dark));
-      holder.paymentMethodTv.setTextColor(ContextCompat.getColor(context, android.R.color.white));
-    } else {
-      holder.mainLay.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
-      holder.paymentMethodTv.setTextColor(ContextCompat.getColor(context, R.color.black_85));
-    }
+    holder.setData(paymentMethod, position);
+
     if (!MultiScreenUtility.isTablet(context)) {
       lastItem(position == paymentMethods.size() - 1, holder);
     }
-    holder.mainLay.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (isEditable) {
-          selectedItem = paymentMethod;
-          notifyDataSetChanged();
-          if (newOrderInfoFragment != null) {
-            newOrderInfoFragment.setPaymentMethod(selectedItem);
-          }
-        }
-      }
-    });
   }
 
   private void lastItem(boolean isLastItem, ViewHolder holder) {
@@ -107,10 +88,35 @@ public class PaymentMethodAdapter extends RecyclerView.Adapter<PaymentMethodAdap
     RelativeLayout mainLay;
     @BindView(R.id.bottom_line)
     View bottomLine;
+    private LabelValue model;
+    private int position;
 
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+    }
+
+    public void setData(LabelValue model, int position) {
+      this.model = model;
+      this.position = position;
+      paymentMethodTv.setText(model.getLabel());
+      if (selectedItem != null && model.getLabel().equals(selectedItem.getLabel())) {
+        mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_dark));
+        paymentMethodTv.setTextColor(ContextCompat.getColor(context, android.R.color.white));
+      } else {
+        mainLay.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
+        paymentMethodTv.setTextColor(ContextCompat.getColor(context, R.color.black_85));
+      }
+
+      mainLay.setOnClickListener(v -> {
+        if (isEditable) {
+          selectedItem = model;
+          notifyDataSetChanged();
+          if (newOrderInfoFragment != null) {
+            newOrderInfoFragment.setPaymentMethod(selectedItem);
+          }
+        }
+      });
     }
   }
 }

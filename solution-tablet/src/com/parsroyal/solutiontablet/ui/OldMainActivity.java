@@ -56,8 +56,8 @@ import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomersFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OldOrdersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.OrdersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireDetailFragment;
@@ -387,7 +387,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(-1);
         break;
       case ORDERS_LIST_FRAGMENT:
-        fragment = new OrdersListFragment();
+        fragment = new OldOrdersListFragment();
         changeSidebarItem(ORDERS_LIST_FRAGMENT);
         break;
       case ORDER_DETAIL_FRAGMENT_ID:

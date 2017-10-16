@@ -85,7 +85,7 @@ public class NewVisitDetailFragment extends BaseFragment {
   private LocationService locationService;
   private CustomerDetailViewPagerAdapter viewPagerAdapter;
   private CustomerInfoFragment customerInfoFragment;
-  private NewOrderListFragment orderListFragment;
+  private OrderListFragment orderListFragment;
   private PaymentListFragment paymentListFragment;
   private ReturnListFragment returnListFragment;
   private PictureFragment pictureFragment;
@@ -318,7 +318,7 @@ public class NewVisitDetailFragment extends BaseFragment {
     Bundle arguments = getArguments();
     paymentListFragment = PaymentListFragment.newInstance(arguments);
     pictureFragment = PictureFragment.newInstance(this);
-    orderListFragment = NewOrderListFragment.newInstance(arguments, this);
+    orderListFragment = OrderListFragment.newInstance(arguments, this);
     returnListFragment = ReturnListFragment.newInstance(arguments, this);
     customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
   }

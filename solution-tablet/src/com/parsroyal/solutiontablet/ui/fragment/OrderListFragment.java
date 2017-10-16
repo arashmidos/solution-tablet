@@ -13,8 +13,6 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
-import com.parsroyal.solutiontablet.constants.StatusCodes;
-import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
@@ -24,7 +22,10 @@ import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 
-public class NewOrderListFragment extends BaseFragment {
+/**
+ * @author arash
+ */
+public class OrderListFragment extends BaseFragment {
 
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
@@ -40,17 +41,15 @@ public class NewOrderListFragment extends BaseFragment {
   private SettingServiceImpl settingService;
   private String saleType;
 
-  public NewOrderListFragment() {
+  public OrderListFragment() {
     // Required empty public constructor
   }
 
-
-  public static NewOrderListFragment newInstance(Bundle arguments,
-      NewVisitDetailFragment newVisitDetailFragment) {
-    NewOrderListFragment newOrderListFragment = new NewOrderListFragment();
-    newOrderListFragment.parent = newVisitDetailFragment;
-    newOrderListFragment.setArguments(arguments);
-    return newOrderListFragment;
+  public static OrderListFragment newInstance(Bundle arguments, NewVisitDetailFragment parent) {
+    OrderListFragment orderListFragment = new OrderListFragment();
+    orderListFragment.parent = parent;
+    orderListFragment.setArguments(arguments);
+    return orderListFragment;
   }
 
   @Override
@@ -61,7 +60,7 @@ public class NewOrderListFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     ButterKnife.bind(this, view);
     Bundle args = getArguments();
-    this.saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    saleOrderService = new SaleOrderServiceImpl(mainActivity);
     settingService = new SettingServiceImpl(mainActivity);
 
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
