@@ -8,14 +8,7 @@ public class QuestionnaireSo extends BaseSO {
   private boolean general;
   private boolean anonymous;
   private long visitId;
-
-  public long getVisitId() {
-    return visitId;
-  }
-
-  public void setVisitId(long visitId) {
-    this.visitId = visitId;
-  }
+  private Long customerBackendId;
 
   public QuestionnaireSo(boolean isGeneral) {
     super();
@@ -24,6 +17,22 @@ public class QuestionnaireSo extends BaseSO {
 
   public QuestionnaireSo() {
     super();
+  }
+
+  public Long getCustomerBackendId() {
+    return customerBackendId;
+  }
+
+  public void setCustomerBackendId(Long customerBackendId) {
+    this.customerBackendId = customerBackendId;
+  }
+
+  public long getVisitId() {
+    return visitId;
+  }
+
+  public void setVisitId(long visitId) {
+    this.visitId = visitId;
   }
 
   public boolean isAnonymous() {

@@ -67,6 +67,7 @@
     android:background="@color/features_background" />
 
   <LinearLayout
+    android:id="@+id/bottom_layout"
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:background="@color/payment_bottom_line"

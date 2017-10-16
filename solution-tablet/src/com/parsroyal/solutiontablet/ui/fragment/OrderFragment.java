@@ -271,7 +271,6 @@ public class OrderFragment extends BaseFragment {
   public void showOrderDialog(Goods goods) {
     try {
       AddOrderDialogFragment addOrderDialogFragment = null;
-//      AddOrderBottomSheet addOrderBottomSheet = null;
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
       if (MultiScreenUtility.isTablet(mainActivity)) {
         addOrderDialogFragment = AddOrderBottomSheet.newInstance();

@@ -82,7 +82,7 @@ public class DialogUtil {
 
   public static void showProgressDialog(Context context, CharSequence message) {
     if (progressDialog == null) {
-      progressDialog = new ProgressDialog(context);
+      progressDialog = new ProgressDialog(context.getApplicationContext());
       progressDialog.setIndeterminate(true);
       progressDialog.setCancelable(Boolean.FALSE);
     }

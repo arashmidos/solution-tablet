@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
@@ -36,14 +38,19 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   TextView totalAmountTv;
   @BindView(R.id.submit_tv)
   TextView submitTv;
+  @BindView(R.id.toolbar_title)
+  TextView toolbarTitle;
+  @BindView(R.id.bottom_layout)
+  ViewGroup bottomLayout;
+
 
   private OrderFinalizeAdapter adapter;
-  private MainActivity activity;
+  private MainActivity mainActivity;
   private SaleOrderService saleOrderService;
   private SaleOrderDto order;
   private OrderFragment orderFragment;
   private long orderId;
-  private long orderStatus;
+  private Long orderStatus;
   private String pageStatus;
   private GoodsDtoList rejectedGoodsList;
 
@@ -69,8 +76,8 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_finalize_order_dialog, container, false);
     ButterKnife.bind(this, view);
-    activity = (MainActivity) getActivity();
-    saleOrderService = new SaleOrderServiceImpl(activity);
+    mainActivity = (MainActivity) getActivity();
+    saleOrderService = new SaleOrderServiceImpl(mainActivity);
     Bundle arguments = getArguments();
     orderId = arguments.getLong(Constants.ORDER_ID);
     orderStatus = arguments.getLong(Constants.ORDER_STATUS);
@@ -89,6 +96,22 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     if (pageStatus.equals(Constants.VIEW)) {
       submitTv.setText(R.string.payment_detail);
     }
+
+    if (isRejected()) {
+      toolbarTitle.setText(R.string.reject_goods);
+      submitTv.setText(R.string.finalize_return);
+      bottomLayout
+          .setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
+    }
+  }
+
+  /*
+  @return true if it's one of the REJECTED states
+ */
+  protected boolean isRejected() {
+    return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
   }
 
   public void updateList() {
@@ -99,9 +122,9 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new OrderFinalizeAdapter(this, activity, order, rejectedGoodsList, pageStatus);
-    if (MultiScreenUtility.isTablet(activity)) {
-      RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(activity, 2);
+    adapter = new OrderFinalizeAdapter(this, mainActivity, order, rejectedGoodsList, pageStatus);
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);
     } else {
       LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -116,7 +139,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
       case R.id.close:
         getDialog().dismiss();
         if (pageStatus.equals(Constants.VIEW)) {
-          activity.navigateToFragment(OrderFragment.class.getSimpleName());
+          mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
         }
         break;
       case R.id.submit_btn:

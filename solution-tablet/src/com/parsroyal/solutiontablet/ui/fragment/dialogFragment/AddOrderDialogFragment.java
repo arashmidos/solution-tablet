@@ -130,9 +130,7 @@ public class AddOrderDialogFragment extends DialogFragment {
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if (getTAG().contains("Sheet")) {
-
-    } else {
+    if (!getTAG().contains("Sheet")) {
       setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
     }
   }

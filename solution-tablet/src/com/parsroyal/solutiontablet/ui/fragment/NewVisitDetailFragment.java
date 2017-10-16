@@ -98,6 +98,10 @@ public class NewVisitDetailFragment extends BaseFragment {
     // Required empty public constructor
   }
 
+  public static NewVisitDetailFragment newInstance() {
+    return new NewVisitDetailFragment();
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
@@ -114,7 +118,8 @@ public class NewVisitDetailFragment extends BaseFragment {
     customer = customerService.getCustomerById(customerId);
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
     visitId = args.getLong(Constants.VISIT_ID);
-    saleType = new SettingServiceImpl(mainActivity).getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+    saleType = new SettingServiceImpl(mainActivity)
+        .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
     tabs.setupWithViewPager(viewpager);
     initFragments();
@@ -125,10 +130,6 @@ public class NewVisitDetailFragment extends BaseFragment {
       mainActivity.changeTitle("");
     }
     return view;
-  }
-
-  public static NewVisitDetailFragment newInstance() {
-    return new NewVisitDetailFragment();
   }
 
   public void finishVisiting() {
@@ -303,6 +304,10 @@ public class NewVisitDetailFragment extends BaseFragment {
 
   public long getCustomerId() {
     return customerId;
+  }
+
+  public long getCustomerBackendId() {
+    return customer.getBackendId();
   }
 
   public long getVisitId() {
