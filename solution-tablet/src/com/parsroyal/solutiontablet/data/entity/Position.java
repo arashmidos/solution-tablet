@@ -166,4 +166,10 @@ public class Position extends BaseEntity<Long> {
     this.accuracy = accuracy;
   }
 
+  public Location getLocation() {
+    Location location = new Location("Dummy");
+    location.setLatitude(latitude);
+    location.setLongitude(longitude);
+    return location;
+  }
 }

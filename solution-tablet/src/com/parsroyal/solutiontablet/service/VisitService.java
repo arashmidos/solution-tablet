@@ -48,4 +48,6 @@ public interface VisitService extends BaseService {
   List<VisitInformationDto> getAllVisitDetailForSend();
 
   Long startAnonymousVisit();
+
+  void deleteVisitById(Long visitId);
 }
