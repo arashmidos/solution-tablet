@@ -56,6 +56,7 @@ import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -126,8 +127,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
 
       return view;
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "UI Exception",
-          "Error in creating VisitDetailFragment " + ex.getMessage());
+      Logger.sendError("UI Exception", "Error in creating VisitDetailFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       return inflater.inflate(R.layout.view_error_page, null);
     }
@@ -220,7 +220,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
       }
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "General Exception", "Error in opening camera " + e.getMessage());
+      Logger.sendError("General Exception", "Error in opening camera " + e.getMessage());
       e.printStackTrace();
     }
   }
@@ -340,7 +340,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       orderDto.setId(id);
       return orderDto;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+      Logger.sendError("Data Storage Exception",
           "Error in creating draft order " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(oldMainActivity, new UnknownSystemException(e));
@@ -449,7 +449,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
           try {
             visitService.updateVisitLocation(visitId, location);
           } catch (Exception e) {
-            Crashlytics.log(Log.ERROR, "Data Storage Exception",
+            Logger.sendError("Data Storage Exception",
                 "Error in updating visit location " + e.getMessage());
             Log.e(TAG, e.getMessage(), e);
           }
@@ -514,7 +514,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
     List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
     if (detailList.size() > 0) {
       ToastUtil
-          .toastError(oldMainActivity, oldMainActivity.getString(R.string.message_error_wants_denied));
+          .toastError(oldMainActivity,
+              oldMainActivity.getString(R.string.message_error_wants_denied));
       return;
     }
     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(oldMainActivity);
@@ -533,7 +534,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
 
     notVisitedCb.setOnCheckedChangeListener(
         (compoundButton, isChecked) -> wantsSpinner.setEnabled(!isChecked));
-    LabelValueArrayAdapter labelValueArrayAdapter = new LabelValueArrayAdapter(oldMainActivity, wants);
+    LabelValueArrayAdapter labelValueArrayAdapter = new LabelValueArrayAdapter(oldMainActivity,
+        wants);
     wantsSpinner.setAdapter(labelValueArrayAdapter);
 
     dialogBuilder.setView(wantsDialogView);
@@ -557,7 +559,7 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
           selectedItem.getValue());
       visitService.saveVisitDetail(visitInformationDetail);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+      Logger.sendError("Data Storage Exception",
           "Error in updating visit result " + ex.getMessage());
       ToastUtil.toastError(oldMainActivity, new UnknownSystemException(ex));
       Log.e(TAG, ex.getMessage(), ex);

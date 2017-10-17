@@ -40,7 +40,9 @@ public class SolutionTabletApplication extends Application {
     super.onCreate();
     sInstance = this;
 
-    Fabric.with(this, new Crashlytics());
+    if (!BuildConfig.DEBUG) {
+      Fabric.with(this, new Crashlytics());
+    }
 
     CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
         .setDefaultFontPath("fonts/IRANSansMobile.ttf")
@@ -61,5 +63,4 @@ public class SolutionTabletApplication extends Application {
     conf.locale = locale;
     res.updateConfiguration(conf, dm);
   }
-
 }

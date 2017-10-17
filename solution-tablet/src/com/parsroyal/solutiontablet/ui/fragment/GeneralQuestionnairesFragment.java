@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
@@ -17,6 +16,7 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionnaireListAdapter;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
@@ -64,7 +64,7 @@ public class GeneralQuestionnairesFragment extends
       return view;
 
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "UI Exception",
+      Logger.sendError("UI Exception",
           "Error in creating GeneralQuestionaireFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
@@ -102,8 +102,9 @@ public class GeneralQuestionnairesFragment extends
       args.putLong(Constants.QUESTIONAIRE_ID, questionnaireListModel.getBackendId());
       args.putLong(Constants.VISIT_ID, visitId);
       args.putLong(Constants.CUSTOMER_ID, customerId);
-      args.putLong(Constants.ANSWERS_GROUP_NO, parent == OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID ? 0
-          : questionnaireService.getNextAnswerGroupNo());
+      args.putLong(Constants.ANSWERS_GROUP_NO,
+          parent == OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID ? 0
+              : questionnaireService.getNextAnswerGroupNo());
       args.putInt(Constants.PARENT, parent);
       oldMainActivity.changeFragment(OldMainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
     };

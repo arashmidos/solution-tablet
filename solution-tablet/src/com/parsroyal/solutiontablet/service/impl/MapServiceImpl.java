@@ -1,8 +1,6 @@
 package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
-import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.maps.model.LatLng;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
@@ -11,6 +9,7 @@ import com.parsroyal.solutiontablet.data.response.MapRoadResponse;
 import com.parsroyal.solutiontablet.service.MapService;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,7 +52,7 @@ public class MapServiceImpl {
       } while (start < route.size());
     } catch (IOException ex) {
       ex.printStackTrace();
-      Crashlytics.log(Log.ERROR, "Snap to Road", ex.getMessage());
+      Logger.sendError("Snap to Road", ex.getMessage());
       return null;
     }
     return snappedList;

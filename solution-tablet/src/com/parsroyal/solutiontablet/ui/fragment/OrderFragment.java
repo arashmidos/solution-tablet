@@ -19,7 +19,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -43,6 +42,7 @@ import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDial
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -323,7 +323,7 @@ public class OrderFragment extends BaseFragment {
         addOrderDialogFragment.show(ft, "order");
       }
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+      Logger.sendError("Data Storage Exception",
           "Error in confirming handling GoodsList " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
@@ -409,7 +409,7 @@ public class OrderFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data storage Exception",
+      Logger.sendError("Data storage Exception",
           "Error in confirming GoodsList " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));

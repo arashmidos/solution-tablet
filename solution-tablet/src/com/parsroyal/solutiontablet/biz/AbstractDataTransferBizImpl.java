@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.biz;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
@@ -15,6 +14,7 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.exception.UserNotAuthorizedException;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.LoggingRequestInterceptor;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.Serializable;
@@ -152,7 +152,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
         getObserver().publishResult(ex);
       }
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data transfer", "abstract exchange data " + e.getMessage());
+      Logger.sendError("Data transfer", "abstract exchange data " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       if (Empty.isNotEmpty(getObserver())) {
         getObserver().publishResult(new UnknownSystemException(e));

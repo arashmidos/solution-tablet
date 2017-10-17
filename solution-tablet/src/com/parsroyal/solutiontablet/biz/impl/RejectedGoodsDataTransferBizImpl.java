@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
@@ -22,6 +21,7 @@ import com.parsroyal.solutiontablet.service.RestService;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.LoggingRequestInterceptor;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -140,8 +140,7 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
       Log.e(TAG, ex.getMessage(), ex);
       getObserver().publishResult(ex);
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data transfer",
-          "Error in exchanging RejectedGoodsData " + e.getMessage());
+      Logger.sendError("Data transfer", "Error in exchanging RejectedGoodsData " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       getObserver().publishResult(new UnknownSystemException(e));
     } finally {

@@ -55,6 +55,7 @@ import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -208,7 +209,7 @@ public class NewVisitDetailFragment extends BaseFragment {
           selectedItem.getValue());
       visitService.saveVisitDetail(visitInformationDetail);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+      Logger.sendError("Data Storage Exception",
           "Error in updating visit result " + ex.getMessage());
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
       Log.e(TAG, ex.getMessage(), ex);
@@ -248,7 +249,7 @@ public class NewVisitDetailFragment extends BaseFragment {
           try {
             visitService.updateVisitLocation(visitId, location);
           } catch (Exception e) {
-            Crashlytics.log(Log.ERROR, "Data Storage Exception",
+            Logger.sendError("Data Storage Exception",
                 "Error in updating visit location " + e.getMessage());
             Log.e(TAG, e.getMessage(), e);
           }
@@ -356,7 +357,7 @@ public class NewVisitDetailFragment extends BaseFragment {
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
       }
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "General Exception", "Error in opening camera " + e.getMessage());
+      Logger.sendError("General Exception", "Error in opening camera " + e.getMessage());
       e.printStackTrace();
     }
   }
@@ -435,8 +436,7 @@ public class NewVisitDetailFragment extends BaseFragment {
       orderDto.setId(id);
       return orderDto;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
-          "Error in creating draft order " + e.getMessage());
+      Logger.sendError("Data Storage Exception", "Error in creating draft order " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
     }

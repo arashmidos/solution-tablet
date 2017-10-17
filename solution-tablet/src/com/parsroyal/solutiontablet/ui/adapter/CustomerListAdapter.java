@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
@@ -15,6 +14,7 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -56,7 +56,7 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel> {
         return customerService.getAllCustomersListModelByVisitLineBackendId(visitLineId);
       }
     } catch (final Exception ex) {
-      Crashlytics.log(Log.ERROR, "Filter data", "Error in filtering customer list" + ex.getMessage());
+      Logger.sendError("Filter data", "Error in filtering customer list" + ex.getMessage());
       context.runOnUiThread(() -> ToastUtil.toastError(context, new UnknownSystemException(ex)));
       return new ArrayList<>();
     }
@@ -113,7 +113,7 @@ public class CustomerListAdapter extends BaseListAdapter<CustomerListModel> {
 
       return convertView;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in CustomerListAdapter.getView " + e.getMessage());
+      Logger.sendError("UI Exception", "Error in CustomerListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

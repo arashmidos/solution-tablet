@@ -124,7 +124,7 @@ public class MediaUtil {
         out.close();
       } catch (IOException e) {
         e.printStackTrace();
-        Crashlytics.log(Log.ERROR, "Zip images", e.getMessage());
+        Logger.sendError( "Zip images", e.getMessage());
       }
     }
     return zip;

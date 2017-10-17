@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.parsroyal.solutiontablet.R;
@@ -12,13 +11,13 @@ import com.parsroyal.solutiontablet.data.dao.GoodsDao;
 import com.parsroyal.solutiontablet.data.dao.impl.GoodsDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
-import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import org.springframework.http.HttpEntity;
@@ -73,8 +72,7 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
             context.getString(R.string.message_deliverable_goods_transferred_successfully));
 
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer",
-            "Error in receiving DeliverableGoods " + ex.getMessage());
+        Logger.sendError("Data transfer", "Error in receiving DeliverableGoods " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         resultObserver.publishResult(
             context.getString(R.string.message_exception_in_transferring_deliverable_goods));

@@ -13,7 +13,6 @@ import android.widget.Spinner;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -29,6 +28,7 @@ import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.greenrobot.eventbus.EventBus;
@@ -152,8 +152,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(mainActivity, ex));
       } catch (final Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer",
-            "Error in getting user information " + ex.getMessage());
+        Logger.sendError("Data transfer", "Error in getting user information " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(mainActivity, new UnknownSystemException(ex)));
       }
@@ -342,7 +341,7 @@ public class SettingFragment extends BaseFragment implements ResultObserver, OnF
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(mainActivity, ex);
         } catch (Exception ex) {
-          Crashlytics.log(Log.ERROR, "UI Exception",
+          Logger.sendError("UI Exception",
               "Error in settingFragment.onClick " + ex.getMessage());
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));

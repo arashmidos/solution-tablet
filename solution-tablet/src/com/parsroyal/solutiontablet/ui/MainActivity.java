@@ -66,6 +66,7 @@ import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -254,7 +255,7 @@ public abstract class MainActivity extends AppCompatActivity {
                   try {//TODO Send Event bus instead of publisher
                     dataTransferService.sendAllData(null);
                   } catch (Exception ex) {
-                    Crashlytics.log(Log.ERROR, "Install Update",
+                    Logger.sendError("Install Update",
                         "Error in installing new version" + ex.getMessage());
                     ex.printStackTrace();
                     ToastUtil
@@ -284,7 +285,7 @@ public abstract class MainActivity extends AppCompatActivity {
         finish();
       }
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Install Update", "Error in installing update" + ex.getMessage());
+      Logger.sendError("Install Update", "Error in installing update" + ex.getMessage());
       ToastUtil.toastError(MainActivity.this, R.string.err_update_failed);
     }
   }
@@ -528,7 +529,7 @@ public abstract class MainActivity extends AppCompatActivity {
         showDialogForExit();
       }
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in backPressed " + e.getMessage());
+      Logger.sendError("UI Exception", "Error in backPressed " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
     }
   }

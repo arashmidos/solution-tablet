@@ -12,10 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
@@ -25,6 +23,7 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
@@ -171,7 +170,7 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
                   Log.e(TAG, ex.getMessage(), ex);
                   ToastUtil.toastError(mainActivity, ex);
                 } catch (Exception ex) {
-                  Crashlytics.log(Log.ERROR, "UI Exception",
+                  Logger.sendError("UI Exception",
                       "Error in NCustomersListAdapter.delete " + ex.getMessage());
                   Log.e(TAG, ex.getMessage(), ex);
                   ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));

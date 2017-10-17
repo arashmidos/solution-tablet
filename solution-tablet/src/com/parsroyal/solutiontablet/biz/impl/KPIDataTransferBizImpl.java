@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.model.KPIDto;
@@ -13,6 +12,7 @@ import com.parsroyal.solutiontablet.exception.URLNotFoundException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
@@ -100,7 +100,7 @@ public class KPIDataTransferBizImpl extends AbstractDataTransferBizImpl<KPIDto> 
       Log.e(TAG, ex.getMessage(), ex);
       getObserver().publishResult(ex);
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data transfer", "Error in exchanging KPIData" + e.getMessage());
+      Logger.sendError("Data transfer", "Error in exchanging KPIData" + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       getObserver().publishResult(new UnknownSystemException(e));
     } finally {

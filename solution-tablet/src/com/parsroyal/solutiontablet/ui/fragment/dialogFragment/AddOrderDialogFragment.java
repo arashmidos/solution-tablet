@@ -36,6 +36,7 @@ import com.parsroyal.solutiontablet.ui.adapter.GoodImagePagerAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.DepthPageTransformer;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -207,7 +208,7 @@ public class AddOrderDialogFragment extends DialogFragment {
         }
       } catch (Exception ex) {
         ex.printStackTrace();
-        Crashlytics.log(Log.ERROR, "GoodDetails Detail Panel", ex.getMessage());
+        Logger.sendError( "GoodDetails Detail Panel", ex.getMessage());
         clearDetailPanel();
       }
     } else {

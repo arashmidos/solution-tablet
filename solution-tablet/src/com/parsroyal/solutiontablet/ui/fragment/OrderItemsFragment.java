@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
@@ -167,7 +168,7 @@ public class OrderItemsFragment extends BaseFragment {
                 Log.e(TAG, ex.getMessage(), ex);
                 ToastUtil.toastError(getActivity(), ex);
               } catch (Exception ex) {
-                Crashlytics.log(Log.ERROR, "Data Storage Exception",
+                Logger.sendError("Data Storage Exception",
                     "Error in deleting order items " + ex.getMessage());
                 Log.e(TAG, ex.getMessage(), ex);
                 ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
@@ -226,7 +227,7 @@ public class OrderItemsFragment extends BaseFragment {
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), ex);
         } catch (Exception ex) {
-          Crashlytics.log(Log.ERROR, "UI Exception",
+          Logger.sendError("UI Exception",
               "Error in confirming order item detail " + ex.getMessage());
           Log.e(TAG, ex.getMessage(), ex);
           ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));

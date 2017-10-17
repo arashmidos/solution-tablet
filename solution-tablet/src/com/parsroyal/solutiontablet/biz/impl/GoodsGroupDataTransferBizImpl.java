@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.parsroyal.solutiontablet.R;
@@ -16,6 +15,7 @@ import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import org.springframework.http.HttpEntity;
@@ -64,8 +64,7 @@ public class GoodsGroupDataTransferBizImpl extends AbstractDataTransferBizImpl<S
             .publishResult(context.getString(R.string.message_no_goods_group_transferred));
       }
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data transfer",
-          "Error in receiving GoodsGroupData " + ex.getMessage());
+      Logger.sendError("Data transfer", "Error in receiving GoodsGroupData " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       resultObserver.publishResult(
           context.getString(R.string.message_exception_in_transferring_goods_groups));

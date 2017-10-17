@@ -14,7 +14,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.bumptech.glide.Glide;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -32,6 +31,7 @@ import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFra
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
@@ -180,7 +180,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
                   Log.e(TAG, ex.getMessage(), ex);
                   ToastUtil.toastError(mainActivity, ex);
                 } catch (Exception ex) {
-                  Crashlytics.log(Log.ERROR, "Data Storage Exception",
+                  Logger.sendError("Data Storage Exception",
                       "Error in deleting order items " + ex.getMessage());
                   Log.e(TAG, ex.getMessage(), ex);
                   ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
@@ -265,7 +265,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(mainActivity, ex);
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data storage Exception",
+        Logger.sendError("Data storage Exception",
             "Error in confirming GoodsList " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));

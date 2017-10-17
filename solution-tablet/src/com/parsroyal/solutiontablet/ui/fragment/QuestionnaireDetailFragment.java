@@ -48,6 +48,7 @@ import com.parsroyal.solutiontablet.ui.adapter.QuestionListAdapter;
 import com.parsroyal.solutiontablet.ui.component.FlowLayout;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.Arrays;
@@ -291,8 +292,7 @@ public class QuestionnaireDetailFragment extends
         }
 
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data Storage Exception",
-            "Error in loading questions " + ex.getMessage());
+        Logger.sendError("Data Storage Exception", "Error in loading questions " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
       }
@@ -317,7 +317,7 @@ public class QuestionnaireDetailFragment extends
           openQuestionDialog(nextQuestionDto);
         }
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data Storage Exception",
+        Logger.sendError("Data Storage Exception",
             "Error in loading next questions " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
@@ -347,7 +347,7 @@ public class QuestionnaireDetailFragment extends
         adapter.notifyDataSetChanged();
         adapter.notifyDataSetInvalidated();
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data Storage Exception",
+        Logger.sendError("Data Storage Exception",
             "Error in saving questions " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));

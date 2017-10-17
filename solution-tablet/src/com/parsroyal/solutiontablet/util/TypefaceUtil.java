@@ -33,7 +33,7 @@ public class TypefaceUtil {
       defaultFontTypefaceField.setAccessible(true);
       defaultFontTypefaceField.set(null, customFontTypeface);
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Resource Exception", "Error in overriding fonts " + e.getMessage());
+      Logger.sendError( "Resource Exception", "Error in overriding fonts " + e.getMessage());
       Log.e("Can not set custom font " + customFontFileNameInAssets + " instead of "
           + defaultFontNameToOverride, TAG);
     }

@@ -34,6 +34,7 @@ import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,10 +102,10 @@ public class GoodsListFragment extends BaseFragment {
         tvPaymentTime.setVisibility(View.GONE);
         rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
 
-        adapter = new GoodListAdapter(this, rejectedGoodsList.getGoodsDtoList(), readOnly,true);
+        adapter = new GoodListAdapter(this, rejectedGoodsList.getGoodsDtoList(), readOnly, true);
       } else {
         goodsList = goodsService.searchForGoodsList(goodsSo);
-        adapter = new GoodListAdapter(this, goodsList, readOnly,false);
+        adapter = new GoodListAdapter(this, goodsList, readOnly, false);
       }
 
       list.setAdapter(adapter);
@@ -151,7 +152,8 @@ public class GoodsListFragment extends BaseFragment {
         List<Goods> filteredList = new ArrayList<>();
         for (int i = 0; i < goodsList.size(); i++) {
           Goods good = goodsList.get(i);
-          if (Empty.isNotEmpty(constraint) && !good.getTitle().equals(constraint) && !good.getCode().equals(constraint)) {
+          if (Empty.isNotEmpty(constraint) && !good.getTitle().equals(constraint) && !good.getCode()
+              .equals(constraint)) {
             continue;
           }
           filteredList.add(good);
@@ -213,7 +215,7 @@ public class GoodsListFragment extends BaseFragment {
 
       goodsDetailDialog.show(getActivity().getSupportFragmentManager(), "GoodsDetailDialog");
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+      Logger.sendError("Data Storage Exception",
           "Error in confirming handling GoodsList " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
@@ -239,8 +241,7 @@ public class GoodsListFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data storage Exception",
-          "Error in confirming GoodsList " + ex.getMessage());
+      Logger.sendError("Data storage Exception", "Error in confirming GoodList " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }

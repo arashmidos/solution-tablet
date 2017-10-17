@@ -39,7 +39,7 @@ public class ImageUtil {
       out.close();
       return file.getAbsolutePath();
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Storage Exception", "Error in Bsaving temp image " + e.getMessage());
+      Logger.sendError( "Storage Exception", "Error in Bsaving temp image " + e.getMessage());
       e.printStackTrace();
       return "";
     }
