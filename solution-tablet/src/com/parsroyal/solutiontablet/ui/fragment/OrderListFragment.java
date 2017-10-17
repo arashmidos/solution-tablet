@@ -100,6 +100,7 @@ public class OrderListFragment extends BaseFragment {
       saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
     }
     saleOrderSO.setIgnoreDraft(true);
+    saleOrderSO.setStatusId(SaleOrderStatus.READY_TO_SEND.getId());
     return saleOrderService.findOrders(saleOrderSO);
   }
 

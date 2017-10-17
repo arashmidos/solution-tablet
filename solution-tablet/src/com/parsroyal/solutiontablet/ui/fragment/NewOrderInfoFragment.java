@@ -174,6 +174,9 @@ public class NewOrderInfoFragment extends BaseFragment {
       paymentTypeTv.setText(R.string.reason_to_return);
       submitOrderBtn
           .setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
+      if (paymentTypeTitle != null) {
+        paymentTypeTitle.setText(R.string.select_reason_to_return);
+      }
     } else if (selectedItem != null) {
       setPaymentMethod(selectedItem);
     } else {
@@ -186,7 +189,6 @@ public class NewOrderInfoFragment extends BaseFragment {
       setUpRecyclerView();
       paymentTypeTv.setVisibility(View.GONE);
       paymentTypeLayout.setVisibility(View.GONE);
-      paymentTypeTitle.setText(R.string.select_reason_to_return);
     }
   }
 
@@ -230,7 +232,7 @@ public class NewOrderInfoFragment extends BaseFragment {
           if (!pageStatus.equals(Constants.VIEW)) {
             saveOrder(statusId);
           }
-          if (visitId != 0l) {
+          if (visitId != 0l) {//TODO WHY?
             mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
           } else {
             mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());

@@ -171,11 +171,10 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     }
 
     public void setReturnData(int position, SaleOrderListModel order) {
-      //TODO:set return data here
       this.position = position;
       this.order = order;
       String returnCode = "کد مرجوعی : " + String.valueOf(order.getId());
-      returnCountTv.setText("--");
+      returnCountTv.setText(String.valueOf(order.getAmount()));
       Date createdDate = DateUtil
           .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
@@ -185,7 +184,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
               R.string.common_irr_currency));
       totalAmountTv.setText(number);
-      returnReasonTv.setText("فرا رسیدن میلاد با سعادت انقضای محصول");
+      returnReasonTv.setText(order.getDescription());
     }
 
     @Override
@@ -195,8 +194,6 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           //TODO:DELET ACTION
           break;
         case R.id.edit_img:
-          //TODO:EDIT ACTION
-          break;
         case R.id.main_lay_linear:
         case R.id.main_lay:
           Bundle args = new Bundle();

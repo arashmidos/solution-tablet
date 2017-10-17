@@ -4,29 +4,23 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
-import com.parsroyal.solutiontablet.constants.StatusCodes;
-import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
-import com.parsroyal.solutiontablet.ui.adapter.ReturnAdapter;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
 
 public class ReturnListFragment extends BaseFragment {
 
@@ -104,8 +98,7 @@ public class ReturnListFragment extends BaseFragment {
       saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
     }
     saleOrderSO.setIgnoreDraft(true);
-    //TODO: uncomment this line
-//    saleOrderSO.setStatusId(SaleOrderStatus.REJECTED.getId());
+    saleOrderSO.setStatusId(SaleOrderStatus.REJECTED.getId());
     return saleOrderService.findOrders(saleOrderSO);
   }
 
@@ -117,6 +110,6 @@ public class ReturnListFragment extends BaseFragment {
 
   @OnClick(R.id.fab_add_return)
   public void onViewClicked() {
-    //TODO: add return fab action
+    parent.openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
   }
 }
