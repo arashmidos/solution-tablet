@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
@@ -22,11 +24,13 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
@@ -44,6 +48,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import me.relex.circleindicator.CircleIndicator;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * @author Shakib
@@ -208,7 +214,7 @@ public class AddOrderDialogFragment extends DialogFragment {
         }
       } catch (Exception ex) {
         ex.printStackTrace();
-        Logger.sendError( "GoodDetails Detail Panel", ex.getMessage());
+        Logger.sendError("GoodDetails Detail Panel", ex.getMessage());
         clearDetailPanel();
       }
     } else {
@@ -289,10 +295,7 @@ public class AddOrderDialogFragment extends DialogFragment {
         R.string.common_irr_currency)));
     unit1TitleTv.setText(unit1Title);
     unit2TitleTv.setText(unit2Title);
-    unit1CountTv.setText("0");
-    unit2CountTv.setText("0");
-    totalPriceTv.setText(String.format(Locale.US, "%,d %s", 0, getString(
-        R.string.common_irr_currency)));
+    clearDetailPanel();
 
     if (saleRateEnabled) {
       coefficientTv.setText(
@@ -405,20 +408,46 @@ public class AddOrderDialogFragment extends DialogFragment {
         getDialog().dismiss();
         break;
       case R.id.register_order_btn:
-        if (Empty.isNotEmpty(onClickListener)) {
-          if (validate()) {
-            Double count1 = Double
-                .valueOf(NumberUtil.digitsToEnglish(countTv.getText().toString()));
-            LabelValue selectedUnitLv = (LabelValue) spinner.getSelectedItem();
-            Long selectedUnit1 = selectedUnitLv.getValue();
-            if (selectedUnit1.equals(2L)) {
-              count1 *= Double.valueOf(unit1Count);
-            }
-            onClickListener.onConfirmBtnClicked(count1, selectedUnit1);
-            AddOrderDialogFragment.this.dismiss();
+        if (Empty.isNotEmpty(onClickListener) && validate()) {
+
+          Double count1 = Double
+              .valueOf(NumberUtil.digitsToEnglish(countTv.getText().toString()));
+          LabelValue selectedUnitLv = (LabelValue) spinner.getSelectedItem();
+          Long selectedUnit1 = selectedUnitLv.getValue();
+          if (selectedUnit1.equals(2L)) {
+            count1 *= Double.valueOf(unit1Count);
           }
+          onClickListener.onConfirmBtnClicked(count1, selectedUnit1);
         }
         break;
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof ErrorEvent) {
+      Log.i(TAG, "khar");
+      errorMsg.setText(event.getMessage());
+      errorMsg.setVisibility(View.VISIBLE);
+      InputMethodManager imm = (InputMethodManager) mainActivity
+          .getSystemService(Context.INPUT_METHOD_SERVICE);
+      imm.hideSoftInputFromWindow(countTv.getWindowToken(), 0);
+
+    } else if (event instanceof SuccessEvent) {
+      Log.i(TAG, "khoob");
+      AddOrderDialogFragment.this.dismiss();
     }
   }
 

@@ -43,7 +43,6 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   @BindView(R.id.bottom_layout)
   ViewGroup bottomLayout;
 
-
   private OrderFinalizeAdapter adapter;
   private MainActivity mainActivity;
   private SaleOrderService saleOrderService;

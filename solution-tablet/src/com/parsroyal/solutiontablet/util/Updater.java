@@ -112,7 +112,7 @@ public class Updater {
 
             } catch (java.io.IOException e) {
               e.printStackTrace();
-              EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATS_STORE_ERROR));
+              EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
             }
           } else {
             EventBus.getDefault().post(new ErrorEvent(StatusCodes.INVALID_DATA));

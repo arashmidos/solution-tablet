@@ -42,7 +42,8 @@ public class NetworkUtil {
         URL url = new URL(toTestUrl);   // Change to "http://google.com" for www  test.
         HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
 
-        String encoded = Base64
+        String encoded
+            = Base64
             .encodeToString((username + ":" + password).getBytes("UTF-8"), Base64.NO_WRAP);
         //urlc.setRequestProperty("Authorization", "Basic " + encoded);
         urlc.setRequestProperty("Authorization", "Basic " + encoded);

@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
+import com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -46,24 +47,25 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
 
   private static final String TAG = OrderFinalizeAdapter.class.getName();
   private final SaleOrderDto order;
-  private final GoodsDtoList rejectedGoodsList;
+  private final List<Goods> rejectedGoodsList;
   private final SaleOrderServiceImpl saleOrderService;
   private final FinalizeOrderDialogFragment parent;
+  private final GoodsDtoList goodsDtoList;
   private LayoutInflater inflater;
   private MainActivity mainActivity;
   private String pageStatus;
   private List<SaleOrderItemDto> orderItems;
 
   public OrderFinalizeAdapter(FinalizeOrderDialogFragment finalizeOrderDialogFragment,
-      MainActivity mainActivity, SaleOrderDto order,
-      GoodsDtoList rejectedGoodsList, String pageStatus) {
+      MainActivity mainActivity, SaleOrderDto order, GoodsDtoList goodsDtoList, String pageStatus) {
     this.parent = finalizeOrderDialogFragment;
     this.mainActivity = mainActivity;
     this.order = order;
     this.pageStatus = pageStatus;
     this.orderItems = order.getOrderItems();
     inflater = LayoutInflater.from(mainActivity);
-    this.rejectedGoodsList = rejectedGoodsList;
+    this.goodsDtoList = goodsDtoList;
+    this.rejectedGoodsList = goodsDtoList.getGoodsDtoList();
     this.saleOrderService = new SaleOrderServiceImpl(mainActivity);
   }
 
@@ -76,7 +78,19 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     SaleOrderItemDto item = orderItems.get(position);
+    item.setGoods(findGoods(item));
     holder.setData(item, position);
+  }
+
+  private Goods findGoods(SaleOrderItemDto item) {
+    Long goodsBackendId = item.getGoodsBackendId();
+    for (int i = 0; i < rejectedGoodsList.size(); i++) {
+      Goods goods = rejectedGoodsList.get(i);
+      if (goods.getBackendId().equals(goodsBackendId)) {
+        return goods;
+      }
+    }
+    return null;
   }
 
   @Override
@@ -122,6 +136,9 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
     }
 
     public void setData(SaleOrderItemDto item, int position) {
+      if (item.getGoods() == null) {
+        throw new IllegalArgumentException();
+      }
       Glide.with(mainActivity)
           .load(MediaUtil.getGoodImage(item.getGoods().getCode()))
           .error(R.drawable.goods_default)
@@ -168,7 +185,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
                   if (order.getStatus().equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
                     goods.setExisting(goods.getExisting() + item.getGoodsCount());
                     orderItems = saleOrderService
-                        .getLocalOrderItemDtoList(order.getId(), rejectedGoodsList);
+                        .getLocalOrderItemDtoList(order.getId(), goodsDtoList);
                   } else {
                     orderItems = saleOrderService.getOrderItemDtoList(order.getId());
                   }
@@ -200,11 +217,10 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
 
     private void editItem() {
 
-      AddOrderDialogFragment addOrderDialogFragment = null;
-      AddOrderBottomSheet addOrderBottomSheet = null;
+      AddOrderDialogFragment addOrderDialogFragment;
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
       if (MultiScreenUtility.isTablet(mainActivity)) {
-        addOrderBottomSheet = AddOrderBottomSheet.newInstance();
+        addOrderDialogFragment = AddOrderBottomSheet.newInstance();
       } else {
         addOrderDialogFragment = AddOrderDialogFragment.newInstance();
       }
@@ -212,7 +228,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       bundle.putLong(Constants.GOODS_BACKEND_ID, goods.getBackendId());
       Double count = Double.valueOf(item.getGoodsCount()) / 1000D;
       bundle.putLong(Constants.ORDER_STATUS, order.getStatus());
-      bundle.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+      bundle.putSerializable(Constants.REJECTED_LIST, goodsDtoList);
       Long defaultUnit = item.getSelectedUnit();
       if (Empty.isNotEmpty(defaultUnit)) {
         bundle.putLong(Constants.SELECTED_UNIT, defaultUnit);
@@ -224,20 +240,13 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       bundle.putDouble(Constants.COUNT, count);
 //      bundle.putLong(Constants.GOODS_INVOICE_ID, invoiceBackendId);
 
-      if (MultiScreenUtility.isTablet(mainActivity)) {
-        addOrderBottomSheet.setArguments(bundle);
-        addOrderBottomSheet.setOnClickListener((goodsCount, selectedUnit) -> {
-          handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
-        });
-        addOrderBottomSheet.show(mainActivity.getSupportFragmentManager(), "order");
-      } else {
-        addOrderDialogFragment.setArguments(bundle);
-        addOrderDialogFragment.setOnClickListener((goodsCount, selectedUnit) -> {
-          handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
-        });
+      addOrderDialogFragment.setArguments(bundle);
+      addOrderDialogFragment.setOnClickListener((goodsCount, selectedUnit) -> {
+        handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
+      });
 
-        addOrderDialogFragment.show(ft, "order");
-      }
+      addOrderDialogFragment.show(ft, "order");
+
     }
 
     private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItemDto item,
@@ -251,8 +260,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         order.setAmount(orderAmount);
 
         if (order.getStatus().equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
-          orderItems = saleOrderService
-              .getLocalOrderItemDtoList(order.getId(), rejectedGoodsList);
+          orderItems = saleOrderService.getLocalOrderItemDtoList(order.getId(), goodsDtoList);
         } else {
           orderItems = saleOrderService.getOrderItemDtoList(order.getId());
         }

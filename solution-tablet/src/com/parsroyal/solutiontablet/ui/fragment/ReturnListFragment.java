@@ -29,7 +29,7 @@ public class ReturnListFragment extends BaseFragment {
   @BindView(R.id.fab_add_return)
   FloatingActionButton fabAddOrder;
 
-  private NewVisitDetailFragment parent;
+  private VisitDetailFragment parent;
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
   private SettingServiceImpl settingService;
@@ -42,9 +42,9 @@ public class ReturnListFragment extends BaseFragment {
   }
 
   public static ReturnListFragment newInstance(Bundle arguments,
-      NewVisitDetailFragment newVisitDetailFragment) {
+      VisitDetailFragment visitDetailFragment) {
     ReturnListFragment returnListFragment = new ReturnListFragment();
-    returnListFragment.parent = newVisitDetailFragment;
+    returnListFragment.parent = visitDetailFragment;
     returnListFragment.setArguments(arguments);
     return returnListFragment;
   }

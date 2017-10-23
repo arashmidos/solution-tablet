@@ -25,9 +25,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Mahyar on 8/21/2015.
@@ -212,7 +210,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         "c." + Customer.COL_FULL_NAME + "," +//5
         "i." + BaseInfo.COL_TITLE + "," +
         "c." + Customer.COL_BACKEND_ID + "," +
-        "o." + SaleOrder.COL_CREATE_DATE_TIME +
+        "o." + SaleOrder.COL_CREATE_DATE_TIME + "," +
         "o." + SaleOrder.COL_DESCRIPTION +
         " FROM " + SaleOrder.TABLE_NAME + " o " +
         " INNER JOIN " + Customer.TABLE_NAME + " c on c." + Customer.COL_BACKEND_ID + " = o."

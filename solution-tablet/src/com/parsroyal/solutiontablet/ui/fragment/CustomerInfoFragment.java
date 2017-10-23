@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -28,18 +27,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikepenz.crossfader.util.UIUtils;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.impl.RejectedGoodsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Customer;
-import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
-import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
-import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
-import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
@@ -48,12 +42,9 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.DialogUtil;
-import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
-import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
-import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -116,7 +107,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   private String saleType;
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
-  private NewVisitDetailFragment parent;
+  private VisitDetailFragment parent;
   private boolean expandedMap = false;
 
 
@@ -125,10 +116,10 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   }
 
   public static CustomerInfoFragment newInstance(Bundle arguments,
-      NewVisitDetailFragment newVisitDetailFragment) {
+      VisitDetailFragment visitDetailFragment) {
     CustomerInfoFragment fragment = new CustomerInfoFragment();
     fragment.setArguments(arguments);
-    fragment.parent = newVisitDetailFragment;
+    fragment.parent = visitDetailFragment;
     return fragment;
   }
 

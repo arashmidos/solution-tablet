@@ -51,12 +51,13 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomersFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.GoodsListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomersFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OldOrdersListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OldVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentFragment;
@@ -65,7 +66,6 @@ import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
-import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialog.LoginDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
@@ -344,7 +344,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case VISIT_DETAIL_FRAGMENT_ID:
-        fragment = new VisitDetailFragment();
+        fragment = new OldVisitDetailFragment();
         changeSidebarItem(OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID);
         setMenuEnabled(false);
         break;
@@ -392,7 +392,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case GOODS_LIST_FRAGMENT_ID:
-        fragment = new GoodsListFragment();
+        fragment = new OldGoodsListFragment();
         args.putBoolean("view_all", true);
         fragment.setArguments(args);
         changeSidebarItem(GOODS_LIST_FRAGMENT_ID);

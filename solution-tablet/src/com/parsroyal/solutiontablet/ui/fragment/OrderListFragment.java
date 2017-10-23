@@ -37,7 +37,7 @@ public class OrderListFragment extends BaseFragment {
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
   private SaleOrderSO saleOrderSO = new SaleOrderSO();
-  private NewVisitDetailFragment parent;
+  private VisitDetailFragment parent;
   private SettingServiceImpl settingService;
   private String saleType;
 
@@ -45,7 +45,7 @@ public class OrderListFragment extends BaseFragment {
     // Required empty public constructor
   }
 
-  public static OrderListFragment newInstance(Bundle arguments, NewVisitDetailFragment parent) {
+  public static OrderListFragment newInstance(Bundle arguments, VisitDetailFragment parent) {
     OrderListFragment orderListFragment = new OrderListFragment();
     orderListFragment.parent = parent;
     orderListFragment.setArguments(arguments);

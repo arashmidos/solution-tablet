@@ -7,207 +7,340 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AlertDialog.Builder;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.biz.impl.RejectedGoodsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
+import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
-import com.parsroyal.solutiontablet.service.BaseInfoService;
-import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationService;
-import com.parsroyal.solutiontablet.service.SaleOrderService;
-import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
-import com.parsroyal.solutiontablet.ui.OldMainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
+import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
-import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
-/**
- * Created by Mahyar on 7/17/2015.
- */
-public class VisitDetailFragment extends BaseFragment implements ResultObserver {
+public class VisitDetailFragment extends BaseFragment {
 
-  public static final String TAG = VisitDetailFragment.class.getSimpleName();
-
+  private static final String TAG = VisitDetailFragment.class.getName();
   private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
   private static final int RESULT_OK = -1;
   private static final int RESULT_CANCELED = 0;
-  private static final int[] icons = {
-      R.drawable.selector_add_order,
-      R.drawable.selector_add_reject,
-      R.drawable.selector_cash,
-      R.drawable.selector_customer_location,
-      R.drawable.selector_customer_detail,
-      R.drawable.selector_general_questionary,//5
-      R.drawable.selector_goods_questionary,
-      R.drawable.selector_goods_delivery,
-      R.drawable.selector_taking_picture,
-      R.drawable.selector_save_reject,
-      R.drawable.selector_exit
-  };
-  private OldMainActivity oldMainActivity;
-  private GridView mainLayout;
-  private CustomerService customerService;
-  private SaleOrderService saleOrderService;
+  @BindView(R.id.tabs)
+  TabLayout tabs;
+  @BindView(R.id.viewpager)
+  ViewPager viewpager;
+  private Uri fileUri;
+  private CustomerServiceImpl customerService;
+  private MainActivity mainActivity;
+  private SaleOrderServiceImpl saleOrderService;
+  private long customerId;
+  private long visitId;
+  private VisitServiceImpl visitService;
+  private BaseInfoServiceImpl baseInfoService;
   private LocationService locationService;
-  private VisitService visitService;
-  private Long visitId;
-  private Long customerId;
+  private CustomerDetailViewPagerAdapter viewPagerAdapter;
+  private CustomerInfoFragment customerInfoFragment;
+  private OrderListFragment orderListFragment;
+  private PaymentListFragment paymentListFragment;
+  private ReturnListFragment returnListFragment;
+  private PictureFragment pictureFragment;
   private Customer customer;
   private SaleOrderDto orderDto;
-  private BaseInfoService baseInfoService;
-  private SettingServiceImpl settingService;
   private String saleType;
-  private Uri fileUri;
-  private GoodsDtoList rejectedGoodsList;
+
+
+  public VisitDetailFragment() {
+    // Required empty public constructor
+  }
+
+  public static VisitDetailFragment newInstance() {
+    return new VisitDetailFragment();
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
+    // Inflate the layout for this fragment
+    View view = inflater.inflate(R.layout.fragment_new_visit_detail, container, false);
+    ButterKnife.bind(this, view);
+    Bundle args = getArguments();
+    customerId = args.getLong(Constants.CUSTOMER_ID);
+    mainActivity = (MainActivity) getActivity();
+    baseInfoService = new BaseInfoServiceImpl(mainActivity);
+    customerService = new CustomerServiceImpl(mainActivity);
+    locationService = new LocationServiceImpl(mainActivity);
+    visitService = new VisitServiceImpl(mainActivity);
+    customer = customerService.getCustomerById(customerId);
+    saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    visitId = args.getLong(Constants.VISIT_ID);
+    saleType = new SettingServiceImpl(mainActivity)
+        .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+
+    tabs.setupWithViewPager(viewpager);
+    initFragments();
+    setUpViewPager();
+    viewpager.setCurrentItem(viewPagerAdapter.getCount());
+    viewpager.setOffscreenPageLimit(viewPagerAdapter.getCount());
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      mainActivity.changeTitle("");
+    }
+    return view;
+  }
+
+  public void finishVisiting() {
     try {
-      oldMainActivity = (OldMainActivity) getActivity();
-      customerService = new CustomerServiceImpl(oldMainActivity);
-      saleOrderService = new SaleOrderServiceImpl(oldMainActivity);
-      baseInfoService = new BaseInfoServiceImpl(oldMainActivity);
-      locationService = new LocationServiceImpl(oldMainActivity);
-      settingService = new SettingServiceImpl(oldMainActivity);
-      visitService = new VisitServiceImpl(oldMainActivity);
-
-      visitId = (Long) getArguments().get(Constants.VISIT_ID);
-      customerId = (Long) getArguments().get(Constants.CUSTOMER_ID);
-
-      customer = customerService.getCustomerById(customerId);
-      saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
-
-      View view = inflater.inflate(R.layout.fragment_visit_detail, null);
-      mainLayout = (GridView) view.findViewById(R.id.mainLayout);
-      mainLayout.setAdapter(new MainLayoutAdapter());
-      setItemClickListener();
-
-      return view;
+      List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
+      if (detailList.size() == 0) {
+        DialogUtil.showConfirmDialog(mainActivity, mainActivity.getString(R.string.title_attention),
+            mainActivity.getString(R.string.message_error_no_visit_detail_found),
+            (dialogInterface, i) -> showNoDialog());
+        return;
+      }
+      VisitInformation visitInformation = visitService.getVisitInformationById(visitId);
+      if (Empty.isEmpty(visitInformation.getxLocation()) || Empty
+          .isEmpty(visitInformation.getyLocation())) {
+        showDialogForEmptyLocation();
+      } else {
+        doFinishVisiting();
+      }
     } catch (Exception ex) {
-      Logger.sendError("UI Exception", "Error in creating VisitDetailFragment " + ex.getMessage());
+      Crashlytics
+          .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
-      return inflater.inflate(R.layout.view_error_page, null);
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
   }
 
-  private void setItemClickListener() {
-    mainLayout.setOnItemClickListener((parent, view, position, id) ->
-    {
-      String contentName = "";
-      switch (position) {
-        //Add Invoice / Add Order
-        case 0:
-          //Distributer should not add order/invoice
-          if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
-            return;
-          }
-          openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
-          contentName = "New Order/Invoice";
-          break;
-        //Add reject
-        case 1:
-          openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
-          contentName = "New Reject";
-          break;
-        //Cash
-        case 2:
-          openPaymentFragment();
-          contentName = "Open Payment";
-          break;
-        //Location
-        case 3:
-          openSaveLocationFragment();
-          contentName = "New Location";
-          break;
-        //Detail
-        case 4:
-          openKPIFragment();
-          contentName = "View Customer KPI";
-          break;
-        //General Questionary
-        case 5:
-          openGeneralQuestionnairesFragment();
-          contentName = "New Questionnaire";
-          break;
-        //Goods Questionary
-        case 6:
-          openGoodsQuestionnairesFragment();
-          contentName = "New Goods Questionnaire";
-          break;
-        //Delivery
-        case 7:
-          openDeliverableOrdersFragment();
-          contentName = "View Deliverable";
-          break;
-        //Camera
-        case 8:
-          startCameraActivity();
-          contentName = "New Photo";
-          break;
-        //Reject
-        case 9:
-          showWantsDialog();
-          contentName = "New None";
-          break;
-        //Exit
-        case 10:
-          finishVisiting();
-          break;
+  public void showNoDialog() {
+    List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
+    if (detailList.size() > 0) {
+      ToastUtil.toastError(mainActivity, R.string.message_error_wants_denied);
+      return;
+    }
+    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mainActivity);
+
+    List<LabelValue> wants = baseInfoService
+        .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.WANT_TYPE.getId());
+    if (Empty.isEmpty(wants)) {
+      ToastUtil.toastError(mainActivity, R.string.message_found_no_wants_information);
+      return;
+    }
+    LayoutInflater inflater = mainActivity.getLayoutInflater();
+    View dialogView = inflater.inflate(R.layout.dialog_register_no, null);
+    dialogBuilder.setView(dialogView);
+
+    Button registerNoBtn = (Button) dialogView.findViewById(R.id.register_btn);
+    TextView cancelTv = (TextView) dialogView.findViewById(R.id.cancel_tv);
+    TextView errorMessage = (TextView) dialogView.findViewById(R.id.error_msg);
+    Spinner noSpinner = (Spinner) dialogView.findViewById(R.id.no_spinner);
+    AlertDialog alertDialog = dialogBuilder.create();
+
+    wants.add(new LabelValue(-1l, mainActivity.getString(R.string.reason_register_no)));
+    LabelValueArrayAdapterWithHint labelValueArrayAdapter = new LabelValueArrayAdapterWithHint(
+        mainActivity,
+        wants);
+    noSpinner.setAdapter(labelValueArrayAdapter);
+    noSpinner.setSelection(wants.size() - 1);
+    alertDialog.show();
+    registerNoBtn.setOnClickListener(v -> {
+      LabelValue selectedItem = (LabelValue) noSpinner.getSelectedItem();
+      if (selectedItem.getValue() != -1l) {
+        errorMessage.setVisibility(View.INVISIBLE);
+        updateVisitResult(selectedItem, false);
+        alertDialog.dismiss();
+      } else {
+        errorMessage.setVisibility(View.VISIBLE);
       }
-      Analytics.logContentView(contentName, "Visit");
     });
+    cancelTv.setOnClickListener(v -> alertDialog.cancel());
   }
 
-  private void openKPIFragment() {
-    Bundle args = new Bundle();
-    args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
-    oldMainActivity.changeFragment(OldMainActivity.KPI_CUSTOMER_FRAGMENT_ID, args, false);
+  private void updateVisitResult(LabelValue selectedItem, boolean notVisited) {
+    try {
+      VisitInformationDetail visitInformationDetail = new VisitInformationDetail(
+          visitId,
+          notVisited ? VisitInformationDetailType.NONE : VisitInformationDetailType.NO_ORDER,
+          selectedItem.getValue());
+      visitService.saveVisitDetail(visitInformationDetail);
+    } catch (Exception ex) {
+      Logger.sendError("Data Storage Exception",
+          "Error in updating visit result " + ex.getMessage());
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+      Log.e(TAG, ex.getMessage(), ex);
+    }
   }
 
-  private void startCameraActivity() {
+  private void doFinishVisiting() {
+    try {
+      visitService.finishVisiting(visitId);
+      Customer customer = customerService.getCustomerById(customerId);
+      saleOrderService.deleteForAllCustomerOrdersByStatus(customer.getBackendId(),
+          SaleOrderStatus.DRAFT.getId());
+      mainActivity.removeFragment(this);
+    } catch (Exception ex) {
+      Crashlytics
+          .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
+      Log.e(TAG, ex.getMessage(), ex);
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+    }
+  }
+
+  private void tryFindingLocation() {
+    try {
+      final ProgressDialog progressDialog = new ProgressDialog(mainActivity);
+      progressDialog.setIndeterminate(true);
+      progressDialog.setCancelable(Boolean.FALSE);
+      progressDialog.setIcon(R.drawable.ic_action_info);
+      progressDialog.setTitle(R.string.message_please_wait);
+      progressDialog
+          .setMessage(mainActivity.getString(R.string.message_please_wait_finding_your_location));
+      progressDialog.show();
+
+      locationService.findCurrentLocation(new FindLocationListener() {
+        @Override
+        public void foundLocation(Location location) {
+          progressDialog.dismiss();
+          try {
+            visitService.updateVisitLocation(visitId, location);
+          } catch (Exception e) {
+            Logger.sendError("Data Storage Exception",
+                "Error in updating visit location " + e.getMessage());
+            Log.e(TAG, e.getMessage(), e);
+          }
+
+          mainActivity.runOnUiThread(() -> showFoundLocationDialog());
+        }
+
+        @Override
+        public void timeOut() {
+          progressDialog.dismiss();
+          mainActivity.runOnUiThread(() ->
+          {
+            ToastUtil
+                .toastError(mainActivity, mainActivity.getString(R.string.visit_found_no_location));
+            showDialogForEmptyLocation();
+          });
+        }
+      });
+
+    } catch (BusinessException ex) {
+      Log.e(TAG, ex.getMessage(), ex);
+      ToastUtil.toastError(mainActivity, ex);
+    } catch (Exception ex) {
+      Crashlytics
+          .log(Log.ERROR, "Location Service", "Error in finding location " + ex.getMessage());
+      Log.e(TAG, ex.getMessage(), ex);
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+    }
+  }
+
+  private void showFoundLocationDialog() {//TODO shakib old style
+    Builder builder = new Builder(mainActivity);
+    builder.setTitle(mainActivity.getString(R.string.visit_location));
+    builder.setMessage(mainActivity.getString(R.string.visit_found_location_message));
+    builder.setPositiveButton(mainActivity.getString(R.string.finish_visit),
+        (dialogInterface, i) -> doFinishVisiting());
+
+    builder.create().show();
+  }
+
+  private void showDialogForEmptyLocation() {
+    DialogUtil.showCustomDialog(mainActivity, mainActivity.getString(R.string.visit_location),
+        mainActivity.getString(R.string.visit_empty_location_message),
+        mainActivity.getString(R.string.visit_empty_location_dialog_try_again),
+        (dialog, which) -> tryFindingLocation(),
+        mainActivity.getString(R.string.visit_empty_location_dialog_finish),
+        (dialog, which) -> doFinishVisiting(), Constants.ICON_MESSAGE);
+  }
+
+  public Customer getCustomer() {
+    return customer;
+  }
+
+  public long getCustomerId() {
+    return customerId;
+  }
+
+  public long getCustomerBackendId() {
+    return customer.getBackendId();
+  }
+
+  public long getVisitId() {
+    return visitId;
+  }
+
+  private void initFragments() {
+    Bundle arguments = getArguments();
+    paymentListFragment = PaymentListFragment.newInstance(arguments);
+    pictureFragment = PictureFragment.newInstance(this);
+    orderListFragment = OrderListFragment.newInstance(arguments, this);
+    returnListFragment = ReturnListFragment.newInstance(arguments, this);
+    customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
+  }
+
+  private void setUpViewPager() {
+    viewPagerAdapter = new CustomerDetailViewPagerAdapter(mainActivity.getSupportFragmentManager());
+//    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
+    viewPagerAdapter.add(pictureFragment, getString(R.string.images));
+    viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
+    viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
+    viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
+    viewPagerAdapter.add(customerInfoFragment, getString(R.string.customer_information));
+    viewpager.setAdapter(viewPagerAdapter);
+  }
+
+  @Override
+  public int getFragmentId() {
+    return MainActivity.VISIT_DETAIL_FRAGMENT_ID;
+  }
+
+  public void startCameraActivity() {
     try {
       Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       // Create a media file name
@@ -244,8 +377,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
         long typeId = customerService.savePicture(cPic);
         visitService.saveVisitDetail(
             new VisitInformationDetail(visitId, VisitInformationDetailType.TAKE_PICTURE, typeId));
-        ToastUtil.toastSuccess(oldMainActivity,
-            oldMainActivity.getString(R.string.message_picutre_saved_successfully));
+        ToastUtil.toastSuccess(mainActivity, R.string.message_picutre_saved_successfully);
+        pictureFragment.update();
 
       } else if (resultCode == RESULT_CANCELED) {
         // User cancelled the image capture
@@ -259,7 +392,8 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
    * @param statusID Could be DRAFT for both AddInvoice/AddOrder or REJECTED_DRAFT for
    * ReturnedOrder
    */
-  private void openOrderDetailFragment(Long statusID) {
+  public void openOrderDetailFragment(Long statusID) {
+
     orderDto = saleOrderService
         .findOrderDtoByCustomerBackendIdAndStatus(customer.getBackendId(), statusID);
     if (Empty.isEmpty(orderDto) || statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
@@ -274,63 +408,21 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
         args.putLong(Constants.ORDER_ID, orderDto.getId());
         args.putString(Constants.SALE_TYPE, saleType);
         args.putLong(Constants.VISIT_ID, visitId);
-        oldMainActivity.changeFragment(OldMainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
+        args.putBoolean(Constants.READ_ONLY, false);
+        args.putString(Constants.PAGE_STATUS, Constants.NEW);
+        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
       }
 
     } else {
       if (statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
-        ToastUtil.toastError(oldMainActivity,
-            oldMainActivity.getString(R.string.message_cannot_create_rejected_right_now));
+        ToastUtil.toastError(mainActivity, R.string.message_cannot_create_rejected_right_now);
       } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && saleType
           .equals(ApplicationKeys.SALE_COLD)) {
-        ToastUtil.toastError(oldMainActivity,
-            oldMainActivity.getString(R.string.message_cannot_create_order_right_now));
+        ToastUtil.toastError(mainActivity, R.string.message_cannot_create_order_right_now);
       } else {
-        ToastUtil.toastError(oldMainActivity,
-            oldMainActivity.getString(R.string.message_cannot_create_factor_right_now));
+        ToastUtil.toastError(mainActivity, R.string.message_cannot_create_factor_right_now);
       }
     }
-  }
-
-  private void invokeGetRejectedData() {
-    showProgressDialog(getString(R.string.message_transferring_rejected_goods_data));
-    Thread thread = new Thread(() ->
-    {
-      try {
-        DataTransferService dataTransferService = new DataTransferServiceImpl(oldMainActivity);
-        rejectedGoodsList = null;/*dataTransferService
-            .getRejectedData(VisitDetailFragment.this, customer.getBackendId());*/
-        if (rejectedGoodsList != null) {
-
-          final Bundle args = new Bundle();
-          args.putLong(Constants.ORDER_ID, orderDto.getId());
-          args.putString(Constants.SALE_TYPE, saleType);
-          args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
-          args.putLong(Constants.VISIT_ID, visitId);
-          oldMainActivity.runOnUiThread(() ->
-          {
-            dismissProgressDialog();
-            oldMainActivity.changeFragment(OldMainActivity.ORDER_DETAIL_FRAGMENT_ID, args, false);
-          });
-        } else {
-          runOnUiThread(() ->
-          {
-            dismissProgressDialog();
-            ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_not_possible));
-          });
-        }
-      } catch (final BusinessException ex) {
-        Log.e(TAG, ex.getMessage(), ex);
-        runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
-      } catch (final Exception ex) {
-        Crashlytics
-            .log(Log.ERROR, "Data transfer", "Error in getting rejected data " + ex.getMessage());
-        Log.e(TAG, ex.getMessage(), ex);
-        runOnUiThread(() -> ToastUtil.toastError(getActivity(), new UnknownSystemException(ex)));
-      }
-    });
-
-    thread.start();
   }
 
   private SaleOrderDto createDraftOrder(Customer customer, Long statusID) {
@@ -340,306 +432,63 @@ public class VisitDetailFragment extends BaseFragment implements ResultObserver 
       orderDto.setId(id);
       return orderDto;
     } catch (Exception e) {
-      Logger.sendError("Data Storage Exception",
-          "Error in creating draft order " + e.getMessage());
+      Logger.sendError("Data Storage Exception", "Error in creating draft order " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
-      ToastUtil.toastError(oldMainActivity, new UnknownSystemException(e));
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
     }
     return null;
   }
 
-  private void openDeliverableOrdersFragment() {
-    Bundle args = new Bundle();
-    args.putLong("customerBackendId", customer.getBackendId());
-    args.putLong(Constants.VISIT_ID, visitId);
-    args.putLong(Constants.STATUS_ID, SaleOrderStatus.DELIVERABLE.getId());
-    oldMainActivity.changeFragment(OldMainActivity.ORDERS_LIST_FRAGMENT, args, false);
-  }
+  private void invokeGetRejectedData() {
 
-  private void openPaymentFragment() {
-    Bundle args = new Bundle();
-    args.putLong(Constants.CUSTOMER_ID, customerId);
-    args.putLong(Constants.VISIT_ID, visitId);
-    oldMainActivity.changeFragment(OldMainActivity.PAYMENT_FRAGMENT_ID, args, false);
-  }
+    DialogUtil.showProgressDialog(mainActivity,
+        getString(R.string.message_transferring_rejected_goods_data));
 
-  private void openSaveLocationFragment() {
-    Bundle args = new Bundle();
-    args.putLong(Constants.CUSTOMER_ID, customerId);
-    args.putLong(Constants.VISIT_ID, visitId);
-    oldMainActivity.changeFragment(OldMainActivity.SAVE_LOCATION_FRAGMENT_ID, args, false);
-  }
-
-  private void openGeneralQuestionnairesFragment() {
-    Bundle args = new Bundle();
-    args.putLong(Constants.CUSTOMER_ID, customerId);
-    args.putLong(Constants.VISIT_ID, visitId);
-    args.putInt(Constants.PARENT, OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID);
-    oldMainActivity.changeFragment(OldMainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID, args, false);
-  }
-
-  private void openGoodsQuestionnairesFragment() {
-    Bundle args = new Bundle();
-    args.putLong(Constants.CUSTOMER_ID, customerId);
-    args.putLong(Constants.VISIT_ID, visitId);
-    args.putInt(Constants.PARENT, OldMainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID);
-    oldMainActivity.changeFragment(OldMainActivity.QUESTIONAIRE_LIST_FRAGMENT_ID, args, false);
-  }
-
-  private void finishVisiting() {
-    try {
-      List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
-      if (detailList.size() == 0) {
-        DialogUtil.showConfirmDialog(oldMainActivity,
-            getString(R.string.title_attention),
-            getString(R.string.message_error_no_visit_detail_found),
-            (dialogInterface, i) -> showWantsDialog());
-        return;
-      }
-      VisitInformation visitInformation = visitService.getVisitInformationById(visitId);
-      if (Empty.isEmpty(visitInformation.getxLocation()) || Empty
-          .isEmpty(visitInformation.getyLocation())) {
-        showDialogForEmptyLocation();
-      } else {
-        doFinishVisiting();
-      }
-    } catch (Exception ex) {
-      Crashlytics
-          .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-    }
-  }
-
-  private void showDialogForEmptyLocation() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-    builder.setTitle(getString(R.string.visit_location));
-    builder.setMessage(getString(R.string.visit_empty_location_message));
-    builder.setPositiveButton(getString(R.string.visit_empty_location_dialog_try_again),
-        (dialogInterface, i) ->
-        {
-          dialogInterface.dismiss();
-          tryFindingLocation();
-        });
-
-    builder.setNegativeButton(getString(R.string.visit_empty_location_dialog_finish),
-        (dialogInterface, i) ->
-        {
-          dialogInterface.dismiss();
-          doFinishVisiting();
-        });
-
-    builder.create().show();
-  }
-
-  private void tryFindingLocation() {
-    try {
-      final ProgressDialog progressDialog = new ProgressDialog(oldMainActivity);
-      progressDialog.setIndeterminate(true);
-      progressDialog.setCancelable(Boolean.FALSE);
-      progressDialog.setIcon(R.drawable.ic_action_info);
-      progressDialog.setTitle(R.string.message_please_wait);
-      progressDialog.setMessage(getString(R.string.message_please_wait_finding_your_location));
-      progressDialog.show();
-
-      locationService.findCurrentLocation(new FindLocationListener() {
-        @Override
-        public void foundLocation(Location location) {
-          progressDialog.dismiss();
-          try {
-            visitService.updateVisitLocation(visitId, location);
-          } catch (Exception e) {
-            Logger.sendError("Data Storage Exception",
-                "Error in updating visit location " + e.getMessage());
-            Log.e(TAG, e.getMessage(), e);
-          }
-
-          oldMainActivity.runOnUiThread(() -> showFoundLocationDialog());
-        }
-
-        @Override
-        public void timeOut() {
-          progressDialog.dismiss();
-          oldMainActivity.runOnUiThread(() ->
-          {
-            ToastUtil.toastError(getActivity(), getString(R.string.visit_found_no_location));
-            showDialogForEmptyLocation();
-          });
-        }
-      });
-
-    } catch (BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), ex);
-    } catch (Exception ex) {
-      Crashlytics
-          .log(Log.ERROR, "Location Service", "Error in finding location " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
-    }
-  }
-
-  private void showFoundLocationDialog() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-    builder.setTitle(getString(R.string.visit_location));
-    builder.setMessage(getString(R.string.visit_found_location_message));
-    builder.setPositiveButton(getString(R.string.finish_visit),
-        (dialogInterface, i) -> doFinishVisiting());
-
-    builder.create().show();
-  }
-
-  private void doFinishVisiting() {
-    try {
-      visitService.finishVisiting(visitId);
-      Customer customer = customerService.getCustomerById(customerId);
-      saleOrderService.deleteForAllCustomerOrdersByStatus(customer.getBackendId(),
-          SaleOrderStatus.DRAFT.getId());
-      oldMainActivity.removeFragment(this);
-      oldMainActivity.setMenuEnabled(true);
-    } catch (Exception ex) {
-      Crashlytics
-          .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(oldMainActivity, new UnknownSystemException(ex));
-    }
-  }
-
-  @Override
-  public int getFragmentId() {
-    return OldMainActivity.VISIT_DETAIL_FRAGMENT_ID;
-  }
-
-  private void showWantsDialog() {
-    List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
-    if (detailList.size() > 0) {
-      ToastUtil
-          .toastError(oldMainActivity,
-              oldMainActivity.getString(R.string.message_error_wants_denied));
-      return;
-    }
-    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(oldMainActivity);
-
-    List<LabelValue> wants = baseInfoService
-        .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.WANT_TYPE.getId());
-    if (Empty.isEmpty(wants)) {
-      ToastUtil.toastError(oldMainActivity,
-          oldMainActivity.getString(R.string.message_found_no_wants_information));
-      return;
-    }
-
-    View wantsDialogView = oldMainActivity.getLayoutInflater().inflate(R.layout.dialog_wants, null);
-    final Spinner wantsSpinner = (Spinner) wantsDialogView.findViewById(R.id.wantsSP);
-    CheckBox notVisitedCb = (CheckBox) wantsDialogView.findViewById((R.id.not_visited_cb));
-
-    notVisitedCb.setOnCheckedChangeListener(
-        (compoundButton, isChecked) -> wantsSpinner.setEnabled(!isChecked));
-    LabelValueArrayAdapter labelValueArrayAdapter = new LabelValueArrayAdapter(oldMainActivity,
-        wants);
-    wantsSpinner.setAdapter(labelValueArrayAdapter);
-
-    dialogBuilder.setView(wantsDialogView);
-    dialogBuilder.setPositiveButton(R.string.button_ok, (dialog, which) ->
-    {
-      LabelValue selectedItem = (LabelValue) wantsSpinner.getSelectedItem();
-      updateVisitResult(selectedItem, notVisitedCb.isChecked());
-    });
-    dialogBuilder.setNegativeButton(R.string.button_cancel, (dialog, which) ->
-    {
-    });
-    dialogBuilder.setTitle(R.string.title_save_want);
-    dialogBuilder.create().show();
-  }
-
-  private void updateVisitResult(LabelValue selectedItem, boolean notVisited) {
-    try {
-      VisitInformationDetail visitInformationDetail = new VisitInformationDetail(
-          visitId,
-          notVisited ? VisitInformationDetailType.NONE : VisitInformationDetailType.NO_ORDER,
-          selectedItem.getValue());
-      visitService.saveVisitDetail(visitInformationDetail);
-    } catch (Exception ex) {
-      Logger.sendError("Data Storage Exception",
-          "Error in updating visit result " + ex.getMessage());
-      ToastUtil.toastError(oldMainActivity, new UnknownSystemException(ex));
-      Log.e(TAG, ex.getMessage(), ex);
-    }
-  }
-
-  @Override
-  public void publishResult(final BusinessException ex) {
-    runOnUiThread(() -> ToastUtil.toastError(oldMainActivity, getErrorString(ex)));
-  }
-
-  @Override
-  public void publishResult(final String message) {
-  }
-
-  @Override
-  public void finished(boolean result) {
-    dismissProgressDialog();
+    new RejectedGoodsDataTransferBizImpl(mainActivity).getAllRejectedData(customer.getBackendId());
   }
 
   @Override
   public void onResume() {
     super.onResume();
-
-    if (getView() == null) {
-      return;
-    }
-
-    getView().setFocusableInTouchMode(true);
-    getView().requestFocus();
-    getView().setOnKeyListener((v, keyCode, event) ->
-    {
-
-      if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-        finishVisiting();
-        return true;
-      }
-      return false;
-    });
+    EventBus.getDefault().register(this);
   }
 
-  private class MainLayoutAdapter extends BaseAdapter {
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
 
-    @Override
-    public int getCount() {
-      return icons.length;
-    }
-
-    @Override
-    public Object getItem(int position) {
-      if (position == 0 && saleType.equals(ApplicationKeys.SALE_HOT)) {
-        return R.drawable.selector_add_factor;
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof ActionEvent) {
+      if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
+//        goToRegisterPaymentFragment();TODO:
       }
-      return icons[position];
+    } else if (event instanceof ErrorEvent) {
+      Log.i(TAG, "Fucking error");
+      DialogUtil.dismissProgressDialog();
+      //TODO Show error message
     }
+  }
 
-    @Override
-    public long getItemId(int position) {
-      return 0;
-    }
+  @Subscribe
+  public void getMessage(GoodsDtoList goodsDtoList) {
+    DialogUtil.dismissProgressDialog();
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-      LinearLayout layout = new LinearLayout(oldMainActivity);
-      layout.setLayoutParams(new GridView.LayoutParams(100, 100));
-      layout.setGravity(Gravity.CENTER);
+    List<Goods> goodsList = goodsDtoList.getGoodsDtoList();
+    if (goodsList != null) {
+      final Bundle args = new Bundle();
+      args.putLong(Constants.ORDER_ID, orderDto.getId());
+      args.putString(Constants.SALE_TYPE, saleType);
+      args.putSerializable(Constants.REJECTED_LIST, goodsDtoList);
+      args.putLong(Constants.VISIT_ID, visitId);
+      args.putBoolean(Constants.READ_ONLY, false);
+      args.putString(Constants.PAGE_STATUS, Constants.NEW);
 
-      ImageView imageView = new ImageView(oldMainActivity);
-      imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-          ViewGroup.LayoutParams.WRAP_CONTENT));
-
-      if (position == 0 && ApplicationKeys.SALE_HOT.equals(saleType)) {
-        imageView.setImageDrawable(
-            oldMainActivity.getResources().getDrawable(R.drawable.selector_add_factor));
-      } else {
-        imageView.setImageDrawable(oldMainActivity.getResources().getDrawable(icons[position]));
-      }
-
-      layout.addView(imageView);
-      return layout;
+      mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
+    } else {
+      ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_not_possible));
     }
   }
 }

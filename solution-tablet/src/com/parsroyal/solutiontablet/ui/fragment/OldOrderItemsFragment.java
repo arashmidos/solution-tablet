@@ -30,9 +30,9 @@ import java.util.List;
 /**
  * Created by mahyar on 2/12/16.
  */
-public class OrderItemsFragment extends BaseFragment {
+public class OldOrderItemsFragment extends BaseFragment {
 
-  public static final String TAG = OrderItemsFragment.class.getSimpleName();
+  public static final String TAG = OldOrderItemsFragment.class.getSimpleName();
 
   private TableLayout dataTb;
   private List<SaleOrderItemDto> orderItems;
@@ -70,7 +70,7 @@ public class OrderItemsFragment extends BaseFragment {
 
     } catch (Exception e) {
       Crashlytics
-          .log(Log.ERROR, "UI Exception", "Error in creating OrderItemsFragment " + e.getMessage());
+          .log(Log.ERROR, "UI Exception", "Error in creating OldOrderItemsFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);

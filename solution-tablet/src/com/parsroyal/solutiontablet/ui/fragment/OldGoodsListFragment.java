@@ -29,7 +29,7 @@ import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
-import com.parsroyal.solutiontablet.ui.adapter.GoodListAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.OldGoodListAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -43,9 +43,9 @@ import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
 /**
  * Created by mahyar on 2/12/16.
  */
-public class GoodsListFragment extends BaseFragment {
+public class OldGoodsListFragment extends BaseFragment {
 
-  public static final String TAG = GoodsListFragment.class.getSimpleName();
+  public static final String TAG = OldGoodsListFragment.class.getSimpleName();
   @BindView(R.id.list)
   UltimateRecyclerView list;
   @BindView(R.id.tvPaymentTime)
@@ -61,7 +61,7 @@ public class GoodsListFragment extends BaseFragment {
 
   private SaleOrderService saleOrderService;
 
-  private GoodListAdapter adapter;
+  private OldGoodListAdapter adapter;
   private Long orderStatus;
   private GoodsDtoList rejectedGoodsList;
   private String constraint;
@@ -102,10 +102,10 @@ public class GoodsListFragment extends BaseFragment {
         tvPaymentTime.setVisibility(View.GONE);
         rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
 
-        adapter = new GoodListAdapter(this, rejectedGoodsList.getGoodsDtoList(), readOnly, true);
+        adapter = new OldGoodListAdapter(this, rejectedGoodsList.getGoodsDtoList(), readOnly, true);
       } else {
         goodsList = goodsService.searchForGoodsList(goodsSo);
-        adapter = new GoodListAdapter(this, goodsList, readOnly, false);
+        adapter = new OldGoodListAdapter(this, goodsList, readOnly, false);
       }
 
       list.setAdapter(adapter);
@@ -137,7 +137,7 @@ public class GoodsListFragment extends BaseFragment {
       return view;
     } catch (Exception e) {
       Crashlytics
-          .log(Log.ERROR, "UI Exception", "Error in creating GoodsListFragment " + e.getMessage());
+          .log(Log.ERROR, "UI Exception", "Error in creating OldGoodsListFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);

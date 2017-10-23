@@ -22,14 +22,16 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.exception.BusinessException;
-import com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
@@ -270,7 +272,7 @@ public class OrderFragment extends BaseFragment {
 
   public void showOrderDialog(Goods goods) {
     try {
-      AddOrderDialogFragment addOrderDialogFragment = null;
+      AddOrderDialogFragment addOrderDialogFragment;
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
       if (MultiScreenUtility.isTablet(mainActivity)) {
         addOrderDialogFragment = AddOrderBottomSheet.newInstance();
@@ -306,22 +308,15 @@ public class OrderFragment extends BaseFragment {
       }
 
       bundle.putLong(Constants.SELECTED_UNIT, defaultUnit);
-      if (MultiScreenUtility.isTablet(mainActivity)) {
-        addOrderDialogFragment.setArguments(bundle);
-        addOrderDialogFragment.setOnClickListener((count, selectedUnit) -> {
-          handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
-          updateGoodsDataTb();
-        });
-        addOrderDialogFragment.show(mainActivity.getSupportFragmentManager(), "order");
-      } else {
-        addOrderDialogFragment.setArguments(bundle);
-        addOrderDialogFragment.setOnClickListener((count, selectedUnit) -> {
-          handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
-          updateGoodsDataTb();
-        });
 
-        addOrderDialogFragment.show(ft, "order");
-      }
+      addOrderDialogFragment.setArguments(bundle);
+      addOrderDialogFragment.setOnClickListener((count, selectedUnit) -> {
+        handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
+        updateGoodsDataTb();
+      });
+
+      addOrderDialogFragment.show(ft, "order");
+
     } catch (Exception e) {
       Logger.sendError("Data Storage Exception",
           "Error in confirming handling GoodsList " + e.getMessage());
@@ -394,7 +389,9 @@ public class OrderFragment extends BaseFragment {
     try {
       if (Empty.isEmpty(item)) {
         if (count * 1000L > Double.valueOf(String.valueOf(goods.getExisting()))) {
-          ToastUtil.toastError(getActivity(), new SaleOrderItemCountExceedExistingException());
+//          ToastUtil.toastError(getActivity(), new SaleOrderItemCountExceedExistingException());
+          EventBus.getDefault().post(new ErrorEvent(getString(R.string.exceed_count_exception),
+              StatusCodes.DATA_STORE_ERROR));
           return;
         }
         item = createOrderItem(goods);
@@ -405,9 +402,12 @@ public class OrderFragment extends BaseFragment {
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);
       orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
+      EventBus.getDefault().post(new SuccessEvent(StatusCodes.SUCCESS));
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), ex);
+//      ToastUtil.toastError(getActivity(), ex);
+      EventBus.getDefault().post(new ErrorEvent(getString(R.string.exceed_count_exception),
+          StatusCodes.DATA_STORE_ERROR));
     } catch (Exception ex) {
       Logger.sendError("Data storage Exception",
           "Error in confirming GoodsList " + ex.getMessage());

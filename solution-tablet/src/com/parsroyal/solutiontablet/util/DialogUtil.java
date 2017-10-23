@@ -80,7 +80,6 @@ public class DialogUtil {
   }
 
   public static void showProgressDialog(Context context, CharSequence message) {
-    dismissProgressDialog();
     progressDialog = new ProgressDialog(context);
     progressDialog.setIndeterminate(true);
     progressDialog.setCancelable(Boolean.FALSE);

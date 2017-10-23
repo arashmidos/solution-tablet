@@ -53,7 +53,7 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NewVisitDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathFragment;
@@ -519,8 +519,8 @@ public abstract class MainActivity extends AppCompatActivity {
         }
         BaseFragment lastItem = getLastFragment();
         if (Empty.isNotEmpty(lastFragment)) {
-          if (lastItem instanceof NewVisitDetailFragment) {
-            ((NewVisitDetailFragment) lastItem).finishVisiting();
+          if (lastItem instanceof VisitDetailFragment) {
+            ((VisitDetailFragment) lastItem).finishVisiting();
             return;
           }
         }
@@ -572,7 +572,7 @@ public abstract class MainActivity extends AppCompatActivity {
         fragment = PathDetailFragment.newInstance();
         break;
       case VISIT_DETAIL_FRAGMENT_ID:
-        fragment = NewVisitDetailFragment.newInstance();
+        fragment = VisitDetailFragment.newInstance();
         break;
       case ORDER_INFO_FRAGMENT:
         fragment = NewOrderInfoFragment.newInstance();

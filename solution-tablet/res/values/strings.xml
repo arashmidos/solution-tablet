@@ -49,6 +49,7 @@
   <string name="com.parsroyal.solutiontablet.exception.SalesmanIdNotProvidedForConnectingToServerException">سریال بازاریاب برای ارسال به سرور یافت نشد.</string>
   <string name="com.parsroyal.solutiontablet.exception.SaleOrderNotFoundException">سفارش مورد نظر یافت نشد.</string>
   <string name="com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingException">تعداد یا مقدار وارد شده بیش از موجودی می باشد</string>
+  <string name="exceed_count_exception">تعداد یا مقدار وارد شده بیش از موجودی می باشد</string>
   <string name="com.parsroyal.solutiontablet.exception.UserNotAuthorizedException">نام کاربری یا رمز عبور اشتباه است</string>
 
   <string name="send_data">ارسال اطلاعات</string>

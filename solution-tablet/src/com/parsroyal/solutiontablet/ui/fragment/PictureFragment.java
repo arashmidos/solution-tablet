@@ -28,16 +28,16 @@ public class PictureFragment extends BaseFragment {
   private CustomerService customerService;
   private MainActivity mainActivity;
   private PictureAdapter adapter;
-  private NewVisitDetailFragment parent;
+  private VisitDetailFragment parent;
 
 
   public PictureFragment() {
     // Required empty public constructor
   }
 
-  public static PictureFragment newInstance(NewVisitDetailFragment newVisitDetailFragment) {
+  public static PictureFragment newInstance(VisitDetailFragment visitDetailFragment) {
     PictureFragment fragment = new PictureFragment();
-    fragment.parent = newVisitDetailFragment;
+    fragment.parent = visitDetailFragment;
     return fragment;
   }
 
