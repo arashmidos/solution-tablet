@@ -430,10 +430,13 @@ public class DataTransferServiceImpl implements DataTransferService {
     VisitInformationDataTransferBizImpl dataTransfer =
         new VisitInformationDataTransferBizImpl(context, resultObserver);
     resultObserver.publishResult(context.getString(R.string.sending_visit_information_data));
+    int emptyVisit = 0;
     for (int i = 0; i < visitInformationList.size(); i++) {
       VisitInformationDto visitInformationDto = visitInformationList.get(i);
       if (visitInformationDto.getDetails() == null
           || visitInformationDto.getDetails().size() == 0) {
+        emptyVisit++;
+        visitService.deleteVisitById(visitInformationDto.getId());
         continue;
       }
       dataTransfer.setData(visitInformationDto);
@@ -442,7 +445,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     resultObserver.publishResult(String
         .format(Locale.US, context.getString(R.string.data_transfered_result),
             String.valueOf(dataTransfer.getSuccess()),
-            String.valueOf(visitInformationList.size() - dataTransfer.getSuccess())));
+            String.valueOf(visitInformationList.size() - dataTransfer.getSuccess() - emptyVisit)));
   }
 
   private void cleanOldData() {

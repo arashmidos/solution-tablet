@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,14 +111,7 @@ public class QuestionnaireDetailFragment extends
       Button canclButton = (Button) buttonPanel.findViewById(R.id.cancelBtn);
       canclButton.setOnClickListener(v ->
       {
-        if (Empty.isEmpty(customer)) {
-          //It's anonymous questionaire
-          //known bug, it he has not answered any quesiton, should remove the entire visit.
-          // List<VisitInformationDetail> detailList = visitService.searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
-          visitService.finishVisiting(visitId);
-        }
-        oldMainActivity.removeFragment(QuestionnaireDetailFragment.this);
-        oldMainActivity.changeSidebarItem(parent);
+        closeQuestionnaire();
       });
       return view;
     } catch (Exception ex) {
@@ -127,6 +121,38 @@ public class QuestionnaireDetailFragment extends
       Log.e(TAG, ex.getMessage(), ex);
       return inflater.inflate(R.layout.view_error_page, null);
     }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+
+    if (getView() == null) {
+      return;
+    }
+
+    getView().setFocusableInTouchMode(true);
+    getView().requestFocus();
+    getView().setOnKeyListener((v, keyCode, event) ->
+    {
+
+      if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+        closeQuestionnaire();
+        return true;
+      }
+      return false;
+    });
+  }
+
+  private void closeQuestionnaire() {
+    if (Empty.isEmpty(customer) || parent == MainActivity.NEW_CUSTOMER_FRAGMENT_ID) {
+      //It's anonymous questionaire or New customer
+      //known bug, it he has not answered any quesiton, should remove the entire visit.
+      // List<VisitInformationDetail> detailList = visitService.searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
+      visitService.finishVisiting(visitId);
+    }
+    mainActivity.removeFragment(QuestionnaireDetailFragment.this);
+    mainActivity.changeSidebarItem(parent);
   }
 
   @Override

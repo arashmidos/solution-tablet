@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.app.Dialog;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
@@ -23,6 +25,7 @@ import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
@@ -123,14 +126,16 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
           ));
 
       VisitInformation visitInformations = null;
+      int detailSize = 0;
       try {
         visitInformations = visitService.getVisitInformationForNewCustomer(model.getPrimaryKey());
+        detailSize = visitService.getAllVisitDetailById(visitInformations.getId()).size();
       } catch (Exception ex) {
         Logger.sendError( "UI Exception",
             "Error in NCustomerListAdapter.getView " + ex.getMessage());
         ex.printStackTrace();
       }
-      if (visitInformations != null) {
+      if (visitInformations != null && detailSize > 0) {
         holder.researchBtn.setImageResource(R.drawable.ic_action_document_active);
       }
 
@@ -160,11 +165,17 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
         long visitId;
         if (finalVisitInformations == null) {
           visitId = visitService.startVisitingNewCustomer(model.getPrimaryKey());
+          visitService.finishVisiting(visitId);
+          Position customerPosition = new PositionServiceImpl(context).getLastPosition();
+
+          visitService.updateVisitLocation(visitId,
+              Empty.isNotEmpty(customerPosition) ? customerPosition.getLocation()
+                  : new Location("Dummy"));
         } else {
           visitId = finalVisitInformations.getId();
         }
         args.putLong(Constants.VISIT_ID, visitId);
-        args.putInt(Constants.PARENT, OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID);
+        args.putInt(Constants.PARENT, MainActivity.NEW_CUSTOMER_FRAGMENT_ID);
         //
 
         //if question count > 0 is each category so we should display it to user.
