@@ -14,11 +14,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.bumptech.glide.Glide;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Goods;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
@@ -32,11 +34,13 @@ import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFra
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by ShakibIsTheBest on 8/4/2017.
@@ -46,24 +50,25 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
 
   private static final String TAG = OrderFinalizeAdapter.class.getName();
   private final SaleOrderDto order;
-  private final GoodsDtoList rejectedGoodsList;
+  private final List<Goods> rejectedGoodsList;
   private final SaleOrderServiceImpl saleOrderService;
   private final FinalizeOrderDialogFragment parent;
+  private final GoodsDtoList goodsDtoList;
   private LayoutInflater inflater;
   private MainActivity mainActivity;
   private String pageStatus;
   private List<SaleOrderItemDto> orderItems;
 
   public OrderFinalizeAdapter(FinalizeOrderDialogFragment finalizeOrderDialogFragment,
-      MainActivity mainActivity, SaleOrderDto order,
-      GoodsDtoList rejectedGoodsList, String pageStatus) {
+      MainActivity mainActivity, SaleOrderDto order, GoodsDtoList goodsDtoList, String pageStatus) {
     this.parent = finalizeOrderDialogFragment;
     this.mainActivity = mainActivity;
     this.order = order;
     this.pageStatus = pageStatus;
     this.orderItems = order.getOrderItems();
     inflater = LayoutInflater.from(mainActivity);
-    this.rejectedGoodsList = rejectedGoodsList;
+    this.goodsDtoList = goodsDtoList;
+    this.rejectedGoodsList = Empty.isNotEmpty(goodsDtoList) ? goodsDtoList.getGoodsDtoList() : null;
     this.saleOrderService = new SaleOrderServiceImpl(mainActivity);
   }
 
@@ -76,7 +81,27 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     SaleOrderItemDto item = orderItems.get(position);
+    if (isRejected(order.getStatus())) {
+      item.setGoods(findGoods(item));
+    }
     holder.setData(item, position);
+  }
+
+  private boolean isRejected(Long orderStatus) {
+    return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
+  }
+
+  private Goods findGoods(SaleOrderItemDto item) {
+    Long goodsBackendId = item.getGoodsBackendId();
+    for (int i = 0; i < rejectedGoodsList.size(); i++) {
+      Goods goods = rejectedGoodsList.get(i);
+      if (goods.getBackendId().equals(goodsBackendId)) {
+        return goods;
+      }
+    }
+    return null;
   }
 
   @Override
@@ -122,6 +147,9 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
     }
 
     public void setData(SaleOrderItemDto item, int position) {
+      if (item.getGoods() == null) {
+        throw new IllegalArgumentException();
+      }
       Glide.with(mainActivity)
           .load(MediaUtil.getGoodImage(item.getGoods().getCode()))
           .error(R.drawable.goods_default)
@@ -165,10 +193,10 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
                 try {
                   saleOrderService.deleteOrderItem(item.getId(), isRejected(order.getStatus()));
 
-                  if (order.getStatus().equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
+                  if (isRejected(order.getStatus())) {
                     goods.setExisting(goods.getExisting() + item.getGoodsCount());
                     orderItems = saleOrderService
-                        .getLocalOrderItemDtoList(order.getId(), rejectedGoodsList);
+                        .getLocalOrderItemDtoList(order.getId(), goodsDtoList);
                   } else {
                     orderItems = saleOrderService.getOrderItemDtoList(order.getId());
                   }
@@ -180,7 +208,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
                   Log.e(TAG, ex.getMessage(), ex);
                   ToastUtil.toastError(mainActivity, ex);
                 } catch (Exception ex) {
-                  Crashlytics.log(Log.ERROR, "Data Storage Exception",
+                  Logger.sendError("Data Storage Exception",
                       "Error in deleting order items " + ex.getMessage());
                   Log.e(TAG, ex.getMessage(), ex);
                   ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
@@ -200,11 +228,10 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
 
     private void editItem() {
 
-      AddOrderDialogFragment addOrderDialogFragment = null;
-      AddOrderBottomSheet addOrderBottomSheet = null;
+      AddOrderDialogFragment addOrderDialogFragment;
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
       if (MultiScreenUtility.isTablet(mainActivity)) {
-        addOrderBottomSheet = AddOrderBottomSheet.newInstance();
+        addOrderDialogFragment = AddOrderBottomSheet.newInstance();
       } else {
         addOrderDialogFragment = AddOrderDialogFragment.newInstance();
       }
@@ -212,7 +239,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       bundle.putLong(Constants.GOODS_BACKEND_ID, goods.getBackendId());
       Double count = Double.valueOf(item.getGoodsCount()) / 1000D;
       bundle.putLong(Constants.ORDER_STATUS, order.getStatus());
-      bundle.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+      bundle.putSerializable(Constants.REJECTED_LIST, goodsDtoList);
       Long defaultUnit = item.getSelectedUnit();
       if (Empty.isNotEmpty(defaultUnit)) {
         bundle.putLong(Constants.SELECTED_UNIT, defaultUnit);
@@ -224,20 +251,12 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       bundle.putDouble(Constants.COUNT, count);
 //      bundle.putLong(Constants.GOODS_INVOICE_ID, invoiceBackendId);
 
-      if (MultiScreenUtility.isTablet(mainActivity)) {
-        addOrderBottomSheet.setArguments(bundle);
-        addOrderBottomSheet.setOnClickListener((goodsCount, selectedUnit) -> {
-          handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
-        });
-        addOrderBottomSheet.show(mainActivity.getSupportFragmentManager(), "order");
-      } else {
-        addOrderDialogFragment.setArguments(bundle);
-        addOrderDialogFragment.setOnClickListener((goodsCount, selectedUnit) -> {
-          handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
-        });
+      addOrderDialogFragment.setArguments(bundle);
+      addOrderDialogFragment.setOnClickListener((goodsCount, selectedUnit) -> {
+        handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
+      });
 
-        addOrderDialogFragment.show(ft, "order");
-      }
+      addOrderDialogFragment.show(ft, "order");
     }
 
     private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItemDto item,
@@ -251,8 +270,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         order.setAmount(orderAmount);
 
         if (order.getStatus().equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
-          orderItems = saleOrderService
-              .getLocalOrderItemDtoList(order.getId(), rejectedGoodsList);
+          orderItems = saleOrderService.getLocalOrderItemDtoList(order.getId(), goodsDtoList);
         } else {
           orderItems = saleOrderService.getOrderItemDtoList(order.getId());
         }
@@ -261,11 +279,15 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         setData(item, position);
         notifyItemChanged(position);
         parent.updateList();
+        EventBus.getDefault().post(new SuccessEvent(StatusCodes.SUCCESS));
       } catch (BusinessException ex) {
+        EventBus.getDefault()
+            .post(new ErrorEvent(mainActivity.getString(R.string.exceed_count_exception),
+                StatusCodes.DATA_STORE_ERROR));
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(mainActivity, ex);
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data storage Exception",
+        Logger.sendError("Data storage Exception",
             "Error in confirming GoodsList " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));

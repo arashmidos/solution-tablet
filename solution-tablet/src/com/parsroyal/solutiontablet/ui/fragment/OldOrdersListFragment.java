@@ -38,10 +38,10 @@ import org.greenrobot.eventbus.Subscribe;
 /**
  * Created by Mahyar on 8/25/2015.
  */
-public class OrdersListFragment extends
+public class OldOrdersListFragment extends
     BaseListFragment<SaleOrderListModel, SaleOrderListAdapter> implements ResultObserver {
 
-  private static final String TAG = OrdersListFragment.class.getSimpleName();
+  private static final String TAG = OldOrdersListFragment.class.getSimpleName();
 
   private OldMainActivity context;
   private SaleOrderSO saleOrderSO;
@@ -236,7 +236,7 @@ public class OrdersListFragment extends
       try {
         DataTransferService dataTransferService = new DataTransferServiceImpl(getActivity());
         GoodsDtoList rejectedGoodsList = null;/*dataTransferService
-            .getRejectedData(OrdersListFragment.this, customerBackendId);*/
+            .getRejectedData(OldOrdersListFragment.this, customerBackendId);*/
         //TODO ARASH Implement it for new ui
         if (rejectedGoodsList != null) {
           final Bundle args = new Bundle();

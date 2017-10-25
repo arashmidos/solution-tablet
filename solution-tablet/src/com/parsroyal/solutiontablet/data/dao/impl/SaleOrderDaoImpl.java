@@ -25,9 +25,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Mahyar on 8/21/2015.
@@ -201,8 +199,6 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
-    //Temporary solution to get unique result
-    Set<SaleOrderListModel> orders = new HashSet<>();
     List<SaleOrderListModel> returnOrders = new ArrayList<>();
     List<String> argsList = new ArrayList<>();
     String sql = "SELECT " +
@@ -211,10 +207,11 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         "o." + SaleOrder.COL_DATE + "," +
         "o." + SaleOrder.COL_AMOUNT + "," +
         "o." + SaleOrder.COL_STATUS + "," +
-        "c." + Customer.COL_FULL_NAME + "," +
+        "c." + Customer.COL_FULL_NAME + "," +//5
         "i." + BaseInfo.COL_TITLE + "," +
         "c." + Customer.COL_BACKEND_ID + "," +
-        "o." + SaleOrder.COL_CREATE_DATE_TIME +
+        "o." + SaleOrder.COL_CREATE_DATE_TIME + "," +
+        "o." + SaleOrder.COL_DESCRIPTION +
         " FROM " + SaleOrder.TABLE_NAME + " o " +
         " INNER JOIN " + Customer.TABLE_NAME + " c on c." + Customer.COL_BACKEND_ID + " = o."
         + SaleOrder.COL_CUSTOMER_BACKEND_ID +
@@ -223,21 +220,37 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         + " AND i." + BaseInfo.COL_TYPE + " = " + BaseInfoTypes.PAYMENT_TYPE.getId()
         + " WHERE 1 = 1 ";
 
-    if (Empty.isNotEmpty(saleOrderSO) && Empty.isNotEmpty(saleOrderSO.getStatusId())) {
-      sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_STATUS + " = ?");
-      argsList.add(String.valueOf(saleOrderSO.getStatusId()));
-    }
+    if (Empty.isNotEmpty(saleOrderSO)) {
+      Long statusId = saleOrderSO.getStatusId();
+      if (Empty.isNotEmpty(statusId)) {
 
-    if (Empty.isNotEmpty(saleOrderSO) && Empty.isNotEmpty(saleOrderSO.getCustomerBackendId())) {
-      sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_CUSTOMER_BACKEND_ID + " = ?");
-      argsList.add(String.valueOf(saleOrderSO.getCustomerBackendId()));
-    }
+        if (statusId.equals(SaleOrderStatus.READY_TO_SEND.getId())) {
+          sql = sql.concat(" ").concat(
+              " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
+          argsList.add(String.valueOf(statusId));
+          argsList.add(String.valueOf(SaleOrderStatus.SENT.getId()));
+        } else if (statusId.equals(SaleOrderStatus.REJECTED.getId())) {
+          sql = sql.concat(" ").concat(
+              " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
+          argsList.add(String.valueOf(statusId));
+          argsList.add(String.valueOf(SaleOrderStatus.REJECTED_SENT.getId()));
+        } else {
+          sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_STATUS + " = ?");
+          argsList.add(String.valueOf(statusId));
+        }
+      }
 
-    if (Empty.isNotEmpty(saleOrderSO) && saleOrderSO.isIgnoreDraft()) {
-      sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_STATUS + " != ?")
-          .concat(" AND o." + SaleOrder.COL_STATUS + " != ?");
-      argsList.add(String.valueOf(SaleOrderStatus.DRAFT.getId()));
-      argsList.add(String.valueOf(SaleOrderStatus.REJECTED_DRAFT.getId()));
+      if (Empty.isNotEmpty(saleOrderSO.getCustomerBackendId())) {
+        sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_CUSTOMER_BACKEND_ID + " = ?");
+        argsList.add(String.valueOf(saleOrderSO.getCustomerBackendId()));
+      }
+
+      if (saleOrderSO.isIgnoreDraft()) {
+        sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_STATUS + " != ?")
+            .concat(" AND o." + SaleOrder.COL_STATUS + " != ?");
+        argsList.add(String.valueOf(SaleOrderStatus.DRAFT.getId()));
+        argsList.add(String.valueOf(SaleOrderStatus.REJECTED_DRAFT.getId()));
+      }
     }
 
     String[] args = {};
@@ -254,11 +267,11 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       order.setPaymentTypeTitle(cursor.getString(6));
       order.setCustomerBackendId(cursor.getLong(7));
       order.setCreatedDateTime(cursor.getString(8));
-      orders.add(order);
+      order.setDescription(cursor.getString(9));
+      returnOrders.add(order);
     }
 
     cursor.close();
-    returnOrders.addAll(orders);
     return returnOrders;
   }
 

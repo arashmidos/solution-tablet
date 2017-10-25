@@ -9,11 +9,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.component.TabContainer;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 
 /**
@@ -42,7 +42,7 @@ public class TrackingBaseFragment extends BaseFragment {
 
       return view;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating TrackingBaseFragment " + e.getMessage());
+      Logger.sendError("UI Exception", "Error in creating TrackingBaseFragment " + e.getMessage());
 
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));

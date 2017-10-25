@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
@@ -14,6 +13,7 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -52,7 +52,7 @@ public class VisitInformationDataTransferBizImpl extends
         }
 
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving VisitInformationData " + ex.getMessage());
+        Logger.sendError("Data transfer","Error in receiving VisitInformationData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
         observer.publishResult(
             context.getString(R.string.message_exception_in_sending_visit_information));

@@ -1,7 +1,10 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,20 +12,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.Goods;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
@@ -32,6 +40,7 @@ import com.parsroyal.solutiontablet.ui.adapter.GoodImagePagerAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.DepthPageTransformer;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -39,89 +48,110 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import me.relex.circleindicator.CircleIndicator;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * @author Shakib
  */
 public class AddOrderDialogFragment extends DialogFragment {
 
+  public final String TAG = AddOrderDialogFragment.class.getSimpleName();
   @BindView(R.id.pager)
-  ViewPager viewPager;
+  protected ViewPager viewPager;
   @BindView(R.id.indicator)
-  CircleIndicator indicator;
+  protected CircleIndicator indicator;
   @BindView(R.id.spinner)
-  Spinner spinner;
+  protected Spinner spinner;
   @BindView(R.id.good_name_tv)
-  TextView goodNameTv;
+  protected TextView goodNameTv;
   @BindView(R.id.count_tv)
-  EditText countTv;
+  protected EditText countTv;
   @BindView(R.id.good_code_tv)
-  TextView goodCodeTv;
+  protected TextView goodCodeTv;
   @BindView(R.id.good_price_tv)
-  TextView goodPriceTv;
+  protected TextView goodPriceTv;
   @BindView(R.id.unit1_count_tv)
-  TextView unit1CountTv;
+  protected TextView unit1CountTv;
   @BindView(R.id.unit1_title_tv)
-  TextView unit1TitleTv;
+  protected TextView unit1TitleTv;
   @BindView(R.id.unit2_count_tv)
-  TextView unit2CountTv;
+  protected TextView unit2CountTv;
   @BindView(R.id.unit2_title_tv)
-  TextView unit2TitleTv;
+  protected TextView unit2TitleTv;
   @BindView(R.id.cost_detail_lay)
-  LinearLayout costDetailLay;
+  protected LinearLayout costDetailLay;
   @BindView(R.id.coefficient_tv)
-  TextView coefficientTv;
+  protected TextView coefficientTv;
   @BindView(R.id.each_Carton_tv)
-  TextView eachCartonTv;
+  protected TextView eachCartonTv;
   @BindView(R.id.total_price_tv)
-  TextView totalPriceTv;
+  protected TextView totalPriceTv;
   @BindView(R.id.error_msg)
-  TextView errorMsg;
+  protected TextView errorMsg;
   @BindView(R.id.view_pager_position_tv)
-  TextView viewPagerPositionTv;
+  protected TextView viewPagerPositionTv;
+  @BindView(R.id.toolbar_title)
+  protected TextView toolbarText;
+  @BindView(R.id.add_order_btn_text)
+  protected TextView addButtonText;
+  @BindView(R.id.bottom_bar)
+  protected RelativeLayout bottomLayout;
+  @BindView(R.id.register_order_image)
+  protected ImageView registerButtonImage;
+  @BindView(R.id.order_count_tv)
+  protected TextView orderCountTv;
 
-  private GoodsDialogOnClickListener onClickListener;
-  private Long goodsBackendId;
-  private long orderStatus;
-  private long goodsInvoiceId;
-  private GoodsDtoList rejectedGoodsList;
-  private MainActivity mainActivity;
-  private GoodsServiceImpl goodsService;
-  private SettingServiceImpl settingService;
-  private String saleType;
-  private Double count;
-  private Long selectedUnit;
-  private boolean saleRateEnabled;
-  private Goods selectedGoods;
-  private Long unit1Count;
-  private String unit1Title;
-  private String unit2Title;
-  private Long saleRate;
+  protected GoodsDialogOnClickListener onClickListener;
+  protected Long goodsBackendId;
+  protected Long orderStatus;
+  protected long goodsInvoiceId;
+  protected GoodsDtoList rejectedGoodsList;
+  protected MainActivity mainActivity;
+  protected GoodsServiceImpl goodsService;
+  protected SettingServiceImpl settingService;
+  protected String saleType;
+  protected Double count;
+  protected Long selectedUnit;
+  protected boolean saleRateEnabled;
+  protected Goods selectedGoods;
+  protected Long unit1Count;
+  protected String unit1Title;
+  protected String unit2Title;
+  protected Long saleRate;
 
   public AddOrderDialogFragment() {
     // Required empty public constructor
   }
 
-
   public static AddOrderDialogFragment newInstance() {
     return new AddOrderDialogFragment();
   }
 
-  public void setOnClickListener(GoodsDialogOnClickListener onClickListener) {
+  public void setOnClickListener(
+      AddOrderDialogFragment.GoodsDialogOnClickListener onClickListener) {
     this.onClickListener = onClickListener;
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
+  public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
+
+    if (!getTAG().contains("Sheet")) {
+      setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
+    }
+  }
+
+  protected String getTAG() {
+    return TAG;
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
+
     // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.fragment_add_order_dialog, container, false);
+    View view = inflater.inflate(getLayout(), container, false);
     ButterKnife.bind(this, view);
     this.mainActivity = (MainActivity) getActivity();
     Bundle arguments = getArguments();
@@ -137,7 +167,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     saleRateEnabled = Boolean
         .valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE));
 
-    if (orderStatus == SaleOrderStatus.REJECTED_DRAFT.getId()) {
+    if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
       rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
       goodsInvoiceId = arguments.getLong(Constants.GOODS_INVOICE_ID);
       selectedGoods = getGoodFromLocal();
@@ -153,11 +183,15 @@ public class AddOrderDialogFragment extends DialogFragment {
     setData();
     setListeners();
     setUpSpinner();
-    fillLeftPanel();
+    fillDetailPanel();
     return view;
   }
 
-  private void fillLeftPanel() {
+  protected int getLayout() {
+    return R.layout.fragment_add_order_dialog;
+  }
+
+  protected void fillDetailPanel() {
     String input = countTv.getText().toString();
     if (Empty.isNotEmpty(input)) {
       try {
@@ -176,45 +210,45 @@ public class AddOrderDialogFragment extends DialogFragment {
           totalPriceTv.setText(String.format(Locale.US, "%,d %s", total, getString(
               R.string.common_irr_currency)));
         } else {
-          clearLeftPanel();
+          clearDetailPanel();
         }
       } catch (Exception ex) {
         ex.printStackTrace();
-        Crashlytics.log(Log.ERROR, "GoodDetails Left Panel", ex.getMessage());
-        clearLeftPanel();
+        Logger.sendError("GoodDetails Detail Panel", ex.getMessage());
+        clearDetailPanel();
       }
     } else {
-      clearLeftPanel();
+      clearDetailPanel();
     }
   }
 
-  private boolean shouldApplySaleRate(String countValue, int currentUnit) {
+  protected boolean shouldApplySaleRate(String countValue, int currentUnit) {
     return hasSaleRate(currentUnit)
         && Double.valueOf(countValue) % saleRate != 0.0;
   }
 
-  private boolean hasSaleRate(int currentUnit) {
+  protected boolean hasSaleRate(int currentUnit) {
     if (!saleRateEnabled || currentUnit != 0) {
       return false;
     }
     if (saleType.equals(ApplicationKeys.SALE_COLD)) {
 
-      if (orderStatus == SaleOrderStatus.DRAFT.getId()
-          || orderStatus == SaleOrderStatus.READY_TO_SEND.getId()) {
+      if (orderStatus.equals(SaleOrderStatus.DRAFT.getId())
+          || orderStatus.equals(SaleOrderStatus.READY_TO_SEND.getId())) {
         return true;
       }
     }
     return false;
   }
 
-  private void clearLeftPanel() {
+  protected void clearDetailPanel() {
     unit1CountTv.setText("0");
     unit2CountTv.setText("0");
     totalPriceTv.setText(String.format(Locale.US, "%,d %s", 0, getString(
         R.string.common_irr_currency)));
   }
 
-  private void setListeners() {
+  protected void setListeners() {
     countTv.addTextChangedListener(new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -226,7 +260,8 @@ public class AddOrderDialogFragment extends DialogFragment {
 
       @Override
       public void afterTextChanged(Editable s) {
-        fillLeftPanel();
+        //TODO why this method change the size of screen?
+        fillDetailPanel();
         errorMsg.setVisibility(View.GONE);
       }
     });
@@ -234,7 +269,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        fillLeftPanel();
+        fillDetailPanel();
       }
 
       @Override
@@ -243,7 +278,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     });
   }
 
-  private void setData() {
+  protected void setData() {
     goodNameTv.setText(selectedGoods.getTitle());
     if (Empty.isNotEmpty(count) && !count.equals(0.0D)) {
       if (count == count.longValue()) {
@@ -260,20 +295,37 @@ public class AddOrderDialogFragment extends DialogFragment {
         R.string.common_irr_currency)));
     unit1TitleTv.setText(unit1Title);
     unit2TitleTv.setText(unit2Title);
-    unit1CountTv.setText("0");
-    unit2CountTv.setText("0");
-    totalPriceTv.setText(String.format(Locale.US, "%,d %s", 0, getString(
-        R.string.common_irr_currency)));
+    clearDetailPanel();
 
     if (saleRateEnabled) {
-      coefficientTv.setText(String.format("ضریب فروش: %s %s", saleRate, unit1Title));
+      coefficientTv.setText(
+          Empty.isNotEmpty(saleRate) ? String.format("ضریب فروش: %s %s", saleRate, unit1Title)
+              : getString(R.string.no_sale_rate));
       eachCartonTv.setText(String.format("هر %s = %s %s", unit2Title, unit1Count, unit1Title));
     } else {
       costDetailLay.setVisibility(View.GONE);
     }
+
+    if (isRejected()) {
+      toolbarText.setText(R.string.add_to_return_goods);
+      addButtonText.setText(R.string.register_return);
+      bottomLayout
+          .setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
+      registerButtonImage.setImageResource(R.drawable.ic_check_white_18_dp);
+      orderCountTv.setText(R.string.return_count);
+    }
   }
 
-  private Goods getGoodFromLocal() {
+  /*
+  @return true if it's one of the REJECTED states
+ */
+  protected boolean isRejected() {
+    return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
+  }
+
+  protected Goods getGoodFromLocal() {
     List<Goods> goods = rejectedGoodsList.getGoodsDtoList();
     for (int i = 0; i < goods.size(); i++) {
       Goods good = goods.get(i);
@@ -284,7 +336,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     return null;
   }
 
-  private void setUpSpinner() {
+  protected void setUpSpinner() {
     List<LabelValue> unitsList = new ArrayList<>();
     unitsList.add(new LabelValue(1L, unit1Title));
     if (Empty.isNotEmpty(unit2Title)) {
@@ -301,7 +353,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     }
   }
 
-  private void setUpPager() {
+  protected void setUpPager() {
     List<String> pathes = new ArrayList<>();
     pathes.add(MediaUtil.getGoodImage(selectedGoods.getCode()));
     final GoodImagePagerAdapter adapter = new GoodImagePagerAdapter(
@@ -328,7 +380,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     });
   }
 
-  private boolean validate() {
+  protected boolean validate() {
     String countValue = NumberUtil.digitsToEnglish(countTv.getText().toString());
 
     if (Empty.isEmpty(countValue) || Double.valueOf(countValue).equals(0D)) {
@@ -356,26 +408,45 @@ public class AddOrderDialogFragment extends DialogFragment {
         getDialog().dismiss();
         break;
       case R.id.register_order_btn:
-        if (Empty.isNotEmpty(onClickListener)) {
-          if (validate()) {
-            Double count1 = Double
-                .valueOf(NumberUtil.digitsToEnglish(countTv.getText().toString()));
-            LabelValue selectedUnitLv = (LabelValue) spinner.getSelectedItem();
-            Long selectedUnit1 = selectedUnitLv.getValue();
-            if (selectedUnit1.equals(2L)) {
-              count1 *= Double.valueOf(unit1Count);
-            }
-            onClickListener.onConfirmBtnClicked(count1, selectedUnit1);
-            AddOrderDialogFragment.this.dismiss();
+        if (Empty.isNotEmpty(onClickListener) && validate()) {
+
+          Double count1 = Double
+              .valueOf(NumberUtil.digitsToEnglish(countTv.getText().toString()));
+          LabelValue selectedUnitLv = (LabelValue) spinner.getSelectedItem();
+          Long selectedUnit1 = selectedUnitLv.getValue();
+          if (selectedUnit1.equals(2L)) {
+            count1 *= Double.valueOf(unit1Count);
           }
+          onClickListener.onConfirmBtnClicked(count1, selectedUnit1);
         }
         break;
     }
   }
 
   @Override
-  public void onDestroyView() {
-    super.onDestroyView();
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof ErrorEvent) {
+      errorMsg.setText(event.getMessage());
+      errorMsg.setVisibility(View.VISIBLE);
+      InputMethodManager imm = (InputMethodManager) mainActivity
+          .getSystemService(Context.INPUT_METHOD_SERVICE);
+      imm.hideSoftInputFromWindow(countTv.getWindowToken(), 0);
+
+    } else if (event instanceof SuccessEvent) {
+      AddOrderDialogFragment.this.dismiss();
+    }
   }
 
   public interface GoodsDialogOnClickListener {

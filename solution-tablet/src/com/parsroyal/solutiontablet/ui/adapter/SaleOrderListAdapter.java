@@ -18,6 +18,7 @@ import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
@@ -123,8 +124,8 @@ public class SaleOrderListAdapter extends BaseListAdapter<SaleOrderListModel> {
 
       return convertView;
     } catch (final Exception e) {
-      Crashlytics.log(Log.ERROR, "Unknown exception",
-          "Error in SaleOrderListAdapter.getView" + e.getMessage());
+      Logger
+          .sendError("Unknown exception", "Error in SaleOrderListAdapter.getView" + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       context.runOnUiThread(() -> ToastUtil.toastError(context, new UnknownSystemException(e)));
       return null;

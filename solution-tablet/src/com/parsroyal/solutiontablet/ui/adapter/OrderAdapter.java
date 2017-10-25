@@ -19,13 +19,13 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.LongSummaryStatistics;
 
 /**
  * Created by ShakibIsTheBest on 8/27/2017.
@@ -33,6 +33,7 @@ import java.util.LongSummaryStatistics;
 
 public class OrderAdapter extends Adapter<ViewHolder> {
 
+  private final SaleOrderServiceImpl saleOrderService;
   private LayoutInflater inflater;
   private Context context;
   private boolean isFromOrder;
@@ -52,12 +53,14 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     this.isFromOrder = isFromOrder;
     this.status = status;
     inflater = LayoutInflater.from(context);
+    saleOrderService = new SaleOrderServiceImpl(mainActivity);
+
   }
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view;
-    if (status.equals(SaleOrderStatus.REJECTED.getId())) {
+    if (isRejected()) {
       view = inflater.inflate(R.layout.item_return_list, parent, false);
     } else if (isFromOrder) {
       view = inflater.inflate(R.layout.item_order_report_list, parent, false);
@@ -67,10 +70,16 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     return new ViewHolder(view);
   }
 
+  protected boolean isRejected() {
+    return (status.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
+        status.equals(SaleOrderStatus.REJECTED.getId()) ||
+        status.equals(SaleOrderStatus.REJECTED_SENT.getId()));
+  }
+
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     SaleOrderListModel order = orders.get(position);
-    if (status.equals(SaleOrderStatus.REJECTED.getId())) {
+    if (isRejected()) {
       holder.setReturnData(position, order);
     } else {
       holder.setOrderData(position, order);
@@ -138,9 +147,10 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-      //TODO:SHAKIB
-//      deleteImg.setOnClickListener(this);
-//      editImg.setOnClickListener(this);
+      if (deleteImg != null) {
+        deleteImg.setOnClickListener(this);
+        editImg.setOnClickListener(this);
+      }
       if (mainLayLin != null) {
         mainLayLin.setOnClickListener(this);
       } else if (mainLayRel != null) {
@@ -156,12 +166,8 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       }
       String orderCode = "کد سفارش : " + String.valueOf(order.getId());
       orderCodeTv.setText(orderCode);
-      orderCountTv.setText("--");
-      /*Date createDate = DateUtil
-          .convertStringToDate(order.getCreatedDateTime(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
-              "FA");
-      String dateString = DateUtil.getFullPersianDate(createDate);*/
-      //96/7/5
+      orderCountTv.setText("--");//TODO: Add order items count
+
       Date createdDate = DateUtil
           .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
@@ -172,14 +178,17 @@ public class OrderAdapter extends Adapter<ViewHolder> {
               R.string.common_irr_currency));
       orderTotalPrice.setText(number);
       orderPaymentMethodTv.setText(order.getPaymentTypeTitle());
+      if (order.getStatus().equals(SaleOrderStatus.SENT)) {
+        editImg.setVisibility(View.GONE);
+        deleteImg.setVisibility(View.GONE);
+      }
     }
 
     public void setReturnData(int position, SaleOrderListModel order) {
-      //TODO:set return data here
       this.position = position;
       this.order = order;
-      String returnCode = "کد مرجوعی : " + String.valueOf(order.getId());
-      returnCountTv.setText("--");
+
+      returnCountTv.setText("--");//TODO: Add Return items count
       Date createdDate = DateUtil
           .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
@@ -189,18 +198,22 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
               R.string.common_irr_currency));
       totalAmountTv.setText(number);
-      returnReasonTv.setText("فرا رسیدن میلاد با سعادت انقضای محصول");
+      returnReasonTv.setText(order.getDescription());
+      if (order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId())) {
+        editImg.setVisibility(View.GONE);
+        deleteImg.setVisibility(View.GONE);
+      }
     }
 
     @Override
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.delete_img:
-          //TODO:DELET ACTION
+          saleOrderService.deleteOrder(order.getId());
+          orders.remove(position);
+          notifyDataSetChanged();
           break;
         case R.id.edit_img:
-          //TODO:EDIT ACTION
-          break;
         case R.id.main_lay_linear:
         case R.id.main_lay:
           Bundle args = new Bundle();

@@ -13,8 +13,6 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
-import com.parsroyal.solutiontablet.constants.StatusCodes;
-import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
@@ -23,9 +21,11 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
 
-public class NewOrderListFragment extends BaseFragment {
+/**
+ * @author arash
+ */
+public class OrderListFragment extends BaseFragment {
 
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
@@ -37,21 +37,19 @@ public class NewOrderListFragment extends BaseFragment {
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
   private SaleOrderSO saleOrderSO = new SaleOrderSO();
-  private NewVisitDetailFragment parent;
+  private VisitDetailFragment parent;
   private SettingServiceImpl settingService;
   private String saleType;
 
-  public NewOrderListFragment() {
+  public OrderListFragment() {
     // Required empty public constructor
   }
 
-
-  public static NewOrderListFragment newInstance(Bundle arguments,
-      NewVisitDetailFragment newVisitDetailFragment) {
-    NewOrderListFragment newOrderListFragment = new NewOrderListFragment();
-    newOrderListFragment.parent = newVisitDetailFragment;
-    newOrderListFragment.setArguments(arguments);
-    return newOrderListFragment;
+  public static OrderListFragment newInstance(Bundle arguments, VisitDetailFragment parent) {
+    OrderListFragment orderListFragment = new OrderListFragment();
+    orderListFragment.parent = parent;
+    orderListFragment.setArguments(arguments);
+    return orderListFragment;
   }
 
   @Override
@@ -62,7 +60,7 @@ public class NewOrderListFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     ButterKnife.bind(this, view);
     Bundle args = getArguments();
-    this.saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    saleOrderService = new SaleOrderServiceImpl(mainActivity);
     settingService = new SettingServiceImpl(mainActivity);
 
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
@@ -102,6 +100,7 @@ public class NewOrderListFragment extends BaseFragment {
       saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
     }
     saleOrderSO.setIgnoreDraft(true);
+    saleOrderSO.setStatusId(SaleOrderStatus.READY_TO_SEND.getId());
     return saleOrderService.findOrders(saleOrderSO);
   }
 
@@ -112,6 +111,6 @@ public class NewOrderListFragment extends BaseFragment {
 
   @OnClick(R.id.fab_add_order)
   public void onClick() {
-    EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_ADD_ORDER));
+    parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
   }
 }

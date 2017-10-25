@@ -1,6 +1,9 @@
 package com.parsroyal.solutiontablet.util;
 
 import android.os.Environment;
+import android.util.Log;
+import com.crashlytics.android.Crashlytics;
+import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,6 +39,12 @@ public class Logger {
       writer.close();
     } catch (Exception ex) {
       ex.printStackTrace();
+    }
+  }
+
+  public static void sendError(String page, String exception) {
+    if (!BuildConfig.DEBUG) {
+      Logger.sendError( page, exception);
     }
   }
 }

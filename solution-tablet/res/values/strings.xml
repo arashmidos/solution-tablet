@@ -49,6 +49,7 @@
   <string name="com.parsroyal.solutiontablet.exception.SalesmanIdNotProvidedForConnectingToServerException">سریال بازاریاب برای ارسال به سرور یافت نشد.</string>
   <string name="com.parsroyal.solutiontablet.exception.SaleOrderNotFoundException">سفارش مورد نظر یافت نشد.</string>
   <string name="com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingException">تعداد یا مقدار وارد شده بیش از موجودی می باشد</string>
+  <string name="exceed_count_exception">تعداد یا مقدار وارد شده بیش از موجودی می باشد</string>
   <string name="com.parsroyal.solutiontablet.exception.UserNotAuthorizedException">نام کاربری یا رمز عبور اشتباه است</string>
 
   <string name="send_data">ارسال اطلاعات</string>
@@ -440,12 +441,12 @@
   <string name="show_more">مشاهده بیشتر</string>
   <string name="show_less">مشاهده کمتر</string>
   <string name="search_goods_hint">جستجو در کالا ها...</string>
-  <string name="order_goods">کالاهای سفارشات</string>
+  <string name="order_goods">کالاهای سفارش</string>
   <string name="no_good">متاسفانه کالایی یافت نشد!</string>
   <string name="add_to_order">افزودن به کالا های سفارش</string>
   <string name="order_count">مقدار سفارش :</string>
   <string name="number">عدد</string>
-  <string name="enter_count_amount">تعداد یا مقدار کالا راوارد نمایید</string>
+  <string name="enter_count_amount">تعداد یا مقدار کالا</string>
   <string name="carton">کارتن</string>
   <string name="total">جمع کل</string>
   <string name="none_added_successfully">ثبت عدم انجام شد.</string>
@@ -462,8 +463,8 @@
   <string name="images">تصاویر</string>
   <string name="amount">قیمت واحد:</string>
   <string name="total_amount">جمع کل:</string>
-  <string name="order_good">کالاهای سفارش</string>
   <string name="finalize_order">نهایی کردن سفارشات</string>
+  <string name="finalize_return">نهایی کردن مرجوعی</string>
   <string name="orders_total_amount">جمع کل سفارشات</string>
   <string name="e_payment">پرداخت الکترونیکی</string>
   <string name="cheque">چک</string>
@@ -539,4 +540,13 @@
   <string name="enter_answer_here">پاسخ را در اینجا وارد نمایید</string>
   <string name="choose_date">انتخاب تاریخ...</string>
   <string name="anonymous_questionnaire">پرسشنامه های فرعی</string>
+  <string name="title_reject_list">فهرست کالا های قابل مرجوع</string>
+  <string name="reject_goods">کالاهای مرجوعی</string>
+  <string name="add_to_return_goods">افزودن به کالاهای مرجوعی</string>
+  <string name="no_sale_rate">ضریب فروش ندارد</string>
+  <string name="return_count">مقدار مرجوعی</string>
+  <string name="amount_to_return">مبلغ قابل بازگشت:</string>
+  <string name="return_info">اطلاعات مرجوع کالا</string>
+  <string name="select_reason_to_return">انتخاب دلیل مرجوع کالا</string>
+  <string name="reason_to_return">دلیل مرجوع کالا</string>
 </resources>

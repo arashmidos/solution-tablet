@@ -1,11 +1,9 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.QuestionType;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
@@ -15,6 +13,7 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
@@ -82,7 +81,7 @@ public class QuestionListAdapter extends BaseListAdapter<QuestionListModel> {
       return convertView;
 
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in BqUESTIONListAdapter.getView " + ex.getMessage());
+      Logger.sendError("UI Exception", "Error in BqUESTIONListAdapter.getView " + ex.getMessage());
       ToastUtil.toastError(context, new UnknownSystemException(ex));
       return null;
     }

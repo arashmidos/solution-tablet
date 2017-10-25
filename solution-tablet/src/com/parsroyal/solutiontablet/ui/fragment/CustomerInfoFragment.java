@@ -19,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -29,18 +28,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikepenz.crossfader.util.UIUtils;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.impl.RejectedGoodsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Customer;
-import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
-import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
-import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
-import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
@@ -49,12 +43,9 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.DialogUtil;
-import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
-import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
-import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -117,8 +108,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   private String saleType;
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
-  private NewVisitDetailFragment parent;
-  private SaleOrderDto orderDto;
+  private VisitDetailFragment parent;
   private boolean expandedMap = false;
 
 
@@ -127,20 +117,11 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   }
 
   public static CustomerInfoFragment newInstance(Bundle arguments,
-      NewVisitDetailFragment newVisitDetailFragment) {
+      VisitDetailFragment visitDetailFragment) {
     CustomerInfoFragment fragment = new CustomerInfoFragment();
     fragment.setArguments(arguments);
-    fragment.parent = newVisitDetailFragment;
+    fragment.parent = visitDetailFragment;
     return fragment;
-  }
-
-  private static void setMapLocation(GoogleMap map, LatLng data) {
-    // Add a marker for this item and set the camera
-    map.moveCamera(CameraUpdateFactory.newLatLngZoom(data, 15f));
-    map.addMarker(new MarkerOptions().position(data));
-
-    // Set the map type back to normal.
-    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
   }
 
   @Override
@@ -160,7 +141,6 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     locationService = new LocationServiceImpl(mainActivity);
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
 
-//    customer = customerService.getCustomerDtoById(customerId);
     customer = customerService.getCustomerById(customerId);
 
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
@@ -168,6 +148,16 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     setData();
 
     return view;
+  }
+
+
+  private static void setMapLocation(GoogleMap map, LatLng data) {
+    // Add a marker for this item and set the camera
+    map.moveCamera(CameraUpdateFactory.newLatLngZoom(data, 15f));
+    map.addMarker(new MarkerOptions().position(data));
+
+    // Set the map type back to normal.
+    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
   }
 
   @Override
@@ -243,10 +233,10 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_return_lay:
-        openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
+        parent.openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
         break;
       case R.id.register_order_lay:
-        openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+        parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
         break;
       case R.id.register_location_btn:
         mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, getArguments(), true);
@@ -315,71 +305,11 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     isShowMore = !isShowMore;
   }
 
-  private SaleOrderDto createDraftOrder(Customer customer, Long statusID) {
-    try {
-      SaleOrderDto orderDto = new SaleOrderDto(statusID, customer);
-      Long id = saleOrderService.saveOrder(orderDto);
-      orderDto.setId(id);
-      return orderDto;
-    } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
-          "Error in creating draft order " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
-      ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
-    }
-    return null;
-  }
-
-  /**
-   * @param statusID Could be DRAFT for both AddInvoice/AddOrder or REJECTED_DRAFT for
-   * ReturnedOrder
-   */
-  private void openOrderDetailFragment(Long statusID) {
-
-    orderDto = saleOrderService
-        .findOrderDtoByCustomerBackendIdAndStatus(customer.getBackendId(), statusID);
-    if (Empty.isEmpty(orderDto) || statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
-      orderDto = createDraftOrder(customer, statusID);
-    }
-
-    if (Empty.isNotEmpty(orderDto) && Empty.isNotEmpty(orderDto.getId())) {
-      if (statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
-        invokeGetRejectedData();
-      } else {
-        Bundle args = new Bundle();
-        args.putLong(Constants.ORDER_ID, orderDto.getId());
-        args.putString(Constants.SALE_TYPE, saleType);
-        args.putLong(Constants.VISIT_ID, visitId);
-        args.putBoolean(Constants.READ_ONLY, false);
-        args.putString(Constants.PAGE_STATUS, Constants.NEW);
-        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
-      }
-
-    } else {
-      if (statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
-        ToastUtil.toastError(mainActivity, R.string.message_cannot_create_rejected_right_now);
-      } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && saleType
-          .equals(ApplicationKeys.SALE_COLD)) {
-        ToastUtil.toastError(mainActivity, R.string.message_cannot_create_order_right_now);
-      } else {
-        ToastUtil.toastError(mainActivity, R.string.message_cannot_create_factor_right_now);
-      }
-    }
-  }
-
   private void goToRegisterPaymentFragment() {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);
     mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true);
-  }
-
-  private void invokeGetRejectedData() {
-
-    DialogUtil.showProgressDialog(mainActivity,
-        getString(R.string.message_transferring_rejected_goods_data));
-
-    new RejectedGoodsDataTransferBizImpl(mainActivity).getAllRejectedData(customer.getBackendId());
   }
 
   @Override
@@ -397,9 +327,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   @Subscribe
   public void getMessage(Event event) {
     if (event instanceof ActionEvent) {
-      if (event.getStatusCode() == StatusCodes.ACTION_ADD_ORDER) {
-        openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
-      } else if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
+      if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
         goToRegisterPaymentFragment();
       }
     } else if (event instanceof ErrorEvent) {
@@ -408,28 +336,6 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       //TODO Show error message
     }
   }
-
-  @Subscribe
-  public void getMessage(GoodsDtoList goodsDtoList) {
-    DialogUtil.dismissProgressDialog();
-    Log.i(TAG, goodsDtoList.getGoodsDtoList() == null ? "REJECTED IS NULL"
-        : "Rejected size is " + goodsDtoList.getGoodsDtoList().size());
-    List<Goods> goodsList = goodsDtoList.getGoodsDtoList();
-    if (goodsList != null) {
-      final Bundle args = new Bundle();
-      args.putLong(Constants.ORDER_ID, orderDto.getId());
-      args.putString(Constants.SALE_TYPE, saleType);
-      args.putSerializable(Constants.REJECTED_LIST, goodsDtoList);
-      args.putLong(Constants.VISIT_ID, visitId);
-      args.putBoolean(Constants.READ_ONLY, false);
-      args.putString(Constants.PAGE_STATUS, Constants.NEW);
-
-      mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
-    } else {
-      ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_not_possible));
-    }
-  }
-
 
   @Override
   public int getFragmentId() {

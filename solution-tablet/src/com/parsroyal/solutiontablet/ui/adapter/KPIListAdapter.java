@@ -13,6 +13,7 @@ import com.parsroyal.solutiontablet.data.model.KPIDetail;
 import com.parsroyal.solutiontablet.service.KPIService;
 import com.parsroyal.solutiontablet.service.impl.KPIServiceImpl;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
+import com.parsroyal.solutiontablet.util.Logger;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class KPIListAdapter extends ArrayAdapter<KPIDetail> {
       return convertView;
 
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in KPIListAdapter.getView " + e.getMessage());
+      Logger.sendError( "UI Exception", "Error in KPIListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

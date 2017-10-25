@@ -12,6 +12,7 @@
     android:layout_weight=".5"
     android:orientation="vertical">
     <TextView
+      android:id="@+id/payment_type_title"
       style="@style/IranSans.Bold"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -121,6 +122,7 @@
             android:textSize="16sp" />
 
           <TextView
+            android:id="@+id/amount_tv"
             style="@style/IranSans"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -234,6 +236,7 @@
           android:textSize="14sp" />
 
         <RelativeLayout
+          android:id="@+id/payment_type_layout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginStart="16dp"

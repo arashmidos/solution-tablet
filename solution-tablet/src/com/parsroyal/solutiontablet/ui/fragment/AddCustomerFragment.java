@@ -32,6 +32,7 @@ import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.Arrays;
@@ -111,7 +112,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "UI Exception",
+      Logger.sendError("UI Exception",
           "Error in creating NCustomerDetailFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
@@ -276,7 +277,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+      Logger.sendError("Data Storage Exception",
           "Error in saving new customer data " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));

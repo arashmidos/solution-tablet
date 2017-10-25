@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.Goods;
-import com.parsroyal.solutiontablet.ui.fragment.GoodsListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
@@ -25,15 +25,15 @@ import java.util.List;
 /**
  * Created by Arash on 03/06/2017
  */
-public class GoodListAdapter extends UltimateViewAdapter<GoodListAdapter.MyViewHolder> {
+public class OldGoodListAdapter extends UltimateViewAdapter<OldGoodListAdapter.MyViewHolder> {
 
   private final boolean readOnly;
   private final boolean isRejectedGoods;
   private LayoutInflater mInflater;
   private List<Goods> goods;
-  private GoodsListFragment context;
+  private OldGoodsListFragment context;
 
-  public GoodListAdapter(GoodsListFragment context, List<Goods> goods, boolean readOnly,
+  public OldGoodListAdapter(OldGoodsListFragment context, List<Goods> goods, boolean readOnly,
       boolean isRejectedGoods) {
     this.goods = goods;
     this.context = context;

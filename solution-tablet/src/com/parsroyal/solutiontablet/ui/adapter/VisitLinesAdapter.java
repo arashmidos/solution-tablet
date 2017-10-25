@@ -5,13 +5,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class VisitLinesAdapter extends BaseListAdapter<VisitLineListModel> {
       }
       return convertView;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in VisitLinesAdapter.getView " + e.getMessage());
+      Logger.sendError("UI Exception", "Error in VisitLinesAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

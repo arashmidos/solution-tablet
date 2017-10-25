@@ -80,4 +80,5 @@
   <color name="register_questionnaire">#1976d2</color>
   <color name="register_image">#673ab7</color>
   <color name="register_return">#f57f17</color>
+  <color name="register_return_dark">#dc7316</color>
 </resources>

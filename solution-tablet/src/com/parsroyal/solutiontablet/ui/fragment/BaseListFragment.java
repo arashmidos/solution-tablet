@@ -11,13 +11,13 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.BaseListModel;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.BaseListAdapter;
 import com.parsroyal.solutiontablet.ui.component.TabContainer;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import java.util.List;
 
 /**
@@ -83,7 +83,7 @@ public abstract class BaseListFragment<T extends BaseListModel, AD extends BaseL
 
       return view;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in creating BaseListFragment " + e.getMessage());
+      Logger.sendError("UI Exception", "Error in creating BaseListFragment " + e.getMessage());
       Log.e(getClassTag(), e.getMessage(), e);
       return getErrorPageView(inflater);
     }

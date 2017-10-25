@@ -25,7 +25,7 @@
         android:layout_marginLeft="19dp"
         android:layout_gravity="start|center"
         android:src="@drawable/ic_search"
-        android:tint="@color/login_gray"/>
+        android:tint="@color/login_gray" />
 
       <EditText
         android:id="@+id/search_edt"
@@ -42,7 +42,7 @@
         android:maxLines="1"
         android:singleLine="true"
         android:textColorHint="@color/login_gray"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
     </LinearLayout>
   </android.support.design.widget.AppBarLayout>
@@ -52,7 +52,7 @@
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1"
-    android:visibility="visible"/>
+    android:visibility="visible" />
 
   <LinearLayout
     android:id="@+id/no_good_lay"
@@ -69,7 +69,7 @@
       android:layout_marginBottom="25dp"
       android:layout_gravity="center_vertical|top"
       android:gravity="center"
-      android:src="@drawable/im_product_not_found"/>
+      android:src="@drawable/im_product_not_found" />
 
     <TextView
       style="@style/IranSans"
@@ -78,7 +78,7 @@
       android:gravity="center"
       android:text="@string/no_good"
       android:textColor="@color/login_gray"
-      android:textSize="14sp"/>
+      android:textSize="14sp" />
   </LinearLayout>
 
   <LinearLayout
@@ -94,13 +94,13 @@
       style="@style/IranSans"
       android:layout_width="20dp"
       android:layout_height="20dp"
-      android:background="@drawable/oval"
       android:gravity="center"
       android:textColor="@android:color/white"
       android:textSize="12sp"
-      tools:text="3"/>
+      tools:text="3" />
 
     <TextView
+      android:id="@+id/bottom_bar_text"
       style="@style/IranSans.Medium"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -108,13 +108,14 @@
       android:text="@string/order_goods"
       android:textColor="@android:color/white"
       android:textSize="14sp"
-      android:tint="@android:color/white"/>
+      android:tint="@android:color/white" />
 
     <ImageView
+      android:id="@+id/goods_cart_image"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:src="@drawable/ic_cart_outline_black_18dp"
-      android:tint="@android:color/white"/>
+      android:tint="@android:color/white" />
 
   </LinearLayout>
 </LinearLayout>

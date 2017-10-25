@@ -2,13 +2,13 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.exception.DataNotAvailableException;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.nio.charset.Charset;
 import org.springframework.http.HttpEntity;
@@ -42,7 +42,7 @@ public class GoodsRequestDataTransferBizImpl extends AbstractDataTransferBizImpl
       try {
         keyValueBiz.save(new KeyValue(ApplicationKeys.GOODS_REQUEST_ID, response));
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving GoodsRequest " + ex.getMessage());
+        Logger.sendError("Data transfer", "Error in receiving GoodsRequest " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
       }
     } else {

@@ -55,7 +55,7 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NewVisitDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathFragment;
@@ -71,6 +71,7 @@ import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -265,7 +266,7 @@ public abstract class MainActivity extends AppCompatActivity {
                   try {//TODO Send Event bus instead of publisher
                     dataTransferService.sendAllData(null);
                   } catch (Exception ex) {
-                    Crashlytics.log(Log.ERROR, "Install Update",
+                    Logger.sendError("Install Update",
                         "Error in installing new version" + ex.getMessage());
                     ex.printStackTrace();
                     ToastUtil
@@ -295,7 +296,7 @@ public abstract class MainActivity extends AppCompatActivity {
         finish();
       }
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Install Update", "Error in installing update" + ex.getMessage());
+      Logger.sendError("Install Update", "Error in installing update" + ex.getMessage());
       ToastUtil.toastError(MainActivity.this, R.string.err_update_failed);
     }
   }
@@ -543,8 +544,8 @@ public abstract class MainActivity extends AppCompatActivity {
         }
         BaseFragment lastItem = getLastFragment();
         if (Empty.isNotEmpty(lastFragment)) {
-          if (lastItem instanceof NewVisitDetailFragment) {
-            ((NewVisitDetailFragment) lastItem).finishVisiting();
+          if (lastItem instanceof VisitDetailFragment) {
+            ((VisitDetailFragment) lastItem).finishVisiting();
             return;
           }
         }
@@ -553,7 +554,7 @@ public abstract class MainActivity extends AppCompatActivity {
         showDialogForExit();
       }
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in backPressed " + e.getMessage());
+      Logger.sendError("UI Exception", "Error in backPressed " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
     }
   }
@@ -602,7 +603,7 @@ public abstract class MainActivity extends AppCompatActivity {
         fragment = PathDetailFragment.newInstance();
         break;
       case VISIT_DETAIL_FRAGMENT_ID:
-        fragment = NewVisitDetailFragment.newInstance();
+        fragment = VisitDetailFragment.newInstance();
         break;
       case ORDER_INFO_FRAGMENT:
         fragment = NewOrderInfoFragment.newInstance();

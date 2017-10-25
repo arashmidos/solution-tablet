@@ -42,6 +42,7 @@ import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
@@ -122,8 +123,8 @@ public class PaymentDetailFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "UI Exception",
-          "Error in creating PaymentDetailFragment " + ex.getMessage());
+      Logger
+          .sendError("UI Exception", "Error in creating PaymentDetailFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
@@ -377,7 +378,7 @@ public class PaymentDetailFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+      Logger.sendError("Data Storage Exception",
           "Error in saving new payment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));

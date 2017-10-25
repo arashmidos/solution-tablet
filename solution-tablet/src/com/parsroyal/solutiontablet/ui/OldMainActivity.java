@@ -51,13 +51,14 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomersFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.GoodsListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomersFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OldOrdersListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OldVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.OrdersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireDetailFragment;
@@ -65,7 +66,6 @@ import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
-import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLinesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialog.LoginDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
@@ -73,6 +73,7 @@ import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ResourceUtil;
@@ -117,7 +118,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
   public static final int CUSTOMER_TRACKING_FRAGMENT_ID = 24;
   public static final int BASE_TRACKING_FRAGMENT_ID = 25;
   public static final int QUESTIONAIRE_LIST_FRAGMENT_ID = 26;
-
+  private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   private final Integer[] drawerItemTitles = {
       R.string.setting,
       R.string.data_transfer,
@@ -147,23 +148,9 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
   private DataTransferService dataTransferService;
   private SettingService settingService;
   private boolean isMenuEnabled = true;
-  private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   private LocationUpdatesService gpsRecieverService = null;
 
   private boolean boundToGpsService = false;
-
-  private BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
-        if (!GPSUtil.isGpsAvailable(context)) {
-          showGpsOffDialog();
-          Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
-        }
-      }
-    }
-  };
-
   // Monitors the state of the connection to the service.
   private final ServiceConnection serviceConnection = new ServiceConnection() {
 
@@ -181,7 +168,17 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
       boundToGpsService = false;
     }
   };
-
+  private BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
+        if (!GPSUtil.isGpsAvailable(context)) {
+          showGpsOffDialog();
+          Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
+        }
+      }
+    }
+  };
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -347,7 +344,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case VISIT_DETAIL_FRAGMENT_ID:
-        fragment = new VisitDetailFragment();
+        fragment = new OldVisitDetailFragment();
         changeSidebarItem(OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID);
         setMenuEnabled(false);
         break;
@@ -387,7 +384,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(-1);
         break;
       case ORDERS_LIST_FRAGMENT:
-        fragment = new OrdersListFragment();
+        fragment = new OldOrdersListFragment();
         changeSidebarItem(ORDERS_LIST_FRAGMENT);
         break;
       case ORDER_DETAIL_FRAGMENT_ID:
@@ -395,7 +392,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case GOODS_LIST_FRAGMENT_ID:
-        fragment = new GoodsListFragment();
+        fragment = new OldGoodsListFragment();
         args.putBoolean("view_all", true);
         fragment.setArguments(args);
         changeSidebarItem(GOODS_LIST_FRAGMENT_ID);
@@ -533,7 +530,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         showDialogForExit();
       }
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in backPressed " + e.getMessage());
+      Logger.sendError("UI Exception", "Error in backPressed " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
     }
   }
@@ -644,7 +641,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
                   try {
                     dataTransferService.sendAllData(OldMainActivity.this);
                   } catch (Exception ex) {
-                    Crashlytics.log(Log.ERROR, "Install Update",
+                    Logger.sendError("Install Update",
                         "Error in installing new version" + ex.getMessage());
                     ex.printStackTrace();
                     ToastUtil
@@ -706,7 +703,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         finish();
       }
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Install Update", "Error in installing update" + ex.getMessage());
+      Logger.sendError("Install Update", "Error in installing update" + ex.getMessage());
       ToastUtil.toastError(OldMainActivity.this, R.string.err_update_failed);
     }
   }

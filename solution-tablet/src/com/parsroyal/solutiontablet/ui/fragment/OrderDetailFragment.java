@@ -28,6 +28,7 @@ import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.component.ParsRoyalTab;
 import com.parsroyal.solutiontablet.ui.component.TabContainer;
 import com.parsroyal.solutiontablet.util.DialogUtil;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Locale;
@@ -90,16 +91,16 @@ public class OrderDetailFragment extends BaseFragment {
         {
           FragmentManager childFragMan = getChildFragmentManager();
           FragmentTransaction childFragTrans = childFragMan.beginTransaction();
-          OrderItemsFragment orderItemsFragment = new OrderItemsFragment();
+          OldOrderItemsFragment oldOrderItemsFragment = new OldOrderItemsFragment();
 
           Bundle args = new Bundle();
           args.putLong(Constants.ORDER_ID, order.getId());
           args.putBoolean(Constants.DISABLED, isDisable());
           args.putLong(Constants.ORDER_STATUS, orderStatus);
           args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
-          orderItemsFragment.setArguments(args);
+          oldOrderItemsFragment.setArguments(args);
 
-          childFragTrans.replace(R.id.orderDetailContentFrame, orderItemsFragment);
+          childFragTrans.replace(R.id.orderDetailContentFrame, oldOrderItemsFragment);
           childFragTrans.commit();
 
         });
@@ -141,13 +142,13 @@ public class OrderDetailFragment extends BaseFragment {
             FragmentManager childFragMan = getChildFragmentManager();
             FragmentTransaction childFragTrans = childFragMan.beginTransaction();
 
-            GoodsListFragment goodsListFragment = new GoodsListFragment();
+            OldGoodsListFragment oldGoodsListFragment = new OldGoodsListFragment();
             Bundle args = new Bundle();
             args.putLong(Constants.ORDER_ID, orderId);
             args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
-            goodsListFragment.setArguments(args);
+            oldGoodsListFragment.setArguments(args);
 
-            childFragTrans.replace(R.id.orderDetailContentFrame, goodsListFragment);
+            childFragTrans.replace(R.id.orderDetailContentFrame, oldGoodsListFragment);
             childFragTrans.commit();
 
           });
@@ -301,7 +302,7 @@ public class OrderDetailFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(context, ex);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data Storage Exception",
+      Logger.sendError("Data Storage Exception",
           "Error in saving new order detail " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(context, new UnknownSystemException(ex));

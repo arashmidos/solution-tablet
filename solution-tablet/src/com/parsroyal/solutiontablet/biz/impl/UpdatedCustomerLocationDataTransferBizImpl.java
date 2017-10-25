@@ -1,8 +1,6 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
-import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.CustomerStatus;
@@ -15,6 +13,7 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import java.util.Date;
 import java.util.List;
 import org.springframework.http.HttpEntity;
@@ -66,7 +65,8 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
         getObserver().publishResult(
             context.getString(R.string.updated_customers_data_transferred_successfully));
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving UpdatedCustomerLocationData " + ex.getMessage());
+        Logger.sendError("Data transfer",
+            "Error in receiving UpdatedCustomerLocationData " + ex.getMessage());
         getObserver()
             .publishResult(context.getString(R.string.error_updated_customers_locaction_transfer));
       }

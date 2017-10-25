@@ -13,11 +13,7 @@ public class SaleOrderListModel extends BaseListModel {
   private String customerName;
   private Long status;
   private Long customerBackendId;
-
-  public String getCreatedDateTime() {
-    return createdDateTime;
-  }
-
+  private String description;
   private String createdDateTime;
 
   public SaleOrderListModel(Long id, Long backendId, String date, Long amount,
@@ -33,6 +29,14 @@ public class SaleOrderListModel extends BaseListModel {
   }
 
   public SaleOrderListModel() {
+  }
+
+  public String getCreatedDateTime() {
+    return createdDateTime;
+  }
+
+  public void setCreatedDateTime(String createdDateTime) {
+    this.createdDateTime = createdDateTime;
   }
 
   public Long getCustomerBackendId() {
@@ -123,7 +127,11 @@ public class SaleOrderListModel extends BaseListModel {
     return id.hashCode();
   }
 
-  public void setCreatedDateTime(String createdDateTime) {
-    this.createdDateTime = createdDateTime;
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }

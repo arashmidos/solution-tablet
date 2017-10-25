@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/order_good"
+        android:text="@string/order_goods"
         android:textColor="@color/primary"
         android:textSize="16sp" />
 
@@ -67,6 +67,7 @@
     android:background="@color/features_background" />
 
   <LinearLayout
+    android:id="@+id/bottom_layout"
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:background="@color/payment_bottom_line"

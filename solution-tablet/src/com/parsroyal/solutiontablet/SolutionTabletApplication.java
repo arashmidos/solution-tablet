@@ -63,5 +63,4 @@ public class SolutionTabletApplication extends Application {
     conf.locale = locale;
     res.updateConfiguration(conf, dm);
   }
-
 }

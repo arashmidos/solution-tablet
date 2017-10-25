@@ -16,6 +16,7 @@ import com.parsroyal.solutiontablet.data.listmodel.BaseListModel;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import java.util.List;
 
 /**
@@ -78,7 +79,7 @@ public abstract class BaseListAdapter<T extends BaseListModel> extends BaseAdapt
       }
       return convertView;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in BaseListAdapter.getView " + e.getMessage());
+      Logger.sendError( "UI Exception", "Error in BaseListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }
