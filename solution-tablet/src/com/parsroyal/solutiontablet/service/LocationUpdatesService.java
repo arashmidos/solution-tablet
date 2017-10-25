@@ -111,6 +111,7 @@ public class LocationUpdatesService extends Service {
     try {
       if (!checkPermissions()) {
         EventBus.getDefault().post(new ErrorEvent(StatusCodes.PERMISSION_DENIED));
+        return;
       }
       fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -129,6 +130,7 @@ public class LocationUpdatesService extends Service {
       handlerThread.start();
       serviceHandler = new Handler(handlerThread.getLooper());
       notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+      requestLocationUpdates();
     } catch (SecurityException ex) {
       ex.printStackTrace();
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.PERMISSION_DENIED));
@@ -212,7 +214,12 @@ public class LocationUpdatesService extends Service {
   public void requestLocationUpdates() {
     Log.i(TAG, "Requesting location updates");
     GPSUtil.setRequestingLocationUpdates(this, true);
+
     startService(new Intent(getApplicationContext(), LocationUpdatesService.class));
+    if (fusedLocationClient == null) {
+      onCreate();
+      return;
+    }
     try {
       fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,
           Looper.myLooper());

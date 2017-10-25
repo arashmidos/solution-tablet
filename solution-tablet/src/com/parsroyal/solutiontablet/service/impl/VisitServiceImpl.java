@@ -237,6 +237,11 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
+  public void deleteVisitById(Long visitId) {
+    visitInformationDao.delete(visitId);
+  }
+
+  @Override
   public void deleteAll() {
     visitLineDao.deleteAll();
     visitInformationDao.deleteAll();
