@@ -501,6 +501,8 @@
   <string name="search_customer_hint">جستجو در اسم، نام فروشگاه و کد مشتری...</string>
   <string name="search">جستجو</string>
   <string name="register">ثبت</string>
+  <string name="questionnaire_page">صفحه پرسشنامه</string>
+
   <string name="reason_register_no">دلیل ثبت عدم را انتخاب کنید</string>
   <string name="code_x">کد : %s</string>
   <string name="choose_one">هیچ گزینه ای انتخاب نشده است</string>
@@ -528,4 +530,13 @@
 
   <!-- TODO: Remove or change this placeholder text -->
   <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="good_questionnaire">پرسشنامه کالایی</string>
+  <string name="general_questionnaire">پرسشنامه عمومی</string>
+  <string name="next_question">سوال بعدی</string>
+  <string name="previous_question">سوال قبلی</string>
+  <string name="multiple_choice_feature">امکان انتخاب چند گزینه وجود دارد!</string>
+  <string name="remove_answer">حذف پاسخ</string>
+  <string name="enter_answer_here">پاسخ را در اینجا وارد نمایید</string>
+  <string name="choose_date">انتخاب تاریخ...</string>
+  <string name="anonymous_questionnaire">پرسشنامه های فرعی</string>
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_marginEnd="18dp"
+  android:layout_marginRight="18dp"
+  android:orientation="vertical">
+
+  <RadioButton
+    android:id="@+id/answer_radio"
+    style="@style/IranSans"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="28dp"
+    android:button="@null"
+    android:drawablePadding="24dp"
+    android:drawableRight="@drawable/customer_radio_blue"
+    android:gravity="right|center"
+    android:tag="0"
+    android:textColor="@color/black_85"
+    android:textSize="14sp" />
+
+</LinearLayout>

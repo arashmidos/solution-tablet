@@ -65,6 +65,14 @@
           android:src="@drawable/ic_search"
           android:tint="@android:color/white"
           android:visibility="gone" />
+        <ImageView
+          android:id="@+id/save_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          android:layout_gravity="start|center"
+          android:src="@drawable/ic_save_24_dp"
+          android:visibility="gone" />
 
         <TextView
           android:id="@+id/detail_tv"

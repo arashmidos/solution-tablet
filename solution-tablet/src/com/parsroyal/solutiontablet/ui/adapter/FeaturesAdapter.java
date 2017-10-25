@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
@@ -82,7 +83,10 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
         case 4: //Map
           context.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
           break;
-        case 5://Settings
+        case 5://Questionnaire
+          Toast.makeText(context, "hi", android.widget.Toast.LENGTH_SHORT).show();
+          break;
+        case 6://Settings
           ToastUtil.toastMessage(context, R.string.error_message_there_is_no_settings);
           break;
       }

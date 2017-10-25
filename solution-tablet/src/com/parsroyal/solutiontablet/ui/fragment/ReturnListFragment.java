@@ -33,7 +33,7 @@ public class ReturnListFragment extends BaseFragment {
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
   @BindView(R.id.fab_add_return)
-  FloatingActionButton fabAddOrder;
+  FloatingActionButton fabAddReturn;
 
   private NewVisitDetailFragment parent;
   private MainActivity mainActivity;
@@ -73,7 +73,7 @@ public class ReturnListFragment extends BaseFragment {
       visitId = args.getLong(Constants.VISIT_ID, -1);
     }
     if (parent == null) {
-      fabAddOrder.setVisibility(View.GONE);
+      fabAddReturn.setVisibility(View.GONE);
     }
     setUpRecyclerView();
     return view;
@@ -91,9 +91,9 @@ public class ReturnListFragment extends BaseFragment {
       public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         if (dy > 0) {
-          fabAddOrder.setVisibility(View.GONE);
+          fabAddReturn.setVisibility(View.GONE);
         } else {
-          fabAddOrder.setVisibility(View.VISIBLE);
+          fabAddReturn.setVisibility(View.VISIBLE);
         }
       }
     });

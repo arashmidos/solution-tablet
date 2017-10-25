@@ -16,10 +16,15 @@ public class Constants {
   public static final String CUSTOMER_ID = "customerId";
   public static final String QUESTIONAIRE_ID = "qnId";
   public static final String PAGE_STATUS = "pageStatus";
-  public static final String NEW= "new";
-  public static final String EDIT= "edit";
-  public static final String VIEW= "view";
+  public static final String NEW = "new";
+  public static final String EDIT = "edit";
+  public static final String VIEW = "view";
+  public static final String QUESTIONNAIRE_BACKEND_ID = "QUESTIONNAIRE_BACKEND_ID";
+  public static final String QUESTIONNAIRE_OBJ = "QUESTIONNAIRE_OBJ";
   public static final String GOODS_BACKEND_ID = "goodsBackendId";
+  public static final String QUESTIONNAIRE_CATEGORY = "QUESTIONNAIRE_CATEGORY";
+  public static final String GOOD_QUESTIONNAIRE = "GOOD_QUESTIONNAIRE";
+  public static final String GENERAL_QUESTIONNAIRE = "GENERAL_QUESTIONNAIRE";
   public static final String GOODS_INVOICE_ID = "goodsInvoiceId";
   public static final String GOODS_SALE_RATE = "goodsSaleRate";
   public static final String GOODS_GROUP_BACKEND_ID = "ggBi";
@@ -58,4 +63,9 @@ public class Constants {
   public static final String READ_ONLY = "readOnly";
   public static final String ApplicationKey = "solution-tablet";
   public static final String DEFAULT_LANGUAGE = "fa";
+
+  public static final String TITLE = "TITLE";
+  public static final String QUESTION_COUNT = "QUESTION_COUNT";
+  public static final String QUESTION_POSITION = "QUESTION_POSITION";
+  public static final String QUESTION_DTO = "QUESTION_DTO";
 }

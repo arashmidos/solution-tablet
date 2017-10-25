@@ -1,0 +1,9 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:drawable="@drawable/ic_radio_button_checked_blue" android:state_checked="true"
+    android:state_window_focused="false"/>
+  <item android:drawable="@drawable/ic_radio_button_unchecked_gray" android:state_checked="false"
+    android:state_window_focused="false"/>
+
+  <item android:drawable="@drawable/ic_radio_button_unchecked_gray" android:state_checked="false"/>
+  <item android:drawable="@drawable/ic_radio_button_checked_blue" android:state_checked="true"/>
+</selector>

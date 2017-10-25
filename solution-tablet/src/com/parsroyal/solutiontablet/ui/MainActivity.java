@@ -27,6 +27,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
@@ -47,6 +48,7 @@ import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
+import com.parsroyal.solutiontablet.ui.fragment.AllQuestionnaireListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
@@ -57,6 +59,9 @@ import com.parsroyal.solutiontablet.ui.fragment.NewVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesCategoryFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.ReportFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
@@ -97,6 +102,10 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int REPORT_FRAGMENT = 14;
   public static final int GOODS_LIST_FRAGMENT_ID = 16;
   public static final int SAVE_LOCATION_FRAGMENT_ID = 17;
+  public static final int QUESTIONNAIRE_CATEGORY_FRAGMENT_ID = 18;
+  public static final int QUESTIONNAIRE_LIST_FRAGMENT_ID = 19;
+  public static final int QUESTION_LIST_FRAGMENT_ID = 20;
+  public static final int ALL_QUESTIONNAIRE_FRAGMENT_ID = 21;
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
   public static final int SYSTEM_CUSTOMER_FRAGMENT = 29;
@@ -148,6 +157,8 @@ public abstract class MainActivity extends AppCompatActivity {
   TextView toolbarTitle;
   @BindView(R.id.search_img)
   ImageView searchImg;
+  @BindView(R.id.save_img)
+  ImageView saveImg;
   @BindView(R.id.container)
   FrameLayout container;
   @BindView(R.id.navigation_img)
@@ -491,7 +502,7 @@ public abstract class MainActivity extends AppCompatActivity {
 
   public abstract void onNavigationTapped();
 
-  @OnClick({R.id.navigation_img, R.id.search_img})
+  @OnClick({R.id.navigation_img, R.id.search_img, R.id.save_img})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.navigation_img:
@@ -499,6 +510,20 @@ public abstract class MainActivity extends AppCompatActivity {
         break;
       case R.id.search_img:
         changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
+        break;
+      case R.id.save_img:
+        saveImg.setVisibility(View.GONE);
+        Fragment questionnaireCategoryFragment = getSupportFragmentManager()
+            .findFragmentByTag(QuestionnairesCategoryFragment.class.getSimpleName());
+        Fragment questionnaireListFragment = getSupportFragmentManager()
+            .findFragmentByTag(QuestionnaireListFragment.class.getSimpleName());
+        if (questionnaireCategoryFragment != null) {
+          navigateToFragment(QuestionnairesCategoryFragment.class.getSimpleName());
+        } else if (questionnaireListFragment != null) {
+          navigateToFragment(QuestionnaireListFragment.class.getSimpleName());
+        } else {
+          onNavigationTapped();
+        }
         break;
     }
   }
@@ -562,6 +587,12 @@ public abstract class MainActivity extends AppCompatActivity {
     } else {
       searchImg.setVisibility(View.GONE);
     }
+    //show save icon in question list fragment
+    if (fragmentId == QUESTION_LIST_FRAGMENT_ID) {
+      saveImg.setVisibility(View.VISIBLE);
+    } else {
+      saveImg.setVisibility(View.GONE);
+    }
     customizeToolbar(fragmentId);
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
@@ -623,6 +654,15 @@ public abstract class MainActivity extends AppCompatActivity {
         break;
       case SAVE_LOCATION_FRAGMENT_ID:
         fragment = new SaveLocationFragment();
+        break;
+      case QUESTIONNAIRE_CATEGORY_FRAGMENT_ID:
+        fragment = QuestionnairesCategoryFragment.newInstance();
+        break;
+      case QUESTIONNAIRE_LIST_FRAGMENT_ID:
+        fragment = QuestionnaireListFragment.newInstance();
+        break;
+      case QUESTION_LIST_FRAGMENT_ID:
+        fragment = QuestionsListFragment.newInstance();
         break;
       case USER_TRACKING_FRAGMENT_ID://20
         fragment = new UserTrackingFragment();

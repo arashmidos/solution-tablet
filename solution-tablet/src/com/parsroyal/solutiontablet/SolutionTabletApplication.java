@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.util.DisplayMetrics;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.constants.Constants;
-import io.fabric.sdk.android.Fabric;
+import io.fabric.sdk.android.*;
 import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -40,7 +40,9 @@ public class SolutionTabletApplication extends Application {
     super.onCreate();
     sInstance = this;
 
-    Fabric.with(this, new Crashlytics());
+    if (!BuildConfig.DEBUG) {
+      Fabric.with(this, new Crashlytics());
+    }
 
     CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
         .setDefaultFontPath("fonts/IRANSansMobile.ttf")

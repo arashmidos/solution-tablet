@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -254,7 +255,11 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         goToRegisterPaymentFragment();
         break;
       case R.id.register_questionnaire_lay:
-        Toast.makeText(mainActivity, "Questionnaire", Toast.LENGTH_SHORT).show();
+        //TODO :if only one category exist we should skip this fragment
+        Bundle bundle = getArguments();
+        bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
+        mainActivity
+            .changeFragment(MainActivity.QUESTIONNAIRE_CATEGORY_FRAGMENT_ID, bundle, true);
         break;
       case R.id.register_image_lay:
         parent.startCameraActivity();

@@ -138,8 +138,9 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-      deleteImg.setOnClickListener(this);
-      editImg.setOnClickListener(this);
+      //TODO:SHAKIB
+//      deleteImg.setOnClickListener(this);
+//      editImg.setOnClickListener(this);
       if (mainLayLin != null) {
         mainLayLin.setOnClickListener(this);
       } else if (mainLayRel != null) {

@@ -1,8 +1,10 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +13,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
+import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
+import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
+import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
+import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.adapter.NewCustomerAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -32,7 +42,7 @@ import java.util.List;
  * Created by ShakibIsTheBest on 09/01/2017.
  */
 
-public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.ViewHolder> {
+public class NewCustomerAdapter extends Adapter<ViewHolder> {
 
   private static final String TAG = NewCustomerAdapter.class.getName();
   private final CustomerServiceImpl customerService;
@@ -40,12 +50,16 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
   private MainActivity mainActivity;
   private boolean isSend;
   private List<NCustomerListModel> customers;
+  private VisitService visitService;
+  private QuestionnaireDao questionnaireService;
 
   public NewCustomerAdapter(MainActivity mainActivity, boolean isSend,
       List<NCustomerListModel> customers) {
     this.mainActivity = mainActivity;
     this.isSend = isSend;
     this.customers = customers;
+    this.visitService = new VisitServiceImpl(mainActivity);
+    this.questionnaireService = new QuestionnaireDaoImpl(mainActivity);
     inflater = LayoutInflater.from(mainActivity);
     customerService = new CustomerServiceImpl(mainActivity);
   }
@@ -65,7 +79,7 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
   }
 
   private void setMargin(boolean isLastItem, RelativeLayout layout) {
-    RelativeLayout.LayoutParams parameter = new RelativeLayout.LayoutParams(
+    LayoutParams parameter = new LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.WRAP_CONTENT);
     float scale = mainActivity.getResources().getDisplayMetrics().density;
@@ -106,8 +120,12 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
     ImageView editImg;
     @BindView(R.id.edit_lay)
     LinearLayout editLay;
+    @BindView(R.id.questionnaire_img)
+    ImageView questionnaireImg;
+
     private NCustomerListModel customer;
     private int position;
+    private VisitInformation visitInformations;
 
     public ViewHolder(View itemView) {
       super(itemView);
@@ -115,6 +133,7 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
       customerLay.setOnClickListener(this);
       editImg.setOnClickListener(this);
       deleteImg.setOnClickListener(this);
+      questionnaireImg.setOnClickListener(this);
     }
 
     public void setData(NCustomerListModel customer, int position) {
@@ -136,6 +155,19 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
         editLay.setVisibility(View.GONE);
       } else {
         editLay.setVisibility(View.VISIBLE);
+        try {
+          visitInformations = visitService
+              .getVisitInformationForNewCustomer(customer.getPrimaryKey());
+        } catch (Exception ex) {
+          Crashlytics.log(Log.ERROR, "UI Exception",
+              "Error in NCustomerListAdapter.getView " + ex.getMessage());
+          ex.printStackTrace();
+        }
+        if (visitInformations != null) {
+          questionnaireImg.setImageResource(R.drawable.ic_questionnaires_done_24_dp);
+        } else {
+          questionnaireImg.setImageResource(R.drawable.ic_add_questionnaires_24_dp);
+        }
       }
     }
 
@@ -152,6 +184,55 @@ public class NewCustomerAdapter extends RecyclerView.Adapter<NewCustomerAdapter.
         case R.id.delete_img:
           deleteCustomer();
           break;
+        case R.id.questionnaire_img:
+          //TODO :EDIT MODE
+          final VisitInformation finalVisitInformations = visitInformations;
+          List<QuestionnaireListModel> generalQmodel = questionnaireService
+              .searchForQuestionnaires(new QuestionnaireSo(true));
+          List<QuestionnaireListModel> goodsQmodel = questionnaireService
+              .searchForQuestionnaires(new QuestionnaireSo(false));
+
+          //Calculate count of questions is each category ( i.e: General and Goods )
+          //There could be more than one questionary in each of them, or questionaries with no question.
+          int generalQCount = 0;
+          int goodsQCount = 0;
+          for (int i = 0; i < goodsQmodel.size(); i++) {
+            QuestionnaireListModel questionnaireListModel = goodsQmodel.get(i);
+            goodsQCount += questionnaireListModel.getQuestionsCount();
+          }
+          for (int i = 0; i < generalQmodel.size(); i++) {
+            QuestionnaireListModel questionnaireListModel = generalQmodel.get(i);
+            generalQCount += questionnaireListModel.getQuestionsCount();
+          }
+
+          //Initialize args
+          final Bundle bundle = new Bundle();
+          bundle.putLong(Constants.CUSTOMER_ID, customer.getPrimaryKey());
+          long visitId;
+          if (finalVisitInformations == null) {
+            visitId = visitService.startVisitingNewCustomer(customer.getPrimaryKey());
+          } else {
+            visitId = finalVisitInformations.getId();
+          }
+          bundle.putLong(Constants.VISIT_ID, visitId);
+          bundle.putInt(Constants.PARENT, MainActivity.NEW_CUSTOMER_FRAGMENT_ID);
+          //
+
+          //if question count > 0 is each category so we should display it to user.
+          if (goodsQCount > 0 && generalQCount > 0) {
+            mainActivity
+                .changeFragment(MainActivity.QUESTIONNAIRE_CATEGORY_FRAGMENT_ID, bundle, false);
+          } else if (generalQCount > 0) {
+            bundle.putString(Constants.QUESTIONNAIRE_CATEGORY, Constants.GENERAL_QUESTIONNAIRE);
+            mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_LIST_FRAGMENT_ID, bundle, true);
+          } else if (goodsQCount > 0) {
+            bundle.putString(Constants.QUESTIONNAIRE_CATEGORY, Constants.GOOD_QUESTIONNAIRE);
+            mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_LIST_FRAGMENT_ID, bundle, true);
+          } else {
+            DialogUtil.showMessageDialog(mainActivity,
+                mainActivity.getString(R.string.select_questionary),
+                mainActivity.getString(R.string.error_no_questionary_found));
+          }          break;
       }
     }
 

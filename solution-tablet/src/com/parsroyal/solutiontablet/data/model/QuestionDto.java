@@ -1,11 +1,13 @@
 package com.parsroyal.solutiontablet.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.parsroyal.solutiontablet.constants.QuestionType;
 
 /**
  * Created by Mahyar on 7/26/2015.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class QuestionDto extends BaseModel {
 
   private Long questionId;
