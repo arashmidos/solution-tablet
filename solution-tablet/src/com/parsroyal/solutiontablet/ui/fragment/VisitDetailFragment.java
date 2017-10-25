@@ -71,10 +71,12 @@ public class VisitDetailFragment extends BaseFragment {
   private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
   private static final int RESULT_OK = -1;
   private static final int RESULT_CANCELED = 0;
+
   @BindView(R.id.tabs)
   TabLayout tabs;
   @BindView(R.id.viewpager)
   ViewPager viewpager;
+
   private Uri fileUri;
   private CustomerServiceImpl customerService;
   private MainActivity mainActivity;
@@ -90,6 +92,7 @@ public class VisitDetailFragment extends BaseFragment {
   private PaymentListFragment paymentListFragment;
   private ReturnListFragment returnListFragment;
   private PictureFragment pictureFragment;
+  private AllQuestionnaireListFragment allQuestionnaireListFragment;
   private Customer customer;
   private SaleOrderDto orderDto;
   private String saleType;
@@ -322,12 +325,14 @@ public class VisitDetailFragment extends BaseFragment {
     orderListFragment = OrderListFragment.newInstance(arguments, this);
     returnListFragment = ReturnListFragment.newInstance(arguments, this);
     customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
+    allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(arguments, this);
   }
 
   private void setUpViewPager() {
     viewPagerAdapter = new CustomerDetailViewPagerAdapter(mainActivity.getSupportFragmentManager());
 //    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
     viewPagerAdapter.add(pictureFragment, getString(R.string.images));
+    viewPagerAdapter.add(allQuestionnaireListFragment, getString(R.string.questionnaire));
     viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
     viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
     viewPagerAdapter.add(orderListFragment, getString(R.string.orders));

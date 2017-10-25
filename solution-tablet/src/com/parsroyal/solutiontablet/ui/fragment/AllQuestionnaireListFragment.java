@@ -40,14 +40,14 @@ public class AllQuestionnaireListFragment extends BaseFragment {
   Unbinder unbinder;
 
   private MainActivity mainActivity;
-  private NewVisitDetailFragment parent;
+  private VisitDetailFragment parent;
 
   public AllQuestionnaireListFragment() {
     // Required empty public constructor
   }
 
   public static AllQuestionnaireListFragment newInstance(
-      Bundle arguments, NewVisitDetailFragment newVisitDetailFragment) {
+      Bundle arguments, VisitDetailFragment newVisitDetailFragment) {
     AllQuestionnaireListFragment fragment = new AllQuestionnaireListFragment();
     fragment.parent = newVisitDetailFragment;
     fragment.setArguments(arguments);
