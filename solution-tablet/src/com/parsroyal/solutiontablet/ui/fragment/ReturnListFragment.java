@@ -58,7 +58,7 @@ public class ReturnListFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     ButterKnife.bind(this, view);
     Bundle args = getArguments();
-    this.saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    saleOrderService = new SaleOrderServiceImpl(mainActivity);
     settingService = new SettingServiceImpl(mainActivity);
 
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);

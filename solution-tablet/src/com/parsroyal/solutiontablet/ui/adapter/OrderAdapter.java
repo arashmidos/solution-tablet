@@ -19,6 +19,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -32,6 +33,7 @@ import java.util.Locale;
 
 public class OrderAdapter extends Adapter<ViewHolder> {
 
+  private final SaleOrderServiceImpl saleOrderService;
   private LayoutInflater inflater;
   private Context context;
   private boolean isFromOrder;
@@ -51,12 +53,14 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     this.isFromOrder = isFromOrder;
     this.status = status;
     inflater = LayoutInflater.from(context);
+    saleOrderService = new SaleOrderServiceImpl(mainActivity);
+
   }
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view;
-    if (status.equals(SaleOrderStatus.REJECTED.getId())) {
+    if (isRejected()) {
       view = inflater.inflate(R.layout.item_return_list, parent, false);
     } else if (isFromOrder) {
       view = inflater.inflate(R.layout.item_order_report_list, parent, false);
@@ -66,10 +70,16 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     return new ViewHolder(view);
   }
 
+  protected boolean isRejected() {
+    return (status.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
+        status.equals(SaleOrderStatus.REJECTED.getId()) ||
+        status.equals(SaleOrderStatus.REJECTED_SENT.getId()));
+  }
+
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     SaleOrderListModel order = orders.get(position);
-    if (status.equals(SaleOrderStatus.REJECTED.getId())) {
+    if (isRejected()) {
       holder.setReturnData(position, order);
     } else {
       holder.setOrderData(position, order);
@@ -156,7 +166,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       }
       String orderCode = "کد سفارش : " + String.valueOf(order.getId());
       orderCodeTv.setText(orderCode);
-      orderCountTv.setText("--");
+      orderCountTv.setText("--");//TODO: Add order items count
 
       Date createdDate = DateUtil
           .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
@@ -168,13 +178,17 @@ public class OrderAdapter extends Adapter<ViewHolder> {
               R.string.common_irr_currency));
       orderTotalPrice.setText(number);
       orderPaymentMethodTv.setText(order.getPaymentTypeTitle());
+      if (order.getStatus().equals(SaleOrderStatus.SENT)) {
+        editImg.setVisibility(View.GONE);
+        deleteImg.setVisibility(View.GONE);
+      }
     }
 
     public void setReturnData(int position, SaleOrderListModel order) {
       this.position = position;
       this.order = order;
-      String returnCode = "کد مرجوعی : " + String.valueOf(order.getId());
-      returnCountTv.setText(String.valueOf(order.getAmount()));
+
+      returnCountTv.setText("--");//TODO: Add Return items count
       Date createdDate = DateUtil
           .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
@@ -185,13 +199,19 @@ public class OrderAdapter extends Adapter<ViewHolder> {
               R.string.common_irr_currency));
       totalAmountTv.setText(number);
       returnReasonTv.setText(order.getDescription());
+      if (order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId())) {
+        editImg.setVisibility(View.GONE);
+        deleteImg.setVisibility(View.GONE);
+      }
     }
 
     @Override
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.delete_img:
-          //TODO:DELET ACTION
+          saleOrderService.deleteOrder(order.getId());
+          orders.remove(position);
+          notifyDataSetChanged();
           break;
         case R.id.edit_img:
         case R.id.main_lay_linear:

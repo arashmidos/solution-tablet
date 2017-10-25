@@ -90,7 +90,7 @@ public class OrderFragment extends BaseFragment {
   private long visitId;
   private SaleOrderServiceImpl saleOrderService;
   private SaleOrderDto order;
-  private Long orderStatus;
+  private Long orderStatus = -1L;
   private GoodsDtoList rejectedGoodsList;
   private String constraint;
   private String pageStatus;
@@ -117,6 +117,7 @@ public class OrderFragment extends BaseFragment {
     readOnly = args.getBoolean(Constants.READ_ONLY);
     if (readOnly) {
       bottomBar.setVisibility(View.GONE);
+      mainActivity.changeTitle(getString(R.string.title_goods_list));
     } else {
       orderId = args.getLong(Constants.ORDER_ID, -1);
       order = saleOrderService.findOrderDtoById(orderId);
@@ -125,9 +126,9 @@ public class OrderFragment extends BaseFragment {
       visitId = args.getLong(Constants.VISIT_ID, -1);
       pageStatus = args.getString(Constants.PAGE_STATUS, "");
       orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
+      mainActivity.changeTitle(getProperTitle());
     }
 
-    mainActivity.changeTitle(getProperTitle());
     setData();
     addSearchListener();
     if (!TextUtils.isEmpty(pageStatus) && (pageStatus.equals(Constants.EDIT) || pageStatus
@@ -281,8 +282,7 @@ public class OrderFragment extends BaseFragment {
       }
 
       Long invoiceBackendId = 0L;
-      if (SaleOrderStatus.REJECTED_DRAFT.getId()
-          .equals(orderStatus)) {//TODO: Maybe add REJECTED too
+      if (isRejected()) {
         invoiceBackendId = goods.getInvoiceBackendId();
       }
       final SaleOrderItem item = saleOrderService.findOrderItemByOrderIdAndGoodsBackendId(

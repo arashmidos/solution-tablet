@@ -13,7 +13,6 @@ import java.util.List;
 
 /**
  * Created by Mahyar on 8/25/2015.
- * Edited by Arash 7/17/2016
  */
 public interface SaleOrderService extends BaseService {
 
@@ -22,6 +21,7 @@ public interface SaleOrderService extends BaseService {
   SaleOrderDto findOrderDtoById(Long orderId);
 
   void deleteForAllCustomerOrdersByStatus(Long customerBackendId, Long statusId);
+  void deleteOrder(Long orderId);
 
   void updateOrderItemCount(Long id, Double count, Long selectedUnit, Long orderStatus,
       Goods goods);

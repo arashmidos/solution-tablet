@@ -438,7 +438,6 @@ public class AddOrderDialogFragment extends DialogFragment {
   @Subscribe
   public void getMessage(Event event) {
     if (event instanceof ErrorEvent) {
-      Log.i(TAG, "khar");
       errorMsg.setText(event.getMessage());
       errorMsg.setVisibility(View.VISIBLE);
       InputMethodManager imm = (InputMethodManager) mainActivity
@@ -446,7 +445,6 @@ public class AddOrderDialogFragment extends DialogFragment {
       imm.hideSoftInputFromWindow(countTv.getWindowToken(), 0);
 
     } else if (event instanceof SuccessEvent) {
-      Log.i(TAG, "khoob");
       AddOrderDialogFragment.this.dismiss();
     }
   }

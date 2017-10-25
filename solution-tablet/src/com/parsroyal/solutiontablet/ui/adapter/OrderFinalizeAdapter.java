@@ -17,12 +17,14 @@ import com.bumptech.glide.Glide;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Goods;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
-import com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -38,6 +40,7 @@ import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by ShakibIsTheBest on 8/4/2017.
@@ -65,7 +68,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
     this.orderItems = order.getOrderItems();
     inflater = LayoutInflater.from(mainActivity);
     this.goodsDtoList = goodsDtoList;
-    this.rejectedGoodsList = goodsDtoList.getGoodsDtoList();
+    this.rejectedGoodsList = Empty.isNotEmpty(goodsDtoList) ? goodsDtoList.getGoodsDtoList() : null;
     this.saleOrderService = new SaleOrderServiceImpl(mainActivity);
   }
 
@@ -78,8 +81,16 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     SaleOrderItemDto item = orderItems.get(position);
-    item.setGoods(findGoods(item));
+    if (isRejected(order.getStatus())) {
+      item.setGoods(findGoods(item));
+    }
     holder.setData(item, position);
+  }
+
+  private boolean isRejected(Long orderStatus) {
+    return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
+        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
   }
 
   private Goods findGoods(SaleOrderItemDto item) {
@@ -182,7 +193,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
                 try {
                   saleOrderService.deleteOrderItem(item.getId(), isRejected(order.getStatus()));
 
-                  if (order.getStatus().equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
+                  if (isRejected(order.getStatus())) {
                     goods.setExisting(goods.getExisting() + item.getGoodsCount());
                     orderItems = saleOrderService
                         .getLocalOrderItemDtoList(order.getId(), goodsDtoList);
@@ -246,7 +257,6 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       });
 
       addOrderDialogFragment.show(ft, "order");
-
     }
 
     private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItemDto item,
@@ -269,7 +279,11 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         setData(item, position);
         notifyItemChanged(position);
         parent.updateList();
+        EventBus.getDefault().post(new SuccessEvent(StatusCodes.SUCCESS));
       } catch (BusinessException ex) {
+        EventBus.getDefault()
+            .post(new ErrorEvent(mainActivity.getString(R.string.exceed_count_exception),
+                StatusCodes.DATA_STORE_ERROR));
         Log.e(TAG, ex.getMessage(), ex);
         ToastUtil.toastError(mainActivity, ex);
       } catch (Exception ex) {

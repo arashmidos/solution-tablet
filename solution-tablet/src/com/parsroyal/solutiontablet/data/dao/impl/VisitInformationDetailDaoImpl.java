@@ -88,6 +88,18 @@ public class VisitInformationDetailDaoImpl extends AbstractDao<VisitInformationD
   }
 
   @Override
+  public void deleteVisitDetail(VisitInformationDetailType type, Long typeId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    db.beginTransaction();
+    db.execSQL(String.format("DELETE FROM %s WHERE %s = %s AND %s = %s", getTableName(),
+        VisitInformationDetail.COL_TYPE, type.getValue(), VisitInformationDetail.COL_TYPE_ID, typeId));
+    db.setTransactionSuccessful();
+    db.endTransaction();
+  }
+
+
+  @Override
   public void updateVisitDetailId(VisitInformationDetailType type, long id, long backendId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(context);
     SQLiteDatabase db = databaseHelper.getWritableDatabase();

@@ -108,9 +108,8 @@ public class QuestionnaireDataTransferBizImpl extends
 
   @Override
   public String getMethod() {
-    String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
     String today = DateUtil.getCurrentGregorianFullWithDate();
-    return String.format("questionnaire/%s/%s", salesmanId, today);
+    return String.format("questionnaire/%s", today);
   }
 
   @Override
