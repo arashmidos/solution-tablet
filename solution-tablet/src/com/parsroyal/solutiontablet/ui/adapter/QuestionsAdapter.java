@@ -181,6 +181,7 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
 
     private QuestionListModel question;
     private int position;
+    private QuestionDto questionDto;
 
     public ViewHolder(View itemView) {
       super(itemView);
@@ -196,17 +197,18 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
       QuestionDto questionDto = questionnaireService
           .getQuestionDto(question.getPrimaryKey(), visitId, goodsBackendId,
               answersGroupNo);
+      this.questionDto = questionDto;
+      preRequisiteTv.setVisibility(View.GONE);
       if (TextUtils.isEmpty(questionDto.getAnswer())) {
         answerTv.setVisibility(View.GONE);
         questionNumberBtn.setBackgroundResource(R.drawable.oval_ee);
         questionNumberBtn.setTextColor(ContextCompat.getColor(mainActivity, R.color.primary_dark));
-        if (questionDto.getPrerequisite() != null && questionDto.getPrerequisite() != 0L) {
+        if (hasPrerequisite()) {
           preRequisiteTv.setVisibility(View.VISIBLE);
           preRequisiteTv.setText(String.format(Locale.getDefault(), "پیش نیاز: سوال شماره %d",
               questionDto.getPrerequisite()));
         }
       } else {
-        preRequisiteTv.setVisibility(View.GONE);
         questionNumberBtn.setBackgroundResource(R.drawable.oval_green_43);
         questionNumberBtn.setTextColor(ContextCompat.getColor(mainActivity, R.color.white));
         answerTv.setVisibility(View.VISIBLE);
@@ -218,11 +220,15 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.question_lay:
+          if (TextUtils.isEmpty(questionDto.getAnswer()) && hasPrerequisite()
+              && preRequisiteNotAnswered()) {
+            return;
+          }
           currentItemPosition = position;
           Bundle bundle = new Bundle();
-          QuestionDto questionDto = questionnaireService
+          /*QuestionDto questionDto = questionnaireService
               .getQuestionDto(question.getPrimaryKey(), visitId, goodsBackendId,
-                  answersGroupNo);
+                  answersGroupNo);*/
           bundle.putSerializable(Constants.QUESTION_DTO, questionDto);
           bundle.putInt(Constants.QUESTION_POSITION, position + 1);
           FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
@@ -237,6 +243,18 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
           questionDetailDialogFragment.show(ft, "Question detail");
           break;
       }
+    }
+
+    private boolean preRequisiteNotAnswered() {
+
+      QuestionDto nextQuestionDto = questionnaireService
+          .getQuestionDtoByBackendId(questionDto.getPrerequisite(), visitId, goodsBackendId,
+              answersGroupNo);
+      return nextQuestionDto != null && TextUtils.isEmpty(nextQuestionDto.getAnswer());
+    }
+
+    private boolean hasPrerequisite() {
+      return questionDto.getPrerequisite() != null && questionDto.getPrerequisite() != 0L;
     }
   }
 }

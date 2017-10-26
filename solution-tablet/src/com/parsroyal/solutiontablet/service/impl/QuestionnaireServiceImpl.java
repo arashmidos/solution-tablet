@@ -56,6 +56,13 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   }
 
   @Override
+  public QuestionDto getQuestionDtoByBackendId(Long backendId, Long visitId, Long goodsBackendId,
+      Long answersGroupNo) {
+    return questionDao.getQuestionDtoByBackendId(backendId, visitId, goodsBackendId, answersGroupNo);
+
+  }
+
+  @Override
   public QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
       Long goodsBackendId, boolean isNext, Long answersGroupNo) {
     return questionDao

@@ -21,6 +21,9 @@ public interface QuestionnaireService extends BaseService {
   QuestionDto getQuestionDto(Long primaryKey, Long visitId, Long goodsBackendId,
       Long answersGroupNo);
 
+  QuestionDto getQuestionDtoByBackendId(Long primaryKey, Long visitId, Long goodsBackendId,
+      Long answersGroupNo);
+
   QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
       Long goodsBackendId, boolean isNext, Long answersGroupNo);
 

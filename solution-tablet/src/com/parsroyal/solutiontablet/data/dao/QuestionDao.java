@@ -2,10 +2,8 @@ package com.parsroyal.solutiontablet.data.dao;
 
 import com.parsroyal.solutiontablet.data.entity.Question;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
-import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
-import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import java.util.List;
 
 /**
@@ -16,6 +14,9 @@ public interface QuestionDao extends BaseDao<Question, Long> {
   List<QuestionListModel> searchForQuestions(QuestionSo questionSo);
 
   QuestionDto getQuestionDto(Long questionId, Long visitId, Long goodsBackendId,
+      Long answersGroupNo);
+
+  QuestionDto getQuestionDtoByBackendId(Long questionId, Long visitId, Long goodsBackendId,
       Long answersGroupNo);
 
   QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,

@@ -190,6 +190,57 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
   }
 
   @Override
+  public QuestionDto getQuestionDtoByBackendId(Long questionId, Long visitId, Long goodsBackendId,
+      Long answersGroupNo) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    QuestionDto questionDto = null;
+
+    String sql = "SELECT" +
+        " q._id," +//0
+        " q.QUESTION," +//1
+        " q.ANSWER," +//2
+        " q.qORDER," +//3
+        " qn.DESCRIPTION," +//4
+        " IFNULL(an._id, NULL)," +//5
+        " IFNULL(an.ANSWER, NULL)," +//6
+        " q.BACKEND_ID," +//7
+        " q.TYPE," +//8
+        " q.REQUIRED," +//9
+        " q.PREREQUISITE" +//10
+        " FROM COMMER_QUESTION q" +
+        " INNER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID= q.QUESTIONNAIRE_BACKEND_ID" +
+        " Left OUTER JOIN COMMER_Q_ANSWER an on an.QUESTION_BACKEND_ID = q.BACKEND_ID "
+        + "and an.VISIT_ID = ? and an.ANSWERS_GROUP_NO = ?"
+        + " and (an.GOODS_BACKEND_ID = ? or  '-1' = ?)" +
+        " where q.BACKEND_ID = ?";
+
+    String[] args = {String.valueOf(visitId), String.valueOf(answersGroupNo),
+        Empty.isNotEmpty(goodsBackendId) ? String.valueOf(goodsBackendId) : "-1",
+        Empty.isNotEmpty(goodsBackendId) ? String.valueOf(goodsBackendId) : "-1",
+        String.valueOf(questionId)};
+    Cursor cursor = db.rawQuery(sql, args);
+
+    if (cursor.moveToNext()) {
+      questionDto = new QuestionDto();
+      questionDto.setQuestionId(cursor.getLong(0));
+      questionDto.setQuestion(cursor.getString(1));
+      questionDto.setqAnswers(cursor.getString(2));
+      questionDto.setOrder(cursor.getInt(3));
+      questionDto.setDescription(cursor.getString(4));
+      questionDto.setAnswerId(cursor.isNull(5) ? null : cursor.getLong(5));
+      questionDto.setAnswer(cursor.getString(6));
+      questionDto.setBackendId(cursor.getLong(7));
+      questionDto.setType(QuestionType.getByValue(cursor.getInt(8)));
+      questionDto.setRequired(cursor.getInt(9) == 1);
+      questionDto.setPrerequisite(cursor.getLong(10));
+    }
+
+    cursor.close();
+    return questionDto;
+  }
+
+  @Override
   public QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
       Long goodsBackendId, boolean isNext, Long answersGroupNo) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
