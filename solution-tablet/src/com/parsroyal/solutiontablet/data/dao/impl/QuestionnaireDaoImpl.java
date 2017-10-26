@@ -162,7 +162,7 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
     String groupBy = " GROUP BY a.ANSWERS_GROUP_NO";
 
     if (questionnaireSo.isAnonymous()) {
-      sql = sql.concat(" AND v.CUSTOMER_BACKEND_ID = 0 AND v.CUSTOMER_ID = 0");
+      sql = sql.concat(" AND v.RESULT = -2");
     } else if (Empty.isNotEmpty(questionnaireSo.getCustomerBackendId())) {
       sql = sql.concat(" AND v.CUSTOMER_BACKEND_ID = " + questionnaireSo.getCustomerBackendId());
     } else {

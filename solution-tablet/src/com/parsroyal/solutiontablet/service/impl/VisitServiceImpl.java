@@ -233,6 +233,7 @@ public class VisitServiceImpl implements VisitService {
       visitInformation.setxLocation(position.getLatitude());
       visitInformation.setyLocation(position.getLongitude());
     }
+
     return saveVisit(visitInformation);
   }
 
