@@ -44,7 +44,7 @@ public class Logger {
 
   public static void sendError(String page, String exception) {
     if (!BuildConfig.DEBUG) {
-      Logger.sendError( page, exception);
+      Crashlytics.log(Log.ERROR, page, exception);
     }
   }
 }

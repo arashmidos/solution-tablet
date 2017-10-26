@@ -145,14 +145,14 @@ public class QuestionnaireDetailFragment extends
   }
 
   private void closeQuestionnaire() {
-    if (Empty.isEmpty(customer) || parent == MainActivity.NEW_CUSTOMER_FRAGMENT_ID) {
+    if (Empty.isEmpty(customer) || parent == OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID) {
       //It's anonymous questionaire or New customer
       //known bug, it he has not answered any quesiton, should remove the entire visit.
       // List<VisitInformationDetail> detailList = visitService.searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
       visitService.finishVisiting(visitId);
     }
-    mainActivity.removeFragment(QuestionnaireDetailFragment.this);
-    mainActivity.changeSidebarItem(parent);
+    oldMainActivity.removeFragment(QuestionnaireDetailFragment.this);
+    oldMainActivity.changeSidebarItem(parent);
   }
 
   @Override

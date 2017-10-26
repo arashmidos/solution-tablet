@@ -1,11 +1,9 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -47,6 +45,7 @@ public class QuestionnairesCategoryFragment extends BaseFragment {
   @OnClick({R.id.good_questionnaire_lay, R.id.general_questionnaire_lay})
   public void onViewClicked(View view) {
     Bundle bundle = getArguments();
+
     switch (view.getId()) {
       case R.id.good_questionnaire_lay:
         bundle.putString(Constants.QUESTIONNAIRE_CATEGORY, Constants.GOOD_QUESTIONNAIRE);
@@ -55,7 +54,7 @@ public class QuestionnairesCategoryFragment extends BaseFragment {
         bundle.putString(Constants.QUESTIONNAIRE_CATEGORY, Constants.GENERAL_QUESTIONNAIRE);
         break;
     }
-    mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_LIST_FRAGMENT_ID,bundle, true);
+    mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_LIST_FRAGMENT_ID, bundle, true);
   }
 
   @Override

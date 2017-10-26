@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -160,7 +159,7 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
           visitInformations = visitService
               .getVisitInformationForNewCustomer(customer.getPrimaryKey());
         } catch (Exception ex) {
-          Crashlytics.log(Log.ERROR, "UI Exception",
+          Logger.sendError("UI Exception",
               "Error in NCustomerListAdapter.getView " + ex.getMessage());
           ex.printStackTrace();
         }
@@ -233,7 +232,8 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
             DialogUtil.showMessageDialog(mainActivity,
                 mainActivity.getString(R.string.select_questionary),
                 mainActivity.getString(R.string.error_no_questionary_found));
-          }          break;
+          }
+          break;
       }
     }
 

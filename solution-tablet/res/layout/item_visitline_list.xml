@@ -13,11 +13,13 @@
   card_view:cardElevation="3dp">
 
   <LinearLayout
+    android:id="@+id/visitline_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:gravity="right"
     android:orientation="vertical">
+
 
     <!-- MapView in lite mode. Note that it needs to be initialised
      programmatically before it can be used. -->
@@ -25,6 +27,7 @@
       android:id="@+id/map_item"
       android:layout_width="match_parent"
       android:layout_height="175dp"
+      android:clickable="false"
       map:liteMode="true"
       map:mapType="none" />
 

@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -124,6 +122,15 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     return fragment;
   }
 
+  private static void setMapLocation(GoogleMap map, LatLng data) {
+    // Add a marker for this item and set the camera
+    map.moveCamera(CameraUpdateFactory.newLatLngZoom(data, 15f));
+    map.addMarker(new MarkerOptions().position(data));
+
+    // Set the map type back to normal.
+    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
@@ -148,16 +155,6 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     setData();
 
     return view;
-  }
-
-
-  private static void setMapLocation(GoogleMap map, LatLng data) {
-    // Add a marker for this item and set the camera
-    map.moveCamera(CameraUpdateFactory.newLatLngZoom(data, 15f));
-    map.addMarker(new MarkerOptions().position(data));
-
-    // Set the map type back to normal.
-    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
   }
 
   @Override

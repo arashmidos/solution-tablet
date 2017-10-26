@@ -97,7 +97,7 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
       ButterKnife.bind(this, itemView);
     }
 
-    @OnClick(R.id.visitline_lay)
+    @OnClick({R.id.visitline_lay,R.id.visitline_layout})
     public void onClick(View view) {
       Bundle bundle = new Bundle();
       bundle.putLong(Constants.VISITLINE_BACKEND_ID, model.getPrimaryKey());
@@ -117,6 +117,9 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
     public void onMapReady(GoogleMap googleMap) {
       MapsInitializer.initialize(mainActivity.getApplicationContext());
       map = googleMap;
+      map.getUiSettings().setMapToolbarEnabled(false);
+      map.getUiSettings().setAllGesturesEnabled(false);
+
       LatLng data = (LatLng) mapView.getTag();
       if (data != null) {
         setMapLocation(map, data);

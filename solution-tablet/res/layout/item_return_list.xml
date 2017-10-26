@@ -79,7 +79,6 @@
     android:textColor="@color/black_de"
     android:textSize="12sp" />
 
-
   <ImageView
     android:id="@+id/delete_img"
     android:layout_width="wrap_content"

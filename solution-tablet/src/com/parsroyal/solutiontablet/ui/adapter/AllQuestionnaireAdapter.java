@@ -106,7 +106,7 @@ public class AllQuestionnaireAdapter extends
                   : questionnaire.getGoodsGroupBackendId());
           args.putLong(Constants.ANSWERS_GROUP_NO,
               args.getInt(Constants.PARENT) == MainActivity.NEW_CUSTOMER_FRAGMENT_ID ? 0
-                  : questionnaireService.getNextAnswerGroupNo());
+                  : questionnaire.getAnswersGroupNo());
           mainActivity.changeFragment(MainActivity.QUESTION_LIST_FRAGMENT_ID, args, false);
           break;
       }

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.entity.Position;
@@ -98,7 +97,8 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
       holder.editBtn.setOnClickListener(v -> {
         Bundle args = new Bundle();
         args.putLong(NCustomerDetailFragment.CUSTOMER_ID_KEY, model.getPrimaryKey());
-        oldMainActivity.changeFragment(OldMainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, false);
+        oldMainActivity
+            .changeFragment(OldMainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, false);
       });
 
       holder.deleteBtn.setOnClickListener(v -> DialogUtil
@@ -117,7 +117,7 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
                   Log.e(TAG, ex.getMessage(), ex);
                   ToastUtil.toastError(oldMainActivity, ex);
                 } catch (Exception ex) {
-                  Logger.sendError( "UI Exception",
+                  Logger.sendError("UI Exception",
                       "Error in NCustomersListAdapter.delete " + ex.getMessage());
                   Log.e(TAG, ex.getMessage(), ex);
                   ToastUtil.toastError(oldMainActivity, new UnknownSystemException(ex));
@@ -131,7 +131,7 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
         visitInformations = visitService.getVisitInformationForNewCustomer(model.getPrimaryKey());
         detailSize = visitService.getAllVisitDetailById(visitInformations.getId()).size();
       } catch (Exception ex) {
-        Logger.sendError( "UI Exception",
+        Logger.sendError("UI Exception",
             "Error in NCustomerListAdapter.getView " + ex.getMessage());
         ex.printStackTrace();
       }
@@ -175,7 +175,7 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
           visitId = finalVisitInformations.getId();
         }
         args.putLong(Constants.VISIT_ID, visitId);
-        args.putInt(Constants.PARENT, MainActivity.NEW_CUSTOMER_FRAGMENT_ID);
+        args.putInt(Constants.PARENT, OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID);
         //
 
         //if question count > 0 is each category so we should display it to user.
@@ -211,7 +211,7 @@ public class NCustomersListAdapter extends BaseListAdapter<NCustomerListModel> {
 
       return convertView;
     } catch (Exception e) {
-      Logger.sendError( "UI Exception", "Error in NCustomerListAdapter.getView " + e.getMessage());
+      Logger.sendError("UI Exception", "Error in NCustomerListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

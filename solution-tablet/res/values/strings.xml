@@ -98,6 +98,8 @@
   <string name="not_sent">ارسال نشده</string>
   <string name="delete_customer">حذف مشتری</string>
   <string name="message_customer_delete_confirm">آیا از حذف مشتری مطمئن هستید؟</string>
+  <string name="message_order_delete_confirm">آیا از حذف سفارش مطمئن هستید؟</string>
+  <string name="message_return_delete_confirm">آیا از حذف مرجوعی مطمئن هستید؟</string>
   <string name="yes">بله</string>
   <string name="no">خیر</string>
   <string name="no_send_data">خیر، می خواهم اطلاعات قبلی را ارسال کنم</string>
@@ -528,9 +530,6 @@
   <string name="register_return">ثبت مرجوعی</string>
   <string name="register_location">ثبت موقعیت جغرافیایی</string>
   <string name="returns">مرجوعی ها</string>
-
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
   <string name="good_questionnaire">پرسشنامه کالایی</string>
   <string name="general_questionnaire">پرسشنامه عمومی</string>
   <string name="next_question">سوال بعدی</string>

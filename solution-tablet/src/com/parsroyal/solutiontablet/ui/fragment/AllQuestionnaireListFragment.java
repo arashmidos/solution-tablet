@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
@@ -15,23 +14,17 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
 import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.BaseInfo;
-import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
-import com.parsroyal.solutiontablet.data.searchobject.PaymentSO;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
-import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.AllQuestionnaireAdapter;
-import com.parsroyal.solutiontablet.util.Empty;
 import java.util.List;
 
 public class AllQuestionnaireListFragment extends BaseFragment {
-
 
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
@@ -76,7 +69,7 @@ public class AllQuestionnaireListFragment extends BaseFragment {
     Bundle bundle = getArguments();
     bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
     AllQuestionnaireAdapter allQuestionnaireAdapter = new AllQuestionnaireAdapter(mainActivity,
-        getQuestionnaireList(),getArguments());
+        getQuestionnaireList(), bundle);
     LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(allQuestionnaireAdapter);
@@ -91,8 +84,10 @@ public class AllQuestionnaireListFragment extends BaseFragment {
 
   @OnClick(R.id.add_questionnaire_fab)
   public void onViewClicked() {
+    QuestionnaireServiceImpl questionnaireService = new QuestionnaireServiceImpl(mainActivity);
     Bundle bundle = getArguments();
     bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
+    bundle.putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
     mainActivity
         .changeFragment(MainActivity.QUESTIONNAIRE_CATEGORY_FRAGMENT_ID, bundle, true);
   }

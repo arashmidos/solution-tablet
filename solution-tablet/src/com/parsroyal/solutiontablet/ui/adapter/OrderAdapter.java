@@ -23,6 +23,7 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -62,10 +63,8 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     View view;
     if (isRejected()) {
       view = inflater.inflate(R.layout.item_return_list, parent, false);
-    } else if (isFromOrder) {
-      view = inflater.inflate(R.layout.item_order_report_list, parent, false);
     } else {
-      view = inflater.inflate(R.layout.item_order_list, parent, false);
+      view = inflater.inflate(R.layout.item_order_report_list, parent, false);
     }
     return new ViewHolder(view);
   }
@@ -178,7 +177,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
               R.string.common_irr_currency));
       orderTotalPrice.setText(number);
       orderPaymentMethodTv.setText(order.getPaymentTypeTitle());
-      if (order.getStatus().equals(SaleOrderStatus.SENT)) {
+      if (order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
         editImg.setVisibility(View.GONE);
         deleteImg.setVisibility(View.GONE);
       }
@@ -209,9 +208,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.delete_img:
-          saleOrderService.deleteOrder(order.getId());
-          orders.remove(position);
-          notifyDataSetChanged();
+          deleteOrder();
           break;
         case R.id.edit_img:
         case R.id.main_lay_linear:
@@ -225,6 +222,18 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
           break;
       }
+    }
+
+    private void deleteOrder() {
+      boolean isRejected = order.getStatus().equals(SaleOrderStatus.REJECTED.getId());
+      DialogUtil.showConfirmDialog(mainActivity, mainActivity.getString(R.string.title_attention),
+          mainActivity.getString(isRejected ? R.string.message_return_delete_confirm
+              : R.string.message_order_delete_confirm), (dialog, which) ->
+          {
+            saleOrderService.deleteOrder(order.getId());
+            orders.remove(position);
+            notifyDataSetChanged();
+          });
     }
 
     private void setPageStatus(Bundle args) {
