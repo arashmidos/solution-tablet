@@ -92,14 +92,14 @@ public class QuestionsListFragment extends BaseFragment {
   }
 
   private void setUpRecyclerView() {
-    QuestionsAdapter questionsAdapter = new QuestionsAdapter(mainActivity, getQuestions(), visitId,
+    QuestionsAdapter questionsAdapter = new QuestionsAdapter(this,mainActivity, getQuestions(), visitId,
         goodsGroupBackendId, answersGroupNo, customerId, questionnaireBackendId);
     LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(questionsAdapter);
   }
 
-  private List<QuestionListModel> getQuestions() {
+  public List<QuestionListModel> getQuestions() {
     QuestionSo questionSo = new QuestionSo();
     questionSo.setQuestionnaireBackendId(questionnaireBackendId);
     questionSo.setVisitId(visitId);

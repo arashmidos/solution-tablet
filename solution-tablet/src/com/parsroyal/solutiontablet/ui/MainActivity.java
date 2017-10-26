@@ -670,17 +670,6 @@ public abstract class MainActivity extends AppCompatActivity {
       case USER_TRACKING_FRAGMENT_ID://20
         fragment = new UserTrackingFragment();
         break;
-      /*case KPI_CUSTOMER_FRAGMENT_ID: //21
-        fragment = new KPIFragment();
-        break;
-      case KPI_SALESMAN_FRAGMENT_ID: //22
-        fragment = new KPIFragment();
-        break;
-      case QUESTIONAIRE_LIST_FRAGMENT_ID:
-        fragment = new QuestionnairesListFragment();
-        if (Empty.isNotEmpty(args)) {
-          fragment.setArguments(args);
-        }break;*/
       case PATH_FRAGMENT_ID:
         fragment = PathFragment.newInstance();
         break;

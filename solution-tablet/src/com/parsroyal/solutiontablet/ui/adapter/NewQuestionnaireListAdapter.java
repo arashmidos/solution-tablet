@@ -18,9 +18,9 @@ import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NewQuestionnaireListAdapter.ViewHolder;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by shkbhbb on 10/14/17.
@@ -86,7 +86,7 @@ public class NewQuestionnaireListAdapter extends
         case R.id.main_lay:
           args.putLong(Constants.QUESTIONNAIRE_BACKEND_ID, questionnaire.getBackendId());
           args.putSerializable(Constants.QUESTIONNAIRE_OBJ, questionnaire);
-          //TODO
+          //TODO todo bara chie?
           args.putLong(Constants.GOODS_GROUP_BACKEND_ID, questionnaire.getGoodsGroupBackendId());
           if (questionnaire.getAnswersGroupNo() != null) {
             args.putLong(Constants.ANSWERS_GROUP_NO, questionnaire.getAnswersGroupNo());
@@ -104,7 +104,8 @@ public class NewQuestionnaireListAdapter extends
     public void setData(int position) {
       this.questionnaire = questionnaires.get(position);
       titleTv.setText(questionnaire.getDescription());
-      questionnaireSizeTv.setText(String.format("%d سوال", questionnaire.getQuestionsCount()));
+      questionnaireSizeTv
+          .setText(String.format(Locale.getDefault(), "%d سوال", questionnaire.getQuestionsCount()));
     }
   }
 }

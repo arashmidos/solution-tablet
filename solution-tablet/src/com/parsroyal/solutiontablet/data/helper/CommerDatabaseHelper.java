@@ -30,7 +30,7 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
 
   public static final String TAG = CommerDatabaseHelper.class.getSimpleName();
   private static final String DATABASE_NAME = "Commer";
-  private static final Integer DATABASE_VERSION = 6;
+  private static final Integer DATABASE_VERSION = 7;
   private static final String SQL_ADD_COLUMN = "ALTER TABLE %s ADD COLUMN %s %s ";
 
   private static CommerDatabaseHelper sInstance;
@@ -89,6 +89,12 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
     if (oldVersion < 6) {
       db.execSQL(String
           .format(SQL_ADD_COLUMN, QAnswer.TABLE_NAME, QAnswer.COL_ANSWERS_GROUP_NO, "INTEGER"));
+    }
+    if (oldVersion < 7) {
+      db.execSQL(
+          String.format(SQL_ADD_COLUMN, Question.TABLE_NAME, Question.COL_REQUIRED, "INTEGER"));
+      db.execSQL(
+          String.format(SQL_ADD_COLUMN, Question.TABLE_NAME, Question.COL_PREREQUISITE, "INTEGER"));
     }
   }
 }

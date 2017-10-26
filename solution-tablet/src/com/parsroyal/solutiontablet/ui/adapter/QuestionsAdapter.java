@@ -14,13 +14,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
-import com.parsroyal.solutiontablet.data.dao.QuestionDao;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
@@ -34,14 +32,15 @@ import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionsAdapter.ViewHolder;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.QuestionDetailBottomSheet;
-import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PaymentMethodDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.QuestionDetailDialogFragment;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by shkbhbb on 10/16/17.
@@ -49,6 +48,7 @@ import java.util.List;
 
 public class QuestionsAdapter extends Adapter<ViewHolder> {
 
+  private final QuestionsListFragment parent;
   private Context context;
   private List<QuestionListModel> questions;
   private LayoutInflater inflater;
@@ -63,9 +63,11 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
   private VisitService visitService;
   private long questionnaireBackendId;
 
-  public QuestionsAdapter(Context context, List<QuestionListModel> questions, long visitId,
+  public QuestionsAdapter(QuestionsListFragment questionsListFragment, Context context,
+      List<QuestionListModel> questions, long visitId,
       long goodsGroupBackendId, long answersGroupNo, long customerId, long questionnaireBackendId) {
     this.context = context;
+    this.parent = questionsListFragment;
     this.visitId = visitId;
     this.goodsBackendId = goodsGroupBackendId;
     this.customerId = customerId;
@@ -105,6 +107,7 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
     questionDto.setAnswerId(saveAnswer(questionDto, TextUtils.isEmpty(answer) ? "" : answer));
 //    questions.get(currentItemPosition).setAnswer(answer);
     setVisitDetail();
+    questions = parent.getQuestions();
     notifyDataSetChanged();
   }
 
@@ -173,6 +176,8 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
     Button questionNumberBtn;
     @BindView(R.id.answer_tv)
     TextView answerTv;
+    @BindView(R.id.prerequisite_tv)
+    TextView preRequisiteTv;
 
     private QuestionListModel question;
     private int position;
@@ -195,7 +200,13 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
         answerTv.setVisibility(View.GONE);
         questionNumberBtn.setBackgroundResource(R.drawable.oval_ee);
         questionNumberBtn.setTextColor(ContextCompat.getColor(mainActivity, R.color.primary_dark));
+        if (questionDto.getPrerequisite() != null && questionDto.getPrerequisite() != 0L) {
+          preRequisiteTv.setVisibility(View.VISIBLE);
+          preRequisiteTv.setText(String.format(Locale.getDefault(), "پیش نیاز: سوال شماره %d",
+              questionDto.getPrerequisite()));
+        }
       } else {
+        preRequisiteTv.setVisibility(View.GONE);
         questionNumberBtn.setBackgroundResource(R.drawable.oval_green_43);
         questionNumberBtn.setTextColor(ContextCompat.getColor(mainActivity, R.color.white));
         answerTv.setVisibility(View.VISIBLE);

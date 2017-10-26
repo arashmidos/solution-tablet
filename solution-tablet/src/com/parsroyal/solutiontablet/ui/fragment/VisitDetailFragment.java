@@ -330,7 +330,6 @@ public class VisitDetailFragment extends BaseFragment {
 
   private void setUpViewPager() {
     viewPagerAdapter = new CustomerDetailViewPagerAdapter(mainActivity.getSupportFragmentManager());
-//    viewPagerAdapter.add(BlankFragment.newInstance(), getString(R.string.questionnaire));
     viewPagerAdapter.add(pictureFragment, getString(R.string.images));
     viewPagerAdapter.add(allQuestionnaireListFragment, getString(R.string.questionnaire));
     viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));

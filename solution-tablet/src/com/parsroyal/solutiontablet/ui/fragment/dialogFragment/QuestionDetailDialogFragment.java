@@ -26,6 +26,7 @@ import com.parsroyal.solutiontablet.ui.adapter.QuestionDetailAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionsAdapter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by shkbhbb on 10/16/17.
@@ -103,7 +104,7 @@ public class QuestionDetailDialogFragment extends DialogFragment {
     navigateButtonStatus(currentPosition != 1, false);
     navigateButtonStatus(currentPosition != questionsAdapter.getItemCount(), true);
     questionTv.setText(questionDto.getQuestion());
-    positionTv.setText(String.format("%d/%d", currentPosition,
+    positionTv.setText(String.format(Locale.getDefault(),"%d/%d", currentPosition,
         questionsAdapter.getItemCount()));
     if (questionDto.getType().getValue() == 102) {
       radioDetailTv.setVisibility(View.VISIBLE);
