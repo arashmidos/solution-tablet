@@ -277,10 +277,12 @@ public class QuestionDetailAdapter extends Adapter<ViewHolder> {
             userAnswer[selectedItemPosition] = false;
           }
           userAnswer[position] = true;
+          submittedAnswer = "";
           notifyDataSetChanged();
           break;
         case R.id.answer_box:
           userAnswer[position] = answerBox.isChecked();
+          submittedAnswer = "";
           break;
         case R.id.date_edit:
           Builder builder = new Builder().id(1);

@@ -131,6 +131,8 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
       if (Empty.isNotEmpty(customer)) {
         qAnswer.setCustomerBackendId(
             customer.getBackendId() == 0 ? customerId : customer.getBackendId());
+      } else {
+        qAnswer.setCustomerBackendId(0L);
       }
       if (Empty.isNotEmpty(goodsBackendId)) {
         qAnswer.setGoodsBackendId(goodsBackendId);

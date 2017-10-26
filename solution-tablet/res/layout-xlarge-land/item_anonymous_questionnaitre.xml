@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main_lay_lin"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="1">
+    <TextView
+      android:id="@+id/title_tv"
+      style="@style/IranSans.Light"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".8"
+      android:layout_marginTop="19dp"
+      android:layout_marginBottom="19dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:singleLine="true"
+      android:textColor="@color/primary"
+      android:textSize="12sp"
+      tools:text="پرسشنامه کیفی آبمیوه های جدید سان استار" />
+
+    <TextView
+      android:id="@+id/date_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".2"
+      android:layout_marginTop="19dp"
+      android:layout_marginBottom="19dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:gravity="right"
+      android:textColor="@color/black_de"
+      android:textSize="12sp"
+      tools:text="پنجشنبه 2 مرداد 96" />
+  </LinearLayout>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/navigation_drawer_divider" />
+
+</LinearLayout>

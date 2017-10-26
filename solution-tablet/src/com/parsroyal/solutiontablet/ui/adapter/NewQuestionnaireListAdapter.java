@@ -18,6 +18,7 @@ import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NewQuestionnaireListAdapter.ViewHolder;
 import java.util.List;
 
@@ -87,9 +88,14 @@ public class NewQuestionnaireListAdapter extends
           args.putSerializable(Constants.QUESTIONNAIRE_OBJ, questionnaire);
           //TODO
           args.putLong(Constants.GOODS_GROUP_BACKEND_ID, questionnaire.getGoodsGroupBackendId());
-          args.putLong(Constants.ANSWERS_GROUP_NO,
-              args.getInt(Constants.PARENT) == MainActivity.NEW_CUSTOMER_FRAGMENT_ID ? 0
-                  : questionnaire.getAnswersGroupNo());
+          if (questionnaire.getAnswersGroupNo() != null) {
+            args.putLong(Constants.ANSWERS_GROUP_NO, questionnaire.getAnswersGroupNo());
+          } else if (args.getInt(Constants.PARENT) == MainActivity.NEW_CUSTOMER_FRAGMENT_ID) {
+            args.putLong(Constants.ANSWERS_GROUP_NO, 0);
+          } else {
+            args.putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
+          }
+
           mainActivity.changeFragment(MainActivity.QUESTION_LIST_FRAGMENT_ID, args, false);
           break;
       }

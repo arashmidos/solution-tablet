@@ -122,7 +122,7 @@ public class NavigationDrawerFragment extends BaseFragment {
           ToastUtil.toastError(mainActivity, R.string.error_message_no_data);
           break;
         }
-        Toast.makeText(mainActivity, "hi", Toast.LENGTH_SHORT).show();
+        mainActivity.changeFragment(MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID, true);
         break;
       case R.id.map_lay:
         mainActivity.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);

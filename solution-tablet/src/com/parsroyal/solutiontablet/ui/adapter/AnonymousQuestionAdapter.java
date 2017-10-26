@@ -14,45 +14,40 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
-import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.AllQuestionnaireAdapter.ViewHolder;
+import com.parsroyal.solutiontablet.ui.adapter.AnonymousQuestionAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by shkbhbb on 10/23/17.
+ * Created by shkbhbb on 10/25/17.
  */
 
-public class AllQuestionnaireAdapter extends
+public class AnonymousQuestionAdapter extends
     Adapter<ViewHolder> {
 
   private Context context;
-  private List<QuestionnaireListModel> questionnaires;
+  private List<QuestionnaireListModel> questionnaireListModels;
   private LayoutInflater inflater;
-  private QuestionnaireDao questionnaireService;
   private Bundle args;
   private MainActivity mainActivity;
 
-  public AllQuestionnaireAdapter(Context context, List<QuestionnaireListModel> questionnaires,
-      Bundle args) {
+  public AnonymousQuestionAdapter(Context context,
+      List<QuestionnaireListModel> questionnaireListModels, Bundle args) {
     this.context = context;
-    this.questionnaires = questionnaires;
-    this.mainActivity = (MainActivity) context;
     this.args = args;
-    this.questionnaireService = new QuestionnaireDaoImpl(context);
+    this.mainActivity = (MainActivity) context;
+    this.questionnaireListModels = questionnaireListModels;
     this.inflater = LayoutInflater.from(context);
   }
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view = inflater.inflate(R.layout.item_all_questionnaire, parent, false);
+    View view = inflater.inflate(R.layout.item_anonymous_questionnaitre, parent, false);
     return new ViewHolder(view);
   }
 
@@ -63,15 +58,13 @@ public class AllQuestionnaireAdapter extends
 
   @Override
   public int getItemCount() {
-    return questionnaires.size();
+    return questionnaireListModels.size();
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
     @BindView(R.id.date_tv)
     TextView dateTv;
-    @BindView(R.id.questionnaire_type_tv)
-    TextView questionnaireTypeTv;
     @BindView(R.id.title_tv)
     TextView titleTv;
     @Nullable
@@ -81,45 +74,44 @@ public class AllQuestionnaireAdapter extends
     @BindView(R.id.main_lay_lin)
     LinearLayout mainLayLin;
 
-    private QuestionnaireListModel questionnaire;
+    private QuestionnaireListModel model;
 
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
       if (mainLayLin != null) {
         mainLayLin.setOnClickListener(this);
-      } else {
+      } else if (mainLayRel != null) {
         mainLayRel.setOnClickListener(this);
       }
+    }
+
+    public void setData(int position) {
+      model = questionnaireListModels.get(position);
+      titleTv.setText(model.getDescription());
+      Date createdDate = DateUtil
+          .convertStringToDate(model.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
+      String dateString = DateUtil.getFullPersianDate(createdDate);
+      dateTv.setText(dateString);
     }
 
     @Override
     public void onClick(View v) {
       switch (v.getId()) {
-        case R.id.main_lay_lin:
         case R.id.main_lay_rel:
-          args.putLong(Constants.QUESTIONNAIRE_BACKEND_ID, questionnaire.getPrimaryKey());
-          args.putSerializable(Constants.QUESTIONNAIRE_OBJ, questionnaire);
+        case R.id.main_lay_lin:
+          args.putLong(Constants.QUESTIONNAIRE_BACKEND_ID, model.getPrimaryKey());
+          args.putSerializable(Constants.QUESTIONNAIRE_OBJ, model);
+          args.putLong(Constants.VISIT_ID, model.getVisitId());
           //TODO
           args.putLong(Constants.GOODS_GROUP_BACKEND_ID,
-              questionnaire.getGoodsGroupBackendId() == null ? -1
-                  : questionnaire.getGoodsGroupBackendId());
-          args.putLong(Constants.ANSWERS_GROUP_NO, questionnaire.getAnswersGroupNo());
+              model.getGoodsGroupBackendId() == null ? -1
+                  : model.getGoodsGroupBackendId());
+          args.putLong(Constants.ANSWERS_GROUP_NO, model.getAnswersGroupNo());
+          args.putLong(Constants.PARENT, MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID);
           mainActivity.changeFragment(MainActivity.QUESTION_LIST_FRAGMENT_ID, args, false);
           break;
       }
-    }
-
-    public void setData(int position) {
-      questionnaire = questionnaires.get(position);
-      titleTv.setText(questionnaire.getDescription());
-      //TODO:ARSH QUESTIONNAIRE TYPE
-      questionnaireTypeTv.setText("پرسشنامه عادی");
-      Date createdDate = DateUtil
-          .convertStringToDate(questionnaire.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
-      String dateString = DateUtil.getFullPersianDate(createdDate);
-      dateTv.setText(dateString);
-
     }
   }
 }

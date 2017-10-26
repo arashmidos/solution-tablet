@@ -84,7 +84,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           context.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
           break;
         case 5://Questionnaire
-          Toast.makeText(context, "hi", android.widget.Toast.LENGTH_SHORT).show();
+          context.changeFragment(MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID, true);
           break;
         case 6://Settings
           ToastUtil.toastMessage(context, R.string.error_message_there_is_no_settings);
