@@ -88,9 +88,14 @@ public class NewQuestionnaireListAdapter extends
           args.putSerializable(Constants.QUESTIONNAIRE_OBJ, questionnaire);
           //TODO
           args.putLong(Constants.GOODS_GROUP_BACKEND_ID, questionnaire.getGoodsGroupBackendId());
-          args.putLong(Constants.ANSWERS_GROUP_NO,
-              args.getInt(Constants.PARENT) == MainActivity.NEW_CUSTOMER_FRAGMENT_ID ? 0
-                  : questionnaireService.getNextAnswerGroupNo());
+          if (questionnaire.getAnswersGroupNo() != null) {
+            args.putLong(Constants.ANSWERS_GROUP_NO, questionnaire.getAnswersGroupNo());
+          } else if (args.getInt(Constants.PARENT) == MainActivity.NEW_CUSTOMER_FRAGMENT_ID) {
+            args.putLong(Constants.ANSWERS_GROUP_NO, 0);
+          } else {
+            args.putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
+          }
+
           mainActivity.changeFragment(MainActivity.QUESTION_LIST_FRAGMENT_ID, args, false);
           break;
       }

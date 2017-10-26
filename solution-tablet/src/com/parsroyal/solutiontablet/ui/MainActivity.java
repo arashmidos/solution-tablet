@@ -49,6 +49,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AllQuestionnaireListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.AnonymousQuestionnaireFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
@@ -107,6 +108,7 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int QUESTIONNAIRE_LIST_FRAGMENT_ID = 19;
   public static final int QUESTION_LIST_FRAGMENT_ID = 20;
   public static final int ALL_QUESTIONNAIRE_FRAGMENT_ID = 21;
+  public static final int ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID = 22;
   public static final int PATH_FRAGMENT_ID = 27;
   public static final int PATH_DETAIL_FRAGMENT_ID = 28;
   public static final int SYSTEM_CUSTOMER_FRAGMENT = 29;
@@ -681,6 +683,9 @@ public abstract class MainActivity extends AppCompatActivity {
         }break;*/
       case PATH_FRAGMENT_ID:
         fragment = PathFragment.newInstance();
+        break;
+      case ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID:
+        fragment = AnonymousQuestionnaireFragment.newInstance();
         break;
       case PATH_DETAIL_FRAGMENT_ID:
         fragment = PathDetailFragment.newInstance();

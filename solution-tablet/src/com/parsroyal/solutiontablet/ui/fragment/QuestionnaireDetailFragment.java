@@ -44,6 +44,7 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionListAdapter;
 import com.parsroyal.solutiontablet.ui.component.FlowLayout;
@@ -151,8 +152,8 @@ public class QuestionnaireDetailFragment extends
       // List<VisitInformationDetail> detailList = visitService.searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId);
       visitService.finishVisiting(visitId);
     }
-    mainActivity.removeFragment(QuestionnaireDetailFragment.this);
-    mainActivity.changeSidebarItem(parent);
+    oldMainActivity.removeFragment(QuestionnaireDetailFragment.this);
+    oldMainActivity.changeSidebarItem(parent);
   }
 
   @Override
