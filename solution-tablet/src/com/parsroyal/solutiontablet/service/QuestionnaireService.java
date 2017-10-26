@@ -36,4 +36,6 @@ public interface QuestionnaireService extends BaseService {
   List<QuestionnaireListModel> searchForQuestionsList(QuestionnaireSo questionnaireSo);
 
   Long getNextAnswerGroupNo();
+
+  void deleteAllAnswer(Long visitId, Long answersGroupNo);
 }

@@ -17,12 +17,14 @@ import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
+import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionsAdapter;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import java.util.List;
 
 
@@ -38,7 +40,7 @@ public class QuestionsListFragment extends BaseFragment {
   Unbinder unbinder;
 
   private MainActivity mainActivity;
-  private QuestionnaireServiceImpl questionnaireService;
+  private QuestionnaireService questionnaireService;
   private CustomerServiceImpl customerService;
   private GoodsServiceImpl goodsService;
   private VisitServiceImpl visitService;
@@ -92,7 +94,8 @@ public class QuestionsListFragment extends BaseFragment {
   }
 
   private void setUpRecyclerView() {
-    QuestionsAdapter questionsAdapter = new QuestionsAdapter(this,mainActivity, getQuestions(), visitId,
+    QuestionsAdapter questionsAdapter = new QuestionsAdapter(this, mainActivity, getQuestions(),
+        visitId,
         goodsGroupBackendId, answersGroupNo, customerId, questionnaireBackendId);
     LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
     recyclerView.setLayoutManager(layoutManager);
@@ -120,5 +123,17 @@ public class QuestionsListFragment extends BaseFragment {
   public void onDestroyView() {
     super.onDestroyView();
     unbinder.unbind();
+  }
+
+  public void exit() {
+    DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
+        getString(R.string.message_save_questionnaire), "", (dialog, which) ->
+            mainActivity.findViewById(R.id.save_img).performClick(),
+        "", (dialog, which) -> deleteAllQuestions(), Constants.ICON_MESSAGE);
+  }
+
+  private void deleteAllQuestions() {
+    questionnaireService.deleteAllAnswer(visitId, answersGroupNo);
+    mainActivity.findViewById(R.id.save_img).performClick();
   }
 }

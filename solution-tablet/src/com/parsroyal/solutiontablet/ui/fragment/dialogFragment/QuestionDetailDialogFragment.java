@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -9,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +53,8 @@ public class QuestionDetailDialogFragment extends DialogFragment {
   protected Button nextBtn;
   @BindView(R.id.previous_tv)
   protected TextView previousTv;
-
+  @BindView(R.id.error_msg)
+  protected TextView errorMsg;
 
   protected QuestionDto questionDto;
   protected Context context;
@@ -95,7 +96,9 @@ public class QuestionDetailDialogFragment extends DialogFragment {
     Bundle bundle = getArguments();
     questionDto = (QuestionDto) bundle.getSerializable(Constants.QUESTION_DTO);
     currentPosition = bundle.getInt(Constants.QUESTION_POSITION);
+
     setUpRecyclerView();
+
     setData();
     return view;
   }
@@ -104,8 +107,9 @@ public class QuestionDetailDialogFragment extends DialogFragment {
     navigateButtonStatus(currentPosition != 1, false);
     navigateButtonStatus(currentPosition != questionsAdapter.getItemCount(), true);
     questionTv.setText(questionDto.getQuestion());
-    positionTv.setText(String.format(Locale.getDefault(),"%d/%d", currentPosition,
+    positionTv.setText(String.format(Locale.getDefault(), "%d/%d", currentPosition,
         questionsAdapter.getItemCount()));
+
     if (questionDto.getType().getValue() == 102) {
       radioDetailTv.setVisibility(View.VISIBLE);
       checkBoxDetailTv.setVisibility(View.GONE);
@@ -195,6 +199,18 @@ public class QuestionDetailDialogFragment extends DialogFragment {
     }
     currentPosition = questionsAdapter.getCurrentItemPosition() + 1;
     setData();
-    setUpRecyclerView();
+    if (TextUtils.isEmpty(questionDto.getAnswer()) && questionsAdapter.hasPrerequisite(questionDto)
+        && questionsAdapter.preRequisiteNotAnswered(questionDto)) {
+      errorMsg.setVisibility(View.VISIBLE);
+      errorMsg.setText(String
+          .format(Locale.getDefault(),
+              "جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!",
+              questionDto.getPrerequisite()));
+      recyclerView.setVisibility(View.GONE);
+    } else {
+      recyclerView.setVisibility(View.VISIBLE);
+      errorMsg.setVisibility(View.GONE);
+      setUpRecyclerView();
+    }
   }
 }

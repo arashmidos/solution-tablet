@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.component.CrossfadeWrapper;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
@@ -148,7 +150,11 @@ public class TabletMainActivity extends MainActivity {
   public void onNavigationTapped() {
     Fragment featureFragment = getSupportFragmentManager()
         .findFragmentByTag(FeaturesFragment.class.getSimpleName());
-    if (featureFragment != null && featureFragment.isVisible()) {
+    Fragment questionsListFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
+    if (questionsListFragment != null && questionsListFragment.isVisible()) {
+      ((QuestionsListFragment)questionsListFragment).exit();
+    } else if (featureFragment != null && featureFragment.isVisible()) {
       if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
         drawerLayout.closeDrawer(GravityCompat.END);
       } else {

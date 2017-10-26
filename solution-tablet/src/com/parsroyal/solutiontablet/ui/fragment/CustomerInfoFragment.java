@@ -42,6 +42,7 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
 import org.greenrobot.eventbus.EventBus;
@@ -328,9 +329,9 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         goToRegisterPaymentFragment();
       }
     } else if (event instanceof ErrorEvent) {
-      Log.i(TAG, "Fucking error");
+      Log.i(TAG, "Error");
       DialogUtil.dismissProgressDialog();
-      //TODO Show error message
+      ToastUtil.toastError(mainActivity,"این عملیات امکان پذیر نیست");
     }
   }
 

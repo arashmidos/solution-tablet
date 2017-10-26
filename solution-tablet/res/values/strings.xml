@@ -548,4 +548,5 @@
   <string name="return_info">اطلاعات مرجوع کالا</string>
   <string name="select_reason_to_return">انتخاب دلیل مرجوع کالا</string>
   <string name="reason_to_return">دلیل مرجوع کالا</string>
+  <string name="message_save_questionnaire">تغییرات پرسشنامه ذخیره شود؟</string>
 </resources>

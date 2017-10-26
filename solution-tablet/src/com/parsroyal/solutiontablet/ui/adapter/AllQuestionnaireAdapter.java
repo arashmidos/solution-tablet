@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
@@ -23,6 +22,7 @@ import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.AllQuestionnaireAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.Empty;
 import java.util.Date;
 import java.util.List;
 
@@ -30,8 +30,7 @@ import java.util.List;
  * Created by shkbhbb on 10/23/17.
  */
 
-public class AllQuestionnaireAdapter extends
-    Adapter<ViewHolder> {
+public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
 
   private Context context;
   private List<QuestionnaireListModel> questionnaires;
@@ -100,7 +99,7 @@ public class AllQuestionnaireAdapter extends
         case R.id.main_lay_rel:
           args.putLong(Constants.QUESTIONNAIRE_BACKEND_ID, questionnaire.getPrimaryKey());
           args.putSerializable(Constants.QUESTIONNAIRE_OBJ, questionnaire);
-          //TODO
+
           args.putLong(Constants.GOODS_GROUP_BACKEND_ID,
               questionnaire.getGoodsGroupBackendId() == null ? -1
                   : questionnaire.getGoodsGroupBackendId());
@@ -113,8 +112,10 @@ public class AllQuestionnaireAdapter extends
     public void setData(int position) {
       questionnaire = questionnaires.get(position);
       titleTv.setText(questionnaire.getDescription());
-      //TODO:ARSH QUESTIONNAIRE TYPE
-      questionnaireTypeTv.setText("پرسشنامه عادی");
+
+      questionnaireTypeTv.setText(Empty.isEmpty(questionnaire.getGoodsGroupBackendId())?
+          "پرسشنامه عمومی":
+          "پرسشنامه کالایی");
       Date createdDate = DateUtil
           .convertStringToDate(questionnaire.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);

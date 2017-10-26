@@ -86,7 +86,7 @@ public class NewQuestionnaireListAdapter extends
         case R.id.main_lay:
           args.putLong(Constants.QUESTIONNAIRE_BACKEND_ID, questionnaire.getBackendId());
           args.putSerializable(Constants.QUESTIONNAIRE_OBJ, questionnaire);
-          //TODO todo bara chie?
+
           args.putLong(Constants.GOODS_GROUP_BACKEND_ID, questionnaire.getGoodsGroupBackendId());
           if (questionnaire.getAnswersGroupNo() != null) {
             args.putLong(Constants.ANSWERS_GROUP_NO, questionnaire.getAnswersGroupNo());

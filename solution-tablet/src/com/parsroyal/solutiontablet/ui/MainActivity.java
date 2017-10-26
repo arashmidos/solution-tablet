@@ -27,7 +27,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
@@ -48,7 +47,6 @@ import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
-import com.parsroyal.solutiontablet.ui.fragment.AllQuestionnaireListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AnonymousQuestionnaireFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerFragment;
@@ -56,7 +54,6 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
-import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathFragment;
@@ -68,6 +65,7 @@ import com.parsroyal.solutiontablet.ui.fragment.ReportFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
+import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -525,7 +523,7 @@ public abstract class MainActivity extends AppCompatActivity {
         } else if (questionnaireListFragment != null) {
           navigateToFragment(QuestionnaireListFragment.class.getSimpleName());
         } else {
-          onNavigationTapped();
+          onBackPressed();
         }
         break;
     }
@@ -626,21 +624,6 @@ public abstract class MainActivity extends AppCompatActivity {
       case REPORT_FRAGMENT:
         fragment = ReportFragment.newInstance();
         break;
-      /*
-      case GENERAL_QUESTIONNAIRES_FRAGMENT_ID://6
-        fragment = new GeneralQuestionnairesFragment();
-        parent = args.getInt(Constants.PARENT, 0);
-        break;
-      case QUESTIONNAIRE_DETAIL_FRAGMENT_ID:
-        fragment = new QuestionnaireDetailFragment();
-        parent = args.getInt(Constants.PARENT);
-        break;
-      case GOODS_QUESTIONNAIRES_FRAGMENT_ID://8
-        fragment = new GoodsQuestionnairesFragment();
-        break;
-      case GOODS_LIST_FOR_QUESTIONNAIRES_FRAGMENT_ID:
-        fragment = new GoodsListForQuestionnairesFragment();
-        break;*/
       case SETTING_FRAGMENT_ID:
         fragment = new SettingFragment();
         break;

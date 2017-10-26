@@ -113,6 +113,11 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   }
 
   @Override
+  public void deleteAllAnswer(Long visitId, Long answersGroupNo) {
+    qAnswerDao.deleteAllAnswer(visitId, answersGroupNo);
+  }
+
+  @Override
   public void deleteAll() {
     questionDao.deleteAll();
     questionnaireDao.deleteAll();

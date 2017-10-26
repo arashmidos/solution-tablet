@@ -15,4 +15,6 @@ public interface QAnswerDao extends BaseDao<QAnswer, Long> {
   void updateCustomerBackendIdForAnswers(long customerId, long customerBackendId);
 
   List<AnswerDetailDto> getAllAnswerDetailByGroupId(Long answersGroupNo);
+
+  void deleteAllAnswer(Long visitId, Long answersGroupNo);
 }

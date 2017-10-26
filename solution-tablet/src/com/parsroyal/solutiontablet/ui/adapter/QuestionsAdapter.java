@@ -166,6 +166,19 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
     return questions.size();
   }
 
+  public boolean preRequisiteNotAnswered(QuestionDto currentQuestionDto) {
+
+    QuestionDto nextQuestionDto = questionnaireService
+        .getQuestionDtoByBackendId(currentQuestionDto.getPrerequisite(), visitId, goodsBackendId,
+            answersGroupNo);
+    return nextQuestionDto != null && TextUtils.isEmpty(nextQuestionDto.getAnswer());
+  }
+
+  public boolean hasPrerequisite(QuestionDto currentQuestionDto) {
+    return currentQuestionDto.getPrerequisite() != null
+        && currentQuestionDto.getPrerequisite() != 0L;
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
     @BindView(R.id.question_lay)
@@ -203,7 +216,7 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
         answerTv.setVisibility(View.GONE);
         questionNumberBtn.setBackgroundResource(R.drawable.oval_ee);
         questionNumberBtn.setTextColor(ContextCompat.getColor(mainActivity, R.color.primary_dark));
-        if (hasPrerequisite()) {
+        if (hasPrerequisite(questionDto)) {
           preRequisiteTv.setVisibility(View.VISIBLE);
           preRequisiteTv.setText(String.format(Locale.getDefault(), "پیش نیاز: سوال شماره %d",
               questionDto.getPrerequisite()));
@@ -220,8 +233,8 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.question_lay:
-          if (TextUtils.isEmpty(questionDto.getAnswer()) && hasPrerequisite()
-              && preRequisiteNotAnswered()) {
+          if (TextUtils.isEmpty(questionDto.getAnswer()) && hasPrerequisite(questionDto)
+              && preRequisiteNotAnswered(questionDto)) {
             return;
           }
           currentItemPosition = position;
@@ -244,17 +257,6 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
           break;
       }
     }
-
-    private boolean preRequisiteNotAnswered() {
-
-      QuestionDto nextQuestionDto = questionnaireService
-          .getQuestionDtoByBackendId(questionDto.getPrerequisite(), visitId, goodsBackendId,
-              answersGroupNo);
-      return nextQuestionDto != null && TextUtils.isEmpty(nextQuestionDto.getAnswer());
-    }
-
-    private boolean hasPrerequisite() {
-      return questionDto.getPrerequisite() != null && questionDto.getPrerequisite() != 0L;
-    }
   }
+
 }

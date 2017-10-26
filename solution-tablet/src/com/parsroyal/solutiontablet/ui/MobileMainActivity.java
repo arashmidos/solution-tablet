@@ -5,11 +5,12 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.TextView;
+import android.util.Log;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
 
 public class MobileMainActivity extends MainActivity {
 
@@ -78,7 +79,11 @@ public class MobileMainActivity extends MainActivity {
   public void onNavigationTapped() {
     Fragment featureFragment = getSupportFragmentManager()
         .findFragmentByTag(FeaturesFragment.class.getSimpleName());
-    if (featureFragment != null && featureFragment.isVisible()) {
+    Fragment questionsListFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
+    if (questionsListFragment != null && questionsListFragment.isVisible()) {
+      Log.i(TAG, "WA");
+    } else if (featureFragment != null && featureFragment.isVisible()) {
       if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
         drawerLayout.closeDrawer(GravityCompat.END);
       } else {

@@ -103,7 +103,7 @@ public class AnonymousQuestionAdapter extends
           args.putLong(Constants.QUESTIONNAIRE_BACKEND_ID, model.getPrimaryKey());
           args.putSerializable(Constants.QUESTIONNAIRE_OBJ, model);
           args.putLong(Constants.VISIT_ID, model.getVisitId());
-          //TODO
+
           args.putLong(Constants.GOODS_GROUP_BACKEND_ID,
               model.getGoodsGroupBackendId() == null ? -1
                   : model.getGoodsGroupBackendId());

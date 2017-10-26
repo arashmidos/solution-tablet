@@ -136,7 +136,9 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
   }
 
   private QAnswerDto createDtoFromEntity(Cursor cursor) {
-    Date date = DateUtil.convertStringToDate(cursor.getString(2), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    Date date = DateUtil
+        .convertStringToDate(cursor.getString(2), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
+            "EN");
     return new QAnswerDto(cursor.getLong(0), cursor.getLong(1), date, cursor.getLong(4),
         cursor.getLong(3));
   }
@@ -172,8 +174,19 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     return answerDetailsForSend;
   }
 
+  @Override
+  public void deleteAllAnswer(Long visitId, Long answersGroupNo) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    db.beginTransaction();
+    db.execSQL(String.format("DELETE FROM %s WHERE %s = %s AND %s = %s", getTableName(),
+        QAnswer.COL_VISIT_ID, visitId, QAnswer.COL_ANSWERS_GROUP_NO, answersGroupNo));
+    db.setTransactionSuccessful();
+    db.endTransaction();
+  }
+
   private AnswerDetailDto createAnswerDetailsDtoFromEntity(QAnswer answerDetail) {
     return new AnswerDetailDto(answerDetail.getQuestionBackendId(), answerDetail.getAnswer(),
-        answerDetail.getGoodsBackendId(),answerDetail.getId());
+        answerDetail.getGoodsBackendId(), answerDetail.getId());
   }
 }

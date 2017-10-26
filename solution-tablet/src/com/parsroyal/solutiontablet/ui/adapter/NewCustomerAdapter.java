@@ -185,7 +185,6 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
           deleteCustomer();
           break;
         case R.id.questionnaire_img:
-          //TODO :EDIT MODE
           final VisitInformation finalVisitInformations = visitInformations;
           List<QuestionnaireListModel> generalQmodel = questionnaireService
               .searchForQuestionnaires(new QuestionnaireSo(true));
