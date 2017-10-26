@@ -14,8 +14,10 @@ import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 
 public class ReportFragment extends BaseFragment {
 
-  @BindView(R.id.tabs) TabLayout tabs;
-  @BindView(R.id.viewpager) ViewPager viewpager;
+  @BindView(R.id.tabs)
+  TabLayout tabs;
+  @BindView(R.id.viewpager)
+  ViewPager viewpager;
 
   private CustomerDetailViewPagerAdapter viewPagerAdapter;
   private MainActivity mainActivity;
@@ -25,8 +27,7 @@ public class ReportFragment extends BaseFragment {
   }
 
   public static ReportFragment newInstance() {
-    ReportFragment fragment = new ReportFragment();
-    return fragment;
+    return new ReportFragment();
   }
 
   @Override
@@ -48,7 +49,8 @@ public class ReportFragment extends BaseFragment {
         getActivity().getSupportFragmentManager());
     viewPagerAdapter
         .add(PaymentListFragment.newInstance(null), getString(R.string.payments));
-    viewPagerAdapter.add(OrderListFragment.newInstance(getArguments(), null), getString(R.string.orders));
+    viewPagerAdapter
+        .add(OrderListFragment.newInstance(getArguments(), null), getString(R.string.orders));
     viewpager.setAdapter(viewPagerAdapter);
   }
 

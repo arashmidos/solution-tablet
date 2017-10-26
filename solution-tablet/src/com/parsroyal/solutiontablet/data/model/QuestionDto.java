@@ -24,6 +24,8 @@ public class QuestionDto extends BaseModel {
   private Long backendId;
   private String createDateTime;
   private QuestionType type;
+  private boolean required;
+  private Long prerequisite;
 
   public String getqAnswers() {
     return qAnswers;
@@ -136,5 +138,21 @@ public class QuestionDto extends BaseModel {
 
   public void setStatus(Long status) {
     this.status = status;
+  }
+
+  public boolean isRequired() {
+    return required;
+  }
+
+  public void setRequired(boolean required) {
+    this.required = required;
+  }
+
+  public Long getPrerequisite() {
+    return prerequisite;
+  }
+
+  public void setPrerequisite(Long prerequisite) {
+    this.prerequisite = prerequisite;
   }
 }

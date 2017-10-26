@@ -19,6 +19,8 @@ public class Question extends BaseEntity<Long> {
   public static final String COL_STATUS = "STATUS";
   public static final String COL_ORDER = "qORDER";
   public static final String COL_TYPE = "TYPE";
+  public static final String COL_REQUIRED = "REQUIRED";
+  public static final String COL_PREREQUISITE = "PREREQUISITE";
 
   public static final String CREATE_TABLE_SQL = "CREATE TABLE " + Question.TABLE_NAME + " (" +
       " " + Question.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -30,7 +32,9 @@ public class Question extends BaseEntity<Long> {
       " " + Question.COL_ORDER + " INTEGER," +
       " " + Question.COL_CREATE_DATE_TIME + " TEXT," +
       " " + Question.COL_UPDATE_DATE_TIME + " TEXT," +
-      " " + Question.COL_TYPE + " INTEGER" +
+      " " + Question.COL_TYPE + " INTEGER," +
+      " " + Question.COL_REQUIRED + " INTEGER," +
+      " " + Question.COL_PREREQUISITE + " INTEGER" +
       " );";
 
   private Long id;
@@ -41,10 +45,12 @@ public class Question extends BaseEntity<Long> {
   private Long status;
   private Integer order;
   private QuestionType type;
+  private boolean required;
+  private Long preRequisite;
 
   public Question(Long backendId, Long questionnaireBackendId, String question,
-      String answer, Long status, Integer order,
-      QuestionType type) {
+      String answer, Long status, Integer order, QuestionType type, boolean required,
+      Long prerequisite) {
     this.backendId = backendId;
     this.questionnaireBackendId = questionnaireBackendId;
     this.question = question;
@@ -56,6 +62,8 @@ public class Question extends BaseEntity<Long> {
         .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     this.updateDateTime = DateUtil
         .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    this.required = required;
+    this.preRequisite = prerequisite;
   }
 
   public Question() {
@@ -128,5 +136,21 @@ public class Question extends BaseEntity<Long> {
   @Override
   public Long getPrimaryKey() {
     return id;
+  }
+
+  public boolean isRequired() {
+    return required;
+  }
+
+  public void setRequired(boolean required) {
+    this.required = required;
+  }
+
+  public Long getPreRequisite() {
+    return preRequisite;
+  }
+
+  public void setPreRequisite(Long preRequisite) {
+    this.preRequisite = preRequisite;
   }
 }

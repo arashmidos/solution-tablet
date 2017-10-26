@@ -83,7 +83,7 @@ public class QuestionnaireDataTransferBizImpl extends
     return new Question(questionDto.getBackendId(), questionDto.getQuestionnaireId(),
         CharacterFixUtil.fixString(questionDto.getQuestion()), questionDto.getAnswer(),
         questionDto.getStatus(),
-        questionDto.getOrder(), questionDto.getType());
+        questionDto.getOrder(), questionDto.getType(),questionDto.isRequired(),questionDto.getPrerequisite());
 
   }
 

@@ -44,6 +44,8 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
     contentValues.put(Question.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(Question.COL_UPDATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(Question.COL_TYPE, entity.getType().getValue());
+    contentValues.put(Question.COL_REQUIRED, entity.isRequired() ? 1 : 0);//10
+    contentValues.put(Question.COL_PREREQUISITE, entity.getPreRequisite());
     return contentValues;
   }
 
@@ -59,7 +61,7 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {
+    return new String[]{
         Question.COL_ID,
         Question.COL_BACKEND_ID,
         Question.COL_QUESTIONNAIRE_BACKEND_ID,
@@ -69,9 +71,10 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         Question.COL_ORDER,
         Question.COL_CREATE_DATE_TIME,
         Question.COL_UPDATE_DATE_TIME,
-        Question.COL_TYPE
+        Question.COL_TYPE,
+        Question.COL_REQUIRED,//10
+        Question.COL_PREREQUISITE
     };
-    return projection;
   }
 
   @Override
@@ -87,6 +90,8 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
     question.setCreateDateTime(cursor.getString(7));
     question.setUpdateDateTime(cursor.getString(8));
     question.setType(QuestionType.getByValue(cursor.getInt(9)));
+    question.setRequired(cursor.getInt(10) == 1);
+    question.setPreRequisite(cursor.getLong(11));
     return question;
   }
 
@@ -149,7 +154,9 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         " IFNULL(an._id, NULL)," +//5
         " IFNULL(an.ANSWER, NULL)," +//6
         " q.BACKEND_ID," +//7
-        " q.TYPE" +//8
+        " q.TYPE," +//8
+        " q.REQUIRED," +//9
+        " q.PREREQUISITE" +//10
         " FROM COMMER_QUESTION q" +
         " INNER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID= q.QUESTIONNAIRE_BACKEND_ID" +
         " Left OUTER JOIN COMMER_Q_ANSWER an on an.QUESTION_BACKEND_ID = q.BACKEND_ID "
@@ -174,6 +181,8 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
       questionDto.setAnswer(cursor.getString(6));
       questionDto.setBackendId(cursor.getLong(7));
       questionDto.setType(QuestionType.getByValue(cursor.getInt(8)));
+      questionDto.setRequired(cursor.getInt(9) == 1);
+      questionDto.setPrerequisite(cursor.getLong(10));
     }
 
     cursor.close();
@@ -196,7 +205,9 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
         " IFNULL(an._id, NULL)," +//5
         " IFNULL(an.ANSWER, NULL)," +//6
         " q.BACKEND_ID," +//7
-        " q.TYPE" +//8
+        " q.TYPE," +//8
+        " q.REQUIRED," +//9
+        " q.PREREQUISITE" +//10
         " FROM COMMER_QUESTION q" +
         " INNER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID= q.QUESTIONNAIRE_BACKEND_ID" +
         " Left OUTER JOIN COMMER_Q_ANSWER an on an.QUESTION_BACKEND_ID = q.BACKEND_ID" +
@@ -224,6 +235,8 @@ public class QuestionDaoImpl extends AbstractDao<Question, Long> implements Ques
       questionDto.setAnswer(cursor.getString(6));
       questionDto.setBackendId(cursor.getLong(7));
       questionDto.setType(QuestionType.getByValue(cursor.getInt(8)));
+      questionDto.setRequired(cursor.getInt(9) == 1);
+      questionDto.setPrerequisite(cursor.getLong(10));
     }
 
     cursor.close();
