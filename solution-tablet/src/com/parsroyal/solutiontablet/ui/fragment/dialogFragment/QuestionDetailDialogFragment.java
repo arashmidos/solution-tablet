@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +56,8 @@ public class QuestionDetailDialogFragment extends DialogFragment {
   protected TextView previousTv;
   @BindView(R.id.error_msg)
   protected TextView errorMsg;
+  @BindView(R.id.save_question_img)
+  protected ImageView saveQuestionImg;
 
   protected QuestionDto questionDto;
   protected Context context;
@@ -137,11 +140,10 @@ public class QuestionDetailDialogFragment extends DialogFragment {
     unbinder.unbind();
   }
 
-  @OnClick({R.id.previous_tv, R.id.close_btn, R.id.next_btn, R.id.radio_detail_tv})
+  @OnClick({R.id.previous_tv, R.id.close_btn, R.id.next_btn, R.id.radio_detail_tv,R.id.save_question_img})
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.close_btn:
-        questionsAdapter.saveUserAnswer(questionDetailAdapter.getUserAnswers());
         getDialog().dismiss();
         break;
       case R.id.previous_tv:
@@ -162,6 +164,10 @@ public class QuestionDetailDialogFragment extends DialogFragment {
         } else {
           getDialog().dismiss();
         }
+        break;
+      case R.id.save_question_img:
+        questionsAdapter.saveUserAnswer(questionDetailAdapter.getUserAnswers());
+        getDialog().dismiss();
         break;
     }
   }
@@ -207,9 +213,11 @@ public class QuestionDetailDialogFragment extends DialogFragment {
               "جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!",
               questionDto.getPrerequisite()));
       recyclerView.setVisibility(View.GONE);
+      saveQuestionImg.setVisibility(View.GONE);
     } else {
       recyclerView.setVisibility(View.VISIBLE);
       errorMsg.setVisibility(View.GONE);
+      saveQuestionImg.setVisibility(View.VISIBLE);
       setUpRecyclerView();
     }
   }

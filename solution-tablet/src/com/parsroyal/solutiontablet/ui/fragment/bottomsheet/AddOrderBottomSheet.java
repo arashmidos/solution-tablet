@@ -46,7 +46,7 @@ public class AddOrderBottomSheet extends AddOrderDialogFragment {
       DisplayMetrics displayMetrics = new DisplayMetrics();
       getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
       int width = displayMetrics.widthPixels;
-      params.setMargins(width / 4, 48, width / 4, 0);
+      params.setMargins(width / 4, 0, width / 4, 0);
       bottomSheet.setLayoutParams(params);
       BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
     });

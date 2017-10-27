@@ -13,6 +13,14 @@
     android:background="@color/white"
     android:elevation="3dp"
     android:orientation="horizontal">
+    <ImageView
+      android:id="@+id/save_question_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="16dp"
+      android:tint="#2288e1"
+      android:layout_gravity="start|center"
+      android:src="@drawable/ic_save_24_dp" />
     <TextView
       android:id="@+id/question_tv"
       style="@style/IranSans.Bold"
