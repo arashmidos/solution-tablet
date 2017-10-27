@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionsAdapter;
 import com.parsroyal.solutiontablet.util.DialogUtil;
+import com.parsroyal.solutiontablet.util.Empty;
 import java.util.List;
 
 
@@ -135,5 +137,33 @@ public class QuestionsListFragment extends BaseFragment {
   private void deleteAllQuestions() {
     questionnaireService.deleteAllAnswer(visitId, answersGroupNo);
     mainActivity.findViewById(R.id.save_img).performClick();
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+
+    if (getView() == null) {
+      return;
+    }
+
+    getView().setFocusableInTouchMode(true);
+    getView().requestFocus();
+    getView().setOnKeyListener((v, keyCode, event) ->
+    {
+      if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+        exit();
+        return true;
+      }
+      return false;
+    });
+  }
+
+  public void closeVisit() {
+    if (Empty.isEmpty(customer) || parent == MainActivity.NEW_CUSTOMER_FRAGMENT_ID) {
+      //It's anonymous questionaire or New customer
+      //known bug, it he has not answered any quesiton, should remove the entire visit.
+      visitService.finishVisiting(visitId);
+    }
   }
 }

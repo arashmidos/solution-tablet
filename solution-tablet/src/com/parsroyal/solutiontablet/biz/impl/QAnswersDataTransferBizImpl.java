@@ -81,7 +81,6 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
   @Override
   public void beforeTransfer() {
-    resultObserver.publishResult(context.getString(R.string.sending_answers_information_data));
   }
 
   @Override

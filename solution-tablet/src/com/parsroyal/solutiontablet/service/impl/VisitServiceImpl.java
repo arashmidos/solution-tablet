@@ -100,6 +100,15 @@ public class VisitServiceImpl implements VisitService {
         DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     // -1 Means new customer without backendId
     visitInformation.setResult(-1L);
+    Position position = new PositionServiceImpl(context).getLastPosition();
+
+    if (Empty.isNotEmpty(position)) {
+      visitInformation.setxLocation(position.getLatitude());
+      visitInformation.setyLocation(position.getLongitude());
+    } else {
+      visitInformation.setxLocation(0.0);
+      visitInformation.setyLocation(0.0);
+    }
     return saveVisit(visitInformation);
   }
 
@@ -144,12 +153,14 @@ public class VisitServiceImpl implements VisitService {
 
   @Override
   public void updateVisitLocation(Long visitInformationId, Location location) {
-    visitInformationDao.updateLocation(visitInformationId, location.getLatitude(), location.getLongitude());
+    visitInformationDao
+        .updateLocation(visitInformationId, location.getLatitude(), location.getLongitude());
   }
 
   @Override
   public void updateVisitLocation(Long visitInformationId, Position position) {
-    visitInformationDao.updateLocation(visitInformationId, position.getLatitude(),position.getLongitude());
+    visitInformationDao
+        .updateLocation(visitInformationId, position.getLatitude(), position.getLongitude());
   }
 
 
@@ -232,6 +243,9 @@ public class VisitServiceImpl implements VisitService {
     if (Empty.isNotEmpty(position)) {
       visitInformation.setxLocation(position.getLatitude());
       visitInformation.setyLocation(position.getLongitude());
+    }else{
+      visitInformation.setxLocation(0.0);
+      visitInformation.setyLocation(0.0);
     }
 
     return saveVisit(visitInformation);

@@ -345,6 +345,10 @@ public class DataTransferServiceImpl implements DataTransferService {
 
     QAnswersDataTransferBizImpl qAnswersDataTransferBizImpl = new QAnswersDataTransferBizImpl(
         context, resultObserver);
+    if (Empty.isNotEmpty(resultObserver)) {
+      resultObserver.publishResult(context.getString(R.string.sending_answers_information_data));
+    }
+
     for (int i = 0; i < answersForSend.size(); i++) {
       QAnswerDto qAnswerDto = answersForSend.get(i);
       qAnswersDataTransferBizImpl.setAnswer(qAnswerDto);

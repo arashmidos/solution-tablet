@@ -518,6 +518,12 @@ public abstract class MainActivity extends AppCompatActivity {
             .findFragmentByTag(QuestionnairesCategoryFragment.class.getSimpleName());
         Fragment questionnaireListFragment = getSupportFragmentManager()
             .findFragmentByTag(QuestionnaireListFragment.class.getSimpleName());
+        Fragment questionsListFragment = getSupportFragmentManager()
+            .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
+        if (questionsListFragment != null && questionsListFragment.isVisible()) {
+          ((QuestionsListFragment) questionsListFragment).closeVisit();
+        }
+
         if (questionnaireCategoryFragment != null) {
           navigateToFragment(QuestionnairesCategoryFragment.class.getSimpleName());
         } else if (questionnaireListFragment != null) {
