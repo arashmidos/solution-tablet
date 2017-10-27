@@ -1,12 +1,10 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -29,7 +27,6 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -45,6 +42,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.OnMapAndViewReadyListener;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
@@ -175,9 +173,15 @@ public class PathDetailFragment extends BaseFragment implements
   private void setMobileData() {
     visitline = visitService.getVisitLineListModelByBackendId(visitlineBackendId);
 
-    customersNumberTv
-        .setText(String.format(getString(R.string.x_customers), visitline.getCustomerCount()));
-    pathCodeTv.setText(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
+    if (Empty.isNotEmpty(customersNumberTv)) {
+      customersNumberTv
+          .setText(String.format(getString(R.string.x_customers), visitline.getCustomerCount()));
+      pathCodeTv.setText(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
+    } else {
+      //We detected wrong device size!
+      Logger.sendError("Wrong Orientation", "Device is not tablet");
+
+    }
     mainActivity
         .changeTitle(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
   }
@@ -187,8 +191,13 @@ public class PathDetailFragment extends BaseFragment implements
     mainActivity.changeDetailContent(
         String.format(getString(R.string.visitline_code_x), visitline.getCode()));
 
-    customerCountBtn
-        .setText(String.format(getString(R.string.x_customers), visitline.getCustomerCount()));
+    if (Empty.isNotEmpty(customerCountBtn)) {
+      customerCountBtn
+          .setText(String.format(getString(R.string.x_customers), visitline.getCustomerCount()));
+    } else {
+      //We detected wrong device size!
+      Logger.sendError("Wrong Orientation", "Device is not tablet");
+    }
     mainActivity
         .changeTitle(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
   }
