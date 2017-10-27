@@ -86,8 +86,7 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
 
   @Override
   public void beforeTransfer() {
-    resultObserver
-        .publishResult(context.getString(R.string.message_transferring_deliverable_orders));
+
   }
 
   @Override

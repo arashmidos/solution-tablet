@@ -46,7 +46,6 @@ public class BaseInfoDataTransferBizImpl extends AbstractDataTransferBizImpl<Bas
 
   @Override
   public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.message_transferring_base_info_data));
   }
 
   @Override

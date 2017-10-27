@@ -114,7 +114,6 @@ public class VisitLineForDeliveryDataTaransferBizImpl extends AbstractDataTransf
 
   @Override
   public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.message_transferring_visit_lines_data));
   }
 
   @Override

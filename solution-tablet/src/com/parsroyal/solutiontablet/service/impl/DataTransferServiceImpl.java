@@ -175,6 +175,8 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   private void getAllProvinces(ResultObserver observer) {
     boolean success = false;
+    observer.publishResult(context.getString(R.string.message_transferring_provinces_data));
+
     for (int i = 0; i < 3 && !success; i++) {
       success = new ProvinceDataTransferBizImpl(context, observer).exchangeData();
     }
@@ -182,66 +184,79 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   private void getAllCities(ResultObserver observer) {
     boolean success = false;
+    observer.publishResult(context.getString(R.string.message_transferring_cities_data));
+
     for (int i = 0; i < 3 && !success; i++) {
       success = new CityDataTransferBizImpl(context, observer).exchangeData();
     }
   }
 
-  private void getAllBaseInfos(ResultObserver resultObserver) {
+  private void getAllBaseInfos(ResultObserver observer) {
     boolean success = false;
+    observer.publishResult(context.getString(R.string.message_transferring_base_info_data));
+
     for (int i = 0; i < 3 && !success; i++) {
-      success = new BaseInfoDataTransferBizImpl(context, resultObserver).exchangeData();
+      success = new BaseInfoDataTransferBizImpl(context, observer).exchangeData();
     }
   }
 
-  private void getAllGoodsGroups(ResultObserver resultObserver) {
+  private void getAllGoodsGroups(ResultObserver observer) {
     boolean success = false;
+    observer.publishResult(context.getString(R.string.message_transferring_goods_group_data));
+
     for (int i = 0; i < 3 && !success; i++) {
-      success = new GoodsGroupDataTransferBizImpl(context, resultObserver).exchangeData();
+      success = new GoodsGroupDataTransferBizImpl(context, observer).exchangeData();
     }
   }
 
-  private void getAllQuestionnaires(ResultObserver resultObserver) {
+  private void getAllQuestionnaires(ResultObserver observer) {
     boolean success = false;
+    observer.publishResult(context.getString(R.string.message_transferring_questionnaires_data));
     for (int i = 0; i < 3 && !success; i++) {
-      success = new QuestionnaireDataTransferBizImpl(context, resultObserver).exchangeData();
+      success = new QuestionnaireDataTransferBizImpl(context, observer).exchangeData();
     }
   }
 
-  private void getAllDeliverableGoods(ResultObserver resultObserver) {
+  private void getAllDeliverableGoods(ResultObserver observer) {
     boolean success = false;
+    observer.publishResult(context.getString(R.string.message_transferring_deliverable_goods_data));
     for (int i = 0; i < 3 && !success; i++) {
-      success = new DeliverableGoodsDataTransferBizImpl(context, resultObserver).exchangeData();
+      success = new DeliverableGoodsDataTransferBizImpl(context, observer).exchangeData();
     }
   }
 
-  private void getAllVisitLinesForDelivery(ResultObserver resultObserver) {
+  private void getAllVisitLinesForDelivery(ResultObserver observer) {
     boolean success = false;
+    observer.publishResult(context.getString(R.string.message_transferring_visit_lines_data));
+
     for (int i = 0; i < 3 && !success; i++) {
-      success = new VisitLineForDeliveryDataTaransferBizImpl(context, resultObserver)
-          .exchangeData();
+      success = new VisitLineForDeliveryDataTaransferBizImpl(context, observer).exchangeData();
     }
   }
 
-  private void getAllOrdersForDelivery(ResultObserver resultObserver) {
+  private void getAllOrdersForDelivery(ResultObserver observer) {
     boolean success = false;
+    observer.publishResult(context.getString(R.string.message_transferring_deliverable_orders));
     for (int i = 0; i < 3 && !success; i++) {
-      success = new SaleOrderForDeliveryDataTaransferBizImpl(context, resultObserver)
-          .exchangeData();
+      success = new SaleOrderForDeliveryDataTaransferBizImpl(context, observer).exchangeData();
     }
   }
 
-  private void getAllGoods(ResultObserver resultObserver) {
+  private void getAllGoods(ResultObserver observer) {
     boolean success = false;
+    observer.publishResult(context.getString(R.string.message_transferring_goods_data));
+
     for (int i = 0; i < 3 && !success; i++) {
-      success = new GoodsDataTransferBizImpl(context, resultObserver).exchangeData();
+      success = new GoodsDataTransferBizImpl(context, observer).exchangeData();
     }
   }
 
-  private void getAllVisitLines(ResultObserver resultObserver) {
+  private void getAllVisitLines(ResultObserver observer) {
     boolean success = false;
+    observer.publishResult(context.getString(R.string.message_transferring_visit_lines_data));
+
     for (int i = 0; i < 3 && !success; i++) {
-      success = new VisitLineDataTaransferBizImpl(context, resultObserver).exchangeData();
+      success = new VisitLineDataTaransferBizImpl(context, observer).exchangeData();
     }
   }
 

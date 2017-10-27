@@ -70,7 +70,6 @@ public class GoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<String
 
   @Override
   public void beforeTransfer() {
-    resultObserver.publishResult(context.getString(R.string.message_transferring_goods_data));
   }
 
   @Override

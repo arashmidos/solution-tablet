@@ -47,7 +47,6 @@ public class ProvinceDataTransferBizImpl extends AbstractDataTransferBizImpl<Pro
 
   @Override
   public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.message_transferring_provinces_data));
   }
 
   @Override

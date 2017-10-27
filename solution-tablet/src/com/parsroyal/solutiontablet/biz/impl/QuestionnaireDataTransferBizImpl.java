@@ -97,8 +97,6 @@ public class QuestionnaireDataTransferBizImpl extends
 
   @Override
   public void beforeTransfer() {
-    getObserver()
-        .publishResult(context.getString(R.string.message_transferring_questionnaires_data));
   }
 
   @Override

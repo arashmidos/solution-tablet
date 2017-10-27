@@ -45,7 +45,6 @@ public class CityDataTransferBizImpl extends AbstractDataTransferBizImpl<CityLis
 
   @Override
   public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.message_transferring_cities_data));
   }
 
   @Override

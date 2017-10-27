@@ -73,7 +73,6 @@ public class GoodsGroupDataTransferBizImpl extends AbstractDataTransferBizImpl<S
 
   @Override
   public void beforeTransfer() {
-    resultObserver.publishResult(context.getString(R.string.message_transferring_goods_group_data));
   }
 
   @Override
