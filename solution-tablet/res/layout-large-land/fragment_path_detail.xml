@@ -1,0 +1,245 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/gray_f5"
+  android:orientation="vertical"
+  tools:context="com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment">
+
+  <android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="3dp">
+
+    <LinearLayout
+      android:id="@+id/search_bar_lay"
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      android:background="@android:color/white"
+      android:orientation="horizontal"
+      android:visibility="gone">
+
+      <ImageView
+        android:id="@+id/search_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="19dp"
+        android:layout_gravity="left|center"
+        android:src="@drawable/ic_search"
+        android:tint="@color/login_gray" />
+
+      <EditText
+        android:id="@+id/search_edt"
+        style="@style/IranSans"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginRight="15dp"
+        android:background="@android:color/transparent"
+        android:gravity="center|right"
+        android:hint="@string/search_customers_hint"
+        android:textColorHint="@color/login_gray"
+        android:textSize="14sp" />
+
+    </LinearLayout>
+  </android.support.design.widget.AppBarLayout>
+  <!-- MapFragment with lite mode enabled -->
+  <!--TODO://Map-->
+  <!--<fragment
+    android:id="@+id/map"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:layout_width="match_parent"
+    android:layout_height="184dp"
+    map:liteMode="true" />-->
+
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/navigation_drawer_divider" />
+
+  <LinearLayout
+    android:id="@+id/detail_lay"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="31dp"
+    android:layout_marginBottom="24dp"
+    android:layout_marginStart="90dp"
+    android:layout_marginEnd="90dp"
+    android:layout_marginLeft="90dp"
+    android:layout_marginRight="90dp"
+    android:layout_gravity="bottom"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+      android:id="@+id/sort_lay"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:gravity="center">
+
+      <TextView
+        android:id="@+id/sort_tv"
+        style="@style/IranSans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:text="@string/sort"
+        android:textColor="@color/black_de"
+        android:textSize="12sp" />
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/sort_tv"
+        android:src="@drawable/ic_sort_black_18dp"
+        android:tint="@color/black_8a" />
+    </RelativeLayout>
+    <View
+      android:layout_width="1dp"
+      android:layout_height="match_parent"
+      android:layout_marginStart="20dp"
+      android:layout_marginEnd="24dp"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="24dp"
+      android:background="@color/features_background" />
+    <RelativeLayout
+      android:id="@+id/filter_lay"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:gravity="center">
+
+      <TextView
+        android:id="@+id/filter_tv"
+        style="@style/IranSans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:text="@string/filter"
+        android:textColor="@color/black_de"
+        android:textSize="12sp" />
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/filter_tv"
+        android:src="@drawable/ic_filter_list_black_18dp"
+        android:tint="@color/black_8a" />
+    </RelativeLayout>
+    <View
+      android:layout_width="1dp"
+      android:layout_height="match_parent"
+      android:layout_marginStart="20dp"
+      android:layout_marginEnd="24dp"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="24dp"
+      android:background="@color/features_background" />
+    <RelativeLayout
+      android:id="@+id/search_lay"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:gravity="center">
+
+      <TextView
+        android:id="@+id/search_tv"
+        style="@style/IranSans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/search"
+        android:textColor="@color/black_de"
+        android:textSize="12sp" />
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/search_tv"
+        android:src="@drawable/ic_search_black_18"
+        android:tint="@color/black_8a" />
+    </RelativeLayout>
+    <View
+      android:layout_width="0dp"
+      android:layout_height="1dp"
+      android:layout_weight="1" />
+    <LinearLayout
+      android:id="@+id/customers_number_lay"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:orientation="horizontal">
+
+      <Button
+        android:id="@+id/customer_count_btn"
+        style="@style/IranSans.Medium"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/customer_badger_background"
+        android:gravity="center"
+        android:textColor="@color/black_8a"
+        android:textSize="14sp"
+        tools:text="9" />
+
+      <TextView
+        android:id="@+id/customers_number_tv"
+        style="@style/IranSans.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="@string/cusomter"
+        android:textColor="@color/black_de"
+        android:textSize="16sp" />
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:layout_marginStart="82dp"
+    android:layout_marginEnd="82dp"
+    android:layout_marginLeft="82dp"
+    android:layout_marginRight="82dp">
+
+  </android.support.v7.widget.RecyclerView>
+  <LinearLayout
+    android:id="@+id/no_customer_lay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="90dp"
+    android:layout_marginEnd="90dp"
+    android:layout_marginLeft="90dp"
+    android:layout_marginRight="90dp"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="50dp"
+      android:layout_marginBottom="25dp"
+      android:layout_gravity="center_vertical|top"
+      android:gravity="center"
+      android:src="@drawable/im_customer_not_found" />
+
+    <TextView
+      style="@style/IranSans"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:text="@string/no_customer"
+      android:textColor="@color/gray_75"
+      android:textSize="14sp" />
+  </LinearLayout>
+
+</LinearLayout>
