@@ -79,9 +79,7 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
   @Override
   public void beforeTransfer() {
-    if (Empty.isNotEmpty(getObserver())) {
-      getObserver().publishResult(context.getString(R.string.sending_positions_data));
-    }
+
   }
 
   @Override
