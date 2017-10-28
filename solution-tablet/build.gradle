@@ -26,11 +26,11 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.3'
     defaultConfig {
-        applicationId "com.parsroyal.solutiontablet"
+        applicationId "com.parsroyal.solutionmobile"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 71
-        versionName "2.10.8.2-ui"
+        versionCode 74
+        versionName "2.10.8.5-ui"
         vectorDrawables.useSupportLibrary = true
         jackOptions {
             enabled true
@@ -80,7 +80,7 @@ android {
         variant.outputs.each { output ->
             output.outputFile = new File(
                     output.outputFile.parent,
-                    "Solution-Tablet-${variant.versionName}.apk")
+                    "Solution-Mobile-${variant.versionName}.apk")
         }
     }
     buildTypes {
