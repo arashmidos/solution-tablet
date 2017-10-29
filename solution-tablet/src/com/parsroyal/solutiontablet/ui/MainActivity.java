@@ -176,10 +176,6 @@ public abstract class MainActivity extends AppCompatActivity {
     if (!BuildConfig.DEBUG) {
       logUser();
     }
-
-    if (!checkPermissions()) {
-      requestPermissions();
-    }
   }
 
 
@@ -308,6 +304,10 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
+    if (!checkPermissions()) {
+      requestPermissions();
+    }
+
     if (!GPSUtil.isGpsAvailable(this)) {
       showGpsOffDialog();
       Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");

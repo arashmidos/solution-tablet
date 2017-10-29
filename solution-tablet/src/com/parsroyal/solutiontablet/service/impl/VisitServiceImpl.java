@@ -23,6 +23,7 @@ import com.parsroyal.solutiontablet.data.model.VisitInformationDetailDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.service.VisitService;
+import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -105,11 +106,25 @@ public class VisitServiceImpl implements VisitService {
     if (Empty.isNotEmpty(position)) {
       visitInformation.setxLocation(position.getLatitude());
       visitInformation.setyLocation(position.getLongitude());
+      return saveVisit(visitInformation);
     } else {
       visitInformation.setxLocation(0.0);
       visitInformation.setyLocation(0.0);
+      final Long visitId = saveVisit(visitInformation);
+      locationService.findCurrentLocation(new FindLocationListener() {
+        @Override
+        public void foundLocation(Location location) {
+          visitInformation.setxLocation(0.0);
+          visitInformation.setyLocation(0.0);
+          updateVisitLocation(visitId, location);
+        }
+
+        @Override
+        public void timeOut() {
+        }
+      });
+      return visitId;
     }
-    return saveVisit(visitInformation);
   }
 
   @Override
@@ -243,7 +258,7 @@ public class VisitServiceImpl implements VisitService {
     if (Empty.isNotEmpty(position)) {
       visitInformation.setxLocation(position.getLatitude());
       visitInformation.setyLocation(position.getLongitude());
-    }else{
+    } else {
       visitInformation.setxLocation(0.0);
       visitInformation.setyLocation(0.0);
     }

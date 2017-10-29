@@ -29,7 +29,6 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -304,7 +303,8 @@ public class LocationUpdatesService extends Service {
 
   private boolean isAccepted(Location location) {
     //Accept first position what ever it is
-    if (Empty.isEmpty(lastLocation) && Empty.isNotEmpty(location)) {
+    if (Empty.isEmpty(lastLocation) && Empty.isNotEmpty(location)
+        && location.getLongitude() != 0.0) {
       return true;
     }
     if ((Empty.isEmpty(location) || location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER

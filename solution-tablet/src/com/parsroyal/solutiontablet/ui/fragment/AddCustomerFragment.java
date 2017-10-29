@@ -342,7 +342,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       return false;
     }
 
-    if (activitySpinner.getSelectedItemId() == -1L) {
+   /* if (activitySpinner.getSelectedItemId() == -1L) {
       ToastUtil.toastError(getActivity(), R.string.message_activity_type_is_required);
       return false;
     }
@@ -350,7 +350,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     if (customerClassSpinner.getSelectedItemId() == -1L) {
       ToastUtil.toastError(getActivity(), R.string.message_customer_class_is_required);
       return false;
-    }
+    }*/
 
     return true;
   }

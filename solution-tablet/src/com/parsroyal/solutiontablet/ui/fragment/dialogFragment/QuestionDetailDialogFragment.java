@@ -150,6 +150,7 @@ public class QuestionDetailDialogFragment extends DialogFragment {
         if (currentPosition != 1) {
           changeQuestion(false);
         } else {
+          questionsAdapter.saveUserAnswer(questionDetailAdapter.getUserAnswers());
           getDialog().dismiss();
         }
         break;
@@ -162,6 +163,7 @@ public class QuestionDetailDialogFragment extends DialogFragment {
         if (currentPosition != questionsAdapter.getItemCount()) {
           changeQuestion(true);
         } else {
+          questionsAdapter.saveUserAnswer(questionDetailAdapter.getUserAnswers());
           getDialog().dismiss();
         }
         break;

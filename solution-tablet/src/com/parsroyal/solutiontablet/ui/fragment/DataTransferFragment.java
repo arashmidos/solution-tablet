@@ -254,8 +254,8 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
         publishResult(getString(R.string.goods_images_data_transferred_successfully));
       } else {
         publishResult(getString(R.string.message_exception_in_data_transfer));
+        finished(true);
       }
-      finished(true);
     }
   }
 }
