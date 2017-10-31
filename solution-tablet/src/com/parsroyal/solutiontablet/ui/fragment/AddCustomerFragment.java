@@ -255,11 +255,11 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
           stateSpinner.getSelectedItemId() <= 0 ? null : stateSpinner.getSelectedItemId());
       customer.setCityBackendId(
           citySpinner.getSelectedItemId() <= 0 ? null : citySpinner.getSelectedItemId());
-      customer.setActivityBackendId(activitySpinner.getSelectedItemId());
-      customer.setStoreLocationTypeBackendId(
-          ownershipSpinner.getSelectedItemId() == -1L ? null
-              : ownershipSpinner.getSelectedItemId());
-      customer.setClassBackendId(customerClassSpinner.getSelectedItemId() == -1L ? null
+      customer.setActivityBackendId(
+          activitySpinner.getSelectedItemId() < 0 ? null : activitySpinner.getSelectedItemId());
+      customer.setStoreLocationTypeBackendId(ownershipSpinner.getSelectedItemId() < 0 ? null
+          : ownershipSpinner.getSelectedItemId());
+      customer.setClassBackendId(customerClassSpinner.getSelectedItemId() < 0 ? null
           : customerClassSpinner.getSelectedItemId());
       customer.setShopName(CharacterFixUtil.fixString(shopNameEdt.getText().toString()));
       customer.setNationalCode(NumberUtil.digitsToEnglish(nationalCodeEdt.getText().toString()));

@@ -296,7 +296,7 @@ public class Customer extends BaseEntity<Long> {
     sb.append("&");
     sb.append(Empty.isNotEmpty(address) ? address : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(activityBackendId) ? activityBackendId : "NULL");
+    sb.append(Empty.isNotEmpty(activityBackendId) && activityBackendId!= 0? activityBackendId : "NULL");
     sb.append("&");
     sb.append(Empty.isNotEmpty(storeSurface) ? storeSurface : "NULL");
     sb.append("&");
@@ -322,7 +322,7 @@ public class Customer extends BaseEntity<Long> {
     sb.append("&");
     sb.append(Empty.isNotEmpty(municipalityCode) ? municipalityCode : "NULL");
     return sb.toString();
-  }
+  }//15&arash&123&22&39&578&kk&NULL&0&0&2017-10-30 - 09:13:28&2017-10-30 - 09:13:28&0.0&0.0&NULL&sho&NULL&NULL&NULL
 
   @Override
   public Long getPrimaryKey() {
