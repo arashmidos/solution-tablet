@@ -508,6 +508,7 @@
 
   <string name="reason_register_no">دلیل ثبت عدم را انتخاب کنید</string>
   <string name="code_x">کد : %s</string>
+  <string name="code">کد :</string>
   <string name="choose_one">هیچ گزینه ای انتخاب نشده است</string>
   <string name="message_cheque_account_number_is_required">وارد کردن شماره حساب اجباریست.</string>
   <string name="message_cheque_amount_is_required">وارد کردن مبلغ اجباریست.</string>
@@ -549,4 +550,5 @@
   <string name="select_reason_to_return">انتخاب دلیل مرجوع کالا</string>
   <string name="reason_to_return">دلیل مرجوع کالا</string>
   <string name="message_save_questionnaire">تغییرات پرسشنامه ذخیره شود؟</string>
+  <string name="customer_price_title">(مصرف کننده)</string>
 </resources>

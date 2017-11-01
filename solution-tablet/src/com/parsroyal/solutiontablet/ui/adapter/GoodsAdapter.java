@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,11 @@ import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ShakibIsTheBest on 8/4/2017.
@@ -55,7 +58,11 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     Goods good = goodsList.get(position);
-    holder.setData(position, good);
+    try {
+      holder.setData(position, good);
+    } catch (Exception ex) {
+      Logger.sendError("Goods Adapter", ex.getMessage());
+    }
   }
 
 
@@ -87,8 +94,14 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
     TextView recoveryDateTv;
     @BindView(R.id.main_lay)
     RelativeLayout mainLay;
+    @BindView(R.id.good_customer_price_tv)
+    TextView goodsCustomerPrice;
+    @Nullable
+    @BindView(R.id.good_currency)
+    TextView goodsCurrency;
     private int position;
     private Goods good;
+
 
     public ViewHolder(View itemView) {
       super(itemView);
@@ -107,36 +120,46 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
           .load(MediaUtil.getGoodImage(good.getCode()))
           .error(R.drawable.goods_default)
           .into(goodImg);
-      goodNameTv.setText(good.getTitle());
-      goodCodeTv.setText(String.format(context.getString(R.string.good_code_x), good.getCode()));
+      goodNameTv.setText(NumberUtil.digitsToPersian(good.getTitle()));
+      goodCodeTv.setText(
+          String.format(Locale.getDefault(), "%s %s", context.getString(R.string.code),
+              NumberUtil.digitsToPersian(good.getCode())));
 
       //set existings
       Double unit1Existing = Double.valueOf(good.getExisting()) / 1000D;
-      goodNumberTv.setText(String.format("%s %s",
+      goodNumberTv.setText(String.format(Locale.getDefault(), "%s %s",
           NumberUtil.formatDoubleWith2DecimalPlaces(unit1Existing),
-          (Empty.isNotEmpty(good.getUnit1Title()) ? good.getUnit1Title() : "--")));
+          (Empty.isNotEmpty(good.getUnit1Title()) ? NumberUtil.digitsToPersian(good.getUnit1Title())
+              : "--")));
 
       Long unit1Count = good.getUnit1Count();
       if (Empty.isNotEmpty(unit1Count) && !unit1Count.equals(0L)) {
         Double unit2Existing = Double.valueOf(good.getExisting()) / Double.valueOf(unit1Count);
         unit2Existing = unit2Existing / 1000D;
 
-        goodBoxTv.setText(String
-            .format("%s %s", NumberUtil.formatDoubleWith2DecimalPlaces(unit2Existing),
-                (Empty.isNotEmpty(good.getUnit2Title()) ? good.getUnit2Title() : "--")));
+        goodBoxTv.setText(String.format(Locale.getDefault(), "%s %s",
+            NumberUtil.formatDoubleWith2DecimalPlaces(unit2Existing),
+            (Empty.isNotEmpty(good.getUnit2Title()) ? NumberUtil
+                .digitsToPersian(good.getUnit2Title()) : "--")));
       }
       //
 
       //set price
       Double goodsAmount = Double.valueOf(good.getPrice()) / 1000D;
-      goodPriceTv.setText(NumberUtil.getCommaSeparated(goodsAmount) + " " +
-          context.getString(R.string.common_irr_currency));
+      goodPriceTv.setText(
+          String.format(Locale.getDefault(), "%s %s", NumberUtil.getCommaSeparated(goodsAmount),
+              context.getString(R.string.common_irr_currency)));
+      Double goodsCustomerAmount = Double.valueOf(good.getCustomerPrice()) / 1000D;
+      goodsCustomerPrice.setText(String
+          .format(Locale.getDefault(), "%s", NumberUtil.getCommaSeparated(goodsCustomerAmount)));
+      if (Empty.isNotEmpty(goodsCurrency)) {
+        goodsCurrency.setText(R.string.common_irr_currency);
+      }
 
       if (isRejectedGoods) {
         recoveryDateTv.setVisibility(View.GONE);
       } else {
-        recoveryDateTv.setText(
-            String.format(context.getString(R.string.recovery_date_x), good.getRecoveryDate()));
+        recoveryDateTv.setText(String.format(NumberUtil.digitsToPersian(good.getRecoveryDate())));
       }
     }
 

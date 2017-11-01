@@ -52,6 +52,7 @@ public class AnonymousQuestionnaireFragment extends BaseFragment {
     View view = inflater.inflate(R.layout.fragment_anonymous_questionnaire, container, false);
     unbinder = ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
+    mainActivity.changeTitle(getString(R.string.questionnaire));
     questionnaireService = new QuestionnaireServiceImpl(mainActivity);
     visitService = new VisitServiceImpl(mainActivity);
     dataModel = getDataModel();

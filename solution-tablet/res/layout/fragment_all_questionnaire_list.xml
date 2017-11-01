@@ -17,7 +17,7 @@
     android:layout_alignParentBottom="true"
     android:layout_alignParentLeft="true"
     android:src="@drawable/ic_add_24_dp_white"
-    app:backgroundTint="@color/register_questionnaire"
+    app:backgroundTint="@color/blue_19"
     app:borderWidth="0dp"
     app:fabSize="normal" />
 </RelativeLayout>

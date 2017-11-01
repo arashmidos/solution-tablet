@@ -77,7 +77,6 @@ public class OrderFragment extends BaseFragment {
   @BindView(R.id.goods_cart_image)
   ImageView goodsCartImage;
 
-
   private boolean isClose = false;
   private List<Goods> goodsList;
   private GoodsService goodsService;

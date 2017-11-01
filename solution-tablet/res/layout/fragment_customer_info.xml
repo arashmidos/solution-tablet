@@ -469,7 +469,7 @@
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_assignment_24dp"
-          android:tint="@color/register_questionnaire" />
+          android:tint="@color/blue_19" />
 
         <TextView
           style="@style/IranSans.Medium"

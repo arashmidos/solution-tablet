@@ -95,8 +95,8 @@
         <RelativeLayout
           android:id="@+id/features_list_lay"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="23dp"
+          android:layout_height="48dp"
+          android:layout_marginTop="8dp"
           android:layout_marginStart="20dp"
           android:layout_marginEnd="20dp"
           android:layout_marginLeft="20dp"
@@ -110,6 +110,7 @@
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_apps_black_24dp"
             android:tint="@color/login_gray" />
 
@@ -129,8 +130,7 @@
         <RelativeLayout
           android:id="@+id/today_paths_lay"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="23dp"
+          android:layout_height="48dp"
           android:layout_marginStart="20dp"
           android:layout_marginEnd="20dp"
           android:layout_marginLeft="20dp"
@@ -144,6 +144,7 @@
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_near_me_black_24dp"
             android:tint="@color/login_gray" />
 
@@ -163,8 +164,7 @@
         <RelativeLayout
           android:id="@+id/customers_lay"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="23dp"
+          android:layout_height="48dp"
           android:layout_marginStart="20dp"
           android:layout_marginEnd="20dp"
           android:layout_marginLeft="20dp"
@@ -173,11 +173,12 @@
           <ImageView
             android:id="@+id/customer_icon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_group_black_24dp"
             android:tint="@color/login_gray" />
 
@@ -197,8 +198,7 @@
         <RelativeLayout
           android:id="@+id/goods_lay"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="23dp"
+          android:layout_height="48dp"
           android:layout_marginStart="20dp"
           android:layout_marginEnd="20dp"
           android:layout_marginLeft="20dp"
@@ -212,6 +212,7 @@
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_products_24_dp"
             android:tint="@color/black_21" />
 
@@ -231,8 +232,7 @@
         <RelativeLayout
           android:id="@+id/reports_lay"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="23dp"
+          android:layout_height="48dp"
           android:layout_marginStart="20dp"
           android:layout_marginEnd="20dp"
           android:layout_marginLeft="20dp"
@@ -241,11 +241,12 @@
           <ImageView
             android:id="@+id/report_icon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_assignment_black_24dp"
             android:tint="@color/login_gray" />
 
@@ -265,8 +266,7 @@
         <RelativeLayout
           android:id="@+id/map_lay"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="23dp"
+          android:layout_height="48dp"
           android:layout_marginStart="20dp"
           android:layout_marginEnd="20dp"
           android:layout_marginLeft="20dp"
@@ -275,11 +275,12 @@
           <ImageView
             android:id="@+id/map_icon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_map_black_24dp"
             android:tint="@color/login_gray" />
 
@@ -298,8 +299,7 @@
         <RelativeLayout
           android:id="@+id/questionnaire_lay"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="23dp"
+          android:layout_height="48dp"
           android:layout_marginStart="20dp"
           android:layout_marginEnd="20dp"
           android:layout_marginLeft="20dp"
@@ -308,7 +308,8 @@
           <ImageView
             android:id="@+id/questionnaire_icon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
@@ -332,9 +333,7 @@
         <RelativeLayout
           android:id="@+id/setting_lay"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="23dp"
-          android:layout_marginBottom="22dp"
+          android:layout_height="48dp"
           android:layout_marginStart="20dp"
           android:layout_marginEnd="20dp"
           android:layout_marginLeft="20dp"
@@ -343,7 +342,8 @@
           <ImageView
             android:id="@+id/setting_icon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
@@ -366,6 +366,8 @@
 
         <View
           android:layout_width="match_parent"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
           android:layout_height="1dp"
           android:background="@color/navigation_drawer_divider" />
 
@@ -373,10 +375,11 @@
           android:id="@+id/about_us"
           style="@style/IranSans"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="24dp"
+          android:layout_height="48dp"
+          android:gravity="center_vertical"
           android:layout_marginEnd="16dp"
           android:layout_marginRight="16dp"
+          android:layout_marginLeft="20dp"
           android:text="@string/about_us"
           android:textColor="@color/black_de"
           android:textSize="14sp" />

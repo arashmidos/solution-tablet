@@ -43,7 +43,8 @@ public class PaymentServiceImpl implements PaymentService {
           DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
       return paymentDao.create(payment);
     } else {
-      payment.setUpdateDateTime(new Date().toString());
+      payment.setUpdateDateTime(
+          DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
       paymentDao.update(payment);
       return payment.getId();
     }
