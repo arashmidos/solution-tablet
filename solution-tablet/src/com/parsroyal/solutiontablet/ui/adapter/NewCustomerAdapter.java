@@ -16,7 +16,6 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
@@ -29,12 +28,14 @@ import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NewCustomerAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
@@ -74,7 +75,9 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
   public void onBindViewHolder(ViewHolder holder, int position) {
     NCustomerListModel customer = customers.get(position);
 
-    setMargin(position == customers.size() - 1, holder.customerLay);
+    if (!MultiScreenUtility.isTablet(mainActivity)) {
+      setMargin(position == customers.size() - 1, holder.customerLay);
+    }
     holder.setData(customer, position);
   }
 
@@ -177,13 +180,16 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
         case R.id.customer_lay:
           break;
         case R.id.edit_img:
+        case R.id.edit_img_layout:
           Bundle args = new Bundle();
           args.putLong(Constants.CUSTOMER_ID, customer.getPrimaryKey());
           mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, false);
           break;
         case R.id.delete_img:
+        case R.id.delete_img_layout:
           deleteCustomer();
           break;
+        case R.id.questionnaire_img_layout:
         case R.id.questionnaire_img:
           final VisitInformation finalVisitInformations = visitInformations;
           List<QuestionnaireListModel> generalQmodel = questionnaireService
@@ -210,9 +216,25 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
           long visitId;
           if (finalVisitInformations == null) {
             visitId = visitService.startVisitingNewCustomer(customer.getPrimaryKey());
+            bundle
+                .putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
           } else {
             visitId = finalVisitInformations.getId();
+            QuestionnaireSo questionnaireSo = new QuestionnaireSo(true);
+            questionnaireSo.setVisitId(visitId);
+            QuestionnaireServiceImpl questionnaireService = new QuestionnaireServiceImpl(
+                mainActivity);
+            List<QuestionnaireListModel> questionnaireList = questionnaireService
+                .searchForQuestionsList(questionnaireSo);
+            if (questionnaireList.size() > 0) {
+              bundle.putLong(Constants.ANSWERS_GROUP_NO,
+                  questionnaireList.get(0).getAnswersGroupNo());
+            } else {
+              bundle
+                  .putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
+            }
           }
+
           bundle.putLong(Constants.VISIT_ID, visitId);
           bundle.putInt(Constants.PARENT, MainActivity.NEW_CUSTOMER_FRAGMENT_ID);
           //

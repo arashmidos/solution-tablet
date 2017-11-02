@@ -13,6 +13,7 @@ public class VisitInformationDetail extends BaseEntity<Long> {
   public static final String COL_TYPE_ID = "TYPE_ID";
   public static final String COL_EXTRA_DATA = "EXTRA_DATA";
   public static final String COL_VISIT_INFORMATION_ID = "VISIT_INFORMATION_ID";
+  public static final String COL_STATUS = "STATUS";
   public static final String CREATE_TABLE_SQL =
       "CREATE TABLE " + VisitInformationDetail.TABLE_NAME + " (" +
           " " + VisitInformationDetail.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -21,13 +22,15 @@ public class VisitInformationDetail extends BaseEntity<Long> {
           " " + VisitInformationDetail.COL_EXTRA_DATA + " TEXT," +
           " " + VisitInformationDetail.COL_VISIT_INFORMATION_ID + " INTEGER," +
           " " + VisitInformationDetail.COL_CREATE_DATE_TIME + " TEXT," +
-          " " + VisitInformationDetail.COL_UPDATE_DATE_TIME + " TEXT" +
+          " " + VisitInformationDetail.COL_UPDATE_DATE_TIME + " TEXT," +
+          " " + VisitInformationDetail.COL_STATUS + " INTEGER" +
           " );";
   private Long id;
   private long type;
   private long typeId;
   private String extraData;
   private long visitInformationId;
+  private long status;
 
   public VisitInformationDetail(long visitId, VisitInformationDetailType type, long typeId) {
     this.visitInformationId = visitId;
@@ -36,7 +39,6 @@ public class VisitInformationDetail extends BaseEntity<Long> {
   }
 
   public VisitInformationDetail() {
-
   }
 
   public Long getId() {
@@ -93,5 +95,13 @@ public class VisitInformationDetail extends BaseEntity<Long> {
         ", extraData='" + extraData + '\'' +
         ", visitInformationId=" + visitInformationId +
         '}';
+  }
+
+  public long getStatus() {
+    return status;
+  }
+
+  public void setStatus(long status) {
+    this.status = status;
   }
 }

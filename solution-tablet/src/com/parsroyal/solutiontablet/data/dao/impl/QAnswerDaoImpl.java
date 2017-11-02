@@ -5,10 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
 import com.parsroyal.solutiontablet.data.entity.Question;
-import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.model.AnswerDetailDto;
 import com.parsroyal.solutiontablet.data.model.QAnswerDto;
@@ -48,6 +48,7 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     contentValues.put(QAnswer.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(QAnswer.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
     contentValues.put(QAnswer.COL_ANSWERS_GROUP_NO, entity.getAnswersGroupNo());
+    contentValues.put(QAnswer.COL_STATUS, entity.getStatus());
 
     return contentValues;
   }
@@ -76,7 +77,8 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
         QAnswer.COL_DATE,
         QAnswer.COL_CREATE_DATE_TIME,
         QAnswer.COL_UPDATE_DATE_TIME,//10
-        QAnswer.COL_ANSWERS_GROUP_NO
+        QAnswer.COL_ANSWERS_GROUP_NO,
+        QAnswer.COL_STATUS
     };
     return projection;
   }
@@ -97,6 +99,7 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     answer.setCreateDateTime(cursor.getString(9));
     answer.setUpdateDateTime(cursor.getString(10));
     answer.setAnswersGroupNo(cursor.getLong(11));
+    answer.setStatus(cursor.getLong(12));
 
     return answer;
   }
@@ -148,10 +151,12 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     db.beginTransaction();
-    String whereClause = QAnswer.COL_CUSTOMER_BACKEND_ID + " = ?";
-    String[] args = {String.valueOf(customerId)};
+    String whereClause =
+        QAnswer.COL_CUSTOMER_BACKEND_ID + " = ? AND " + QAnswer.COL_STATUS + " = ? ";
+    String[] args = {String.valueOf(customerId), String.valueOf(SendStatus.NEW.getId())};
     ContentValues contentValues = new ContentValues();
-    contentValues.put(VisitInformation.COL_CUSTOMER_BACKEND_ID, customerBackendId);
+    contentValues.put(QAnswer.COL_CUSTOMER_BACKEND_ID, customerBackendId);
+    contentValues.put(QAnswer.COL_STATUS, SendStatus.SENT.getId());
     int rows = db.update(getTableName(), contentValues, whereClause, args);
     Log.d("QAnswer", "row updated " + rows);
     db.setTransactionSuccessful();

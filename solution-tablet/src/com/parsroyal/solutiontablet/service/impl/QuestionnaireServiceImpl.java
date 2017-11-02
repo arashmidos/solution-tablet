@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
+import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.dao.QuestionDao;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
@@ -75,9 +76,11 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     if (Empty.isEmpty(qAnswer.getId()) || qAnswer.getId().equals(0L)) {
       qAnswer.setCreateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
       qAnswer.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
+      qAnswer.setStatus(SendStatus.NEW.getId());
       return qAnswerDao.create(qAnswer);
     } else {
       qAnswer.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
+      qAnswer.setStatus(SendStatus.NEW.getId());
       qAnswerDao.update(qAnswer);
       return qAnswer.getId();
     }

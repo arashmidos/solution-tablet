@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDetailDao;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
@@ -40,6 +41,7 @@ public class VisitInformationDetailDaoImpl extends AbstractDao<VisitInformationD
     cv.put(VisitInformationDetail.COL_VISIT_INFORMATION_ID, entity.getVisitInformationId());
     cv.put(VisitInformationDetail.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     cv.put(VisitInformationDetail.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
+    cv.put(VisitInformationDetail.COL_STATUS, entity.getStatus());
     return cv;
   }
 
@@ -62,7 +64,8 @@ public class VisitInformationDetailDaoImpl extends AbstractDao<VisitInformationD
         VisitInformationDetail.COL_EXTRA_DATA,
         VisitInformationDetail.COL_VISIT_INFORMATION_ID,
         VisitInformationDetail.COL_CREATE_DATE_TIME,
-        VisitInformationDetail.COL_UPDATE_DATE_TIME
+        VisitInformationDetail.COL_UPDATE_DATE_TIME,
+        VisitInformationDetail.COL_STATUS
     };
   }
 
@@ -76,6 +79,7 @@ public class VisitInformationDetailDaoImpl extends AbstractDao<VisitInformationD
     entity.setVisitInformationId(cursor.getLong(4));
     entity.setCreateDateTime(cursor.getString(5));
     entity.setUpdateDateTime(cursor.getString(6));
+    entity.setStatus(cursor.getLong(7));
     return entity;
   }
 
@@ -93,7 +97,8 @@ public class VisitInformationDetailDaoImpl extends AbstractDao<VisitInformationD
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     db.beginTransaction();
     db.execSQL(String.format("DELETE FROM %s WHERE %s = %s AND %s = %s", getTableName(),
-        VisitInformationDetail.COL_TYPE, type.getValue(), VisitInformationDetail.COL_TYPE_ID, typeId));
+        VisitInformationDetail.COL_TYPE, type.getValue(), VisitInformationDetail.COL_TYPE_ID,
+        typeId));
     db.setTransactionSuccessful();
     db.endTransaction();
   }
@@ -105,11 +110,13 @@ public class VisitInformationDetailDaoImpl extends AbstractDao<VisitInformationD
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     db.beginTransaction();
     String whereClause =
-        VisitInformationDetail.COL_TYPE + " = ? and " + VisitInformationDetail.COL_TYPE_ID
-            + " = ? ";
-    String[] args = {String.valueOf(type.getValue()), String.valueOf(id)};
+        VisitInformationDetail.COL_TYPE + " = ? AND " + VisitInformationDetail.COL_TYPE_ID
+            + " = ? AND " + VisitInformationDetail.COL_STATUS + " <> ? ";
+    String[] args = {String.valueOf(type.getValue()), String.valueOf(id),
+        String.valueOf(SendStatus.UPDATED.getId())};
     ContentValues contentValues = new ContentValues();
     contentValues.put(VisitInformationDetail.COL_TYPE_ID, backendId);
+    contentValues.put(VisitInformationDetail.COL_STATUS, SendStatus.UPDATED.getId());
     int rows = db.update(getTableName(), contentValues, whereClause, args);
     Log.d("VisitDetailUpdate", "row updated " + rows);
     db.setTransactionSuccessful();
