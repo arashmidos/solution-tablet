@@ -20,7 +20,6 @@ import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.AllQuestionnaireAdapter;
 import java.util.List;
 
@@ -34,19 +33,22 @@ public class AllQuestionnaireListFragment extends BaseFragment {
 
   private MainActivity mainActivity;
   private VisitDetailFragment parent;
+  private long customerBackendId;
 
   public AllQuestionnaireListFragment() {
     // Required empty public constructor
   }
 
-  public static AllQuestionnaireListFragment newInstance(
-      Bundle arguments, VisitDetailFragment newVisitDetailFragment) {
+  public static AllQuestionnaireListFragment newInstance(Bundle arguments) {
     AllQuestionnaireListFragment fragment = new AllQuestionnaireListFragment();
-    fragment.parent = newVisitDetailFragment;
     fragment.setArguments(arguments);
     return fragment;
   }
 
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +69,8 @@ public class AllQuestionnaireListFragment extends BaseFragment {
 
   private void setUpRecyclerView() {
     Bundle bundle = getArguments();
+    this.customerBackendId = bundle.getLong(Constants.CUSTOMER_BACKEND_ID);
+
     bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
     AllQuestionnaireAdapter allQuestionnaireAdapter = new AllQuestionnaireAdapter(mainActivity,
         getQuestionnaireList(), bundle);
@@ -77,7 +81,7 @@ public class AllQuestionnaireListFragment extends BaseFragment {
 
   private List<QuestionnaireListModel> getQuestionnaireList() {
     QuestionnaireSo questionnaireSo = new QuestionnaireSo();
-    questionnaireSo.setCustomerBackendId(parent.getCustomer().getBackendId());
+    questionnaireSo.setCustomerBackendId(customerBackendId);
     QuestionnaireDao questionnaireService = new QuestionnaireDaoImpl(mainActivity);
     return questionnaireService.searchForQuestionsList(questionnaireSo);
   }

@@ -320,12 +320,13 @@ public class VisitDetailFragment extends BaseFragment {
 
   private void initFragments() {
     Bundle arguments = getArguments();
+    arguments.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     paymentListFragment = PaymentListFragment.newInstance(arguments);
     pictureFragment = PictureFragment.newInstance(this);
     orderListFragment = OrderListFragment.newInstance(arguments, this);
     returnListFragment = ReturnListFragment.newInstance(arguments, this);
     customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
-    allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(arguments, this);
+    allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(arguments);
   }
 
   private void setUpViewPager() {
