@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.entity.Question;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionListModel;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
+import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionSo;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
@@ -54,6 +58,7 @@ public class QuestionsListFragment extends BaseFragment {
   private int parent;
   private long answersGroupNo;
   private Customer customer;
+  private PageStatus pageStatus;
 
   public QuestionsListFragment() {
     // Required empty public constructor
@@ -85,6 +90,7 @@ public class QuestionsListFragment extends BaseFragment {
     goodsGroupBackendId = arguments.getLong(Constants.GOODS_GROUP_BACKEND_ID);
     parent = arguments.getInt(Constants.PARENT, 0);
     answersGroupNo = arguments.getLong(Constants.ANSWERS_GROUP_NO, -1);
+    pageStatus = (PageStatus) arguments.getSerializable(Constants.PAGE_STATUS);
 
     customer = customerService.getCustomerById(customerId);
 
@@ -98,7 +104,7 @@ public class QuestionsListFragment extends BaseFragment {
   private void setUpRecyclerView() {
     QuestionsAdapter questionsAdapter = new QuestionsAdapter(this, mainActivity, getQuestions(),
         visitId,
-        goodsGroupBackendId, answersGroupNo, customerId, questionnaireBackendId);
+        goodsGroupBackendId, answersGroupNo, customerId, questionnaireBackendId,pageStatus);
     LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(questionsAdapter);
@@ -165,5 +171,17 @@ public class QuestionsListFragment extends BaseFragment {
       //known bug, it he has not answered any quesiton, should remove the entire visit.
       visitService.finishVisiting(visitId);
     }
+  }
+
+  public boolean hasRequiredQuestionAnswer() {
+    for (QuestionListModel question : getQuestions()) {
+      QuestionDto questionDto = questionnaireService
+          .getQuestionDto(question.getPrimaryKey(), visitId, goodsGroupBackendId,
+              answersGroupNo);
+      if (questionDto.isRequired() && TextUtils.isEmpty(questionDto.getAnswer())) {
+        return false;
+      }
+    }
+    return true;
   }
 }

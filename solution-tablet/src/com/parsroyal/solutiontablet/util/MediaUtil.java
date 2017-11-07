@@ -1,7 +1,10 @@
 package com.parsroyal.solutiontablet.util;
 
+import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
@@ -30,8 +33,28 @@ public class MediaUtil {
   public static final String GOODS_IMAGES_FOLDER = SolutionTabletApplication.getInstance()
       .getCacheDir().getAbsolutePath() + "/goods/";
 
-  public static Uri getOutputMediaFileUri(int type, String directoryName, String fileName) {
-    return Uri.fromFile(getOutputMediaFile(type, directoryName, fileName));
+  public static Uri getOutputMediaFileUri(Context context, int type, String directoryName,
+      String fileName) {
+    return getUri(getOutputMediaFile(type, directoryName, fileName), context);
+  }
+
+  /**
+   * Convert File into Uri.
+   *
+   * @return uri
+   */
+  public static Uri getUri(File file, Context context) {
+    if (file != null) {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        return Uri.fromFile(file);
+      } else {
+        return FileProvider.getUriForFile(
+            context,
+            context.getApplicationContext()
+                .getPackageName(), file);
+      }
+    }
+    return null;
   }
 
   /**
@@ -124,7 +147,7 @@ public class MediaUtil {
         out.close();
       } catch (IOException e) {
         e.printStackTrace();
-        Logger.sendError( "Zip images", e.getMessage());
+        Logger.sendError("Zip images", e.getMessage());
       }
     }
     return zip;

@@ -388,6 +388,7 @@
   <string name="launch_activity">اجرای برنامه</string>
   <string name="remove_location_updates">توقف موقعیت یاب</string>
   <string name="permission_rationale">مجوز دریافت موقعیت باید فعال باشد</string>
+  <string name="permission_rationale_camera_storage">مجوز استفاده از دوربین و دسترسی به فایل برای ذخیره عکس باید فعال باشد</string>
   <string name="permission_denied_explanation">دسترسی موقعیت یاب داده نشد. برای عملکرد صحیح برنامه این دسترسی لازم است</string>
   <string name="notification_message_gps_service_active">سرویس موقعیت یاب فعال است</string>
   <string name="show_waypoints">نمایش نقاط</string>

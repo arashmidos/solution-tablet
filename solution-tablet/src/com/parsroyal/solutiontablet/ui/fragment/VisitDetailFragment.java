@@ -349,7 +349,7 @@ public class VisitDetailFragment extends BaseFragment {
       Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       // Create a media file name
       String postfix = String.valueOf((new Date().getTime()) % 1000);
-      fileUri = MediaUtil.getOutputMediaFileUri(MediaUtil.MEDIA_TYPE_IMAGE,
+      fileUri = MediaUtil.getOutputMediaFileUri(mainActivity, MediaUtil.MEDIA_TYPE_IMAGE,
           Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
           "IMG_" + customer.getCode() + "_" + postfix); // create a file to save the image
       intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name

@@ -21,6 +21,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
@@ -113,7 +115,9 @@ public class SystemCustomerFragment extends BaseFragment {
         showFilterDialog();
         break;
       case R.id.fab_add_customer:
-        mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.PAGE_STATUS, PageStatus.EDIT);
+        mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, bundle, true);
         break;
     }
   }

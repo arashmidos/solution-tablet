@@ -1,7 +1,15 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.Manifest;
+import android.Manifest.permission;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +33,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikepenz.crossfader.util.UIUtils;
+import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -54,6 +63,7 @@ import org.greenrobot.eventbus.Subscribe;
 public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCallback {
 
   private static final String TAG = CustomerInfoFragment.class.getName();
+  private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
   private final HashSet<MapView> mMaps = new HashSet<>();
   @BindView(R.id.store_tv)
   TextView storeTv;
@@ -250,7 +260,11 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
             .changeFragment(MainActivity.QUESTIONNAIRE_CATEGORY_FRAGMENT_ID, bundle, true);
         break;
       case R.id.register_image_lay:
-        parent.startCameraActivity();
+        if (!checkPermissions()) {
+          requestPermissions();
+        } else {
+          parent.startCameraActivity();
+        }
         break;
       case R.id.end_and_exit_visit_lay:
         parent.finishVisiting();
@@ -267,6 +281,61 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       case R.id.fullscreen_map:
         toggleMapFullScreen();
         break;
+    }
+  }
+
+  private boolean checkPermissions() {
+    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(mainActivity,
+        permission.WRITE_EXTERNAL_STORAGE) && PackageManager.PERMISSION_GRANTED == ActivityCompat
+        .checkSelfPermission(mainActivity,
+            permission.CAMERA);
+  }
+
+  private void requestPermissions() {
+    boolean cameraShouldProvideRationale =
+        ActivityCompat.shouldShowRequestPermissionRationale(mainActivity,
+            permission.CAMERA);
+    boolean storageShouldProvideRationale =
+        ActivityCompat.shouldShowRequestPermissionRationale(mainActivity,
+            permission.WRITE_EXTERNAL_STORAGE);
+
+    // Provide an additional rationale to the user. This would happen if the user denied the
+    // request previously, but didn't check the "Don't ask again" checkbox.
+    if (cameraShouldProvideRationale && storageShouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(mainActivity,
+                new String[]{permission.CAMERA, permission.WRITE_EXTERNAL_STORAGE},
+                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
+          });
+    } else if (cameraShouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(mainActivity,
+                new String[]{permission.CAMERA},
+                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
+          });
+    } else if (storageShouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(mainActivity,
+                new String[]{permission.WRITE_EXTERNAL_STORAGE},
+                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
+          });
+    } else {
+      Log.i(TAG, "Requesting permission");
+      // Request permission. It's possible this can be auto answered if device policy
+      // sets the permission in a given state or the user denied the permission
+      // previously and checked "Never ask again".
+      ActivityCompat.requestPermissions(mainActivity,
+          new String[]{permission.CAMERA, permission.WRITE_EXTERNAL_STORAGE},
+          REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
     }
   }
 
@@ -331,7 +400,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     } else if (event instanceof ErrorEvent) {
       Log.i(TAG, "Error");
       DialogUtil.dismissProgressDialog();
-      ToastUtil.toastError(mainActivity,"این عملیات امکان پذیر نیست");
+      ToastUtil.toastError(mainActivity, "این عملیات امکان پذیر نیست");
     }
   }
 
