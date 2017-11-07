@@ -299,7 +299,7 @@ public class UserTrackingFragment extends BaseFragment implements
   private void loadCalendars() {
     toDate.setHint(endDate.getYear() % 100 + "/" + endDate.getMonth() + "/" + endDate.getDay());
     Calendar calendar = endDate.getCalendar();
-    calendar.add(Calendar.DAY_OF_YEAR, -1);
+//    calendar.add(Calendar.DAY_OF_YEAR, -1);
     startDate.setDate(new JDF(calendar));
     fromDate
         .setHint(startDate.getYear() % 100 + "/" + startDate.getMonth() + "/" + startDate.getDay());

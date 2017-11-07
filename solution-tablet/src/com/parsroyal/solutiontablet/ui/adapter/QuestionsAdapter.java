@@ -118,13 +118,13 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
   private void setVisitDetail() {
     List<VisitInformationDetail> detailList = visitService
         .searchVisitDetail(visitId, VisitInformationDetailType.FILL_QUESTIONNAIRE,
-            questionnaireBackendId);
+            answersGroupNo);
     //If we have filled this questionary before
     if (detailList.size() > 0) {
       return;
     }
     visitService.saveVisitDetail(new VisitInformationDetail(visitId,
-        VisitInformationDetailType.FILL_QUESTIONNAIRE, questionnaireBackendId));
+        VisitInformationDetailType.FILL_QUESTIONNAIRE, answersGroupNo));
   }
 
   private Long saveAnswer(QuestionDto questionDto, String answer) {

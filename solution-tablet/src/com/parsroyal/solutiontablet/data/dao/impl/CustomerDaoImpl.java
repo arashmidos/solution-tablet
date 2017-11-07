@@ -260,7 +260,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 //    } else {
     } else {
       selection =
-          selection + (selection.equals("") ? "" : " and ") + Customer.COL_STATUS + " <> ? ";
+          selection + (selection.equals("") ? "c." : " and c.") + Customer.COL_STATUS + " <> ? ";
       args.add(String.valueOf(CustomerStatus.NEW.getId()));
     }
     String[] argsArray = new String[args.size()];

@@ -52,11 +52,11 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
             qAnswer.setBackendId(backendId);
             qAnswer.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
             qAnswerDao.update(qAnswer);
-            visitService
-                .updateVisitDetailId(VisitInformationDetailType.FILL_QUESTIONNAIRE, qAnswer.getId(),
-                    backendId);
           }
         }
+        visitService
+            .updateVisitDetailId(VisitInformationDetailType.FILL_QUESTIONNAIRE,
+                answer.getAnswersGroupNo(), backendId);
         success++;
       } catch (Exception ex) {
         Crashlytics

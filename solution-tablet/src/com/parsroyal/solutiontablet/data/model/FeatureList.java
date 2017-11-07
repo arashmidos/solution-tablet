@@ -37,8 +37,8 @@ public class FeatureList {
     featureList
         .add(new FeatureList(0, R.drawable.ic_questionnaires_48_dp,
             context.getString(R.string.anonymous_questionnaire)));
-    featureList.add(
-        new FeatureList(0, R.drawable.ic_settings_black_48dp, context.getString(R.string.setting)));
+    /*featureList.add(
+        new FeatureList(0, R.drawable.ic_settings_black_48dp, context.getString(R.string.setting)));*/
     return featureList;
   }
 
@@ -66,3 +66,4 @@ public class FeatureList {
     this.title = title;
   }
 }
+

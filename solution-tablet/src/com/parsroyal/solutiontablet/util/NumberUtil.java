@@ -49,4 +49,19 @@ public class NumberUtil {
 
     return input;
   }
+
+  public static String digitsToPersian(String input) {
+    if (Empty.isEmpty(input)) {
+      return input;
+    }
+    char[] persian = ("۰۱۲۳۴۵۶۷۸۹").toCharArray();
+    char[] english = ("0123456789").toCharArray();
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(String.valueOf(english[i])
+          , String.valueOf(persian[i]));
+    }
+
+    return input;
+  }
 }

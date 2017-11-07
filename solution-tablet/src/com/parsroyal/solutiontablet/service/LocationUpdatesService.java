@@ -147,8 +147,13 @@ public class LocationUpdatesService extends Service {
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     Log.i(TAG, "Service started");
-    boolean startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
-        false);
+
+    boolean startedFromNotification = false;
+    if (Empty.isNotEmpty(intent)) {
+
+      startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
+          false);
+    }
 
     // We got here because the user decided to remove location updates from the notification.
     if (startedFromNotification) {
@@ -241,6 +246,9 @@ public class LocationUpdatesService extends Service {
     } catch (SecurityException unlikely) {
       GPSUtil.setRequestingLocationUpdates(this, true);
       Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.e(TAG, "Location service couldn't finish successfully!");
     }
   }
 

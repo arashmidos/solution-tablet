@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
@@ -18,6 +19,15 @@ public class SplashActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    if (!isTaskRoot()
+        && getIntent().hasCategory(Intent.CATEGORY_LAUNCHER)
+        && getIntent().getAction() != null
+        && getIntent().getAction().equals(Intent.ACTION_MAIN)) {
+
+      finish();
+      return;
+    }
+
     setContentView(R.layout.activity_splash);
     new Handler().postDelayed(() -> {
 

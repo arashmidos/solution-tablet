@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -386,6 +385,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     if (Empty.isEmpty(countValue) || Double.valueOf(countValue).equals(0D)) {
       errorMsg.setText(R.string.message_please_enter_count);
       errorMsg.setVisibility(View.VISIBLE);
+      hideKeyboard();
       return false;
     }
 
@@ -396,6 +396,7 @@ public class AddOrderDialogFragment extends DialogFragment {
       errorMsg.setText(String.format(getString(R.string.error_sale_rate_not_correct),
           String.valueOf(saleRate), unit1Title));
       errorMsg.setVisibility(View.VISIBLE);
+      hideKeyboard();
       return false;
     }
     return true;
@@ -440,13 +441,17 @@ public class AddOrderDialogFragment extends DialogFragment {
     if (event instanceof ErrorEvent) {
       errorMsg.setText(event.getMessage());
       errorMsg.setVisibility(View.VISIBLE);
-      InputMethodManager imm = (InputMethodManager) mainActivity
-          .getSystemService(Context.INPUT_METHOD_SERVICE);
-      imm.hideSoftInputFromWindow(countTv.getWindowToken(), 0);
+      hideKeyboard();
 
     } else if (event instanceof SuccessEvent) {
       AddOrderDialogFragment.this.dismiss();
     }
+  }
+
+  private void hideKeyboard() {
+    InputMethodManager imm = (InputMethodManager) mainActivity
+        .getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(countTv.getWindowToken(), 0);
   }
 
   public interface GoodsDialogOnClickListener {

@@ -36,7 +36,6 @@ public class NewQuestionnaireListAdapter extends
   private Bundle args;
   private QuestionnaireService questionnaireService;
 
-
   public NewQuestionnaireListAdapter(Context context, List<QuestionnaireListModel> questionnaires,
       Bundle args) {
     this.context = context;
@@ -84,17 +83,11 @@ public class NewQuestionnaireListAdapter extends
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.main_lay:
+
           args.putLong(Constants.QUESTIONNAIRE_BACKEND_ID, questionnaire.getBackendId());
           args.putSerializable(Constants.QUESTIONNAIRE_OBJ, questionnaire);
 
           args.putLong(Constants.GOODS_GROUP_BACKEND_ID, questionnaire.getGoodsGroupBackendId());
-          if (questionnaire.getAnswersGroupNo() != null) {
-            args.putLong(Constants.ANSWERS_GROUP_NO, questionnaire.getAnswersGroupNo());
-          } else if (args.getInt(Constants.PARENT) == MainActivity.NEW_CUSTOMER_FRAGMENT_ID) {
-            args.putLong(Constants.ANSWERS_GROUP_NO, 0);
-          } else {
-            args.putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
-          }
 
           mainActivity.changeFragment(MainActivity.QUESTION_LIST_FRAGMENT_ID, args, false);
           break;
@@ -105,7 +98,8 @@ public class NewQuestionnaireListAdapter extends
       this.questionnaire = questionnaires.get(position);
       titleTv.setText(questionnaire.getDescription());
       questionnaireSizeTv
-          .setText(String.format(Locale.getDefault(), "%d سوال", questionnaire.getQuestionsCount()));
+          .setText(
+              String.format(Locale.getDefault(), "%d سوال", questionnaire.getQuestionsCount()));
     }
   }
 }

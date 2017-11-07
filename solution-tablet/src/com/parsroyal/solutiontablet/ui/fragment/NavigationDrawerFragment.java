@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -74,13 +73,19 @@ public class NavigationDrawerFragment extends BaseFragment {
 
   @OnClick({R.id.user_name_tv, R.id.features_list_lay, R.id.today_paths_lay, R.id.reports_lay,
       R.id.customers_lay, R.id.map_lay, R.id.setting_lay, R.id.about_us, R.id.body_log_out,
-      R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay, R.id.questionnaire_lay})
+      R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay, R.id.questionnaire_lay, R.id.header,
+      R.id.user_role_tv, R.id.user_img, R.id.drop_img})
   public void onClick(View view) {
     boolean closeDrawer = true;
     hasData = baseInfoService.getAllProvinces().size() != 0;
 
     switch (view.getId()) {
+
       case R.id.user_name_tv:
+      case R.id.header:
+      case R.id.user_role_tv:
+      case R.id.user_img:
+      case R.id.drop_img:
         changeMode();
         closeDrawer = false;
         break;

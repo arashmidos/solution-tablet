@@ -268,10 +268,12 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
   private void save() {
     try {
-      customer.setFullName(CharacterFixUtil.fixString(fullNameEdt.getText().toString()));
+      customer.setFullName(
+          NumberUtil.digitsToEnglish(CharacterFixUtil.fixString(fullNameEdt.getText().toString())));
       customer.setPhoneNumber(NumberUtil.digitsToEnglish(phoneNumberEdt.getText().toString()));
       customer.setCellPhone(NumberUtil.digitsToEnglish(mobileEdt.getText().toString()));
-      customer.setAddress(CharacterFixUtil.fixString(addressEdt.getText().toString()));
+      customer.setAddress(
+          NumberUtil.digitsToEnglish(CharacterFixUtil.fixString(addressEdt.getText().toString())));
       if (Empty.isNotEmpty(storeMeterEdt.getText()) && !storeMeterEdt.getText().toString()
           .equals("")) {
         customer.setStoreSurface(
@@ -281,13 +283,14 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
           stateSpinner.getSelectedItemId() <= 0 ? null : stateSpinner.getSelectedItemId());
       customer.setCityBackendId(
           citySpinner.getSelectedItemId() <= 0 ? null : citySpinner.getSelectedItemId());
-      customer.setActivityBackendId(activitySpinner.getSelectedItemId());
-      customer.setStoreLocationTypeBackendId(
-          ownershipSpinner.getSelectedItemId() == -1L ? null
-              : ownershipSpinner.getSelectedItemId());
-      customer.setClassBackendId(customerClassSpinner.getSelectedItemId() == -1L ? null
+      customer.setActivityBackendId(
+          activitySpinner.getSelectedItemId() < 0 ? null : activitySpinner.getSelectedItemId());
+      customer.setStoreLocationTypeBackendId(ownershipSpinner.getSelectedItemId() < 0 ? null
+          : ownershipSpinner.getSelectedItemId());
+      customer.setClassBackendId(customerClassSpinner.getSelectedItemId() < 0 ? null
           : customerClassSpinner.getSelectedItemId());
-      customer.setShopName(CharacterFixUtil.fixString(shopNameEdt.getText().toString()));
+      customer.setShopName(
+          NumberUtil.digitsToEnglish(CharacterFixUtil.fixString(shopNameEdt.getText().toString())));
       customer.setNationalCode(NumberUtil.digitsToEnglish(nationalCodeEdt.getText().toString()));
       customer.setMunicipalityCode(
           NumberUtil.digitsToEnglish(regionalMunicipalityEdt.getText().toString()));
@@ -297,7 +300,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       if (validate()) {
         customerService.saveCustomer(customer);
         ToastUtil.toastSuccess(getActivity(), R.string.message_customer_save_successfully);
-        mainActivity.changeFragment(MainActivity.CUSTOMER_FRAGMENT, false);
+        mainActivity.removeFragment(AddCustomerFragment.this);
       }
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);

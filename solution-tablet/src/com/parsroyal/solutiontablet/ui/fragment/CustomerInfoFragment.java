@@ -237,7 +237,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   @OnClick({R.id.show_more_tv, R.id.register_order_lay, R.id.register_payment_lay,
       R.id.register_questionnaire_lay, R.id.register_image_lay, R.id.end_and_exit_visit_lay,
       R.id.no_activity_lay, R.id.register_location_btn, R.id.edit_map, R.id.fullscreen_map,
-      R.id.register_return_lay})
+      R.id.register_return_lay, R.id.edit_map_layout, R.id.fullscreen_map_layout})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_return_lay:
@@ -276,8 +276,10 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         onShowMoreTapped();
         break;
       case R.id.edit_map:
+      case R.id.edit_map_layout:
         mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, getArguments(), true);
         break;
+      case R.id.fullscreen_map_layout:
       case R.id.fullscreen_map:
         toggleMapFullScreen();
         break;

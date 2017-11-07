@@ -72,7 +72,8 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setStatus(CustomerStatus.NEW.getId());
         customerDao.create(customer);
       } else {
-        customer.setUpdateDateTime(new Date().toString());
+        customer.setUpdateDateTime(
+            DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
         customerDao.update(customer);
       }
     } catch (SQLiteException ex) {
@@ -123,8 +124,9 @@ public class CustomerServiceImpl implements CustomerService {
       if (Empty.isEmpty(position)) {
         item.setDistance(0.0f);
       } else {
-        item.setDistance(LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
-            item.getXlocation(), item.getYlocation()));
+        item.setDistance(
+            LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
+                item.getXlocation(), item.getYlocation()));
       }
     }
 

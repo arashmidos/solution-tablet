@@ -41,6 +41,7 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.Locale;
 
 /**
@@ -214,6 +215,7 @@ public class SaveLocationFragment extends BaseFragment implements
           .position(temp).title(getString(R.string.location_set)).snippet("")
           .icon(BitmapDescriptorFactory
               .fromResource(R.drawable.ic_action_flag)));
+      ToastUtil.toastMessage(mainActivity,"ثبت موقعیت با موفقیت انجام شد!");
       m.setDraggable(true);
       markerLayout.setVisibility(View.GONE);
     });
