@@ -52,7 +52,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
   protected KeyValueDao keyValueDao;
   protected KeyValue salesmanCode;
   private KeyValue goodsRequestId;
-  private KeyValue token;
+  protected KeyValue token;
 
   public AbstractDataTransferBizImpl(Context context) {
     this.context = context;

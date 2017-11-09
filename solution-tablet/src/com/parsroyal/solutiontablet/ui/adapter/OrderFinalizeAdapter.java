@@ -58,6 +58,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
   private MainActivity mainActivity;
   private String pageStatus;
   private List<SaleOrderItemDto> orderItems;
+  private AddOrderDialogFragment addOrderDialogFragment;
 
   public OrderFinalizeAdapter(FinalizeOrderDialogFragment finalizeOrderDialogFragment,
       MainActivity mainActivity, SaleOrderDto order, GoodsDtoList goodsDtoList, String pageStatus) {
@@ -228,7 +229,6 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
 
     private void editItem() {
 
-      AddOrderDialogFragment addOrderDialogFragment;
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
       if (MultiScreenUtility.isTablet(mainActivity)) {
         addOrderDialogFragment = AddOrderBottomSheet.newInstance();
@@ -256,6 +256,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
       });
 
+      addOrderDialogFragment.setCancelable(true);
       addOrderDialogFragment.show(ft, "order");
     }
 

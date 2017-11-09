@@ -70,4 +70,10 @@ public class FeaturesFragment extends BaseFragment {
   public int getFragmentId() {
     return MainActivity.FEATURE_FRAGMENT_ID;
   }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    mainActivity.showMenu();
+  }
 }

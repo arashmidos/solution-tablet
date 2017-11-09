@@ -104,6 +104,7 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
               questionnaire.getGoodsGroupBackendId() == null ? -1
                   : questionnaire.getGoodsGroupBackendId());
           args.putLong(Constants.ANSWERS_GROUP_NO, questionnaire.getAnswersGroupNo());
+          args.putLong(Constants.VISIT_ID,questionnaire.getVisitId());
           mainActivity.changeFragment(MainActivity.QUESTION_LIST_FRAGMENT_ID, args, false);
           break;
       }

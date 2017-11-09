@@ -208,18 +208,22 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.delete_img:
-          deleteOrder();
+          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
+            deleteOrder();
+          }
           break;
         case R.id.edit_img:
         case R.id.main_lay_linear:
         case R.id.main_lay:
-          Bundle args = new Bundle();
-          args.putLong(Constants.ORDER_ID, order.getId());
-          args.putString(Constants.SALE_TYPE, saleType);
-          args.putLong(Constants.VISIT_ID, visitId);
-          args.putBoolean(Constants.READ_ONLY, false);
-          setPageStatus(args);
-          mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
+          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
+            Bundle args = new Bundle();
+            args.putLong(Constants.ORDER_ID, order.getId());
+            args.putString(Constants.SALE_TYPE, saleType);
+            args.putLong(Constants.VISIT_ID, visitId);
+            args.putBoolean(Constants.READ_ONLY, false);
+            setPageStatus(args);
+            mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
+          }
           break;
       }
     }

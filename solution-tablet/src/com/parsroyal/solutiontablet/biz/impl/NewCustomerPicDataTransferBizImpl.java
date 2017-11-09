@@ -65,14 +65,13 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
       beforeTransfer();
 
       HttpHeaders httpHeaders = new HttpHeaders();
-      HttpBasicAuthentication authentication = new HttpBasicAuthentication(username.getValue(),
-          password.getValue());
-      httpHeaders.setAuthorization(authentication);
 
       if (Empty.isNotEmpty(salesmanId)) {
         httpHeaders.add("salesmanId", salesmanId.getValue());
         httpHeaders.add("salesmanCode", salesmanId.getValue());
       }
+
+      httpHeaders.add("Authorization", "Bearer " + token.getValue());
 
       RestTemplate restTemplate = new RestTemplate();
       restTemplate.getMessageConverters().add(new StringHttpMessageConverter());

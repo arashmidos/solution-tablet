@@ -67,6 +67,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
+    setRetainInstance(true);
   }
 
   @Override
@@ -146,5 +147,14 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
         getDialog().dismiss();
         break;
     }
+  }
+
+  @Override
+  public void onDestroyView() {
+    //workaround for this issue: https://code.google.com/p/android/issues/detail?id=17423 (unable to retain instance after configuration change)
+    if (getDialog() != null && getRetainInstance()) {
+      getDialog().setDismissMessage(null);
+    }
+    super.onDestroyView();
   }
 }

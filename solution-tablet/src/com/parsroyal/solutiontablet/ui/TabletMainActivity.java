@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
@@ -57,7 +56,9 @@ public class TabletMainActivity extends MainActivity {
     ButterKnife.bind(this);
 
     settingService = new SettingServiceImpl(this);
-    showFeaturesFragment();
+    if (savedInstanceState == null) {
+      showFeaturesFragment();
+    }
 //    setupToolbar(savedInstanceState);
 
   }
@@ -153,7 +154,7 @@ public class TabletMainActivity extends MainActivity {
     Fragment questionsListFragment = getSupportFragmentManager()
         .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
     if (questionsListFragment != null && questionsListFragment.isVisible()) {
-      ((QuestionsListFragment)questionsListFragment).exit();
+      ((QuestionsListFragment) questionsListFragment).exit();
     } else if (featureFragment != null && featureFragment.isVisible()) {
       if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
         drawerLayout.closeDrawer(GravityCompat.END);

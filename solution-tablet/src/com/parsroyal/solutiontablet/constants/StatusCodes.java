@@ -20,7 +20,9 @@ public enum StatusCodes {
   NEW_GPS_LOCATION(2002, R.string.message_new_gps_location),
   ACTION_ADD_ORDER(901, R.string.register_order),
   ACTION_ADD_PAYMENT(902, R.string.register_payment),
-  ACTION_EXIT_VISIT(903, R.string.exit_end_visit);
+  ACTION_EXIT_VISIT(903, R.string.exit_end_visit),
+  ACTION_START_CAMERA(904, R.string.add_picture),
+  ;
 
   private int statusCode;
   private int message;

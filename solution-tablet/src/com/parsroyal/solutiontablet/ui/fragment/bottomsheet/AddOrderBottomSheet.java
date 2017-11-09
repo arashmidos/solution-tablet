@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 
 public class AddOrderBottomSheet extends AddOrderDialogFragment {
@@ -49,13 +48,9 @@ public class AddOrderBottomSheet extends AddOrderDialogFragment {
       params.setMargins(width / 4, 0, width / 4, 0);
       bottomSheet.setLayoutParams(params);
       BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
+      getDialog().setCancelable(false);
     });
 
     return super.onCreateView(inflater, container, savedInstanceState);
-  }
-
-  @Override
-  protected int getLayout() {
-    return R.layout.fragment_add_order_bottom_sheet;
   }
 }

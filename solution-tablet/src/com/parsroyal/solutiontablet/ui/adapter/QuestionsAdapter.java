@@ -179,6 +179,18 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
         && currentQuestionDto.getPrerequisite() != 0L;
   }
 
+  public int findPositionByBackendId(long backendId) {
+    for (int i = 0; i < questions.size(); i++) {
+      QuestionDto questionDto = questionnaireService
+          .getQuestionDto(questions.get(i).getPrimaryKey(), visitId, goodsBackendId,
+              answersGroupNo);
+      if (questionDto != null && questionDto.getBackendId() == backendId) {
+        return i + 1;
+      }
+    }
+    return -1;
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
     @BindView(R.id.question_lay)
@@ -216,10 +228,11 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
         answerTv.setVisibility(View.GONE);
         questionNumberBtn.setBackgroundResource(R.drawable.oval_ee);
         questionNumberBtn.setTextColor(ContextCompat.getColor(mainActivity, R.color.primary_dark));
-        if (hasPrerequisite(questionDto)) {
+        Long prerequisite = questionDto.getPrerequisite();
+        if (hasPrerequisite(questionDto) && prerequisite != -1) {
           preRequisiteTv.setVisibility(View.VISIBLE);
           preRequisiteTv.setText(String.format(Locale.getDefault(), "پیش نیاز: سوال شماره %d",
-              questionDto.getPrerequisite()));
+              findPositionByBackendId(prerequisite)));
         }
       } else {
         questionNumberBtn.setBackgroundResource(R.drawable.oval_green_43);
@@ -258,5 +271,4 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
       }
     }
   }
-
 }

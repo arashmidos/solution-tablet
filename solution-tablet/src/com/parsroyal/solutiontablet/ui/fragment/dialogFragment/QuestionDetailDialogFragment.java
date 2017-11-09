@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -83,6 +84,7 @@ public class QuestionDetailDialogFragment extends DialogFragment {
     if (!getTAG().contains("Sheet")) {
       setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
     }
+    setRetainInstance(true);
   }
 
   protected String getTAG() {
@@ -103,6 +105,7 @@ public class QuestionDetailDialogFragment extends DialogFragment {
     setUpRecyclerView();
 
     setData();
+
     return view;
   }
 
@@ -136,11 +139,17 @@ public class QuestionDetailDialogFragment extends DialogFragment {
 
   @Override
   public void onDestroyView() {
+    Dialog dialog = getDialog();
+    // handles https://code.google.com/p/android/issues/detail?id=17423
+    if (dialog != null && getRetainInstance()) {
+      dialog.setDismissMessage(null);
+    }
     super.onDestroyView();
     unbinder.unbind();
   }
 
-  @OnClick({R.id.previous_tv, R.id.close_btn, R.id.next_btn, R.id.radio_detail_tv,R.id.save_question_img})
+  @OnClick({R.id.previous_tv, R.id.close_btn, R.id.next_btn, R.id.radio_detail_tv,
+      R.id.save_question_img})
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.close_btn:
@@ -213,7 +222,7 @@ public class QuestionDetailDialogFragment extends DialogFragment {
       errorMsg.setText(String
           .format(Locale.getDefault(),
               "جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!",
-              questionDto.getPrerequisite()));
+              questionsAdapter.findPositionByBackendId(questionDto.getPrerequisite())));
       recyclerView.setVisibility(View.GONE);
       saveQuestionImg.setVisibility(View.GONE);
     } else {
@@ -223,4 +232,5 @@ public class QuestionDetailDialogFragment extends DialogFragment {
       setUpRecyclerView();
     }
   }
+
 }

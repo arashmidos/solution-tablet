@@ -105,6 +105,12 @@ public class NewOrderInfoFragment extends BaseFragment {
     // Required empty public constructor
   }
 
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setRetainInstance(true);
+  }
+
   public static NewOrderInfoFragment newInstance() {
     return new NewOrderInfoFragment();
   }
@@ -124,16 +130,21 @@ public class NewOrderInfoFragment extends BaseFragment {
 
     Bundle args = getArguments();
 
-    orderId = args.getLong(Constants.ORDER_ID, -1);
-    pageStatus = args.getString(Constants.PAGE_STATUS);
-    order = saleOrderService.findOrderDtoById(orderId);
-    customer = customerService.getCustomerByBackendId(order.getCustomerBackendId());
-    orderStatus = order.getStatus();
-    saleType = args.getString(Constants.SALE_TYPE, "");
-    visitId = args.getLong(Constants.VISIT_ID, -1);
+    if (Empty.isNotEmpty(args)) {
+      orderId = args.getLong(Constants.ORDER_ID, -1);
+      pageStatus = args.getString(Constants.PAGE_STATUS);
+      order = saleOrderService.findOrderDtoById(orderId);
+      customer = customerService.getCustomerByBackendId(order.getCustomerBackendId());
+      orderStatus = order.getStatus();
+      saleType = args.getString(Constants.SALE_TYPE, "");
+      visitId = args.getLong(Constants.VISIT_ID, -1);
 
-    setData();
-    return view;
+      setData();
+
+      return view;
+    } else {
+      return inflater.inflate(R.layout.empty_view, container, false);
+    }
   }
 
   private void setData() {
@@ -246,7 +257,7 @@ public class NewOrderInfoFragment extends BaseFragment {
 
       if (isRejected()) {
         //Add reason or reject to orders
-        order.setDescription(Empty.isNotEmpty(selectedItem)?selectedItem.getLabel():"");
+        order.setDescription(Empty.isNotEmpty(selectedItem) ? selectedItem.getLabel() : "");
       } else {
         order.setPaymentTypeBackendId(selectedItem.getValue());
       }
@@ -356,9 +367,12 @@ public class NewOrderInfoFragment extends BaseFragment {
     adapter = new PaymentMethodAdapter(mainActivity, dataModel, selectedItem, this,
         !pageStatus.equals(Constants.VIEW));
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-    recyclerView.setLayoutManager(linearLayoutManager);
-    recyclerView.setAdapter(adapter);
-    recyclerView.scrollToPosition(dataModel.indexOf(selectedItem));
+
+    if (recyclerView != null) {
+      recyclerView.setLayoutManager(linearLayoutManager);
+      recyclerView.setAdapter(adapter);
+      recyclerView.scrollToPosition(dataModel.indexOf(selectedItem));
+    }
   }
 
   private List<LabelValue> getModel() {

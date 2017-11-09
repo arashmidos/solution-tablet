@@ -7,6 +7,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -107,33 +108,43 @@ public class VisitDetailFragment extends BaseFragment {
   }
 
   @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+  }
+
+  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
+
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_new_visit_detail, container, false);
     ButterKnife.bind(this, view);
     Bundle args = getArguments();
-    customerId = args.getLong(Constants.CUSTOMER_ID);
-    mainActivity = (MainActivity) getActivity();
-    baseInfoService = new BaseInfoServiceImpl(mainActivity);
-    customerService = new CustomerServiceImpl(mainActivity);
-    locationService = new LocationServiceImpl(mainActivity);
-    visitService = new VisitServiceImpl(mainActivity);
-    customer = customerService.getCustomerById(customerId);
-    saleOrderService = new SaleOrderServiceImpl(mainActivity);
-    visitId = args.getLong(Constants.VISIT_ID);
-    saleType = new SettingServiceImpl(mainActivity)
-        .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+    if (Empty.isNotEmpty(args)) {
+      customerId = args.getLong(Constants.CUSTOMER_ID);
+      mainActivity = (MainActivity) getActivity();
+      baseInfoService = new BaseInfoServiceImpl(mainActivity);
+      customerService = new CustomerServiceImpl(mainActivity);
+      locationService = new LocationServiceImpl(mainActivity);
+      visitService = new VisitServiceImpl(mainActivity);
+      customer = customerService.getCustomerById(customerId);
+      saleOrderService = new SaleOrderServiceImpl(mainActivity);
+      visitId = args.getLong(Constants.VISIT_ID);
+      saleType = new SettingServiceImpl(mainActivity)
+          .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
-    tabs.setupWithViewPager(viewpager);
-    initFragments();
-    setUpViewPager();
-    viewpager.setCurrentItem(viewPagerAdapter.getCount());
-    viewpager.setOffscreenPageLimit(viewPagerAdapter.getCount());
-    if (MultiScreenUtility.isTablet(mainActivity)) {
-      mainActivity.changeTitle("");
+      tabs.setupWithViewPager(viewpager);
+      initFragments();
+      setUpViewPager();
+      viewpager.setCurrentItem(viewPagerAdapter.getCount());
+      viewpager.setOffscreenPageLimit(viewPagerAdapter.getCount());
+      if (MultiScreenUtility.isTablet(mainActivity)) {
+        mainActivity.changeTitle("");
+      }
+      return view;
+    } else {
+      return inflater.inflate(R.layout.empty_view, container, false);
     }
-    return view;
   }
 
   public void finishVisiting() {
@@ -322,7 +333,7 @@ public class VisitDetailFragment extends BaseFragment {
     Bundle arguments = getArguments();
     arguments.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     paymentListFragment = PaymentListFragment.newInstance(arguments);
-    pictureFragment = PictureFragment.newInstance(this);
+    pictureFragment = PictureFragment.newInstance(arguments);
     orderListFragment = OrderListFragment.newInstance(arguments, this);
     returnListFragment = ReturnListFragment.newInstance(arguments, this);
     customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
@@ -330,7 +341,7 @@ public class VisitDetailFragment extends BaseFragment {
   }
 
   private void setUpViewPager() {
-    viewPagerAdapter = new CustomerDetailViewPagerAdapter(mainActivity.getSupportFragmentManager());
+    viewPagerAdapter = new CustomerDetailViewPagerAdapter(getChildFragmentManager());
     viewPagerAdapter.add(pictureFragment, getString(R.string.images));
     viewPagerAdapter.add(allQuestionnaireListFragment, getString(R.string.questionnaire));
     viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
@@ -456,6 +467,7 @@ public class VisitDetailFragment extends BaseFragment {
   public void onResume() {
     super.onResume();
     EventBus.getDefault().register(this);
+    mainActivity.showNav();
   }
 
   @Override
@@ -469,6 +481,8 @@ public class VisitDetailFragment extends BaseFragment {
     if (event instanceof ActionEvent) {
       if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
 //        goToRegisterPaymentFragment();TODO:
+      } else if (event.getStatusCode() == StatusCodes.ACTION_START_CAMERA) {
+        startCameraActivity();
       }
     } else if (event instanceof ErrorEvent) {
       Log.i(TAG, "Fucking error");

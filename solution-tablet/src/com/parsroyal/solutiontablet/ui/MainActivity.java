@@ -315,6 +315,7 @@ public abstract class MainActivity extends AppCompatActivity {
 
     registerReceiver(gpsStatusReceiver, new IntentFilter("android.location.PROVIDERS_CHANGED"));
     new TrackerAlarmReceiver().setAlarm(this);
+    navigationImg.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -476,12 +477,14 @@ public abstract class MainActivity extends AppCompatActivity {
   }
 
   protected void commitFragment(String fragmentTag, BaseFragment fragment, boolean addToBackStack) {
-    FragmentTransaction fragmentTransaction;
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.container, fragment, fragmentTag);
-    fragmentTransaction.addToBackStack(fragmentTag);
-    fragmentTransaction.commit();
+    if (!isFinishing()) {
+      FragmentTransaction fragmentTransaction;
+      FragmentManager fragmentManager = getSupportFragmentManager();
+      fragmentTransaction = fragmentManager.beginTransaction();
+      fragmentTransaction.replace(R.id.container, fragment, fragmentTag);
+      fragmentTransaction.addToBackStack(fragmentTag);
+      fragmentTransaction.commit();
+    }
   }
 
   public void changeFragment(int fragmentId, boolean addToBackStack) {
@@ -575,7 +578,10 @@ public abstract class MainActivity extends AppCompatActivity {
     detailTv.setText(content);
   }
 
-  ;
+  public void showButtons() {
+    saveImg.setVisibility(View.VISIBLE);
+    setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
+  }
 
   public abstract void customizeToolbar(int fragmentId);
 
@@ -679,5 +685,15 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void attachBaseContext(Context newBase) {
     super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+  }
+
+  public void showMenu() {
+    navigationImg.setVisibility(View.VISIBLE);
+    navigationImg.setImageResource(R.drawable.ic_menu);
+  }
+
+  public void showNav() {
+    navigationImg.setVisibility(View.VISIBLE);
+    navigationImg.setImageResource(R.drawable.ic_arrow_forward);
   }
 }

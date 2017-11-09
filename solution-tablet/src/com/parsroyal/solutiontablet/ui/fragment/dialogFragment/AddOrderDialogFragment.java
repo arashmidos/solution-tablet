@@ -139,6 +139,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     if (!getTAG().contains("Sheet")) {
       setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
     }
+    setRetainInstance(true);
   }
 
   protected String getTAG() {
@@ -187,6 +188,10 @@ public class AddOrderDialogFragment extends DialogFragment {
   }
 
   protected int getLayout() {
+    if (!getTAG().contains("Sheet")) {
+      setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
+      return R.layout.fragment_add_order_bottom_sheet;
+    }
     return R.layout.fragment_add_order_dialog;
   }
 
@@ -457,5 +462,13 @@ public class AddOrderDialogFragment extends DialogFragment {
   public interface GoodsDialogOnClickListener {
 
     void onConfirmBtnClicked(Double count, Long selectedUnit);
+  }
+
+  @Override
+  public void onDestroyView() {
+    //workaround for this issue: https://code.google.com/p/android/issues/detail?id=17423 (unable to retain instance after configuration change)
+    if (getDialog() != null && getRetainInstance())
+      getDialog().setDismissMessage(null);
+    super.onDestroyView();
   }
 }
