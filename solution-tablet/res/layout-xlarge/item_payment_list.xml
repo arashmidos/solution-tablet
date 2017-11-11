@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main_lay_linear"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@android:color/white"
+  android:orientation="vertical">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:layout_marginBottom="17dp"
+    android:gravity="right|center"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+
+    <TextView
+      android:id="@+id/bank_detail_tv"
+      style="@style/IranSans.Light"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".5"
+      android:textColor="@color/black_de"
+      android:textSize="12sp"
+      tools:text="bank" />
+    <TextView
+      android:id="@+id/payment_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".2"
+      android:textColor="@color/register_order"
+      android:textSize="12sp"
+      tools:text="amount" />
+    <TextView
+      android:id="@+id/payment_method_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".1"
+      android:textColor="@color/black_de"
+      android:textSize="12sp"
+      tools:text="method" />
+    <TextView
+      android:id="@+id/payment_date_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".2"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:textColor="@color/black_de"
+      android:textSize="12sp"
+      tools:text="date" />
+  </LinearLayout>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/navigation_drawer_divider" />
+
+</LinearLayout>

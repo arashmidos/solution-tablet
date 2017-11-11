@@ -172,7 +172,8 @@ public class VisitDetailFragment extends BaseFragment {
   }
 
   public void showNoDialog() {
-    List<VisitInformationDetail> detailList = visitService.getAllVisitDetailById(visitId);
+    List<VisitInformationDetail> detailList = visitService
+        .searchVisitDetail(visitId, VisitInformationDetailType.CREATE_ORDER);
     if (detailList.size() > 0) {
       ToastUtil.toastError(mainActivity, R.string.message_error_wants_denied);
       return;

@@ -256,7 +256,6 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
       });
 
-      addOrderDialogFragment.setCancelable(true);
       addOrderDialogFragment.show(ft, "order");
     }
 

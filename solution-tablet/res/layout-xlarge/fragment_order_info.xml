@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:paddingTop="15dp"
+  android:layout_weight="1"
+  android:orientation="horizontal">
+
+<LinearLayout
+  android:layout_width="0dp"
+  android:layout_weight=".5"
+  android:layout_height="wrap_content">
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:orientation="horizontal">
+
+    <TextView
+      android:id="@+id/orderDateTv"
+      style="@style/TextView.Value"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="40dp"
+      android:gravity="right"
+      tools:text="94/05/30" />
+
+    <TextView
+      android:id="@+id/orderDateLabel"
+      style="@style/TextView.Caption"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="تاریخ سفارش:" />
+
+    <TextView
+      android:id="@+id/orderNumberTv"
+      style="@style/TextView.Value"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="40dp"
+      android:gravity="right"
+      tools:text="112" />
+
+    <TextView
+      android:id="@+id/orderNoLabel"
+      style="@style/TextView.Caption"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="شماره سفارش:" />
+
+    <TextView
+      android:id="@+id/customerNameTv"
+      style="@style/TextView.Value"
+      android:layout_width="250dp"
+      android:layout_height="wrap_content"
+      android:gravity="right"
+      tools:text="مهیار سفیدی" />
+
+    <TextView
+      android:id="@+id/textView46"
+      style="@style/TextView.Caption"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="نام مشتری:" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:gravity="right"
+    android:orientation="horizontal">
+
+    <Spinner
+      android:id="@+id/paymentTypeSp"
+      style="@style/Spinner"
+      android:layout_width="250dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="15dp" />
+
+    <TextView
+      android:id="@+id/paymentTypeLabel"
+      style="@style/TextView.Caption.Spinner"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:text="نوع پرداخت:" />
+
+    <TextView
+      android:id="@+id/orderAmountTv"
+      style="@style/TextView.Value"
+      android:layout_width="240dp"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:gravity="right"
+      tools:text="125,000 تومان" />
+
+    <TextView
+      android:id="@+id/orderAmountLabel"
+      style="@style/TextView.Caption.Spinner"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="مبلغ سفارش:" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="17dp"
+    android:gravity="right"
+    android:orientation="horizontal">
+
+    <EditText
+      android:id="@+id/orderDescriptionTxt"
+      style="@style/EditBox"
+      android:layout_width="500dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="5dp"
+      android:text="این سفارش توضیحاتی زیادی دارد. خیلی زیاد" />
+
+    <TextView
+      android:id="@+id/orderDescriptionLabel"
+      style="@style/TextView.Caption"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="توضیحات سفارش:" />
+  </LinearLayout>
+</LinearLayout>
+
+</LinearLayout>

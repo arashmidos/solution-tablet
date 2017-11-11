@@ -82,7 +82,7 @@ public class MobileMainActivity extends MainActivity {
     Fragment questionsListFragment = getSupportFragmentManager()
         .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
     if (questionsListFragment != null && questionsListFragment.isVisible()) {
-      Log.i(TAG, "WA");
+      ((QuestionsListFragment) questionsListFragment).exit();
     } else if (featureFragment != null && featureFragment.isVisible()) {
       if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
         drawerLayout.closeDrawer(GravityCompat.END);

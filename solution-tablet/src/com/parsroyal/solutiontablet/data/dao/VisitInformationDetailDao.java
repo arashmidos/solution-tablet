@@ -18,5 +18,7 @@ public interface VisitInformationDetailDao extends BaseDao<VisitInformationDetai
 
   List<VisitInformationDetail> search(Long visitId, VisitInformationDetailType type, Long typeId);
 
+  List<VisitInformationDetail> search(Long visitId, VisitInformationDetailType type);
+
   List<VisitInformationDetailDto> getAllVisitDetailDto(Long id);
 }

@@ -213,6 +213,12 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
+  public List<VisitInformationDetail> searchVisitDetail(Long visitId,
+      VisitInformationDetailType type) {
+    return visitInformationDetailDao.search(visitId, type);
+  }
+
+  @Override
   public List<VisitInformationDto> getAllVisitDetailForSend() {
     List<VisitInformationDto> visitList = visitInformationDao.getAllVisitInformationDtoForSend();
     SaleType saleType = SaleType.getByValue(
