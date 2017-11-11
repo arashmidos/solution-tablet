@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +22,7 @@ import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.adapter.SystemCustomerAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.Collections;
@@ -28,7 +32,7 @@ import java.util.List;
  * Created by ShakibIsTheBest on 09/01/2017.
  */
 
-public class SystemCustomerAdapter extends RecyclerView.Adapter<SystemCustomerAdapter.ViewHolder> {
+public class SystemCustomerAdapter extends Adapter<ViewHolder> {
 
   private final CustomerServiceImpl customerService;
   private LayoutInflater inflater;
@@ -53,6 +57,7 @@ public class SystemCustomerAdapter extends RecyclerView.Adapter<SystemCustomerAd
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     CustomerListModel customer = customers.get(position);
+    holder.editLay.setVisibility(View.GONE);
     setMargin(position == customers.size() - 1, holder.customerLay);
     holder.customerNameTv.setText(customer.getTitle());
     String customerCode = "کد : " + customer.getCode();
@@ -68,7 +73,7 @@ public class SystemCustomerAdapter extends RecyclerView.Adapter<SystemCustomerAd
   }
 
   private void setMargin(boolean isLastItem, RelativeLayout layout) {
-    RelativeLayout.LayoutParams parameter = new RelativeLayout.LayoutParams(
+    LayoutParams parameter = new LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.WRAP_CONTENT);
     float scale = context.getResources().getDisplayMetrics().density;
@@ -121,6 +126,8 @@ public class SystemCustomerAdapter extends RecyclerView.Adapter<SystemCustomerAd
     TextView customerShopNameTv;
     @BindView(R.id.has_location_img)
     ImageView hasLocationImg;
+    @BindView(R.id.edit_lay)
+    LinearLayout editLay;
 
     public ViewHolder(View itemView) {
       super(itemView);

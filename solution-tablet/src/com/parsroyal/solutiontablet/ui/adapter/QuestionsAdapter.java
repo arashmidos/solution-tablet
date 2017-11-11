@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
@@ -62,10 +63,12 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
   private long customerId;
   private VisitService visitService;
   private long questionnaireBackendId;
+  private PageStatus pageStatus;
 
   public QuestionsAdapter(QuestionsListFragment questionsListFragment, Context context,
       List<QuestionListModel> questions, long visitId,
-      long goodsGroupBackendId, long answersGroupNo, long customerId, long questionnaireBackendId) {
+      long goodsGroupBackendId, long answersGroupNo, long customerId, long questionnaireBackendId,
+      PageStatus pageStatus) {
     this.context = context;
     this.parent = questionsListFragment;
     this.visitId = visitId;
@@ -73,6 +76,7 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
     this.customerId = customerId;
     this.answersGroupNo = answersGroupNo;
     this.questions = questions;
+    this.pageStatus = pageStatus;
     this.questionnaireBackendId = questionnaireBackendId;
     this.mainActivity = (MainActivity) context;
     this.questionnaireService = new QuestionnaireServiceImpl(mainActivity);
@@ -167,11 +171,17 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
   }
 
   public boolean preRequisiteNotAnswered(QuestionDto currentQuestionDto) {
-
     QuestionDto nextQuestionDto = questionnaireService
         .getQuestionDtoByBackendId(currentQuestionDto.getPrerequisite(), visitId, goodsBackendId,
             answersGroupNo);
     return nextQuestionDto != null && TextUtils.isEmpty(nextQuestionDto.getAnswer());
+  }
+
+  public QuestionDto getQuestionDtoByBackendId(Long backendId) {
+    currentItemPosition = (int) (long) backendId - 1;
+    return questionnaireService
+        .getQuestionDtoByBackendId(backendId, visitId, goodsBackendId,
+            answersGroupNo);
   }
 
   public boolean hasPrerequisite(QuestionDto currentQuestionDto) {
@@ -223,6 +233,10 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
           .getQuestionDto(question.getPrimaryKey(), visitId, goodsBackendId,
               answersGroupNo);
       this.questionDto = questionDto;
+      if (questionDto.isRequired()) {
+        questionTv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_star_red_18, 0);
+        questionTv.setCompoundDrawablePadding(10);
+      }
       preRequisiteTv.setVisibility(View.GONE);
       if (TextUtils.isEmpty(questionDto.getAnswer())) {
         answerTv.setVisibility(View.GONE);
@@ -246,27 +260,26 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.question_lay:
-          if (TextUtils.isEmpty(questionDto.getAnswer()) && hasPrerequisite(questionDto)
-              && preRequisiteNotAnswered(questionDto)) {
-            return;
-          }
-          currentItemPosition = position;
-          Bundle bundle = new Bundle();
+          if (pageStatus == null || pageStatus == PageStatus.EDIT) {
+            currentItemPosition = position;
+
+            Bundle bundle = new Bundle();
           /*QuestionDto questionDto = questionnaireService
               .getQuestionDto(question.getPrimaryKey(), visitId, goodsBackendId,
                   answersGroupNo);*/
-          bundle.putSerializable(Constants.QUESTION_DTO, questionDto);
-          bundle.putInt(Constants.QUESTION_POSITION, position + 1);
-          FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
-          QuestionDetailDialogFragment questionDetailDialogFragment;
-          if (MultiScreenUtility.isTablet(mainActivity)) {
-            questionDetailDialogFragment = QuestionDetailBottomSheet
-                .newInstance(bundle, QuestionsAdapter.this);
-          } else {
-            questionDetailDialogFragment = QuestionDetailDialogFragment
-                .newInstance(bundle, QuestionsAdapter.this);
+            bundle.putSerializable(Constants.QUESTION_DTO, questionDto);
+            bundle.putInt(Constants.QUESTION_POSITION, position + 1);
+            FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+            QuestionDetailDialogFragment questionDetailDialogFragment;
+            if (MultiScreenUtility.isTablet(mainActivity)) {
+              questionDetailDialogFragment = QuestionDetailBottomSheet
+                  .newInstance(bundle, QuestionsAdapter.this);
+            } else {
+              questionDetailDialogFragment = QuestionDetailDialogFragment
+                  .newInstance(bundle, QuestionsAdapter.this);
+            }
+            questionDetailDialogFragment.show(ft, "Question detail");
           }
-          questionDetailDialogFragment.show(ft, "Question detail");
           break;
       }
     }

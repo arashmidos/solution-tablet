@@ -12,6 +12,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
 import com.parsroyal.solutiontablet.service.CustomerService;
@@ -93,7 +95,9 @@ public class NewCustomerFragment extends BaseFragment {
 
   @OnClick(R.id.fab_add_customer)
   public void onClick() {
-    activity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, true);
+    Bundle args = new Bundle();
+    args.putSerializable(Constants.PAGE_STATUS, PageStatus.EDIT);
+    activity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID,args, true);
   }
 
   @Override

@@ -111,7 +111,9 @@ public class QuestionDetailAdapter extends Adapter<ViewHolder> {
     String answer = "";
     switch (questionType) {
       case SIMPLE:
-        answer = viewHolder.simpleEdit.getText().toString();
+        if (viewHolder != null) {
+          answer = viewHolder.simpleEdit.getText().toString();
+        }
         break;
       case SIMPLE_NUMERIC:
         if (Empty.isNotEmpty(amountValue)) {
@@ -138,9 +140,11 @@ public class QuestionDetailAdapter extends Adapter<ViewHolder> {
         }
         break;
       case DATE:
-        answer = viewHolder.dateEdit.getText().toString();
-        if (answer.equals(context.getString(R.string.choose_date))) {
-          answer = "";
+        if (viewHolder != null) {
+          answer = viewHolder.dateEdit.getText().toString();
+          if (answer.equals(context.getString(R.string.choose_date))) {
+            answer = "";
+          }
         }
     }
     return answer;

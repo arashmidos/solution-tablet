@@ -115,6 +115,7 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int CUSTOMER_INFO_FRAGMENT = 32;
 
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+  private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
   private static final String TAG = MainActivity.class.getName();
   protected ProgressDialog progressDialog;
   protected BaseFragment currentFragment;
@@ -366,6 +367,31 @@ public abstract class MainActivity extends AppCompatActivity {
               startActivity(intent);
             });
       }
+    } else if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE) {
+      if (grantResults.length <= 0) {
+        // If user interaction was interrupted, the permission request is cancelled and you
+        // receive empty arrays.
+        Log.i(TAG, "User interaction was cancelled.");
+      } else if ((grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+          && grantResults[1] == PackageManager.PERMISSION_GRANTED) || (grantResults.length == 1
+          && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+        // Permission was granted.
+        Fragment visitDetailFragment = getSupportFragmentManager()
+            .findFragmentByTag(VisitDetailFragment.class.getSimpleName());
+        ((VisitDetailFragment) visitDetailFragment).startCameraActivity();
+      } else {
+        ToastUtil.toastError(this, getString(R.string.permission_denied_explanation),
+            view -> {
+              // Build intent that displays the App settings screen.
+              Intent intent = new Intent();
+              intent.setAction(
+                  Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+              Uri uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null);
+              intent.setData(uri);
+              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+              startActivity(intent);
+            });
+      }
     }
   }
 
@@ -516,17 +542,23 @@ public abstract class MainActivity extends AppCompatActivity {
         changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
         break;
       case R.id.save_img:
-        saveImg.setVisibility(View.GONE);
-        Fragment questionnaireCategoryFragment = getSupportFragmentManager()
-            .findFragmentByTag(QuestionnairesCategoryFragment.class.getSimpleName());
-        Fragment questionnaireListFragment = getSupportFragmentManager()
-            .findFragmentByTag(QuestionnaireListFragment.class.getSimpleName());
-        Fragment questionsListFragment = getSupportFragmentManager()
-            .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
-        if (questionsListFragment != null && questionsListFragment.isVisible()) {
-          ((QuestionsListFragment) questionsListFragment).closeVisit();
-        }
+        onSaveImageClicked(true);
+        break;
+    }
+  }
 
+  public void onSaveImageClicked(boolean isRequiredMode) {
+    Fragment questionnaireCategoryFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionnairesCategoryFragment.class.getSimpleName());
+    Fragment questionnaireListFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionnaireListFragment.class.getSimpleName());
+    Fragment questionsListFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
+    if (questionsListFragment != null && questionsListFragment.isVisible()) {
+      if (!isRequiredMode || ((QuestionsListFragment) questionsListFragment)
+          .hasRequiredQuestionAnswer()) {
+        saveImg.setVisibility(View.GONE);
+        ((QuestionsListFragment) questionsListFragment).closeVisit();
         if (questionnaireCategoryFragment != null) {
           navigateToFragment(QuestionnairesCategoryFragment.class.getSimpleName());
         } else if (questionnaireListFragment != null) {
@@ -534,7 +566,10 @@ public abstract class MainActivity extends AppCompatActivity {
         } else {
           onBackPressed();
         }
-        break;
+      } else {
+        //TODO: change message
+        ToastUtil.toastError(this, "لطفا به همه سوالات ستاره دار پاسخ بدهید");
+      }
     }
   }
 
@@ -578,9 +613,9 @@ public abstract class MainActivity extends AppCompatActivity {
     detailTv.setText(content);
   }
 
-  public void showButtons() {
-    saveImg.setVisibility(View.VISIBLE);
-    setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
+  public void setToolbarIconVisibility(int id, int visibility) {
+    View view = findViewById(id);
+    view.setVisibility(visibility);
   }
 
   public abstract void customizeToolbar(int fragmentId);
@@ -601,9 +636,7 @@ public abstract class MainActivity extends AppCompatActivity {
       searchImg.setVisibility(View.GONE);
     }
     //show save icon in question list fragment
-    if (fragmentId == QUESTION_LIST_FRAGMENT_ID) {
-      saveImg.setVisibility(View.VISIBLE);
-    } else {
+    if (fragmentId != QUESTION_LIST_FRAGMENT_ID) {
       saveImg.setVisibility(View.GONE);
     }
     customizeToolbar(fragmentId);

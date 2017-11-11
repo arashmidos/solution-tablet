@@ -70,7 +70,6 @@ public class AllQuestionnaireListFragment extends BaseFragment {
   private void setUpRecyclerView() {
     Bundle bundle = getArguments();
     this.customerBackendId = bundle.getLong(Constants.CUSTOMER_BACKEND_ID);
-
     bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
     AllQuestionnaireAdapter allQuestionnaireAdapter = new AllQuestionnaireAdapter(mainActivity,
         getQuestionnaireList(), bundle);

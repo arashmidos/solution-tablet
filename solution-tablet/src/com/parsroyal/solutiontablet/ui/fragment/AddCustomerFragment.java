@@ -17,6 +17,7 @@ import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -79,6 +80,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   private BaseInfoService baseInfoService;
   private LocationService locationService;
   private Customer customer;
+  private PageStatus pageStatus;
 
   public AddCustomerFragment() {
     // Required empty public constructor
@@ -104,9 +106,12 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     try {
       Bundle arguments = getArguments();
       if (Empty.isNotEmpty(arguments)) {
-        customer = customerService.getCustomerById(arguments.getLong(Constants.CUSTOMER_ID));
-      } else {
-        customer = new Customer();
+        pageStatus = (PageStatus) arguments.getSerializable(Constants.PAGE_STATUS);
+        if (pageStatus != null && pageStatus == PageStatus.VIEW) {
+          customer = customerService.getCustomerById(arguments.getLong(Constants.CUSTOMER_ID));
+        } else {
+          customer = new Customer();
+        }
       }
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
@@ -125,7 +130,28 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
     setData();
     setUpSpinners();
+    if (pageStatus != null && pageStatus == PageStatus.VIEW) {
+      disableItems();
+    }
     return view;
+  }
+
+  private void disableItems() {
+    fullNameEdt.setEnabled(false);
+    phoneNumberEdt.setEnabled(false);
+    mobileEdt.setEnabled(false);
+    shopNameEdt.setEnabled(false);
+    nationalCodeEdt.setEnabled(false);
+    regionalMunicipalityEdt.setEnabled(false);
+    postalCodeEdt.setEnabled(false);
+    storeMeterEdt.setEnabled(false);
+    addressEdt.setEnabled(false);
+    stateSpinner.setEnabled(false);
+    activitySpinner.setEnabled(false);
+    citySpinner.setEnabled(false);
+    ownershipSpinner.setEnabled(false);
+    customerClassSpinner.setEnabled(false);
+    createBtn.setVisibility(View.GONE);
   }
 
   private void setData() {
@@ -428,7 +454,9 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.location_lay:
-        getLocation();
+        if (pageStatus != null && pageStatus == PageStatus.EDIT) {
+          getLocation();
+        }
         break;
       case R.id.create_btn:
         save();

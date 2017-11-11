@@ -22,6 +22,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.QuestionType;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionDetailAdapter;
@@ -59,6 +60,8 @@ public class QuestionDetailDialogFragment extends DialogFragment {
   protected TextView errorMsg;
   @BindView(R.id.save_question_img)
   protected ImageView saveQuestionImg;
+  @BindView(R.id.prerequisite_btn)
+  protected Button prerequisiteBtn;
 
   protected QuestionDto questionDto;
   protected Context context;
@@ -116,15 +119,38 @@ public class QuestionDetailDialogFragment extends DialogFragment {
     positionTv.setText(String.format(Locale.getDefault(), "%d/%d", currentPosition,
         questionsAdapter.getItemCount()));
 
-    if (questionDto.getType().getValue() == 102) {
+    if (questionDto.getType() == QuestionType.CHOICE_SINGLE) {
       radioDetailTv.setVisibility(View.VISIBLE);
       checkBoxDetailTv.setVisibility(View.GONE);
-    } else if (questionDto.getType().getValue() == 103) {
+    } else if (questionDto.getType() == QuestionType.CHOICE_MULTIPLE) {
       checkBoxDetailTv.setVisibility(View.VISIBLE);
       radioDetailTv.setVisibility(View.GONE);
     } else {
       radioDetailTv.setVisibility(View.GONE);
       checkBoxDetailTv.setVisibility(View.GONE);
+    }
+    if (TextUtils.isEmpty(questionDto.getAnswer()) && questionsAdapter.hasPrerequisite(questionDto)
+        && questionsAdapter.preRequisiteNotAnswered(questionDto)) {
+      errorMsg.setVisibility(View.VISIBLE);
+      prerequisiteBtn.setVisibility(View.VISIBLE);
+      prerequisiteBtn.setText(
+          String.format(Locale.getDefault(), "نمایش سوال شماره %d",
+              questionsAdapter.findPositionByBackendId(questionDto.getPrerequisite())));
+      errorMsg.setText(String
+          .format(Locale.getDefault(),
+              "جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!",
+              questionDto.getPrerequisite()));
+      recyclerView.setVisibility(View.GONE);
+      saveQuestionImg.setVisibility(View.GONE);
+      radioDetailTv.setVisibility(View.GONE);
+      checkBoxDetailTv.setVisibility(View.GONE);
+      questionTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray_9e));
+    } else {
+      questionTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.black_85));
+      recyclerView.setVisibility(View.VISIBLE);
+      errorMsg.setVisibility(View.GONE);
+      prerequisiteBtn.setVisibility(View.GONE);
+      saveQuestionImg.setVisibility(View.VISIBLE);
     }
   }
 
@@ -149,11 +175,17 @@ public class QuestionDetailDialogFragment extends DialogFragment {
   }
 
   @OnClick({R.id.previous_tv, R.id.close_btn, R.id.next_btn, R.id.radio_detail_tv,
-      R.id.save_question_img})
+      R.id.save_question_img, R.id.prerequisite_btn})
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.close_btn:
         getDialog().dismiss();
+        break;
+      case R.id.prerequisite_btn:
+        questionDto = questionsAdapter.getQuestionDtoByBackendId(questionDto.getPrerequisite());
+        currentPosition = questionsAdapter.getCurrentItemPosition() + 1;
+        setData();
+        setUpRecyclerView();
         break;
       case R.id.previous_tv:
         if (currentPosition != 1) {
@@ -216,21 +248,7 @@ public class QuestionDetailDialogFragment extends DialogFragment {
     }
     currentPosition = questionsAdapter.getCurrentItemPosition() + 1;
     setData();
-    if (TextUtils.isEmpty(questionDto.getAnswer()) && questionsAdapter.hasPrerequisite(questionDto)
-        && questionsAdapter.preRequisiteNotAnswered(questionDto)) {
-      errorMsg.setVisibility(View.VISIBLE);
-      errorMsg.setText(String
-          .format(Locale.getDefault(),
-              "جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!",
-              questionsAdapter.findPositionByBackendId(questionDto.getPrerequisite())));
-      recyclerView.setVisibility(View.GONE);
-      saveQuestionImg.setVisibility(View.GONE);
-    } else {
-      recyclerView.setVisibility(View.VISIBLE);
-      errorMsg.setVisibility(View.GONE);
-      saveQuestionImg.setVisibility(View.VISIBLE);
-      setUpRecyclerView();
-    }
+    setUpRecyclerView();
   }
 
 }

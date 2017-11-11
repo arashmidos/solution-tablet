@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 
@@ -21,6 +22,10 @@ public class ReportFragment extends BaseFragment {
 
   private CustomerDetailViewPagerAdapter viewPagerAdapter;
   private MainActivity mainActivity;
+  private PaymentListFragment paymentListFragment;
+  private OrderListFragment orderListFragment;
+  private ReturnListFragment returnListFragment;
+  private AllQuestionnaireListFragment allQuestionnaireListFragment;
 
   public ReportFragment() {
     // Required empty public constructor
@@ -39,21 +44,30 @@ public class ReportFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     mainActivity.changeTitle(getString(R.string.reports));
     tabs.setupWithViewPager(viewpager);
+    initFragments();
     setUpViewPager();
-    viewpager.setCurrentItem(1);
+    viewpager.setCurrentItem(2);
     return view;
   }
 
   private void setUpViewPager() {
-    viewPagerAdapter = new CustomerDetailViewPagerAdapter(
-        getActivity().getSupportFragmentManager());
-    viewPagerAdapter
-        .add(PaymentListFragment.newInstance(null), getString(R.string.payments));
-    viewPagerAdapter
-        .add(OrderListFragment.newInstance(getArguments(), null), getString(R.string.orders));
+    viewPagerAdapter = new CustomerDetailViewPagerAdapter(mainActivity.getSupportFragmentManager());
+    //TODO:ADD Questionnaire
+//    viewPagerAdapter.add(allQuestionnaireListFragment, getString(R.string.questionnaire));
+    viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
+    viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
+    viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
     viewpager.setAdapter(viewPagerAdapter);
   }
 
+  private void initFragments() {
+    Bundle arguments = getArguments();
+    paymentListFragment = PaymentListFragment.newInstance(null);
+    orderListFragment = OrderListFragment.newInstance(arguments, null);
+    returnListFragment = ReturnListFragment.newInstance(arguments, null);
+    //TODO:ADD Questionnaire
+//    allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(arguments);
+  }
 
   @Override
   public int getFragmentId() {

@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
 import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
@@ -154,18 +155,28 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
         hasLocationImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.login_gray));
       }
 
+      try {
+        visitInformations = visitService
+            .getVisitInformationForNewCustomer(customer.getPrimaryKey());
+      } catch (Exception ex) {
+        Logger.sendError("UI Exception",
+            "Error in NCustomerListAdapter.getView " + ex.getMessage());
+        ex.printStackTrace();
+      }
       if (isSend) {
-        editLay.setVisibility(View.GONE);
+        editImg.setVisibility(View.INVISIBLE);
+        deleteImg.setVisibility(View.INVISIBLE);
+        if (visitInformations != null) {
+          questionnaireImg.setVisibility(View.VISIBLE);
+          questionnaireImg.setImageResource(R.drawable.ic_questionnaires_done_24_dp);
+        } else {
+          editLay.setVisibility(View.GONE);
+        }
       } else {
         editLay.setVisibility(View.VISIBLE);
-        try {
-          visitInformations = visitService
-              .getVisitInformationForNewCustomer(customer.getPrimaryKey());
-        } catch (Exception ex) {
-          Logger.sendError("UI Exception",
-              "Error in NCustomerListAdapter.getView " + ex.getMessage());
-          ex.printStackTrace();
-        }
+        questionnaireImg.setVisibility(View.VISIBLE);
+        editImg.setVisibility(View.VISIBLE);
+        deleteImg.setVisibility(View.VISIBLE);
         if (visitInformations != null) {
           questionnaireImg.setImageResource(R.drawable.ic_questionnaires_done_24_dp);
         } else {
@@ -178,6 +189,12 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.customer_lay:
+          if (isSend) {
+            Bundle arg = new Bundle();
+            arg.putSerializable(Constants.PAGE_STATUS, PageStatus.VIEW);
+            arg.putLong(Constants.CUSTOMER_ID, customer.getPrimaryKey());
+            mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, arg, true);
+          }
           break;
         case R.id.edit_img:
         case R.id.edit_img_layout:
@@ -213,6 +230,11 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
           //Initialize args
           final Bundle bundle = new Bundle();
           bundle.putLong(Constants.CUSTOMER_ID, customer.getPrimaryKey());
+          if (isSend) {
+            bundle.putSerializable(Constants.PAGE_STATUS, PageStatus.VIEW);
+          } else {
+            bundle.putSerializable(Constants.PAGE_STATUS, PageStatus.EDIT);
+          }
           long visitId;
           if (finalVisitInformations == null) {
             visitId = visitService.startVisitingNewCustomer(customer.getPrimaryKey());

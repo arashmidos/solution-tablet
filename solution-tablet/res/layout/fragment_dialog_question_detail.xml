@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/main_lay"
   android:layout_width="match_parent"
@@ -18,9 +19,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="16dp"
-      android:tint="#2288e1"
       android:layout_gravity="start|center"
-      android:src="@drawable/ic_save_24_dp" />
+      android:src="@drawable/ic_save_24_dp"
+      android:tint="#2288e1" />
     <TextView
       android:id="@+id/question_tv"
       style="@style/IranSans.Bold"
@@ -155,11 +156,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginRight="32dp"
+    android:layout_marginLeft="32dp"
+    android:layout_marginEnd="32dp"
+    android:layout_marginStart="32dp"
     android:layout_below="@+id/radio_detail_tv"
     android:gravity="right"
-    android:textColor="#1976d2"
+    android:textColor="@color/colorPrimaryDark"
     android:textSize="16sp"
     android:visibility="gone"
     tools:text="جهت پاسخ به این سوال، ابتدا باید به سوال شماره ۳ پاسخ داده شود!" />
+  <Button
+    android:id="@+id/prerequisite_btn"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="22dp"
+    android:layout_below="@id/error_msg"
+    android:layout_centerHorizontal="true"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:background="@drawable/rectangle_green"
+    android:textColor="@color/white"
+    android:textSize="14sp"
+    android:visibility="gone"
+    tools:text="نمایش سوال شماره ۳" />
 </RelativeLayout>
