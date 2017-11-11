@@ -91,7 +91,11 @@ public class QuestionsListFragment extends BaseFragment {
     parent = arguments.getInt(Constants.PARENT, 0);
     answersGroupNo = arguments.getLong(Constants.ANSWERS_GROUP_NO, -1);
     pageStatus = (PageStatus) arguments.getSerializable(Constants.PAGE_STATUS);
-
+    if (pageStatus != null && pageStatus == PageStatus.VIEW) {
+      mainActivity.setToolbarIconVisibility(R.id.save_img, View.GONE);
+    } else {
+      mainActivity.setToolbarIconVisibility(R.id.save_img, View.VISIBLE);
+    }
     customer = customerService.getCustomerById(customerId);
 
     setUpRecyclerView();
@@ -104,7 +108,7 @@ public class QuestionsListFragment extends BaseFragment {
   private void setUpRecyclerView() {
     QuestionsAdapter questionsAdapter = new QuestionsAdapter(this, mainActivity, getQuestions(),
         visitId,
-        goodsGroupBackendId, answersGroupNo, customerId, questionnaireBackendId,pageStatus);
+        goodsGroupBackendId, answersGroupNo, customerId, questionnaireBackendId, pageStatus);
     LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(questionsAdapter);
@@ -134,15 +138,19 @@ public class QuestionsListFragment extends BaseFragment {
   }
 
   public void exit() {
-    DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
-        getString(R.string.message_save_questionnaire), "", (dialog, which) ->
-            mainActivity.findViewById(R.id.save_img).performClick(),
-        "", (dialog, which) -> deleteAllQuestions(), Constants.ICON_MESSAGE);
+    if (pageStatus != null && pageStatus == PageStatus.VIEW) {
+      mainActivity.onSaveImageClicked(false);
+    } else {
+      DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
+          getString(R.string.message_save_questionnaire), "", (dialog, which) ->
+              mainActivity.onSaveImageClicked(true),
+          "", (dialog, which) -> deleteAllQuestions(), Constants.ICON_MESSAGE);
+    }
   }
 
   private void deleteAllQuestions() {
     questionnaireService.deleteAllAnswer(visitId, answersGroupNo);
-    mainActivity.findViewById(R.id.save_img).performClick();
+    mainActivity.onSaveImageClicked(false);
   }
 
   @Override
@@ -166,7 +174,8 @@ public class QuestionsListFragment extends BaseFragment {
   }
 
   public void closeVisit() {
-    if (Empty.isEmpty(customer) || parent == MainActivity.NEW_CUSTOMER_FRAGMENT_ID) {
+    if (pageStatus == null || pageStatus == PageStatus.EDIT || Empty.isEmpty(customer)
+        || parent == MainActivity.NEW_CUSTOMER_FRAGMENT_ID) {
       //It's anonymous questionaire or New customer
       //known bug, it he has not answered any quesiton, should remove the entire visit.
       visitService.finishVisiting(visitId);
@@ -174,6 +183,9 @@ public class QuestionsListFragment extends BaseFragment {
   }
 
   public boolean hasRequiredQuestionAnswer() {
+    if (pageStatus != null && pageStatus == PageStatus.VIEW) {
+      return true;
+    }
     for (QuestionListModel question : getQuestions()) {
       QuestionDto questionDto = questionnaireService
           .getQuestionDto(question.getPrimaryKey(), visitId, goodsGroupBackendId,

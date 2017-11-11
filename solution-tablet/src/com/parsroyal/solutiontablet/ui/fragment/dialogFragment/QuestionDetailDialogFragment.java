@@ -131,7 +131,8 @@ public class QuestionDetailDialogFragment extends DialogFragment {
       errorMsg.setVisibility(View.VISIBLE);
       prerequisiteBtn.setVisibility(View.VISIBLE);
       prerequisiteBtn.setText(
-          String.format(Locale.getDefault(), "نمایش سوال شماره %d", questionDto.getPrerequisite()));
+          String.format(Locale.getDefault(), "نمایش سوال شماره %d",
+              questionsAdapter.findPositionByBackendId(questionDto.getPrerequisite())));
       errorMsg.setText(String
           .format(Locale.getDefault(),
               "جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!",

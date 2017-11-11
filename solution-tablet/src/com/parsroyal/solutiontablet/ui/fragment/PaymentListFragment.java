@@ -68,10 +68,12 @@ public class PaymentListFragment extends BaseFragment {
       customerId = arguments.getLong(Constants.CUSTOMER_ID);
       visitId = arguments.getLong(Constants.VISIT_ID);
       customer = customerService.getCustomerById(customerId);
+      //TODO : ARASH fix this to get all payments
       paymentSO = new PaymentSO(customer.getBackendId(), SendStatus.NEW.getId());
     } else {
       fabAddPayment.setVisibility(View.GONE);
-      paymentSO = new PaymentSO(SendStatus.NEW.getId());
+      //TODO : ARASH fix this to get all payments
+      paymentSO = new PaymentSO(SendStatus.SENT.getId());
     }
     setUpRecyclerView();
     return view;
@@ -84,17 +86,19 @@ public class PaymentListFragment extends BaseFragment {
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
-    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-      @Override
-      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        super.onScrolled(recyclerView, dx, dy);
-        if (dy > 0) {
-          fabAddPayment.setVisibility(View.GONE);
-        } else {
-          fabAddPayment.setVisibility(View.VISIBLE);
+    if (!Empty.isEmpty(getArguments())) {
+      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+          super.onScrolled(recyclerView, dx, dy);
+          if (dy > 0) {
+            fabAddPayment.setVisibility(View.GONE);
+          } else {
+            fabAddPayment.setVisibility(View.VISIBLE);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   private List<PaymentListModel> getPaymentList() {

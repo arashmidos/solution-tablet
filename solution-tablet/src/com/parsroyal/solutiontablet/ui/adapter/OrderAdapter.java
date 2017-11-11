@@ -3,8 +3,11 @@ package com.parsroyal.solutiontablet.ui.adapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.mikepenz.crossfader.util.UIUtils;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -24,6 +29,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -139,6 +145,12 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     @Nullable
     @BindView(R.id.return_date_tv)
     TextView returnDateTv;
+    @Nullable
+    @BindView(R.id.customer_name_tv)
+    TextView customerNameTv;
+    @Nullable
+    @BindView(R.id.return_status_tv)
+    TextView returnStatusTv;
 
     private int position;
     private SaleOrderListModel order;
@@ -160,11 +172,15 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public void setOrderData(int position, SaleOrderListModel order) {
       this.position = position;
       this.order = order;
-      if (isFromOrder) {
-        orderStatusTv.setText(SaleOrderStatus.getDisplayTitle(context, order.getStatus()));
+      if (!isFromOrder) {
+        orderStatusTv.setVisibility(View.GONE);
+        customerNameTv.setVisibility(View.GONE);
+      } else {
+        customerNameTv.setVisibility(View.VISIBLE);
       }
       String orderCode = "کد سفارش : " + String.valueOf(order.getId());
       orderCodeTv.setText(orderCode);
+      customerNameTv.setText(order.getCustomerName());
       orderCountTv.setText("--");//TODO: Add order items count
 
       Date createdDate = DateUtil
@@ -178,8 +194,19 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       orderTotalPrice.setText(number);
       orderPaymentMethodTv.setText(order.getPaymentTypeTitle());
       if (order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
-        editImg.setVisibility(View.GONE);
-        deleteImg.setVisibility(View.GONE);
+        if (isFromOrder) {
+          orderStatusTv.setVisibility(View.VISIBLE);
+        } else {
+          orderStatusTv.setVisibility(View.GONE);
+        }
+        if (!MultiScreenUtility.isTablet(context)) {
+          editImg.setVisibility(View.GONE);
+          deleteImg.setVisibility(View.GONE);
+        } else {
+          editImg.setVisibility(View.INVISIBLE);
+          deleteImg.setVisibility(View.INVISIBLE);
+
+        }
       }
     }
 
@@ -187,20 +214,50 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       this.position = position;
       this.order = order;
 
-      returnCountTv.setText("--");//TODO: Add Return items count
       Date createdDate = DateUtil
           .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
-
+      if (isFromOrder && !MultiScreenUtility.isTablet(context)) {
+        returnReasonTv
+            .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_return_grey_18_dp, 0);
+        returnReasonTv.setCompoundDrawablePadding((int) UIUtils.convertDpToPixel(8, context));
+        returnReasonTv.setTextColor(ContextCompat.getColor(context, R.color.black_de));
+        returnReasonTv.setText("--");//TODO: Add Return items count
+        returnCountTv.setText(order.getCustomerName());
+      } else {
+        if (isFromOrder) {
+          customerNameTv.setText(order.getCustomerName());
+          customerNameTv.setVisibility(View.VISIBLE);
+        }
+        if (TextUtils.isEmpty(order.getDescription())) {
+          returnReasonTv.setVisibility(View.GONE);
+        } else {
+          returnReasonTv.setText(order.getDescription());
+        }
+        returnCountTv
+            .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_return_grey_18_dp, 0);
+        returnCountTv.setCompoundDrawablePadding((int) UIUtils.convertDpToPixel(8, context));
+        returnCountTv.setText("--");//TODO: Add Return items count
+      }
       returnDateTv.setText(dateString);
       String number = String
           .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
               R.string.common_irr_currency));
       totalAmountTv.setText(number);
-      returnReasonTv.setText(order.getDescription());
+
       if (order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId())) {
-        editImg.setVisibility(View.GONE);
-        deleteImg.setVisibility(View.GONE);
+        if (isFromOrder) {
+          returnStatusTv.setVisibility(View.VISIBLE);
+        } else {
+          returnStatusTv.setVisibility(View.GONE);
+        }
+        if (!MultiScreenUtility.isTablet(context)) {
+          editImg.setVisibility(View.GONE);
+          deleteImg.setVisibility(View.GONE);
+        } else {
+          editImg.setVisibility(View.INVISIBLE);
+          deleteImg.setVisibility(View.INVISIBLE);
+        }
       }
     }
 
@@ -208,18 +265,22 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.delete_img:
-          deleteOrder();
+          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
+            deleteOrder();
+          }
           break;
         case R.id.edit_img:
         case R.id.main_lay_linear:
         case R.id.main_lay:
-          Bundle args = new Bundle();
-          args.putLong(Constants.ORDER_ID, order.getId());
-          args.putString(Constants.SALE_TYPE, saleType);
-          args.putLong(Constants.VISIT_ID, visitId);
-          args.putBoolean(Constants.READ_ONLY, false);
-          setPageStatus(args);
-          mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
+          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
+            Bundle args = new Bundle();
+            args.putLong(Constants.ORDER_ID, order.getId());
+            args.putString(Constants.SALE_TYPE, saleType);
+            args.putLong(Constants.VISIT_ID, visitId);
+            args.putBoolean(Constants.READ_ONLY, false);
+            setPageStatus(args);
+            mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
+          }
           break;
       }
     }

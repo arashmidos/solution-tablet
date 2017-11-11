@@ -539,29 +539,34 @@ public abstract class MainActivity extends AppCompatActivity {
         changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
         break;
       case R.id.save_img:
-        Fragment questionnaireCategoryFragment = getSupportFragmentManager()
-            .findFragmentByTag(QuestionnairesCategoryFragment.class.getSimpleName());
-        Fragment questionnaireListFragment = getSupportFragmentManager()
-            .findFragmentByTag(QuestionnaireListFragment.class.getSimpleName());
-        Fragment questionsListFragment = getSupportFragmentManager()
-            .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
-        if (questionsListFragment != null && questionsListFragment.isVisible()) {
-          if (((QuestionsListFragment) questionsListFragment).hasRequiredQuestionAnswer()) {
-            saveImg.setVisibility(View.GONE);
-            ((QuestionsListFragment) questionsListFragment).closeVisit();
-            if (questionnaireCategoryFragment != null) {
-              navigateToFragment(QuestionnairesCategoryFragment.class.getSimpleName());
-            } else if (questionnaireListFragment != null) {
-              navigateToFragment(QuestionnaireListFragment.class.getSimpleName());
-            } else {
-              onBackPressed();
-            }
-          } else {
-            //TODO: change message
-            ToastUtil.toastError(this, "لطفا به همه سوالات ستاره دار پاسخ بدهید");
-          }
-        }
+        onSaveImageClicked(true);
         break;
+    }
+  }
+
+  public void onSaveImageClicked(boolean isRequiredMode) {
+    Fragment questionnaireCategoryFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionnairesCategoryFragment.class.getSimpleName());
+    Fragment questionnaireListFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionnaireListFragment.class.getSimpleName());
+    Fragment questionsListFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
+    if (questionsListFragment != null && questionsListFragment.isVisible()) {
+      if (!isRequiredMode || ((QuestionsListFragment) questionsListFragment)
+          .hasRequiredQuestionAnswer()) {
+        saveImg.setVisibility(View.GONE);
+        ((QuestionsListFragment) questionsListFragment).closeVisit();
+        if (questionnaireCategoryFragment != null) {
+          navigateToFragment(QuestionnairesCategoryFragment.class.getSimpleName());
+        } else if (questionnaireListFragment != null) {
+          navigateToFragment(QuestionnaireListFragment.class.getSimpleName());
+        } else {
+          onBackPressed();
+        }
+      } else {
+        //TODO: change message
+        ToastUtil.toastError(this, "لطفا به همه سوالات ستاره دار پاسخ بدهید");
+      }
     }
   }
 
@@ -605,7 +610,10 @@ public abstract class MainActivity extends AppCompatActivity {
     detailTv.setText(content);
   }
 
-  ;
+  public void setToolbarIconVisibility(int id, int visibility) {
+    View view = findViewById(id);
+    view.setVisibility(visibility);
+  }
 
   public abstract void customizeToolbar(int fragmentId);
 
@@ -625,9 +633,7 @@ public abstract class MainActivity extends AppCompatActivity {
       searchImg.setVisibility(View.GONE);
     }
     //show save icon in question list fragment
-    if (fragmentId == QUESTION_LIST_FRAGMENT_ID) {
-      saveImg.setVisibility(View.VISIBLE);
-    } else {
+    if (fragmentId != QUESTION_LIST_FRAGMENT_ID) {
       saveImg.setVisibility(View.GONE);
     }
     customizeToolbar(fragmentId);

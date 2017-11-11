@@ -1,150 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/main_lay"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:background="@android:color/white">
+  android:background="@color/white"
+  android:orientation="vertical">
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+      android:id="@+id/order_code_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="14dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:textColor="@color/black_de"
+      android:textSize="12sp"
+      tools:text="code" />
 
-  <TextView
-    android:id="@+id/order_code_tv"
-    style="@style/IranSans.Medium"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="14dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginLeft="16dp"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:textColor="@color/black_de"
-    android:textSize="12sp"
-    tools:text="code" />
+    <TextView
+      android:id="@+id/order_date_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="14dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:textColor="@color/black_de"
+      android:textSize="12sp"
+      tools:text="date" />
 
-  <TextView
-    android:id="@+id/order_status_tv"
-    style="@style/IranSans.Medium"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="14dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginLeft="16dp"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:layout_below="@id/order_date_tv"
-    android:textColor="@color/black_de"
-    android:textSize="12sp"
-    tools:text="status" />
-  <TextView
-    android:id="@+id/order_date_tv"
-    style="@style/IranSans.Medium"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="14dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
-    android:textColor="@color/black_de"
-    android:textSize="12sp"
-    tools:text="date" />
+    <TextView
+      android:id="@+id/order_total_price"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="14dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_below="@id/order_date_tv"
+      android:textColor="@color/register_order"
+      android:textSize="12sp"
+      tools:text="price" />
 
-  <TextView
-    android:id="@+id/order_total_price"
-    style="@style/IranSans.Medium"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="14dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
-    android:layout_below="@id/order_date_tv"
-    android:textColor="@color/register_order"
-    android:textSize="12sp"
-    tools:text="price" />
+    <TextView
+      android:id="@+id/customer_name_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_below="@id/order_total_price"
+      android:textColor="@color/black_de"
+      android:textSize="12sp"
+      tools:text="shakib" />
 
+    <ImageView
+      android:id="@+id/order_count_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="14dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_below="@id/order_date_tv"
+      android:src="@drawable/ic_cart_outline_black_18dp"
+      android:tint="@color/login_gray" />
+
+    <TextView
+      android:id="@+id/order_count_tv"
+      style="@style/IranSans.Light"
+      android:layout_width="42dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="14dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_below="@id/order_date_tv"
+      android:layout_toLeftOf="@id/order_count_img"
+      android:layout_toStartOf="@id/order_count_img"
+      android:gravity="right"
+      android:textColor="@color/login_gray"
+      android:textSize="12sp" />
+
+    <ImageView
+      android:id="@+id/order_payment_method_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="14dp"
+      android:layout_below="@id/order_date_tv"
+      android:layout_toLeftOf="@id/order_count_tv"
+      android:layout_toStartOf="@id/order_count_tv"
+      android:src="@drawable/ic_attach_money_18_dp"
+      android:tint="@color/login_gray" />
+
+    <TextView
+      android:id="@+id/order_payment_method_tv"
+      style="@style/IranSans.Light"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="14dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_below="@id/order_date_tv"
+      android:layout_toLeftOf="@id/order_payment_method_img"
+      android:layout_toStartOf="@id/order_payment_method_img"
+      android:textColor="@color/login_gray"
+      android:textSize="12sp" />
+
+    <ImageView
+      android:id="@+id/delete_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="14dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="28dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="28dp"
+      android:layout_below="@+id/order_total_price"
+      android:src="@drawable/ic_delete_24_black"
+      android:tint="@color/black_de" />
+    <ImageView
+      android:id="@+id/edit_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="14dp"
+      android:layout_below="@+id/order_total_price"
+      android:layout_toEndOf="@id/delete_img"
+      android:layout_toRightOf="@id/delete_img"
+      android:src="@drawable/ic_edit_24_black"
+      android:tint="@color/black_de" />
+    <TextView
+      android:id="@+id/order_status_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_below="@+id/order_total_price"
+      android:text="@string/sent"
+      android:textColor="@color/primary_dark"
+      android:textSize="12sp"
+      android:visibility="gone" />
+  </RelativeLayout>
   <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
-    android:layout_below="@id/order_count_img"
+    android:layout_marginTop="16dp"
     android:background="@color/navigation_drawer_divider" />
-
-  <ImageView
-    android:id="@+id/order_count_img"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="14dp"
-    android:layout_marginBottom="20dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
-    android:layout_below="@id/order_total_price"
-    android:src="@drawable/ic_cart_outline_black_18dp"
-    android:tint="@color/login_gray" />
-
-  <TextView
-    android:id="@+id/order_count_tv"
-    style="@style/IranSans.Light"
-    android:layout_width="42dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="14dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_below="@id/order_total_price"
-    android:layout_toLeftOf="@id/order_count_img"
-    android:layout_toStartOf="@id/order_count_img"
-    android:gravity="right"
-    android:textColor="@color/login_gray"
-    android:textSize="12sp" />
-
-  <ImageView
-    android:id="@+id/order_payment_method_img"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="14dp"
-    android:layout_marginBottom="20dp"
-    android:layout_below="@id/order_total_price"
-    android:layout_toLeftOf="@id/order_count_tv"
-    android:layout_toStartOf="@id/order_count_tv"
-    android:src="@drawable/ic_attach_money_18_dp"
-    android:tint="@color/login_gray" />
-
-  <TextView
-    android:id="@+id/order_payment_method_tv"
-    style="@style/IranSans.Light"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="14dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_below="@id/order_total_price"
-    android:layout_toLeftOf="@id/order_payment_method_img"
-    android:layout_toStartOf="@id/order_payment_method_img"
-    android:textColor="@color/login_gray"
-    android:textSize="12sp" />
-
-  <ImageView
-    android:id="@+id/delete_img"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="14dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="28dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="28dp"
-    android:layout_below="@+id/order_total_price"
-    android:src="@drawable/ic_delete_24_black"
-    android:tint="@color/black_de" />
-  <ImageView
-    android:id="@+id/edit_img"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="14dp"
-    android:layout_below="@+id/order_total_price"
-    android:layout_toEndOf="@id/delete_img"
-    android:layout_toRightOf="@id/delete_img"
-    android:src="@drawable/ic_edit_24_black"
-    android:tint="@color/black_de" />
-
-</RelativeLayout>
+</LinearLayout>

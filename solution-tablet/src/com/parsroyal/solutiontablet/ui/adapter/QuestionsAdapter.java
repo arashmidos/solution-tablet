@@ -189,6 +189,18 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
         && currentQuestionDto.getPrerequisite() != 0L;
   }
 
+  public int findPositionByBackendId(long backendId) {
+    for (int i = 0; i < questions.size(); i++) {
+      QuestionDto questionDto = questionnaireService
+          .getQuestionDto(questions.get(i).getPrimaryKey(), visitId, goodsBackendId,
+              answersGroupNo);
+      if (questionDto.getBackendId() == backendId) {
+        return i + 1;
+      }
+    }
+    return -1;
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
     @BindView(R.id.question_lay)
@@ -233,7 +245,8 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
         if (hasPrerequisite(questionDto)) {
           preRequisiteTv.setVisibility(View.VISIBLE);
           preRequisiteTv.setText(String.format(Locale.getDefault(), "پیش نیاز: سوال شماره %d",
-              questionDto.getPrerequisite()));
+              findPositionByBackendId(questionDto.getPrerequisite())
+          ));
         }
       } else {
         questionNumberBtn.setBackgroundResource(R.drawable.oval_green_43);

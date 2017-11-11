@@ -155,27 +155,28 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
         hasLocationImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.login_gray));
       }
 
+      try {
+        visitInformations = visitService
+            .getVisitInformationForNewCustomer(customer.getPrimaryKey());
+      } catch (Exception ex) {
+        Logger.sendError("UI Exception",
+            "Error in NCustomerListAdapter.getView " + ex.getMessage());
+        ex.printStackTrace();
+      }
       if (isSend) {
-        editImg.setVisibility(View.GONE);
-        deleteImg.setVisibility(View.GONE);
+        editImg.setVisibility(View.INVISIBLE);
+        deleteImg.setVisibility(View.INVISIBLE);
         if (visitInformations != null) {
+          questionnaireImg.setVisibility(View.VISIBLE);
           questionnaireImg.setImageResource(R.drawable.ic_questionnaires_done_24_dp);
         } else {
-          editLay.setVisibility(View.VISIBLE);
+          editLay.setVisibility(View.GONE);
         }
       } else {
         editLay.setVisibility(View.VISIBLE);
         questionnaireImg.setVisibility(View.VISIBLE);
         editImg.setVisibility(View.VISIBLE);
         deleteImg.setVisibility(View.VISIBLE);
-        try {
-          visitInformations = visitService
-              .getVisitInformationForNewCustomer(customer.getPrimaryKey());
-        } catch (Exception ex) {
-          Logger.sendError("UI Exception",
-              "Error in NCustomerListAdapter.getView " + ex.getMessage());
-          ex.printStackTrace();
-        }
         if (visitInformations != null) {
           questionnaireImg.setImageResource(R.drawable.ic_questionnaires_done_24_dp);
         } else {

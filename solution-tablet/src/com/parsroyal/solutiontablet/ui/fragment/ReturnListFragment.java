@@ -19,6 +19,7 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 
@@ -80,17 +81,19 @@ public class ReturnListFragment extends BaseFragment {
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
-    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-      @Override
-      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        super.onScrolled(recyclerView, dx, dy);
-        if (dy > 0) {
-          fabAddReturn.setVisibility(View.GONE);
-        } else {
-          fabAddReturn.setVisibility(View.VISIBLE);
+    if (!Empty.isEmpty(getArguments())) {
+      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+          super.onScrolled(recyclerView, dx, dy);
+          if (dy > 0) {
+            fabAddReturn.setVisibility(View.GONE);
+          } else {
+            fabAddReturn.setVisibility(View.VISIBLE);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   private List<SaleOrderListModel> getReturnList() {

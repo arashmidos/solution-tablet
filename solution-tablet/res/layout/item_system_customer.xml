@@ -70,8 +70,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="28dp"
     android:layout_below="@id/customer_id_tv"
-    android:orientation="horizontal"
-    android:visibility="gone">
+    android:orientation="horizontal">
     <LinearLayout
       android:id="@+id/delete_img_layout"
       android:layout_width="36dp"

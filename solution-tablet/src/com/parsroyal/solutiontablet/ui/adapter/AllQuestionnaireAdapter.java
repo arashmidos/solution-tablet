@@ -99,7 +99,7 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
         case R.id.main_lay_rel:
           args.putLong(Constants.QUESTIONNAIRE_BACKEND_ID, questionnaire.getPrimaryKey());
           args.putSerializable(Constants.QUESTIONNAIRE_OBJ, questionnaire);
-
+          args.putLong(Constants.VISIT_ID, questionnaire.getVisitId());
           args.putLong(Constants.GOODS_GROUP_BACKEND_ID,
               questionnaire.getGoodsGroupBackendId() == null ? -1
                   : questionnaire.getGoodsGroupBackendId());
