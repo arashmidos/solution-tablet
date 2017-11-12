@@ -172,7 +172,6 @@ public class DataTransferServiceImpl implements DataTransferService {
     Updater.downloadGoodsImages(context);
   }
 
-
   private void getAllProvinces(ResultObserver observer) {
     boolean success = false;
     observer.publishResult(context.getString(R.string.message_transferring_provinces_data));

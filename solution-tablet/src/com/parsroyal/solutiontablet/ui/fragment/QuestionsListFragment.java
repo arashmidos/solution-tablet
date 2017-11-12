@@ -171,7 +171,8 @@ public class QuestionsListFragment extends BaseFragment {
       }
       return false;
     });
-    mainActivity.showButtons();
+    //TODO: Show buttons
+
   }
 
   public void closeVisit() {

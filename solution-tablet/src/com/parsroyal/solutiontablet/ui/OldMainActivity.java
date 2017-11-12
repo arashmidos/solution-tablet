@@ -47,7 +47,6 @@ import com.parsroyal.solutiontablet.ui.adapter.DrawerArrayAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.CustomersFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragment;
@@ -55,7 +54,6 @@ import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
 import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NCustomersFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OldOrdersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OldVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
@@ -328,7 +326,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         fragment = new VisitLinesFragment();
         break;
       case NEW_CUSTOMER_FRAGMENT_ID:
-        fragment = new NCustomersFragment();
+//        fragment = new NCustomersFragment();
         changeSidebarItem(OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID);
         break;
       case NEW_CUSTOMER_DETAIL_FRAGMENT_ID:
@@ -336,7 +334,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID);
         break;
       case CUSTOMERS_FRAGMENT_ID:
-        fragment = new CustomersFragment();
+//        fragment = new CustomersFragment();
         changeSidebarItem(OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case CUSTOMER_DETAIL_FRAGMENT_ID:

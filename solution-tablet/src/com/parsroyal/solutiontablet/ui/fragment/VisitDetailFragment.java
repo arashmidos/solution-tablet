@@ -198,8 +198,7 @@ public class VisitDetailFragment extends BaseFragment {
 
     wants.add(new LabelValue(-1l, mainActivity.getString(R.string.reason_register_no)));
     LabelValueArrayAdapterWithHint labelValueArrayAdapter = new LabelValueArrayAdapterWithHint(
-        mainActivity,
-        wants);
+        mainActivity, wants);
     noSpinner.setAdapter(labelValueArrayAdapter);
     noSpinner.setSelection(wants.size() - 1);
     alertDialog.show();

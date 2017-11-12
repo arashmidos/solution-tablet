@@ -43,7 +43,6 @@ public class Updater {
   private static BroadcastReceiver receiverDownloadComplete;
   private static final String API_UPDATE_URL = "http://173.212.199.107:50004/appcenter/app/latest/solution-mobile";
 
-
   public static void checkAppUpdate(final Context context) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       return;
