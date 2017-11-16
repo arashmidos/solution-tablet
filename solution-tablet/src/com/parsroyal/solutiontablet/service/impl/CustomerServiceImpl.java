@@ -177,6 +177,17 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
+  public File getAllCustomerPicForSendByVisitId(Long visitId) {
+    List<String> pics = customerPicDao.getAllCustomerPicForSendByVisitId(visitId);
+    if (pics.size() == 0) {
+      return null;
+    }
+    String[] picArray = new String[pics.size()];
+    picArray = pics.toArray(picArray);
+    return MediaUtil.zipFiles(picArray);
+  }
+
+  @Override
   public List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO) {
     return customerDao.getAllCusromerPostionModel(nCustomerSO);
   }
@@ -184,6 +195,11 @@ public class CustomerServiceImpl implements CustomerService {
   @Override
   public void deleteAllPics() {
     customerPicDao.deleteAll();
+  }
+
+  @Override
+  public void updateCustomerPictures() {
+    customerPicDao.updateAllPictures();
   }
 
   @Override

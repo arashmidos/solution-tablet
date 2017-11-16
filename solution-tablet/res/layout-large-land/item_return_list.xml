@@ -39,7 +39,7 @@
     android:layout_centerVertical="true"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:text="@string/sent"
+    android:text="@string/status"
     android:textColor="@color/primary_dark"
     android:textSize="12sp"
     android:visibility="gone" />

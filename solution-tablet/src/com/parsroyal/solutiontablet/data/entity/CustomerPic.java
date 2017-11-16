@@ -11,6 +11,7 @@ public class CustomerPic extends BaseEntity<Long> {
   public static final String COL_CUSTOMER_BACKEND_ID = "CUSTOMER_BACKEND_ID";
   public static final String COL_TITLE = "CUSTOMER_TITLE";
   public static final String COL_STATUS = "STATUS";
+  public static final String COL_VISIT_ID = "VISIT_ID";
 
   public static final String CREATE_TABLE_SQL = "CREATE TABLE " + CustomerPic.TABLE_NAME + " (" +
       " " + CustomerPic.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -18,7 +19,8 @@ public class CustomerPic extends BaseEntity<Long> {
       " " + CustomerPic.COL_CUSTOMER_BACKEND_ID + " INTEGER," +
       " " + CustomerPic.COL_TITLE + " TEXT," +
       " " + CustomerPic.COL_CREATE_DATE_TIME + " TEXT," +
-      " " + CustomerPic.COL_STATUS + " INTEGER" +
+      " " + CustomerPic.COL_STATUS + " INTEGER," +
+      " " + CustomerPic.COL_VISIT_ID + " INTEGER" +
       " );";
 
   private Long id;
@@ -26,6 +28,7 @@ public class CustomerPic extends BaseEntity<Long> {
   private Long customerBackendId;
   private String title;
   private Long status;
+  private Long visitId;
 
   public Long getId() {
     return id;
@@ -70,5 +73,13 @@ public class CustomerPic extends BaseEntity<Long> {
 
   public void setBackendId(Long backendId) {
     this.backendId = backendId;
+  }
+
+  public Long getVisitId() {
+    return visitId;
+  }
+
+  public void setVisitId(Long visitId) {
+    this.visitId = visitId;
   }
 }

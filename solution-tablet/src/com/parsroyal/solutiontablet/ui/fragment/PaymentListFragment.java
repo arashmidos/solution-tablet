@@ -68,12 +68,10 @@ public class PaymentListFragment extends BaseFragment {
       customerId = arguments.getLong(Constants.CUSTOMER_ID);
       visitId = arguments.getLong(Constants.VISIT_ID);
       customer = customerService.getCustomerById(customerId);
-      //TODO : ARASH fix this to get all payments
       paymentSO = new PaymentSO(customer.getBackendId(), SendStatus.NEW.getId());
     } else {
       fabAddPayment.setVisibility(View.GONE);
-      //TODO : ARASH fix this to get all payments
-      paymentSO = new PaymentSO(SendStatus.SENT.getId());
+      paymentSO = new PaymentSO(SendStatus.NEW.getId());
     }
     setUpRecyclerView();
     return view;

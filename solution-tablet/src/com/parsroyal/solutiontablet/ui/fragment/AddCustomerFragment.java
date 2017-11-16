@@ -75,6 +75,9 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   EditText storeMeterEdt;
   @BindView(R.id.create_btn)
   Button createBtn;
+  @BindView(R.id.description_edt)
+  EditText customerDescription;
+
   private MainActivity mainActivity;
   private CustomerService customerService;
   private BaseInfoService baseInfoService;
@@ -168,6 +171,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     }
 
     addressEdt.setText(customer.getAddress());
+    customerDescription.setText(customer.getDescription());
   }
 
   private void setUpSpinners() {
@@ -296,6 +300,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
           NumberUtil.digitsToEnglish(regionalMunicipalityEdt.getText().toString()));
       customer.setPostalCode(NumberUtil.digitsToEnglish(postalCodeEdt.getText().toString()));
       customer.setApproved(false);
+      customer.setDescription(customerDescription.getText().toString());
 
       if (validate()) {
         customerService.saveCustomer(customer);
@@ -380,6 +385,11 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       ToastUtil.toastError(getActivity(), R.string.message_customer_class_is_required);
       return false;
     }*/
+
+    if (Empty.isEmpty(customer.getxLocation()) || Empty.isEmpty(customer.getyLocation())) {
+      ToastUtil.toastError(getActivity(), "وارد کردن مختصات مکان مشتری اجباری است");
+      return false;
+    }
 
     return true;
   }

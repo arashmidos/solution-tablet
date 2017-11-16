@@ -389,6 +389,7 @@ public class VisitDetailFragment extends BaseFragment {
         CustomerPic cPic = new CustomerPic();
         cPic.setTitle(s);
         cPic.setCustomerBackendId(customer.getBackendId());
+        cPic.setVisitId(visitId);
 
         long typeId = customerService.savePicture(cPic);
         visitService.saveVisitDetail(

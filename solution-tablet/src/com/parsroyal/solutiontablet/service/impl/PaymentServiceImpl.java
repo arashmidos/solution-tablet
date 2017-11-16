@@ -66,12 +66,6 @@ public class PaymentServiceImpl implements PaymentService {
   }
 
   @Override
-  public List<PaymentListModel> getAllPaymentListModelByCustomerIdWithConstraint(Long customerId,
-      String constraint) {
-    return paymentDao.getAllPaymentListModelByCustomerIdWithConstraint(customerId, constraint);
-  }
-
-  @Override
   public List<PaymentListModel> getAllPaymentsListModelByCustomerBackendId(Long customerBackendId) {
     return paymentDao.getAllPaymentListModelByCustomerIdWithConstraint(customerBackendId, "");
   }

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -84,6 +85,8 @@ public class NewOrderInfoFragment extends BaseFragment {
   TextView paymentTypeTitle;
   @BindView(R.id.payment_type_layout)
   RelativeLayout paymentTypeLayout;
+  @BindView(R.id.description_edt)
+  EditText descriptionEdt;
 
   private LabelValue selectedItem = null;
   private MainActivity mainActivity;
@@ -105,14 +108,14 @@ public class NewOrderInfoFragment extends BaseFragment {
     // Required empty public constructor
   }
 
+  public static NewOrderInfoFragment newInstance() {
+    return new NewOrderInfoFragment();
+  }
+
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setRetainInstance(true);
-  }
-
-  public static NewOrderInfoFragment newInstance() {
-    return new NewOrderInfoFragment();
   }
 
   @Override
@@ -201,6 +204,10 @@ public class NewOrderInfoFragment extends BaseFragment {
       paymentTypeTv.setVisibility(View.GONE);
       paymentTypeLayout.setVisibility(View.GONE);
     }
+
+    if (Empty.isNotEmpty(order.getDescription())) {
+      descriptionEdt.setText(order.getDescription());
+    }
   }
 
   public void setPaymentMethod(LabelValue paymentMethod) {
@@ -257,7 +264,8 @@ public class NewOrderInfoFragment extends BaseFragment {
 
       if (isRejected()) {
         //Add reason or reject to orders
-        order.setDescription(Empty.isNotEmpty(selectedItem) ? selectedItem.getLabel() : "");
+        order.setDescription(descriptionEdt.getText().toString());
+//        order.setDescription(Empty.isNotEmpty(selectedItem) ? selectedItem.getLabel() : "");
       } else {
         order.setPaymentTypeBackendId(selectedItem.getValue());
       }

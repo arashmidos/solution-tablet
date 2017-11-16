@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.PaymentDao;
 import com.parsroyal.solutiontablet.data.entity.Customer;
@@ -136,8 +135,13 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
       Long customerBackendId, String constraint) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String[] projection = {Payment.COL_ID, Payment.COL_AMOUNT, Payment.COL_CREATE_DATE_TIME,
-        Payment.COL_PAYMENT_TYPE_ID, Payment.COL_CUSTOMER_BACKEND_ID};
+    String[] projection = {
+        Payment.COL_ID,
+        Payment.COL_AMOUNT,
+        Payment.COL_CREATE_DATE_TIME,
+        Payment.COL_PAYMENT_TYPE_ID,
+        Payment.COL_CUSTOMER_BACKEND_ID};
+
     String selection = " " + Payment.COL_CUSTOMER_BACKEND_ID + " = ? ";
     String[] args = {String.valueOf(customerBackendId)};
     Cursor cursor = null;
@@ -161,17 +165,9 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
   }
 
   private PaymentListModel createListModelFromCursor(Cursor cursor, boolean simpleModel) {
-    PaymentListModel paymentListModel = new PaymentListModel();
-    paymentListModel.setPrimaryKey(cursor.getLong(0));
-    paymentListModel.setAmount(String.valueOf(cursor.getLong(1)));
-    paymentListModel.setDate(cursor.getString(2));
-    paymentListModel.setType(cursor.getString(3));
-    paymentListModel.setCustomerBackendId(cursor.getLong(4));
-    if (!simpleModel) {
-      paymentListModel.setCustomerFullName(cursor.getString(5));
-    }
-    paymentListModel.setStatus(cursor.getLong(6));
-    return paymentListModel;
+    return new PaymentListModel(cursor.getLong(0),
+        String.valueOf(cursor.getLong(1)), cursor.getString(2), cursor.getString(3),
+        cursor.getLong(4), cursor.getString(5), cursor.getLong(6));
   }
 
   @Override
@@ -221,26 +217,33 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         "cu." + Customer.COL_FULL_NAME,
         "p." + Payment.COL_STATUS};
 
-    String selection =
-        " " + "p." + Payment.COL_CUSTOMER_BACKEND_ID + " = ? and " + "p." + Payment.COL_STATUS
-            + " = ? ";
-    String[] args = {String.valueOf(paymentSO.getCustomerBackendId()),
-        String.valueOf(paymentSO.getSent())};
-    //If it's a global search
-    if (paymentSO.getCustomerBackendId() == null || paymentSO.getCustomerBackendId() == -1) {
-      Log.d("Payment.SearchAll", "Done");
-      selection = " p." + Payment.COL_STATUS + " = ? ";
-      args = new String[1];
-      args[0] = String.valueOf(paymentSO.getSent());
+    List<String> argsList = new ArrayList<>();
+
+    String selection = " ";
+
+    if (paymentSO.getCustomerBackendId() != -1L) {
+      selection = selection + "p." + Payment.COL_CUSTOMER_BACKEND_ID + " = ? ";
+      argsList.add(String.valueOf(paymentSO.getCustomerBackendId()));
     }
+    if (paymentSO.getStatus().equals(SendStatus.NEW.getId())) {
+      selection =
+          selection + " AND (p." + Payment.COL_STATUS + " = ? OR p." + Payment.COL_STATUS + " = ?)";
+      argsList.add(String.valueOf(SendStatus.NEW.getId()));
+      argsList.add(String.valueOf(SendStatus.SENT.getId()));
+    } else {
+      selection =
+          selection + " AND p." + Payment.COL_STATUS + " = ? ";
+      argsList.add(String.valueOf(paymentSO.getStatus()));
+    }
+
+    String[] args = {};
 
     String table = getTableName() + " p " +
         " INNER JOIN " + Customer.TABLE_NAME + " cu on p." + Payment.COL_CUSTOMER_BACKEND_ID +
         " = cu." + Customer.COL_BACKEND_ID;
 
-    String groupBy = " p." + Payment.COL_ID;
-
-    Cursor cursor = db.query(table, projection, selection, args, groupBy, null, null);
+    Cursor cursor = db
+        .query(table, projection, selection, argsList.toArray(args), null, null, null);
 
     List<PaymentListModel> entities = new ArrayList<>();
     while (cursor.moveToNext()) {

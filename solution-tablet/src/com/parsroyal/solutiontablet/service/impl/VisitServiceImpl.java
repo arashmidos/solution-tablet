@@ -21,6 +21,7 @@ import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDetailDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
+import com.parsroyal.solutiontablet.data.searchobject.VisitInformationDetailSO;
 import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
@@ -216,6 +217,11 @@ public class VisitServiceImpl implements VisitService {
   public List<VisitInformationDetail> searchVisitDetail(Long visitId,
       VisitInformationDetailType type) {
     return visitInformationDetailDao.search(visitId, type);
+  }
+
+  @Override
+  public List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailSO visitInformationDetailSO) {
+    return visitInformationDetailDao.search(visitInformationDetailSO);
   }
 
   @Override

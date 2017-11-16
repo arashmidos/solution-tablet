@@ -25,7 +25,7 @@ import java.util.List;
 public abstract class BaseListAdapter<T extends BaseListModel> extends BaseAdapter implements
     Filterable {
 
-  public static final String TAG = VisitLinesAdapter.class.getSimpleName();
+  public static final String TAG = BaseListAdapter.class.getSimpleName();
 
   protected OldMainActivity context;
   protected List<T> dataModel;

@@ -8,16 +8,19 @@ public class PaymentListModel extends BaseListModel {
   protected String date;
   protected String amount;
   protected String type;
-  private Long status;
   protected long customerBackendId;
+  private Long status;
   private String customerFullName;
 
-  public PaymentListModel(String date, String amount, String type, long customerBackendId, String customerFullName) {
+  public PaymentListModel(Long primaryKey, String amount, String date, String type,
+      long customerBackendId, String customerFullName, Long status) {
+    this.primaryKey = primaryKey;
     this.date = date;
     this.amount = amount;
     this.type = type;
     this.customerBackendId = customerBackendId;
     this.customerFullName = customerFullName;
+    this.status = status;
   }
 
   public PaymentListModel() {

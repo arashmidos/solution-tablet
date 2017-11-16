@@ -20,9 +20,6 @@ public interface PaymentService extends BaseService {
 
   List<Payment> getAllPaymentByCustomerID(Long customerId);
 
-  List<PaymentListModel> getAllPaymentListModelByCustomerIdWithConstraint(Long customerId,
-      String constraint);
-
   List<PaymentListModel> getAllPaymentsListModelByCustomerBackendId(Long customerBackendId);
 
   List<PaymentListModel> searchForPayments(PaymentSO paymentSO);

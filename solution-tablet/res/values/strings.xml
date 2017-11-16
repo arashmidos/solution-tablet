@@ -53,6 +53,7 @@
   <string name="com.parsroyal.solutiontablet.exception.UserNotAuthorizedException">نام کاربری یا رمز عبور اشتباه است</string>
 
   <string name="send_data">ارسال اطلاعات</string>
+  <string name="send_visit_data">ارسال اطلاعات بازدید</string>
   <string name="get_data">دریافت اطلاعات</string>
   <string name="message_downloading_data_please_wait">درحال دریافت اطلاعات…</string>
   <string name="data_transfer">انتقال اطلاعات</string>
@@ -75,6 +76,7 @@
   <string name="phone_number">شماره تلفن ثابت</string>
   <string name="cell_phone">تلفن همراه</string>
   <string name="address">آدرس</string>
+  <string name="location">مکان</string>
 
   <string name="please_select_province">لطفا استان مورد نظر را انتخاب نمایید</string>
   <string name="please_select_payment_type">نوع پرداخت</string>
@@ -86,15 +88,15 @@
   <string name="message_error_in_loading_or_creating_customer">خطا در ایجاد مشتری</string>
   <string name="message_found_location_successfully">مکان مشتری با موفقیت دریافت شد</string>
   <string name="message_finding_location_timeout">برنامه قادر به دریافت مکان مشتری در زمان مناسب نیست.</string>
-  <string name="message_customer_name_is_required">وارد کردن نام مشتری اجباریست.</string>
-  <string name="message_address_is_required">وارد کردن آدرس مشتری اجباریست.</string>
+  <string name="message_customer_name_is_required">وارد کردن نام مشتری اجباری است.</string>
+  <string name="message_address_is_required">وارد کردن آدرس مشتری اجباری است.</string>
   <string name="message_customer_save_successfully">مشتری با موفقیت ذخیره شد</string>
   <string name="message_payment_save_successfully">دریافت وجه با موفقیت ذخیره شد</string>
   <string name="create_date_label">تاریخ ایجاد:</string>
   <string name="error_page_txt">در حال حاظر امکان مشاهده این صفحه وجود ندارد</string>
   <string name="no_result">هیچ نتیجه ای یافت نشد</string>
   <string name="send_status_label">وضعیت ارسال:</string>
-  <string name="sent">ارسال شده</string>
+  <string name="status">ارسال شده</string>
   <string name="not_sent">ارسال نشده</string>
   <string name="delete_customer">حذف مشتری</string>
   <string name="message_customer_delete_confirm">آیا از حذف مشتری مطمئن هستید؟</string>
@@ -246,6 +248,7 @@
   <string name="button_ok">تایید</string>
   <string name="button_cancel">انصراف</string>
   <string name="title_save_want">ثبت عدم</string>
+  <string name="title_no_order">عدم سفارش</string>
   <string name="title_attention">توجه</string>
   <string name="message_order_already_created">در این بازدید یک سفارش ثبت شده است. با ثبت عدم این سفارش حذف می گردد،
         آیا مطمئنید؟
@@ -253,17 +256,17 @@
   <string name="message_found_no_wants_information">اطلاعات لازم برای ثبت عدم یافت نشد. لطفا به قسمت دریافت اطلاعات
         مراجعه فرمایید.
     </string>
-  <string name="message_phone_is_required">وارد کردن شماره تلفن اجباریست.</string>
-  <string name="message_cell_phone_is_required">وارد کردن شماره موبایل اجباریست.</string>
-  <string name="message_shop_name_is_required">وارد کردن نام فروشگاه اجباریست.</string>
-  <string name="message_municipality_code_is_required">وارد کردن منطقه شهرداری اجباریست.</string>
-  <string name="message_national_code_is_required">وارد کردن کد ملی اجباریست.</string>
+  <string name="message_phone_is_required">وارد کردن شماره تلفن اجباری است.</string>
+  <string name="message_cell_phone_is_required">وارد کردن شماره موبایل اجباری است.</string>
+  <string name="message_shop_name_is_required">وارد کردن نام فروشگاه اجباری است.</string>
+  <string name="message_municipality_code_is_required">وارد کردن منطقه شهرداری اجباری است.</string>
+  <string name="message_national_code_is_required">وارد کردن کد ملی اجباری است.</string>
   <string name="message_national_code_is_not_valid">کد ملی وارد شده صحیح نیست</string>
-  <string name="message_postal_code_is_required">وارد کردن کد پستی اجباریست.</string>
-  <string name="message_amount_is_required">وارد کردن مبلغ اجباریست.</string>
-  <string name="message_cheque_date_is_required">وارد کردن تاریخ چک اجباریست.</string>
-  <string name="message_cheque_number_is_required">وارد کردن شماره چک اجباریست.</string>
-  <string name="message_tracking_no_is_required">وارد کردن شماره پیگیری اجباریست.</string>
+  <string name="message_postal_code_is_required">وارد کردن کد پستی اجباری است.</string>
+  <string name="message_amount_is_required">وارد کردن مبلغ اجباری است.</string>
+  <string name="message_cheque_date_is_required">وارد کردن تاریخ چک اجباری است.</string>
+  <string name="message_cheque_number_is_required">وارد کردن شماره چک اجباری است.</string>
+  <string name="message_tracking_no_is_required">وارد کردن شماره پیگیری اجباری است.</string>
   <string name="login">ورود</string>
   <string name="error_username_is_empty">نام کاربری وارد نشده است</string>
   <string name="error_password_is_empty">رمز عبور وارد نشده است</string>
@@ -433,6 +436,7 @@
   <string name="customer_information">اطلاعات مشتری</string>
   <string name="orders">سفارشات</string>
   <string name="payments">دریافتی ها</string>
+  <string name="payments_x">دریافتی های</string>
   <string name="questionnaire">پرسشنامه</string>
   <string name="x_customers">%1$d مشتری</string>
   <string name="visitline_code_x">کد مسیر : %1$s</string>
@@ -511,15 +515,15 @@
   <string name="code_x">کد : %s</string>
   <string name="code">کد :</string>
   <string name="choose_one">هیچ گزینه ای انتخاب نشده است</string>
-  <string name="message_cheque_account_number_is_required">وارد کردن شماره حساب اجباریست.</string>
-  <string name="message_cheque_amount_is_required">وارد کردن مبلغ اجباریست.</string>
-  <string name="message_cheque_account_owner_is_required">وارد کردن صاحب چک اجباریست.</string>
+  <string name="message_cheque_account_number_is_required">وارد کردن شماره حساب اجباری است.</string>
+  <string name="message_cheque_amount_is_required">وارد کردن مبلغ اجباری است.</string>
+  <string name="message_cheque_account_owner_is_required">وارد کردن صاحب چک اجباری است.</string>
   <string name="updating_user_info">در حال دریافت اطلاعات کاربری</string>
   <string name="authenticate_user">در حال تایید کاربر</string>
-  <string name="message_province_is_required">وارد کردن استان اجباریست.</string>
-  <string name="message_city_is_required">وارد کردن شهر اجباریست.</string>
-  <string name="message_customer_class_is_required">وارد کردن کلاس مشتری اجباریست.</string>
-  <string name="message_activity_type_is_required">وارد کردن نوع فعالیت اجباریست.</string>
+  <string name="message_province_is_required">وارد کردن استان اجباری است.</string>
+  <string name="message_city_is_required">وارد کردن شهر اجباری است.</string>
+  <string name="message_customer_class_is_required">وارد کردن کلاس مشتری اجباری است.</string>
+  <string name="message_activity_type_is_required">وارد کردن نوع فعالیت اجباری است.</string>
   <string name="error_no_visitline">هیچ خط ویزیتی یافت نشد. به قسمت دریافت اطلاعات مراجعه کنید</string>
   <string name="not_implemented_yet">در این نسخه فعال نیست</string>
   <string name="error_message_there_is_no_settings">هیچ تنظیم قابل نمایشی وجود ندارد</string>
@@ -541,6 +545,7 @@
   <string name="enter_answer_here">پاسخ را در اینجا وارد نمایید</string>
   <string name="choose_date">انتخاب تاریخ...</string>
   <string name="anonymous_questionnaire">پرسشنامه های فرعی</string>
+  <string name="questionnaires">پرسشنامه های</string>
   <string name="title_reject_list">فهرست کالا های قابل مرجوع</string>
   <string name="reject_goods">کالاهای مرجوعی</string>
   <string name="add_to_return_goods">افزودن به کالاهای مرجوعی</string>
@@ -553,4 +558,7 @@
   <string name="message_save_questionnaire">تغییرات پرسشنامه ذخیره شود؟</string>
   <string name="customer_price_title">(مصرف کننده)</string>
   <string name="add_picture">ثبت تصویر</string>
+  <string name="send_x_registered">ارسال %s ثبت شده</string>
+  <string name="order_description">توضیحات سفارش</string>
+  <string name="customer_description">توضیحات مشتری</string>
 </resources>

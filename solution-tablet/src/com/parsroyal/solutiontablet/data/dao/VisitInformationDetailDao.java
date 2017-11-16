@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.data.dao;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDetailDto;
+import com.parsroyal.solutiontablet.data.searchobject.VisitInformationDetailSO;
 import java.util.List;
 
 /**
@@ -19,6 +20,8 @@ public interface VisitInformationDetailDao extends BaseDao<VisitInformationDetai
   List<VisitInformationDetail> search(Long visitId, VisitInformationDetailType type, Long typeId);
 
   List<VisitInformationDetail> search(Long visitId, VisitInformationDetailType type);
+  List<VisitInformationDetail> search(VisitInformationDetailSO visitInformationDetailSO);
 
   List<VisitInformationDetailDto> getAllVisitDetailDto(Long id);
+
 }

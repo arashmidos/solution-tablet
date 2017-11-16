@@ -53,18 +53,14 @@ import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragme
 import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.OldOrdersListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OldVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PaymentDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.PaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
-import com.parsroyal.solutiontablet.ui.fragment.VisitLinesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialog.LoginDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
@@ -323,14 +319,14 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
     int parent = 0;
     switch (fragmentId) {
       case CUSTOMER_LIST_FRAGMENT_ID:
-        fragment = new VisitLinesFragment();
+//        fragment = new VisitLinesFragment();
         break;
       case NEW_CUSTOMER_FRAGMENT_ID:
 //        fragment = new NCustomersFragment();
         changeSidebarItem(OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID);
         break;
       case NEW_CUSTOMER_DETAIL_FRAGMENT_ID:
-        fragment = new NCustomerDetailFragment();
+//        fragment = new NCustomerDetailFragment();
         changeSidebarItem(OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID);
         break;
       case CUSTOMERS_FRAGMENT_ID:
@@ -382,7 +378,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(-1);
         break;
       case ORDERS_LIST_FRAGMENT:
-        fragment = new OldOrdersListFragment();
+//        fragment = new OldOrdersListFragment();
         changeSidebarItem(ORDERS_LIST_FRAGMENT);
         break;
       case ORDER_DETAIL_FRAGMENT_ID:

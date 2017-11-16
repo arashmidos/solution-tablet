@@ -157,9 +157,12 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     SaleOrder order = createOrderFromDto(orderDto);
 
     if (Empty.isEmpty(order.getId())) {
+      order.setCreateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
+      order.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
       Long newId = saleOrderDao.create(order);
       order.setId(newId);
     } else {
+      order.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
       saleOrderDao.update(order);
     }
 
@@ -258,6 +261,8 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     order.setStatus(orderDto.getStatus());
     order.setBackendId(orderDto.getBackendId());
     order.setInvoiceBackendId(orderDto.getInvoiceBackendId());
+    order.setCreateDateTime(orderDto.getCreateDateTime());
+    order.setUpdateDateTime(orderDto.getUpdateDateTime());
     return order;
   }
 

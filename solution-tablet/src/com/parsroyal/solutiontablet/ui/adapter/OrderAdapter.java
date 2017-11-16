@@ -3,11 +3,11 @@ package com.parsroyal.solutiontablet.ui.adapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,10 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Optional;
 import com.mikepenz.crossfader.util.UIUtils;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -27,6 +28,7 @@ import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter.ViewHolder;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
@@ -133,6 +135,8 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     @Nullable
     @BindView(R.id.edit_img)
     ImageView editImg;
+    @BindView(R.id.upload_img)
+    ImageView uploadImg;
     @Nullable
     @BindView(R.id.return_reason_tv)
     TextView returnReasonTv;
@@ -158,10 +162,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-      if (deleteImg != null) {
-        deleteImg.setOnClickListener(this);
-        editImg.setOnClickListener(this);
-      }
+
       if (mainLayLin != null) {
         mainLayLin.setOnClickListener(this);
       } else if (mainLayRel != null) {
@@ -174,13 +175,19 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       this.order = order;
       if (!isFromOrder) {
         orderStatusTv.setVisibility(View.GONE);
-        customerNameTv.setVisibility(View.GONE);
+        if (customerNameTv != null) {//TODO SHAKIB: FIX THIS
+          customerNameTv.setVisibility(View.GONE);
+        }
       } else {
-        customerNameTv.setVisibility(View.VISIBLE);
+        if (customerNameTv != null) {//TODO SHAKIB: FIX THIS
+          customerNameTv.setVisibility(View.VISIBLE);
+        }
       }
       String orderCode = "کد سفارش : " + String.valueOf(order.getId());
       orderCodeTv.setText(orderCode);
-      customerNameTv.setText(order.getCustomerName());
+      if (customerNameTv != null) {//TODO SHAKIB: FIX THIS
+        customerNameTv.setText(order.getCustomerName());
+      }
       orderCountTv.setText("--");//TODO: Add order items count
 
       Date createdDate = DateUtil
@@ -261,14 +268,19 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       }
     }
 
-    @Override
+    @OnClick({R.id.delete_img, R.id.delete_img_layout, R.id.edit_img, R.id.edit_img_layout,
+        R.id.main_lay, R.id.main_lay_linear, R.id.upload_img, R.id.upload_img_layout})
+    @Optional
     public void onClick(View v) {
+
       switch (v.getId()) {
+        case R.id.delete_img_layout:
         case R.id.delete_img:
           if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
             deleteOrder();
           }
           break;
+        case R.id.edit_img_layout:
         case R.id.edit_img:
         case R.id.main_lay_linear:
         case R.id.main_lay:
@@ -276,11 +288,15 @@ public class OrderAdapter extends Adapter<ViewHolder> {
             Bundle args = new Bundle();
             args.putLong(Constants.ORDER_ID, order.getId());
             args.putString(Constants.SALE_TYPE, saleType);
-            args.putLong(Constants.VISIT_ID, visitId);
+            args.putLong(Constants.VISIT_ID, order.getVisitId());
             args.putBoolean(Constants.READ_ONLY, false);
             setPageStatus(args);
             mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
           }
+          break;
+        case R.id.upload_img:
+        case R.id.upload_img_layout:
+          openSendDataDialog();
           break;
       }
     }
@@ -306,6 +322,16 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       } else {
         args.putString(Constants.PAGE_STATUS, Constants.EDIT);
       }
+    }
+
+
+    private void openSendDataDialog() {
+      FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+      Bundle args = new Bundle();
+      args.putLong(Constants.VISIT_ID, order.getVisitId());
+      SingleDataTransferDialogFragment singleDataTransferDialogFragment = SingleDataTransferDialogFragment
+          .newInstance(args);
+      singleDataTransferDialogFragment.show(ft, "data_transfer");
     }
   }
 }

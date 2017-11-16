@@ -101,7 +101,7 @@
       android:layout_marginStart="16dp"
       android:layout_marginLeft="16dp"
       android:layout_below="@id/return_reason_tv"
-      android:text="@string/sent"
+      android:text="@string/status"
       android:textColor="@color/primary_dark"
       android:textSize="12sp"
       android:visibility="gone" />

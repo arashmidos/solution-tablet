@@ -15,6 +15,7 @@ public class SaleOrderListModel extends BaseListModel {
   private Long customerBackendId;
   private String description;
   private String createdDateTime;
+  private Long visitId;
 
   public SaleOrderListModel(Long id, Long backendId, String date, Long amount,
       String paymentTypeTitle, String customerName, Long status, Long customerBackendId) {
@@ -29,6 +30,14 @@ public class SaleOrderListModel extends BaseListModel {
   }
 
   public SaleOrderListModel() {
+  }
+
+  public Long getVisitId() {
+    return visitId;
+  }
+
+  public void setVisitId(Long visitId) {
+    this.visitId = visitId;
   }
 
   public String getCreatedDateTime() {

@@ -4,8 +4,11 @@ import android.content.Context;
 import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerPicDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerPicDaoImpl;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.InternalServerError;
 import com.parsroyal.solutiontablet.exception.TimeOutException;
@@ -16,8 +19,8 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import java.io.File;
 import java.nio.charset.Charset;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -42,18 +45,20 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
   public static final String TAG = NewCustomerPicDataTransferBizImpl.class.getSimpleName();
   private final File pics;
+  private final Long visitId;
 
   private Context context;
   private CustomerPicDao customerPicDao;
   private ResultObserver observer;
 
   public NewCustomerPicDataTransferBizImpl(Context context, ResultObserver resultObserver,
-      File pics) {
+      File pics, Long visitId) {
     super(context);
     this.context = context;
     this.customerPicDao = new CustomerPicDaoImpl(context);
     this.observer = resultObserver;
     this.pics = pics;
+    this.visitId = visitId;
   }
 
   @Override
@@ -66,6 +71,7 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
       HttpHeaders httpHeaders = new HttpHeaders();
 
+      //TODO CLEAN REMOVE THESE
       if (Empty.isNotEmpty(salesmanId)) {
         httpHeaders.add("salesmanId", salesmanId.getValue());
         httpHeaders.add("salesmanCode", salesmanId.getValue());
@@ -118,7 +124,13 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
       Log.e(TAG, e.getMessage(), e);
       getObserver().publishResult(new UnknownSystemException(e));
     } finally {
-      getObserver().finished(result);
+      if (Empty.isNotEmpty(getObserver())) {
+        getObserver().finished(result);
+      } else {
+        EventBus.getDefault().post(
+            new ErrorEvent(context.getString(R.string.error_new_customers_pic_transfer),
+                StatusCodes.SERVER_ERROR));
+      }
     }
     return result;
   }
@@ -126,17 +138,37 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
   @Override
   public void receiveData(String data) {
     if (data.equals("1")) {
-      customerPicDao.deleteAll();
-      getObserver()
-          .publishResult(context.getString(R.string.new_customers_pic_transferred_successfully));
+      if (Empty.isNotEmpty(visitId)) {
+        //Sent single visit images
+        customerPicDao.updatePicturesByVisitId(visitId);
+      } else {
+        //Sent all images
+        customerPicDao.updateAllPictures();
+      }
+      if (Empty.isNotEmpty(getObserver())) {
+        getObserver()
+            .publishResult(context.getString(R.string.new_customers_pic_transferred_successfully));
+      } else {
+        EventBus.getDefault().post(
+            new SuccessEvent(context.getString(R.string.new_customers_pic_transferred_successfully),
+                StatusCodes.SUCCESS));
+      }
     } else {
-      getObserver().publishResult(context.getString(R.string.error_new_customers_pic_transfer));
+      if (Empty.isNotEmpty(getObserver())) {
+        getObserver().publishResult(context.getString(R.string.error_new_customers_pic_transfer));
+      } else {
+        EventBus.getDefault().post(
+            new ErrorEvent(context.getString(R.string.error_new_customers_pic_transfer),
+                StatusCodes.SERVER_ERROR));
+      }
     }
   }
 
   @Override
   public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.sending_new_customers_pic_data));
+    if (Empty.isNotEmpty(getObserver())) {
+      getObserver().publishResult(context.getString(R.string.sending_new_customers_pic_data));
+    }
   }
 
   @Override
@@ -161,8 +193,7 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
   @Override
   protected MediaType getContentType() {
-    MediaType contentType = new MediaType("TEXT", "PLAIN", Charset.forName("UTF-8"));
-    return contentType;
+    return new MediaType("TEXT", "PLAIN", Charset.forName("UTF-8"));
   }
 
   @Override

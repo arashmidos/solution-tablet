@@ -46,7 +46,11 @@ public interface CustomerService extends BaseService {
 
   File getAllCustomerPicForSend();
 
+  File getAllCustomerPicForSendByVisitId(Long visitId);
+
   List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
 
   void deleteAllPics();
+
+  void updateCustomerPictures();
 }

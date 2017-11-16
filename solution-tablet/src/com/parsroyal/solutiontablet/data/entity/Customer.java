@@ -30,6 +30,7 @@ public class Customer extends BaseEntity<Long> {
   public static final String COL_MUNICIPALITY_CODE = "MUNICIPALITY_CODE";
   public static final String COL_POSTAL_CODE = "POSTAL_CODE";
   public static final String COL_APPROVED = "APPROVED";
+  public static final String COL_DESCRIPTION = "DESCRIPTION";
 
   public static final String TABLE_NAME = "COMMER_CUSTOMER";
 
@@ -57,7 +58,8 @@ public class Customer extends BaseEntity<Long> {
       " " + Customer.COL_NATIONAL_CODE + " TEXT," +
       " " + Customer.COL_MUNICIPALITY_CODE + " TEXT," +
       " " + Customer.COL_POSTAL_CODE + " TEXT," +
-      " " + Customer.COL_APPROVED + " INTEGER" +
+      " " + Customer.COL_APPROVED + " INTEGER," +
+      " " + Customer.COL_DESCRIPTION + " TEXT" +
       " );";
 
   private Long id;
@@ -83,6 +85,7 @@ public class Customer extends BaseEntity<Long> {
   private String nationalCode;
   private String municipalityCode;
   private boolean approved = true;
+  private String description;
 
   public Customer(Double xLocation, String fullName, String shopName, String code) {
     this.xLocation = xLocation;
@@ -296,7 +299,8 @@ public class Customer extends BaseEntity<Long> {
     sb.append("&");
     sb.append(Empty.isNotEmpty(address) ? address : "NULL");
     sb.append("&");
-    sb.append(Empty.isNotEmpty(activityBackendId) && activityBackendId!= 0? activityBackendId : "NULL");
+    sb.append(
+        Empty.isNotEmpty(activityBackendId) && activityBackendId != 0 ? activityBackendId : "NULL");
     sb.append("&");
     sb.append(Empty.isNotEmpty(storeSurface) ? storeSurface : "NULL");
     sb.append("&");
@@ -341,5 +345,13 @@ public class Customer extends BaseEntity<Long> {
     } else {
       return false;
     }
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }

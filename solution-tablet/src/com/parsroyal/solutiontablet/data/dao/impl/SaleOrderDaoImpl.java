@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderDao;
 import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
@@ -211,13 +213,17 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         "i." + BaseInfo.COL_TITLE + "," +
         "c." + Customer.COL_BACKEND_ID + "," +
         "o." + SaleOrder.COL_CREATE_DATE_TIME + "," +
-        "o." + SaleOrder.COL_DESCRIPTION +
+        "o." + SaleOrder.COL_DESCRIPTION + "," +
+        "vd." + VisitInformationDetail.COL_VISIT_INFORMATION_ID +//10
         " FROM " + SaleOrder.TABLE_NAME + " o " +
         " INNER JOIN " + Customer.TABLE_NAME + " c on c." + Customer.COL_BACKEND_ID + " = o."
         + SaleOrder.COL_CUSTOMER_BACKEND_ID +
-        " LEFT OUTER JOIN " + BaseInfo.TABLE_NAME + " i on i."
+        " INNER JOIN " + BaseInfo.TABLE_NAME + " i on i."
         + BaseInfo.COL_BACKEND_ID + " = o." + SaleOrder.COL_PAYMENT_TYPE_BACKEND_ID
         + " AND i." + BaseInfo.COL_TYPE + " = " + BaseInfoTypes.PAYMENT_TYPE.getId()
+        + " LEFT JOIN " + VisitInformationDetail.TABLE_NAME + " vd on vd."
+        + VisitInformationDetail.COL_TYPE_ID + " = o." + SaleOrder.COL_ID
+        + " AND vd." + VisitInformationDetail.COL_TYPE + " = ?"
         + " WHERE 1 = 1 ";
 
     if (Empty.isNotEmpty(saleOrderSO)) {
@@ -225,16 +231,19 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       if (Empty.isNotEmpty(statusId)) {
 
         if (statusId.equals(SaleOrderStatus.READY_TO_SEND.getId())) {
+          argsList.add(String.valueOf(VisitInformationDetailType.CREATE_ORDER.getValue()));
           sql = sql.concat(" ").concat(
               " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
           argsList.add(String.valueOf(statusId));
           argsList.add(String.valueOf(SaleOrderStatus.SENT.getId()));
         } else if (statusId.equals(SaleOrderStatus.REJECTED.getId())) {
+          argsList.add(String.valueOf(VisitInformationDetailType.CREATE_REJECT.getValue()));
           sql = sql.concat(" ").concat(
               " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
           argsList.add(String.valueOf(statusId));
           argsList.add(String.valueOf(SaleOrderStatus.REJECTED_SENT.getId()));
         } else {
+          argsList.add("0");//DO NOT JOIN WITH VD
           sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_STATUS + " = ?");
           argsList.add(String.valueOf(statusId));
         }
@@ -268,6 +277,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       order.setCustomerBackendId(cursor.getLong(7));
       order.setCreatedDateTime(cursor.getString(8));
       order.setDescription(cursor.getString(9));
+      order.setVisitId(cursor.getLong(10));
       returnOrders.add(order);
     }
 

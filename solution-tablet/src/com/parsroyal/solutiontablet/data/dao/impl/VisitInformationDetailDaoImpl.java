@@ -11,6 +11,8 @@ import com.parsroyal.solutiontablet.data.dao.VisitInformationDetailDao;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDetailDto;
+import com.parsroyal.solutiontablet.data.searchobject.VisitInformationDetailSO;
+import com.parsroyal.solutiontablet.util.Empty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,6 +147,21 @@ public class VisitInformationDetailDaoImpl extends AbstractDao<VisitInformationD
     String[] args = {String.valueOf(visitId), String.valueOf(type.getValue())};
 
     return retrieveAll(selection, args, null, null, null);
+  }
+
+  @Override
+  public List<VisitInformationDetail> search(VisitInformationDetailSO visitInformationDetailSO) {
+    String selection = " " + VisitInformationDetail.COL_VISIT_INFORMATION_ID + " = ?";/* and " +
+        VisitInformationDetail.COL_TYPE + " = ? ";*/
+
+    String[] args = {String.valueOf(visitInformationDetailSO.getVisitId())};
+
+    String groupBy = null;
+    String orderBy = VisitInformationDetail.COL_TYPE;
+    if (Empty.isNotEmpty(visitInformationDetailSO.getGroupBy())) {
+      groupBy = visitInformationDetailSO.getGroupBy();
+    }
+    return retrieveAll(selection, args, groupBy, null, orderBy);
   }
 
   @Override
