@@ -16,6 +16,7 @@ public class SaleOrderListModel extends BaseListModel {
   private String description;
   private String createdDateTime;
   private Long visitId;
+  private int orderCount;
 
   public SaleOrderListModel(Long id, Long backendId, String date, Long amount,
       String paymentTypeTitle, String customerName, Long status, Long customerBackendId) {
@@ -142,5 +143,13 @@ public class SaleOrderListModel extends BaseListModel {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public int getOrderCount() {
+    return orderCount;
+  }
+
+  public void setOrderCount(int orderCount) {
+    this.orderCount = orderCount;
   }
 }

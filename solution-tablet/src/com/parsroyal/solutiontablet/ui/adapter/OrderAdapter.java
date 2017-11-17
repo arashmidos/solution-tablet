@@ -189,7 +189,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       if (customerNameTv != null) {//TODO SHAKIB: FIX THIS
         customerNameTv.setText(order.getCustomerName());
       }
-      orderCountTv.setText("--");//TODO: Add order items count
+      orderCountTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderCount())));
 
       Date createdDate = DateUtil
           .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");

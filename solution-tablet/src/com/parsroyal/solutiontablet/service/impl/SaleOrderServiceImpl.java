@@ -51,7 +51,13 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
   @Override
   public List<SaleOrderListModel> findOrders(SaleOrderSO saleOrderSO) {
-    return saleOrderDao.searchForOrders(saleOrderSO);
+
+    List<SaleOrderListModel> orders = saleOrderDao.searchForOrders(saleOrderSO);
+    for (int i = 0; i < orders.size(); i++) {
+      SaleOrderListModel order = orders.get(i);
+      order.setOrderCount(saleOrderItemDao.getAllOrderItemsDtoByOrderId(order.getId()).size());
+    }
+    return orders;
   }
 
   @Override
@@ -239,7 +245,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
       saleOrderItemDao.delete(saleOrderItemDto.getId());
 
     }
-      saleOrderDao.delete(order.getId());
+    saleOrderDao.delete(order.getId());
 
     //Delete visit detail
     VisitInformationDetailDao visitInformationDetailDao = new VisitInformationDetailDaoImpl(
