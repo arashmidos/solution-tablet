@@ -31,6 +31,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionsAdapter;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.List;
 
 
@@ -100,7 +101,8 @@ public class QuestionsListFragment extends BaseFragment {
 
     setUpRecyclerView();
 
-    questionnaireSizeTv.setText(String.valueOf(questionnaire.getQuestionsCount()));
+    questionnaireSizeTv
+        .setText(NumberUtil.digitsToPersian(String.valueOf(questionnaire.getQuestionsCount())));
     titleTv.setText(questionnaire.getDescription());
     return view;
   }

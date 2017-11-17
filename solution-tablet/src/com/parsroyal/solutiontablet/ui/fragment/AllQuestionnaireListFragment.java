@@ -21,6 +21,7 @@ import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.AllQuestionnaireAdapter;
+import com.parsroyal.solutiontablet.util.Empty;
 import java.util.List;
 
 public class AllQuestionnaireListFragment extends BaseFragment {
@@ -69,8 +70,16 @@ public class AllQuestionnaireListFragment extends BaseFragment {
 
   private void setUpRecyclerView() {
     Bundle bundle = getArguments();
-    this.customerBackendId = bundle.getLong(Constants.CUSTOMER_BACKEND_ID);
-    bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
+    if (Empty.isEmpty(bundle)) {
+      bundle = new Bundle();
+    }
+    customerBackendId = bundle.getLong(Constants.CUSTOMER_BACKEND_ID, -1);
+    if (customerBackendId == -1) {
+      bundle.putInt(Constants.PARENT, MainActivity.REPORT_FRAGMENT);
+      addQuestionnaireFab.setVisibility(View.GONE);
+    } else {
+      bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
+    }
     AllQuestionnaireAdapter allQuestionnaireAdapter = new AllQuestionnaireAdapter(mainActivity,
         getQuestionnaireList(), bundle);
     LayoutManager layoutManager = new LinearLayoutManager(mainActivity);

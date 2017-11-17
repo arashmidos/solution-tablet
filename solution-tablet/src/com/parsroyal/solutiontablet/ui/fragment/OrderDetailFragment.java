@@ -57,7 +57,7 @@ public class OrderDetailFragment extends BaseFragment {
 
   private Long orderStatus;
   private GoodsDtoList rejectedGoodsList;
-  private OrderInfoFragment orderInfoFrg;
+  private OldOrderInfoFragment orderInfoFrg;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,7 +115,7 @@ public class OrderDetailFragment extends BaseFragment {
         {
           FragmentManager childFragMan = getChildFragmentManager();
           FragmentTransaction childFragTrans = childFragMan.beginTransaction();
-          orderInfoFrg = new OrderInfoFragment();
+          orderInfoFrg = new OldOrderInfoFragment();
           Bundle args = new Bundle();
           args.putLong(Constants.ORDER_ID, orderId);
           args.putString(Constants.SALE_TYPE, saleType);

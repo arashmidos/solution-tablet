@@ -18,6 +18,7 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
   public void onBindViewHolder(ViewHolder holder, int position) {
     FeatureList feature = features.get(position);
     if (feature.getBadger() != 0) {
-      holder.badgerBtn.setText(String.valueOf(feature.getBadger()));
+      holder.badgerBtn.setText(NumberUtil.digitsToPersian(String.valueOf(feature.getBadger())));
       holder.badgerBtn.setVisibility(View.VISIBLE);
     } else {
       holder.badgerBtn.setVisibility(View.GONE);

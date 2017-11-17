@@ -21,15 +21,16 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.HashSet;
 import java.util.List;
 
 public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
 
+  private final HashSet<MapView> mMaps = new HashSet<>();
   private List<VisitLineListModel> visitLineList;
   private LayoutInflater inflater;
   private MainActivity mainActivity;
-  private final HashSet<MapView> mMaps = new HashSet<>();
   private LatLng loation = new LatLng(35.6892, 51.3890);
 
 
@@ -37,6 +38,15 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
     this.mainActivity = mainActivity;
     this.visitLineList = visitLineList;
     inflater = LayoutInflater.from(mainActivity);
+  }
+
+  private static void setMapLocation(GoogleMap map, LatLng data) {
+    // Add a marker for this item and set the camera
+    map.moveCamera(CameraUpdateFactory.newLatLngZoom(data, 13f));
+    map.addMarker(new MarkerOptions().position(data));
+
+    // Set the map type back to normal.
+    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
   }
 
   @Override
@@ -64,15 +74,6 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
     }
   }
 
-  private static void setMapLocation(GoogleMap map, LatLng data) {
-    // Add a marker for this item and set the camera
-    map.moveCamera(CameraUpdateFactory.newLatLngZoom(data, 13f));
-    map.addMarker(new MarkerOptions().position(data));
-
-    // Set the map type back to normal.
-    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-  }
-
   @Override
   public int getItemCount() {
     return visitLineList.size();
@@ -86,18 +87,18 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
     TextView visitlineDetail;
     @BindView(R.id.customer_count)
     TextView customerCount;
-    private VisitLineListModel model;
-    private int position;
     @BindView(R.id.map_item)
     MapView mapView;
     GoogleMap map;
+    private VisitLineListModel model;
+    private int position;
 
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
     }
 
-    @OnClick({R.id.visitline_lay,R.id.visitline_layout})
+    @OnClick({R.id.visitline_lay, R.id.visitline_layout})
     public void onClick(View view) {
       Bundle bundle = new Bundle();
       bundle.putLong(Constants.VISITLINE_BACKEND_ID, model.getPrimaryKey());
@@ -107,10 +108,10 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
     public void setData(VisitLineListModel model, int position) {
       this.model = model;
       this.position = position;
-      visitlineName.setText(model.getTitle());
-      visitlineDetail.setText(model.getCode());
-      customerCount.setText(String.format(mainActivity.getString(R.string.x_customers),
-          model.getCustomerCount()));
+      visitlineName.setText(NumberUtil.digitsToPersian(model.getTitle()));
+      visitlineDetail.setText(NumberUtil.digitsToPersian(model.getCode()));
+      customerCount.setText(NumberUtil.digitsToPersian(String
+          .format(mainActivity.getString(R.string.x_customers), model.getCustomerCount())));
     }
 
     @Override

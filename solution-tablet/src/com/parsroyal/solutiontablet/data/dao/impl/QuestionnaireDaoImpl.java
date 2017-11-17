@@ -164,7 +164,12 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
     if (questionnaireSo.isAnonymous()) {
       sql = sql.concat(" AND v.RESULT = -2");
     } else if (Empty.isNotEmpty(questionnaireSo.getCustomerBackendId())) {
-      sql = sql.concat(" AND v.CUSTOMER_BACKEND_ID = " + questionnaireSo.getCustomerBackendId());
+      if (questionnaireSo.getCustomerBackendId() == -1L) {
+        //Exclude anonymous questionnary and new customer questionnary
+        sql = sql.concat(" AND v.RESULT <> -1 AND v.RESULT <> -2");
+      } else {
+        sql = sql.concat(" AND v.CUSTOMER_BACKEND_ID = " + questionnaireSo.getCustomerBackendId());
+      }
     } else {
       if (questionnaireSo.isGeneral()) {
         sql = sql.concat(" AND " + Questionnaire.COL_GOODS_GROUP_BACKEND_ID + " = 0 ");

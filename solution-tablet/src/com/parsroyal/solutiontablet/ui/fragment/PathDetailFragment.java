@@ -44,6 +44,7 @@ import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.OnMapAndViewReadyListener;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.text.Collator;
@@ -189,7 +190,8 @@ public class PathDetailFragment extends BaseFragment implements
   private void setTabletData() {
     visitline = visitService.getVisitLineListModelByBackendId(visitlineBackendId);
     mainActivity.changeDetailContent(
-        String.format(getString(R.string.visitline_code_x), visitline.getCode()));
+        String.format(getString(R.string.visitline_code_x),
+            NumberUtil.digitsToPersian(visitline.getCode())));
 
     if (Empty.isNotEmpty(customerCountBtn)) {
       customerCountBtn
@@ -199,7 +201,8 @@ public class PathDetailFragment extends BaseFragment implements
       Logger.sendError("Wrong Orientation", "Device is not tablet");
     }
     mainActivity
-        .changeTitle(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
+        .changeTitle(String.format(getString(R.string.visitline_code_x),
+            NumberUtil.digitsToPersian(visitline.getCode())));
   }
 
   //set up recycler view

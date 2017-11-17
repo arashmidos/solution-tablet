@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -23,7 +22,7 @@ import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
-import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
 import java.util.List;
@@ -161,22 +160,29 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
         deleteImg.setVisibility(View.INVISIBLE);
       }
       if (isFromReport) {
-        customerNameTv.setText(payment.getCustomerFullName());
+        //TODO: SHAKIB KACHALAM KARDI
+        if (customerNameTv != null) {
+          customerNameTv.setText(payment.getCustomerFullName());
+        }
       }
-      paymentMethodTv.setText(getPaymentType(payment.getType()));
+      paymentMethodTv.setText(NumberUtil.digitsToPersian(getPaymentType(payment.getType())));
       Date createDate = DateUtil
           .convertStringToDate(payment.getDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
               "FA");
 
       String dateString = DateUtil.getFullPersianDate(createDate);
-      paymentDateTv.setText(dateString);
+      paymentDateTv.setText(NumberUtil.digitsToPersian(dateString));
       long amountValue = Long
           .parseLong(NumberUtil.digitsToEnglish(payment.getAmount().replaceAll(",", "")));
       String number = String.format(Locale.US, "%,d %s", amountValue / 1000, context.getString(
           R.string.common_irr_currency));
-      paymentTv.setText(number);
-      //TODO: arash add bank and branch
-//    holder.bankDetailTv.setText(payment.get);
+      paymentTv.setText(NumberUtil.digitsToPersian(number));
+      if (payment.getType().equals("6")) {
+        bankDetailTv.setText(String
+            .format(Locale.getDefault(), "بانک %s / شعبه %s",
+                Empty.isNotEmpty(payment.getBank()) ? payment.getBank() : "--",
+                Empty.isNotEmpty(payment.getBranch()) ? payment.getBranch() : "--"));
+      }
     }
   }
 }

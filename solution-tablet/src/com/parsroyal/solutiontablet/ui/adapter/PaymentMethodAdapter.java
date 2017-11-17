@@ -13,8 +13,9 @@ import android.widget.TextView;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 
-import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,16 +31,16 @@ public class PaymentMethodAdapter extends RecyclerView.Adapter<PaymentMethodAdap
   private LabelValue selectedItem;
   private Context context;
   private List<LabelValue> paymentMethods;
-  private NewOrderInfoFragment newOrderInfoFragment;
+  private OrderInfoFragment orderInfoFragment;
   private boolean isEditable;
 
   public PaymentMethodAdapter(Context context, List<LabelValue> paymentMethods,
-      LabelValue selectedItem, NewOrderInfoFragment newOrderInfoFragment, boolean isEditable) {
+      LabelValue selectedItem, OrderInfoFragment orderInfoFragment, boolean isEditable) {
     this.context = context;
     this.isEditable = isEditable;
     this.selectedItem = selectedItem;
     this.paymentMethods = paymentMethods;
-    this.newOrderInfoFragment = newOrderInfoFragment;
+    this.orderInfoFragment = orderInfoFragment;
     inflater = LayoutInflater.from(context);
   }
 
@@ -99,7 +100,7 @@ public class PaymentMethodAdapter extends RecyclerView.Adapter<PaymentMethodAdap
     public void setData(LabelValue model, int position) {
       this.model = model;
       this.position = position;
-      paymentMethodTv.setText(model.getLabel());
+      paymentMethodTv.setText(NumberUtil.digitsToPersian(model.getLabel()));
       if (selectedItem != null && model.getLabel().equals(selectedItem.getLabel())) {
         mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_dark));
         paymentMethodTv.setTextColor(ContextCompat.getColor(context, android.R.color.white));
@@ -112,8 +113,8 @@ public class PaymentMethodAdapter extends RecyclerView.Adapter<PaymentMethodAdap
         if (isEditable) {
           selectedItem = model;
           notifyDataSetChanged();
-          if (newOrderInfoFragment != null) {
-            newOrderInfoFragment.setPaymentMethod(selectedItem);
+          if (orderInfoFragment != null) {
+            orderInfoFragment.setPaymentMethod(selectedItem);
           }
         }
       });

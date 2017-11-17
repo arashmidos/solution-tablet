@@ -39,6 +39,7 @@ import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.QuestionDetailDia
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -228,7 +229,7 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
       this.position = position;
       this.question = questions.get(position);
       questionTv.setText(question.getQuestion());
-      questionNumberBtn.setText(String.valueOf(position + 1));
+      questionNumberBtn.setText(NumberUtil.digitsToPersian(String.valueOf(position + 1)));
       QuestionDto questionDto = questionnaireService
           .getQuestionDto(question.getPrimaryKey(), visitId, goodsBackendId,
               answersGroupNo);

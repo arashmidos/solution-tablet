@@ -53,7 +53,7 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathFragment;
@@ -651,7 +651,7 @@ public abstract class MainActivity extends AppCompatActivity {
         fragment = VisitDetailFragment.newInstance();
         break;
       case ORDER_INFO_FRAGMENT:
-        fragment = NewOrderInfoFragment.newInstance();
+        fragment = OrderInfoFragment.newInstance();
         break;
       case REGISTER_PAYMENT_FRAGMENT:
         fragment = RegisterPaymentFragment.newInstance();

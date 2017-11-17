@@ -5,7 +5,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:background="@android:color/white"
   android:orientation="vertical"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment">
+  tools:context="com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment">
 
   <ScrollView
     android:layout_width="match_parent"

@@ -133,7 +133,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     recyclerView.setAdapter(adapter);
   }
 
-  @OnClick({R.id.close, R.id.submit_btn})
+  @OnClick({R.id.close, R.id.submit_btn,R.id.bottom_layout})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.close:
@@ -142,6 +142,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
           mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
         }
         break;
+      case R.id.bottom_layout:
       case R.id.submit_btn:
         orderFragment.goToOrderInfoFragment();
         getDialog().dismiss();

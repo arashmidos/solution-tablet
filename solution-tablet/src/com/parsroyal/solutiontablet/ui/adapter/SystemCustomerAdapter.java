@@ -24,6 +24,7 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SystemCustomerAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.Collections;
 import java.util.List;
@@ -57,19 +58,7 @@ public class SystemCustomerAdapter extends Adapter<ViewHolder> {
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     CustomerListModel customer = customers.get(position);
-    holder.editLay.setVisibility(View.GONE);
-    setMargin(position == customers.size() - 1, holder.customerLay);
-    holder.customerNameTv.setText(customer.getTitle());
-    String customerCode = "کد : " + customer.getCode();
-    holder.customerIdTv.setText(customerCode);
-    holder.customerShopNameTv.setText(customer.getShopName());
-    if (customer.hasLocation()) {
-      holder.hasLocationImg.setImageResource(R.drawable.ic_gps_fixed_black_18dp);
-      holder.hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.primary));
-    } else {
-      holder.hasLocationImg.setImageResource(R.drawable.ic_gps_off_black_18dp);
-      holder.hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.login_gray));
-    }
+    holder.setData(customer, position);
   }
 
   private void setMargin(boolean isLastItem, RelativeLayout layout) {
@@ -128,10 +117,30 @@ public class SystemCustomerAdapter extends Adapter<ViewHolder> {
     ImageView hasLocationImg;
     @BindView(R.id.edit_lay)
     LinearLayout editLay;
+    private CustomerListModel customer;
+    private int position;
 
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+    }
+
+    public void setData(CustomerListModel customer, int position) {
+      this.customer = customer;
+      this.position = position;
+      editLay.setVisibility(View.GONE);
+      setMargin(position == customers.size() - 1, customerLay);
+      customerNameTv.setText(customer.getTitle());
+      String customerCode = "کد : " + NumberUtil.digitsToPersian(customer.getCode());
+      customerIdTv.setText(customerCode);
+      customerShopNameTv.setText(NumberUtil.digitsToPersian(customer.getShopName()));
+      if (customer.hasLocation()) {
+        hasLocationImg.setImageResource(R.drawable.ic_gps_fixed_black_18dp);
+        hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.primary));
+      } else {
+        hasLocationImg.setImageResource(R.drawable.ic_gps_off_black_18dp);
+        hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.login_gray));
+      }
     }
   }
 }

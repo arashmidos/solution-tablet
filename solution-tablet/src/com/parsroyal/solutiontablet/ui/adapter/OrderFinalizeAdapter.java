@@ -155,17 +155,18 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
           .load(MediaUtil.getGoodImage(item.getGoods().getCode()))
           .error(R.drawable.goods_default)
           .into(goodImg);
-      goodTitleTv.setText(item.getGoods().getTitle());
+      goodTitleTv.setText(NumberUtil.digitsToPersian(item.getGoods().getTitle()));
       Double goodsAmount = Double.valueOf(item.getGoods().getPrice()) / 1000D;
-      amountTv.setText(NumberUtil.getCommaSeparated(goodsAmount) + " " +
+      amountTv.setText(NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(goodsAmount)) + " " +
           mainActivity.getString(R.string.common_irr_currency));
       Double totalAmount = Double.valueOf(item.getAmount()) / 1000D;
-      totalAmountTv.setText(NumberUtil.getCommaSeparated(totalAmount) + " " +
+      totalAmountTv.setText(NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(totalAmount)) + " " +
           mainActivity.getString(R.string.common_irr_currency));
-      countTv.setText(String.valueOf(item.getGoodsCount() / 1000));
-      unit2CountTv.setText(String.valueOf(item.getGoodsUnit2Count() / 1000));
-      unit1TitleTv.setText(item.getGoods().getUnit1Title());
-      unit2TitleTv.setText(item.getGoods().getUnit2Title());
+      countTv.setText(NumberUtil.digitsToPersian(String.valueOf(item.getGoodsCount() / 1000)));
+      unit2CountTv
+          .setText(NumberUtil.digitsToPersian(String.valueOf(item.getGoodsUnit2Count() / 1000)));
+      unit1TitleTv.setText(NumberUtil.digitsToPersian(item.getGoods().getUnit1Title()));
+      unit2TitleTv.setText(NumberUtil.digitsToPersian(item.getGoods().getUnit2Title()));
       this.item = item;
       this.goods = item.getGoods();
       this.position = position;

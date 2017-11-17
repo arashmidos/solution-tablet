@@ -46,6 +46,7 @@ import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Collections;
@@ -178,7 +179,8 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       this.position = position;
       customerShopNameTv.setText(model.getShopName());
       customerNameTv.setText(model.getTitle());
-      customerIdTv.setText(String.format(mainActivity.getString(R.string.code_x), model.getCode()));
+      customerIdTv.setText(String.format(mainActivity.getString(R.string.code_x),
+          NumberUtil.digitsToPersian(model.getCode())));
       //set location icon
       if (model.hasLocation()) {
         hasLocationImg.setImageResource(R.drawable.ic_gps_fixed_black_18dp);
@@ -226,7 +228,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       ImageView hasOrderImg = (ImageView) dialogView.findViewById(R.id.has_order_img);
       customerShopNameTv.setText(model.getShopName());
       customerNameTv.setText(model.getTitle());
-      String customerCode = "کد : " + model.getCode();
+      String customerCode = "کد : " + NumberUtil.digitsToPersian(model.getCode());
       customerIdTv.setText(customerCode);
       //set location icon
       if (model.hasLocation()) {
@@ -250,9 +252,9 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
 
       hasOrderImg.setVisibility(model.hasOrder() ? View.VISIBLE : View.GONE);
 
-      customerLocationTv.setText(model.getAddress());
-      customerMobileTv.setText(model.getCellPhone());
-      customerPhoneTv.setText(model.getPhoneNumber());
+      customerLocationTv.setText(NumberUtil.digitsToPersian(model.getAddress()));
+      customerMobileTv.setText(NumberUtil.digitsToPersian(model.getCellPhone()));
+      customerPhoneTv.setText(NumberUtil.digitsToPersian(model.getPhoneNumber()));
 
       AlertDialog alertDialog = dialogBuilder.create();
       alertDialog.show();

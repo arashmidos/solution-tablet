@@ -32,6 +32,7 @@ import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransfe
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -183,7 +184,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           customerNameTv.setVisibility(View.VISIBLE);
         }
       }
-      String orderCode = "کد سفارش : " + String.valueOf(order.getId());
+      String orderCode = "کد سفارش : " + NumberUtil.digitsToPersian(String.valueOf(order.getId()));
       orderCodeTv.setText(orderCode);
       if (customerNameTv != null) {//TODO SHAKIB: FIX THIS
         customerNameTv.setText(order.getCustomerName());
@@ -194,12 +195,12 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
 
-      orderDateTv.setText(dateString);
+      orderDateTv.setText(NumberUtil.digitsToPersian(dateString));
       String number = String
           .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
               R.string.common_irr_currency));
-      orderTotalPrice.setText(number);
-      orderPaymentMethodTv.setText(order.getPaymentTypeTitle());
+      orderTotalPrice.setText(NumberUtil.digitsToPersian(number));
+      orderPaymentMethodTv.setText(NumberUtil.digitsToPersian(order.getPaymentTypeTitle()));
       if (order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
         if (isFromOrder) {
           orderStatusTv.setVisibility(View.VISIBLE);
@@ -246,11 +247,11 @@ public class OrderAdapter extends Adapter<ViewHolder> {
         returnCountTv.setCompoundDrawablePadding((int) UIUtils.convertDpToPixel(8, context));
         returnCountTv.setText("--");//TODO: Add Return items count
       }
-      returnDateTv.setText(dateString);
+      returnDateTv.setText(NumberUtil.digitsToPersian(dateString));
       String number = String
           .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
               R.string.common_irr_currency));
-      totalAmountTv.setText(number);
+      totalAmountTv.setText(NumberUtil.digitsToPersian(number));
 
       if (order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId())) {
         if (isFromOrder) {

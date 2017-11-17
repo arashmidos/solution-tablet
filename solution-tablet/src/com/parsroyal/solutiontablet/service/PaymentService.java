@@ -18,10 +18,6 @@ public interface PaymentService extends BaseService {
 
   List<Payment> getAllPaymentsByStatus(Long status);
 
-  List<Payment> getAllPaymentByCustomerID(Long customerId);
-
-  List<PaymentListModel> getAllPaymentsListModelByCustomerBackendId(Long customerBackendId);
-
   List<PaymentListModel> searchForPayments(PaymentSO paymentSO);
 
   void clearAllSentPayment();

@@ -46,6 +46,7 @@ import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -124,7 +125,8 @@ public class OrderFragment extends BaseFragment {
       saleType = args.getString(Constants.SALE_TYPE, "");
       visitId = args.getLong(Constants.VISIT_ID, -1);
       pageStatus = args.getString(Constants.PAGE_STATUS, "");
-      orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
+      orderCountTv
+          .setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
       mainActivity.changeTitle(getProperTitle());
     }
 
@@ -239,7 +241,7 @@ public class OrderFragment extends BaseFragment {
   @Subscribe
   public void getMessage(UpdateListEvent event) {
     order = saleOrderService.findOrderDtoById(orderId);
-    orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
+    orderCountTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
   }
 
   @OnClick({R.id.search_img, R.id.bottom_bar})
@@ -400,7 +402,8 @@ public class OrderFragment extends BaseFragment {
       Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);
-      orderCountTv.setText(String.valueOf(order.getOrderItems().size()));
+      orderCountTv
+          .setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
       EventBus.getDefault().post(new SuccessEvent(StatusCodes.SUCCESS));
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);

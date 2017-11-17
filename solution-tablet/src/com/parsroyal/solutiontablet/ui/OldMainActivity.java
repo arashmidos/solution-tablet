@@ -396,7 +396,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case PAYMENT_FRAGMENT_ID://18
-        fragment = new PaymentFragment();
+//        fragment = new PaymentFragment();
         changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case PAYMENT_DETAIL_FRAGMENT_ID://19
@@ -416,7 +416,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(KPI_SALESMAN_FRAGMENT_ID);
         break;
       case FUNDS_FRAGMENT_ID: //23
-        fragment = new PaymentFragment();
+//        fragment = new PaymentFragment();
         changeSidebarItem(FUNDS_FRAGMENT_ID);
         break;
       case QUESTIONAIRE_LIST_FRAGMENT_ID:

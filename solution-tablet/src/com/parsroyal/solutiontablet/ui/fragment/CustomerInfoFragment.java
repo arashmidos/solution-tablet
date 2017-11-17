@@ -51,6 +51,7 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
@@ -198,10 +199,10 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
 
   private void setData() {
     mainActivity.changeTitle(customer.getFullName());
-    phoneTv.setText(customer.getPhoneNumber());
-    mobileTv.setText(customer.getCellPhone());
-    locationTv.setText(customer.getAddress());
-    storeTv.setText(customer.getFullName());
+    phoneTv.setText(NumberUtil.digitsToPersian(customer.getPhoneNumber()));
+    mobileTv.setText(NumberUtil.digitsToPersian(customer.getCellPhone()));
+    locationTv.setText(NumberUtil.digitsToPersian(customer.getAddress()));
+    storeTv.setText(NumberUtil.digitsToPersian(customer.getFullName()));
 
     if (saleType.equals(ApplicationKeys.SALE_HOT)) {
       addOrderTv.setText(String.format("ثبت %s", getString(R.string.title_factor)));

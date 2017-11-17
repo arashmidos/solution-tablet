@@ -203,15 +203,16 @@ public class AddOrderDialogFragment extends DialogFragment {
         if (Empty.isNotEmpty(count1) && !count1.equals(0D)) {
           int selectedUnit1 = spinner.getSelectedItemPosition();
           if (selectedUnit1 == 1) {
-            unit2CountTv.setText(String.format(Locale.US, "%d", count1.intValue()));
+            unit2CountTv.setText(String.format(Locale.getDefault(), "%d", count1.intValue()));
             count1 *= Double.valueOf(unit1Count);
             unit1CountTv.setText(String.valueOf(count1));
           } else {
-            unit2CountTv.setText(String.format(Locale.US, "%d", (count1.longValue() / unit1Count)));
-            unit1CountTv.setText(input);
+            unit2CountTv.setText(
+                String.format(Locale.getDefault(), "%d", (count1.longValue() / unit1Count)));
+            unit1CountTv.setText(NumberUtil.digitsToPersian(input));
           }
           long total = (long) (count1 * selectedGoods.getPrice() / 1000);
-          totalPriceTv.setText(String.format(Locale.US, "%,d %s", total, getString(
+          totalPriceTv.setText(String.format(Locale.getDefault(), "%,d %s", total, getString(
               R.string.common_irr_currency)));
         } else {
           clearDetailPanel();
@@ -246,9 +247,9 @@ public class AddOrderDialogFragment extends DialogFragment {
   }
 
   protected void clearDetailPanel() {
-    unit1CountTv.setText("0");
-    unit2CountTv.setText("0");
-    totalPriceTv.setText(String.format(Locale.US, "%,d %s", 0, getString(
+    unit1CountTv.setText(NumberUtil.digitsToPersian("0"));
+    unit2CountTv.setText(NumberUtil.digitsToPersian("0"));
+    totalPriceTv.setText(String.format(Locale.getDefault(), "%,d %s", 0, getString(
         R.string.common_irr_currency)));
   }
 
@@ -283,29 +284,35 @@ public class AddOrderDialogFragment extends DialogFragment {
   }
 
   protected void setData() {
-    goodNameTv.setText(selectedGoods.getTitle());
+    goodNameTv.setText(NumberUtil.digitsToPersian(selectedGoods.getTitle()));
     if (Empty.isNotEmpty(count) && !count.equals(0.0D)) {
       if (count == count.longValue()) {
-        countTv.setText(String.format(Locale.US, "%d", count.longValue()));
+        countTv.setText(String.format(Locale.getDefault(), "%d", count.longValue()));
       } else {
-        countTv.setText(String.format(Locale.US, "%s", count));
+        countTv.setText(String.format(Locale.getDefault(), "%s", count));
       }
       countTv.setSelection(countTv.getText().length());
     }
 
-    goodCodeTv.setText(String.format("کد کالا: %s", selectedGoods.getCode()));
+    goodCodeTv
+        .setText(String.format("کد کالا: %s", NumberUtil.digitsToPersian(selectedGoods.getCode())));
     long total = selectedGoods.getPrice() / 1000;
-    goodPriceTv.setText(String.format(Locale.US, "%,d %s", total, getString(
+    goodPriceTv.setText(String.format(Locale.getDefault(), "%,d %s", total, getString(
         R.string.common_irr_currency)));
-    unit1TitleTv.setText(unit1Title);
-    unit2TitleTv.setText(unit2Title);
+    unit1TitleTv.setText(NumberUtil.digitsToPersian(unit1Title));
+    unit2TitleTv.setText(NumberUtil.digitsToPersian(unit2Title));
     clearDetailPanel();
 
     if (saleRateEnabled) {
       coefficientTv.setText(
-          Empty.isNotEmpty(saleRate) ? String.format("ضریب فروش: %s %s", saleRate, unit1Title)
-              : getString(R.string.no_sale_rate));
-      eachCartonTv.setText(String.format("هر %s = %s %s", unit2Title, unit1Count, unit1Title));
+          Empty.isNotEmpty(saleRate) ? String
+              .format("ضریب فروش: %s %s", NumberUtil.digitsToPersian(String.valueOf(saleRate)),
+                  NumberUtil.digitsToPersian(unit1Title)) : getString(R.string.no_sale_rate));
+      eachCartonTv.setText(
+          String
+              .format(Locale.getDefault(), "هر %s = %s %s", NumberUtil.digitsToPersian(unit2Title),
+                  NumberUtil.digitsToPersian(String.valueOf(unit1Count)),
+                  NumberUtil.digitsToPersian(unit1Title)));
     } else {
       costDetailLay.setVisibility(View.GONE);
     }
@@ -342,9 +349,9 @@ public class AddOrderDialogFragment extends DialogFragment {
 
   protected void setUpSpinner() {
     List<LabelValue> unitsList = new ArrayList<>();
-    unitsList.add(new LabelValue(1L, unit1Title));
+    unitsList.add(new LabelValue(1L, NumberUtil.digitsToPersian(unit1Title)));
     if (Empty.isNotEmpty(unit2Title)) {
-      unitsList.add(new LabelValue(2L, unit2Title));
+      unitsList.add(new LabelValue(2L, NumberUtil.digitsToPersian(unit2Title)));
     }
     spinner.setAdapter(new LabelValueArrayAdapter(mainActivity, unitsList));
 
@@ -407,12 +414,13 @@ public class AddOrderDialogFragment extends DialogFragment {
     return true;
   }
 
-  @OnClick({R.id.close, R.id.register_order_btn})
+  @OnClick({R.id.close, R.id.register_order_btn, R.id.bottom_bar})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.close:
         getDialog().dismiss();
         break;
+      case R.id.bottom_bar:
       case R.id.register_order_btn:
         if (Empty.isNotEmpty(onClickListener) && validate()) {
 

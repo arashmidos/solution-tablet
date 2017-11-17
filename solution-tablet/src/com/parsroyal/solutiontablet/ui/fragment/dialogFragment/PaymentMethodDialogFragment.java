@@ -19,7 +19,7 @@ import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentMethodAdapter;
-import com.parsroyal.solutiontablet.ui.fragment.NewOrderInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
 import java.util.List;
 
 public class PaymentMethodDialogFragment extends DialogFragment {
@@ -36,17 +36,17 @@ public class PaymentMethodDialogFragment extends DialogFragment {
   private PaymentMethodAdapter adapter;
   private MainActivity mainActivity;
   private BaseInfoServiceImpl baseInfoService;
-  private NewOrderInfoFragment newOrderInfoFragment;
+  private OrderInfoFragment orderInfoFragment;
   private boolean isReject;
 
   public PaymentMethodDialogFragment() {
     // Required empty public constructor
   }
 
-  public static PaymentMethodDialogFragment newInstance(NewOrderInfoFragment newOrderInfoFragment,
+  public static PaymentMethodDialogFragment newInstance(OrderInfoFragment orderInfoFragment,
       LabelValue selectedItem, boolean isReject) {
     PaymentMethodDialogFragment fragment = new PaymentMethodDialogFragment();
-    fragment.newOrderInfoFragment = newOrderInfoFragment;
+    fragment.orderInfoFragment = orderInfoFragment;
     fragment.selectedItem = selectedItem;
     fragment.isReject = isReject;
     return fragment;
@@ -97,7 +97,7 @@ public class PaymentMethodDialogFragment extends DialogFragment {
         getDialog().dismiss();
         break;
       case R.id.submit_btn:
-        newOrderInfoFragment.setPaymentMethod(adapter.getSelectedItem());
+        orderInfoFragment.setPaymentMethod(adapter.getSelectedItem());
         getDialog().dismiss();
         break;
     }
