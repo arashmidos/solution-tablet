@@ -455,8 +455,12 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
    */
   @Override
   public void onFocusChange(View v, boolean hasFocus) {
-    if (hasFocus) {
-      v.performClick();
+    try {
+      if (getActivity() != null && !getActivity().isFinishing() && hasFocus) {
+        v.performClick();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 

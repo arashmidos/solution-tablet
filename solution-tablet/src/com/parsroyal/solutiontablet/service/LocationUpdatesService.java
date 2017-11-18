@@ -207,7 +207,13 @@ public class LocationUpdatesService extends Service {
 
   @Override
   public void onDestroy() {
-    serviceHandler.removeCallbacksAndMessages(null);
+    try {
+      if (serviceHandler != null) {
+        serviceHandler.removeCallbacksAndMessages(null);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**

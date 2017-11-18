@@ -53,8 +53,8 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PathFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireListFragment;
@@ -428,13 +428,17 @@ public abstract class MainActivity extends AppCompatActivity {
     // request previously, but didn't check the "Don't ask again" checkbox.
     if (shouldProvideRationale) {
       Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(this, getString(R.string.permission_rationale),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                REQUEST_PERMISSIONS_REQUEST_CODE);
-          });
+      try {
+        ToastUtil.toastError(this, getString(R.string.permission_rationale),
+            view -> {
+              // Request permission
+              ActivityCompat.requestPermissions(MainActivity.this,
+                  new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                  REQUEST_PERMISSIONS_REQUEST_CODE);
+            });
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     } else {
       Log.i(TAG, "Requesting permission");
       // Request permission. It's possible this can be auto answered if device policy
@@ -503,13 +507,20 @@ public abstract class MainActivity extends AppCompatActivity {
   }
 
   protected void commitFragment(String fragmentTag, BaseFragment fragment, boolean addToBackStack) {
-    if (!isFinishing()) {
-      FragmentTransaction fragmentTransaction;
-      FragmentManager fragmentManager = getSupportFragmentManager();
-      fragmentTransaction = fragmentManager.beginTransaction();
-      fragmentTransaction.replace(R.id.container, fragment, fragmentTag);
-      fragmentTransaction.addToBackStack(fragmentTag);
-      fragmentTransaction.commit();
+    try {
+      if (!isFinishing()) {
+        FragmentTransaction fragmentTransaction;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container, fragment, fragmentTag);
+        fragmentTransaction.addToBackStack(fragmentTag);
+        fragmentTransaction.commit();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      ToastUtil.toastError(this, R.string.error_unknown_system_exception);
+    } finally {
+      Logger.sendError("MainActivity", "Exception in commitFragment");
     }
   }
 
