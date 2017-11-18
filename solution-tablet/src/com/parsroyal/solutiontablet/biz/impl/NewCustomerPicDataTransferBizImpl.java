@@ -72,10 +72,10 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
       HttpHeaders httpHeaders = new HttpHeaders();
 
       //TODO CLEAN REMOVE THESE
-      if (Empty.isNotEmpty(salesmanId)) {
+      /*if (Empty.isNotEmpty(salesmanId)) {
         httpHeaders.add("salesmanId", salesmanId.getValue());
         httpHeaders.add("salesmanCode", salesmanId.getValue());
-      }
+      }*/
 
       httpHeaders.add("Authorization", "Bearer " + token.getValue());
 
@@ -90,8 +90,8 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
       MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
       parts.add("zipfile.zip", new FileSystemResource(pics));
-      HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<MultiValueMap<String, Object>>(
-          parts, httpHeaders);
+      HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts,
+          httpHeaders);
 
       String url = makeUrl(serverAddress1.getValue(), getMethod());
 
@@ -178,7 +178,7 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
   @Override
   public String getMethod() {
-    return "customer/images";
+    return "customers/images";
   }
 
   @Override

@@ -90,7 +90,7 @@ public class RegisterPaymentFragment extends BaseFragment {
   @BindView(R.id.branch_edt)
   EditText branchEdt;
   @BindView(R.id.spinner)
-  Spinner spinner;
+  Spinner bankSpinner;
   @BindView(R.id.cheque_detail_lay)
   LinearLayout chequeDetailLay;
   @BindView(R.id.payment_price_lay)
@@ -129,8 +129,7 @@ public class RegisterPaymentFragment extends BaseFragment {
 
 
   public static RegisterPaymentFragment newInstance() {
-    RegisterPaymentFragment fragment = new RegisterPaymentFragment();
-    return fragment;
+    return new RegisterPaymentFragment();
   }
 
   @Override
@@ -218,7 +217,7 @@ public class RegisterPaymentFragment extends BaseFragment {
     chequeNumEdt.setEnabled(false);
     accountNumEdt.setEnabled(false);
     chequeOwnerEdt.setEnabled(false);
-    spinner.setEnabled(false);
+    bankSpinner.setEnabled(false);
     branchEdt.setEnabled(false);
     registerBtn.setEnabled(false);
   }
@@ -227,7 +226,7 @@ public class RegisterPaymentFragment extends BaseFragment {
     bankList = baseInfoService
         .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.BANK_NAME_TYPE.getId());
     if (Empty.isNotEmpty(bankList)) {
-      spinner.setAdapter(new LabelValueArrayAdapter(mainActivity, bankList));
+      bankSpinner.setAdapter(new LabelValueArrayAdapter(mainActivity, bankList));
     }
   }
 
@@ -258,7 +257,7 @@ public class RegisterPaymentFragment extends BaseFragment {
           int position = 0;
           for (LabelValue labelValue : bankList) {
             if (labelValue.getValue().equals(payment.getChequeBank())) {
-              spinner.setSelection(position);
+              bankSpinner.setSelection(position);
               break;
             }
             position++;
@@ -450,7 +449,7 @@ public class RegisterPaymentFragment extends BaseFragment {
           payment
               .setChequeAccountNumber(NumberUtil
                   .digitsToEnglish(CharacterFixUtil.fixString(accountNumEdt.getText().toString())));
-          payment.setChequeBank(spinner.getSelectedItemId());
+          payment.setChequeBank(bankSpinner.getSelectedItemId());
           payment.setChequeBranch(NumberUtil
               .digitsToEnglish(CharacterFixUtil.fixString(branchEdt.getText().toString())));
           payment.setChequeDate(chequeDateEdt.getText().toString());

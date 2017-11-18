@@ -73,7 +73,7 @@ public class BaseInfoDaoImpl extends AbstractDao<BaseInfo, Long> implements Base
     String selection = " " + BaseInfo.COL_TYPE + " = ?";
     String[] args = {String.valueOf(typeId)};
     if (Empty.isNotEmpty(backendId)) {
-      selection = selection + " and " + BaseInfo.COL_BACKEND_ID + " = ? ";
+      selection = selection + " AND " + BaseInfo.COL_BACKEND_ID + " = ? ";
       args = new String[]{String.valueOf(typeId), String.valueOf(backendId)};
     }
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());

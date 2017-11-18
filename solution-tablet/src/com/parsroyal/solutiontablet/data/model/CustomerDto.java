@@ -31,7 +31,7 @@ public class CustomerDto extends BaseModel {
   private String municipalityCode;
   private String postalCode;
   private boolean isApproved;
-  private String description;
+  private String customerDescription;
 
   public boolean isApproved() {
     return isApproved;
@@ -241,11 +241,11 @@ public class CustomerDto extends BaseModel {
     this.postalCode = postalCode;
   }
 
-  public String getDescription() {
-    return description;
+  public String getCustomerDescription() {
+    return customerDescription;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setCustomerDescription(String customerDescription) {
+    this.customerDescription = customerDescription;
   }
 }

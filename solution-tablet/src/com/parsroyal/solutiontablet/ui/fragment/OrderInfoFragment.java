@@ -266,7 +266,7 @@ public class OrderInfoFragment extends BaseFragment {
       if (isRejected()) {
         //Add reason or reject to orders
         order.setDescription(descriptionEdt.getText().toString());
-//        order.setDescription(Empty.isNotEmpty(selectedItem) ? selectedItem.getLabel() : "");
+//        order.setCustomerDescription(Empty.isNotEmpty(selectedItem) ? selectedItem.getLabel() : "");
       } else {
         order.setPaymentTypeBackendId(selectedItem.getValue());
       }

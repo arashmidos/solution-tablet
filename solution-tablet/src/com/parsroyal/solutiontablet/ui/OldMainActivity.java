@@ -55,7 +55,6 @@ import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OldVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.PaymentDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
@@ -400,7 +399,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case PAYMENT_DETAIL_FRAGMENT_ID://19
-        fragment = new PaymentDetailFragment();
+//        fragment = new PaymentDetailFragment();
         changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case USER_TRACKING_FRAGMENT_ID://20

@@ -10,10 +10,12 @@ import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
 import java.util.List;
 import org.springframework.http.HttpEntity;
@@ -87,7 +89,9 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
 
   @Override
   public String getMethod() {
-    return "customer/updateLocation";
+    return String
+        .format("customers/%s/updateLocation", new SettingServiceImpl(context).getSettingValue(
+            ApplicationKeys.SALESMAN_ID));
   }
 
   @Override
@@ -109,8 +113,7 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
     List<CustomerLocationDto> customerLocationDtoList = customerService
         .getAllUpdatedCustomerLocation();
-    HttpEntity<List<CustomerLocationDto>> requestEntity = new HttpEntity<>(customerLocationDtoList,
+    return new HttpEntity<>(customerLocationDtoList,
         headers);
-    return requestEntity;
   }
 }

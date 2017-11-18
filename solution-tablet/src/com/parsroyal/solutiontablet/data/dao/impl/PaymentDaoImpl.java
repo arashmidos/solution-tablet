@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.PaymentDao;
+import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
@@ -159,14 +161,14 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String[] projection = {
-        "p." + Payment.COL_ID,
+        "DISTINCT p." + Payment.COL_ID,
         "p." + Payment.COL_AMOUNT,
         "p." + Payment.COL_CREATE_DATE_TIME,
         "p." + Payment.COL_PAYMENT_TYPE_ID,
         "p." + Payment.COL_CUSTOMER_BACKEND_ID,
         "cu." + Customer.COL_FULL_NAME,//5
         "p." + Payment.COL_STATUS,
-        "p." + Payment.COL_CHEQUE_BANK,
+        "bi." + BaseInfo.COL_TITLE,
         "p." + Payment.COL_CHEQUE_BRANCH
     };
 
@@ -193,7 +195,10 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
 
     String table = getTableName() + " p " +
         " INNER JOIN " + Customer.TABLE_NAME + " cu on p." + Payment.COL_CUSTOMER_BACKEND_ID +
-        " = cu." + Customer.COL_BACKEND_ID;
+        " = cu." + Customer.COL_BACKEND_ID
+        + " LEFT OUTER JOIN " + BaseInfo.TABLE_NAME + " bi on p." + Payment.COL_CHEQUE_BANK +
+        " = bi." + BaseInfo.COL_BACKEND_ID + " AND bi." + BaseInfo.COL_TYPE + " = "
+        + BaseInfoTypes.BANK_NAME_TYPE.getId();
 
     Cursor cursor = db
         .query(table, projection, selection, argsList.toArray(args), null, null, null);

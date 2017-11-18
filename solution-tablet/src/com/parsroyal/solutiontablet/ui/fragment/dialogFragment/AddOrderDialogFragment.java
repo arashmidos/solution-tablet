@@ -406,7 +406,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     //If saleRate setting is enabled & default unit is unit1 & mod unit1 is not zero
     if (shouldApplySaleRate(countValue, currentUnit)) {
       errorMsg.setText(String.format(getString(R.string.error_sale_rate_not_correct),
-          String.valueOf(saleRate), unit1Title));
+          NumberUtil.digitsToPersian(saleRate), NumberUtil.digitsToPersian(unit1Title)));
       errorMsg.setVisibility(View.VISIBLE);
       hideKeyboard();
       return false;

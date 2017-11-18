@@ -524,7 +524,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     customer.setMunicipalityCode(cursor.getString(22));
     customer.setPostalCode(cursor.getString(23));
     customer.setApproved(cursor.getInt(24) == 1);
-    customer.setDescription(cursor.getString(25));
+    customer.setCustomerDescription(cursor.getString(25));
     return customer;
   }
 

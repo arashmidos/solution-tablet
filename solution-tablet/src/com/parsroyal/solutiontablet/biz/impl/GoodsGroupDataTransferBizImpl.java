@@ -102,7 +102,6 @@ public class GoodsGroupDataTransferBizImpl extends AbstractDataTransferBizImpl<S
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity<String> entity = new HttpEntity<String>("No Param", headers);
-    return entity;
+    return new HttpEntity<>("No Param", headers);
   }
 }

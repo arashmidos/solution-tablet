@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -18,6 +19,6 @@ public interface RestService {
   @POST("saleorders")
   Call<String> sendOrder(@Body SaleOrderDocument saleDocument);
 
-  @GET("goods/reject")
-  Call<JsonArray> getAllRejectedData(@Query("custId") Long customerBackendId);
+  @GET("goods/{customerId}/reject")
+  Call<JsonArray> getAllRejectedData(@Path("customerId") Long customerBackendId);
 }

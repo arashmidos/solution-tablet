@@ -96,7 +96,8 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
 
   @Override
   public String getMethod() {
-    return "saleorders/deliverable";
+    return String
+        .format("saleorders/%s/deliverable", keyValueBiz.findByKey(ApplicationKeys.SALESMAN_ID));
   }
 
   @Override
@@ -116,7 +117,7 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    KeyValue userCodeKey = keyValueBiz.findByKey(ApplicationKeys.SETTING_USER_CODE);
+    KeyValue userCodeKey = keyValueBiz.findByKey(ApplicationKeys.SETTING_USER_CODE);//TODO REMOVE THIS
     return new HttpEntity<>(userCodeKey.getValue(), headers);
   }
 }

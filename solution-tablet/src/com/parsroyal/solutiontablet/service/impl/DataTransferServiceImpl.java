@@ -294,7 +294,6 @@ public class DataTransferServiceImpl implements DataTransferService {
     uiObserver.finished(true);
   }
 
-//TODO: Send 1 by 1
   private void sendAllNewCustomers(ResultObserver resultObserver) {
     List<Customer> allNewCustomers = customerService.getAllNewCustomersForSend();
     if (Empty.isEmpty(allNewCustomers)) {
@@ -304,7 +303,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
     new NewCustomerDataTransferBizImpl(context, resultObserver).exchangeData();
   }
-//TODO: change url and remove id/codes
+
   private void sendAllCustomerPics(ResultObserver resultObserver) {
 
     File pics = customerService.getAllCustomerPicForSend();
@@ -318,7 +317,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
     new NewCustomerPicDataTransferBizImpl(context, resultObserver, pics, null).exchangeData();
   }
-//TODO customers/salesman/updateLocation
+
   private void sendAllUpdatedCustomers(ResultObserver resultObserver) {
     List<CustomerLocationDto> allUpdatedCustomerLocation = customerService
         .getAllUpdatedCustomerLocation();
@@ -370,7 +369,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
     resultObserver.publishResult(qAnswersDataTransferBizImpl.getSuccessfulMessage());
   }
-//TODO :
+
   private void sendAllPayments(ResultObserver resultObserver) {
     List<Payment> payments = paymentService.getAllPaymentsByStatus(SendStatus.NEW.getId());
     if (Empty.isNotEmpty(payments)) {

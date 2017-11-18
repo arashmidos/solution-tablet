@@ -10,8 +10,9 @@ import com.parsroyal.solutiontablet.exception.InternalServerError;
 import com.parsroyal.solutiontablet.exception.TimeOutException;
 import com.parsroyal.solutiontablet.exception.URLNotFoundException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
+import com.parsroyal.solutiontablet.service.SettingService;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
-import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.springframework.http.HttpBasicAuthentication;
@@ -56,17 +57,17 @@ public class KPIDataTransferBizImpl extends AbstractDataTransferBizImpl<KPIDto> 
       beforeTransfer();
 
       HttpHeaders httpHeaders = new HttpHeaders();
-      httpHeaders.setContentType(getContentType());
+      httpHeaders.setContentType(getContentType());//TODO REMOVE THESE AND ADD BEARER
       HttpBasicAuthentication authentication = new HttpBasicAuthentication(username.getValue(),
           password.getValue());
       httpHeaders.setAuthorization(authentication);
-      httpHeaders.add("saleType",
+      /*httpHeaders.add("saleType",
           Empty.isEmpty(saleType) ? ApplicationKeys.SALE_COLD : saleType.getValue());
-
-      if (Empty.isNotEmpty(salesmanId)) {
+*/
+      /*if (Empty.isNotEmpty(salesmanId)) {
         httpHeaders.add("salesmanId", salesmanId.getValue());
         httpHeaders.add("salesmanCode", salesmanCode.getValue());
-      }
+      }*/
 
       RestTemplate restTemplate = new RestTemplate();
       restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
@@ -126,7 +127,9 @@ public class KPIDataTransferBizImpl extends AbstractDataTransferBizImpl<KPIDto> 
 
   @Override
   public String getMethod() {
-    return customerBackendId == -1 ? "kpi/salesman" : "kpi/customer";
+    SettingService settingService = new SettingServiceImpl(context);
+    return customerBackendId == -1 ? "kpi/salesman/" + settingService
+        .getSettingValue(ApplicationKeys.SALESMAN_ID) : "kpi/customer/" + customerBackendId;
   }
 
   @Override

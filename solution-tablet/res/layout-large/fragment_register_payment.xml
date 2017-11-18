@@ -387,11 +387,10 @@
                 android:background="@drawable/edit_text_state_background"
                 android:gravity="right|center_vertical"
                 android:imeOptions="actionDone"
-                android:inputType="number"
                 android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_normal"
-                tools:text="422543526" />
+                tools:text="میدان توپخانه" />
             </android.support.design.widget.TextInputLayout>
 
             <RelativeLayout

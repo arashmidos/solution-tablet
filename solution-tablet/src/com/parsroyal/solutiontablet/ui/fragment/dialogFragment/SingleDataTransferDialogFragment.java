@@ -62,6 +62,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   private boolean transferFinished = false;
   private VisitInformationDetail currentModel;
   private List<VisitInformationDetail> model;
+  private int currentPosition;
 
   public SingleDataTransferDialogFragment() {
     // Required empty public constructor
@@ -142,36 +143,42 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     transferStarted = true;
     Toast.makeText(mainActivity, "Uploading data...", Toast.LENGTH_SHORT).show();
     uploadDataBtn.setEnabled(false);
+    currentPosition = 0;
     //TODO SHAKIB Loading on button
-    for (int i = 0; i < model.size() && !transferFinished; i++) {
 
-      //Uploading started
-      VisitInformationDetail visitInformationDetail = model.get(i);
-      adapter.setCurrent(visitInformationDetail.getType());
-      currentModel = visitInformationDetail;
-      switch (VisitInformationDetailType.getByValue(visitInformationDetail.getType())) {
-        case CREATE_ORDER:
-        case CREATE_REJECT:
-        case CREATE_INVOICE:
-          sendOrder(visitInformationDetail.getTypeId());
-          break;
-        case TAKE_PICTURE:
-          sendPicture(visitInformationDetail.getVisitInformationId());
-          break;
-        case FILL_QUESTIONNAIRE:
-
-          break;
-        case SAVE_LOCATION:
-          break;
-        case CASH:
-          break;
-        case NO_ORDER:
-          break;
-      }
-    }
-    transferFinished = true;
-
+    sendNextDetail();
     //send VisitInformationDetail
+  }
+
+  private void sendNextDetail() {
+    //Uploading started
+    VisitInformationDetail visitInformationDetail = model.get(currentPosition);
+    adapter.setCurrent(visitInformationDetail.getType());
+    currentModel = visitInformationDetail;
+    switch (VisitInformationDetailType.getByValue(visitInformationDetail.getType())) {
+      case CREATE_ORDER:
+      case CREATE_REJECT:
+      case CREATE_INVOICE:
+        Toast.makeText(mainActivity, "Sending order/reject/invoice", Toast.LENGTH_SHORT).show();
+        sendOrder(visitInformationDetail.getTypeId());
+        break;
+      case TAKE_PICTURE:
+        Toast.makeText(mainActivity, "Sending pictures", Toast.LENGTH_SHORT).show();
+//        sendPicture(visitInformationDetail.getVisitInformationId());
+        break;
+      case FILL_QUESTIONNAIRE:
+        Toast.makeText(mainActivity, "Sending Questionnaire", Toast.LENGTH_SHORT).show();
+        break;
+      case SAVE_LOCATION:
+        Toast.makeText(mainActivity, "Sending SaveLocation", Toast.LENGTH_SHORT).show();
+        break;
+      case CASH:
+        Toast.makeText(mainActivity, "Sending CASH", Toast.LENGTH_SHORT).show();
+        break;
+      case NO_ORDER:
+        Toast.makeText(mainActivity, "Sending No order", Toast.LENGTH_SHORT).show();
+        break;
+    }
   }
 
   private void sendPicture(long visitId) {
@@ -198,14 +205,22 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
 
       if (event.getStatusCode().equals(StatusCodes.SUCCESS)) {
         adapter.setFinished(currentModel.getType());
+        currentPosition++;
+        sendNextDetail();
       } else {
         adapter.setError(currentModel.getType());
         transferFinished = true;
+        finishTransfer();
       }
     } else if (event instanceof ErrorEvent) {
       ToastUtil.toastError(getActivity(), event.getStatusCode().toString());
       transferFinished = true;
+      finishTransfer();
     }
+  }
+
+  private void finishTransfer() {
+    Toast.makeText(mainActivity, "Transfer Finished", Toast.LENGTH_SHORT).show();
   }
 
   @Override

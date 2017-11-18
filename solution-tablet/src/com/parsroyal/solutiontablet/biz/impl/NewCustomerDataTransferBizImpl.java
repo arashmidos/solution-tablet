@@ -112,7 +112,7 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
 
   @Override
   public String getMethod() {
-    return "customer/new";
+    return "customers";
   }
 
   @Override
@@ -133,9 +133,9 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    headers
+    /*headers
         .add("branchCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_CODE).getValue());
-
+*/
     List<Customer> allNewCustomersForSend = customerService.getAllNewCustomersForSend();
     String customersString = getCustomersString(allNewCustomersForSend);
     headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN));

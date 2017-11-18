@@ -64,4 +64,12 @@ public class NumberUtil {
 
     return input;
   }
+
+  public static String digitsToPersian(Long number) {
+    if (Empty.isEmpty(number)) {
+      return "";
+    }
+
+    return digitsToPersian(String.valueOf(number));
+  }
 }

@@ -7,13 +7,16 @@ import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.service.PaymentService;
+import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -28,7 +31,7 @@ import org.springframework.http.MediaType;
 public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
 
   public static final String TAG = PaymentsDataTransferBizImpl.class.getSimpleName();
-
+  private final SettingService settingService;
   private Context context;
   private PaymentService paymentService;
   private VisitService visitService;
@@ -40,6 +43,7 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
     this.context = context;
     paymentService = new PaymentServiceImpl(context);
     visitService = new VisitServiceImpl(context);
+    settingService = new SettingServiceImpl(context);
     observer = resultObserver;
   }
 
@@ -95,7 +99,8 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
   @Override
   public String getMethod() {
-    return "payment/create";
+    return String
+        .format("payment/%s/create", settingService.getSettingValue(ApplicationKeys.SALESMAN_ID));
   }
 
   @Override
@@ -115,8 +120,7 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity<List<Payment>> requestEntity = new HttpEntity<>(payments, headers);
-    return requestEntity;
+    return new HttpEntity<>(payments, headers);
   }
 
   public void setPayments(List<Payment> payments) {
