@@ -46,7 +46,6 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.adapter.DrawerArrayAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
-import com.parsroyal.solutiontablet.ui.fragment.CustomerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragment;
@@ -333,7 +332,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case CUSTOMER_DETAIL_FRAGMENT_ID:
-        fragment = new CustomerDetailFragment();
+//        fragment = new CustomerDetailFragment();
         changeSidebarItem(OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case VISIT_DETAIL_FRAGMENT_ID:

@@ -92,7 +92,7 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
-  public List<Customer> getAllNewCustomersForSend() {
+  public List<CustomerDto> getAllNewCustomersForSend() {
     return customerDao.retrieveAllNewCustomersForSend();
   }
 

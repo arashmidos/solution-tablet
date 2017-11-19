@@ -640,7 +640,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="25dp"
         android:gravity="end"
-        android:hint="@string/order_description"
+        android:hint="@string/customer_description"
         android:textColorHint="@color/gray_9e"
         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 

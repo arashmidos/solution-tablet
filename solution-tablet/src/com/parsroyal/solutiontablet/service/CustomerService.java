@@ -26,7 +26,7 @@ public interface CustomerService extends BaseService {
 
   void deleteCustomer(Long id);
 
-  List<Customer> getAllNewCustomersForSend();
+  List<CustomerDto> getAllNewCustomersForSend();
 
   List<CustomerLocationDto> getAllUpdatedCustomerLocation();
 

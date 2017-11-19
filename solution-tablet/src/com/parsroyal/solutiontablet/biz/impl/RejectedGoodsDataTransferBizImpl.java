@@ -187,8 +187,7 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity<String> entity = new HttpEntity<>("No Params", headers);
-    return entity;
+    return new HttpEntity<>("No Params", headers);
   }
 
   public void getAllRejectedData(Long customerBackendId) {

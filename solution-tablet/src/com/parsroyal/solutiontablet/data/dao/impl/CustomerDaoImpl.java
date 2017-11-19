@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
-import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
@@ -117,6 +116,36 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     };
   }
 
+  private CustomerDto createCustomerDtoFromCursor(Cursor cursor) {
+    CustomerDto customer = new CustomerDto();
+    customer.setId(cursor.getLong(0));
+    customer.setBackendId(cursor.getLong(1));
+    customer.setFullName(cursor.getString(2));
+    customer.setPhoneNumber(cursor.getString(3));
+    customer.setCellPhone(cursor.getString(4));
+    customer.setProvinceBackendId(cursor.getLong(5));
+    customer.setCityBackendId(cursor.getLong(6));
+    customer.setAddress(cursor.getString(7));
+    customer.setActivityBackendId(cursor.getLong(8));
+    customer.setStoreSurface(cursor.getInt(9));
+    customer.setStoreLocationTypeBackendId(cursor.getLong(10));
+    customer.setClassBackendId(cursor.getLong(11));
+    customer.setStatus(cursor.getLong(12));
+    customer.setCode(cursor.getString(13));
+    customer.setVisitLineBackendId(cursor.getLong(14));
+    customer.setCreateDateTime(cursor.getString(15));
+    customer.setUpdateDateTime(cursor.getString(16));
+    customer.setxLocation(cursor.getDouble(17));
+    customer.setyLocation(cursor.getDouble(18));
+    customer.setShopName(cursor.getString(19));
+    customer.setNationalCode(cursor.getString(20));
+    customer.setMunicipalityCode(cursor.getString(21));
+    customer.setPostalCode(cursor.getString(22));
+    customer.setApproved(cursor.getInt(23) == 1);
+    customer.setCustomerDescription(cursor.getString(24));
+    return customer;
+  }
+
   @Override
   protected Customer createEntityFromCursor(Cursor cursor) {
     Customer customer = new Customer();
@@ -149,12 +178,24 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
   }
 
   @Override
-  public List<Customer> retrieveAllNewCustomersForSend() {
+  public List<CustomerDto> retrieveAllNewCustomersForSend() {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
     String selection =
         " " + Customer.COL_STATUS + " = ? " + " AND (" + Customer.COL_BACKEND_ID + " is null or "
             + Customer.COL_BACKEND_ID + " = 0)";
     String[] args = {String.valueOf(CustomerStatus.NEW.getId())};
-    return retrieveAll(selection, args, null, null, null);
+
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+    List<CustomerDto> list = new ArrayList<>();
+
+    while (cursor.moveToNext()) {
+      list.add(createCustomerDtoFromCursor(cursor));
+    }
+    cursor.close();
+
+    return list;
   }
 
   @Override
@@ -331,40 +372,11 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
   public CustomerDto getCustomerDtoById(Long customerId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String[] projection = {
-        " cu." + Customer.COL_ID,
-        " cu." + Customer.COL_BACKEND_ID,
-        " cu." + Customer.COL_FULL_NAME,
-        " cu." + Customer.COL_PHONE_NUMBER,
-        " cu." + Customer.COL_CELL_PHONE,
-        " cu." + Customer.COL_PROVINCE_BACKEND_ID, //5
-        " cu." + Customer.COL_CITY_BACKEND_ID,
-        " cu." + Customer.COL_ADDRESS,
-        " cu." + Customer.COL_ACTIVITY_BACKEND_ID,
-        " cu." + Customer.COL_STORE_SURFACE,
-        " cu." + Customer.COL_STORE_LOCATION_TYPE_BACKEND_ID,//10
-        " cu." + Customer.COL_STORE_LOCATION_TYPE_BACKEND_ID,
-        " cu." + Customer.COL_STATUS,
-        " cu." + Customer.COL_CODE,
-        " cu." + Customer.COL_VISIT_LINE_BACKEND_ID,
-        " cu." + Customer.COL_CREATE_DATE_TIME,//15
-        " cu." + Customer.COL_UPDATE_DATE_TIME,
-        " cu." + Customer.COL_X_LOCATION,
-        " cu." + Customer.COL_Y_LOCATION,
-        " bi." + BaseInfo.COL_TITLE + " activityTitle",
-        " cu." + Customer.COL_SHOP_NAME, //20
-        " cu." + Customer.COL_NATIONAL_CODE,
-        " cu." + Customer.COL_MUNICIPALITY_CODE,
-        " cu." + Customer.COL_POSTAL_CODE,
-        " cu." + Customer.COL_APPROVED,
-        " cu." + Customer.COL_DESCRIPTION
-    };
+
     String selection = " cu." + getPrimaryKeyColumnName() + " = ?";
     String[] args = {String.valueOf(customerId)};
-    String table = getTableName() + " cu " +
-        " LEFT OUTER JOIN " + BaseInfo.TABLE_NAME + " bi on bi." + BaseInfo.COL_ID + " = cu."
-        + Customer.COL_ACTIVITY_BACKEND_ID;
-    Cursor cursor = db.query(table, projection, selection, args, null, null, null);
+
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
     CustomerDto customerDto = null;
     if (cursor.moveToFirst()) {
       customerDto = createCustomerDtoFromCursor(cursor);
@@ -495,37 +507,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     }
     cursor.close();
     return positionModelList;
-  }
-
-  protected CustomerDto createCustomerDtoFromCursor(Cursor cursor) {
-    CustomerDto customer = new CustomerDto();
-    customer.setId(cursor.getLong(0));
-    customer.setBackendId(cursor.getLong(1));
-    customer.setFullName(cursor.getString(2));
-    customer.setPhoneNumber(cursor.getString(3));
-    customer.setCellPhone(cursor.getString(4));
-    customer.setProvinceBackendId(cursor.getLong(5));
-    customer.setCityBackendId(cursor.getLong(6));
-    customer.setAddress(cursor.getString(7));
-    customer.setActivityBackendId(cursor.getLong(8));
-    customer.setStoreSurface(cursor.getInt(9));
-    customer.setStoreLocationTypeBackendId(cursor.getLong(10));
-    customer.setClassBackendId(cursor.getLong(11));
-    customer.setStatus(cursor.getLong(12));
-    customer.setCode(cursor.getString(13));
-    customer.setVisitLineBackendId(cursor.getLong(14));
-    customer.setCreateDateTime(cursor.getString(15));
-    customer.setUpdateDateTime(cursor.getString(16));
-    customer.setxLocation(cursor.getDouble(17));
-    customer.setyLocation(cursor.getDouble(18));
-    customer.setActivityTitle(cursor.getString(19));
-    customer.setShopName(cursor.getString(20));
-    customer.setNationalCode(cursor.getString(21));
-    customer.setMunicipalityCode(cursor.getString(22));
-    customer.setPostalCode(cursor.getString(23));
-    customer.setApproved(cursor.getInt(24) == 1);
-    customer.setCustomerDescription(cursor.getString(25));
-    return customer;
   }
 
   public void bulkInsert(List<Customer> list) {

@@ -29,10 +29,10 @@ import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
+import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.PositionDto;
@@ -295,13 +295,27 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   private void sendAllNewCustomers(ResultObserver resultObserver) {
-    List<Customer> allNewCustomers = customerService.getAllNewCustomersForSend();
+    List<CustomerDto> allNewCustomers = customerService.getAllNewCustomersForSend();
     if (Empty.isEmpty(allNewCustomers)) {
-      resultObserver
-          .publishResult(context.getString(R.string.message_found_no_new_customer_for_send));
+      if (Empty.isNotEmpty(resultObserver)) {
+        resultObserver
+            .publishResult(context.getString(R.string.message_found_no_new_customer_for_send));
+      }
       return;
     }
-    new NewCustomerDataTransferBizImpl(context, resultObserver).exchangeData();
+
+    NewCustomerDataTransferBizImpl newCustomerDataTransferBiz = new NewCustomerDataTransferBizImpl(
+        context, resultObserver);
+    if (Empty.isNotEmpty(resultObserver)) {
+      resultObserver.publishResult(context.getString(R.string.sending_new_customers_data));
+    }
+
+    for (int i = 0; i < allNewCustomers.size(); i++) {
+      CustomerDto customerDto = allNewCustomers.get(i);
+      newCustomerDataTransferBiz.setCustomer(customerDto);
+      newCustomerDataTransferBiz.exchangeData();
+    }
+    resultObserver.publishResult(newCustomerDataTransferBiz.getSuccessfulMessage());
   }
 
   private void sendAllCustomerPics(ResultObserver resultObserver) {

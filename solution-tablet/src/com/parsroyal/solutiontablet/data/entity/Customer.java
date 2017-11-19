@@ -281,53 +281,6 @@ public class Customer extends BaseEntity<Long> {
     this.salesmanId = salesmanId;
   }
 
-  public String getString() {
-    StringBuilder sb = new StringBuilder();
-
-    sb.append(this.getId());
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(fullName) ? fullName : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(phoneNumber) ? phoneNumber : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(cellPhone) ? cellPhone : "NULL");
-    sb.append("&");
-    sb.append(
-        Empty.isNotEmpty(provinceBackendId) && provinceBackendId != 0 ? provinceBackendId : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(cityBackendId) && cityBackendId != 0 ? cityBackendId : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(address) ? address : "NULL");
-    sb.append("&");
-    sb.append(
-        Empty.isNotEmpty(activityBackendId) && activityBackendId != 0 ? activityBackendId : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(storeSurface) ? storeSurface : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(storeLocationTypeBackendId) ? storeLocationTypeBackendId
-        : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(createDateTime) ? createDateTime : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(updateDateTime) ? updateDateTime : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(xLocation) ? xLocation : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(yLocation) ? yLocation : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(classBackendId) && classBackendId != 0 ? classBackendId : "NULL");
-    //New
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(shopName) ? shopName : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(postalCode) ? postalCode : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(nationalCode) ? nationalCode : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(municipalityCode) ? municipalityCode : "NULL");
-    return sb.toString();
-  }//15&arash&123&22&39&578&kk&NULL&0&0&2017-10-30 - 09:13:28&2017-10-30 - 09:13:28&0.0&0.0&NULL&sho&NULL&NULL&NULL
-
   @Override
   public Long getPrimaryKey() {
     return id;
