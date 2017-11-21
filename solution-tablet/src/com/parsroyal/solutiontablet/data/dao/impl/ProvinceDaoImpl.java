@@ -49,10 +49,8 @@ public class ProvinceDaoImpl extends AbstractDao<Province, Long> implements Prov
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {Province.COL_ID, Province.COL_BACKEND_ID, Province.COL_CODE,
+    return new String[]{Province.COL_ID, Province.COL_BACKEND_ID, Province.COL_CODE,
         Province.COL_TITLE};
-    ;
-    return projection;
   }
 
   @Override
@@ -70,7 +68,22 @@ public class ProvinceDaoImpl extends AbstractDao<Province, Long> implements Prov
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     Cursor cursor = db.query(getTableName(), getProjection(), null, null, null, null, null);
-    List<LabelValue> labelValueModels = new ArrayList<LabelValue>();
+    List<LabelValue> labelValueModels = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      labelValueModels.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
+    }
+    cursor.close();
+    return labelValueModels;
+  }
+
+  @Override
+  public List<LabelValue> searchProvincesLabelValues(String constraint) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String selection = " " + Province.COL_TITLE + " = ?";
+    String[] args = {constraint};
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+    List<LabelValue> labelValueModels = new ArrayList<>();
     while (cursor.moveToNext()) {
       labelValueModels.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
     }

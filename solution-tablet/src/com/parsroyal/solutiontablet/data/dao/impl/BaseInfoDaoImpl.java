@@ -86,4 +86,5 @@ public class BaseInfoDaoImpl extends AbstractDao<BaseInfo, Long> implements Base
     cursor.close();
     return entities;
   }
+
 }
