@@ -373,7 +373,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-    String selection = " cu." + getPrimaryKeyColumnName() + " = ?";
+    String selection =  getPrimaryKeyColumnName() + " = ?";
     String[] args = {String.valueOf(customerId)};
 
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);

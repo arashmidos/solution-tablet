@@ -80,8 +80,8 @@ public class ProvinceDaoImpl extends AbstractDao<Province, Long> implements Prov
   public List<LabelValue> searchProvincesLabelValues(String constraint) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String selection = " " + Province.COL_TITLE + " = ?";
-    String[] args = {constraint};
+    String selection = " " + Province.COL_TITLE + " LIKE ?";
+    String[] args = {"%" + constraint + "%"};
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
     List<LabelValue> labelValueModels = new ArrayList<>();
     while (cursor.moveToNext()) {
