@@ -37,6 +37,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.io.File;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 /**
@@ -163,8 +164,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         sendOrder(visitInformationDetail.getTypeId());
         break;
       case TAKE_PICTURE:
-        Toast.makeText(mainActivity, "Sending pictures", Toast.LENGTH_SHORT).show();
-//        sendPicture(visitInformationDetail.getVisitInformationId());
+        sendPicture(visitInformationDetail.getVisitInformationId());
         break;
       case FILL_QUESTIONNAIRE:
         Toast.makeText(mainActivity, "Sending Questionnaire", Toast.LENGTH_SHORT).show();
@@ -221,6 +221,19 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
 
   private void finishTransfer() {
     Toast.makeText(mainActivity, "Transfer Finished", Toast.LENGTH_SHORT).show();
+  }
+
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
   }
 
   @Override

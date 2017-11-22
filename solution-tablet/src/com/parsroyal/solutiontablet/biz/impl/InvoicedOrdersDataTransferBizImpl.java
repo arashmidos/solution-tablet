@@ -33,7 +33,7 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
   protected SaleOrderDao saleOrderDao;
   protected SaleOrderItemDao saleOrderItemDao;
   protected BaseSaleDocument order;
-  private VisitService visitService;
+  protected VisitService visitService;
   private KeyValueBiz keyValueBiz;
   protected int success = 0;
   protected int total = 0;

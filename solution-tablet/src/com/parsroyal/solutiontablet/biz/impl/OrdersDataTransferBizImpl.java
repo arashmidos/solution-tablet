@@ -37,6 +37,7 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl
     saleOrder.setStatus(SaleOrderStatus.SENT.getId());
     saleOrder.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
     saleOrderDao.update(saleOrder);
+    visitService.updateVisitDetailId(getVisitDetailType(), saleOrder.getId(), backendId);
   }
 
   @Override
