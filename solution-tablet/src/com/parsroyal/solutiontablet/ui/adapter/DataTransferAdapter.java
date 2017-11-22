@@ -2,11 +2,14 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -14,6 +17,7 @@ import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
+import com.parsroyal.solutiontablet.ui.adapter.DataTransferAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import java.util.List;
@@ -22,7 +26,7 @@ import java.util.List;
  * Created by Arash on 11/13/2017.
  */
 
-public class DataTransferAdapter extends RecyclerView.Adapter<DataTransferAdapter.ViewHolder> {
+public class DataTransferAdapter extends Adapter<ViewHolder> {
 
   private final List<VisitInformationDetail> model;
   private final SingleDataTransferDialogFragment parent;
@@ -30,6 +34,8 @@ public class DataTransferAdapter extends RecyclerView.Adapter<DataTransferAdapte
   private Context context;
   private int currentPosition;
   private int current;
+  private long currentType;
+  private int currentService;
 
   public DataTransferAdapter(Context context, SingleDataTransferDialogFragment parent,
       List<VisitInformationDetail> model) {
@@ -61,7 +67,7 @@ public class DataTransferAdapter extends RecyclerView.Adapter<DataTransferAdapte
 
 
   private void lastItem(boolean isLastItem, ViewHolder holder) {
-    LinearLayout.LayoutParams parameter = new LinearLayout.LayoutParams(
+    LayoutParams parameter = new LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     if (isLastItem) {
       parameter.setMargins(0, 0, 0, 160);
@@ -84,7 +90,8 @@ public class DataTransferAdapter extends RecyclerView.Adapter<DataTransferAdapte
   }
 
   public void setFinished(int currentService) {
-    //TODO SHAKIB CHANGE ICON TO GREEN CHECK
+    this.currentService = currentService;
+    notifyDataSetChanged();
   }
 
   public void setError(long currentService) {
@@ -92,7 +99,8 @@ public class DataTransferAdapter extends RecyclerView.Adapter<DataTransferAdapte
   }
 
   public void setCurrent(long type) {
-    //TODO SHAKIB CURRENT PROGRESS BAR by type
+    this.currentType = type;
+    notifyDataSetChanged();
   }
 
   public void setFinished(long currentModel) {
@@ -109,6 +117,8 @@ public class DataTransferAdapter extends RecyclerView.Adapter<DataTransferAdapte
     View bottomLine;
     @BindView(R.id.img)
     ImageView img;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     private int position;
     private VisitInformationDetail visitDetail;
@@ -127,8 +137,19 @@ public class DataTransferAdapter extends RecyclerView.Adapter<DataTransferAdapte
 
       dataTypeTv.setText(String.format(context.getString(R.string.send_x_registered),
           context.getString(type.getTitle())));
-
-      img.setImageResource(type.getDrawable());
+//TODO:ARASH
+      if (currentService == visitDetail.getId()) {
+        progressBar.setVisibility(View.INVISIBLE);
+        img.setVisibility(View.VISIBLE);
+        img.setImageResource(R.drawable.ic_marker_green_24dp);
+      } else if (currentType == visitDetail.getType()) {
+        progressBar.setVisibility(View.VISIBLE);
+        img.setVisibility(View.INVISIBLE);
+      } else {
+        progressBar.setVisibility(View.INVISIBLE);
+        img.setVisibility(View.VISIBLE);
+        img.setImageResource(type.getDrawable());
+      }
     }
   }
 }

@@ -1,7 +1,9 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.Manifest.permission;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
@@ -70,6 +73,7 @@ public class VisitDetailFragment extends BaseFragment {
 
   private static final String TAG = VisitDetailFragment.class.getName();
   private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+  private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
   private static final int RESULT_OK = -1;
   private static final int RESULT_CANCELED = 0;
 
@@ -168,6 +172,61 @@ public class VisitDetailFragment extends BaseFragment {
           .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+    }
+  }
+
+  public boolean checkPermissions() {
+    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(mainActivity,
+        permission.WRITE_EXTERNAL_STORAGE) && PackageManager.PERMISSION_GRANTED == ActivityCompat
+        .checkSelfPermission(mainActivity,
+            permission.CAMERA);
+  }
+
+  public void requestPermissions() {
+    boolean cameraShouldProvideRationale =
+        ActivityCompat.shouldShowRequestPermissionRationale(mainActivity,
+            permission.CAMERA);
+    boolean storageShouldProvideRationale =
+        ActivityCompat.shouldShowRequestPermissionRationale(mainActivity,
+            permission.WRITE_EXTERNAL_STORAGE);
+
+    // Provide an additional rationale to the user. This would happen if the user denied the
+    // request previously, but didn't check the "Don't ask again" checkbox.
+    if (cameraShouldProvideRationale && storageShouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(mainActivity,
+                new String[]{permission.CAMERA, permission.WRITE_EXTERNAL_STORAGE},
+                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
+          });
+    } else if (cameraShouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(mainActivity,
+                new String[]{permission.CAMERA},
+                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
+          });
+    } else if (storageShouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(mainActivity,
+                new String[]{permission.WRITE_EXTERNAL_STORAGE},
+                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
+          });
+    } else {
+      Log.i(TAG, "Requesting permission");
+      // Request permission. It's possible this can be auto answered if device policy
+      // sets the permission in a given state or the user denied the permission
+      // previously and checked "Never ask again".
+      ActivityCompat.requestPermissions(mainActivity,
+          new String[]{permission.CAMERA, permission.WRITE_EXTERNAL_STORAGE},
+          REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
     }
   }
 
@@ -483,7 +542,11 @@ public class VisitDetailFragment extends BaseFragment {
       if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
 //        goToRegisterPaymentFragment();TODO:
       } else if (event.getStatusCode() == StatusCodes.ACTION_START_CAMERA) {
-        startCameraActivity();
+        if (!checkPermissions()) {
+          requestPermissions();
+        } else {
+          startCameraActivity();
+        }
       }
     } else if (event instanceof ErrorEvent) {
       Log.i(TAG, "Fucking error");

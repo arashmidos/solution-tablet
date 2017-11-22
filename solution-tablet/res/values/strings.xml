@@ -561,4 +561,6 @@
   <string name="send_x_registered">ارسال %s ثبت شده</string>
   <string name="order_description">توضیحات سفارش</string>
   <string name="customer_description">توضیحات مشتری</string>
+  <string name="search_in_cities">جستجو در شهر ها</string>
+  <string name="search_in_provinces">جستجو در استان ها</string>
 </resources>

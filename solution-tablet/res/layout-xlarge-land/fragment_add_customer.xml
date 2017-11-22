@@ -265,16 +265,18 @@
           android:layout_marginLeft="16dp"
           android:layout_marginRight="16dp">
 
-          <Spinner
-            android:id="@+id/city_spinner"
+          <TextView
+            android:id="@+id/city_tv"
             style="@style/IranSans"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:background="@color/white"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:gravity="right"
-            android:prompt="@string/city" />
+            android:gravity="right|center"
+            android:text="@string/city"
+            android:textColor="@color/black_21"
+            android:textSize="14sp" />
 
           <View
             android:layout_width="match_parent"
@@ -301,16 +303,18 @@
           android:layout_marginEnd="16dp"
           android:layout_marginRight="16dp">
 
-          <Spinner
-            android:id="@+id/state_spinner"
+          <TextView
+            android:id="@+id/state_tv"
             style="@style/IranSans"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:background="@color/white"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:gravity="right"
-            android:prompt="@string/state" />
+            android:gravity="right|center"
+            android:text="@string/state"
+            android:textColor="@color/black_21"
+            android:textSize="14sp" />
 
           <View
             android:layout_width="match_parent"
@@ -328,7 +332,6 @@
             android:tint="@color/gray_9e" />
 
         </RelativeLayout>
-
       </LinearLayout>
 
       <LinearLayout
@@ -671,7 +674,6 @@
           tools:text="@string/customer_description" />
 
       </android.support.design.widget.TextInputLayout>
-
       <Button
         android:id="@+id/create_btn"
         style="@style/IranSans.Medium"

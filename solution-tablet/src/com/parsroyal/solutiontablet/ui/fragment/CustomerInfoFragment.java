@@ -261,8 +261,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
             .changeFragment(MainActivity.QUESTIONNAIRE_CATEGORY_FRAGMENT_ID, bundle, true);
         break;
       case R.id.register_image_lay:
-        if (!checkPermissions()) {
-          requestPermissions();
+        if (!parent.checkPermissions()) {
+          parent.requestPermissions();
         } else {
           parent.startCameraActivity();
         }
@@ -287,60 +287,6 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     }
   }
 
-  private boolean checkPermissions() {
-    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(mainActivity,
-        permission.WRITE_EXTERNAL_STORAGE) && PackageManager.PERMISSION_GRANTED == ActivityCompat
-        .checkSelfPermission(mainActivity,
-            permission.CAMERA);
-  }
-
-  private void requestPermissions() {
-    boolean cameraShouldProvideRationale =
-        ActivityCompat.shouldShowRequestPermissionRationale(mainActivity,
-            permission.CAMERA);
-    boolean storageShouldProvideRationale =
-        ActivityCompat.shouldShowRequestPermissionRationale(mainActivity,
-            permission.WRITE_EXTERNAL_STORAGE);
-
-    // Provide an additional rationale to the user. This would happen if the user denied the
-    // request previously, but didn't check the "Don't ask again" checkbox.
-    if (cameraShouldProvideRationale && storageShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(mainActivity,
-                new String[]{permission.CAMERA, permission.WRITE_EXTERNAL_STORAGE},
-                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
-          });
-    } else if (cameraShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(mainActivity,
-                new String[]{permission.CAMERA},
-                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
-          });
-    } else if (storageShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(mainActivity,
-                new String[]{permission.WRITE_EXTERNAL_STORAGE},
-                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
-          });
-    } else {
-      Log.i(TAG, "Requesting permission");
-      // Request permission. It's possible this can be auto answered if device policy
-      // sets the permission in a given state or the user denied the permission
-      // previously and checked "Never ask again".
-      ActivityCompat.requestPermissions(mainActivity,
-          new String[]{permission.CAMERA, permission.WRITE_EXTERNAL_STORAGE},
-          REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
-    }
-  }
 
   private void toggleMapFullScreen() {
     expandedMap = !expandedMap;
