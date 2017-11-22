@@ -380,7 +380,7 @@ public abstract class MainActivity extends AppCompatActivity {
             .findFragmentByTag(VisitDetailFragment.class.getSimpleName());
         ((VisitDetailFragment) visitDetailFragment).startCameraActivity();
       } else {
-        ToastUtil.toastError(this, getString(R.string.permission_denied_explanation),
+        ToastUtil.toastError(this, getString(R.string.permission_rationale_camera_storage),
             view -> {
               // Build intent that displays the App settings screen.
               Intent intent = new Intent();

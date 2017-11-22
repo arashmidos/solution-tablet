@@ -46,7 +46,7 @@ public class ReportFragment extends BaseFragment {
     tabs.setupWithViewPager(viewpager);
     initFragments();
     setUpViewPager();
-    viewpager.setCurrentItem(2);
+    viewpager.setCurrentItem(3);
     return view;
   }
 

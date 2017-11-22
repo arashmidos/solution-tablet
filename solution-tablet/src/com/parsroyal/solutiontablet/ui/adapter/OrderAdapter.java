@@ -210,10 +210,11 @@ public class OrderAdapter extends Adapter<ViewHolder> {
         if (!MultiScreenUtility.isTablet(context)) {
           editImg.setVisibility(View.GONE);
           deleteImg.setVisibility(View.GONE);
+          uploadImg.setVisibility(View.GONE);
         } else {
           editImg.setVisibility(View.INVISIBLE);
           deleteImg.setVisibility(View.INVISIBLE);
-
+          uploadImg.setVisibility(View.INVISIBLE);
         }
       }
     }
@@ -270,7 +271,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     }
 
     @OnClick({R.id.delete_img, R.id.delete_img_layout, R.id.edit_img, R.id.edit_img_layout,
-        R.id.main_lay, R.id.main_lay_linear, R.id.upload_img, R.id.upload_img_layout})
+        R.id.main_lay, R.id.main_lay_linear, R.id.upload_img})
     @Optional
     public void onClick(View v) {
 
@@ -296,7 +297,6 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           }
           break;
         case R.id.upload_img:
-        case R.id.upload_img_layout:
           openSendDataDialog();
           break;
       }

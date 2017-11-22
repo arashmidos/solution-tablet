@@ -203,7 +203,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
 
     List<SaleOrderListModel> returnOrders = new ArrayList<>();
     List<String> argsList = new ArrayList<>();
-    String sql = "SELECT " +
+    String sql = "SELECT DISTINCT " +
         "o." + SaleOrder.COL_ID + "," +
         "o." + SaleOrder.COL_BACKEND_ID + "," +
         "o." + SaleOrder.COL_DATE + "," +
@@ -224,7 +224,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         + " LEFT JOIN " + VisitInformationDetail.TABLE_NAME + " vd on vd."
         + VisitInformationDetail.COL_TYPE_ID + " = o." + SaleOrder.COL_ID
         + " AND vd." + VisitInformationDetail.COL_TYPE + " = ?"
-        + " WHERE 1 = 1 ";
+        + " WHERE 1 = 1";
 
     if (Empty.isNotEmpty(saleOrderSO)) {
       Long statusId = saleOrderSO.getStatusId();

@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,6 +32,8 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CityDialogFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PaymentMethodDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -45,10 +49,10 @@ import java.util.List;
 public class AddCustomerFragment extends BaseFragment implements View.OnFocusChangeListener {
 
   private static final String TAG = AddCustomerFragment.class.getName();
-  @BindView(R.id.city_spinner)
-  Spinner citySpinner;
-  @BindView(R.id.state_spinner)
-  Spinner stateSpinner;
+  @BindView(R.id.city_tv)
+  TextView cityTv;
+  @BindView(R.id.state_tv)
+  TextView stateTv;
   @BindView(R.id.ownership_spinner)
   Spinner ownershipSpinner;
   @BindView(R.id.activity_spinner)
@@ -83,6 +87,8 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   private BaseInfoService baseInfoService;
   private LocationService locationService;
   private Customer customer;
+  private LabelValue selectedCity;
+  private LabelValue selectedProvince;
   private PageStatus pageStatus;
 
   public AddCustomerFragment() {
@@ -149,15 +155,28 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     postalCodeEdt.setEnabled(false);
     storeMeterEdt.setEnabled(false);
     addressEdt.setEnabled(false);
-    stateSpinner.setEnabled(false);
+    stateTv.setEnabled(false);
+    stateTv.setClickable(false);
     activitySpinner.setEnabled(false);
-    citySpinner.setEnabled(false);
+    cityTv.setEnabled(false);
+    cityTv.setClickable(false);
     ownershipSpinner.setEnabled(false);
     customerClassSpinner.setEnabled(false);
     createBtn.setVisibility(View.GONE);
   }
 
   private void setData() {
+    List<LabelValue> provinceList = baseInfoService.getAllProvincesLabelValues();
+    if (Empty.isNotEmpty(customer.getProvinceBackendId())) {
+      for (LabelValue labelValue : provinceList) {
+        if (labelValue.getValue().equals(customer.getProvinceBackendId())) {
+          selectedProvince = labelValue;
+          stateTv.setText(selectedProvince.getLabel());
+          loadCity(selectedProvince.getValue());
+          break;
+        }
+      }
+    }
     fullNameEdt.setText(customer.getFullName());
     phoneNumberEdt.setText(customer.getPhoneNumber());
     mobileEdt.setText(customer.getCellPhone());
@@ -174,42 +193,23 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     customerDescription.setText(customer.getDescription());
   }
 
+  public void setSelectedItem(LabelValue selectedItem, boolean isCity) {
+    if (isCity) {
+      selectedCity = selectedItem;
+      cityTv.setText(selectedCity.getLabel());
+    } else {
+      selectedProvince = selectedItem;
+      stateTv.setText(selectedProvince.getLabel());
+    }
+  }
+
   private void setUpSpinners() {
-    List<LabelValue> provinceList = baseInfoService.getAllProvincesLabelValues();
     List<LabelValue> activityList = baseInfoService
         .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.ACTIVITY_TYPE.getId());
     List<LabelValue> ownershipList = baseInfoService
         .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.OWNERSHIP_TYPE.getId());
     List<LabelValue> customerClassList = baseInfoService
         .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.CUSTOMER_CLASS.getId());
-
-    if (Empty.isNotEmpty(provinceList)) {
-      initSpinner(stateSpinner, provinceList, getString(R.string.state));
-      stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-          LabelValue selectedProvince = provinceList.get(position);
-          if (Empty.isNotEmpty(selectedProvince)) {
-            loadCitySpinnerData(selectedProvince.getValue());
-          }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }
-      });
-
-      if (Empty.isNotEmpty(customer.getProvinceBackendId())) {
-        int position = 0;
-        for (LabelValue labelValue : provinceList) {
-          if (labelValue.getValue().equals(customer.getProvinceBackendId())) {
-            stateSpinner.setSelection(position);
-            break;
-          }
-          position++;
-        }
-      }
-    }
 
     if (Empty.isNotEmpty(activityList)) {
       initSpinner(activitySpinner, activityList, getString(R.string.activity_type));
@@ -255,19 +255,19 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       }
     }
 
-    LabelValue provinceLabelValue = (LabelValue) stateSpinner.getSelectedItem();
-    loadCitySpinnerData(provinceLabelValue.getValue());
-
-    stateSpinner.setFocusableInTouchMode(true);
-    stateSpinner.setOnFocusChangeListener(this);
-    citySpinner.setFocusableInTouchMode(true);
-    citySpinner.setOnFocusChangeListener(this);
     activitySpinner.setFocusableInTouchMode(true);
     activitySpinner.setOnFocusChangeListener(this);
     customerClassSpinner.setFocusableInTouchMode(true);
     customerClassSpinner.setOnFocusChangeListener(this);
     ownershipSpinner.setFocusableInTouchMode(true);
     ownershipSpinner.setOnFocusChangeListener(this);
+  }
+
+  private void showCityDialog(long provinceId) {
+    FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+    CityDialogFragment cityDialogFragment = CityDialogFragment
+        .newInstance(this, provinceId);
+    cityDialogFragment.show(ft, "city");
   }
 
   private void save() {
@@ -284,9 +284,9 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
             Integer.parseInt(NumberUtil.digitsToEnglish(storeMeterEdt.getText().toString())));
       }
       customer.setProvinceBackendId(
-          stateSpinner.getSelectedItemId() <= 0 ? null : stateSpinner.getSelectedItemId());
+          selectedProvince == null ? null : selectedProvince.getValue());
       customer.setCityBackendId(
-          citySpinner.getSelectedItemId() <= 0 ? null : citySpinner.getSelectedItemId());
+          selectedCity == null ? null : selectedCity.getValue());
       customer.setActivityBackendId(
           activitySpinner.getSelectedItemId() < 0 ? null : activitySpinner.getSelectedItemId());
       customer.setStoreLocationTypeBackendId(ownershipSpinner.getSelectedItemId() < 0 ? null
@@ -366,12 +366,12 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       return false;
     }
 
-    if (stateSpinner.getSelectedItemId() == -1L) {
+    if (selectedProvince == null) {
       ToastUtil.toastError(getActivity(), R.string.message_province_is_required);
       return false;
     }
 
-    if (citySpinner.getSelectedItemId() <= 0) {
+    if (selectedCity == null) {
       ToastUtil.toastError(getActivity(), R.string.message_city_is_required);
       return false;
     }
@@ -394,20 +394,16 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     return true;
   }
 
-  private void loadCitySpinnerData(Long provinceId) {
+  private void loadCity(Long provinceId) {
     List<LabelValue> cityLabelValues = baseInfoService.getAllCitiesLabelsValues(provinceId);
-    if (Empty.isNotEmpty(cityLabelValues)) {
-      initSpinner(citySpinner, cityLabelValues, getString(R.string.city));
-    }
 
     if (Empty.isNotEmpty(customer.getCityBackendId())) {
-      int position = 0;
       for (LabelValue labelValue : cityLabelValues) {
         if (labelValue.getValue().equals(customer.getCityBackendId())) {
-          citySpinner.setSelection(position);
+          selectedCity = labelValue;
+          cityTv.setText(selectedCity.getLabel());
           break;
         }
-        position++;
       }
     }
   }
@@ -464,7 +460,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     }
   }
 
-  @OnClick({R.id.create_btn, R.id.location_lay})
+  @OnClick({R.id.create_btn, R.id.location_lay, R.id.city_tv, R.id.state_tv})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.location_lay:
@@ -474,6 +470,14 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
         break;
       case R.id.create_btn:
         save();
+        break;
+      case R.id.city_tv:
+        if (selectedProvince != null) {
+          showCityDialog(selectedProvince.getValue());
+        }
+        break;
+      case R.id.state_tv:
+        showCityDialog(-1L);
         break;
     }
   }
