@@ -15,7 +15,7 @@ public interface VisitInformationDao extends BaseDao<VisitInformation, Long> {
 
   VisitInformation retrieveForNewCustomer(Long customerId);
 
-  List<VisitInformationDto> getAllVisitInformationDtoForSend();
+  List<VisitInformationDto> getAllVisitInformationDtoForSend(Long visitId);
 
   void clearAllSent();
 

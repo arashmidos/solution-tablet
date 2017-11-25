@@ -23,6 +23,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.AllQuestionnaireAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
 import java.util.List;
 
@@ -104,7 +105,7 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
               questionnaire.getGoodsGroupBackendId() == null ? -1
                   : questionnaire.getGoodsGroupBackendId());
           args.putLong(Constants.ANSWERS_GROUP_NO, questionnaire.getAnswersGroupNo());
-          args.putLong(Constants.VISIT_ID,questionnaire.getVisitId());
+          args.putLong(Constants.VISIT_ID, questionnaire.getVisitId());
           mainActivity.changeFragment(MainActivity.QUESTION_LIST_FRAGMENT_ID, args, false);
           break;
       }
@@ -114,13 +115,13 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
       questionnaire = questionnaires.get(position);
       titleTv.setText(questionnaire.getDescription());
 
-      questionnaireTypeTv.setText(Empty.isEmpty(questionnaire.getGoodsGroupBackendId())?
-          "پرسشنامه عمومی":
+      questionnaireTypeTv.setText(Empty.isEmpty(questionnaire.getGoodsGroupBackendId()) ?
+          "پرسشنامه عمومی" :
           "پرسشنامه کالایی");
       Date createdDate = DateUtil
           .convertStringToDate(questionnaire.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
-      dateTv.setText(dateString);
+      dateTv.setText(NumberUtil.digitsToPersian(dateString));
 
     }
   }

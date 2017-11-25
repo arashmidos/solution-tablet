@@ -151,7 +151,8 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
         " qn.DESCRIPTION," +
         " a.VISIT_ID," +
         " a.DATE," +
-        " a.ANSWERS_GROUP_NO" +//4
+        " a.ANSWERS_GROUP_NO," +//4
+        " a.STATUS" +
         " FROM COMMER_Q_ANSWER a " +
         " LEFT OUTER JOIN COMMER_QUESTION q ON a.QUESTION_BACKEND_ID = q.BACKEND_ID  " +
         " LEFT OUTER JOIN COMMER_VISIT_INFORMATION v on v._id = a.VISIT_ID " +
@@ -166,7 +167,7 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
     } else if (Empty.isNotEmpty(questionnaireSo.getCustomerBackendId())) {
       if (questionnaireSo.getCustomerBackendId() == -1L) {
         //Exclude anonymous questionnary and new customer questionnary
-        sql = sql.concat(" AND v.RESULT <> -1 AND v.RESULT <> -2");
+        sql = sql.concat(" AND v.RESULT IS NULL");
       } else {
         sql = sql.concat(" AND v.CUSTOMER_BACKEND_ID = " + questionnaireSo.getCustomerBackendId());
       }
@@ -192,6 +193,7 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
       listModel.setVisitId(cursor.getLong(2));
       listModel.setDate(cursor.getString(3));
       listModel.setAnswersGroupNo(cursor.getLong(4));
+      listModel.setStatus(cursor.getLong(5));
       questions.add(listModel);
     }
 

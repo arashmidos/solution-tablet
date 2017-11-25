@@ -4,9 +4,12 @@ import android.content.Context;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.CustomerStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
@@ -16,8 +19,10 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,6 +40,7 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
   private CustomerDao customerDao;
   private CustomerService customerService;
   private ResultObserver observer;
+  private CustomerLocationDto data;
 
   public UpdatedCustomerLocationDataTransferBizImpl(Context context,
       ResultObserver resultObserver) {
@@ -64,22 +70,38 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
             customerDao.update(customer);
           }
         }
-        getObserver().publishResult(
-            context.getString(R.string.updated_customers_data_transferred_successfully));
+        if (Empty.isNotEmpty(getObserver())) {
+          getObserver().publishResult(
+              context.getString(R.string.updated_customers_data_transferred_successfully));
+        } else {
+          EventBus.getDefault().post(
+              new SendOrderEvent(StatusCodes.SUCCESS, 0L,
+                  context.getString(R.string.updated_customers_data_transferred_successfully)));
+        }
       } catch (Exception ex) {
         Logger.sendError("Data transfer",
             "Error in receiving UpdatedCustomerLocationData " + ex.getMessage());
-        getObserver()
-            .publishResult(context.getString(R.string.error_updated_customers_locaction_transfer));
+        if (Empty.isNotEmpty(observer)) {
+          observer.publishResult(
+              context.getString(R.string.error_updated_customers_locaction_transfer));
+        } else {
+          EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
+        }
       }
     } else {
-      getObserver().publishResult(context.getString(R.string.message_got_no_response));
+      if (Empty.isNotEmpty(observer)) {
+        observer.publishResult(context.getString(R.string.message_got_no_response));
+      } else {
+        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+      }
     }
   }
 
   @Override
   public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.sending_updated_customers_data));
+    if (Empty.isNotEmpty(observer)) {
+      getObserver().publishResult(context.getString(R.string.sending_updated_customers_data));
+    }
   }
 
   @Override
@@ -111,9 +133,16 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    List<CustomerLocationDto> customerLocationDtoList = customerService
-        .getAllUpdatedCustomerLocation();
-    return new HttpEntity<>(customerLocationDtoList,
-        headers);
+    if (Empty.isEmpty(data)) {
+      List<CustomerLocationDto> customerLocationDtoList = customerService
+          .getAllUpdatedCustomerLocation();
+      return new HttpEntity<>(customerLocationDtoList, headers);
+    } else {
+      return new HttpEntity<>(Collections.singletonList(data), headers);
+    }
+  }
+
+  public void setData(CustomerLocationDto data) {
+    this.data = data;
   }
 }

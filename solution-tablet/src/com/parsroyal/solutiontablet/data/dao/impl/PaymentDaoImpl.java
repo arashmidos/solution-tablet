@@ -68,7 +68,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {
+    return new String[]{
         Payment.COL_ID,
         Payment.COL_CUSTOMER_BACKEND_ID,
         Payment.COL_VISIT_BACKEND_ID,
@@ -88,7 +88,6 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         Payment.COL_TRACKING_NO,
         Payment.COL_CHEQUE_OWNER
     };
-    return projection;
   }
 
   @Override
@@ -144,6 +143,24 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String selection = Payment.COL_STATUS + " = ?";
     String[] args = {String.valueOf(statusId)};
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+
+    List<Payment> paymentList = new ArrayList<>();
+
+    while (cursor.moveToNext()) {
+      paymentList.add(createEntityFromCursor(cursor));
+    }
+
+    cursor.close();
+    return paymentList;
+  }
+
+  @Override
+  public List<Payment> findPaymentsByVisitId(Long visitId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String selection = Payment.COL_VISIT_BACKEND_ID + " = ? AND " + Payment.COL_STATUS + " = ?";
+    String[] args = {String.valueOf(visitId), String.valueOf(SendStatus.NEW.getId())};
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
 
     List<Payment> paymentList = new ArrayList<>();

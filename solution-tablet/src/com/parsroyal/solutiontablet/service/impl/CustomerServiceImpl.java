@@ -102,6 +102,11 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
+  public CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId) {
+    return customerDao.findCustomerLocationDtoByCustomerBackendId(customerBackendId);
+  }
+
+  @Override
   public List<Customer> getAllCustomersByVisitLineBackendId(Long visitLineId) {
     return customerDao.retrieveAllCustomersByVisitLineBackendId(visitLineId);
   }

@@ -563,4 +563,5 @@
   <string name="customer_description">توضیحات مشتری</string>
   <string name="search_in_cities">جستجو در شهر ها</string>
   <string name="search_in_provinces">جستجو در استان ها</string>
+  <string name="reject_description">توضیح مرجوعی</string>
 </resources>

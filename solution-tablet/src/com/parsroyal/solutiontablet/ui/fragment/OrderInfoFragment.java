@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -87,6 +88,8 @@ public class OrderInfoFragment extends BaseFragment {
   RelativeLayout paymentTypeLayout;
   @BindView(R.id.description_edt)
   EditText descriptionEdt;
+  @BindView(R.id.description_lay)
+  TextInputLayout descriptionLayout;
 
   private LabelValue selectedItem = null;
   private MainActivity mainActivity;
@@ -192,6 +195,7 @@ public class OrderInfoFragment extends BaseFragment {
       if (paymentTypeTitle != null) {
         paymentTypeTitle.setText(R.string.select_reason_to_return);
       }
+      descriptionLayout.setHint(getString(R.string.reject_description));
     } else if (selectedItem != null) {
       setPaymentMethod(selectedItem);
     } else {
@@ -265,10 +269,10 @@ public class OrderInfoFragment extends BaseFragment {
 
       if (isRejected()) {
         //Add reason or reject to orders
-        order.setDescription(descriptionEdt.getText().toString());
-//        order.setCustomerDescription(Empty.isNotEmpty(selectedItem) ? selectedItem.getLabel() : "");
+        order.setDescription(Empty.isNotEmpty(selectedItem) ? selectedItem.getLabel() : "");
       } else {
         order.setPaymentTypeBackendId(selectedItem.getValue());
+        order.setDescription(descriptionEdt.getText().toString());
       }
 
       //Distributer should not enter his salesmanId.
@@ -277,7 +281,7 @@ public class OrderInfoFragment extends BaseFragment {
             Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
       }
       long typeId = saleOrderService.saveOrder(order);
-      if (visitId != 0l) {
+      if (visitId != 0L) {
         VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, getDetailType(),
             typeId);
         visitService.saveVisitDetail(visitDetail);

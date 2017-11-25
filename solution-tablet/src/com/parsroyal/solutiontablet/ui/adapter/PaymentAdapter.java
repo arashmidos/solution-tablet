@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -29,26 +28,24 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by ShakibIsTheBest on 8/27/2017.
+ * Created by Shakib on 8/27/2017.
  */
 
 public class PaymentAdapter extends Adapter<ViewHolder> {
 
   private LayoutInflater inflater;
-  private Context context;
   private long visitId;
   private boolean isFromReport;
   private MainActivity mainActivity;
   private List<PaymentListModel> payments;
 
-  public PaymentAdapter(Context context, List<PaymentListModel> payments, long visitId,
+  public PaymentAdapter(MainActivity mainActivity, List<PaymentListModel> payments, long visitId,
       boolean isFromReport) {
-    this.context = context;
     this.isFromReport = isFromReport;
     this.visitId = visitId;
     this.payments = payments;
-    mainActivity = (MainActivity) context;
-    inflater = LayoutInflater.from(context);
+    this.mainActivity = mainActivity;
+    inflater = LayoutInflater.from(mainActivity);
   }
 
   @Override
@@ -174,7 +171,7 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
       paymentDateTv.setText(NumberUtil.digitsToPersian(dateString));
       long amountValue = Long
           .parseLong(NumberUtil.digitsToEnglish(payment.getAmount().replaceAll(",", "")));
-      String number = String.format(Locale.US, "%,d %s", amountValue / 1000, context.getString(
+      String number = String.format(Locale.US, "%,d %s", amountValue / 1000, mainActivity.getString(
           R.string.common_irr_currency));
       paymentTv.setText(NumberUtil.digitsToPersian(number));
       if (payment.getType().equals("6")) {

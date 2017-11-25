@@ -220,14 +220,34 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     Cursor cursor = db.query(getTableName(), projection, selection, args, null, null, null);
     List<CustomerLocationDto> locationDtoList = new ArrayList<>();
     while (cursor.moveToNext()) {
-      CustomerLocationDto locationDto = new CustomerLocationDto();
-      locationDto.setCustomerBackendId(cursor.getLong(0));
-      locationDto.setLatitude(cursor.getDouble(2));
-      locationDto.setLongitude(cursor.getDouble(3));
-      locationDtoList.add(locationDto);
+      locationDtoList.add(new CustomerLocationDto(cursor.getLong(0), cursor.getDouble(2),
+          cursor.getDouble(3)));
     }
     cursor.close();
     return locationDtoList;
+  }
+
+  @Override
+  public CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String[] projection = {
+        Customer.COL_BACKEND_ID,
+        Customer.COL_STATUS,
+        Customer.COL_X_LOCATION,
+        Customer.COL_Y_LOCATION
+    };
+    String selection = Customer.COL_STATUS + " = ? AND " + Customer.COL_BACKEND_ID + " = ? ";
+    String[] args = {String.valueOf(CustomerStatus.UPDATED.getId()),
+        String.valueOf(customerBackendId)};
+    Cursor cursor = db.query(getTableName(), projection, selection, args, null, null, null);
+    CustomerLocationDto locationDto = null;
+    if (cursor.moveToNext()) {
+      locationDto = new CustomerLocationDto(cursor.getLong(0), cursor.getDouble(2),
+          cursor.getDouble(3));
+    }
+    cursor.close();
+    return locationDto;
   }
 
   @Override
@@ -373,7 +393,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-    String selection =  getPrimaryKeyColumnName() + " = ?";
+    String selection = getPrimaryKeyColumnName() + " = ?";
     String[] args = {String.valueOf(customerId)};
 
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);

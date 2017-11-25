@@ -42,7 +42,7 @@ public class PaymentListFragment extends BaseFragment {
   private Customer customer;
   private PaymentSO paymentSO;
   private PaymentAdapter adapter;
-  private MainActivity activity;
+  private MainActivity mainActivity;
 
   public PaymentListFragment() {
     // Required empty public constructor
@@ -57,14 +57,21 @@ public class PaymentListFragment extends BaseFragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
+
     View view = inflater.inflate(R.layout.fragment_payment_list, container, false);
     ButterKnife.bind(this, view);
-    activity = (MainActivity) getActivity();
-    this.paymentService = new PaymentServiceImpl(activity);
-    this.customerService = new CustomerServiceImpl(activity);
+    mainActivity = (MainActivity) getActivity();
+    paymentService = new PaymentServiceImpl(mainActivity);
+    customerService = new CustomerServiceImpl(mainActivity);
+    setData();
+    setUpRecyclerView();
+    return view;
+  }
+
+  private void setData() {
     Bundle arguments = getArguments();
     if (Empty.isNotEmpty(arguments)) {
+      //It comes from VisitDetail
       customerId = arguments.getLong(Constants.CUSTOMER_ID);
       visitId = arguments.getLong(Constants.VISIT_ID);
       customer = customerService.getCustomerById(customerId);
@@ -73,13 +80,11 @@ public class PaymentListFragment extends BaseFragment {
       fabAddPayment.setVisibility(View.GONE);
       paymentSO = new PaymentSO(SendStatus.NEW.getId());
     }
-    setUpRecyclerView();
-    return view;
   }
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new PaymentAdapter(activity, getPaymentList(), visitId,
+    adapter = new PaymentAdapter(mainActivity, getPaymentList(), visitId,
         paymentSO.getCustomerBackendId() == -1);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
@@ -113,6 +118,6 @@ public class PaymentListFragment extends BaseFragment {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);
-    activity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true);
+    mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true);
   }
 }

@@ -62,40 +62,68 @@
     android:paddingStart="8dp"
     android:paddingEnd="8dp"
     android:background="@drawable/top_border">
-    <Button
-      android:id="@+id/upload_data_btn"
-      style="@style/IranSans.Medium"
+    <RelativeLayout
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerVertical="true"
-      android:paddingTop="8dp"
-      android:paddingBottom="8dp"
-      android:paddingLeft="16dp"
-      android:paddingRight="16dp"
-      android:background="@drawable/get_data_background"
-      android:drawableEnd="@drawable/ic_cloud_upload_black_18dp"
-      android:drawablePadding="6dp"
-      android:drawableRight="@drawable/ic_cloud_upload_white_24dp"
-      android:drawableTint="@color/white"
-      android:gravity="center"
-      android:text="@string/send_data"
-      android:textColor="@color/white"
-      android:textSize="14sp" />
+      android:layout_height="wrap_content">
+      <Button
+        android:id="@+id/upload_data_btn"
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@drawable/get_data_background"
+        android:drawableEnd="@drawable/ic_cloud_upload_black_18dp"
+        android:drawablePadding="6dp"
+        android:drawableRight="@drawable/ic_cloud_upload_white_24dp"
+        android:drawableTint="@color/white"
+        android:gravity="center"
+        android:text="@string/send_data"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
 
+      <Button
+        android:id="@+id/upload_data_btn_disabled"
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingTop="8dp"
+        android:layout_alignRight="@+id/upload_data_btn"
+        android:layout_alignLeft="@+id/upload_data_btn"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@drawable/get_data_background"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        android:textSize="14sp" />
+
+      <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+    </RelativeLayout>
     <TextView
       android:id="@+id/cancel_btn"
       style="@style/IranSans.Medium"
-      android:paddingRight="24dp"
-      android:paddingLeft="24dp"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
+      android:layout_alignParentTop="true"
+      android:paddingLeft="24dp"
+      android:paddingRight="24dp"
+      android:gravity="center_vertical"
       android:text="@string/cancel_btn"
       android:textColor="@color/red"
-      android:textSize="14sp"
-      android:gravity="center_vertical"
-      android:layout_alignParentTop="true"
-      android:layout_alignParentBottom="true" />
+      android:textSize="14sp" />
   </RelativeLayout>
 </FrameLayout>

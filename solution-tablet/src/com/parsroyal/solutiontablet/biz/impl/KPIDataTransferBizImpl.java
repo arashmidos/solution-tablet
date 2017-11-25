@@ -57,7 +57,7 @@ public class KPIDataTransferBizImpl extends AbstractDataTransferBizImpl<KPIDto> 
       beforeTransfer();
 
       HttpHeaders httpHeaders = new HttpHeaders();
-      httpHeaders.setContentType(getContentType());//TODO REMOVE THESE AND ADD BEARER
+      httpHeaders.setContentType(getContentType());//TODO LATER REMOVE THESE AND ADD BEARER
       HttpBasicAuthentication authentication = new HttpBasicAuthentication(username.getValue(),
           password.getValue());
       httpHeaders.setAuthorization(authentication);

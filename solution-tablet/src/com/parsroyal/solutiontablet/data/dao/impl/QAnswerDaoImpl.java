@@ -138,6 +138,40 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     return answersForSend;
   }
 
+  @Override
+  public List<QAnswerDto> getAllQAnswersDtoForSend(Long visitId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+    String sql = "SELECT "
+        + " a." + QAnswer.COL_CUSTOMER_BACKEND_ID
+        + ",a." + QAnswer.COL_VISIT_ID
+        + ",a." + QAnswer.COL_UPDATE_DATE_TIME
+        + ",a." + QAnswer.COL_ANSWERS_GROUP_NO
+        + ",q." + Question.COL_QUESTIONNAIRE_BACKEND_ID
+        + ",a." + Question.COL_ID
+        + " FROM " + QAnswer.TABLE_NAME
+        + " a LEFT OUTER JOIN " + Question.TABLE_NAME + " q ON a." + QAnswer.COL_QUESTION_BACKEND_ID
+        + "=  q." + Question.COL_BACKEND_ID;
+
+    String selection =
+        " WHERE (a." + QAnswer.COL_BACKEND_ID + " is null or a." + QAnswer.COL_BACKEND_ID + " = 0) "
+            + "AND " + QAnswer.COL_VISIT_ID + " = " + visitId;
+    String groupBy = " GROUP BY a." + QAnswer.COL_ANSWERS_GROUP_NO;
+    sql = sql.concat(selection).concat(groupBy);
+
+    Cursor cursor = db.rawQuery(sql, null);
+
+    List<QAnswerDto> answersForSend = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      answersForSend.add(createDtoFromEntity(cursor));
+    }
+
+    cursor.close();
+
+    return answersForSend;
+  }
+
   private QAnswerDto createDtoFromEntity(Cursor cursor) {
     Date date = DateUtil
         .convertStringToDate(cursor.getString(2), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,

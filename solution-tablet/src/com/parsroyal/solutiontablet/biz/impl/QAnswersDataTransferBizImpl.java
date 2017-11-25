@@ -5,6 +5,7 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
+import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.dao.impl.QAnswerDaoImpl;
@@ -51,6 +52,7 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
           if (Empty.isNotEmpty(qAnswer)) {
             qAnswer.setBackendId(backendId);
             qAnswer.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
+            qAnswer.setStatus(SendStatus.SENT.getId());
             qAnswerDao.update(qAnswer);
           }
         }
@@ -62,7 +64,9 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
         Crashlytics
             .log(Log.ERROR, "Data transfer", "Error in receiving QAnswerData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
-        resultObserver.publishResult(getExceptionMessage());
+        if (Empty.isNotEmpty(resultObserver)) {
+          resultObserver.publishResult(getExceptionMessage());
+        }
       }
     }
   }
@@ -117,5 +121,13 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
   public void setAnswer(QAnswerDto answer) {
     this.answer = answer;
     this.total++;
+  }
+
+  public int getSuccess() {
+    return success;
+  }
+
+  public int getTotal() {
+    return total;
   }
 }

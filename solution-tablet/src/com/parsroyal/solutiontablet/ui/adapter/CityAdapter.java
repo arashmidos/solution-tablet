@@ -1,24 +1,18 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
-import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
-import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CityDialogFragment;
-import com.parsroyal.solutiontablet.util.MultiScreenUtility;
-import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.Empty;
 import java.util.List;
 
 /**
@@ -85,7 +79,9 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.city_tv:
-          cityDialogFragment.setSelectedItem(model);
+          if (Empty.isNotEmpty(cityDialogFragment)) {
+            cityDialogFragment.setSelectedItem(model);
+          }
           break;
       }
     }

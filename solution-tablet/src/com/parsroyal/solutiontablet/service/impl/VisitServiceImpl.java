@@ -225,8 +225,8 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
-  public List<VisitInformationDto> getAllVisitDetailForSend() {
-    List<VisitInformationDto> visitList = visitInformationDao.getAllVisitInformationDtoForSend();
+  public List<VisitInformationDto> getAllVisitDetailForSend(Long visitId) {
+    List<VisitInformationDto> visitList = visitInformationDao.getAllVisitInformationDtoForSend(visitId);
     SaleType saleType = SaleType.getByValue(
         Long.parseLong(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE)));
     for (VisitInformationDto visit : visitList) {

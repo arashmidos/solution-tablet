@@ -71,12 +71,6 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
       HttpHeaders httpHeaders = new HttpHeaders();
 
-      //TODO CLEAN REMOVE THESE
-      /*if (Empty.isNotEmpty(salesmanId)) {
-        httpHeaders.add("salesmanId", salesmanId.getValue());
-        httpHeaders.add("salesmanCode", salesmanId.getValue());
-      }*/
-
       httpHeaders.add("Authorization", "Bearer " + token.getValue());
 
       RestTemplate restTemplate = new RestTemplate();
@@ -104,34 +98,35 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
     } catch (ResourceAccessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
-      getObserver().publishResult(new TimeOutException());
+      if (Empty.isNotEmpty(getObserver())) {
+        getObserver().publishResult(new TimeOutException());
+      }
     } catch (HttpServerErrorException ex) {
       Log.e(TAG, ex.getMessage(), ex);
-      if (ex.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
+      if (ex.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR) && Empty.isNotEmpty(getObserver())) {
         getObserver().publishResult(new InternalServerError());
       } else {
-        if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+        if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND) && Empty.isNotEmpty(getObserver())) {
           getObserver().publishResult(new URLNotFoundException());
         }
       }
     } catch (HttpClientErrorException ex) {
-      getObserver().publishResult(new URLNotFoundException());
+      if (Empty.isNotEmpty(getObserver())) {
+        getObserver().publishResult(new URLNotFoundException());
+      }
     } catch (final BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
-      getObserver().publishResult(ex);
+      if (Empty.isNotEmpty(getObserver())) {
+        getObserver().publishResult(ex);
+      }
     } catch (Exception e) {
       Logger.sendError("Data transfer", "Error in exchanging NewCustomerPicData " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
-      getObserver().publishResult(new UnknownSystemException(e));
-    } finally {
       if (Empty.isNotEmpty(getObserver())) {
-        getObserver().finished(result);
-      } else {
-        EventBus.getDefault().post(
-            new ErrorEvent(context.getString(R.string.error_new_customers_pic_transfer),
-                StatusCodes.SERVER_ERROR));
+        getObserver().publishResult(new UnknownSystemException(e));
       }
     }
+
     return result;
   }
 

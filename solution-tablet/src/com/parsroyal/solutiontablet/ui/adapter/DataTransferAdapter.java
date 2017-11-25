@@ -1,13 +1,12 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -19,6 +18,7 @@ import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.ui.adapter.DataTransferAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import java.util.List;
 
@@ -31,13 +31,13 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
   private final List<VisitInformationDetail> model;
   private final SingleDataTransferDialogFragment parent;
   private LayoutInflater inflater;
-  private Context context;
+  private Activity context;
   private int currentPosition;
-  private int current;
+  private int current = -1;
   private long currentType;
   private int currentService;
 
-  public DataTransferAdapter(Context context, SingleDataTransferDialogFragment parent,
+  public DataTransferAdapter(Activity context, SingleDataTransferDialogFragment parent,
       List<VisitInformationDetail> model) {
     this.context = context;
     this.model = model;
@@ -53,16 +53,12 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
-    if (position == model.size()) {
-      //Visit is always the latest
-      holder.dataTypeTv.setText("ارسال اطلاعات بازدید");
-      holder.img.setImageResource(R.drawable.ic_visit_24_dp);
-    } else {
-      holder.setData(model.get(position), position);
-      if (!MultiScreenUtility.isTablet(context)) {
-        lastItem(position == model.size(), holder);
-      }
+
+    holder.setData(position);
+    if (!MultiScreenUtility.isTablet(context)) {
+      lastItem(position == model.size(), holder);
     }
+
   }
 
 
@@ -85,26 +81,15 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
   public void setCurrent(int current) {
     this.current = current;
-    //TODO SHAKIB CURRENT PROGRESS BAR
-    //NOTIFY ITEM CHANGED
+    context.runOnUiThread(this::notifyDataSetChanged);
   }
 
   public void setFinished(int currentService) {
-    this.currentService = currentService;
-    notifyDataSetChanged();
+    this.current = currentService;
+    context.runOnUiThread(this::notifyDataSetChanged);
   }
 
-  public void setError(long currentService) {
-    //TODO SHAKIB CHANGE ICON TO RED CROSS
-  }
-
-  public void setCurrent(long type) {
-    this.currentType = type;
-    notifyDataSetChanged();
-  }
-
-  public void setFinished(long currentModel) {
-
+  public void setError(int currentService) {
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
@@ -122,33 +107,40 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
     private int position;
     private VisitInformationDetail visitDetail;
+    private VisitInformationDetailType type;
 
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
     }
 
-    public void setData(VisitInformationDetail visitDetail, int position) {
-      this.visitDetail = visitDetail;
+    public void setData(int position) {
       this.position = position;
+      if (position == model.size()) {
+        //Visit is always the latest
+        dataTypeTv.setText("ارسال اطلاعات بازدید");
+      } else {
+        this.visitDetail = model.get(position);
 
-      VisitInformationDetailType type = VisitInformationDetailType
-          .getByValue(visitDetail.getType());
+        type = VisitInformationDetailType
+            .getByValue(visitDetail.getType());
 
-      dataTypeTv.setText(String.format(context.getString(R.string.send_x_registered),
-          context.getString(type.getTitle())));
-//TODO:ARASH
-      if (currentService == visitDetail.getId()) {
+        dataTypeTv.setText(String.format(context.getString(R.string.send_x_registered),
+            context.getString(type.getTitle())));
+      }
+
+      if (current > position) {
         progressBar.setVisibility(View.INVISIBLE);
         img.setVisibility(View.VISIBLE);
-        img.setImageResource(R.drawable.ic_marker_green_24dp);
-      } else if (currentType == visitDetail.getType()) {
+        img.setImageResource(R.drawable.ic_check_circle_24_dp);
+      } else if (current == position) {
         progressBar.setVisibility(View.VISIBLE);
         img.setVisibility(View.INVISIBLE);
       } else {
         progressBar.setVisibility(View.INVISIBLE);
         img.setVisibility(View.VISIBLE);
-        img.setImageResource(type.getDrawable());
+
+        img.setImageResource(Empty.isEmpty(type) ? R.drawable.ic_visit_24_dp : type.getDrawable());
       }
     }
   }

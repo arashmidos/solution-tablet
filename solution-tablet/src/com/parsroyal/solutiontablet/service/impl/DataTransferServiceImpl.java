@@ -455,7 +455,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   private void sendAllVisitInformation(ResultObserver resultObserver) {
 
-    List<VisitInformationDto> visitInformationList = visitService.getAllVisitDetailForSend();
+    List<VisitInformationDto> visitInformationList = visitService.getAllVisitDetailForSend(null);
     if (Empty.isEmpty(visitInformationList)) {
       resultObserver
           .publishResult(context.getString(R.string.message_found_no_visit_information_for_send));

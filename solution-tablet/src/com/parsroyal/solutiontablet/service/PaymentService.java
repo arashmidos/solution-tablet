@@ -17,6 +17,7 @@ public interface PaymentService extends BaseService {
   void updatePayment(Payment payment);
 
   List<Payment> getAllPaymentsByStatus(Long status);
+  List<Payment> getAllPaymentsByVisitId(Long visitId);
 
   List<PaymentListModel> searchForPayments(PaymentSO paymentSO);
 

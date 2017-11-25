@@ -218,7 +218,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         " FROM " + SaleOrder.TABLE_NAME + " o " +
         " INNER JOIN " + Customer.TABLE_NAME + " c on c." + Customer.COL_BACKEND_ID + " = o."
         + SaleOrder.COL_CUSTOMER_BACKEND_ID +
-        " INNER JOIN " + BaseInfo.TABLE_NAME + " i on i."
+        " LEFT OUTER JOIN " + BaseInfo.TABLE_NAME + " i on i."
         + BaseInfo.COL_BACKEND_ID + " = o." + SaleOrder.COL_PAYMENT_TYPE_BACKEND_ID
         + " AND i." + BaseInfo.COL_TYPE + " = " + BaseInfoTypes.PAYMENT_TYPE.getId()
         + " LEFT JOIN " + VisitInformationDetail.TABLE_NAME + " vd on vd."
@@ -339,8 +339,15 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
   public BaseSaleDocument findOrderDocumentByOrderId(Long orderId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String selection = SaleOrder.COL_ID + " = ? ";
-    String[] args = {String.valueOf(orderId)};
+    String selection = SaleOrder.COL_ID + " = ? AND ("
+        + SaleOrder.COL_STATUS + " = ? OR "
+        + SaleOrder.COL_STATUS + " = ? OR "
+        + SaleOrder.COL_STATUS + " = ? )";
+    String[] args = {String.valueOf(orderId),
+        String.valueOf(SaleOrderStatus.READY_TO_SEND.getId()),
+        String.valueOf(SaleOrderStatus.REJECTED.getId()),
+        String.valueOf(SaleOrderStatus.INVOICED.getId())
+    };
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
 
     BaseSaleDocument baseSaleDocument = null;

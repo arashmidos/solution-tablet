@@ -52,10 +52,13 @@ public class VisitInformationDataTransferBizImpl extends
         }
 
       } catch (Exception ex) {
-        Logger.sendError("Data transfer","Error in receiving VisitInformationData " + ex.getMessage());
+        Logger.sendError("Data transfer",
+            "Error in receiving VisitInformationData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
-        observer.publishResult(
-            context.getString(R.string.message_exception_in_sending_visit_information));
+        if (Empty.isNotEmpty(observer)) {
+          observer.publishResult(
+              context.getString(R.string.message_exception_in_sending_visit_information));
+        }
       }
     }
   }

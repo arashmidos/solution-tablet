@@ -54,9 +54,10 @@ public interface VisitService extends BaseService {
   List<VisitInformationDetail> searchVisitDetail(Long visitId, VisitInformationDetailType type);
   List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailSO visitInformationDetailSo);
 
-  List<VisitInformationDto> getAllVisitDetailForSend();
+  List<VisitInformationDto> getAllVisitDetailForSend(Long visitId);
 
   Long startAnonymousVisit();
 
   void deleteVisitById(Long visitId);
+
 }

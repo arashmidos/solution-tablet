@@ -4,8 +4,11 @@ import android.content.Context;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SendStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Payment;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
 import com.parsroyal.solutiontablet.service.PaymentService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
@@ -20,6 +23,7 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -75,21 +79,42 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
             failure++;
           }
         }
-        getObserver().publishResult(String
-            .format(Locale.US, context.getString(R.string.payments_data_transferred_successfully),
-                String.valueOf(success), String.valueOf(failure)));
+        if (Empty.isNotEmpty(observer)) {
+          getObserver().publishResult(String
+              .format(Locale.US, context.getString(R.string.payments_data_transferred_successfully),
+                  String.valueOf(success), String.valueOf(failure)));
+        } else {
+          if (payments.size() == success) {
+            EventBus.getDefault().post(new SendOrderEvent(StatusCodes.SUCCESS, 0L, String
+                .format(Locale.US,
+                    context.getString(R.string.payments_data_transferred_successfully),
+                    String.valueOf(success), String.valueOf(failure))));
+          } else {
+            EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
+          }
+        }
       } catch (Exception ex) {
         Logger.sendError("Data transfer", "Error in receiving PaymentData " + ex.getMessage());
-        getObserver().publishResult(context.getString(R.string.error_payments_transfer));
+        if (Empty.isNotEmpty(observer)) {
+          getObserver().publishResult(context.getString(R.string.error_payments_transfer));
+        } else {
+          EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
+        }
       }
     } else {
-      getObserver().publishResult(context.getString(R.string.message_got_no_response));
+      if (Empty.isNotEmpty(observer)) {
+        getObserver().publishResult(context.getString(R.string.message_got_no_response));
+      } else {
+        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+      }
     }
   }
 
   @Override
   public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.sending_payments_data));
+    if (Empty.isNotEmpty(observer)) {
+      getObserver().publishResult(context.getString(R.string.sending_payments_data));
+    }
   }
 
   @Override

@@ -11,10 +11,12 @@ import java.util.List;
 public interface QAnswerDao extends BaseDao<QAnswer, Long> {
 
   List<QAnswerDto> getAllQAnswersDtoForSend();
+  List<QAnswerDto> getAllQAnswersDtoForSend(Long visitId);
 
   void updateCustomerBackendIdForAnswers(long customerId, long customerBackendId);
 
   List<AnswerDetailDto> getAllAnswerDetailByGroupId(Long answersGroupNo);
 
   void deleteAllAnswer(Long visitId, Long answersGroupNo);
+
 }

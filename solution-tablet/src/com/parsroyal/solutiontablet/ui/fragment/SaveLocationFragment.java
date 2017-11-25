@@ -119,7 +119,7 @@ public class SaveLocationFragment extends BaseFragment implements
 
   @Override
   public int getFragmentId() {
-    return OldMainActivity.SAVE_LOCATION_FRAGMENT_ID;
+    return MainActivity.SAVE_LOCATION_FRAGMENT_ID;
   }
 
   @Override

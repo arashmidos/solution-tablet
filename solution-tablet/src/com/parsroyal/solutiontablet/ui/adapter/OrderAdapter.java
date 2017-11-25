@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by ShakibIsTheBest on 8/27/2017.
+ * Created by Shakib on 8/27/2017.
  */
 
 public class OrderAdapter extends Adapter<ViewHolder> {
@@ -46,21 +46,21 @@ public class OrderAdapter extends Adapter<ViewHolder> {
   private final SaleOrderServiceImpl saleOrderService;
   private LayoutInflater inflater;
   private Context context;
-  private boolean isFromOrder;
+  private boolean isFromReport;
   private MainActivity mainActivity;
   private List<SaleOrderListModel> orders;
   private Long visitId;
   private String saleType;
   private Long status;
 
-  public OrderAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromOrder,
+  public OrderAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromReport,
       Long visitId, String saleType, Long status) {
     this.context = context;
     this.visitId = visitId == null ? 0 : visitId;
     this.orders = orders;
     this.saleType = saleType;
     this.mainActivity = (MainActivity) context;
-    this.isFromOrder = isFromOrder;
+    this.isFromReport = isFromReport;
     this.status = status;
     inflater = LayoutInflater.from(context);
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
@@ -73,7 +73,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     if (isRejected()) {
       view = inflater.inflate(R.layout.item_return_list, parent, false);
     } else {
-      view = inflater.inflate(R.layout.item_order_report_list, parent, false);
+      view = inflater.inflate(R.layout.item_order_list, parent, false);
     }
     return new ViewHolder(view);
   }
@@ -136,6 +136,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     @Nullable
     @BindView(R.id.edit_img)
     ImageView editImg;
+    @Nullable
     @BindView(R.id.upload_img)
     ImageView uploadImg;
     @Nullable
@@ -174,19 +175,19 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public void setOrderData(int position, SaleOrderListModel order) {
       this.position = position;
       this.order = order;
-      if (!isFromOrder) {
+      if (!isFromReport) {
         orderStatusTv.setVisibility(View.GONE);
-        if (customerNameTv != null) {//TODO SHAKIB: FIX THIS
+        if (customerNameTv != null) {
           customerNameTv.setVisibility(View.GONE);
         }
       } else {
-        if (customerNameTv != null) {//TODO SHAKIB: FIX THIS
+        if (customerNameTv != null) {
           customerNameTv.setVisibility(View.VISIBLE);
         }
       }
       String orderCode = "کد سفارش : " + NumberUtil.digitsToPersian(String.valueOf(order.getId()));
       orderCodeTv.setText(orderCode);
-      if (customerNameTv != null) {//TODO SHAKIB: FIX THIS
+      if (customerNameTv != null) {
         customerNameTv.setText(order.getCustomerName());
       }
       orderCountTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderCount())));
@@ -202,11 +203,18 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       orderTotalPrice.setText(NumberUtil.digitsToPersian(number));
       orderPaymentMethodTv.setText(NumberUtil.digitsToPersian(order.getPaymentTypeTitle()));
       if (order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
-        if (isFromOrder) {
+        if (isFromReport) {
           orderStatusTv.setVisibility(View.VISIBLE);
         } else {
           orderStatusTv.setVisibility(View.GONE);
         }
+      }
+      changeButtonStates();
+    }
+
+    private void changeButtonStates() {
+      if (order.getStatus().equals(SaleOrderStatus.SENT.getId()) || order.getStatus()
+          .equals(SaleOrderStatus.REJECTED_SENT.getId())) {
         if (!MultiScreenUtility.isTablet(context)) {
           editImg.setVisibility(View.GONE);
           deleteImg.setVisibility(View.GONE);
@@ -217,6 +225,10 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           uploadImg.setVisibility(View.INVISIBLE);
         }
       }
+
+      if (!isFromReport) {
+        uploadImg.setVisibility(View.GONE);
+      }
     }
 
     public void setReturnData(int position, SaleOrderListModel order) {
@@ -226,7 +238,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       Date createdDate = DateUtil
           .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
-      if (isFromOrder && !MultiScreenUtility.isTablet(context)) {
+      if (isFromReport && !MultiScreenUtility.isTablet(context)) {
         returnReasonTv
             .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_return_grey_18_dp, 0);
         returnReasonTv.setCompoundDrawablePadding((int) UIUtils.convertDpToPixel(8, context));
@@ -234,7 +246,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
         returnReasonTv.setText("--");//TODO: Add Return items count
         returnCountTv.setText(order.getCustomerName());
       } else {
-        if (isFromOrder) {
+        if (isFromReport) {
           customerNameTv.setText(order.getCustomerName());
           customerNameTv.setVisibility(View.VISIBLE);
         }
@@ -255,19 +267,13 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       totalAmountTv.setText(NumberUtil.digitsToPersian(number));
 
       if (order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId())) {
-        if (isFromOrder) {
+        if (isFromReport) {
           returnStatusTv.setVisibility(View.VISIBLE);
         } else {
           returnStatusTv.setVisibility(View.GONE);
         }
-        if (!MultiScreenUtility.isTablet(context)) {
-          editImg.setVisibility(View.GONE);
-          deleteImg.setVisibility(View.GONE);
-        } else {
-          editImg.setVisibility(View.INVISIBLE);
-          deleteImg.setVisibility(View.INVISIBLE);
-        }
       }
+      changeButtonStates();
     }
 
     @OnClick({R.id.delete_img, R.id.delete_img_layout, R.id.edit_img, R.id.edit_img_layout,
@@ -286,7 +292,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
         case R.id.edit_img:
         case R.id.main_lay_linear:
         case R.id.main_lay:
-          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
+          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {//OR REJECT//TODO IMPORTANT
             Bundle args = new Bundle();
             args.putLong(Constants.ORDER_ID, order.getId());
             args.putString(Constants.SALE_TYPE, saleType);
@@ -297,6 +303,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           }
           break;
         case R.id.upload_img:
+        case R.id.upload_img_layout:
           openSendDataDialog();
           break;
       }

@@ -457,6 +457,7 @@ public class RegisterPaymentFragment extends BaseFragment {
               .digitsToEnglish(CharacterFixUtil.fixString(chequeNumEdt.getText().toString())));
         }
         payment.setStatus(SendStatus.NEW.getId());
+        payment.setVisitBackendId(visitId);
         long paymentId = paymentService.savePayment(payment);
 
         VisitInformationDetail visitDetail = new VisitInformationDetail(visitId,

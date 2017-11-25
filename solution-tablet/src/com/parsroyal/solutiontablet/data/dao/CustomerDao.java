@@ -20,6 +20,8 @@ public interface CustomerDao extends BaseDao<Customer, Long> {
 
   List<CustomerLocationDto> retrieveAllUpdatedCustomerLocationDto();
 
+  CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId);
+
   void deleteAllCustomersRelatedToVisitLines();
 
   List<Customer> retrieveAllCustomersByVisitLineBackendId(Long visitLineId);

@@ -101,6 +101,20 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   }
 
   @Override
+  public List<QAnswerDto> getAllAnswersDtoForSend(Long visitId) {
+    List<QAnswerDto> answersGroupList = qAnswerDao.getAllQAnswersDtoForSend(visitId);
+
+    String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
+    for (int i = 0; i < answersGroupList.size(); i++) {
+      QAnswerDto qAnswerDto = answersGroupList.get(i);
+      qAnswerDto.setAnswers(qAnswerDao.getAllAnswerDetailByGroupId(qAnswerDto.getAnswersGroupNo()));
+      qAnswerDto.setSalesmanId(Long.valueOf(salesmanId));
+    }
+
+    return answersGroupList;
+  }
+
+  @Override
   public QAnswer getAnswerById(Long id) {
     return qAnswerDao.retrieve(id);
   }

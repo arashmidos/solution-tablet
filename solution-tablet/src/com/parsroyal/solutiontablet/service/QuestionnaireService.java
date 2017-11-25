@@ -30,6 +30,7 @@ public interface QuestionnaireService extends BaseService {
   Long saveAnswer(QAnswer qAnswer);
 
   List<QAnswerDto> getAllAnswersDtoForSend();
+  List<QAnswerDto> getAllAnswersDtoForSend(Long visitId);
 
   QAnswer getAnswerById(Long id);
 
@@ -38,4 +39,5 @@ public interface QuestionnaireService extends BaseService {
   Long getNextAnswerGroupNo();
 
   void deleteAllAnswer(Long visitId, Long answersGroupNo);
+
 }

@@ -15,25 +15,57 @@
     android:orientation="horizontal"
     android:weightSum="1">
 
+    <LinearLayout
+      android:id="@+id/delete_img_layout"
+      android:layout_width="36dp"
+      android:layout_height="36dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="8dp"
+      android:gravity="center">
+      <ImageView
+        android:id="@+id/delete_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete_24_black"
+        android:tint="@color/gray_75" />
+    </LinearLayout>
+    <LinearLayout
+      android:id="@+id/edit_img_layout"
+      android:layout_width="36dp"
+      android:layout_height="36dp"
+      android:gravity="center">
+      <ImageView
+        android:id="@+id/edit_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_edit_24_black"
+        android:tint="@color/gray_75" />
+    </LinearLayout>
+
+    <TextView
+      android:id="@+id/payment_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".5"
+      android:gravity="right"
+      android:textColor="@color/register_order"
+      android:textSize="12sp"
+      tools:text="۱۰۰۰۰ ریال" />
 
     <TextView
       android:id="@+id/bank_detail_tv"
       style="@style/IranSans.Light"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight=".5"
+      android:layout_weight=".2"
+      android:gravity="right"
       android:textColor="@color/black_de"
       android:textSize="12sp"
-      tools:text="bank" />
-    <TextView
-      android:id="@+id/payment_tv"
-      style="@style/IranSans.Medium"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_weight=".2"
-      android:textColor="@color/register_order"
-      android:textSize="12sp"
-      tools:text="amount" />
+      tools:text="بانک ملی" />
+
     <TextView
       android:id="@+id/payment_method_tv"
       style="@style/IranSans.Medium"
@@ -42,7 +74,7 @@
       android:layout_weight=".1"
       android:textColor="@color/black_de"
       android:textSize="12sp"
-      tools:text="method" />
+      tools:text="پرداخت الکترونیکی" />
     <TextView
       android:id="@+id/payment_date_tv"
       style="@style/IranSans.Medium"
@@ -53,7 +85,7 @@
       android:layout_marginRight="16dp"
       android:textColor="@color/black_de"
       android:textSize="12sp"
-      tools:text="date" />
+      tools:text="جمعه ۰۳ آذر ۹۶" />
   </LinearLayout>
   <View
     android:layout_width="match_parent"

@@ -197,8 +197,6 @@ public abstract class MainActivity extends AppCompatActivity {
       }
       new TrackerAlarmReceiver().setAlarm(this);
     }
-
-    //TODO: If instance of data transfer completed
   }
 
   @Override
@@ -260,7 +258,7 @@ public abstract class MainActivity extends AppCompatActivity {
                 showProgressDialog(getString(R.string.message_sending_data));
                 new Thread(() ->
                 {
-                  try {//TODO Send Event bus instead of publisher
+                  try {
                     dataTransferService.sendAllData(null);
                   } catch (Exception ex) {
                     Logger.sendError("Install Update",
@@ -578,7 +576,6 @@ public abstract class MainActivity extends AppCompatActivity {
           onBackPressed();
         }
       } else {
-        //TODO: change message
         ToastUtil.toastError(this, "لطفا به همه سوالات ستاره دار پاسخ بدهید");
       }
     }
