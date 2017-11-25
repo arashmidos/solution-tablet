@@ -6,16 +6,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Optional;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -50,18 +50,18 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view;
-    if (isFromReport) {
-      view = inflater.inflate(R.layout.item_payment_report_list, parent, false);
-    } else {
-      view = inflater.inflate(R.layout.item_payment_list, parent, false);
-    }
+    View view = inflater.inflate(R.layout.item_payment_list, parent, false);
+
     return new ViewHolder(view);
   }
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
-    holder.setData(position);
+    try {
+      holder.setData(position);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   @Override
@@ -94,9 +94,8 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
     mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true);
   }
 
-  public class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+  public class ViewHolder extends RecyclerView.ViewHolder {
 
-    @Nullable
     @BindView(R.id.payment_status_tv)
     TextView paymentStatusTv;
     @BindView(R.id.payment_method_tv)
@@ -105,67 +104,52 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
     TextView paymentDateTv;
     @BindView(R.id.payment_tv)
     TextView paymentTv;
-    @Nullable
     @BindView(R.id.customer_name_tv)
     TextView customerNameTv;
     @BindView(R.id.bank_detail_tv)
     TextView bankDetailTv;
-    @Nullable
     @BindView(R.id.delete_img)
     ImageView deleteImg;
-    @Nullable
     @BindView(R.id.edit_img)
     ImageView editImg;
-    @Nullable
-    @BindView(R.id.main_lay)
-    RelativeLayout mainLayRel;
 
     private PaymentListModel payment;
 
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-      if (deleteImg != null && editImg != null) {
-        deleteImg.setOnClickListener(this);
-        editImg.setOnClickListener(this);
-      } else if (mainLayRel != null) {
-        mainLayRel.setOnClickListener(this);
-      }
     }
 
-    @Override
+    @Optional
+    @OnClick({R.id.edit_img, R.id.edit_img_layout, R.id.delete_img_layout, R.id.delete_img,
+        R.id.main_lay, R.id.main_lay_linear})
     public void onClick(View v) {
       switch (v.getId()) {
+        case R.id.delete_img_layout:
         case R.id.delete_img:
+          Toast.makeText(mainActivity, "DELETE PAYMENT", Toast.LENGTH_SHORT).show();
           break;
         case R.id.edit_img:
-        case R.id.main_lay:
-          if (!payment.getStatus().equals(SaleOrderStatus.SENT.getId())) {
+        case R.id.edit_img_layout:
+          /*if (!payment.getStatus().equals(SaleOrderStatus.SENT.getId())) {
             goToRegisterPaymentFragment(payment);
-          }
+          }*/
+          Toast.makeText(mainActivity, "EDIT", Toast.LENGTH_SHORT).show();
+          break;
+        case R.id.main_lay:
+        case R.id.main_lay_linear:
+          Toast.makeText(mainActivity, "CLICKED ON MAIN LAYOUT", Toast.LENGTH_SHORT).show();
           break;
       }
-
     }
 
     public void setData(int position) {
       payment = payments.get(position);
-      //TODO:change the enum after list fixed
-      if (payment.getStatus().equals(SendStatus.SENT.getId()) && isFromReport) {
-        paymentStatusTv.setVisibility(View.VISIBLE);
-        editImg.setVisibility(View.INVISIBLE);
-        deleteImg.setVisibility(View.INVISIBLE);
-      }
-      if (isFromReport) {
-        //TODO: SHAKIB KACHALAM KARDI
-        if (customerNameTv != null) {
-          customerNameTv.setText(payment.getCustomerFullName());
-        }
-      }
+
+      changeVisibility();
       paymentMethodTv.setText(NumberUtil.digitsToPersian(getPaymentType(payment.getType())));
-      Date createDate = DateUtil
-          .convertStringToDate(payment.getDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
-              "FA");
+      Date createDate = DateUtil.convertStringToDate(payment.getDate(),
+          DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "FA");
 
       String dateString = DateUtil.getFullPersianDate(createDate);
       paymentDateTv.setText(NumberUtil.digitsToPersian(dateString));
@@ -179,6 +163,20 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
             .format(Locale.getDefault(), "بانک %s / شعبه %s",
                 Empty.isNotEmpty(payment.getBank()) ? payment.getBank() : "--",
                 Empty.isNotEmpty(payment.getBranch()) ? payment.getBranch() : "--"));
+      }
+    }
+
+    private void changeVisibility() {
+      if (payment.getStatus().equals(SendStatus.SENT.getId())) {
+        paymentStatusTv.setVisibility(View.VISIBLE);
+        editImg.setVisibility(View.INVISIBLE);
+        deleteImg.setVisibility(View.INVISIBLE);
+      }
+      if (isFromReport) {
+        customerNameTv.setVisibility(View.VISIBLE);
+        customerNameTv.setText(payment.getCustomerFullName());
+      }else{
+        customerNameTv.setVisibility(View.INVISIBLE);
       }
     }
   }

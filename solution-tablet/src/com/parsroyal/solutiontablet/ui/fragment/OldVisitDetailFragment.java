@@ -74,17 +74,17 @@ public class OldVisitDetailFragment extends BaseFragment implements ResultObserv
   private static final int RESULT_OK = -1;
   private static final int RESULT_CANCELED = 0;
   private static final int[] icons = {
-      R.drawable.selector_add_order,
-      R.drawable.selector_add_reject,
-      R.drawable.selector_cash,
-      R.drawable.selector_customer_location,
-      R.drawable.selector_customer_detail,
-      R.drawable.selector_general_questionary,//5
-      R.drawable.selector_goods_questionary,
-      R.drawable.selector_goods_delivery,
-      R.drawable.selector_taking_picture,
-      R.drawable.selector_save_reject,
-      R.drawable.selector_exit
+//      R.drawable.selector_add_order,
+//      R.drawable.selector_add_reject,
+//      R.drawable.selector_cash,
+//      R.drawable.selector_customer_location,
+//      R.drawable.selector_customer_detail,
+//      R.drawable.selector_general_questionary,//5
+//      R.drawable.selector_goods_questionary,
+//      R.drawable.selector_goods_delivery,
+//      R.drawable.selector_taking_picture,
+//      R.drawable.selector_save_reject,
+//      R.drawable.selector_exit
   };
   private OldMainActivity oldMainActivity;
   private GridView mainLayout;

@@ -119,11 +119,11 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
       R.string.exit
   };
   private final Integer[] drawerItemImages = {
-      R.drawable.ic_settings_43dp,
-      R.drawable.ic_transform_43dp,
-      R.drawable.ic_aboutus_43dp,
-      R.drawable.ic_version_43dp,
-      R.drawable.ic_exit_43dp,
+//      R.drawable.ic_settings_43dp,
+//      R.drawable.ic_transform_43dp,
+//      R.drawable.ic_aboutus_43dp,
+//      R.drawable.ic_version_43dp,
+//      R.drawable.ic_exit_43dp,
   };
   @BindView(R.id.mainLayout)
   LinearLayout mainLayout;
@@ -240,35 +240,35 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
     String contentName = "";
     switch (fragmentId) {
       case 0:
-        customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list_active);
+//        customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list_active);
         contentName = "Customer List";
         break;
       case 1:
-        newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer_active);
+//        newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer_active);
         contentName = "New Customer";
         break;
       case 12:
-        dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_active);
+//        dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_active);
         contentName = "Map";
         break;
       case 14:
-        ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_active);
+//        ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_active);
         contentName = "Reports";
         break;
       case 16:
-        goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods_active);
+//        goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods_active);
         contentName = "Goods List";
         break;
       case KPI_SALESMAN_FRAGMENT_ID://22
-        userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance_active);
+//        userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance_active);
         contentName = "User KPI";
         break;
       case FUNDS_FRAGMENT_ID://23
-        fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report_active);
+//        fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report_active);
         contentName = "Payment Reports";
         break;
       case QUESTIONAIRE_LIST_FRAGMENT_ID://26
-        questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_active);
+//        questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_active);
         contentName = "New Questionnaire";
         break;
     }
@@ -276,14 +276,14 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
   }
 
   private void setAllImagesInactive() {
-    customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
+    /*customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
     dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
     newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
     ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
     goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
     userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
     fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
-    questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_inactive);
+    questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_inactive);*/
   }
 
   public void changeFragment(int fragmentId, boolean addToBackStack) {

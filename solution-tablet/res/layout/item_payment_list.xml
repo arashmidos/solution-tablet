@@ -102,14 +102,31 @@
     style="@style/IranSans.Medium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="12dp"
+    android:layout_marginTop="14dp"
     android:layout_marginStart="16dp"
     android:layout_marginLeft="16dp"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
     android:layout_below="@+id/payment_tv"
     android:text="@string/status"
     android:textColor="@color/primary_dark"
     android:textSize="12sp"
-    android:visibility="visible" />
+    android:visibility="invisible" />
+  <TextView
+    android:id="@+id/customer_name_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_below="@id/bank_detail_tv"
+    android:textColor="@color/black_de"
+    android:textSize="12sp"
+    android:visibility="gone"
+    tools:text="آرش نوری" />
   <View
     android:layout_width="match_parent"
     android:layout_height="1dp"

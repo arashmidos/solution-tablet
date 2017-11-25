@@ -13,8 +13,18 @@
     android:layout_marginBottom="17dp"
     android:gravity="right|center"
     android:orientation="horizontal"
-    android:weightSum="1">
-
+    android:weightSum="1.2">
+    <TextView
+      android:id="@+id/payment_status_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:text="@string/status"
+      android:textColor="@color/primary_dark"
+      android:textSize="12sp"
+      android:visibility="gone" />
     <LinearLayout
       android:id="@+id/delete_img_layout"
       android:layout_width="36dp"
@@ -75,6 +85,20 @@
       android:textColor="@color/black_de"
       android:textSize="12sp"
       tools:text="پرداخت الکترونیکی" />
+    <TextView
+      android:id="@+id/customer_name_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".2"
+      android:drawableEnd="@drawable/ic_person_line_24_dp"
+      android:drawablePadding="16dp"
+      android:drawableRight="@drawable/ic_person_line_24_dp"
+      android:gravity="right|center"
+      android:textColor="@color/black_de"
+      android:textSize="12sp"
+      android:visibility="invisible"
+      tools:text="shakib" />
     <TextView
       android:id="@+id/payment_date_tv"
       style="@style/IranSans.Medium"
