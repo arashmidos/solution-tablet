@@ -106,6 +106,9 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
   }
 
   public void saveUserAnswer(String answer) {
+    if (Empty.isEmpty(answer)) {
+      return;
+    }
     QuestionDto questionDto = questionnaireService
         .getQuestionDto(questions.get(currentItemPosition).getPrimaryKey(), visitId, goodsBackendId,
             answersGroupNo);

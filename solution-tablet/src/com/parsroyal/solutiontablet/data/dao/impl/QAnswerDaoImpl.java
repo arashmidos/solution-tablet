@@ -65,7 +65,7 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {
+    return new String[]{
         QAnswer.COL_ID,
         QAnswer.COL_BACKEND_ID,
         QAnswer.COL_QUESTION_BACKEND_ID,
@@ -80,7 +80,6 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
         QAnswer.COL_ANSWERS_GROUP_NO,
         QAnswer.COL_STATUS
     };
-    return projection;
   }
 
   @Override
@@ -190,7 +189,7 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
     String[] args = {String.valueOf(customerId), String.valueOf(SendStatus.NEW.getId())};
     ContentValues contentValues = new ContentValues();
     contentValues.put(QAnswer.COL_CUSTOMER_BACKEND_ID, customerBackendId);
-    contentValues.put(QAnswer.COL_STATUS, SendStatus.SENT.getId());
+    contentValues.put(QAnswer.COL_STATUS, SendStatus.UPDATED.getId());
     int rows = db.update(getTableName(), contentValues, whereClause, args);
     Log.d("QAnswer", "row updated " + rows);
     db.setTransactionSuccessful();

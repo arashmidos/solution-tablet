@@ -94,6 +94,7 @@ public class AnonymousQuestionnaireFragment extends BaseFragment {
     arguments.putLong(Constants.VISIT_ID, visitService.startAnonymousVisit());
     arguments.putLong(Constants.PARENT, MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID);
     arguments.putString(Constants.QUESTIONNAIRE_CATEGORY, Constants.GENERAL_QUESTIONNAIRE);
+    arguments.putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
     mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_LIST_FRAGMENT_ID, arguments, true);
   }
 

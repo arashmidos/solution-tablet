@@ -97,9 +97,8 @@ public class NewQuestionnaireListAdapter extends
     public void setData(int position) {
       this.questionnaire = questionnaires.get(position);
       titleTv.setText(questionnaire.getDescription());
-      questionnaireSizeTv
-          .setText(
-              String.format(Locale.getDefault(), "%d سوال", questionnaire.getQuestionsCount()));
+      questionnaireSizeTv.setText(
+          String.format(Locale.getDefault(), "%d سوال", questionnaire.getQuestionsCount()));
     }
   }
 }

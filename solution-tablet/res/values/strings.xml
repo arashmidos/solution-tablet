@@ -104,7 +104,6 @@
   <string name="message_order_delete_confirm">آیا از حذف سفارش مطمئن هستید؟</string>
   <string name="message_payment_delete_confirm">آیا از حذف دریافتی مطمئن هستید؟</string>
   <string name="message_return_delete_confirm">آیا از حذف مرجوعی مطمئن هستید؟</string>
-  <string name="message_questionnaire_delete_confirm">آیا از حذف پرسشنامه مطمئن هستید؟</string>
   <string name="yes">بله</string>
   <string name="no">خیر</string>
   <string name="no_send_data">خیر، می خواهم اطلاعات قبلی را ارسال کنم</string>

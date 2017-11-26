@@ -211,7 +211,7 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
 
     String sql = "SELECT max(" + QAnswer.COL_ANSWERS_GROUP_NO + ") FROM " + QAnswer.TABLE_NAME;
     Cursor cursor = db.rawQuery(sql, null);
-    Long maxId = 0L;
+    Long maxId = 1L;
     if (cursor.moveToNext()) {
       maxId = cursor.getLong(0) + 1;
     }

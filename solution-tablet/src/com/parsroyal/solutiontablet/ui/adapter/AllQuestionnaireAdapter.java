@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -20,13 +21,12 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.constants.SendStatus;
+import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
+import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
-import com.parsroyal.solutiontablet.service.QuestionnaireService;
-import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.AllQuestionnaireAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
-import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
@@ -41,7 +41,7 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
   private Context context;
   private List<QuestionnaireListModel> questionnaires;
   private LayoutInflater inflater;
-  private QuestionnaireService questionnaireService;
+  private QuestionnaireDao questionnaireService;
   private Bundle args;
   private MainActivity mainActivity;
 
@@ -51,7 +51,7 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
     this.questionnaires = questionnaires;
     this.mainActivity = (MainActivity) context;
     this.args = args;
-    this.questionnaireService = new QuestionnaireServiceImpl(context);
+    this.questionnaireService = new QuestionnaireDaoImpl(context);
     this.inflater = LayoutInflater.from(context);
   }
 
@@ -95,7 +95,6 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
     LinearLayout deleteImageLayout;
 
     private QuestionnaireListModel questionnaire;
-    private int position;
 
     public ViewHolder(View itemView) {
       super(itemView);
@@ -126,24 +125,12 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
           break;
         case R.id.delete_img:
         case R.id.delete_img_layout:
-          DialogUtil.showConfirmDialog(mainActivity, mainActivity.getString(R.string.warning),
-              mainActivity.getString(R.string.message_questionnaire_delete_confirm),
-              (dialog, which) ->
-                  deleteQuestionnaire());
+          Toast.makeText(mainActivity, "DELETE ACTION", Toast.LENGTH_SHORT).show();
           break;
       }
     }
 
-    private void deleteQuestionnaire() {
-      questionnaireService
-          .deleteAllAnswer(questionnaire.getVisitId(), questionnaire.getAnswersGroupNo());
-      questionnaires.remove(position);
-      notifyDataSetChanged();
-
-    }
-
     public void setData(int position) {
-      this.position = position;
       questionnaire = questionnaires.get(position);
       titleTv.setText(questionnaire.getDescription());
 

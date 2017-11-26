@@ -1,15 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.Manifest;
-import android.Manifest.permission;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +25,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikepenz.crossfader.util.UIUtils;
-import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -45,6 +36,7 @@ import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
@@ -120,6 +112,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   private SaleOrderServiceImpl saleOrderService;
   private VisitDetailFragment parent;
   private boolean expandedMap = false;
+  private QuestionnaireServiceImpl questionnaireService;
 
 
   public CustomerInfoFragment() {
@@ -159,6 +152,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     baseInfoService = new BaseInfoServiceImpl(mainActivity);
     locationService = new LocationServiceImpl(mainActivity);
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    questionnaireService = new QuestionnaireServiceImpl(mainActivity);
 
     customer = customerService.getCustomerById(customerId);
 
@@ -257,6 +251,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         //TODO :if only one category exist we should skip this fragment
         Bundle bundle = getArguments();
         bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
+        bundle.putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
         mainActivity
             .changeFragment(MainActivity.QUESTIONNAIRE_CATEGORY_FRAGMENT_ID, bundle, true);
         break;
