@@ -86,6 +86,7 @@
   <string name="customer_store_surface">متراژ فروشگاه (به متر)</string>
   <string name="get_customer_location">دریافت مکان مشتری بر روی نقشه</string>
   <string name="message_error_in_loading_or_creating_customer">خطا در ایجاد مشتری</string>
+  <string name="message_error_in_loading_data">خطا در بارگذاری اطلاعات</string>
   <string name="message_found_location_successfully">مکان مشتری با موفقیت دریافت شد</string>
   <string name="message_finding_location_timeout">برنامه قادر به دریافت مکان مشتری در زمان مناسب نیست.</string>
   <string name="message_customer_name_is_required">وارد کردن نام مشتری اجباری است.</string>
@@ -101,7 +102,9 @@
   <string name="delete_customer">حذف مشتری</string>
   <string name="message_customer_delete_confirm">آیا از حذف مشتری مطمئن هستید؟</string>
   <string name="message_order_delete_confirm">آیا از حذف سفارش مطمئن هستید؟</string>
+  <string name="message_payment_delete_confirm">آیا از حذف دریافتی مطمئن هستید؟</string>
   <string name="message_return_delete_confirm">آیا از حذف مرجوعی مطمئن هستید؟</string>
+  <string name="message_questionnaire_delete_confirm">آیا از حذف پرسشنامه مطمئن هستید؟</string>
   <string name="yes">بله</string>
   <string name="no">خیر</string>
   <string name="no_send_data">خیر، می خواهم اطلاعات قبلی را ارسال کنم</string>
@@ -555,7 +558,7 @@
   <string name="return_info">اطلاعات مرجوع کالا</string>
   <string name="select_reason_to_return">انتخاب دلیل مرجوع کالا</string>
   <string name="reason_to_return">دلیل مرجوع کالا</string>
-  <string name="message_save_questionnaire">تغییرات پرسشنامه ذخیره شود؟</string>
+  <string name="message_save_questionnaire">پرسشنامه ذخیره شود؟</string>
   <string name="customer_price_title">(مصرف کننده)</string>
   <string name="add_picture">ثبت تصویر</string>
   <string name="send_x_registered">ارسال %s ثبت شده</string>

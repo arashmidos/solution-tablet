@@ -1,10 +1,13 @@
 package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.PaymentDao;
+import com.parsroyal.solutiontablet.data.dao.VisitInformationDetailDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.PaymentDaoImpl;
+import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDetailDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.data.searchobject.PaymentSO;
@@ -78,5 +81,15 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
   public void deleteAll() {
     paymentDao.deleteAll();
+  }
+
+  @Override
+  public void deletePayment(Long paymentId) {
+    paymentDao.delete(paymentId);
+
+    //Delete Payment detail
+    VisitInformationDetailDao visitInformationDetailDao = new VisitInformationDetailDaoImpl(
+        context);
+    visitInformationDetailDao.deleteVisitDetail(VisitInformationDetailType.CASH, paymentId);
   }
 }

@@ -31,6 +31,7 @@ import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
@@ -218,15 +219,19 @@ public class OrderAdapter extends Adapter<ViewHolder> {
         if (!MultiScreenUtility.isTablet(context)) {
           editImg.setVisibility(View.GONE);
           deleteImg.setVisibility(View.GONE);
-          uploadImg.setVisibility(View.GONE);
+          if (Empty.isNotEmpty(uploadImg)) {
+            uploadImg.setVisibility(View.GONE);
+          }
         } else {
           editImg.setVisibility(View.INVISIBLE);
           deleteImg.setVisibility(View.INVISIBLE);
-          uploadImg.setVisibility(View.INVISIBLE);
+          if (Empty.isNotEmpty(uploadImg)) {
+            uploadImg.setVisibility(View.INVISIBLE);
+          }
         }
       }
 
-      if (!isFromReport) {
+      if (!isFromReport && Empty.isNotEmpty(uploadImg)) {
         uploadImg.setVisibility(View.GONE);
       }
     }
@@ -243,7 +248,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
             .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_return_grey_18_dp, 0);
         returnReasonTv.setCompoundDrawablePadding((int) UIUtils.convertDpToPixel(8, context));
         returnReasonTv.setTextColor(ContextCompat.getColor(context, R.color.black_de));
-        returnReasonTv.setText("--");//TODO: Add Return items count
+        returnReasonTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderCount())));
         returnCountTv.setText(order.getCustomerName());
       } else {
         if (isFromReport) {
@@ -258,7 +263,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
         returnCountTv
             .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_return_grey_18_dp, 0);
         returnCountTv.setCompoundDrawablePadding((int) UIUtils.convertDpToPixel(8, context));
-        returnCountTv.setText("--");//TODO: Add Return items count
+        returnCountTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderCount())));
       }
       returnDateTv.setText(NumberUtil.digitsToPersian(dateString));
       String number = String

@@ -119,7 +119,6 @@ public class RegisterPaymentFragment extends BaseFragment {
   private List<LabelValue> bankList;
   private List<LabelValue> paymentTypes;
   private long amountValue;
-  private int ref;
   private int paymentTypePos = 0;
   private long visitId;
 
@@ -149,24 +148,25 @@ public class RegisterPaymentFragment extends BaseFragment {
     paymentTypes = baseInfoService.getAllPaymentType();
 
     loadSpinnersData();
-    checkForExistPayment();
-    onAmountTextChange();
+    loadPaymentData();
+    addListener();
     setUpDatePicker();
     return view;
   }
 
   private void setUpDatePicker() {
     chequeDateEdt.setOnClickListener(v -> {
-      DatePicker.Builder builder = new DatePicker.Builder()
-          .id(1);
+      if (isDisabled()) {
+        return;
+      }
+      DatePicker.Builder builder = new DatePicker.Builder().id(1);
       if (Empty.isNotEmpty(payment) && Empty.isNotEmpty(payment.getChequeDate())) {
         String[] date = payment.getChequeDate().split("/");
         builder.date(Integer.parseInt(date[2]),
             Integer.parseInt(date[1]),
             Integer.parseInt("13" + date[0]));
       }
-      builder.build((id, calendar, day, month, year) ->
-      {
+      builder.build((id, calendar, day, month, year) -> {
         chequeDateEdt.setText(
             String.format(Locale.ENGLISH, "%02d/%02d/%02d", year % 100, month, day));
         dateModified = true;
@@ -174,7 +174,7 @@ public class RegisterPaymentFragment extends BaseFragment {
     });
   }
 
-  private void checkForExistPayment() {
+  private void loadPaymentData() {
     try {
       Bundle arguments = getArguments();
       if (Empty.isNotEmpty(arguments)) {
@@ -182,10 +182,9 @@ public class RegisterPaymentFragment extends BaseFragment {
         customer = customerService
             .getCustomerByBackendId(arguments.getLong(Constants.CUSTOMER_BACKEND_ID));
         visitId = arguments.getLong(Constants.VISIT_ID);
-        ref = arguments.getInt(Constants.PARENT);
       } else {
-        ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
-        mainActivity.changeFragment(MainActivity.FEATURE_FRAGMENT_ID, true);
+        ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_data);
+        mainActivity.removeFragment(RegisterPaymentFragment.this);
       }
     } catch (BusinessException ex) {
       Log.e(getFragmentTag(), ex.getMessage(), ex);
@@ -198,8 +197,8 @@ public class RegisterPaymentFragment extends BaseFragment {
     }
 
     if (Empty.isEmpty(customer)) {
-      ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
-      mainActivity.changeFragment(MainActivity.FEATURE_FRAGMENT_ID, true);
+      ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_data);
+      mainActivity.removeFragment(RegisterPaymentFragment.this);
     }
     if (Empty.isNotEmpty(payment)) {
       loadData();
@@ -275,7 +274,7 @@ public class RegisterPaymentFragment extends BaseFragment {
     }
   }
 
-  private void onAmountTextChange() {
+  private void addListener() {
     paymentPriceEdt.addTextChangedListener(new TextWatcher() {
       boolean isEditing = false;
 

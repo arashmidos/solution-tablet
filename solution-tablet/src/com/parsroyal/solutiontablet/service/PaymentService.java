@@ -22,4 +22,6 @@ public interface PaymentService extends BaseService {
   List<PaymentListModel> searchForPayments(PaymentSO paymentSO);
 
   void clearAllSentPayment();
+
+  void deletePayment(Long paymentId);
 }

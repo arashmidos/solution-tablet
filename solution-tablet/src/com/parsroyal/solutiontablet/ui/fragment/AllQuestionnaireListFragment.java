@@ -62,17 +62,12 @@ public class AllQuestionnaireListFragment extends BaseFragment {
     return view;
   }
 
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-    unbinder.unbind();
-  }
-
   private void setUpRecyclerView() {
     Bundle bundle = getArguments();
     if (Empty.isEmpty(bundle)) {
       bundle = new Bundle();
     }
+
     customerBackendId = bundle.getLong(Constants.CUSTOMER_BACKEND_ID, -1);
     if (customerBackendId == -1) {
       bundle.putInt(Constants.PARENT, MainActivity.REPORT_FRAGMENT);
@@ -80,6 +75,7 @@ public class AllQuestionnaireListFragment extends BaseFragment {
     } else {
       bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
     }
+
     AllQuestionnaireAdapter allQuestionnaireAdapter = new AllQuestionnaireAdapter(mainActivity,
         getQuestionnaireList(), bundle);
     LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
@@ -102,6 +98,12 @@ public class AllQuestionnaireListFragment extends BaseFragment {
     bundle.putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
     mainActivity
         .changeFragment(MainActivity.QUESTIONNAIRE_CATEGORY_FRAGMENT_ID, bundle, true);
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
   }
 
   @Override

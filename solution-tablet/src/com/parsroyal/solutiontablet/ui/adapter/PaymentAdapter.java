@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -18,9 +16,11 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
+import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
@@ -33,6 +33,7 @@ import java.util.Locale;
 
 public class PaymentAdapter extends Adapter<ViewHolder> {
 
+  private final PaymentServiceImpl paymentService;
   private LayoutInflater inflater;
   private long visitId;
   private boolean isFromReport;
@@ -46,6 +47,7 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
     this.payments = payments;
     this.mainActivity = mainActivity;
     inflater = LayoutInflater.from(mainActivity);
+    paymentService = new PaymentServiceImpl(mainActivity);
   }
 
   @Override
@@ -114,6 +116,7 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
     ImageView editImg;
 
     private PaymentListModel payment;
+    private int position;
 
     public ViewHolder(View itemView) {
       super(itemView);
@@ -127,23 +130,32 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
       switch (v.getId()) {
         case R.id.delete_img_layout:
         case R.id.delete_img:
-          Toast.makeText(mainActivity, "DELETE PAYMENT", Toast.LENGTH_SHORT).show();
+          if (payment.getStatus().equals(SendStatus.SENT.getId())) {
+            return;
+          }
+          deletePayment();
           break;
         case R.id.edit_img:
         case R.id.edit_img_layout:
-          /*if (!payment.getStatus().equals(SaleOrderStatus.SENT.getId())) {
-            goToRegisterPaymentFragment(payment);
-          }*/
-          Toast.makeText(mainActivity, "EDIT", Toast.LENGTH_SHORT).show();
-          break;
         case R.id.main_lay:
         case R.id.main_lay_linear:
-          Toast.makeText(mainActivity, "CLICKED ON MAIN LAYOUT", Toast.LENGTH_SHORT).show();
+          goToRegisterPaymentFragment(payment);
           break;
       }
     }
 
+    private void deletePayment() {
+      DialogUtil.showConfirmDialog(mainActivity, mainActivity.getString(R.string.title_attention),
+          mainActivity.getString(R.string.message_payment_delete_confirm), (dialog, which) ->
+          {
+            paymentService.deletePayment(payment.getPrimaryKey());
+            payments.remove(position);
+            notifyDataSetChanged();
+          });
+    }
+
     public void setData(int position) {
+      this.position = position;
       payment = payments.get(position);
 
       changeVisibility();
@@ -175,7 +187,7 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
       if (isFromReport) {
         customerNameTv.setVisibility(View.VISIBLE);
         customerNameTv.setText(payment.getCustomerFullName());
-      }else{
+      } else {
         customerNameTv.setVisibility(View.INVISIBLE);
       }
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
+import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
 import com.parsroyal.solutiontablet.data.entity.Questionnaire;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
@@ -152,11 +153,13 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
         " a.VISIT_ID," +
         " a.DATE," +
         " a.ANSWERS_GROUP_NO," +//4
-        " a.STATUS" +
+        " a.STATUS," +
+        " cu." + Customer.COL_FULL_NAME +//6
         " FROM COMMER_Q_ANSWER a " +
         " LEFT OUTER JOIN COMMER_QUESTION q ON a.QUESTION_BACKEND_ID = q.BACKEND_ID  " +
         " LEFT OUTER JOIN COMMER_VISIT_INFORMATION v on v._id = a.VISIT_ID " +
         " LEFT OUTER JOIN COMMER_QUESTIONNAIRE qn on qn.BACKEND_ID = q.QUESTIONNAIRE_BACKEND_ID " +
+        " LEFT OUTER JOIN COMMER_CUSTOMER cu on a.CUSTOMER_BACKEND_ID = cu.BACKEND_ID " +
         " WHERE 1=1 ";
 
     String orderBy = " ORDER BY q.qOrder";
@@ -182,8 +185,7 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
 
     sql = sql.concat(groupBy).concat(orderBy);
 
-    String[] args = null;
-    Cursor cursor = db.rawQuery(sql, args);
+    Cursor cursor = db.rawQuery(sql, null);
 
     List<QuestionnaireListModel> questions = new ArrayList<>();
     while (cursor.moveToNext()) {
@@ -194,6 +196,7 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
       listModel.setDate(cursor.getString(3));
       listModel.setAnswersGroupNo(cursor.getLong(4));
       listModel.setStatus(cursor.getLong(5));
+      listModel.setCustomerFullName(cursor.getString(6));
       questions.add(listModel);
     }
 
@@ -208,9 +211,11 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
 
     String sql = "SELECT max(" + QAnswer.COL_ANSWERS_GROUP_NO + ") FROM " + QAnswer.TABLE_NAME;
     Cursor cursor = db.rawQuery(sql, null);
+    Long maxId = 0L;
     if (cursor.moveToNext()) {
-      return cursor.getLong(0) + 1;
+      maxId = cursor.getLong(0) + 1;
     }
-    return 0L;
+    cursor.close();
+    return maxId;
   }
 }

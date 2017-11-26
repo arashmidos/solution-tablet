@@ -611,7 +611,7 @@ public class OldVisitDetailFragment extends BaseFragment implements ResultObserv
     @Override
     public Object getItem(int position) {
       if (position == 0 && saleType.equals(ApplicationKeys.SALE_HOT)) {
-        return R.drawable.selector_add_factor;
+        return null;//R.drawable.selector_add_factor;
       }
       return icons[position];
     }
@@ -632,8 +632,8 @@ public class OldVisitDetailFragment extends BaseFragment implements ResultObserv
           ViewGroup.LayoutParams.WRAP_CONTENT));
 
       if (position == 0 && ApplicationKeys.SALE_HOT.equals(saleType)) {
-        imageView.setImageDrawable(
-            oldMainActivity.getResources().getDrawable(R.drawable.selector_add_factor));
+//        imageView.setImageDrawable(
+//            oldMainActivity.getResources().getDrawable(R.drawable.selector_add_factor));
       } else {
         imageView.setImageDrawable(oldMainActivity.getResources().getDrawable(icons[position]));
       }

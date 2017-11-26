@@ -49,12 +49,11 @@ import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OldVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
@@ -346,7 +345,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(parent);
         break;
       case QUESTIONNAIRE_DETAIL_FRAGMENT_ID:
-        fragment = new QuestionnaireDetailFragment();
+//        fragment = new QuestionnaireDetailFragment();
         parent = args.getInt(Constants.PARENT);
         changeSidebarItem(parent);
         break;

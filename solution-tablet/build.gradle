@@ -44,7 +44,7 @@ android {
     }
 
     dexOptions {
-        javaMaxHeapSize '4096m'
+        javaMaxHeapSize '2048m'
     }
 
 
