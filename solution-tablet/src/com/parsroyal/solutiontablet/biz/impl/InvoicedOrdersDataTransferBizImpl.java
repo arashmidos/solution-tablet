@@ -5,12 +5,15 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderDao;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderItemDao;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderItemDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
@@ -20,6 +23,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,13 +39,9 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
   protected SaleOrderItemDao saleOrderItemDao;
   protected BaseSaleDocument order;
   protected VisitService visitService;
-  private KeyValueBiz keyValueBiz;
   protected int success = 0;
   protected int total = 0;
-
-  public int getSuccess() {
-    return success;
-  }
+  private KeyValueBiz keyValueBiz;
 
   public InvoicedOrdersDataTransferBizImpl(Context context, ResultObserver resultObserver) {
     super(context);
@@ -50,6 +50,10 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
     this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
     this.keyValueBiz = new KeyValueBizImpl(context);
     visitService = new VisitServiceImpl(context);
+  }
+
+  public int getSuccess() {
+    return success;
   }
 
   public BaseSaleDocument getOrder() {
@@ -73,6 +77,8 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
     } else {
       if (Empty.isNotEmpty(resultObserver)) {
         resultObserver.publishResult(getExceptionMessage());
+      } else {
+        EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
       }
     }
   }

@@ -11,7 +11,6 @@ import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
-import com.parsroyal.solutiontablet.data.model.SaleRejectDocument;
 import com.parsroyal.solutiontablet.service.RestService;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
@@ -60,7 +59,7 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl
     return VisitInformationDetailType.CREATE_ORDER;
   }
 
-  public void sendSingleOrder(BaseSaleDocument baseSaleDocument, boolean isOrder) {
+  public void sendSingleOrder(BaseSaleDocument baseSaleDocument) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
     }
@@ -69,12 +68,8 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl
 
     RestService restService = ServiceGenerator.createService(RestService.class);
 
-    Call<String> call;
-    if (isOrder) {//Retrofit can not understand polymorphism!
-      call = restService.sendOrder((SaleOrderDocument) baseSaleDocument);
-    } else {
-      call = restService.sendReject((SaleRejectDocument) baseSaleDocument);
-    }
+    Call<String> call = restService.sendOrder((SaleOrderDocument) baseSaleDocument);
+
     call.enqueue(new Callback<String>() {
       @Override
       public void onResponse(Call<String> call, Response<String> response) {

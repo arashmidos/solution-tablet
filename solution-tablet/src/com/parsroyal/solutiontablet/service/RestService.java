@@ -18,9 +18,6 @@ public interface RestService {
   @POST("saleorders")
   Call<String> sendOrder(@Body SaleOrderDocument saleDocument);
 
-  @POST("saleorders")
-  Call<String> sendReject(@Body SaleRejectDocument saleDocument);
-
   @GET("goods/{customerId}/reject")
   Call<JsonArray> getAllRejectedData(@Path("customerId") Long customerBackendId);
 }

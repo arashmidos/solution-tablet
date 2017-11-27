@@ -19,6 +19,7 @@ import com.parsroyal.solutiontablet.biz.impl.NewCustomerPicDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PaymentsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -200,10 +201,10 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     currentModel = visitDetail;
     switch (VisitInformationDetailType.getByValue(visitDetail.getType())) {
       case CREATE_ORDER:
-        sendOrder(visitDetail.getTypeId(), true);
+        sendOrder(visitDetail.getTypeId());
         break;
       case CREATE_REJECT:
-        sendOrder(visitDetail.getTypeId(), false);
+        sendReject(visitDetail.getTypeId());
       case CREATE_INVOICE:
         break;
       case TAKE_PICTURE:
@@ -219,6 +220,29 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         sendPayments(visitDetail.getVisitInformationId());
         break;
       default:
+    }
+  }
+
+  private void sendReject(long typeId) {
+    SaleOrderServiceImpl saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(typeId);
+
+    if (Empty.isNotEmpty(saleOrder)) {
+      Thread dataTransfer = new Thread(() -> {
+
+        SaleRejectsDataTransferBizImpl dataTransfer1 = new SaleRejectsDataTransferBizImpl(
+            mainActivity, null);
+        dataTransfer1.setOrder(saleOrder);
+        dataTransfer1.exchangeData();
+        if (dataTransfer1.getSuccess() == 1) {
+          sendNextDetail();
+        } else {
+          cancelTransfer();
+        }
+      });
+      dataTransfer.start();
+    } else {
+      sendNextDetail();
     }
   }
 
@@ -298,12 +322,12 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   }
 
   //Async call
-  private void sendOrder(Long orderId, boolean isOrder) {
+  private void sendOrder(Long orderId) {
     SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
     BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
     if (Empty.isNotEmpty(saleOrder)) {
       OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity, null);
-      dataTransfer.sendSingleOrder(saleOrder, isOrder);
+      dataTransfer.sendSingleOrder(saleOrder);
     } else {
       //We have sent them before
       sendNextDetail();
