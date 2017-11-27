@@ -15,6 +15,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
 import java.util.Locale;
@@ -71,10 +72,10 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
   }
 
   public String getSuccessfulMessage() {
-    return String
-        .format(Locale.US, context.getString(R.string.data_transfered_result),
+    return NumberUtil.digitsToPersian(String
+        .format(Locale.getDefault(), context.getString(R.string.data_transfered_result),
             String.valueOf(success),
-            String.valueOf(total - success));
+            String.valueOf(total - success)));
   }
 
   @Override

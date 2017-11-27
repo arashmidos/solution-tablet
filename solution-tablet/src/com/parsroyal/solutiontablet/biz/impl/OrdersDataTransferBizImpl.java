@@ -11,6 +11,7 @@ import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
+import com.parsroyal.solutiontablet.data.model.SaleRejectDocument;
 import com.parsroyal.solutiontablet.service.RestService;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
@@ -59,7 +60,7 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl
     return VisitInformationDetailType.CREATE_ORDER;
   }
 
-  public void sendSingleOrder(BaseSaleDocument baseSaleDocument) {
+  public void sendSingleOrder(BaseSaleDocument baseSaleDocument, boolean isOrder) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
     }
@@ -68,7 +69,12 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl
 
     RestService restService = ServiceGenerator.createService(RestService.class);
 
-    Call<String> call = restService.sendOrder((SaleOrderDocument)baseSaleDocument);
+    Call<String> call;
+    if (isOrder) {//Retrofit can not understand polymorphism!
+      call = restService.sendOrder((SaleOrderDocument) baseSaleDocument);
+    } else {
+      call = restService.sendReject((SaleRejectDocument) baseSaleDocument);
+    }
     call.enqueue(new Callback<String>() {
       @Override
       public void onResponse(Call<String> call, Response<String> response) {
@@ -78,10 +84,12 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl
             receiveData(OrderBackendId);
             if (getSuccess() == 1) {
               EventBus.getDefault().post(
-                  new SendOrderEvent(StatusCodes.SUCCESS, Long.valueOf(OrderBackendId), getSuccessfulMessage()));
+                  new SendOrderEvent(StatusCodes.SUCCESS, Long.valueOf(OrderBackendId),
+                      getSuccessfulMessage()));
             } else {
               EventBus.getDefault().post(
-                  new SendOrderEvent(StatusCodes.SERVER_ERROR, order.getId(), getExceptionMessage()));
+                  new SendOrderEvent(StatusCodes.SERVER_ERROR, order.getId(),
+                      getExceptionMessage()));
             }
           } else {
             EventBus.getDefault().post(new ErrorEvent(StatusCodes.INVALID_DATA));
@@ -92,7 +100,8 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl
           } catch (IOException e) {
             e.printStackTrace();
           }
-          EventBus.getDefault().post(new SendOrderEvent(StatusCodes.SERVER_ERROR, order.getId(), getExceptionMessage()));
+          EventBus.getDefault().post(
+              new SendOrderEvent(StatusCodes.SERVER_ERROR, order.getId(), getExceptionMessage()));
         }
       }
 

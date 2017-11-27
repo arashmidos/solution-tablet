@@ -27,6 +27,7 @@ import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionDetailAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionsAdapter;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -116,8 +117,9 @@ public class QuestionDetailDialogFragment extends DialogFragment {
     navigateButtonStatus(currentPosition != 1, false);
     navigateButtonStatus(currentPosition != questionsAdapter.getItemCount(), true);
     questionTv.setText(questionDto.getQuestion());
-    positionTv.setText(String.format(Locale.getDefault(), "%d/%d", currentPosition,
-        questionsAdapter.getItemCount()));
+    positionTv.setText(
+        NumberUtil.digitsToPersian(String.format(Locale.getDefault(), "%d/%d", currentPosition,
+            questionsAdapter.getItemCount())));
 
     if (questionDto.getType() == QuestionType.CHOICE_SINGLE) {
       radioDetailTv.setVisibility(View.VISIBLE);
@@ -134,12 +136,12 @@ public class QuestionDetailDialogFragment extends DialogFragment {
       errorMsg.setVisibility(View.VISIBLE);
       prerequisiteBtn.setVisibility(View.VISIBLE);
       prerequisiteBtn.setText(
-          String.format(Locale.getDefault(), "نمایش سوال شماره %d",
-              questionsAdapter.findPositionByBackendId(questionDto.getPrerequisite())));
-      errorMsg.setText(String
+          NumberUtil.digitsToPersian(String.format(Locale.getDefault(), "نمایش سوال شماره %d",
+              questionsAdapter.findPositionByBackendId(questionDto.getPrerequisite()))));
+      errorMsg.setText(NumberUtil.digitsToPersian(String
           .format(Locale.getDefault(),
               "جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!",
-              questionDto.getPrerequisite()));
+              questionDto.getPrerequisite())));
       recyclerView.setVisibility(View.GONE);
       saveQuestionImg.setVisibility(View.GONE);
       radioDetailTv.setVisibility(View.GONE);

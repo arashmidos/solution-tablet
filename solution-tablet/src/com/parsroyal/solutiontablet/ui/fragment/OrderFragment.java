@@ -113,31 +113,36 @@ public class OrderFragment extends BaseFragment {
     goodsService = new GoodsServiceImpl(mainActivity);
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
 
-    Bundle args = getArguments();
-    readOnly = args.getBoolean(Constants.READ_ONLY);
-    if (readOnly) {
-      //It comes from FeatureList->Goods
-      bottomBar.setVisibility(View.GONE);
-      mainActivity.changeTitle(getString(R.string.title_goods_list));
-    } else {
-      //Comes from Report or CustomerVisit, to add Order or Reject
-      orderId = args.getLong(Constants.ORDER_ID, -1);
-      order = saleOrderService.findOrderDtoById(orderId);
-      if (Empty.isEmpty(order)) {
-        return inflater.inflate(R.layout.empty_view, container, false);
+    try {
+      Bundle args = getArguments();
+      readOnly = args.getBoolean(Constants.READ_ONLY);
+      if (readOnly) {
+        //It comes from FeatureList->Goods
+        bottomBar.setVisibility(View.GONE);
+        mainActivity.changeTitle(getString(R.string.title_goods_list));
+      } else {
+        //Comes from Report or CustomerVisit, to add Order or Reject
+        orderId = args.getLong(Constants.ORDER_ID, -1);
+        order = saleOrderService.findOrderDtoById(orderId);
+        if (Empty.isEmpty(order)) {
+          return inflater.inflate(R.layout.empty_view, container, false);
+        }
+        orderStatus = order.getStatus();
+        saleType = args.getString(Constants.SALE_TYPE, "");
+        visitId = args.getLong(Constants.VISIT_ID, -1);
+        pageStatus = args.getString(Constants.PAGE_STATUS, "");
+        mainActivity.changeTitle(getProperTitle());
       }
-      orderStatus = order.getStatus();
-      saleType = args.getString(Constants.SALE_TYPE, "");
-      visitId = args.getLong(Constants.VISIT_ID, -1);
-      pageStatus = args.getString(Constants.PAGE_STATUS, "");
-      mainActivity.changeTitle(getProperTitle());
-    }
 
-    setData();
-    addSearchListener();
-    if (!TextUtils.isEmpty(pageStatus) && (pageStatus.equals(Constants.EDIT) || pageStatus
-        .equals(Constants.VIEW))) {
-      showFinalizeOrderDialog();
+      setData();
+      addSearchListener();
+      if (!TextUtils.isEmpty(pageStatus) && (pageStatus.equals(Constants.EDIT) || pageStatus
+          .equals(Constants.VIEW))) {
+        showFinalizeOrderDialog();
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      return inflater.inflate(R.layout.empty_view, container, false);
     }
 
     return view;
@@ -160,8 +165,10 @@ public class OrderFragment extends BaseFragment {
           readOnly, false);
     }
 
-    orderCountTv
-        .setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
+    if (!readOnly) {
+      orderCountTv
+          .setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
+    }
 
     if (MultiScreenUtility.isTablet(mainActivity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);

@@ -176,15 +176,18 @@ public class PathDetailFragment extends BaseFragment implements
 
     if (Empty.isNotEmpty(customersNumberTv)) {
       customersNumberTv
-          .setText(String.format(getString(R.string.x_customers), visitline.getCustomerCount()));
-      pathCodeTv.setText(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
+          .setText(NumberUtil.digitsToPersian(
+              String.format(getString(R.string.x_customers), visitline.getCustomerCount())));
+      pathCodeTv.setText(NumberUtil.digitsToPersian(
+          String.format(getString(R.string.visitline_code_x), visitline.getCode())));
     } else {
       //We detected wrong device size!
       Logger.sendError("Wrong Orientation", "Device is not tablet");
 
     }
     mainActivity
-        .changeTitle(String.format(getString(R.string.visitline_code_x), visitline.getCode()));
+        .changeTitle(NumberUtil.digitsToPersian(
+            String.format(getString(R.string.visitline_code_x), visitline.getCode())));
   }
 
   private void setTabletData() {
@@ -194,8 +197,8 @@ public class PathDetailFragment extends BaseFragment implements
             NumberUtil.digitsToPersian(visitline.getCode())));
 
     if (Empty.isNotEmpty(customerCountBtn)) {
-      customerCountBtn
-          .setText(String.format(getString(R.string.x_customers), visitline.getCustomerCount()));
+      customerCountBtn.setText(NumberUtil.digitsToPersian(
+          String.format(getString(R.string.x_customers), visitline.getCustomerCount())));
     } else {
       //We detected wrong device size!
       Logger.sendError("Wrong Orientation", "Device is not tablet");

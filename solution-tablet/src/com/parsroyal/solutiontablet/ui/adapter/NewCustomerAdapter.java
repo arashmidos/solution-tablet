@@ -189,18 +189,14 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
     public void onClick(View v) {
       switch (v.getId()) {
         case R.id.customer_lay:
-          if (isSend) {
-            Bundle arg = new Bundle();
-            arg.putSerializable(Constants.PAGE_STATUS, PageStatus.VIEW);
-            arg.putLong(Constants.CUSTOMER_ID, customer.getPrimaryKey());
-            mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, arg, true);
-          }
-          break;
         case R.id.edit_img:
         case R.id.edit_img_layout:
-          Bundle args = new Bundle();
-          args.putLong(Constants.CUSTOMER_ID, customer.getPrimaryKey());
-          mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, false);
+          Bundle arg = new Bundle();
+          if (isSend) {
+            arg.putSerializable(Constants.PAGE_STATUS, PageStatus.VIEW);
+          }
+          arg.putLong(Constants.CUSTOMER_ID, customer.getPrimaryKey());
+          mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, arg, true);
           break;
         case R.id.delete_img:
         case R.id.delete_img_layout:

@@ -58,7 +58,6 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Position;
-import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -327,11 +326,9 @@ public class UserTrackingFragment extends BaseFragment implements
   }
 
   @Subscribe
-  public void getMessage(Event event) {
-    if (event instanceof GPSEvent) {
-      if (showTrack.isChecked()) {
-        runOnUiThread(this::doFilter);
-      }
+  public void getMessage(GPSEvent event) {
+    if (showTrack.isChecked()) {
+      runOnUiThread(this::doFilter);
     }
   }
 

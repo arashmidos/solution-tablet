@@ -91,8 +91,9 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   }
 
   private void setData() {
-    totalAmountTv.setText(NumberUtil.getCommaSeparated(order.getAmount() / 1000) + " " +
-        getString(R.string.common_irr_currency));
+    totalAmountTv.setText(
+        NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(order.getAmount() / 1000) + " " +
+            getString(R.string.common_irr_currency)));
     if (pageStatus.equals(Constants.VIEW)) {
       submitTv.setText(R.string.payment_detail);
     }
@@ -133,7 +134,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     recyclerView.setAdapter(adapter);
   }
 
-  @OnClick({R.id.close, R.id.submit_btn,R.id.bottom_layout})
+  @OnClick({R.id.close, R.id.submit_btn, R.id.bottom_layout})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.close:

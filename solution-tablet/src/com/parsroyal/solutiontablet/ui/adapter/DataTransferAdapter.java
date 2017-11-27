@@ -56,7 +56,7 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
     holder.setData(position);
     if (!MultiScreenUtility.isTablet(context)) {
-      lastItem(position == model.size(), holder);
+      lastItem(position == model.size()+1, holder);
     }
 
   }

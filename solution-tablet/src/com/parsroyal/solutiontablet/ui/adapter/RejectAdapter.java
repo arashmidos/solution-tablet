@@ -105,9 +105,6 @@ public class RejectAdapter extends Adapter<ViewHolder> {
         setPageStatus(tempOrder.getStatus(), args);
 
         mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
-      } else {
-        ToastUtil.toastError(mainActivity,
-            mainActivity.getString(R.string.err_reject_order_not_possible));
       }
     } catch (Exception ex) {
       ex.printStackTrace();

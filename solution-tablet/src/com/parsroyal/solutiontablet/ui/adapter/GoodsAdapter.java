@@ -129,39 +129,43 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
 
       //set existings
       Double unit1Existing = Double.valueOf(good.getExisting()) / 1000D;
-      goodNumberTv.setText(String.format(Locale.getDefault(), "%s %s",
+      goodNumberTv.setText(NumberUtil.digitsToPersian(String.format(Locale.getDefault(), "%s %s",
           NumberUtil.formatDoubleWith2DecimalPlaces(unit1Existing),
-          (Empty.isNotEmpty(good.getUnit1Title()) ? NumberUtil.digitsToPersian(good.getUnit1Title())
-              : "--")));
+          (Empty.isNotEmpty(good.getUnit1Title()) ? good.getUnit1Title() : "--"))));
 
       Long unit1Count = good.getUnit1Count();
       if (Empty.isNotEmpty(unit1Count) && !unit1Count.equals(0L)) {
         Double unit2Existing = Double.valueOf(good.getExisting()) / Double.valueOf(unit1Count);
         unit2Existing = unit2Existing / 1000D;
 
-        goodBoxTv.setText(String.format(Locale.getDefault(), "%s %s",
+        goodBoxTv.setText(NumberUtil.digitsToPersian(String.format(Locale.getDefault(), "%s %s",
             NumberUtil.formatDoubleWith2DecimalPlaces(unit2Existing),
-            (Empty.isNotEmpty(good.getUnit2Title()) ? NumberUtil
-                .digitsToPersian(good.getUnit2Title()) : "--")));
+            (Empty.isNotEmpty(good.getUnit2Title()) ? good.getUnit2Title() : "--"))));
       }
       //
 
       //set price
       Double goodsAmount = Double.valueOf(good.getPrice()) / 1000D;
-      goodPriceTv.setText(
+      goodPriceTv.setText(NumberUtil.digitsToPersian(
           String.format(Locale.getDefault(), "%s %s", NumberUtil.getCommaSeparated(goodsAmount),
-              context.getString(R.string.common_irr_currency)));
-      Double goodsCustomerAmount = Double.valueOf(good.getCustomerPrice()) / 1000D;
-      goodsCustomerPrice.setText(String
-          .format(Locale.getDefault(), "%s", NumberUtil.getCommaSeparated(goodsCustomerAmount)));
-      if (Empty.isNotEmpty(goodsCurrency)) {
-        goodsCurrency.setText(R.string.common_irr_currency);
+              context.getString(R.string.common_irr_currency))));
+      if (Empty.isNotEmpty(good.getCustomerPrice())) {
+
+        Double goodsCustomerAmount = Double.valueOf(good.getCustomerPrice()) / 1000D;
+        goodsCustomerPrice.setText(NumberUtil.digitsToPersian(String
+            .format(Locale.getDefault(), "%s", NumberUtil.getCommaSeparated(goodsCustomerAmount))));
+        if (Empty.isNotEmpty(goodsCurrency)) {
+          goodsCurrency.setText(R.string.common_irr_currency);
+        }
       }
 
       if (isRejectedGoods) {
         recoveryDateTv.setVisibility(View.GONE);
         goodsCustomerPrice.setVisibility(View.INVISIBLE);
         goodCustomerPriceTitle.setVisibility(View.INVISIBLE);
+        if (Empty.isNotEmpty(goodsCurrency)) {
+          goodsCurrency.setVisibility(View.INVISIBLE);
+        }
       } else {
         recoveryDateTv.setText(String.format(NumberUtil.digitsToPersian(good.getRecoveryDate())));
       }

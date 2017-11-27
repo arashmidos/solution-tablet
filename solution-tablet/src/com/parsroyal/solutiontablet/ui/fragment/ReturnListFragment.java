@@ -13,9 +13,7 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
-import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
@@ -142,8 +140,9 @@ public class ReturnListFragment extends BaseFragment {
   }
 
   @Subscribe
-  public void getMessage(Event event) {
-    if (event instanceof ErrorEvent) {
+  public void getMessage(ErrorEvent event) {
+    if (event.getMessage().equals("reject")) {
+
       DialogUtil.dismissProgressDialog();
       ToastUtil.toastError(mainActivity,
           mainActivity.getString(R.string.err_reject_order_not_possible));

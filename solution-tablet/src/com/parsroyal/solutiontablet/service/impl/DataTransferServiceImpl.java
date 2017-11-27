@@ -53,6 +53,7 @@ import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MediaUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.File;
@@ -476,10 +477,10 @@ public class DataTransferServiceImpl implements DataTransferService {
       dataTransfer.setData(visitInformationDto);
       dataTransfer.exchangeData();
     }
-    resultObserver.publishResult(String
+    resultObserver.publishResult(NumberUtil.digitsToPersian(String
         .format(Locale.US, context.getString(R.string.data_transfered_result),
             String.valueOf(dataTransfer.getSuccess()),
-            String.valueOf(visitInformationList.size() - dataTransfer.getSuccess() - emptyVisit)));
+            String.valueOf(visitInformationList.size() - dataTransfer.getSuccess() - emptyVisit))));
   }
 
   private void cleanOldData() {

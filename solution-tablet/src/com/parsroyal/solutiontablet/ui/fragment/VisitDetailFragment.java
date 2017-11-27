@@ -39,7 +39,6 @@ import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
@@ -367,12 +366,14 @@ public class VisitDetailFragment extends BaseFragment {
     DialogUtil.showCustomDialog(mainActivity, mainActivity.getString(R.string.send_data),
         getString(R.string.message_confirm_send_visit_data_instantly), "نمایش جزئیات ارسال",
         (dialog, which) -> {
+          visitService.finishVisiting(visitId);
           FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
           Bundle args = new Bundle();
           args.putLong(Constants.VISIT_ID, visitId);
           SingleDataTransferDialogFragment singleDataTransferDialogFragment = SingleDataTransferDialogFragment
               .newInstance(args);
           singleDataTransferDialogFragment.show(ft, "data_transfer");
+          dialog.dismiss();
         }, mainActivity.getString(R.string.cancel_btn), (dialog, which) -> doFinishVisiting(),
         Constants.ICON_MESSAGE);
   }
@@ -551,18 +552,21 @@ public class VisitDetailFragment extends BaseFragment {
   }
 
   @Subscribe
-  public void getMessage(Event event) {
-    if (event instanceof ActionEvent) {
-      if (event.getStatusCode() == StatusCodes.ACTION_START_CAMERA) {
-        if (!checkPermissions()) {
-          requestPermissions();
-        } else {
-          startCameraActivity();
-        }
-      } else if (event.getStatusCode() == StatusCodes.SUCCESS) {
-        finishVisiting();
+  public void getMessage(ActionEvent event) {
+    if (event.getStatusCode() == StatusCodes.ACTION_START_CAMERA) {
+      if (!checkPermissions()) {
+        requestPermissions();
+      } else {
+        startCameraActivity();
       }
-    } else if (event instanceof ErrorEvent) {
+    } else if (event.getStatusCode() == StatusCodes.SUCCESS) {
+      doFinishVisiting();
+    }
+  }
+
+  @Subscribe
+  public void getMessage(ErrorEvent errorEvent) {
+    if (!errorEvent.getMessage().equals("reject")) {
       DialogUtil.dismissProgressDialog();
       ToastUtil.toastError(mainActivity, getString(R.string.error_unknown_system_exception));
     }

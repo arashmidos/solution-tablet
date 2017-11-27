@@ -20,6 +20,7 @@ import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
 import java.util.Locale;
 import org.springframework.http.HttpEntity;
@@ -133,9 +134,9 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
   }
 
   public String getSuccessfulMessage() {
-    return String
-        .format(Locale.US, context.getString(R.string.data_transfered_result),
+    return NumberUtil.digitsToPersian(String
+        .format(Locale.getDefault(), context.getString(R.string.data_transfered_result),
             String.valueOf(success),
-            String.valueOf(total - success));
+            String.valueOf(total - success)));
   }
 }

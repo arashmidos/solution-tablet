@@ -19,6 +19,7 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.NewQuestionnaireListAdapter.ViewHolder;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.List;
 import java.util.Locale;
 
@@ -97,8 +98,8 @@ public class NewQuestionnaireListAdapter extends
     public void setData(int position) {
       this.questionnaire = questionnaires.get(position);
       titleTv.setText(questionnaire.getDescription());
-      questionnaireSizeTv.setText(
-          String.format(Locale.getDefault(), "%d سوال", questionnaire.getQuestionsCount()));
+      questionnaireSizeTv.setText(NumberUtil.digitsToPersian(
+          String.format(Locale.getDefault(), "%d سوال", questionnaire.getQuestionsCount())));
     }
   }
 }

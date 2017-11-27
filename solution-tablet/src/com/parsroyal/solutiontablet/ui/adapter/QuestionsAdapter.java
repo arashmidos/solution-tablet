@@ -240,6 +240,8 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
       if (questionDto.isRequired()) {
         questionTv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_star_red_18, 0);
         questionTv.setCompoundDrawablePadding(10);
+      }else{
+        questionTv.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
       }
       preRequisiteTv.setVisibility(View.GONE);
       if (TextUtils.isEmpty(questionDto.getAnswer())) {
@@ -249,8 +251,9 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
         Long prerequisite = questionDto.getPrerequisite();
         if (hasPrerequisite(questionDto) && prerequisite != -1) {
           preRequisiteTv.setVisibility(View.VISIBLE);
-          preRequisiteTv.setText(String.format(Locale.getDefault(), "پیش نیاز: سوال شماره %d",
-              findPositionByBackendId(prerequisite)));
+          preRequisiteTv.setText(NumberUtil
+              .digitsToPersian(String.format(Locale.getDefault(), "پیش نیاز: سوال شماره %d",
+                  findPositionByBackendId(prerequisite))));
         }
       } else {
         questionNumberBtn.setBackgroundResource(R.drawable.oval_green_43);

@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -33,7 +32,6 @@ import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CityDialogFragment;
-import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PaymentMethodDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -115,10 +113,10 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     try {
       Bundle arguments = getArguments();
       if (Empty.isNotEmpty(arguments)) {
+
         pageStatus = (PageStatus) arguments.getSerializable(Constants.PAGE_STATUS);
-        if (pageStatus != null && pageStatus == PageStatus.VIEW) {
-          customer = customerService.getCustomerById(arguments.getLong(Constants.CUSTOMER_ID));
-        } else {
+        customer = customerService.getCustomerById(arguments.getLong(Constants.CUSTOMER_ID));
+        if (Empty.isEmpty(customer)) {
           customer = new Customer();
         }
       }
@@ -162,6 +160,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     cityTv.setClickable(false);
     ownershipSpinner.setEnabled(false);
     customerClassSpinner.setEnabled(false);
+    customerDescription.setEnabled(false);
     createBtn.setVisibility(View.GONE);
   }
 

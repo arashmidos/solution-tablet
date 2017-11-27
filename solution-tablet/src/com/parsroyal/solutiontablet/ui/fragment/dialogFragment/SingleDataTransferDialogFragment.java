@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -170,7 +169,6 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     transferStarted = true;
     transferFinished = false;
     currentPosition = -1;
-    Toast.makeText(mainActivity, "Uploading data...", Toast.LENGTH_SHORT).show();
     switchButtonState();
     sendNextDetail();
     //send VisitInformationDetail
@@ -198,13 +196,15 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       return;
     }
     VisitInformationDetail visitDetail = model.get(currentPosition);
-    adapter.setCurrent(currentPosition);
+//    adapter.setCurrent(currentPosition);
     currentModel = visitDetail;
     switch (VisitInformationDetailType.getByValue(visitDetail.getType())) {
       case CREATE_ORDER:
+        sendOrder(visitDetail.getTypeId(), true);
+        break;
       case CREATE_REJECT:
+        sendOrder(visitDetail.getTypeId(), false);
       case CREATE_INVOICE:
-        sendOrder(visitDetail.getTypeId());
         break;
       case TAKE_PICTURE:
         sendPicture(visitDetail.getVisitInformationId());
@@ -288,6 +288,9 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   private void sendPicture(long visitId) {
     CustomerService customerService = new CustomerServiceImpl(mainActivity);
     File pics = customerService.getAllCustomerPicForSendByVisitId(visitId);
+    if (Empty.isEmpty(pics)) {
+      sendNextDetail();
+    }
     Thread sendDataThead = new Thread(
         () -> new NewCustomerPicDataTransferBizImpl(mainActivity, null, pics, visitId)
             .exchangeData());
@@ -295,12 +298,12 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   }
 
   //Async call
-  private void sendOrder(Long orderId) {
+  private void sendOrder(Long orderId, boolean isOrder) {
     SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
     BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
     if (Empty.isNotEmpty(saleOrder)) {
       OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity, null);
-      dataTransfer.sendSingleOrder(saleOrder);
+      dataTransfer.sendSingleOrder(saleOrder, isOrder);
     } else {
       //We have sent them before
       sendNextDetail();
@@ -348,21 +351,25 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   }
 
   private void finishTransfer() {
-    adapter.setCurrent(++currentPosition);
-    ToastUtil.toastMessage(getActivity(), "ارسال اطلاعات با موفقیت انجام شد");
-    transferFinished = true;
-    switchButtonState();
-    uploadDataBtn.setText("تمام");
-    Drawable img = getResources().getDrawable(R.drawable.ic_check_white_18_dp);
-    img.setBounds(10, 0, 0, 0);
-    uploadDataBtn.setCompoundDrawables(img, null, null, null);
+    mainActivity.runOnUiThread(() -> {
+      adapter.setCurrent(++currentPosition);
+      ToastUtil.toastMessage(getActivity(), "ارسال اطلاعات با موفقیت انجام شد");
+      transferFinished = true;
+      switchButtonState();
+      uploadDataBtn.setText("تمام");
+      Drawable img = getResources().getDrawable(R.drawable.ic_check_white_18_dp);
+      img.setBounds(10, 0, 0, 0);
+      uploadDataBtn.setCompoundDrawables(img, null, null, null);
+    });
   }
 
   private void cancelTransfer() {
     transferFinished = true;
-    switchButtonState();
-    adapter.setError(currentPosition);
-    ToastUtil.toastError(getActivity(), "خطا در ارسال اطلاعات");
+    mainActivity.runOnUiThread(() -> {
+      switchButtonState();
+      adapter.setError(currentPosition);
+      ToastUtil.toastError(getActivity(), "خطا در ارسال اطلاعات");
+    });
   }
 
 

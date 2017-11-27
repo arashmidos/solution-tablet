@@ -212,8 +212,9 @@ public class AddOrderDialogFragment extends DialogFragment {
             unit1CountTv.setText(NumberUtil.digitsToPersian(input));
           }
           long total = (long) (count1 * selectedGoods.getPrice() / 1000);
-          totalPriceTv.setText(String.format(Locale.getDefault(), "%,d %s", total, getString(
-              R.string.common_irr_currency)));
+          totalPriceTv.setText(NumberUtil
+              .digitsToPersian(String.format(Locale.getDefault(), "%,d %s", total, getString(
+                  R.string.common_irr_currency))));
         } else {
           clearDetailPanel();
         }
@@ -249,8 +250,9 @@ public class AddOrderDialogFragment extends DialogFragment {
   protected void clearDetailPanel() {
     unit1CountTv.setText(NumberUtil.digitsToPersian("0"));
     unit2CountTv.setText(NumberUtil.digitsToPersian("0"));
-    totalPriceTv.setText(String.format(Locale.getDefault(), "%,d %s", 0, getString(
-        R.string.common_irr_currency)));
+    totalPriceTv.setText(
+        NumberUtil.digitsToPersian(String.format(Locale.getDefault(), "%,d %s", 0, getString(
+            R.string.common_irr_currency))));
   }
 
   protected void setListeners() {
@@ -297,8 +299,9 @@ public class AddOrderDialogFragment extends DialogFragment {
     goodCodeTv
         .setText(String.format("کد کالا: %s", NumberUtil.digitsToPersian(selectedGoods.getCode())));
     long total = selectedGoods.getPrice() / 1000;
-    goodPriceTv.setText(String.format(Locale.getDefault(), "%,d %s", total, getString(
-        R.string.common_irr_currency)));
+    goodPriceTv.setText(
+        NumberUtil.digitsToPersian(String.format(Locale.getDefault(), "%,d %s", total, getString(
+            R.string.common_irr_currency))));
     unit1TitleTv.setText(NumberUtil.digitsToPersian(unit1Title));
     unit2TitleTv.setText(NumberUtil.digitsToPersian(unit2Title));
     clearDetailPanel();
@@ -375,7 +378,8 @@ public class AddOrderDialogFragment extends DialogFragment {
     viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        String pos = String.format("%d/%d", position + 1, pathes.size());
+        String pos = NumberUtil.digitsToPersian(
+            String.format(Locale.getDefault(), "%d/%d", position + 1, pathes.size()));
         viewPagerPositionTv.setText(pos);
       }
 

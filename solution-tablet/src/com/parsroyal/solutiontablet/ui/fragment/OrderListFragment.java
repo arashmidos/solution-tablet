@@ -15,7 +15,6 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
-import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
@@ -129,11 +128,10 @@ public class OrderListFragment extends BaseFragment {
   }
 
   @Subscribe
-  public void getMessage(Event event) {
-    if (event instanceof ActionEvent && event.getStatusCode()
-        .equals(StatusCodes.ACTION_REFRESH_DATA)) {
+  public void getMessage(ActionEvent event) {
+    if (event.getStatusCode().equals(StatusCodes.ACTION_REFRESH_DATA)) {
       List<SaleOrderListModel> model = getOrderList();
-      adapter.update( model );
+      adapter.update(model);
     }
   }
 

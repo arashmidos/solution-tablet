@@ -22,8 +22,7 @@
       android:layout_height="64dp"
       android:layout_margin="16dp"
       android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      tools:src="@drawable/goods_research" />
+      android:layout_alignParentRight="true" />
 
     <TextView
       android:id="@+id/good_name_tv"

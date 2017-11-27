@@ -16,10 +16,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.PageStatus;
+import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.AnonymousQuestionAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +30,7 @@ import java.util.List;
  * Created by shkbhbb on 10/25/17.
  */
 
-public class AnonymousQuestionAdapter extends
-    Adapter<ViewHolder> {
+public class AnonymousQuestionAdapter extends Adapter<ViewHolder> {
 
   private Context context;
   private List<QuestionnaireListModel> questionnaireListModels;
@@ -53,7 +55,11 @@ public class AnonymousQuestionAdapter extends
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
-    holder.setData(position);
+    try {
+      holder.setData(position);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   @Override
@@ -88,11 +94,11 @@ public class AnonymousQuestionAdapter extends
 
     public void setData(int position) {
       model = questionnaireListModels.get(position);
-      titleTv.setText(model.getDescription());
+      titleTv.setText(NumberUtil.digitsToPersian(model.getDescription()));
       Date createdDate = DateUtil
           .convertStringToDate(model.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
-      dateTv.setText(dateString);
+      dateTv.setText(NumberUtil.digitsToPersian(dateString));
     }
 
     @Override
@@ -109,6 +115,10 @@ public class AnonymousQuestionAdapter extends
                   : model.getGoodsGroupBackendId());
           args.putLong(Constants.ANSWERS_GROUP_NO, model.getAnswersGroupNo());
           args.putLong(Constants.PARENT, MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID);
+          if (model.getStatus().equals(SendStatus.SENT.getId())) {
+            args.putSerializable(Constants.PAGE_STATUS, PageStatus.VIEW);
+          }
+
           mainActivity.changeFragment(MainActivity.QUESTION_LIST_FRAGMENT_ID, args, false);
           break;
       }

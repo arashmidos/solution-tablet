@@ -172,8 +172,9 @@ public class OrderInfoFragment extends BaseFragment {
 
     Double total = Double.valueOf(order.getAmount()) / 1000D;
 
-    costTv.setText(String.format(Locale.getDefault(), "%s %s", NumberUtil.getCommaSeparated(total),
-        getString(R.string.common_irr_currency)));
+    costTv.setText(NumberUtil.digitsToPersian(
+        String.format(Locale.getDefault(), "%s %s", NumberUtil.getCommaSeparated(total),
+            getString(R.string.common_irr_currency))));
     String orderDate = order.getDate();
     dateTv.setText(Empty.isNotEmpty(orderDate) ? NumberUtil.digitsToPersian(orderDate) : "--");
     Long number = order.getNumber();
@@ -203,6 +204,7 @@ public class OrderInfoFragment extends BaseFragment {
     }
     if (pageStatus.equals(Constants.VIEW)) {
       submitOrderBtn.setText(getString(R.string.close));
+      descriptionEdt.setEnabled(false);
     }
     if (MultiScreenUtility.isTablet(mainActivity)) {
       setUpRecyclerView();

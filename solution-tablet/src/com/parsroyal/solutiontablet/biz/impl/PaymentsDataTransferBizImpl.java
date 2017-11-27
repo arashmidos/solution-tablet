@@ -19,6 +19,7 @@ import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
 import java.util.List;
@@ -80,9 +81,9 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
           }
         }
         if (Empty.isNotEmpty(observer)) {
-          getObserver().publishResult(String
+          getObserver().publishResult(NumberUtil.digitsToPersian(String
               .format(Locale.US, context.getString(R.string.payments_data_transferred_successfully),
-                  String.valueOf(success), String.valueOf(failure)));
+                  String.valueOf(success), String.valueOf(failure))));
         } else {
           if (payments.size() == success) {
             EventBus.getDefault().post(new SendOrderEvent(StatusCodes.SUCCESS, 0L, String

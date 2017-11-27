@@ -34,7 +34,6 @@ import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
-import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
@@ -603,10 +602,8 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
   }
 
   @Subscribe
-  public void getMessage(Event event) {
-    if (event instanceof UpdateEvent) {
-      installNewVersion();
-    }
+  public void getMessage(UpdateEvent event) {
+    installNewVersion();
   }
 
   private void installNewVersion() {

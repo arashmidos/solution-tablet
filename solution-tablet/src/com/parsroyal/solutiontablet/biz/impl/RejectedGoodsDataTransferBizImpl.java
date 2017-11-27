@@ -192,7 +192,7 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
 
   public void getAllRejectedData(Long customerBackendId) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
-      EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
+      EventBus.getDefault().post(new ErrorEvent("reject", StatusCodes.NO_NETWORK));
       return;
     }
 
@@ -215,13 +215,13 @@ public class RejectedGoodsDataTransferBizImpl extends AbstractDataTransferBizImp
           EventBus.getDefault().post(goodsDtoList);
 
         } else {
-          EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
+          EventBus.getDefault().post(new ErrorEvent("reject", StatusCodes.SERVER_ERROR));
         }
       }
 
       @Override
       public void onFailure(Call<JsonArray> call, Throwable t) {
-        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+        EventBus.getDefault().post(new ErrorEvent("reject", StatusCodes.NETWORK_ERROR));
       }
     });
   }

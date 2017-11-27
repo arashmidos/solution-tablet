@@ -29,8 +29,8 @@ android {
         applicationId "com.parsroyal.solutionmobile"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 86
-        versionName "2.10.9.3-ui"
+        versionCode 87
+        versionName "2.11.0-ui"
         vectorDrawables.useSupportLibrary = true
         jackOptions {
             enabled true
