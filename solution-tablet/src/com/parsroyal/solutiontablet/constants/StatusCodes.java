@@ -22,6 +22,7 @@ public enum StatusCodes {
   ACTION_ADD_PAYMENT(902, R.string.register_payment),
   ACTION_EXIT_VISIT(903, R.string.exit_end_visit),
   ACTION_START_CAMERA(904, R.string.add_picture),
+  ACTION_REFRESH_DATA(905, R.string.refresh_data),
   ;
 
   private int statusCode;

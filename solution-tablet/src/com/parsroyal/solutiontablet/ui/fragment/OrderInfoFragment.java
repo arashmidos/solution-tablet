@@ -231,7 +231,8 @@ public class OrderInfoFragment extends BaseFragment {
       case R.id.submit_order_btn:
         order = saleOrderService.findOrderDtoById(orderId);
         if (validateOrderForSave()) {
-          if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
+          if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) || orderStatus
+              .equals(SaleOrderStatus.REJECTED.getId())) {
             showSaveOrderConfirmDialog(getString(R.string.title_save_order),
                 SaleOrderStatus.REJECTED.getId());
           } else {

@@ -49,9 +49,9 @@ import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OldVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
@@ -71,7 +71,6 @@ import com.parsroyal.solutiontablet.util.ResourceUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -473,7 +472,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
           closeDrawer();
           break;
         case 3:
-          showVersionDialog();
+//          showVersionDialog();
           break;
         case 4:
           showDialogForExit();
@@ -491,11 +490,6 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         }
       }
     });
-  }
-
-  private void showVersionDialog() {
-    DialogUtil.showMessageDialog(this, getString(R.string.version),
-        String.format(Locale.US, getString(R.string.your_version), BuildConfig.VERSION_NAME));
   }
 
   private void settingLoginDialog() {

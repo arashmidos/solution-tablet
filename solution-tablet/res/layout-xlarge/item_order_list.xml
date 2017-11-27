@@ -6,39 +6,57 @@
   android:layout_height="wrap_content"
   android:background="@color/white"
   android:orientation="vertical">
-  <ImageView
-    android:id="@+id/delete_img"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+  <LinearLayout
+    android:id="@+id/delete_img_layout"
+    android:layout_width="36dp"
+    android:layout_height="36dp"
     android:layout_marginStart="16dp"
     android:layout_marginLeft="16dp"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_centerVertical="true"
-    android:src="@drawable/ic_delete_24_black"
-    android:tint="@color/black_de" />
-  <ImageView
-    android:id="@+id/edit_img"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
-    android:layout_marginLeft="20dp"
+    android:gravity="center">
+    <ImageView
+      android:id="@+id/delete_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/ic_delete_24_black"
+      android:tint="@color/gray_75" />
+  </LinearLayout>
+  <LinearLayout
+    android:id="@+id/edit_img_layout"
+    android:layout_width="36dp"
+    android:layout_height="36dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
     android:layout_centerVertical="true"
-    android:layout_toEndOf="@id/delete_img"
-    android:layout_toRightOf="@id/delete_img"
-    android:src="@drawable/ic_edit_24_black"
-    android:tint="@color/black_de" />
-  <ImageView
-    android:id="@+id/upload_img"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
-    android:layout_marginLeft="20dp"
+    android:layout_toEndOf="@id/delete_img_layout"
+    android:layout_toRightOf="@id/delete_img_layout"
+    android:gravity="center">
+    <ImageView
+      android:id="@+id/edit_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/ic_edit_24_black"
+      android:tint="@color/gray_75" />
+  </LinearLayout>
+  <LinearLayout
+    android:id="@+id/upload_img_layout"
+    android:layout_width="36dp"
+    android:layout_height="36dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
     android:layout_centerVertical="true"
-    android:layout_toEndOf="@id/edit_img"
-    android:layout_toRightOf="@id/edit_img"
-    android:src="@drawable/ic_cloud_upload_24dp"
-    android:tint="@color/black_de" />
+    android:layout_toEndOf="@id/edit_img_layout"
+    android:layout_toRightOf="@id/edit_img_layout"
+    android:gravity="center">
+    <ImageView
+      android:id="@+id/upload_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/ic_cloud_upload_24dp"
+      android:tint="@color/gray_75" />
+  </LinearLayout>
 
   <TextView
     android:id="@+id/order_status_tv"
@@ -62,8 +80,8 @@
     android:layout_marginBottom="16dp"
     android:layout_marginStart="16dp"
     android:layout_marginLeft="16dp"
-    android:layout_toEndOf="@id/edit_img"
-    android:layout_toRightOf="@id/edit_img"
+    android:layout_toEndOf="@id/upload_img_layout"
+    android:layout_toRightOf="@id/upload_img_layout"
     android:gravity="end|center_vertical"
     android:orientation="horizontal"
     android:weightSum="10">
@@ -73,10 +91,10 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="2"
+      android:gravity="center"
       android:textColor="@color/register_order"
       android:textSize="12sp"
-      android:gravity="center"
-      tools:text="price" />
+      tools:text="۱۲۳۴۵۶۷۸۹۰ریاب" />
     <TextView
       android:id="@+id/order_payment_method_tv"
       style="@style/IranSans.Light"
@@ -88,7 +106,8 @@
       android:drawableRight="@drawable/ic_attach_money_18_dp"
       android:gravity="right"
       android:textColor="@color/black_de"
-      android:textSize="12sp" />
+      android:textSize="12sp"
+      tools:text="چک ۱۲۰ روزه" />
 
     <TextView
       android:id="@+id/order_count_tv"
@@ -101,8 +120,8 @@
       android:drawableRight="@drawable/ic_cart_outline_black_18dp"
       android:gravity="right"
       android:textColor="@color/black_de"
-      android:textSize="12sp" />
-
+      android:textSize="12sp"
+      tools:text="23" />
 
     <TextView
       android:id="@+id/order_code_tv"
@@ -113,7 +132,7 @@
       android:gravity="right"
       android:textColor="@color/black_de"
       android:textSize="12sp"
-      tools:text="code" />
+      tools:text="کدسفارش:۱۲۳۴۵۶۷۸" />
     <TextView
       android:id="@+id/customer_name_tv"
       style="@style/IranSans.Medium"
@@ -127,7 +146,7 @@
       android:textColor="@color/black_de"
       android:textSize="12sp"
       android:visibility="gone"
-      tools:text="shakib" />
+      tools:text="آرش نوری" />
     <TextView
       android:id="@+id/order_date_tv"
       style="@style/IranSans.Medium"
@@ -138,7 +157,8 @@
       android:layout_marginRight="15dp"
       android:gravity="right|center"
       android:textColor="@color/black_de"
-      android:textSize="12sp" />
+      android:textSize="12sp"
+      tools:text="پنجشنبه 2 مرداد 96" />
   </LinearLayout>
   <View
     android:layout_width="match_parent"

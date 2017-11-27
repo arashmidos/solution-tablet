@@ -12,9 +12,9 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AlertDialog.Builder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +55,7 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -165,7 +166,7 @@ public class VisitDetailFragment extends BaseFragment {
           .isEmpty(visitInformation.getyLocation())) {
         showDialogForEmptyLocation();
       } else {
-        doFinishVisiting();
+        saveVisit();
       }
     } catch (Exception ex) {
       Crashlytics
@@ -281,6 +282,8 @@ public class VisitDetailFragment extends BaseFragment {
           notVisited ? VisitInformationDetailType.NONE : VisitInformationDetailType.NO_ORDER,
           selectedItem.getValue());
       visitService.saveVisitDetail(visitInformationDetail);
+      doFinishVisiting();
+
     } catch (Exception ex) {
       Logger.sendError("Data Storage Exception",
           "Error in updating visit result " + ex.getMessage());
@@ -353,14 +356,25 @@ public class VisitDetailFragment extends BaseFragment {
     }
   }
 
-  private void showFoundLocationDialog() {//TODO shakib old style
-    Builder builder = new Builder(mainActivity);
-    builder.setTitle(mainActivity.getString(R.string.visit_location));
-    builder.setMessage(mainActivity.getString(R.string.visit_found_location_message));
-    builder.setPositiveButton(mainActivity.getString(R.string.finish_visit),
-        (dialogInterface, i) -> doFinishVisiting());
+  private void showFoundLocationDialog() {
+    DialogUtil.showCustomDialog(mainActivity, mainActivity.getString(R.string.visit_location),
+        mainActivity.getString(R.string.visit_found_location_message),
+        mainActivity.getString(R.string.finish_visit),
+        (dialog, which) -> saveVisit(), "", null, Constants.ICON_MESSAGE);
+  }
 
-    builder.create().show();
+  private void saveVisit() {
+    DialogUtil.showCustomDialog(mainActivity, mainActivity.getString(R.string.send_data),
+        getString(R.string.message_confirm_send_visit_data_instantly), "نمایش جزئیات ارسال",
+        (dialog, which) -> {
+          FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+          Bundle args = new Bundle();
+          args.putLong(Constants.VISIT_ID, visitId);
+          SingleDataTransferDialogFragment singleDataTransferDialogFragment = SingleDataTransferDialogFragment
+              .newInstance(args);
+          singleDataTransferDialogFragment.show(ft, "data_transfer");
+        }, mainActivity.getString(R.string.cancel_btn), (dialog, which) -> doFinishVisiting(),
+        Constants.ICON_MESSAGE);
   }
 
   private void showDialogForEmptyLocation() {
@@ -369,7 +383,7 @@ public class VisitDetailFragment extends BaseFragment {
         mainActivity.getString(R.string.visit_empty_location_dialog_try_again),
         (dialog, which) -> tryFindingLocation(),
         mainActivity.getString(R.string.visit_empty_location_dialog_finish),
-        (dialog, which) -> doFinishVisiting(), Constants.ICON_MESSAGE);
+        (dialog, which) -> saveVisit(), Constants.ICON_MESSAGE);
   }
 
   public Customer getCustomer() {
@@ -539,19 +553,18 @@ public class VisitDetailFragment extends BaseFragment {
   @Subscribe
   public void getMessage(Event event) {
     if (event instanceof ActionEvent) {
-      if (event.getStatusCode() == StatusCodes.ACTION_ADD_PAYMENT) {
-//        goToRegisterPaymentFragment();TODO:
-      } else if (event.getStatusCode() == StatusCodes.ACTION_START_CAMERA) {
+      if (event.getStatusCode() == StatusCodes.ACTION_START_CAMERA) {
         if (!checkPermissions()) {
           requestPermissions();
         } else {
           startCameraActivity();
         }
+      } else if (event.getStatusCode() == StatusCodes.SUCCESS) {
+        finishVisiting();
       }
     } else if (event instanceof ErrorEvent) {
-      Log.i(TAG, "Fucking error");
       DialogUtil.dismissProgressDialog();
-      //TODO Show error message
+      ToastUtil.toastError(mainActivity, getString(R.string.error_unknown_system_exception));
     }
   }
 

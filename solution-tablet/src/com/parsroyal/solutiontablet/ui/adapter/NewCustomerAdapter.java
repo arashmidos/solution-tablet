@@ -272,9 +272,11 @@ public class NewCustomerAdapter extends Adapter<ViewHolder> {
             bundle.putString(Constants.QUESTIONNAIRE_CATEGORY, Constants.GOOD_QUESTIONNAIRE);
             mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_LIST_FRAGMENT_ID, bundle, true);
           } else {
-            DialogUtil.showMessageDialog(mainActivity,
+            DialogUtil.showCustomDialog(mainActivity,
                 mainActivity.getString(R.string.select_questionary),
-                mainActivity.getString(R.string.error_no_questionary_found));
+                mainActivity.getString(R.string.error_no_questionary_found),
+                mainActivity.getString(R.string.close), (dialog, which) -> dialog.dismiss(), "",
+                null, Constants.ICON_MESSAGE);
           }
           break;
       }

@@ -28,6 +28,7 @@ import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
@@ -155,6 +156,8 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         break;
       case R.id.upload_data_btn:
         if (transferFinished) {
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_REFRESH_DATA));
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.SUCCESS));
           getDialog().dismiss();
         } else {
           startTransfer();

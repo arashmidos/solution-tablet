@@ -13,6 +13,9 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
@@ -22,6 +25,8 @@ import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * @author arash
@@ -78,8 +83,7 @@ public class OrderListFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new OrderAdapter(mainActivity, getOrderList(), parent == null, visitId, saleType,
-        SaleOrderStatus.READY_TO_SEND.getId());
+    adapter = new OrderAdapter(mainActivity, getOrderList(), parent == null, visitId, saleType);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
@@ -110,6 +114,27 @@ public class OrderListFragment extends BaseFragment {
   @Override
   public int getFragmentId() {
     return 0;
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof ActionEvent && event.getStatusCode()
+        .equals(StatusCodes.ACTION_REFRESH_DATA)) {
+      List<SaleOrderListModel> model = getOrderList();
+      adapter.update( model );
+    }
   }
 
   @OnClick(R.id.fab_add_order)

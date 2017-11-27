@@ -4,13 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,7 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
-import com.mikepenz.crossfader.util.UIUtils;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -31,7 +27,6 @@ import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
-import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
@@ -52,47 +47,30 @@ public class OrderAdapter extends Adapter<ViewHolder> {
   private List<SaleOrderListModel> orders;
   private Long visitId;
   private String saleType;
-  private Long status;
 
   public OrderAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromReport,
-      Long visitId, String saleType, Long status) {
+      Long visitId, String saleType) {
     this.context = context;
     this.visitId = visitId == null ? 0 : visitId;
     this.orders = orders;
     this.saleType = saleType;
     this.mainActivity = (MainActivity) context;
     this.isFromReport = isFromReport;
-    this.status = status;
     inflater = LayoutInflater.from(context);
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
-
   }
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view;
-    if (isRejected()) {
-      view = inflater.inflate(R.layout.item_return_list, parent, false);
-    } else {
-      view = inflater.inflate(R.layout.item_order_list, parent, false);
-    }
-    return new ViewHolder(view);
-  }
+    View view = inflater.inflate(R.layout.item_order_list, parent, false);
 
-  protected boolean isRejected() {
-    return (status.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
-        status.equals(SaleOrderStatus.REJECTED.getId()) ||
-        status.equals(SaleOrderStatus.REJECTED_SENT.getId()));
+    return new ViewHolder(view);
   }
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     SaleOrderListModel order = orders.get(position);
-    if (isRejected()) {
-      holder.setReturnData(position, order);
-    } else {
-      holder.setOrderData(position, order);
-    }
+    holder.setOrderData(position, order);
   }
 
   @Override
@@ -105,59 +83,40 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     notifyDataSetChanged();
   }
 
-  public class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+  public class ViewHolder extends RecyclerView.ViewHolder {
 
-    @Nullable
     @BindView(R.id.order_code_tv)
     TextView orderCodeTv;
-    @Nullable
     @BindView(R.id.order_date_tv)
     TextView orderDateTv;
-    @Nullable
     @BindView(R.id.order_total_price)
     TextView orderTotalPrice;
-    @Nullable
     @BindView(R.id.order_count_tv)
     TextView orderCountTv;
-    @Nullable
     @BindView(R.id.order_payment_method_tv)
     TextView orderPaymentMethodTv;
     @Nullable
     @BindView(R.id.main_lay_rel)
     RelativeLayout mainLayRel;
     @Nullable
-    @BindView(R.id.main_lay_linear)
+    @BindView(R.id.main_lay)
     LinearLayout mainLayLin;
-    @Nullable
     @BindView(R.id.order_status_tv)
     TextView orderStatusTv;
-    @Nullable
     @BindView(R.id.delete_img)
     ImageView deleteImg;
-    @Nullable
     @BindView(R.id.edit_img)
     ImageView editImg;
-    @Nullable
     @BindView(R.id.upload_img)
     ImageView uploadImg;
-    @Nullable
-    @BindView(R.id.return_reason_tv)
-    TextView returnReasonTv;
-    @Nullable
-    @BindView(R.id.total_amount_tv)
-    TextView totalAmountTv;
-    @Nullable
-    @BindView(R.id.return_count_tv)
-    TextView returnCountTv;
-    @Nullable
-    @BindView(R.id.return_date_tv)
-    TextView returnDateTv;
-    @Nullable
+    @BindView(R.id.delete_img_layout)
+    LinearLayout deleteImageLayout;
+    @BindView(R.id.edit_img_layout)
+    LinearLayout editImageLayout;
+    @BindView(R.id.upload_img_layout)
+    LinearLayout uploadImageLayout;
     @BindView(R.id.customer_name_tv)
     TextView customerNameTv;
-    @Nullable
-    @BindView(R.id.return_status_tv)
-    TextView returnStatusTv;
 
     private int position;
     private SaleOrderListModel order;
@@ -165,32 +124,16 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-
-      if (mainLayLin != null) {
-        mainLayLin.setOnClickListener(this);
-      } else if (mainLayRel != null) {
-        mainLayRel.setOnClickListener(this);
-      }
     }
 
     public void setOrderData(int position, SaleOrderListModel order) {
       this.position = position;
       this.order = order;
-      if (!isFromReport) {
-        orderStatusTv.setVisibility(View.GONE);
-        if (customerNameTv != null) {
-          customerNameTv.setVisibility(View.GONE);
-        }
-      } else {
-        if (customerNameTv != null) {
-          customerNameTv.setVisibility(View.VISIBLE);
-        }
-      }
+
       String orderCode = "کد سفارش : " + NumberUtil.digitsToPersian(String.valueOf(order.getId()));
       orderCodeTv.setText(orderCode);
-      if (customerNameTv != null) {
-        customerNameTv.setText(order.getCustomerName());
-      }
+      customerNameTv.setText(order.getCustomerName());
+
       orderCountTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderCount())));
 
       Date createdDate = DateUtil
@@ -203,86 +146,36 @@ public class OrderAdapter extends Adapter<ViewHolder> {
               R.string.common_irr_currency));
       orderTotalPrice.setText(NumberUtil.digitsToPersian(number));
       orderPaymentMethodTv.setText(NumberUtil.digitsToPersian(order.getPaymentTypeTitle()));
+
+      changeVisibility();
+    }
+
+    private void changeVisibility() {
       if (order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
-        if (isFromReport) {
-          orderStatusTv.setVisibility(View.VISIBLE);
-        } else {
-          orderStatusTv.setVisibility(View.GONE);
-        }
-      }
-      changeButtonStates();
-    }
-
-    private void changeButtonStates() {
-      if (order.getStatus().equals(SaleOrderStatus.SENT.getId()) || order.getStatus()
-          .equals(SaleOrderStatus.REJECTED_SENT.getId())) {
         if (!MultiScreenUtility.isTablet(context)) {
-          editImg.setVisibility(View.GONE);
-          deleteImg.setVisibility(View.GONE);
-          if (Empty.isNotEmpty(uploadImg)) {
-            uploadImg.setVisibility(View.GONE);
-          }
+          editImageLayout.setVisibility(View.GONE);
+          deleteImageLayout.setVisibility(View.GONE);
+          uploadImageLayout.setVisibility(View.GONE);
         } else {
-          editImg.setVisibility(View.INVISIBLE);
-          deleteImg.setVisibility(View.INVISIBLE);
-          if (Empty.isNotEmpty(uploadImg)) {
-            uploadImg.setVisibility(View.INVISIBLE);
-          }
+          editImageLayout.setVisibility(View.INVISIBLE);
+          deleteImageLayout.setVisibility(View.INVISIBLE);
+          uploadImageLayout.setVisibility(View.INVISIBLE);
         }
+
+        orderStatusTv.setVisibility(View.VISIBLE);
       }
 
-      if (!isFromReport && Empty.isNotEmpty(uploadImg)) {
-        uploadImg.setVisibility(View.GONE);
-      }
-    }
+      if (isFromReport) {
 
-    public void setReturnData(int position, SaleOrderListModel order) {
-      this.position = position;
-      this.order = order;
-
-      Date createdDate = DateUtil
-          .convertStringToDate(order.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
-      String dateString = DateUtil.getFullPersianDate(createdDate);
-      if (isFromReport && !MultiScreenUtility.isTablet(context)) {
-        returnReasonTv
-            .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_return_grey_18_dp, 0);
-        returnReasonTv.setCompoundDrawablePadding((int) UIUtils.convertDpToPixel(8, context));
-        returnReasonTv.setTextColor(ContextCompat.getColor(context, R.color.black_de));
-        returnReasonTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderCount())));
-        returnCountTv.setText(order.getCustomerName());
+        customerNameTv.setVisibility(View.VISIBLE);
       } else {
-        if (isFromReport) {
-          customerNameTv.setText(order.getCustomerName());
-          customerNameTv.setVisibility(View.VISIBLE);
-        }
-        if (TextUtils.isEmpty(order.getDescription())) {
-          returnReasonTv.setVisibility(View.GONE);
-        } else {
-          returnReasonTv.setText(order.getDescription());
-        }
-        returnCountTv
-            .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_return_grey_18_dp, 0);
-        returnCountTv.setCompoundDrawablePadding((int) UIUtils.convertDpToPixel(8, context));
-        returnCountTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderCount())));
+        uploadImageLayout.setVisibility(View.GONE);
+        customerNameTv.setVisibility(View.GONE);
       }
-      returnDateTv.setText(NumberUtil.digitsToPersian(dateString));
-      String number = String
-          .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
-              R.string.common_irr_currency));
-      totalAmountTv.setText(NumberUtil.digitsToPersian(number));
-
-      if (order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId())) {
-        if (isFromReport) {
-          returnStatusTv.setVisibility(View.VISIBLE);
-        } else {
-          returnStatusTv.setVisibility(View.GONE);
-        }
-      }
-      changeButtonStates();
     }
 
     @OnClick({R.id.delete_img, R.id.delete_img_layout, R.id.edit_img, R.id.edit_img_layout,
-        R.id.main_lay, R.id.main_lay_linear, R.id.upload_img})
+        R.id.main_lay, R.id.main_lay_rel, R.id.upload_img, R.id.upload_img_layout})
     @Optional
     public void onClick(View v) {
 
@@ -295,21 +188,21 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           break;
         case R.id.edit_img_layout:
         case R.id.edit_img:
-        case R.id.main_lay_linear:
+        case R.id.main_lay_rel:
         case R.id.main_lay:
-          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {//OR REJECT//TODO IMPORTANT
-            Bundle args = new Bundle();
-            args.putLong(Constants.ORDER_ID, order.getId());
-            args.putString(Constants.SALE_TYPE, saleType);
-            args.putLong(Constants.VISIT_ID, order.getVisitId());
-            args.putBoolean(Constants.READ_ONLY, false);
-            setPageStatus(args);
-            mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
-          }
+          Bundle args = new Bundle();
+          args.putLong(Constants.ORDER_ID, order.getId());
+          args.putString(Constants.SALE_TYPE, saleType);
+          args.putLong(Constants.VISIT_ID, order.getVisitId());
+          args.putBoolean(Constants.READ_ONLY, false);
+          setPageStatus(args);
+          mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
           break;
         case R.id.upload_img:
         case R.id.upload_img_layout:
-          openSendDataDialog();
+          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
+            openSendDataDialog();
+          }
           break;
       }
     }
@@ -318,8 +211,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       boolean isRejected = order.getStatus().equals(SaleOrderStatus.REJECTED.getId());
       DialogUtil.showConfirmDialog(mainActivity, mainActivity.getString(R.string.title_attention),
           mainActivity.getString(isRejected ? R.string.message_return_delete_confirm
-              : R.string.message_order_delete_confirm), (dialog, which) ->
-          {
+              : R.string.message_order_delete_confirm), (dialog, which) -> {
             saleOrderService.deleteOrder(order.getId());
             orders.remove(position);
             notifyDataSetChanged();
@@ -344,6 +236,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       args.putLong(Constants.VISIT_ID, order.getVisitId());
       SingleDataTransferDialogFragment singleDataTransferDialogFragment = SingleDataTransferDialogFragment
           .newInstance(args);
+
       singleDataTransferDialogFragment.show(ft, "data_transfer");
     }
   }

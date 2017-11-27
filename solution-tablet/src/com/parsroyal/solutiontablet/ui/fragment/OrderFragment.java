@@ -116,17 +116,20 @@ public class OrderFragment extends BaseFragment {
     Bundle args = getArguments();
     readOnly = args.getBoolean(Constants.READ_ONLY);
     if (readOnly) {
+      //It comes from FeatureList->Goods
       bottomBar.setVisibility(View.GONE);
       mainActivity.changeTitle(getString(R.string.title_goods_list));
     } else {
+      //Comes from Report or CustomerVisit, to add Order or Reject
       orderId = args.getLong(Constants.ORDER_ID, -1);
       order = saleOrderService.findOrderDtoById(orderId);
+      if (Empty.isEmpty(order)) {
+        return inflater.inflate(R.layout.empty_view, container, false);
+      }
       orderStatus = order.getStatus();
       saleType = args.getString(Constants.SALE_TYPE, "");
       visitId = args.getLong(Constants.VISIT_ID, -1);
       pageStatus = args.getString(Constants.PAGE_STATUS, "");
-      orderCountTv
-          .setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
       mainActivity.changeTitle(getProperTitle());
     }
 
@@ -156,6 +159,9 @@ public class OrderFragment extends BaseFragment {
       adapter = new GoodsAdapter(mainActivity, this, goodsService.searchForGoodsList(goodsSo),
           readOnly, false);
     }
+
+    orderCountTv
+        .setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
 
     if (MultiScreenUtility.isTablet(mainActivity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);

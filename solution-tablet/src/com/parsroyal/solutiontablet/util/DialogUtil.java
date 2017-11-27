@@ -30,9 +30,7 @@ public class DialogUtil {
   public static void showCustomDialog(Context context, String title, String message,
       String positiveChoice, DialogInterface.OnClickListener positiveBtnOnClickListener,
       String negativeChoice, DialogInterface.OnClickListener negativeBtnOnClickListener,
-      int iconType)
-
-  {
+      int iconType)  {
     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
     LayoutInflater inflater = ((AppCompatActivity) context).getLayoutInflater();
     View dialogView = inflater.inflate(R.layout.dialog_custom, null);
@@ -63,20 +61,6 @@ public class DialogUtil {
       positiveBtnOnClickListener.onClick(alertDialog, 0);
       alertDialog.dismiss();
     });
-  }
-//Todo shakib: Change style
-
-  /**
-   * Show an Alert Dialog with Ok button
-   */
-  public static void showMessageDialog(Context context, String title, String message) {
-    Dialog dialog = new AlertDialog.Builder(context)
-        .setTitle(title)
-        .setMessage(message)
-        .setPositiveButton(context.getString(R.string.button_ok),
-            (dialog1, which) -> dialog1.dismiss())
-        .create();
-    dialog.show();
   }
 
   public static void showProgressDialog(Context context, CharSequence message) {

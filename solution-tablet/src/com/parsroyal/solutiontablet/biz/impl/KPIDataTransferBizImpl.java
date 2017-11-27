@@ -61,13 +61,7 @@ public class KPIDataTransferBizImpl extends AbstractDataTransferBizImpl<KPIDto> 
       HttpBasicAuthentication authentication = new HttpBasicAuthentication(username.getValue(),
           password.getValue());
       httpHeaders.setAuthorization(authentication);
-      /*httpHeaders.add("saleType",
-          Empty.isEmpty(saleType) ? ApplicationKeys.SALE_COLD : saleType.getValue());
-*/
-      /*if (Empty.isNotEmpty(salesmanId)) {
-        httpHeaders.add("salesmanId", salesmanId.getValue());
-        httpHeaders.add("salesmanCode", salesmanCode.getValue());
-      }*/
+
 
       RestTemplate restTemplate = new RestTemplate();
       restTemplate.getMessageConverters().add(new StringHttpMessageConverter());

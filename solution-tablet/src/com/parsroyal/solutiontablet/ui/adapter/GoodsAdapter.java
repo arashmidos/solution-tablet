@@ -96,6 +96,8 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
     RelativeLayout mainLay;
     @BindView(R.id.good_customer_price_tv)
     TextView goodsCustomerPrice;
+    @BindView(R.id.good_customer_price_title)
+    TextView goodCustomerPriceTitle;
     @Nullable
     @BindView(R.id.good_currency)
     TextView goodsCurrency;
@@ -158,6 +160,8 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
 
       if (isRejectedGoods) {
         recoveryDateTv.setVisibility(View.GONE);
+        goodsCustomerPrice.setVisibility(View.INVISIBLE);
+        goodCustomerPriceTitle.setVisibility(View.INVISIBLE);
       } else {
         recoveryDateTv.setText(String.format(NumberUtil.digitsToPersian(good.getRecoveryDate())));
       }

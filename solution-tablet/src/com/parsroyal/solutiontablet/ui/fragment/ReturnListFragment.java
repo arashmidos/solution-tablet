@@ -13,15 +13,23 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.data.entity.Goods;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
+import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.RejectAdapter;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class ReturnListFragment extends BaseFragment {
 
@@ -37,6 +45,7 @@ public class ReturnListFragment extends BaseFragment {
   private String saleType;
   private long visitId;
   private SaleOrderSO saleOrderSO = new SaleOrderSO();
+  private RejectAdapter adapter;
 
   public ReturnListFragment() {
     // Required empty public constructor
@@ -76,8 +85,7 @@ public class ReturnListFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    OrderAdapter adapter = new OrderAdapter(mainActivity, getReturnList(), parent == null, visitId,
-        saleType, SaleOrderStatus.REJECTED.getId());
+    adapter = new RejectAdapter(mainActivity, getReturnList(), parent == null, visitId, saleType);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
@@ -114,5 +122,31 @@ public class ReturnListFragment extends BaseFragment {
   @OnClick(R.id.fab_add_return)
   public void onViewClicked() {
     parent.openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(GoodsDtoList goodsDtoList) {
+    adapter.setRejectGoods(goodsDtoList);
+  }
+
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof ErrorEvent) {
+      DialogUtil.dismissProgressDialog();
+      ToastUtil.toastError(mainActivity,
+          mainActivity.getString(R.string.err_reject_order_not_possible));
+    }
   }
 }

@@ -56,7 +56,7 @@
       android:gravity="left"
       android:textColor="@color/green_return"
       android:textSize="12sp"
-      tools:text="566465 toman" />
+      tools:text="۱۲۳۴۵۶۷۸۹۰ریال" />
 
     <TextView
       android:id="@+id/return_count_tv"
@@ -82,7 +82,7 @@
       android:layout_marginRight="28dp"
       android:layout_below="@id/return_reason_tv"
       android:src="@drawable/ic_delete_24_black"
-      android:tint="@color/black_de" />
+      android:tint="@color/gray_75" />
     <ImageView
       android:id="@+id/edit_img"
       android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
       android:layout_toEndOf="@id/delete_img"
       android:layout_toRightOf="@id/delete_img"
       android:src="@drawable/ic_edit_24_black"
-      android:tint="@color/black_de" />
+      android:tint="@color/gray_75" />
     <TextView
       android:id="@+id/return_status_tv"
       style="@style/IranSans.Medium"
