@@ -29,8 +29,8 @@ android {
         applicationId "com.parsroyal.solutionmobile"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 88
-        versionName "2.11.1-ui"
+        versionCode 90
+        versionName "2.11.3-ui"
         vectorDrawables.useSupportLibrary = true
         jackOptions {
             enabled true
@@ -46,7 +46,6 @@ android {
     dexOptions {
         javaMaxHeapSize '2048m'
     }
-
 
     sourceSets {
         main {

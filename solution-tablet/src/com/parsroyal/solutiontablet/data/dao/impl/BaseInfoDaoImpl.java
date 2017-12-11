@@ -87,4 +87,19 @@ public class BaseInfoDaoImpl extends AbstractDao<BaseInfo, Long> implements Base
     return entities;
   }
 
+  @Override
+  public List<LabelValue> search(Long type, String constraint) {
+    String selection = " " + BaseInfo.COL_TYPE + " = ? AND " + BaseInfo.COL_TITLE + " LIKE ? ";
+    String[] args = {String.valueOf(type), "%" + constraint + "%"};
+
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+    List<LabelValue> entities = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      entities.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
+    }
+    cursor.close();
+    return entities;
+  }
 }

@@ -89,7 +89,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
   @Override
   public List<LabelValue> getAllPaymentType() {
     PaymentType[] payments = PaymentType.values();
-    List<LabelValue> entities = new ArrayList<LabelValue>();
+    List<LabelValue> entities = new ArrayList<>();
     for (int i = 0; i < 3; i++) {
       entities.add(new LabelValue(payments[i].getId(), payments[i].getTitle()));
     }
@@ -104,6 +104,12 @@ public class BaseInfoServiceImpl implements BaseInfoService {
   @Override
   public void deleteAllProvinces() {
     provinceDao.deleteAll();
+  }
+
+  @Override
+  public List<LabelValue> search(Long type, String constraint) {
+    return baseInfoDao.search(type, constraint);
+
   }
 
   @Override

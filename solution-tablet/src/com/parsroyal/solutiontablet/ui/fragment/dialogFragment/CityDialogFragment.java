@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.data.dao.impl.CityDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.ProvinceDaoImpl;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
@@ -75,6 +76,8 @@ public class CityDialogFragment extends DialogFragment {
     setUpRecyclerView();
     if (provinceId == -1) {
       cityEdt.setHint(R.string.search_in_provinces);
+    } else if (provinceId == -2) {
+      cityEdt.setHint(R.string.search_in_activities);
     } else {
       cityEdt.setHint(R.string.search_in_cities);
     }
@@ -95,6 +98,8 @@ public class CityDialogFragment extends DialogFragment {
           searchImg.setVisibility(View.VISIBLE);
           if (provinceId == -1) {
             adapter.updateList(getProvinceModel());
+          } else if (provinceId == -2) {
+            adapter.updateList(getActivityModel());
           } else {
             adapter.updateList(getCityModel());
           }
@@ -102,6 +107,8 @@ public class CityDialogFragment extends DialogFragment {
           searchImg.setVisibility(View.GONE);
           if (provinceId == -1) {
             adapter.updateList(provinceDaoImpl.searchProvincesLabelValues(s.toString()));
+          } else if (provinceId == -2) {
+            adapter.updateList(baseInfoService.search(BaseInfoTypes.ACTIVITY_TYPE.getId(), s.toString()));
           } else {
             adapter.updateList(
                 cityDaoImpl.searchCitiesLabelValuesForProvinceId(provinceId, s.toString()));
@@ -121,6 +128,8 @@ public class CityDialogFragment extends DialogFragment {
   private void setUpRecyclerView() {
     if (provinceId == -1) {
       adapter = new CityAdapter(mainActivity, getProvinceModel(), this);
+    } else if (provinceId == -2) {
+      adapter = new CityAdapter(mainActivity, getActivityModel(), this);
     } else {
       adapter = new CityAdapter(mainActivity, getCityModel(), this);
     }
@@ -130,7 +139,8 @@ public class CityDialogFragment extends DialogFragment {
   }
 
   public void setSelectedItem(LabelValue selectedItem) {
-    addCustomerFragment.setSelectedItem(selectedItem, provinceId != -1L);
+    addCustomerFragment
+        .setSelectedItem(selectedItem, provinceId == -1L ? -1 : provinceId == -2L ? -2 : -3);
     getDialog().dismiss();
   }
 
@@ -141,7 +151,10 @@ public class CityDialogFragment extends DialogFragment {
 
   private List<LabelValue> getProvinceModel() {
     return baseInfoService.getAllProvincesLabelValues();
+  }
 
+  private List<LabelValue> getActivityModel() {
+    return baseInfoService.getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.ACTIVITY_TYPE.getId());
   }
 
   @OnClick({R.id.close_btn})

@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.util;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,7 +29,7 @@ public class DialogUtil {
   public static void showCustomDialog(Context context, String title, String message,
       String positiveChoice, DialogInterface.OnClickListener positiveBtnOnClickListener,
       String negativeChoice, DialogInterface.OnClickListener negativeBtnOnClickListener,
-      int iconType)  {
+      int iconType) {
     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
     LayoutInflater inflater = ((AppCompatActivity) context).getLayoutInflater();
     View dialogView = inflater.inflate(R.layout.dialog_custom, null);

@@ -537,23 +537,27 @@
 
         </RelativeLayout>
 
-
         <RelativeLayout
           android:layout_width="0dp"
           android:layout_height="40dp"
           android:layout_weight=".5"
+          android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
+          android:layout_marginLeft="16dp"
           android:layout_marginRight="16dp">
 
-          <Spinner
-            android:id="@+id/activity_spinner"
+          <TextView
+            android:id="@+id/activity_tv"
             style="@style/IranSans"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:background="@color/white"
+            android:textColor="@color/black_21"
+            android:textSize="14sp"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:gravity="right" />
+            android:gravity="right|center"
+            android:text="@string/activity_type" />
 
           <View
             android:layout_width="match_parent"
