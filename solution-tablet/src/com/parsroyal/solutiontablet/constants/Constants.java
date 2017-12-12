@@ -7,7 +7,7 @@ import com.parsroyal.solutiontablet.R;
  */
 public class Constants {
 
-  public static final String APPLICATION_NAME = "COMMER";
+  public static final String APPLICATION_NAME = "SolutionMobile";
   public static final String CUSTOMER_PICTURE_DIRECTORY_NAME = "Customer-Pics";
   public static final String GPS_TRACKER_ACTION = "com.parsroyal.solutiontablet.TrackerAlarmReceiver";
   public static final String CUSTOMER_BACKEND_ID = "CUSTOMER_BACKEND_ID";

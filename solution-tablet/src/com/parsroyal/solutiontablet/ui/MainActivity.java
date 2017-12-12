@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui;
 
 import android.Manifest;
+import android.Manifest.permission;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -349,7 +350,9 @@ public abstract class MainActivity extends AppCompatActivity {
         // If user interaction was interrupted, the permission request is cancelled and you
         // receive empty arrays.
         Log.i(TAG, "User interaction was cancelled.");
-      } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      } else if  ((grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+          && grantResults[1] == PackageManager.PERMISSION_GRANTED) || (grantResults.length == 1
+          && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
         // Permission was granted.
         gpsRecieverService.requestLocationUpdates();
       } else {
@@ -421,29 +424,51 @@ public abstract class MainActivity extends AppCompatActivity {
     boolean shouldProvideRationale =
         ActivityCompat.shouldShowRequestPermissionRationale(this,
             Manifest.permission.ACCESS_FINE_LOCATION);
+    boolean storageShouldProvideRationale =
+        ActivityCompat.shouldShowRequestPermissionRationale(this,
+            permission.WRITE_EXTERNAL_STORAGE);
 
     // Provide an additional rationale to the user. This would happen if the user denied the
     // request previously, but didn't check the "Don't ask again" checkbox.
-    if (shouldProvideRationale) {
+    if (shouldProvideRationale && storageShouldProvideRationale) {
       Log.i(TAG, "Displaying permission rationale to provide additional context.");
       try {
-        ToastUtil.toastError(this, getString(R.string.permission_rationale),
+        ToastUtil.toastError(this, getString(R.string.permission_rationale_storage_location),
             view -> {
               // Request permission
               ActivityCompat.requestPermissions(MainActivity.this,
-                  new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                  new String[]{permission.ACCESS_FINE_LOCATION, permission.WRITE_EXTERNAL_STORAGE},
                   REQUEST_PERMISSIONS_REQUEST_CODE);
+
             });
       } catch (Exception e) {
         e.printStackTrace();
       }
-    } else {
+    } else if (shouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(this, getString(R.string.permission_rationale_location),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(this,
+                new String[]{permission.ACCESS_FINE_LOCATION},
+                REQUEST_PERMISSIONS_REQUEST_CODE);
+          });
+    } else if (storageShouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(this, getString(R.string.permission_rationale_storage),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(this,
+                new String[]{permission.WRITE_EXTERNAL_STORAGE},
+                REQUEST_PERMISSIONS_REQUEST_CODE);
+          });
+    }  else {
       Log.i(TAG, "Requesting permission");
       // Request permission. It's possible this can be auto answered if device policy
       // sets the permission in a given state or the user denied the permission
       // previously and checked "Never ask again".
       ActivityCompat.requestPermissions(MainActivity.this,
-          new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+          new String[]{permission.ACCESS_FINE_LOCATION, permission.WRITE_EXTERNAL_STORAGE},
           REQUEST_PERMISSIONS_REQUEST_CODE);
     }
   }
@@ -468,7 +493,9 @@ public abstract class MainActivity extends AppCompatActivity {
    */
   private boolean checkPermissions() {
     return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-        Manifest.permission.ACCESS_FINE_LOCATION);
+        Manifest.permission.ACCESS_FINE_LOCATION) &&
+        PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+            permission.WRITE_EXTERNAL_STORAGE);
   }
 
   public void showFeaturesFragment() {

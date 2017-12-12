@@ -377,10 +377,11 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   private void finishTransfer() {
     mainActivity.runOnUiThread(() -> {
       adapter.setCurrent(++currentPosition);
-      ToastUtil.toastMessage(getActivity(), "ارسال اطلاعات با موفقیت انجام شد");
+      ToastUtil.toastMessage(getActivity(), getString(R.string.send_data_completed_successfully));
       transferFinished = true;
+      cancelBtn.setVisibility(View.GONE);
       switchButtonState();
-      uploadDataBtn.setText("تمام");
+      uploadDataBtn.setText(R.string.finish);
       Drawable img = getResources().getDrawable(R.drawable.ic_check_white_18_dp);
       img.setBounds(10, 0, 0, 0);
       uploadDataBtn.setCompoundDrawables(img, null, null, null);
@@ -392,7 +393,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     mainActivity.runOnUiThread(() -> {
       switchButtonState();
       adapter.setError(currentPosition);
-      ToastUtil.toastError(getActivity(), "خطا در ارسال اطلاعات");
+      ToastUtil.toastError(getActivity(), getString(R.string.error_in_sending_data));
     });
   }
 

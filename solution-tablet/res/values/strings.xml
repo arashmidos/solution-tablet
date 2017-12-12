@@ -393,8 +393,11 @@
   <string name="launch_activity">اجرای برنامه</string>
   <string name="remove_location_updates">توقف موقعیت یاب</string>
   <string name="permission_rationale">مجوز دریافت موقعیت باید فعال باشد</string>
+  <string name="permission_rationale_storage_location">مجوز دریافت موقعیت و دسترسی به فایل برای ذخیره عکس باید فعال باشد</string>
+  <string name="permission_rationale_location">مجوز دریافت موقعیت باید فعال باشد</string>
+  <string name="permission_rationale_storage">مجوز دسترسی به فایل برای ذخیره عکس باید فعال باشد</string>
   <string name="permission_rationale_camera_storage">مجوز استفاده از دوربین و دسترسی به فایل برای ذخیره عکس باید فعال باشد</string>
-  <string name="permission_denied_explanation">دسترسی موقعیت یاب داده نشد. برای عملکرد صحیح برنامه این دسترسی لازم است</string>
+  <string name="permission_denied_explanation">دسترسی موقعیت یاب یا فایل داده نشد. برای عملکرد صحیح برنامه این دو دسترسی لازم هستند</string>
   <string name="notification_message_gps_service_active">سرویس موقعیت یاب فعال است</string>
   <string name="show_waypoints">نمایش نقاط</string>
   <string name="show_optimized_route">بهبود نمایش مسیر</string>
@@ -569,4 +572,7 @@
   <string name="reject_description">توضیح مرجوعی</string>
   <string name="refresh_data">بروزرسانی داده ها</string>
   <string name="message_confirm_send_visit_data_instantly">آیا مایل به ارسال اطلاعات این بازدید در این لحظه هستید؟</string>
+  <string name="finish">تمام</string>
+  <string name="send_data_completed_successfully">ارسال اطلاعات با موفقیت انجام شد</string>
+  <string name="error_in_sending_data">خطا در ارسال اطلاعات</string>
 </resources>
