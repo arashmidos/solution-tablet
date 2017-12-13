@@ -137,6 +137,8 @@ public class OrderListFragment extends BaseFragment {
 
   @OnClick(R.id.fab_add_order)
   public void onClick() {
-    parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+    if( parent!=null) {
+      parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+    }
   }
 }

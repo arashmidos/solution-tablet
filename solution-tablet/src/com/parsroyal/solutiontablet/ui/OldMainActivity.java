@@ -55,7 +55,6 @@ import com.parsroyal.solutiontablet.ui.fragment.OldVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
-import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialog.LoginDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
@@ -66,7 +65,6 @@ import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
-import com.parsroyal.solutiontablet.util.ResourceUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -355,7 +353,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         fragment = new GoodsListForQuestionnairesFragment();
         break;
       case SETTING_FRAGMENT_ID:
-        fragment = new SettingFragment();
+//        fragment = new SettingFragment();
         changeSidebarItem(-1);
         break;
       case DATA_TRANSFER_FRAGMENT_ID:
@@ -658,7 +656,6 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
 
   @Override
   public void publishResult(BusinessException ex) {
-    changeMessageDialog(ResourceUtil.getString(this, ex.getClass().getCanonicalName()));
   }
 
   @Override

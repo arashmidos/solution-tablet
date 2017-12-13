@@ -48,7 +48,9 @@ public class SendLocationService extends IntentService {
   protected void onHandleIntent(@Nullable Intent intent) {
     Log.i(TAG, "Send locations...");
     String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
-    if (Empty.isNotEmpty(salesmanId) && NetworkUtil.isNetworkAvailable(this)) {
+    String saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+    if (Empty.isNotEmpty(salesmanId) && Empty.isNotEmpty(saleType) && NetworkUtil
+        .isNetworkAvailable(this)) {
 
       List<PositionDto> positions = positionService
           .getAllPositionDtoByStatus(SendStatus.NEW.getId());

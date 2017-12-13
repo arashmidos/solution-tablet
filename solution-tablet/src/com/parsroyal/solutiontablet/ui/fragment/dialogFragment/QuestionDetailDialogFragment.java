@@ -136,11 +136,10 @@ public class QuestionDetailDialogFragment extends DialogFragment {
       errorMsg.setVisibility(View.VISIBLE);
       prerequisiteBtn.setVisibility(View.VISIBLE);
       prerequisiteBtn.setText(
-          NumberUtil.digitsToPersian(String.format(Locale.getDefault(), "نمایش سوال شماره %d",
+          NumberUtil.digitsToPersian(String.format(Locale.getDefault(), getString(R.string.show_question_x),
               questionsAdapter.findPositionByBackendId(questionDto.getPrerequisite()))));
       errorMsg.setText(NumberUtil.digitsToPersian(String
-          .format(Locale.getDefault(),
-              "جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!",
+          .format(Locale.getDefault(),              getString(R.string.question_has_prerequisite_x),
               questionDto.getPrerequisite())));
       recyclerView.setVisibility(View.GONE);
       saveQuestionImg.setVisibility(View.GONE);

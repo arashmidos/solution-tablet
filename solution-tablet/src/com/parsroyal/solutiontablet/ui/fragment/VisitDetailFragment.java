@@ -132,6 +132,9 @@ public class VisitDetailFragment extends BaseFragment {
       locationService = new LocationServiceImpl(mainActivity);
       visitService = new VisitServiceImpl(mainActivity);
       customer = customerService.getCustomerById(customerId);
+      if (customer == null) {
+        return inflater.inflate(R.layout.empty_view, container, false);
+      }
       saleOrderService = new SaleOrderServiceImpl(mainActivity);
       visitId = args.getLong(Constants.VISIT_ID);
       saleType = new SettingServiceImpl(mainActivity)

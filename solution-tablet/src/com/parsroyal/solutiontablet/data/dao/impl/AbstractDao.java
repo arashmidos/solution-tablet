@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import com.parsroyal.solutiontablet.data.entity.BaseEntity;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import java.util.ArrayList;
@@ -17,13 +18,18 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long> {
   protected static SQLiteDatabase writableDb;
 
   public PK create(T entity) {
-    CommerDatabaseHelper databaseHelper = new CommerDatabaseHelper(getContext());
-    SQLiteDatabase db = databaseHelper.getWritableDatabase();
-    db.beginTransaction();
-    Long id = db.insert(getTableName(), null, getContentValues(entity));
-    db.setTransactionSuccessful();
-    db.endTransaction();
-    return (PK) id;
+    try {
+      CommerDatabaseHelper databaseHelper = new CommerDatabaseHelper(getContext());
+      SQLiteDatabase db = databaseHelper.getWritableDatabase();
+      db.beginTransaction();
+      Long id = db.insert(getTableName(), null, getContentValues(entity));
+      db.setTransactionSuccessful();
+      db.endTransaction();
+      return (PK) id;
+    } catch (SQLiteDatabaseLockedException ex) {
+      ex.printStackTrace();
+      return null;
+    }
   }
 
   public void bulkInsert(List<T> list) {

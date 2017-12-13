@@ -20,15 +20,6 @@ public enum SendStatus {
     this.title = title;
   }
 
-  public static String getDisplayTitle(Context context, Long status) {
-    SendStatus foundStatus = findById(status);
-    if (Empty.isNotEmpty(foundStatus)) {
-      return ResourceUtil.getString(context, "payment_status_" + foundStatus.getTitle());
-    } else {
-      return "";
-    }
-  }
-
   private static SendStatus findById(Long statusId) {
     for (SendStatus sendStatus : SendStatus.values()) {
       if (sendStatus.getId().equals(statusId)) {

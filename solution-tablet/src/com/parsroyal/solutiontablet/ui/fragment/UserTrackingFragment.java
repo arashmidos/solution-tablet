@@ -340,6 +340,9 @@ public class UserTrackingFragment extends BaseFragment implements
 
   @Override
   public void onConnected(@Nullable Bundle bundle) {
+    if (!isAdded()) {
+      return;
+    }
     layoutContainer.setVisibility(View.VISIBLE);
     errorMsg.setVisibility(View.GONE);
     FragmentManager fm = getChildFragmentManager();
@@ -570,6 +573,9 @@ public class UserTrackingFragment extends BaseFragment implements
   }
 
   private void drawRoute(List<LatLng> route) {
+    if (Empty.isEmpty(map)) {
+      return;
+    }
     clearMapRoute();
     if (route.size() == 0) {
       return;
@@ -604,14 +610,18 @@ public class UserTrackingFragment extends BaseFragment implements
   }
 
   private void drawSnappedRoute(List<LatLng> route) {
-    //Double check if user unchecked the option
-    if (showSnappedTrack.isChecked()) {
-      PolylineOptions polyOptions = new PolylineOptions();
-      polyOptions.color(getResources().getColor(colors[4]));
-      polyOptions.width(4);
-      polyOptions.addAll(route);
-      snappedPolyline = map.addPolyline(polyOptions);
-      polylines.add(snappedPolyline);
+    try {
+      //Double check if user unchecked the option
+      if (showSnappedTrack.isChecked()) {
+        PolylineOptions polyOptions = new PolylineOptions();
+        polyOptions.color(getResources().getColor(colors[4]));
+        polyOptions.width(4);
+        polyOptions.addAll(route);
+        snappedPolyline = map.addPolyline(polyOptions);
+        polylines.add(snappedPolyline);
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
     }
   }
 

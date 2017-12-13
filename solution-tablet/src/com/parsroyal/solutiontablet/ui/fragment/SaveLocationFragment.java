@@ -124,6 +124,9 @@ public class SaveLocationFragment extends BaseFragment implements
 
   @Override
   public void onConnected(@Nullable Bundle bundle) {
+    if (!isAdded()) {
+      return;
+    }
     layoutContainer.setVisibility(View.VISIBLE);
     errorMsg.setVisibility(View.GONE);
     FragmentManager fm = getChildFragmentManager();

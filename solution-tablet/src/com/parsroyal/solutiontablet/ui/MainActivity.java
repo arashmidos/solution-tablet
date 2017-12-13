@@ -64,7 +64,6 @@ import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.ReportFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
-import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
@@ -96,7 +95,6 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int CUSTOMER_FRAGMENT = 7;
   public static final int ORDER_INFO_FRAGMENT = 8;
   public static final int CUSTOMER_SEARCH_FRAGMENT = 9;
-  public static final int SETTING_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
   public static final int USER_TRACKING_FRAGMENT_ID = 12;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
@@ -703,9 +701,6 @@ public abstract class MainActivity extends AppCompatActivity {
         break;
       case REPORT_FRAGMENT:
         fragment = ReportFragment.newInstance();
-        break;
-      case SETTING_FRAGMENT_ID:
-        fragment = new SettingFragment();
         break;
       case DATA_TRANSFER_FRAGMENT_ID:
         if (isDataTransferPossible()) {

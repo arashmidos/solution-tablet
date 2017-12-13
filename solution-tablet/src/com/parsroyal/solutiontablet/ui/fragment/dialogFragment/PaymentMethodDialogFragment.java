@@ -97,8 +97,10 @@ public class PaymentMethodDialogFragment extends DialogFragment {
         getDialog().dismiss();
         break;
       case R.id.submit_btn:
-        orderInfoFragment.setPaymentMethod(adapter.getSelectedItem());
-        getDialog().dismiss();
+        if( adapter.getSelectedItem()!=null) {
+          orderInfoFragment.setPaymentMethod(adapter.getSelectedItem());
+          getDialog().dismiss();
+        }
         break;
     }
   }

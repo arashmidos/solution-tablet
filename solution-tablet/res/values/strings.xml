@@ -3,32 +3,17 @@
 
   <string name="app_name">Solution-Mobile</string>
 
-  <string name="action_settings">Settings</string>
   <string name="setting">تنظیمات</string>
   <string name="about_us">درباره ما</string>
   <string name="version">ورژن برنامه</string>
   <string name="exit">خروج</string>
 
-  <string name="address1">آدرس 1</string>
-  <string name="address2">آدرس 2</string>
   <string name="username">نام کاربری</string>
   <string name="password">رمز عبور</string>
   <string name="userCode">کد کاربر</string>
-  <string name="serverAddress1">آدرس سرور 1</string>
   <string name="save">ذخیره</string>
-  <string name="error_serverAddress1_is_required">مقدار آدرس سرور 1 ضروری است</string>
-  <string name="error_user_code_is_required">مقدار کد کاربری ضروری است</string>
-  <string name="error_gps_interval_is_required">مقدار زمان ارسال موقعیت یاب ضروری است</string>
-  <string name="error_branch_serial_is_required">مقدار سریال شعبه ضروری است</string>
-  <string name="error_branch_serial_is_not_valid">مقدار سریال شعبه صحیح نیست</string>
-  <string name="error_stock_serial_is_required">مقدار سریال انبار ضروری است</string>
-  <string name="error_invoice_type_is_required">مقدار نوع فاکتور ضروری است</string>
-  <string name="error_order_type_is_required">مقدار نوع سفارش ضروری است</string>
-  <string name="error_reject_type_is_required">مقدار نوع مرجوعی ضروری است</string>
-  <string name="error_stock_serial_is_not_valid">مقدار سریال انبار صحیح نیست</string>
   <string name="error_unknown_system_exception">خطای سیستمی ناشناس</string>
   <string name="message_setting_saved_successfully">اطلاعات تنظیمات با موفقیت ذخیره شد</string>
-  <string name="message_connecting_to_server_please_wait">در حال اتصال به سرور، لطفا صبر کنید…</string>
   <string name="message_please_wait">لطفا صبر کنید</string>
 
   <string name="com.parsroyal.solutiontablet.exception.InvalidServerAddressException">مقدار آدرس سرور معتبر نمی باشد</string>
@@ -106,7 +91,6 @@
   <string name="message_return_delete_confirm">آیا از حذف مرجوعی مطمئن هستید؟</string>
   <string name="yes">بله</string>
   <string name="no">خیر</string>
-  <string name="no_send_data">خیر، می خواهم اطلاعات قبلی را ارسال کنم</string>
   <string name="message_customer_deleted_successfully">مشتری با موفقیت حذف شد.</string>
   <string name="message_no_item_found">هیچ آیتمی یافت نشد</string>
   <string name="new_customers_data_transferred_successfully">اطلاعات مشتریان جدید با موفقیت ارسال شد</string>
@@ -375,15 +359,9 @@
   <string name="enter">ورود</string>
   <string name="last_visit_label">آخرین ویزیت:</string>
   <string name="error_salesman_location_not_found">موقعیت شما مشخص نیست</string>
-  <string name="enable_calculate_distance">سرویس محاسبه فاصله تا مشتری فعال باشد</string>
   <string name="not_visited">عدم ویزیت</string>
   <string name="error_filter_is_not_correct">عدد وارد شده صحیح نیست.</string>
-  <string name="warning_delete_data_after_setting_change">با تغییر تنظیمات تمام داده های قبلی برنامه حذف می شوند.\n چنانچه اطلاعات ارسال نشده ای دارید،‌ می بایست ابتدا از قسمت انتقال اطلاعات ارسال کنید. آیا از تغییر تنظیمات مطمئن هستید؟</string>
-  <string name="invoice_type">نوع فاکتور</string>
-  <string name="order_type">نوع سفارش</string>
-  <string name="reject_type">نوع مرجوعی</string>
   <string name="error_sale_rate_not_correct">ضریب فروش این کالا باید %1$s %2$s‌ باشد</string>
-  <string name="enable_sale_rate">فروش بر اساس ضریب کالا فعال باشد</string>
   <string name="get_catalog">دریافت عکس کالاها</string>
   <string name="message_exception_in_data_transfer">خطا در ارتباط با سرور</string>
   <string name="data_transfered_successfully">انتقال اطلاعات با موفقیت انجام شد</string>
@@ -575,4 +553,6 @@
   <string name="finish">تمام</string>
   <string name="send_data_completed_successfully">ارسال اطلاعات با موفقیت انجام شد</string>
   <string name="error_in_sending_data">خطا در ارسال اطلاعات</string>
+  <string name="show_question_x">نمایش سوال شماره %d</string>
+  <string name="question_has_prerequisite_x">جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!</string>
 </resources>

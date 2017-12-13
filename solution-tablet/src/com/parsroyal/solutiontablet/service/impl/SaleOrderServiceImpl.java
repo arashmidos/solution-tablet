@@ -230,17 +230,22 @@ public class SaleOrderServiceImpl implements SaleOrderService {
   @Override
   public void deleteOrder(Long orderId) {
     SaleOrder order = saleOrderDao.retrieve(orderId);
-
+    if (Empty.isEmpty(order)) {
+      return;
+    }
     //Delete order items
     List<SaleOrderItemDto> orderItems = saleOrderItemDao
         .getAllOrderItemsDtoByOrderId(order.getId());
-    boolean isReject = order.getStatus().equals(SaleOrderStatus.REJECTED.getId());
+
+    boolean isReject = SaleOrderStatus.REJECTED.getId().equals(order.getStatus());
     for (SaleOrderItemDto saleOrderItemDto : orderItems) {
       if (Empty.isNotEmpty(saleOrderItemDto.getGoodsCount()) && !isReject) {
         //If its not rejected, return goods item back to inventory
         Goods goods = goodsDao.retrieveByBackendId(saleOrderItemDto.getGoodsBackendId());
-        goods.setExisting(goods.getExisting() + saleOrderItemDto.getGoodsCount());
-        goodsDao.update(goods);
+        if( goods!=null) {
+          goods.setExisting(goods.getExisting() + saleOrderItemDto.getGoodsCount());
+          goodsDao.update(goods);
+        }
       }
       saleOrderItemDao.delete(saleOrderItemDto.getId());
 

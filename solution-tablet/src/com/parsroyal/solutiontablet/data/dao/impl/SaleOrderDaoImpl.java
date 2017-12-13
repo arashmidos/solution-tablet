@@ -135,13 +135,13 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     return saleOrder;
   }
 
-  protected BaseSaleDocument createsaleDocumentFromCursor(Cursor cursor) {
+  protected BaseSaleDocument createSaleDocumentFromCursor(Cursor cursor) {
     BaseSaleDocument saleOrder = null;
     Long statusId = cursor.getLong(8);
     if (SaleOrderStatus.READY_TO_SEND.getId().equals(statusId)) {
       saleOrder = new SaleOrderDocument();
-      saleOrder.setType(
-          Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_ORDER_TYPE)));
+      String orderType = settingService.getSettingValue(ApplicationKeys.SETTING_ORDER_TYPE);
+      saleOrder.setType(Empty.isEmpty(orderType) ? 0 : Integer.valueOf(orderType));
       //Set export date to tomorrow
       String saleDate = cursor.getString(3);
       Date date = DateUtil.convertStringToDate(saleDate, DateUtil.GLOBAL_FORMATTER, "FA");
@@ -328,7 +328,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     List<BaseSaleDocument> saleOrderList = new ArrayList<>();
 
     while (cursor.moveToNext()) {
-      saleOrderList.add(createsaleDocumentFromCursor(cursor));
+      saleOrderList.add(createSaleDocumentFromCursor(cursor));
     }
 
     cursor.close();
@@ -353,7 +353,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     BaseSaleDocument baseSaleDocument = null;
 
     if (cursor.moveToNext()) {
-      baseSaleDocument = createsaleDocumentFromCursor(cursor);
+      baseSaleDocument = createSaleDocumentFromCursor(cursor);
     }
 
     cursor.close();
