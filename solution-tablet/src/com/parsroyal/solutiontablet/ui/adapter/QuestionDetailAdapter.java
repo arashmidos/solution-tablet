@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.DatePicker.Builder;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.parsroyal.solutiontablet.R;
@@ -107,6 +106,11 @@ public class QuestionDetailAdapter extends Adapter<ViewHolder> {
     submittedAnswer = "";
   }
 
+  public void removeDate() {
+    submittedAnswer = "";
+    notifyDataSetChanged();
+  }
+
   public String getUserAnswers() {
     String answer = "";
     switch (questionType) {
@@ -126,6 +130,7 @@ public class QuestionDetailAdapter extends Adapter<ViewHolder> {
         for (int i = 0; i < userAnswer.length; i++) {
           if (userAnswer[i] != null && userAnswer[i]) {
             answer = answers.get(i);
+            break;
           }
         }
         break;
@@ -204,9 +209,8 @@ public class QuestionDetailAdapter extends Adapter<ViewHolder> {
         }
       } else if (dateEdit != null) {
         dateEdit.setFocusable(false);
-        dateEdit.setText(
-            Empty.isEmpty(submittedAnswer) ? context.getString(R.string.choose_date)
-                : submittedAnswer);
+        dateEdit.setText(Empty.isEmpty(submittedAnswer) ? context.getString(R.string.choose_date)
+            : submittedAnswer);
       }
     }
 

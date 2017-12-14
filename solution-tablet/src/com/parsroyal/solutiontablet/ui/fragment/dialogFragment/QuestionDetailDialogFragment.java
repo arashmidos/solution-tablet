@@ -121,7 +121,7 @@ public class QuestionDetailDialogFragment extends DialogFragment {
         NumberUtil.digitsToPersian(String.format(Locale.getDefault(), "%d/%d", currentPosition,
             questionsAdapter.getItemCount())));
 
-    if (questionDto.getType() == QuestionType.CHOICE_SINGLE) {
+    if (questionDto.getType() == QuestionType.CHOICE_SINGLE || questionDto.getType() == QuestionType.DATE) {
       radioDetailTv.setVisibility(View.VISIBLE);
       checkBoxDetailTv.setVisibility(View.GONE);
     } else if (questionDto.getType() == QuestionType.CHOICE_MULTIPLE) {
@@ -198,7 +198,12 @@ public class QuestionDetailDialogFragment extends DialogFragment {
         break;
       case R.id.radio_detail_tv:
         if (questionDetailAdapter != null) {
-          questionDetailAdapter.removeAllSelections();
+          if( questionDto.getType() == QuestionType.CHOICE_SINGLE) {
+            questionDetailAdapter.removeAllSelections();
+          }else{
+            //Date type
+            questionDetailAdapter.removeDate();
+          }
         }
         break;
       case R.id.next_btn:

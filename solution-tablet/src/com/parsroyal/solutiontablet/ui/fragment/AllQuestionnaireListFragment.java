@@ -14,6 +14,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
 import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
@@ -35,6 +36,8 @@ public class AllQuestionnaireListFragment extends BaseFragment {
   private MainActivity mainActivity;
   private VisitDetailFragment parent;
   private long customerBackendId;
+  private long customerId;
+  private long visitId;
 
   public AllQuestionnaireListFragment() {
     // Required empty public constructor
@@ -58,6 +61,11 @@ public class AllQuestionnaireListFragment extends BaseFragment {
     View view = inflater.inflate(R.layout.fragment_all_questionnaire_list, container, false);
     unbinder = ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
+    /*Bundle bundle = getArguments();
+    if (Empty.isNotEmpty(bundle)) {
+      customerId = bundle.getLong(Constants.CUSTOMER_ID);
+      visitId = bundle.getLong(Constants.VISIT_ID);
+    }*/
     setUpRecyclerView();
     return view;
   }
@@ -66,6 +74,8 @@ public class AllQuestionnaireListFragment extends BaseFragment {
     Bundle bundle = getArguments();
     if (Empty.isEmpty(bundle)) {
       bundle = new Bundle();
+//      bundle.putLong(Constants.VISIT_ID, visitId);
+//      bundle.putLong(Constants.CUSTOMER_ID, customerId);
     }
 
     customerBackendId = bundle.getLong(Constants.CUSTOMER_BACKEND_ID, -1);
@@ -96,6 +106,7 @@ public class AllQuestionnaireListFragment extends BaseFragment {
     Bundle bundle = getArguments();
     bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
     bundle.putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
+    bundle.putSerializable(Constants.PAGE_STATUS, PageStatus.EDIT);
     mainActivity
         .changeFragment(MainActivity.QUESTIONNAIRE_CATEGORY_FRAGMENT_ID, bundle, true);
   }

@@ -46,8 +46,12 @@ public class DialogUtil {
     bodyTv.setText(message);
     positiveBtn
         .setText(Empty.isEmpty(positiveChoice) ? context.getString(R.string.yes) : positiveChoice);
-    negativeTv
-        .setText(Empty.isEmpty(negativeChoice) ? context.getString(R.string.no) : negativeChoice);
+    if (negativeBtnOnClickListener == null) {
+negativeTv.setVisibility(View.GONE);
+    } else {
+      negativeTv
+          .setText(Empty.isEmpty(negativeChoice) ? context.getString(R.string.no) : negativeChoice);
+    }
 
     AlertDialog alertDialog = dialogBuilder.create();
     alertDialog.show();

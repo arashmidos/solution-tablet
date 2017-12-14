@@ -106,15 +106,18 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
   }
 
   public void saveUserAnswer(String answer) {
+
+    QuestionDto questionDto = questionnaireService.getQuestionDto(
+        questions.get(currentItemPosition).getPrimaryKey(), visitId, goodsBackendId,
+        answersGroupNo);
     if (Empty.isEmpty(answer)) {
-      return;
-    }
-    QuestionDto questionDto = questionnaireService
-        .getQuestionDto(questions.get(currentItemPosition).getPrimaryKey(), visitId, goodsBackendId,
-            answersGroupNo);
-    questionDto.setAnswerId(saveAnswer(questionDto, TextUtils.isEmpty(answer) ? "" : answer));
+      //Delete answer
+      questionnaireService.deleteAnswerById(questionDto.getAnswerId());
+    } else {
+      questionDto.setAnswerId(saveAnswer(questionDto, answer));
 //    questions.get(currentItemPosition).setAnswer(answer);
-    setVisitDetail();
+      setVisitDetail();
+    }
     questions = parent.getQuestions();
     notifyDataSetChanged();
   }
@@ -240,7 +243,7 @@ public class QuestionsAdapter extends Adapter<ViewHolder> {
       if (questionDto.isRequired()) {
         questionTv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_star_red_18, 0);
         questionTv.setCompoundDrawablePadding(10);
-      }else{
+      } else {
         questionTv.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
       }
       preRequisiteTv.setVisibility(View.GONE);

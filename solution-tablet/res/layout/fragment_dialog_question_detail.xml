@@ -72,8 +72,6 @@
     android:paddingBottom="8dp"
     android:paddingStart="10dp"
     android:paddingEnd="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     android:background="@drawable/rectangle_radius_16"
     android:drawableEnd="@drawable/ic_done"
     android:drawablePadding="7dp"

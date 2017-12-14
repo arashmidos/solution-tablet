@@ -68,16 +68,14 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     transferLogTxtV.setMovementMethod(new ScrollingMovementMethod());
 
     Bundle args = getArguments();
+    mainActivity.changeTitle("دریافت اطلاعات");
     if (Empty.isNotEmpty(args)) {
       String action = args.getString(Constants.DATA_TRANSFER_ACTION);
       switch (action) {
         case Constants.DATA_TRANSFER_GET:
-          mainActivity.changeTitle(getString(R.string.get_data));
           checkForUnsentData();
-          invokeGetData();
           break;
         case Constants.DATA_TRANSFER_SEND_DATA:
-          mainActivity.changeTitle(getString(R.string.send_data));
           invokeSendData();
           break;
         case Constants.DATA_TRANSFER_SEND_IMAGES:
@@ -93,16 +91,15 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     if (dataTransferService.hasUnsentData()) {
       DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
           "شما اطلاعات ارسال نشده دارید که با دریافت دیتای جدید حذف می شوند. آیا میخواهید آنها را ارسال کنید؟",
-          getString(R.string.yes), (dialog, which) -> {
-            invokeSendData();
-          }, getString(R.string.no), (dialog, which) -> {
-            invokeGetData();
-          }, Constants.ICON_WARNING);
+          getString(R.string.yes), (dialog, which) -> invokeSendData(), getString(R.string.no),
+          (dialog, which) -> invokeGetData(), Constants.ICON_WARNING);
+    }else{
+      invokeGetData();
     }
-
   }
 
   private void invokeSendData() {
+    mainActivity.changeTitle(getString(R.string.send_data));
     dataTransferPB.setVisibility(View.VISIBLE);
     Analytics.logContentView("Send Data", "Data Transfer");
     enableButtons(false);
@@ -133,6 +130,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
   }
 
   private void invokeGetData() {
+    mainActivity.changeTitle(getString(R.string.get_data));
     dataTransferPB.setVisibility(View.VISIBLE);
     Analytics.logContentView("Get Data", "Data Transfer");
     enableButtons(false);

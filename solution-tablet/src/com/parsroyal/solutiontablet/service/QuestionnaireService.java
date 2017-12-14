@@ -40,4 +40,5 @@ public interface QuestionnaireService extends BaseService {
 
   void deleteAllAnswer(Long visitId, Long answersGroupNo);
 
+  void deleteAnswerById(Long answerId);
 }

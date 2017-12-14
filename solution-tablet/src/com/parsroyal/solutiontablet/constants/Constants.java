@@ -68,4 +68,5 @@ public class Constants {
   public static final String QUESTION_COUNT = "QUESTION_COUNT";
   public static final String QUESTION_POSITION = "QUESTION_POSITION";
   public static final String QUESTION_DTO = "QUESTION_DTO";
+  public static final String ORIGIN_VISIT_ID = "ORIGIN_VISIT_ID";
 }

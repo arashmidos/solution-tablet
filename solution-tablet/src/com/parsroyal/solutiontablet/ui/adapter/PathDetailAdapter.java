@@ -322,6 +322,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
             SaleOrderStatus.DRAFT.getId());
         Bundle args = new Bundle();
         args.putLong(Constants.VISIT_ID, visitInformationId);
+        args.putLong(Constants.ORIGIN_VISIT_ID, visitInformationId);
         args.putLong(Constants.CUSTOMER_ID, customer.getId());
         mainActivity.changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, true);
 

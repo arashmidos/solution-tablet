@@ -245,18 +245,15 @@ public abstract class MainActivity extends AppCompatActivity {
 
   private void installNewVersion() {
     DialogUtil.showCustomDialog(this, getString(R.string.message_update_title),
-        getString(R.string.message_update_alert), "", (dialogInterface, i) ->
-        {
+        getString(R.string.message_update_alert), "", (dialogInterface, i) -> {
           dialogInterface.dismiss();
           DialogUtil.showCustomDialog(MainActivity.this, getString(R.string.warning),
               getString(R.string.message_alert_send_data),
               "",
-              (dialog, i1) ->
-              {
+              (dialog, i1) -> {
                 dialog.dismiss();
                 showProgressDialog(getString(R.string.message_sending_data));
-                new Thread(() ->
-                {
+                new Thread(() -> {
                   try {
                     dataTransferService.sendAllData(null);
                   } catch (Exception ex) {
@@ -267,11 +264,8 @@ public abstract class MainActivity extends AppCompatActivity {
                         .toastError(MainActivity.this, R.string.error_unknown_system_exception);
                   }
                 }).start();
-              },
-              "",
-              (dialogInterface1, i12) -> doInstall(), Constants.ICON_WARNING);
-        }, "", (dialogInterface, i) ->
-        {
+              }, "", (dialogInterface1, i12) -> doInstall(), Constants.ICON_WARNING);
+        }, "", (dialogInterface, i) -> {
           dialogInterface.dismiss();
           if (PreferenceHelper.isForceExit()) {
             finish();
@@ -348,7 +342,7 @@ public abstract class MainActivity extends AppCompatActivity {
         // If user interaction was interrupted, the permission request is cancelled and you
         // receive empty arrays.
         Log.i(TAG, "User interaction was cancelled.");
-      } else if  ((grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+      } else if ((grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
           && grantResults[1] == PackageManager.PERMISSION_GRANTED) || (grantResults.length == 1
           && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
         // Permission was granted.
@@ -460,7 +454,7 @@ public abstract class MainActivity extends AppCompatActivity {
                 new String[]{permission.WRITE_EXTERNAL_STORAGE},
                 REQUEST_PERMISSIONS_REQUEST_CODE);
           });
-    }  else {
+    } else {
       Log.i(TAG, "Requesting permission");
       // Request permission. It's possible this can be auto answered if device policy
       // sets the permission in a given state or the user denied the permission

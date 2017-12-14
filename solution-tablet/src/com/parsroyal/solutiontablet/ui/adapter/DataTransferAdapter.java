@@ -36,6 +36,7 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
   private int current = -1;
   private long currentType;
   private int currentService;
+  private boolean hasError;
 
   public DataTransferAdapter(Activity context, SingleDataTransferDialogFragment parent,
       List<VisitInformationDetail> model) {
@@ -90,6 +91,8 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
   }
 
   public void setError(int currentService) {
+    hasError= true;
+    context.runOnUiThread(this::notifyDataSetChanged);
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
@@ -134,8 +137,13 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
         img.setVisibility(View.VISIBLE);
         img.setImageResource(R.drawable.ic_check_circle_24_dp);
       } else if (current == position) {
-        progressBar.setVisibility(View.VISIBLE);
-        img.setVisibility(View.INVISIBLE);
+        if( hasError){
+          progressBar.setVisibility(View.INVISIBLE);
+          img.setImageResource(R.drawable.ic_clear_red_18_dp);
+        }else {
+          progressBar.setVisibility(View.VISIBLE);
+          img.setVisibility(View.INVISIBLE);
+        }
       } else {
         progressBar.setVisibility(View.INVISIBLE);
         img.setVisibility(View.VISIBLE);

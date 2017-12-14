@@ -477,6 +477,7 @@ public class UserTrackingFragment extends BaseFragment implements
       Bundle args = new Bundle();
       args.putLong(Constants.VISIT_ID, visitInformationId);
       args.putLong(Constants.CUSTOMER_ID, clickedClusterItem.getPrimaryKey());
+      args.putLong(Constants.ORIGIN_VISIT_ID, visitInformationId);
       Analytics.logContentView("Map Visit");
       context.changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, false);
 

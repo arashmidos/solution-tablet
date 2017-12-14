@@ -20,7 +20,6 @@ public class QuestionnairesCategoryFragment extends BaseFragment {
     // Required empty public constructor
   }
 
-
   public static QuestionnairesCategoryFragment newInstance() {
     return new QuestionnairesCategoryFragment();
   }

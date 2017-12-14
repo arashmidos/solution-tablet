@@ -605,39 +605,6 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
   }
 
   private void installNewVersion() {
-    DialogUtil.showCustomDialog(this, getString(R.string.message_update_title),
-        getString(R.string.message_update_alert), "", (dialogInterface, i) ->
-        {
-          dialogInterface.dismiss();
-          DialogUtil.showCustomDialog(OldMainActivity.this, getString(R.string.warning),
-              getString(R.string.message_alert_send_data),
-              "",
-              (dialog, i1) ->
-              {
-                dialog.dismiss();
-                showProgressDialog(getString(R.string.message_sending_data));
-                new Thread(() ->
-                {
-                  try {
-                    dataTransferService.sendAllData(OldMainActivity.this);
-                  } catch (Exception ex) {
-                    Logger.sendError("Install Update",
-                        "Error in installing new version" + ex.getMessage());
-                    ex.printStackTrace();
-                    ToastUtil
-                        .toastError(OldMainActivity.this, R.string.error_unknown_system_exception);
-                  }
-                }).start();
-              },
-              "",
-              (dialogInterface1, i12) -> doInstall(), Constants.ICON_WARNING);
-        }, "", (dialogInterface, i) ->
-        {
-          dialogInterface.dismiss();
-          if (PreferenceHelper.isForceExit()) {
-            finish();
-          }
-        }, Constants.ICON_MESSAGE);
   }
 
   private void showGpsOffDialog() {
