@@ -173,6 +173,17 @@ public class DataTransferServiceImpl implements DataTransferService {
     Updater.downloadGoodsImages(context);
   }
 
+  @Override
+  public boolean hasUnsentData() {
+    List<QAnswerDto> answersForSend = questionnaireService.getAllAnswersDtoForSend();
+    List<BaseSaleDocument> saleOrders = saleOrderService
+        .findOrderDocumentByStatus(SaleOrderStatus.READY_TO_SEND.getId());
+    List<CustomerDto> allNewCustomers = customerService.getAllNewCustomersForSend();
+
+    return Empty.isNotEmpty(answersForSend) || Empty.isNotEmpty(saleOrders) || Empty
+        .isNotEmpty(allNewCustomers);
+  }
+
   private void getAllProvinces(ResultObserver observer) {
     boolean success = false;
     observer.publishResult(context.getString(R.string.message_transferring_provinces_data));

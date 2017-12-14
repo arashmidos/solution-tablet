@@ -25,6 +25,7 @@ import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -72,6 +73,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
       switch (action) {
         case Constants.DATA_TRANSFER_GET:
           mainActivity.changeTitle(getString(R.string.get_data));
+          checkForUnsentData();
           invokeGetData();
           break;
         case Constants.DATA_TRANSFER_SEND_DATA:
@@ -85,6 +87,19 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
       }
     }
     return dataTransferView;
+  }
+
+  private void checkForUnsentData() {
+    if (dataTransferService.hasUnsentData()) {
+      DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
+          "شما اطلاعات ارسال نشده دارید که با دریافت دیتای جدید حذف می شوند. آیا میخواهید آنها را ارسال کنید؟",
+          getString(R.string.yes), (dialog, which) -> {
+            invokeSendData();
+          }, getString(R.string.no), (dialog, which) -> {
+            invokeGetData();
+          }, Constants.ICON_WARNING);
+    }
+
   }
 
   private void invokeSendData() {

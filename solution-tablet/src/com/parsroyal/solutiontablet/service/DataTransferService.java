@@ -20,4 +20,6 @@ public interface DataTransferService {
   void clearData(int updateType);
 
   void getGoodsImages(ResultObserver observer);
+
+  boolean hasUnsentData();
 }
