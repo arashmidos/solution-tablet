@@ -203,12 +203,13 @@ public class AddOrderDialogFragment extends DialogFragment {
         if (Empty.isNotEmpty(count1) && !count1.equals(0D)) {
           int selectedUnit1 = spinner.getSelectedItemPosition();
           if (selectedUnit1 == 1) {
-            unit2CountTv.setText(String.format(Locale.getDefault(), "%d", count1.intValue()));
+            unit2CountTv.setText(NumberUtil
+                .digitsToPersian(String.format(Locale.getDefault(), "%d", count1.intValue())));
             count1 *= Double.valueOf(unit1Count);
-            unit1CountTv.setText(String.valueOf(count1));
+            unit1CountTv.setText(NumberUtil.digitsToPersian(String.valueOf(count1)));
           } else {
-            unit2CountTv.setText(
-                String.format(Locale.getDefault(), "%d", (count1.longValue() / unit1Count)));
+            unit2CountTv.setText(NumberUtil.digitsToPersian(
+                String.format(Locale.getDefault(), "%d", (count1.longValue() / unit1Count))));
             unit1CountTv.setText(NumberUtil.digitsToPersian(input));
           }
           long total = (long) (count1 * selectedGoods.getPrice() / 1000);
