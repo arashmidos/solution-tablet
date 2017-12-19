@@ -97,10 +97,8 @@ import org.greenrobot.eventbus.Subscribe;
 /**
  * Created by Arash on 2016-09-14.
  */
-public class UserTrackingFragment extends BaseFragment implements
-    ConnectionCallbacks, OnConnectionFailedListener,
-    OnMapReadyCallback,
-    OnCameraChangeListener, DateSetListener {
+public class UserTrackingFragment extends BaseFragment implements ConnectionCallbacks,
+    OnConnectionFailedListener, OnMapReadyCallback, OnCameraChangeListener, DateSetListener {
 
   public static final String TAG = UserTrackingFragment.class.getSimpleName();
 
@@ -124,8 +122,8 @@ public class UserTrackingFragment extends BaseFragment implements
   CheckBox showTrack;
   @BindView(R.id.mainLayout)
   RelativeLayout mainLayout;
-  @BindView(R.id.show_snapped_track)
-  CheckBox showSnappedTrack;
+  //  @BindView(R.id.show_snapped_track)
+//  CheckBox showSnappedTrack;
   @BindView(R.id.show_waypoints)
   CheckBox showWaypoints;
 
@@ -225,7 +223,7 @@ public class UserTrackingFragment extends BaseFragment implements
 
     showTrack.setOnCheckedChangeListener((buttonView, isChecked) ->
     {
-      showSnappedTrack.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+//      showSnappedTrack.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
       showWaypoints.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
       if (isChecked) {
         doFilter();
@@ -234,17 +232,16 @@ public class UserTrackingFragment extends BaseFragment implements
       }
     });
 
-    showSnappedTrack.setOnCheckedChangeListener((buttonView, isChecked) ->
-    {
-      if (isChecked && Empty.isNotEmpty(lastRoute)) {
-        new AsyncRouteLoader().execute(lastRoute);
-      } else {
-        if (Empty.isNotEmpty(snappedPolyline)) {
-          snappedPolyline.remove();
-          polylines.remove(snappedPolyline);
-        }
-      }
-    });
+//    showSnappedTrack.setOnCheckedChangeListener((buttonView, isChecked) -> {
+//      if (isChecked && Empty.isNotEmpty(lastRoute)) {
+//        new AsyncRouteLoader().execute(lastRoute);
+//      } else {
+//        if (Empty.isNotEmpty(snappedPolyline)) {
+//          snappedPolyline.remove();
+//          polylines.remove(snappedPolyline);
+//        }
+//      }
+//    });
 
     showWaypoints.setOnCheckedChangeListener((buttonView, isChecked) ->
     {
@@ -544,9 +541,9 @@ public class UserTrackingFragment extends BaseFragment implements
       lastRoute = positionService.getAllPositionLatLngByDate(from, to);
       drawRoute(lastRoute);
 
-      if (showSnappedTrack.isChecked() && Empty.isNotEmpty(lastRoute)) {
-        new AsyncRouteLoader().execute(lastRoute);
-      }
+//      if (showSnappedTrack.isChecked() && Empty.isNotEmpty(lastRoute)) {
+//        new AsyncRouteLoader().execute(lastRoute);
+//      }
       Analytics.logContentView("Map Filter");
     }
   }
@@ -610,7 +607,7 @@ public class UserTrackingFragment extends BaseFragment implements
     polylines.add(polyline);
   }
 
-  private void drawSnappedRoute(List<LatLng> route) {
+  /*private void drawSnappedRoute(List<LatLng> route) {
     try {
       //Double check if user unchecked the option
       if (showSnappedTrack.isChecked()) {
@@ -624,7 +621,7 @@ public class UserTrackingFragment extends BaseFragment implements
     } catch (Exception ex) {
       ex.printStackTrace();
     }
-  }
+  }*/
 
   @Override
   public void onDateSet(int id, @Nullable Calendar calendar, int day, int month, int year) {
@@ -701,7 +698,7 @@ public class UserTrackingFragment extends BaseFragment implements
     }
   }
 
-  private class AsyncRouteLoader extends AsyncTask<List<LatLng>, Void, List<LatLng>> {
+  /*private class AsyncRouteLoader extends AsyncTask<List<LatLng>, Void, List<LatLng>> {
 
     @Override
     protected void onPreExecute() {
@@ -722,5 +719,5 @@ public class UserTrackingFragment extends BaseFragment implements
         drawSnappedRoute(list);
       }
     }
-  }
+  }*/
 }

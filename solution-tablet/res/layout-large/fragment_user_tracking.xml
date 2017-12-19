@@ -79,15 +79,13 @@
       android:id="@+id/show_customers"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignBaseline="@+id/show_track"
-      android:layout_alignBottom="@+id/show_track"
-      android:layout_alignEnd="@+id/show_waypoints"
-      android:layout_alignLeft="@id/show_waypoints"
-      android:layout_alignRight="@+id/show_waypoints"
       android:paddingLeft="5dp"
       android:paddingRight="5dp"
       android:checked="true"
-      android:text="@string/show_customers" />
+      android:text="@string/show_customers"
+      android:layout_alignTop="@+id/show_track"
+      android:layout_alignLeft="@+id/show_waypoints"
+      android:layout_alignStart="@+id/show_waypoints" />
 
     <CheckBox
       android:id="@+id/show_track"
@@ -113,6 +111,7 @@
       android:layout_toLeftOf="@+id/toDate"
       android:paddingLeft="5dp"
       android:paddingRight="5dp"
+      android:visibility="invisible"
       android:text="@string/show_optimized_route" />
 
     <CheckBox

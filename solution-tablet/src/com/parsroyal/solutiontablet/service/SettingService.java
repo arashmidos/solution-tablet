@@ -5,15 +5,13 @@ import com.parsroyal.solutiontablet.data.response.UserInfoResponse;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 
 /**
- * Created by Mahyar on 6/4/2015.
+ * Created by Arash on 6/4/2015.
  */
 public interface SettingService {
 
   void saveSetting(String settingKey, String settingValue);
 
   String getSettingValue(String key);
-
-  void getUserInformation(ResultObserver observer);
 
   void saveSetting(SettingResponse response);
 
