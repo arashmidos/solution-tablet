@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -22,8 +25,10 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
+import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -36,6 +41,13 @@ public class OrderListFragment extends BaseFragment {
   RecyclerView recyclerView;
   @BindView(R.id.fab_add_order)
   FloatingActionButton fabAddOrder;
+  @BindView(R.id.total_order_sale_amount)
+  TextView totalOrderSaleAmount;
+  @BindView(R.id.total_order_sale)
+  TextView totalOrderSale;
+  @BindView(R.id.total_sale)
+  LinearLayout totalSale;
+
 
   private Long visitId;
   private OrderAdapter adapter;
@@ -45,6 +57,7 @@ public class OrderListFragment extends BaseFragment {
   private VisitDetailFragment parent;
   private SettingServiceImpl settingService;
   private String saleType;
+  private List<SaleOrderListModel> model;
 
   public OrderListFragment() {
     // Required empty public constructor
@@ -73,21 +86,38 @@ public class OrderListFragment extends BaseFragment {
     if (args != null) {
       visitId = args.getLong(Constants.VISIT_ID, -1);
     }
-    if (parent == null) {
-      fabAddOrder.setVisibility(View.GONE);
-    }
     setUpRecyclerView();
+    if (parent == null) {
+      //Report
+      fabAddOrder.setVisibility(View.GONE);
+      totalSale.setVisibility(View.VISIBLE);
+      displayTotalSale();
+    }
     return view;
+  }
+
+  private void displayTotalSale() {
+
+    long total = 0;
+    for (int i = 0; i < model.size(); i++) {
+      total += model.get(i).getAmount();
+    }
+
+    totalOrderSale.setText(NumberUtil.digitsToPersian(model.size()));
+    String number = String
+        .format(Locale.US, "%,d %s", total / 1000, getString(R.string.common_irr_currency));
+    totalOrderSaleAmount.setText(NumberUtil.digitsToPersian(number));
   }
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new OrderAdapter(mainActivity, getOrderList(), parent == null, visitId, saleType);
+    model = getOrderList();
+    adapter = new OrderAdapter(mainActivity, model, parent == null, visitId, saleType);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
     if (!Empty.isEmpty(getArguments())) {
-      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      recyclerView.addOnScrollListener(new OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
           super.onScrolled(recyclerView, dx, dy);
@@ -130,15 +160,20 @@ public class OrderListFragment extends BaseFragment {
   @Subscribe
   public void getMessage(ActionEvent event) {
     if (event.getStatusCode().equals(StatusCodes.ACTION_REFRESH_DATA)) {
-      List<SaleOrderListModel> model = getOrderList();
+      model = getOrderList();
       adapter.update(model);
     }
   }
 
   @OnClick(R.id.fab_add_order)
   public void onClick() {
-    if( parent!=null) {
+    if (parent != null) {
       parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
     }
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
   }
 }

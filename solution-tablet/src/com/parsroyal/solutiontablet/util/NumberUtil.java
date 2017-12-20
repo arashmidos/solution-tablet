@@ -72,4 +72,8 @@ public class NumberUtil {
 
     return digitsToPersian(String.valueOf(number));
   }
+
+  public static String digitsToPersian(int number) {
+    return digitsToPersian(String.valueOf(number));
+  }
 }

@@ -556,4 +556,6 @@
   <string name="error_in_sending_data">خطا در ارسال اطلاعات</string>
   <string name="show_question_x">نمایش سوال شماره %d</string>
   <string name="question_has_prerequisite_x">جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!</string>
+  <string name="total_order_sale_tv">مجموع مبلغ سفارشات</string>
+  <string name="total_order_sale_count_tv">مجموع تعداد سفارشات</string>
 </resources>
