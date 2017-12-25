@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.service;
 
 import com.google.gson.JsonArray;
+import com.parsroyal.solutiontablet.data.model.ProvinceList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
 import com.parsroyal.solutiontablet.data.model.SaleRejectDocument;
 import retrofit2.Call;

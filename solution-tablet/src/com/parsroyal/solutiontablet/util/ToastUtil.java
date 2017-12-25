@@ -14,13 +14,20 @@ import de.mateware.snacky.Snacky;
 import java.text.MessageFormat;
 
 /**
- * Created by Mahyar on 6/23/2015.
+ * Created by Arash on 6/23/2015.
  */
 public class ToastUtil {
 
-  public static void toastMessage(Activity activity, String message) {
+  //*********************** Toast Messages ***********************/
+  private static void toastMessage(Activity activity, View view, String message) {
     Snacky.Builder builder = Snacky.builder();
-    builder.setActivty(activity);
+    if (activity != null) {
+      builder.setActivty(activity);
+    } else if (view != null) {
+      builder.setView(view);
+    } else {
+      return;
+    }
 
     builder.setText(message);
     builder.setActionTextColor(Color.WHITE);
@@ -28,55 +35,87 @@ public class ToastUtil {
     builder.setDuration(Snacky.LENGTH_LONG);
     final Snackbar snack = builder.info();
     if (MultiScreenUtility.isTablet(activity)) {
-      View view = snack.getView();
-      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+      View snackView = snack.getView();
+      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackView.getLayoutParams();
       params.gravity = Gravity.TOP;
       params.width = LayoutParams.MATCH_PARENT;
-      view.setLayoutParams(params);
+      snackView.setLayoutParams(params);
     }
     snack.show();
   }
 
   public static void toastMessage(Activity activity, int messageResource) {
     String message = activity.getString(messageResource);
-    toastMessage(activity, message);
+    toastMessage(activity, null, message);
   }
 
-  public static void toastSuccess(Activity activity, String message) {
+  public static void toastMessage(View view, int messageResource) {
+    String message = view.getResources().getString(messageResource);
+    toastMessage(null, view, message);
+  }
+
+  public static void toastMessage(Activity activity, String message) {
+    toastMessage(activity, null, message);
+  }
+
+  public static void toastMessage(View view, String message) {
+    toastMessage(null, view, message);
+  }
+
+  //*********************** Toast Success ***********************/
+  private static void toastSuccess(Activity activity, View view, String message) {
     Snacky.Builder builder = Snacky.builder();
-    builder.setActivty(activity);
+    if (activity != null) {
+      builder.setActivty(activity);
+    } else if (view != null) {
+      builder.setView(view);
+    } else {
+      return;
+    }
     builder.setText(message);
     builder.setActionTextColor(Color.BLACK);
     builder.setTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
     builder.setDuration(Snacky.LENGTH_LONG);
     final Snackbar snack = builder.success();
     if (MultiScreenUtility.isTablet(activity)) {
-      View view = snack.getView();
-      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+      View snackView = snack.getView();
+      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackView.getLayoutParams();
       params.gravity = Gravity.TOP;
       params.width = LayoutParams.MATCH_PARENT;
-      view.setLayoutParams(params);
+      snackView.setLayoutParams(params);
     }
     snack.show();
   }
 
   public static void toastSuccess(Activity activity, int messageResource) {
     String message = activity.getString(messageResource);
-    toastSuccess(activity, message);
+    toastSuccess(activity, null, message);
   }
 
-  public static void toastError(Activity activity, int messageResource) {
-    String message = activity.getString(messageResource);
-    toastError(activity, message, null);
+  public static void toastSuccess(View view, int messageResource) {
+    String message = view.getResources().getString(messageResource);
+    toastSuccess(null, view, message);
   }
 
-  public static void toastError(Activity activity, String message) {
-    toastError(activity, message, null);
+  public static void toastSuccess(Activity activity, String message) {
+    toastSuccess(activity, null, message);
   }
 
-  public static void toastError(final Activity activity, String message, OnClickListener listener) {
+  public static void toastSuccess(View view, String message) {
+    toastSuccess(null, view, message);
+  }
+
+  //*********************** Toast ERROR ***********************/
+  private static void toastError(Activity activity, View view, String message,
+      OnClickListener listener) {
     Snacky.Builder builder = Snacky.builder();
-    builder.setActivty(activity);
+    if (activity != null) {
+      builder.setActivty(activity);
+    } else if (view != null) {
+      builder.setView(view);
+    } else {
+      return;
+    }
     builder.setText(message);
     builder.setTextColor(Color.WHITE);
     builder.setActionTextColor(Color.BLACK);
@@ -86,11 +125,11 @@ public class ToastUtil {
     builder.setDuration(Snacky.LENGTH_INDEFINITE);
     final Snackbar snack = builder.build();
     if (MultiScreenUtility.isTablet(activity)) {
-      View view = snack.getView();
-      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+      View snackView = snack.getView();
+      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackView.getLayoutParams();
       params.gravity = Gravity.TOP;
       params.width = LayoutParams.MATCH_PARENT;
-      view.setLayoutParams(params);
+      snackView.setLayoutParams(params);
     }
     snack.setAction(activity.getString(R.string.button_ok), v -> {
       snack.dismiss();
@@ -101,21 +140,62 @@ public class ToastUtil {
     snack.show();
   }
 
+
+  public static void toastError(Activity activity, int messageResource) {
+    String message = activity.getString(messageResource);
+    toastError(activity, null, message, null);
+  }
+
+  public static void toastError(Activity activity, String message) {
+    toastError(activity, null, message, null);
+  }
+
+  public static void toastError(View view, int messageResource) {
+    String message = view.getResources().getString(messageResource);
+    toastError(null, view, message, null);
+  }
+
+  public static void toastError(View view, String message) {
+    toastError(null, view, message, null);
+  }
+
+  public static void toastError(Activity activity, String message, OnClickListener listener) {
+    toastError(activity, null, message, listener);
+  }
+
   public static void toastError(Activity activity, BusinessException ex) {
     String message = getErrorString(activity, ex);
     if (Empty.isNotEmpty(message)) {
       message = MessageFormat.format(message, ex.getArgs());
     }
-    toastError(activity, message, null);
+    toastError(activity, null, message, null);
   }
 
-  public static String getStringResourceByName(Activity activity, String aString) {
+  public static void toastError(View view, BusinessException ex) {
+    String message = getErrorString(view, ex);
+    if (Empty.isNotEmpty(message)) {
+      message = MessageFormat.format(message, ex.getArgs());
+    }
+    toastError(null, view, message, null);
+  }
+
+  private static String getStringResourceByName(Activity activity, String aString) {
     String packageName = activity.getPackageName();
     int resId = activity.getResources().getIdentifier(aString, "string", packageName);
     return activity.getString(resId);
   }
 
+  private static String getStringResourceByName(View view, String aString) {
+    String packageName = view.getContext().getPackageName();
+    int resId = view.getResources().getIdentifier(aString, "string", packageName);
+    return view.getResources().getString(resId);
+  }
+
   private static String getErrorString(Activity activity, Exception ex) {
     return getStringResourceByName(activity, ex.getClass().getCanonicalName());
+  }
+
+  private static String getErrorString(View view, Exception ex) {
+    return getStringResourceByName(view, ex.getClass().getCanonicalName());
   }
 }

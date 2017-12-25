@@ -96,7 +96,7 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   @Override
-  public void getAllData(final ResultObserver uiObserver) {
+  public void getAllData() {
     backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
@@ -185,12 +185,8 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   private void getAllProvinces(ResultObserver observer) {
-    boolean success = false;
     observer.publishResult(context.getString(R.string.message_transferring_provinces_data));
-
-    for (int i = 0; i < 3 && !success; i++) {
-      success = new ProvinceDataTransferBizImpl(context, observer).exchangeData();
-    }
+    new ProvinceDataTransferBizImpl(context).getAllProvinces();
   }
 
   private void getAllCities(ResultObserver observer) {

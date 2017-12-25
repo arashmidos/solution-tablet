@@ -190,7 +190,7 @@
             android:layout_toLeftOf="@id/customer_icon"
             android:layout_toStartOf="@id/customer_icon"
             android:gravity="center"
-            android:text="@string/cusomters"
+            android:text="@string/customers"
             android:textColor="@color/black_de"
             android:textSize="14sp" />
         </RelativeLayout>

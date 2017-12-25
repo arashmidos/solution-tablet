@@ -9,7 +9,7 @@ import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
  */
 public interface DataTransferService {
 
-  void getAllData(ResultObserver observer);
+  void getAllData();
 
   void sendAllData(ResultObserver resultObserver);
 

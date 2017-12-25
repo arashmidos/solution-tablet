@@ -123,7 +123,6 @@
   <string name="message_no_visit_lines_data">هیچ خط بازدیدی دریافت نشد</string>
   <string name="visitlines_data_transferred_successfully">اطلاعات خطوط بازدید با موفقیت دریافت شد.</string>
   <string name="visit_lines">خطوط بازدید</string>
-  <string name="cusomters">مشتریان</string>
   <string name="message_transferring_questionnaires_data">در حال انتقال اطلاعات پرسشنامه ها</string>
   <string name="message_questionnaires_transferred_successfully">اطلاعات پرسشنامه ها با موفقیت دریافت شد.</string>
   <string name="message_exception_in_transferring_questionnaires">خطا در انتقال اطلاعات پرسشنامه ها</string>
@@ -514,7 +513,7 @@
   <string name="payment_detail">جزییات پرداخت</string>
   <string name="error_invalid_login_info">اطلاعات وارد شده صحیح نیست</string>
   <string name="error_message_no_data">اطلاعات لازم یافت نشد. به قسمت دریافت اطلاعات مراجعه کنید</string>
-  <string name="cusomter">مشتری</string>
+  <string name="customer">مشتری</string>
   <string name="no_customer">متاسفانه مشتری مورد نظر یافت نشد!</string>
   <string name="no_location">موقعیت جغرافیایی کاربر ثبت نشده است!</string>
   <string name="register_return">ثبت مرجوعی</string>
@@ -529,7 +528,8 @@
   <string name="enter_answer_here">پاسخ را در اینجا وارد نمایید</string>
   <string name="choose_date">انتخاب تاریخ...</string>
   <string name="anonymous_questionnaire">پرسشنامه های فرعی</string>
-  <string name="questionnaires">پرسشنامه های</string>
+  <string name="questionnaires_x">پرسشنامه های</string>
+  <string name="questionnaires">پرسشنامه ها</string>
   <string name="title_reject_list">فهرست کالا های قابل مرجوع</string>
   <string name="reject_goods">کالاهای مرجوعی</string>
   <string name="add_to_return_goods">افزودن به کالاهای مرجوعی</string>
@@ -558,4 +558,11 @@
   <string name="question_has_prerequisite_x">جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!</string>
   <string name="total_order_sale_tv">مجموع مبلغ سفارشات</string>
   <string name="total_order_sale_count_tv">مجموع تعداد سفارشات</string>
+  <string name="provinces">استان ها</string>
+  <string name="cities">شهر ها</string>
+  <string name="basic">پایه</string>
+  <string name="goods_category">گروه های کالا</string>
+  <string name="goods">کالا ها</string>
+  <string name="goods_images">عکس کالا ها</string>
+  <string name="new_customers">مشتریان جدید</string>
 </resources>

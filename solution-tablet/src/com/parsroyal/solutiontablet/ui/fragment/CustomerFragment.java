@@ -40,7 +40,7 @@ public class CustomerFragment extends BaseFragment {
     View view = inflater.inflate(R.layout.fragment_customer, container, false);
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
-    mainActivity.changeTitle(getString(R.string.cusomters));
+    mainActivity.changeTitle(getString(R.string.customers));
     tabs.setupWithViewPager(viewpager);
     setUpViewPager();
     viewpager.setCurrentItem(viewPagerAdapter.getCount());

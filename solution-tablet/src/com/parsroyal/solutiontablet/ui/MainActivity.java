@@ -36,7 +36,6 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
-import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
@@ -187,14 +186,6 @@ public abstract class MainActivity extends AppCompatActivity {
       if (event.getStatusCode() == StatusCodes.PERMISSION_DENIED) {
         requestPermissions();
       }
-    } else if (event instanceof DataTransferEvent) {
-      ToastUtil.toastSuccess(this, R.string.message_setting_saved_successfully);
-      if (!checkPermissions()) {
-        requestPermissions();
-      } else {
-        startGpsService();
-      }
-      new TrackerAlarmReceiver().setAlarm(this);
     }
   }
 
@@ -697,9 +688,9 @@ public abstract class MainActivity extends AppCompatActivity {
         fragment = ReportFragment.newInstance();
         break;
       case DATA_TRANSFER_FRAGMENT_ID:
-        if (isDataTransferPossible()) {
+        /*if (isDataTransferPossible()) {
           fragment = new DataTransferFragment();
-        }
+        }*/
         break;
       case ABOUT_US_FRAGMENT_ID:
         fragment = new AboutUsFragment();

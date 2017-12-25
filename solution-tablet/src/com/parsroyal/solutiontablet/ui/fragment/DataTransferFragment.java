@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,10 +79,6 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
         case Constants.DATA_TRANSFER_SEND_DATA:
           invokeSendData();
           break;
-        case Constants.DATA_TRANSFER_SEND_IMAGES:
-          publishResult(getString(R.string.message_transferring_goods_images_data));
-          getGoodsImages();
-          break;
       }
     }
     return dataTransferView;
@@ -137,7 +134,7 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
     Thread thread = new Thread(() ->
     {
       try {
-        dataTransferService.getAllData(DataTransferFragment.this);
+        dataTransferService.getAllData();
       } catch (final BusinessException ex) {
         Log.e(TAG, ex.getMessage(), ex);
         runOnUiThread(() -> ToastUtil.toastError(getActivity(), ex));
@@ -179,28 +176,6 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
       enableButtons(true);
       transferSv.scrollTo(0, transferSv.getBottom());
     });
-  }
-
-  @Override
-  public int getFragmentId() {
-    return MainActivity.DATA_TRANSFER_FRAGMENT_ID;
-  }
-
-  @OnClick({R.id.getDataBtn, R.id.sendDataBtn, R.id.get_images_button})
-  public void onViewClicked(View view) {
-    transferLogTxtV.setText("");
-    switch (view.getId()) {
-      case R.id.getDataBtn:
-        invokeGetData();
-        break;
-      case R.id.sendDataBtn:
-        invokeSendData();
-        break;
-      case R.id.get_images_button:
-        publishResult(getString(R.string.message_transferring_goods_images_data));
-        getGoodsImages();
-        break;
-    }
   }
 
   private void getGoodsImages() {
@@ -270,5 +245,11 @@ public class DataTransferFragment extends BaseFragment implements ResultObserver
         finished(true);
       }
     }
+  }
+
+  @Override
+  public int getFragmentId() {
+
+    return 0;
   }
 }

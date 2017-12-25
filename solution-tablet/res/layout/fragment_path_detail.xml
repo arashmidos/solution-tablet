@@ -116,7 +116,7 @@
     android:paddingRight="16dp"
     android:background="@color/customers_title_background"
     android:gravity="right|center"
-    android:text="@string/cusomters"
+    android:text="@string/customers"
     android:textColor="@color/black_85"
     android:textSize="12sp" />
 
