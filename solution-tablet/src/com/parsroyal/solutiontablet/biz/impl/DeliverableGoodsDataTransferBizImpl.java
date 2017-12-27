@@ -38,10 +38,9 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
   private KeyValueBiz keyValueBiz;
   private SettingService settingService;
 
-  public DeliverableGoodsDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public DeliverableGoodsDataTransferBizImpl(Context context) {
     super(context);
     this.context = context;
-    this.resultObserver = resultObserver;
     this.goodsDao = new GoodsDaoImpl(context);
     this.keyValueBiz = new KeyValueBizImpl(context);
     this.settingService = new SettingServiceImpl(context);

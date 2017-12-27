@@ -11,7 +11,6 @@ import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.VisitLineDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.model.VisitLineDto;
 import com.parsroyal.solutiontablet.service.SettingService;
@@ -37,10 +36,9 @@ public class VisitLineDataTaransferBizImpl extends AbstractDataTransferBizImpl<S
   private CustomerDao customerDao;
   private SettingService settingService;
 
-  public VisitLineDataTaransferBizImpl(Context context, ResultObserver resultObserver) {
+  public VisitLineDataTaransferBizImpl(Context context) {
     super(context);
     this.context = context;
-    this.resultObserver = resultObserver;
     this.visitLineDao = new VisitLineDaoImpl(context);
     this.customerDao = new CustomerDaoImpl(context);
     this.settingService = new SettingServiceImpl(context);
@@ -73,7 +71,8 @@ public class VisitLineDataTaransferBizImpl extends AbstractDataTransferBizImpl<S
               "Error in receiving customer visitlines  " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       resultObserver
-          .publishResult(context.getString(R.string.message_exception_in_transferring_visit_lines_data));
+          .publishResult(
+              context.getString(R.string.message_exception_in_transferring_visit_lines_data));
     }
   }
 

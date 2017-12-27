@@ -49,7 +49,7 @@ import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.DataTransferAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.SingleDataTransferAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.io.File;
@@ -66,7 +66,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   RecyclerView recyclerView;
   @BindView(R.id.toolbar_title)
   TextView toolbarTitle;
-  @BindView(R.id.upload_data_btn)
+  @BindView(R.id.data_transfer_btn)
   Button uploadDataBtn;
   @BindView(R.id.upload_data_btn_disabled)
   Button uploadDataBtnDisabled;
@@ -78,7 +78,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   private MainActivity mainActivity;
   private long orderId;
   private long visitId;
-  private DataTransferAdapter adapter;
+  private SingleDataTransferAdapter adapter;
   private VisitService visitService;
   private boolean transferStarted;
   private boolean transferFinished = false;
@@ -135,7 +135,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     model = getSimpleModel();
-    adapter = new DataTransferAdapter(mainActivity, this, model);
+    adapter = new SingleDataTransferAdapter(mainActivity, this, model);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
@@ -147,14 +147,14 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     return visitService.searchVisitDetail(visitInformationDetailSO);
   }
 
-  @OnClick({R.id.close, R.id.upload_data_btn, R.id.cancel_btn})
+  @OnClick({R.id.close, R.id.data_transfer_btn, R.id.cancel_btn})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.close:
       case R.id.cancel_btn:
         getDialog().dismiss();
         break;
-      case R.id.upload_data_btn:
+      case R.id.data_transfer_btn:
         if (transferFinished) {
           EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_REFRESH_DATA));
           EventBus.getDefault().post(new ActionEvent(StatusCodes.SUCCESS));
@@ -375,7 +375,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   }
 
   private void finishTransfer() {
-    mainActivity.runOnUiThread(() -> {
+    getActivity().runOnUiThread(() -> {
       adapter.setCurrent(++currentPosition);
       ToastUtil.toastMessage(getActivity(), getString(R.string.send_data_completed_successfully));
       transferFinished = true;
@@ -390,7 +390,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
 
   private void cancelTransfer() {
     transferFinished = true;
-    mainActivity.runOnUiThread(() -> {
+    getActivity().runOnUiThread(() -> {
       switchButtonState();
       adapter.setError(currentPosition);
       ToastUtil.toastError(getActivity(), getString(R.string.error_in_sending_data));

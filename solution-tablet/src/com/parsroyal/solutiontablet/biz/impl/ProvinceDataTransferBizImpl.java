@@ -37,7 +37,7 @@ public class ProvinceDataTransferBizImpl {
 
   public void getAllProvinces() {
     if (!NetworkUtil.isNetworkAvailable(context)) {
-      EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
     }
 
     GetDataRestService restService = ServiceGenerator.createService(GetDataRestService.class);
@@ -74,7 +74,7 @@ public class ProvinceDataTransferBizImpl {
 
       @Override
       public void onFailure(Call<ProvinceList> call, Throwable t) {
-        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+        EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NETWORK_ERROR));
       }
     });
   }

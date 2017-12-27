@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +18,12 @@ import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.LoginActivity;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.DataTransferDialogFragment;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -144,19 +148,40 @@ public class NavigationDrawerFragment extends BaseFragment {
         mainActivity.finish();
         break;
       case R.id.get_data_lay:
-        Bundle args3 = new Bundle();
-        args3.putString(Constants.DATA_TRANSFER_ACTION, Constants.DATA_TRANSFER_GET);
-        mainActivity.changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, args3, true);
+        checkForUnsentData();
         break;
       case R.id.send_data_lay:
-        Bundle args2 = new Bundle();
-        args2.putString(Constants.DATA_TRANSFER_ACTION, Constants.DATA_TRANSFER_SEND_DATA);
-        mainActivity.changeFragment(MainActivity.DATA_TRANSFER_FRAGMENT_ID, args2, true);
+        openDataTransferDialog(Constants.DATA_TRANSFER_SEND_DATA);
         break;
     }
     if (closeDrawer) {
       mainActivity.closeDrawer();
     }
+  }
+
+  private void checkForUnsentData() {
+
+    DataTransferServiceImpl dataTransferService = new DataTransferServiceImpl(mainActivity);
+    if (dataTransferService.hasUnsentData()) {
+      DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
+          "شما اطلاعات ارسال نشده دارید که با دریافت دیتای جدید حذف می شوند. آیا میخواهید آنها را ارسال کنید؟",
+          getString(R.string.yes),
+          (dialog, which) -> openDataTransferDialog(Constants.DATA_TRANSFER_SEND_DATA),
+          getString(R.string.no),
+          (dialog, which) -> openDataTransferDialog(Constants.DATA_TRANSFER_GET),
+          Constants.ICON_WARNING);
+    } else {
+      openDataTransferDialog(Constants.DATA_TRANSFER_GET);
+    }
+  }
+
+  private void openDataTransferDialog(String action) {
+    FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+    Bundle args = new Bundle();
+    args.putString(Constants.DATA_TRANSFER_ACTION, action);
+    DataTransferDialogFragment dialogFragment = DataTransferDialogFragment.newInstance(args);
+
+    dialogFragment.show(ft, "data_transfer");
   }
 
   private void changeMode() {

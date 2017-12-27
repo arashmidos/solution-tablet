@@ -519,6 +519,7 @@
   <string name="register_return">ثبت مرجوعی</string>
   <string name="register_location">ثبت موقعیت جغرافیایی</string>
   <string name="returns">مرجوعی ها</string>
+  <string name="return_order">سند مرجوعی</string>
   <string name="good_questionnaire">پرسشنامه کالایی</string>
   <string name="general_questionnaire">پرسشنامه عمومی</string>
   <string name="next_question">سوال بعدی</string>
@@ -553,6 +554,7 @@
   <string name="message_confirm_send_visit_data_instantly">آیا مایل به ارسال اطلاعات این بازدید در این لحظه هستید؟</string>
   <string name="finish">تمام</string>
   <string name="send_data_completed_successfully">ارسال اطلاعات با موفقیت انجام شد</string>
+  <string name="get_data_completed_successfully">دریافت اطلاعات با موفقیت انجام شد</string>
   <string name="error_in_sending_data">خطا در ارسال اطلاعات</string>
   <string name="show_question_x">نمایش سوال شماره %d</string>
   <string name="question_has_prerequisite_x">جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!</string>
@@ -565,4 +567,10 @@
   <string name="goods">کالا ها</string>
   <string name="goods_images">عکس کالا ها</string>
   <string name="new_customers">مشتریان جدید</string>
+  <string name="new_addresses">آدرس های جدید</string>
+  <string name="salesman_location">موقعیت مکانی</string>
+  <string name="image">عکس</string>
+  <string name="payment">دریافت وجه</string>
+  <string name="order">دریافت سفارش</string>
+  <string name="visit_detail">جزئیات بازدید</string>
 </resources>

@@ -115,8 +115,12 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
   public void setPosition(PositionDto positionDto) {
     this.positionDto = positionDto;
-    this.positionDto.setSaleType(SaleType.getByValue(
-        Long.parseLong(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE))));
+    try {
+      this.positionDto.setSaleType(SaleType.getByValue(
+          Long.parseLong(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE))));
+    } catch (Exception ex) {
+      positionDto.setSaleType(SaleType.COLD);
+    }
     this.total++;
   }
 

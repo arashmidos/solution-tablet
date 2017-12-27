@@ -14,10 +14,11 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.Constants.TransferStatus;
-import com.parsroyal.solutiontablet.data.model.DataTransferList;
-import com.parsroyal.solutiontablet.ui.adapter.DataTransferAdapter.ViewHolder;
-import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.DataTransferDialogFragment;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
+import com.parsroyal.solutiontablet.ui.adapter.SingleDataTransferAdapter.ViewHolder;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import java.util.List;
 
@@ -25,10 +26,10 @@ import java.util.List;
  * Created by Arash on 11/13/2017.
  */
 
-public class DataTransferAdapter extends Adapter<ViewHolder> {
+public class SingleDataTransferAdapter extends Adapter<ViewHolder> {
 
-  private final List<DataTransferList> model;
-  private final DataTransferDialogFragment parent;
+  private final List<VisitInformationDetail> model;
+  private final SingleDataTransferDialogFragment parent;
   private LayoutInflater inflater;
   private Activity context;
   private int currentPosition;
@@ -37,8 +38,8 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
   private int currentService;
   private boolean hasError;
 
-  public DataTransferAdapter(Activity context, DataTransferDialogFragment parent,
-      List<DataTransferList> model) {
+  public SingleDataTransferAdapter(Activity context, SingleDataTransferDialogFragment parent,
+      List<VisitInformationDetail> model) {
     this.context = context;
     this.model = model;
     this.parent = parent;
@@ -56,7 +57,7 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
     holder.setData(position);
     if (!MultiScreenUtility.isTablet(context)) {
-      lastItem(position == model.size(), holder);
+      lastItem(position == model.size()+1, holder);
     }
   }
 
@@ -75,25 +76,21 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
   @Override
   public int getItemCount() {
-    return model.size();
+    return model.size() + 1;
   }
 
   public void setCurrent(int current) {
     this.current = current;
-    model.get(current).setStatus(TransferStatus.IN_PROGRESS);
     context.runOnUiThread(this::notifyDataSetChanged);
   }
 
-  public void setFinished(int currentPosition) {
-    this.current = currentPosition;
-    model.get(current).setStatus(TransferStatus.DONE);
+  public void setFinished(int currentService) {
+    this.current = currentService;
     context.runOnUiThread(this::notifyDataSetChanged);
   }
 
-  public void setError(int currentPosition) {
-    hasError = true;
-    model.get(currentPosition).setStatus(TransferStatus.ERROR);
-//    model.get(currentPosition).setResult(detail);
+  public void setError(int currentService) {
+    hasError= true;
     context.runOnUiThread(this::notifyDataSetChanged);
   }
 
@@ -111,7 +108,8 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
     ProgressBar progressBar;
 
     private int position;
-    private DataTransferList transferDetail;
+    private VisitInformationDetail visitDetail;
+    private VisitInformationDetailType type;
 
     public ViewHolder(View itemView) {
       super(itemView);
@@ -120,30 +118,36 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
     public void setData(int position) {
       this.position = position;
+      if (position == model.size()) {
+        //Visit is always the latest
+        dataTypeTv.setText("ارسال اطلاعات بازدید");
+      } else {
+        this.visitDetail = model.get(position);
 
-      this.transferDetail = model.get(position);
+        type = VisitInformationDetailType
+            .getByValue(visitDetail.getType());
 
-      dataTypeTv.setText(transferDetail.getTitle());
+        dataTypeTv.setText(String.format(context.getString(R.string.send_x_registered),
+            context.getString(type.getTitle())));
+      }
 
-      switch (transferDetail.getStatus()) {
-        case TransferStatus.READY:
+      if (current > position) {
+        progressBar.setVisibility(View.INVISIBLE);
+        img.setVisibility(View.VISIBLE);
+        img.setImageResource(R.drawable.ic_check_circle_24_dp);
+      } else if (current == position) {
+        if( hasError){
           progressBar.setVisibility(View.INVISIBLE);
-          img.setVisibility(View.VISIBLE);
-          img.setImageResource(transferDetail.getImageId());
-          break;
-        case TransferStatus.IN_PROGRESS:
+          img.setImageResource(R.drawable.ic_clear_red_18_dp);
+        }else {
           progressBar.setVisibility(View.VISIBLE);
           img.setVisibility(View.INVISIBLE);
-          break;
-        case TransferStatus.ERROR:
-          progressBar.setVisibility(View.INVISIBLE);
-          img.setImageResource(R.drawable.ic_check_warning_24_dp);
-          //TODO: visible detail
-          break;
-        case TransferStatus.DONE:
-          progressBar.setVisibility(View.INVISIBLE);
-          img.setVisibility(View.VISIBLE);
-          img.setImageResource(R.drawable.ic_check_circle_24_dp);
+        }
+      } else {
+        progressBar.setVisibility(View.INVISIBLE);
+        img.setVisibility(View.VISIBLE);
+
+        img.setImageResource(Empty.isEmpty(type) ? R.drawable.ic_visit_24_dp : type.getDrawable());
       }
     }
   }

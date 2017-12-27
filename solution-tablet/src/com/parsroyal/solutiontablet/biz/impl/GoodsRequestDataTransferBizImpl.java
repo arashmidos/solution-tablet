@@ -28,10 +28,9 @@ public class GoodsRequestDataTransferBizImpl extends AbstractDataTransferBizImpl
   private ResultObserver observer;
   private KeyValueBiz keyValueBiz;
 
-  public GoodsRequestDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public GoodsRequestDataTransferBizImpl(Context context) {
     super(context);
     this.context = context;
-    this.observer = resultObserver;
     this.keyValueBiz = new KeyValueBizImpl(context);
     userCode = keyValueBiz.findByKey(ApplicationKeys.SETTING_USER_CODE).getValue();
   }
@@ -76,14 +75,12 @@ public class GoodsRequestDataTransferBizImpl extends AbstractDataTransferBizImpl
 
   @Override
   protected MediaType getContentType() {
-    MediaType contentType = new MediaType("TEXT", "PLAIN", Charset.forName("UTF-8"));
-    return contentType;
+    return new MediaType("TEXT", "PLAIN", Charset.forName("UTF-8"));
   }
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity requestEntity = new HttpEntity<String>(headers);
 
-    return requestEntity;
+    return new HttpEntity<String>(headers);
   }
 }

@@ -14,8 +14,6 @@ import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
-import com.parsroyal.solutiontablet.util.CharacterFixUtil;
-import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
@@ -37,10 +35,9 @@ public class GoodsDataTransferBizImpl extends AbstractDataTransferBizImpl<String
   private GoodsDao goodsDao;
   private SettingService settingService;
 
-  public GoodsDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public GoodsDataTransferBizImpl(Context context) {
     super(context);
     this.context = context;
-    this.resultObserver = resultObserver;
     this.goodsDao = new GoodsDaoImpl(context);
     this.keyValueBiz = new KeyValueBizImpl(context);
     this.settingService = new SettingServiceImpl(context);

@@ -68,4 +68,38 @@ public class Constants {
   public static final String QUESTION_POSITION = "QUESTION_POSITION";
   public static final String QUESTION_DTO = "QUESTION_DTO";
   public static final String ORIGIN_VISIT_ID = "ORIGIN_VISIT_ID";
+
+  public class TransferStatus {
+
+    public static final int READY = 0;
+    public static final int IN_PROGRESS = 1;
+    public static final int ERROR = 2;
+    public static final int DONE = 3;
+    public static final int CANCELED = 4;
+  }
+
+  public class TransferOrder {
+
+    public static final int PROVINCE = 1;
+    public static final int CITY = 2;
+    public static final int INFO = 3;
+    public static final int GOODS_GROUP = 4;
+    public static final int QUESTIONNAIRE = 5;
+    public static final int GOODS = 6;
+    public static final int VISITLINE = 7;
+    public static final int GOODS_IMAGES = 8;
+  }
+
+  public class SendOrder {
+
+    public static final int NEW_CUSTOMERS = 20;
+    public static final int ADDRESS = 21;
+    public static final int POSITION = 22;
+    public static final int QUESTIONNAIRE = 23;
+    public static final int PAYMENT = 24;
+    public static final int ORDER = 25;
+    public static final int RETURN_ORDER = 26;
+    public static final int VISIT_DETAIL = 27;
+    public static final int CUSTOMER_PICS = 29;
+  }
 }

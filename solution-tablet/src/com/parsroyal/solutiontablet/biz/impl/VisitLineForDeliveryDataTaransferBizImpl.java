@@ -39,10 +39,9 @@ public class VisitLineForDeliveryDataTaransferBizImpl extends AbstractDataTransf
   private CustomerDao customerDao;
   private SettingService settingService;
 
-  public VisitLineForDeliveryDataTaransferBizImpl(Context context, ResultObserver resultObserver) {
+  public VisitLineForDeliveryDataTaransferBizImpl(Context context) {
     super(context);
     this.context = context;
-    this.resultObserver = resultObserver;
     this.visitLineDao = new VisitLineDaoImpl(context);
     this.customerDao = new CustomerDaoImpl(context);
     this.settingService = new SettingServiceImpl(context);
@@ -125,7 +124,8 @@ public class VisitLineForDeliveryDataTaransferBizImpl extends AbstractDataTransf
   public String getMethod() {
 //    GET /visit-lines/delivery/{distributorCode}
     String url = String.format("visit-lines/delivery/%s",
-        settingService.getSettingValue(ApplicationKeys.SETTING_USER_CODE));//TODO LATER ? DISTRIBUTER ID
+        settingService
+            .getSettingValue(ApplicationKeys.SETTING_USER_CODE));//TODO LATER ? DISTRIBUTER ID
     Log.d(TAG, "Calling service:" + url);
     return url;
   }

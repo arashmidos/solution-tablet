@@ -34,9 +34,8 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
   private SaleOrderItemDao saleOrderItemDao;
   private KeyValueBiz keyValueBiz;
 
-  public SaleOrderForDeliveryDataTaransferBizImpl(Context context, ResultObserver resultObserver) {
+  public SaleOrderForDeliveryDataTaransferBizImpl(Context context) {
     super(context);
-    this.resultObserver = resultObserver;
     this.saleOrderDao = new SaleOrderDaoImpl(context);
     this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
     this.keyValueBiz = new KeyValueBizImpl(context);
