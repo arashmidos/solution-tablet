@@ -51,18 +51,18 @@ public class GoodsGroupDataTransferBizImpl {
 
     GetDataRestService restService = ServiceGenerator.createService(GetDataRestService.class);
 
-    Call<String> call = restService
+    Call<List<GoodsGroup>> call = restService
         .getAllGoodGroups(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID));
 
-    call.enqueue(new Callback<String>() {
+    call.enqueue(new Callback<List<GoodsGroup>>() {
       @Override
-      public void onResponse(Call<String> call, Response<String> response) {
+      public void onResponse(Call<List<GoodsGroup>> call, Response<List<GoodsGroup>> response) {
         if (response.isSuccessful()) {
-          String data = response.body();
+          List<GoodsGroup> list = response.body();
           try {
-            List<GoodsGroup> list = new Gson().fromJson(data, new TypeToken<List<GoodsGroup>>() {
-            }.getType());
-            if (Empty.isNotEmpty(data) && Empty.isNotEmpty(list)) {
+//            List<GoodsGroup> list = new Gson().fromJson(data, new TypeToken<List<GoodsGroup>>() {
+//            }.getType());
+            if (/*Empty.isNotEmpty(data) && */Empty.isNotEmpty(list)) {
 
               for (GoodsGroup group : list) {
                 group.setTitle(CharacterFixUtil.fixString(group.getTitle()));
@@ -93,7 +93,7 @@ public class GoodsGroupDataTransferBizImpl {
       }
 
       @Override
-      public void onFailure(Call<String> call, Throwable t) {
+      public void onFailure(Call<List<GoodsGroup>> call, Throwable t) {
         EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NETWORK_ERROR));
       }
     });

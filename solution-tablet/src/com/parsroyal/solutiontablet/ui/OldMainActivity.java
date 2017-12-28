@@ -45,7 +45,6 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.adapter.DrawerArrayAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
-import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
@@ -358,7 +357,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         break;
       case DATA_TRANSFER_FRAGMENT_ID:
         if (isDataTransferPossible()) {
-          fragment = new DataTransferFragment();
+//          fragment = new DataTransferFragment();
           changeSidebarItem(-1);
         }
         break;

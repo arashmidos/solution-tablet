@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
@@ -12,6 +13,8 @@ import com.parsroyal.solutiontablet.data.dao.impl.QAnswerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.response.CustomerResponse;
 import com.parsroyal.solutiontablet.service.CustomerService;
@@ -23,6 +26,7 @@ import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
 import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -45,14 +49,13 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
   private int success = 0;
   private int total = 0;
 
-  public NewCustomerDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public NewCustomerDataTransferBizImpl(Context context) {
     super(context);
     this.context = context;
     this.customerDao = new CustomerDaoImpl(context);
     this.visitInformationDao = new VisitInformationDaoImpl(context);
     this.qAnswerDao = new QAnswerDaoImpl(context);
     this.customerService = new CustomerServiceImpl(context);
-    this.observer = resultObserver;
   }
 
   @Override
@@ -83,14 +86,12 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
         }
 //        }
         success++;
-        getObserver()
-            .publishResult(context.getString(R.string.new_customers_data_transferred_successfully));
       } catch (Exception ex) {
         Logger.sendError("Data transfer", "Error in receiving NewCustomerData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
       }
+      EventBus.getDefault().post(new DataTransferSuccessEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
     }
-
   }
 
   @Override

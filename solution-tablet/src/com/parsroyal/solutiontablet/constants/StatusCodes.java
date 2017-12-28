@@ -15,6 +15,8 @@ public enum StatusCodes {
   NETWORK_ERROR(1003,
       R.string.com_parsroyal_solutiontablet_exception_BackendIsNotReachableException),
   DATA_STORE_ERROR(1004, R.string.message_exception_in_data_store),
+  NO_DATA_ERROR(1005, R.string.message_no_data_received),
+  UPDATE(1006, R.string.data_transfered_successfully),
   SERVER_ERROR(1100, R.string.com_parsroyal_solutiontablet_exception_InternalServerError),
   PERMISSION_DENIED(2001, R.string.permission_denied_explanation),
   NEW_GPS_LOCATION(2002, R.string.message_new_gps_location),

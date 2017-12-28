@@ -97,10 +97,18 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
     context.runOnUiThread(this::notifyDataSetChanged);
   }
 
+  public void setFinished(int currentPosition, String message) {
+    this.current = currentPosition;
+    model.get(current).setStatus(TransferStatus.DONE);
+    model.get(current).setResult(message);
+    context.runOnUiThread(this::notifyDataSetChanged);
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.data_type_tv)
-    TextView dataTypeTv;
+    TextView dataTypeTv;@BindView(R.id.message_tv)
+    TextView messageTv;
     @BindView(R.id.main_lay)
     RelativeLayout mainLay;
     @BindView(R.id.bottom_line)
@@ -133,17 +141,19 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
           break;
         case TransferStatus.IN_PROGRESS:
           progressBar.setVisibility(View.VISIBLE);
+          img.setImageResource(transferDetail.getImageId());
           img.setVisibility(View.INVISIBLE);
           break;
         case TransferStatus.ERROR:
           progressBar.setVisibility(View.INVISIBLE);
           img.setImageResource(R.drawable.ic_check_warning_24_dp);
-          //TODO: visible detail
+          messageTv.setText(transferDetail.getResult());
           break;
         case TransferStatus.DONE:
           progressBar.setVisibility(View.INVISIBLE);
           img.setVisibility(View.VISIBLE);
           img.setImageResource(R.drawable.ic_check_circle_24_dp);
+          messageTv.setText(transferDetail.getResult());
       }
     }
   }

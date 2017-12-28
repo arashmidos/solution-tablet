@@ -573,4 +573,5 @@
   <string name="payment">دریافت وجه</string>
   <string name="order">دریافت سفارش</string>
   <string name="visit_detail">جزئیات بازدید</string>
+  <string name="message_no_data_received">هیچ داده ای یافت نشد</string>
 </resources>

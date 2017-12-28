@@ -51,7 +51,6 @@ import com.parsroyal.solutiontablet.ui.fragment.AnonymousQuestionnaireFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
-import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
@@ -686,11 +685,6 @@ public abstract class MainActivity extends AppCompatActivity {
         break;
       case REPORT_FRAGMENT:
         fragment = ReportFragment.newInstance();
-        break;
-      case DATA_TRANSFER_FRAGMENT_ID:
-        /*if (isDataTransferPossible()) {
-          fragment = new DataTransferFragment();
-        }*/
         break;
       case ABOUT_US_FRAGMENT_ID:
         fragment = new AboutUsFragment();

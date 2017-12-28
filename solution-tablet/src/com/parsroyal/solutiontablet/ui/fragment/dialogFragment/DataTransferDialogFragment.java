@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,18 +20,16 @@ import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PaymentsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.Constants.SendOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferOrder;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Payment;
-import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
-import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.DataTransferList;
 import com.parsroyal.solutiontablet.data.model.QAnswerDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
@@ -50,6 +47,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.DataTransferAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import com.parsroyal.solutiontablet.util.Updater;
 import java.io.File;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -84,7 +82,6 @@ public class DataTransferDialogFragment extends DialogFragment {
   private DataTransferList currentModel;
   private List<DataTransferList> model;
   private int currentPosition = -1;
-  private VisitInformation visit;
   private DataTransferServiceImpl dataTransferService;
   private boolean isGet;
   private DataTransferAdapter adapter;
@@ -127,10 +124,8 @@ public class DataTransferDialogFragment extends DialogFragment {
           setData();
           break;
         case Constants.DATA_TRANSFER_SEND_DATA:
-          toolbarTitle.setText(getString(R.string.send_data));
           isGet = false;
           setData();
-          invokeSendData();
           break;
       }
 
@@ -151,9 +146,14 @@ public class DataTransferDialogFragment extends DialogFragment {
     if (isGet) {
       model = getReceiveModel();
       dataTransferBtn.setText(getString(R.string.get_data));
+
+      dataTransferBtn
+          .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_file_download_white_18dp, 0);
+
       toolbarTitle.setText(getString(R.string.get_data));
     } else {
       model = getSendModel();
+
       dataTransferBtn.setText(getString(R.string.send_data));
       toolbarTitle.setText(getString(R.string.send_data));
     }
@@ -235,10 +235,18 @@ public class DataTransferDialogFragment extends DialogFragment {
         dataTransferService.getAllQuestionnaires();
         break;
       case TransferOrder.GOODS:
+        dataTransferService.getAllGoods();
         break;
       case TransferOrder.VISITLINE:
+        dataTransferService.getAllVisitLines();
         break;
       case TransferOrder.GOODS_IMAGES:
+        Updater.downloadGoodsImages(getActivity());
+        break;
+      case SendOrder.NEW_CUSTOMERS:
+        Thread t = new Thread(() -> dataTransferService.sendAllNewCustomers());
+        t.start();
+        break;
       default:
     }
   }
@@ -311,24 +319,6 @@ public class DataTransferDialogFragment extends DialogFragment {
     sendDataThead.start();
   }
 
-  private void sendSaveLocation() {
-    CustomerServiceImpl customerService = new CustomerServiceImpl(mainActivity);
-    CustomerLocationDto customerLocationDto = customerService
-        .findCustomerLocationDtoByCustomerBackendId(visit.getCustomerBackendId());
-    Thread sendDataThead = new Thread(() -> {
-
-      if (Empty.isNotEmpty(customerLocationDto)) {
-        UpdatedCustomerLocationDataTransferBizImpl locationDataTransferBiz =
-            new UpdatedCustomerLocationDataTransferBizImpl(mainActivity, null);
-        locationDataTransferBiz.setData(customerLocationDto);
-        locationDataTransferBiz.exchangeData();
-      } else {
-        sendNextDetail();
-      }
-    });
-    sendDataThead.start();
-  }
-
   private void sendPicture(long visitId) {
     CustomerService customerService = new CustomerServiceImpl(mainActivity);
     File pics = customerService.getAllCustomerPicForSendByVisitId(visitId);
@@ -358,12 +348,16 @@ public class DataTransferDialogFragment extends DialogFragment {
   public void getMessage(DataTransferEvent event) {
     if (event instanceof DataTransferSuccessEvent) {
       if (event.getStatusCode().equals(StatusCodes.SUCCESS)) {
+        adapter.setFinished(currentPosition);
         sendNextDetail();
       } else {
-        cancelTransfer();
+        if (event.getStatusCode().equals(StatusCodes.NO_DATA_ERROR)) {
+          adapter.setFinished(currentPosition, getString(StatusCodes.NO_DATA_ERROR.getMessage()));
+        }
       }
     } else if (event instanceof DataTransferErrorEvent) {
       if (isGet) {
+        adapter.setError(currentPosition);
         cancelTransfer();
       } else {
         adapter.setError(currentPosition);
@@ -408,9 +402,9 @@ public class DataTransferDialogFragment extends DialogFragment {
       cancelBtn.setVisibility(View.GONE);
       switchButtonState();
       dataTransferBtn.setText(R.string.finish);
-      Drawable img = getResources().getDrawable(R.drawable.ic_check_white_18_dp);
-      img.setBounds(10, 0, 0, 0);
-      dataTransferBtn.setCompoundDrawables(img, null, null, null);
+
+      dataTransferBtn
+          .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_white_18_dp, 0);
     });
   }
 

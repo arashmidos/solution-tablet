@@ -21,20 +21,23 @@ public class ToastUtil {
   //*********************** Toast Messages ***********************/
   private static void toastMessage(Activity activity, View view, String message) {
     Snacky.Builder builder = Snacky.builder();
+    boolean isTablet;
     if (activity != null) {
       builder.setActivty(activity);
+      isTablet = MultiScreenUtility.isTablet(activity);
     } else if (view != null) {
       builder.setView(view);
+      isTablet = MultiScreenUtility.isTablet(view);
     } else {
       return;
     }
 
     builder.setText(message);
     builder.setActionTextColor(Color.WHITE);
-    builder.setTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
+    builder.setTextSize(isTablet ? 20 : 14);
     builder.setDuration(Snacky.LENGTH_LONG);
     final Snackbar snack = builder.info();
-    if (MultiScreenUtility.isTablet(activity)) {
+    if (isTablet) {
       View snackView = snack.getView();
       FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackView.getLayoutParams();
       params.gravity = Gravity.TOP;
@@ -65,19 +68,22 @@ public class ToastUtil {
   //*********************** Toast Success ***********************/
   private static void toastSuccess(Activity activity, View view, String message) {
     Snacky.Builder builder = Snacky.builder();
+    boolean isTablet;
     if (activity != null) {
       builder.setActivty(activity);
+      isTablet = MultiScreenUtility.isTablet(activity);
     } else if (view != null) {
       builder.setView(view);
+      isTablet = MultiScreenUtility.isTablet(view);
     } else {
       return;
     }
     builder.setText(message);
     builder.setActionTextColor(Color.BLACK);
-    builder.setTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
+    builder.setTextSize(isTablet ? 20 : 14);
     builder.setDuration(Snacky.LENGTH_LONG);
     final Snackbar snack = builder.success();
-    if (MultiScreenUtility.isTablet(activity)) {
+    if (isTablet) {
       View snackView = snack.getView();
       FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackView.getLayoutParams();
       params.gravity = Gravity.TOP;
@@ -109,10 +115,16 @@ public class ToastUtil {
   private static void toastError(Activity activity, View view, String message,
       OnClickListener listener) {
     Snacky.Builder builder = Snacky.builder();
+    boolean isTablet;
+    String okButton;
     if (activity != null) {
       builder.setActivty(activity);
+      isTablet = MultiScreenUtility.isTablet(activity);
+      okButton = activity.getString(R.string.button_ok);
     } else if (view != null) {
       builder.setView(view);
+      isTablet = MultiScreenUtility.isTablet(view);
+      okButton = view.getResources().getString(R.string.button_ok);
     } else {
       return;
     }
@@ -120,18 +132,18 @@ public class ToastUtil {
     builder.setTextColor(Color.WHITE);
     builder.setActionTextColor(Color.BLACK);
     builder.setBackgroundColor(Color.RED);
-    builder.setTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
-    builder.setActionTextSize(MultiScreenUtility.isTablet(activity) ? 20 : 14);
+    builder.setTextSize(isTablet ? 20 : 14);
+    builder.setActionTextSize(isTablet ? 20 : 14);
     builder.setDuration(Snacky.LENGTH_INDEFINITE);
     final Snackbar snack = builder.build();
-    if (MultiScreenUtility.isTablet(activity)) {
+    if (isTablet) {
       View snackView = snack.getView();
       FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackView.getLayoutParams();
       params.gravity = Gravity.TOP;
       params.width = LayoutParams.MATCH_PARENT;
       snackView.setLayoutParams(params);
     }
-    snack.setAction(activity.getString(R.string.button_ok), v -> {
+    snack.setAction(okButton, v -> {
       snack.dismiss();
       if (Empty.isNotEmpty(listener)) {
         listener.onClick(null);

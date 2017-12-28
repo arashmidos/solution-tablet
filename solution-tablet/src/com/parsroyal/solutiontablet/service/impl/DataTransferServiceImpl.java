@@ -33,6 +33,7 @@ import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
@@ -54,9 +55,7 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
-import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.File;
 import java.util.List;
@@ -146,34 +145,6 @@ public class DataTransferServiceImpl implements DataTransferService {
 //    uiObserver.finished(true);
   }
 
-  public void getGoodsImages(final ResultObserver uiObserver) {
-    backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
-    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
-    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
-    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-    saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
-
-    if (Empty.isEmpty(backendUri)) {
-      throw new InvalidServerAddressException();
-    }
-
-    if (Empty.isEmpty(username)) {
-      throw new UsernameNotProvidedForConnectingToServerException();
-    }
-
-    if (Empty.isEmpty(password)) {
-      throw new PasswordNotProvidedForConnectingToServerException();
-    }
-
-    if (Empty.isEmpty(salesmanId)) {
-      throw new SalesmanIdNotProvidedForConnectingToServerException();
-    }
-
-    MediaUtil.clearGoodsFolder();
-
-    Updater.downloadGoodsImages(context);
-  }
-
   @Override
   public boolean hasUnsentData() {
     List<QAnswerDto> answersForSend = questionnaireService.getAllAnswersDtoForSend();
@@ -250,21 +221,19 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
   }
 
-  private void getAllGoods() {
-    boolean success = false;
-//    observer.publishResult(context.getString(R.string.message_transferring_goods_data));
-
-    for (int i = 0; i < 3 && !success; i++) {
-      success = new GoodsDataTransferBizImpl(context).exchangeData();
+  public void getAllGoods() {
+    try {
+      new GoodsDataTransferBizImpl(context).exchangeData();
+    } catch (Exception ex) {
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
     }
   }
 
-  private void getAllVisitLines() {
-    boolean success = false;
-//    observer.publishResult(context.getString(R.string.message_transferring_visit_lines_data));
-
-    for (int i = 0; i < 3 && !success; i++) {
-      success = new VisitLineDataTaransferBizImpl(context).exchangeData();
+  public void getAllVisitLines() {
+    try {
+      new VisitLineDataTaransferBizImpl(context).exchangeData();
+    } catch (Exception ex) {
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
     }
   }
 
@@ -287,44 +256,40 @@ public class DataTransferServiceImpl implements DataTransferService {
       throw new PasswordNotProvidedForConnectingToServerException();
     }
 
-    final ResultObserver resultObserver = prepareResultObserverForDataTransfer(uiObserver);
-
-    sendAllNewCustomers(resultObserver);
-    sendAllCustomerPics(resultObserver);
-    sendAllUpdatedCustomers(resultObserver);
-    sendAllPositions(resultObserver);
-    sendAllAnswers(resultObserver);
-    sendAllPayments(resultObserver);
-    sendAllOrders(resultObserver);
-    sendAllInvoicedOrders(resultObserver);
-    sendAllSaleRejects(resultObserver);
+    sendAllNewCustomers();
+    sendAllCustomerPics(null);
+    sendAllUpdatedCustomers(null);
+    sendAllPositions(null);
+    sendAllAnswers(null);
+    sendAllPayments(null);
+    sendAllOrders(null);
+    sendAllInvoicedOrders(null);
+    sendAllSaleRejects(null);
     //Visit detail always should be the last one
-    sendAllVisitInformation(resultObserver);
+    sendAllVisitInformation(null);
     uiObserver.finished(true);
   }
 
-  private void sendAllNewCustomers(ResultObserver resultObserver) {
+  public void sendAllNewCustomers() {
     List<CustomerDto> allNewCustomers = customerService.getAllNewCustomersForSend();
     if (Empty.isEmpty(allNewCustomers)) {
-      if (Empty.isNotEmpty(resultObserver)) {
-        resultObserver
-            .publishResult(context.getString(R.string.message_found_no_new_customer_for_send));
-      }
+      EventBus.getDefault().post(new DataTransferSuccessEvent(
+          context.getString(R.string.message_found_no_new_customer_for_send),
+          StatusCodes.NO_DATA_ERROR));
+
       return;
     }
 
     NewCustomerDataTransferBizImpl newCustomerDataTransferBiz = new NewCustomerDataTransferBizImpl(
-        context, resultObserver);
-    if (Empty.isNotEmpty(resultObserver)) {
-      resultObserver.publishResult(context.getString(R.string.sending_new_customers_data));
-    }
+        context);
 
     for (int i = 0; i < allNewCustomers.size(); i++) {
       CustomerDto customerDto = allNewCustomers.get(i);
       newCustomerDataTransferBiz.setCustomer(customerDto);
       newCustomerDataTransferBiz.exchangeData();
     }
-    resultObserver.publishResult(newCustomerDataTransferBiz.getSuccessfulMessage());
+
+    EventBus.getDefault().post(new DataTransferSuccessEvent(StatusCodes.SUCCESS));
   }
 
   private void sendAllCustomerPics(ResultObserver resultObserver) {

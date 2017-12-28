@@ -30,7 +30,7 @@
   <TextView
     android:id="@+id/data_type_tv"
     style="@style/IranSans"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     android:layout_centerVertical="true"
@@ -39,6 +39,21 @@
     android:textColor="@color/black_85"
     android:textSize="14sp"
     tools:text="ارسال اطلاعات سفارش" />
+
+  <TextView
+    android:id="@+id/message_tv"
+    style="@style/IranSans"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginStart="16dp"
+    android:ellipsize="start"
+    android:layout_centerVertical="true"
+    android:layout_toLeftOf="@+id/data_type_tv"
+    android:layout_toStartOf="@+id/data_type_tv"
+    android:textColor="@color/gray_75"
+    android:textSize="12sp"
+    tools:text="هیچ داده ای یافت نشد" />
 
   <View
     android:id="@+id/bottom_line"

@@ -13,8 +13,8 @@ import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
-import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.data.response.UpdateResponse;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
@@ -38,10 +38,10 @@ import retrofit2.Response;
 public class Updater {
 
   private static final String TAG = Updater.class.getName();
+  private static final String API_UPDATE_URL = "http://173.212.199.107:50004/appcenter/app/latest/solution-mobile";
   private static DownloadManager downloadManager;
   private static long downloadReference;
   private static BroadcastReceiver receiverDownloadComplete;
-  private static final String API_UPDATE_URL = "http://173.212.199.107:50004/appcenter/app/latest/solution-mobile";
 
   public static void checkAppUpdate(final Context context) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
@@ -86,7 +86,7 @@ public class Updater {
 
   public static void downloadGoodsImages(final Context context) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
-      EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
       return;
     }
 
@@ -99,31 +99,29 @@ public class Updater {
         if (response.isSuccessful()) {
           if (response.body() != null) {
 
-            InputStream in = response.body().byteStream();
             File path = context.getCacheDir();
             File file = new File(path, "images.zip");
             try {
               FileOutputStream fileOutputStream = new FileOutputStream(file);
               IOUtils.write(response.body().bytes(), fileOutputStream);
               MediaUtil.unpackZip(file);
-              EventBus.getDefault()
-                  .post(new Event(StatusCodes.SUCCESS, "Good images downloaded successfully"));
+              EventBus.getDefault().post(new DataTransferSuccessEvent(StatusCodes.SUCCESS));
 
             } catch (java.io.IOException e) {
               e.printStackTrace();
-              EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
+              EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.DATA_STORE_ERROR));
             }
           } else {
-            EventBus.getDefault().post(new ErrorEvent(StatusCodes.INVALID_DATA));
+            EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.INVALID_DATA));
           }
         } else {
-          EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
+          EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
         }
       }
 
       @Override
       public void onFailure(Call<ResponseBody> call, Throwable t) {
-        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+        EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NETWORK_ERROR));
       }
     });
   }
