@@ -8,8 +8,8 @@ import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
-import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
@@ -42,13 +42,11 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
   private ResultObserver observer;
   private CustomerLocationDto data;
 
-  public UpdatedCustomerLocationDataTransferBizImpl(Context context,
-      ResultObserver resultObserver) {
+  public UpdatedCustomerLocationDataTransferBizImpl(Context context) {
     super(context);
     this.context = context;
     this.customerDao = new CustomerDaoImpl(context);
     this.customerService = new CustomerServiceImpl(context);
-    this.observer = resultObserver;
   }
 
   @Override
@@ -70,38 +68,23 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
             customerDao.update(customer);
           }
         }
-        if (Empty.isNotEmpty(getObserver())) {
-          getObserver().publishResult(
-              context.getString(R.string.updated_customers_data_transferred_successfully));
-        } else {
-          EventBus.getDefault().post(
-              new SendOrderEvent(StatusCodes.SUCCESS, 0L,
-                  context.getString(R.string.updated_customers_data_transferred_successfully)));
-        }
+
+        EventBus.getDefault().post(new DataTransferSuccessEvent(
+            context.getString(R.string.updated_customers_data_transferred_successfully),
+            StatusCodes.SUCCESS));
       } catch (Exception ex) {
         Logger.sendError("Data transfer",
             "Error in receiving UpdatedCustomerLocationData " + ex.getMessage());
-        if (Empty.isNotEmpty(observer)) {
-          observer.publishResult(
-              context.getString(R.string.error_updated_customers_locaction_transfer));
-        } else {
-          EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
-        }
+        EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.DATA_STORE_ERROR));
       }
     } else {
-      if (Empty.isNotEmpty(observer)) {
-        observer.publishResult(context.getString(R.string.message_got_no_response));
-      } else {
-        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
-      }
+      EventBus.getDefault().post(new DataTransferErrorEvent(
+          context.getString(R.string.message_got_no_response), StatusCodes.NETWORK_ERROR));
     }
   }
 
   @Override
   public void beforeTransfer() {
-    if (Empty.isNotEmpty(observer)) {
-      getObserver().publishResult(context.getString(R.string.sending_updated_customers_data));
-    }
   }
 
   @Override
@@ -111,9 +94,8 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
 
   @Override
   public String getMethod() {
-    return String
-        .format("customers/%s/updateLocation", new SettingServiceImpl(context).getSettingValue(
-            ApplicationKeys.SALESMAN_ID));
+    return String.format("customers/%s/updateLocation",
+        new SettingServiceImpl(context).getSettingValue(ApplicationKeys.SALESMAN_ID));
   }
 
   @Override

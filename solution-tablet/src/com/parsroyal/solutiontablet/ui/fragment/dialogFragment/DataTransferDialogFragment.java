@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -247,7 +248,36 @@ public class DataTransferDialogFragment extends DialogFragment {
         Thread t = new Thread(() -> dataTransferService.sendAllNewCustomers());
         t.start();
         break;
+      case SendOrder.ADDRESS:
+        Thread t2 = new Thread(() -> dataTransferService.sendAllUpdatedCustomers());
+        t2.start();
+                break;
+      case SendOrder.POSITION:
+        Thread t3 = new Thread(() -> dataTransferService.sendAllPositions());
+        t3.start();
+        break;
+      case SendOrder.QUESTIONNAIRE:
+        Thread t4 = new Thread(() -> dataTransferService.sendAllAnswers());
+        t4.start();
+        break;
+      case SendOrder.PAYMENT:
+        Thread t5 = new Thread(() -> dataTransferService.sendAllPAnswers());
+        t5.start();
+        break;
+      case SendOrder.ORDER:
+        Toast.makeText(mainActivity, "Not Implemented", Toast.LENGTH_SHORT).show();
+        break;
+      case SendOrder.RETURN_ORDER:
+        Toast.makeText(mainActivity, "Not Implemented", Toast.LENGTH_SHORT).show();
+        break;
+      case SendOrder.VISIT_DETAIL:
+        Toast.makeText(mainActivity, "Not Implemented", Toast.LENGTH_SHORT).show();
+        break;
+      case SendOrder.CUSTOMER_PICS:
+        Toast.makeText(mainActivity, "Not Implemented", Toast.LENGTH_SHORT).show();
+        break;
       default:
+
     }
   }
 
@@ -350,10 +380,10 @@ public class DataTransferDialogFragment extends DialogFragment {
       if (event.getStatusCode().equals(StatusCodes.SUCCESS)) {
         adapter.setFinished(currentPosition);
         sendNextDetail();
-      } else {
-        if (event.getStatusCode().equals(StatusCodes.NO_DATA_ERROR)) {
-          adapter.setFinished(currentPosition, getString(StatusCodes.NO_DATA_ERROR.getMessage()));
-        }
+      } else if (event.getStatusCode().equals(StatusCodes.NO_DATA_ERROR)) {
+        adapter.setFinished(currentPosition, getString(StatusCodes.NO_DATA_ERROR.getMessage()));
+      } else if (event.getStatusCode().equals(StatusCodes.UPDATE)) {
+        adapter.setUpdate(currentPosition, event.getMessage());
       }
     } else if (event instanceof DataTransferErrorEvent) {
       if (isGet) {

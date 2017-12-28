@@ -104,10 +104,17 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
     context.runOnUiThread(this::notifyDataSetChanged);
   }
 
+  public void setUpdate(int currentPosition, String message) {
+    this.current = currentPosition;
+    model.get(current).setResult(message);
+    context.runOnUiThread(() -> notifyItemChanged(current));
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.data_type_tv)
-    TextView dataTypeTv;@BindView(R.id.message_tv)
+    TextView dataTypeTv;
+    @BindView(R.id.message_tv)
     TextView messageTv;
     @BindView(R.id.main_lay)
     RelativeLayout mainLay;
@@ -143,6 +150,7 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
           progressBar.setVisibility(View.VISIBLE);
           img.setImageResource(transferDetail.getImageId());
           img.setVisibility(View.INVISIBLE);
+          messageTv.setText(transferDetail.getResult());
           break;
         case TransferStatus.ERROR:
           progressBar.setVisibility(View.INVISIBLE);

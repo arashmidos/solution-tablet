@@ -6,10 +6,12 @@ import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SendStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.dao.impl.QAnswerDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.QAnswer;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.AnswerDetailDto;
 import com.parsroyal.solutiontablet.data.model.QAnswerDto;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
@@ -18,13 +20,14 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 /**
- * Created by Mahyar on 8/4/2015.
+ * Created by Arash on 29/12/2017
  */
 public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
 
@@ -35,9 +38,8 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
   private int success = 0;
   private int total = 0;
 
-  public QAnswersDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public QAnswersDataTransferBizImpl(Context context) {
     super(context);
-    this.resultObserver = resultObserver;
     this.qAnswerDao = new QAnswerDaoImpl(context);
     this.visitService = new VisitServiceImpl(context);
   }
@@ -57,19 +59,17 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
             qAnswerDao.update(qAnswer);
           }
         }
-        visitService
-            .updateVisitDetailId(VisitInformationDetailType.FILL_QUESTIONNAIRE,
-                answer.getAnswersGroupNo(), backendId);
+        visitService.updateVisitDetailId(VisitInformationDetailType.FILL_QUESTIONNAIRE,
+            answer.getAnswersGroupNo(), backendId);
         success++;
       } catch (Exception ex) {
         Crashlytics
             .log(Log.ERROR, "Data transfer", "Error in receiving QAnswerData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
-        if (Empty.isNotEmpty(resultObserver)) {
-          resultObserver.publishResult(getExceptionMessage());
-        }
       }
     }
+    EventBus.getDefault()
+        .post(new DataTransferSuccessEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
   }
 
 
@@ -110,7 +110,6 @@ public class QAnswersDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
   @Override
   protected MediaType getContentType() {
-
     return MediaType.APPLICATION_JSON;
   }
 

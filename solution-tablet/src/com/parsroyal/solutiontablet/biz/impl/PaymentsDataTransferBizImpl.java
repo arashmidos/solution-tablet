@@ -7,8 +7,8 @@ import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Payment;
-import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.service.PaymentService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
@@ -19,7 +19,6 @@ import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
-import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
 import java.util.List;
@@ -43,13 +42,12 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
   private ResultObserver observer;
   private List<Payment> payments;
 
-  public PaymentsDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public PaymentsDataTransferBizImpl(Context context) {
     super(context);
     this.context = context;
     paymentService = new PaymentServiceImpl(context);
     visitService = new VisitServiceImpl(context);
     settingService = new SettingServiceImpl(context);
-    observer = resultObserver;
   }
 
   @Override
@@ -80,42 +78,31 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
             failure++;
           }
         }
-        if (Empty.isNotEmpty(observer)) {
-          getObserver().publishResult(NumberUtil.digitsToPersian(String
-              .format(Locale.US, context.getString(R.string.payments_data_transferred_successfully),
-                  String.valueOf(success), String.valueOf(failure))));
+
+        if (payments.size() == success) {
+          EventBus.getDefault().post(new DataTransferSuccessEvent(
+              String.format(Locale.US,
+                  context.getString(R.string.payments_data_transferred_successfully),
+                  String.valueOf(success), String.valueOf(failure)),
+              StatusCodes.SUCCESS));
         } else {
-          if (payments.size() == success) {
-            EventBus.getDefault().post(new SendOrderEvent(StatusCodes.SUCCESS, 0L, String
-                .format(Locale.US,
-                    context.getString(R.string.payments_data_transferred_successfully),
-                    String.valueOf(success), String.valueOf(failure))));
-          } else {
-            EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
-          }
+          EventBus.getDefault().post(new DataTransferErrorEvent(String.format(Locale.US,
+              context.getString(R.string.payments_data_transferred_successfully),
+              String.valueOf(success), String.valueOf(failure)), StatusCodes.DATA_STORE_ERROR));
         }
       } catch (Exception ex) {
         Logger.sendError("Data transfer", "Error in receiving PaymentData " + ex.getMessage());
-        if (Empty.isNotEmpty(observer)) {
-          getObserver().publishResult(context.getString(R.string.error_payments_transfer));
-        } else {
-          EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
-        }
+        EventBus.getDefault().post(new DataTransferErrorEvent(context.getString(
+            R.string.message_exception_in_data_store), StatusCodes.DATA_STORE_ERROR));
       }
     } else {
-      if (Empty.isNotEmpty(observer)) {
-        getObserver().publishResult(context.getString(R.string.message_got_no_response));
-      } else {
-        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
-      }
+      EventBus.getDefault().post(new DataTransferErrorEvent(
+          context.getString(R.string.message_got_no_response), StatusCodes.NO_DATA_ERROR));
     }
   }
 
   @Override
   public void beforeTransfer() {
-    if (Empty.isNotEmpty(observer)) {
-      getObserver().publishResult(context.getString(R.string.sending_payments_data));
-    }
   }
 
   @Override

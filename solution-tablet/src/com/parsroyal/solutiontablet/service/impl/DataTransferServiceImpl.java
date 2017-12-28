@@ -257,26 +257,23 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
 
     sendAllNewCustomers();
-    sendAllCustomerPics(null);
-    sendAllUpdatedCustomers(null);
-    sendAllPositions(null);
-    sendAllAnswers(null);
-    sendAllPayments(null);
+    sendAllUpdatedCustomers();
+    sendAllPositions();
+    sendAllAnswers();
+    sendAllPayments();
     sendAllOrders(null);
     sendAllInvoicedOrders(null);
     sendAllSaleRejects(null);
     //Visit detail always should be the last one
+    sendAllCustomerPics(null);
     sendAllVisitInformation(null);
-    uiObserver.finished(true);
   }
 
   public void sendAllNewCustomers() {
     List<CustomerDto> allNewCustomers = customerService.getAllNewCustomersForSend();
     if (Empty.isEmpty(allNewCustomers)) {
-      EventBus.getDefault().post(new DataTransferSuccessEvent(
-          context.getString(R.string.message_found_no_new_customer_for_send),
-          StatusCodes.NO_DATA_ERROR));
-
+      EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
+          R.string.message_found_no_new_customer_for_send), StatusCodes.NO_DATA_ERROR));
       return;
     }
 
@@ -289,84 +286,76 @@ public class DataTransferServiceImpl implements DataTransferService {
       newCustomerDataTransferBiz.exchangeData();
     }
 
-    EventBus.getDefault().post(new DataTransferSuccessEvent(StatusCodes.SUCCESS));
+    EventBus.getDefault().post(new DataTransferSuccessEvent(
+        newCustomerDataTransferBiz.getSuccessfulMessage(), StatusCodes.SUCCESS));
   }
 
-  private void sendAllCustomerPics(ResultObserver resultObserver) {
-
-    File pics = customerService.getAllCustomerPicForSend();
-    if (Empty.isEmpty(pics)) {
-      resultObserver
-          .publishResult(context.getString(R.string.message_found_no_new_customer_pic_for_send));
-      return;
-    } else {
-      Log.d(TAG, "Send Pic" + pics.length());
-    }
-
-    new NewCustomerPicDataTransferBizImpl(context, resultObserver, pics, null).exchangeData();
-  }
-
-  private void sendAllUpdatedCustomers(ResultObserver resultObserver) {
+  public void sendAllUpdatedCustomers() {
     List<CustomerLocationDto> allUpdatedCustomerLocation = customerService
         .getAllUpdatedCustomerLocation();
     if (Empty.isEmpty(allUpdatedCustomerLocation)) {
-      resultObserver
-          .publishResult(context.getString(R.string.message_found_no_updated_customer_for_send));
+      EventBus.getDefault().post(new DataTransferSuccessEvent(
+          context.getString(R.string.message_found_no_new_customer_for_send),
+          StatusCodes.NO_DATA_ERROR));
       return;
     }
-    new UpdatedCustomerLocationDataTransferBizImpl(context, resultObserver).exchangeData();
+    boolean success = new UpdatedCustomerLocationDataTransferBizImpl(context).exchangeData();
+    if (!success) {
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
+    }
   }
 
-  private void sendAllPositions(ResultObserver resultObserver) {
+  public void sendAllPositions() {
     List<PositionDto> positions = positionService.getAllPositionDtoByStatus(SendStatus.NEW.getId());
     if (Empty.isNotEmpty(positions)) {
-      PositionDataTransferBizImpl positionDataTransferBiz = new PositionDataTransferBizImpl(context,
-          resultObserver);
-      if (Empty.isNotEmpty(resultObserver)) {
-        resultObserver.publishResult(context.getString(R.string.sending_positions_data));
-      }
+      PositionDataTransferBizImpl positionDataTransferBiz = new PositionDataTransferBizImpl(
+          context);
+
       for (int i = 0; i < positions.size(); i++) {
         PositionDto positionDto = positions.get(i);
         positionDataTransferBiz.setPosition(positionDto);
         positionDataTransferBiz.sendAllData();
       }
-      resultObserver.publishResult(positionDataTransferBiz.getSuccessfulMessage());
+      EventBus.getDefault().post(new DataTransferSuccessEvent(
+          positionDataTransferBiz.getSuccessfulMessage(), StatusCodes.SUCCESS));
     } else {
-      resultObserver.publishResult(context.getString(R.string.message_no_positions_for_sending));
+      EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
+          R.string.message_no_positions_for_sending), StatusCodes.NO_DATA_ERROR));
     }
   }
 
-  private void sendAllAnswers(ResultObserver resultObserver) {
+  public void sendAllAnswers() {
     List<QAnswerDto> answersForSend = questionnaireService.getAllAnswersDtoForSend();
 
     if (Empty.isEmpty(answersForSend)) {
-      resultObserver.publishResult(context.getString(R.string.message_found_no_answer_for_send));
+      EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
+          R.string.message_found_no_answer_for_send), StatusCodes.NO_DATA_ERROR));
       return;
     }
 
-    QAnswersDataTransferBizImpl qAnswersDataTransferBizImpl = new QAnswersDataTransferBizImpl(
-        context, resultObserver);
-    if (Empty.isNotEmpty(resultObserver)) {
-      resultObserver.publishResult(context.getString(R.string.sending_answers_information_data));
-    }
+    QAnswersDataTransferBizImpl dataTransferBiz = new QAnswersDataTransferBizImpl(        context);
 
     for (int i = 0; i < answersForSend.size(); i++) {
       QAnswerDto qAnswerDto = answersForSend.get(i);
-      qAnswersDataTransferBizImpl.setAnswer(qAnswerDto);
-      qAnswersDataTransferBizImpl.exchangeData();
+      dataTransferBiz.setAnswer(qAnswerDto);
+      dataTransferBiz.exchangeData();
     }
-    resultObserver.publishResult(qAnswersDataTransferBizImpl.getSuccessfulMessage());
+    EventBus.getDefault().post(new DataTransferSuccessEvent(
+        dataTransferBiz.getSuccessfulMessage(), StatusCodes.SUCCESS));
   }
 
-  private void sendAllPayments(ResultObserver resultObserver) {
+  private void sendAllPayments() {
     List<Payment> payments = paymentService.getAllPaymentsByStatus(SendStatus.NEW.getId());
     if (Empty.isNotEmpty(payments)) {
-      PaymentsDataTransferBizImpl paymentsDataTransferBiz = new PaymentsDataTransferBizImpl(context,
-          resultObserver);
-      paymentsDataTransferBiz.setPayments(payments);
-      paymentsDataTransferBiz.exchangeData();
+      PaymentsDataTransferBizImpl dataTransferBiz = new PaymentsDataTransferBizImpl(context);
+      dataTransferBiz.setPayments(payments);
+      boolean success = dataTransferBiz.exchangeData();
+      if (!success) {
+        EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
+      }
     } else {
-      resultObserver.publishResult(context.getString(R.string.message_no_payments_for_sending));
+      EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
+          R.string.message_no_payments_for_sending), StatusCodes.NO_DATA_ERROR));
     }
   }
 
@@ -425,6 +414,20 @@ public class DataTransferServiceImpl implements DataTransferService {
       resultObserver
           .publishResult(context.getString(R.string.message_no_sale_reject_for_sending));
     }
+  }
+
+  private void sendAllCustomerPics(ResultObserver resultObserver) {
+
+    File pics = customerService.getAllCustomerPicForSend();
+    if (Empty.isEmpty(pics)) {
+      resultObserver
+          .publishResult(context.getString(R.string.message_found_no_new_customer_pic_for_send));
+      return;
+    } else {
+      Log.d(TAG, "Send Pic" + pics.length());
+    }
+
+    new NewCustomerPicDataTransferBizImpl(context, resultObserver, pics, null).exchangeData();
   }
 
   private void sendAllVisitInformation(ResultObserver resultObserver) {
