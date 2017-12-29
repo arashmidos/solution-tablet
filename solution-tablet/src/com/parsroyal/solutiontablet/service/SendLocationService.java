@@ -57,7 +57,7 @@ public class SendLocationService extends IntentService {
       if (Empty.isNotEmpty(positions)) {
 
         PositionDataTransferBizImpl positionDataTransferBiz = new PositionDataTransferBizImpl(
-            this, null);
+            this);
         for (int i = 0; i < positions.size(); i++) {
           PositionDto positionDto = positions.get(i);
           positionDataTransferBiz.setPosition(positionDto);

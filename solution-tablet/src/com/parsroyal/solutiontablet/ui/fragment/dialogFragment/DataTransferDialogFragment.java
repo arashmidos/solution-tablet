@@ -27,6 +27,7 @@ import com.parsroyal.solutiontablet.constants.Constants.SendOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferOrder;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Payment;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
@@ -136,11 +137,6 @@ public class DataTransferDialogFragment extends DialogFragment {
     }
   }
 
-  private void invokeSendData() {
-    isGet = false;
-    startTransfer();
-  }
-
   //set up recycler view
   private void setData() {
 
@@ -181,8 +177,12 @@ public class DataTransferDialogFragment extends DialogFragment {
         break;
       case R.id.data_transfer_btn:
         if (transferFinished) {
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_REFRESH_DATA));
           getDialog().dismiss();
         } else {
+          if (isGet) {
+            dataTransferService.clearData(Constants.FULL_UPDATE);
+          }
           startTransfer();
         }
         break;
@@ -214,6 +214,7 @@ public class DataTransferDialogFragment extends DialogFragment {
     currentPosition++;
     if (currentPosition == adapter.getItemCount()) {
       finishTransfer();
+      return;
     }
     adapter.setCurrent(currentPosition);
 
@@ -261,116 +262,27 @@ public class DataTransferDialogFragment extends DialogFragment {
         t4.start();
         break;
       case SendOrder.PAYMENT:
-        Thread t5 = new Thread(() -> dataTransferService.sendAllPAnswers());
+        Thread t5 = new Thread(() -> dataTransferService.sendAllPayments());
         t5.start();
         break;
       case SendOrder.ORDER:
-        Toast.makeText(mainActivity, "Not Implemented", Toast.LENGTH_SHORT).show();
+        Thread t6 = new Thread(() -> dataTransferService.sendAllOrders());
+        t6.start();
         break;
       case SendOrder.RETURN_ORDER:
-        Toast.makeText(mainActivity, "Not Implemented", Toast.LENGTH_SHORT).show();
+        Thread t7 = new Thread(() -> dataTransferService.sendAllSaleRejects());
+        t7.start();
         break;
       case SendOrder.VISIT_DETAIL:
-        Toast.makeText(mainActivity, "Not Implemented", Toast.LENGTH_SHORT).show();
+        Thread t8 = new Thread(() -> dataTransferService.sendAllVisitInformation());
+        t8.start();
         break;
       case SendOrder.CUSTOMER_PICS:
-        Toast.makeText(mainActivity, "Not Implemented", Toast.LENGTH_SHORT).show();
+        Thread t9 = new Thread(() -> dataTransferService.sendAllCustomerPics());
+        t9.start();
         break;
       default:
 
-    }
-  }
-
-  private void sendReject(long typeId) {
-    SaleOrderServiceImpl saleOrderService = new SaleOrderServiceImpl(mainActivity);
-    BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(typeId);
-
-    if (Empty.isNotEmpty(saleOrder)) {
-      Thread dataTransfer = new Thread(() -> {
-
-        SaleRejectsDataTransferBizImpl dataTransfer1 = new SaleRejectsDataTransferBizImpl(
-            mainActivity, null);
-        dataTransfer1.setOrder(saleOrder);
-        dataTransfer1.exchangeData();
-        if (dataTransfer1.getSuccess() == 1) {
-          sendNextDetail();
-        } else {
-          cancelTransfer();
-        }
-      });
-      dataTransfer.start();
-    } else {
-      sendNextDetail();
-    }
-  }
-
-  //Sync call
-  private void sendAnswers(long visitId) {
-    QuestionnaireService questionnaireService = new QuestionnaireServiceImpl(mainActivity);
-    List<QAnswerDto> answersForSend = questionnaireService.getAllAnswersDtoForSend(visitId);
-
-    if (Empty.isEmpty(answersForSend)) {
-      sendNextDetail();
-    } else {
-      QAnswersDataTransferBizImpl qAnswersDataTransferBizImpl = new QAnswersDataTransferBizImpl(
-          mainActivity, null);
-
-      Thread sendDataThead = new Thread(() -> {
-
-        for (int i = 0; i < answersForSend.size(); i++) {
-          QAnswerDto qAnswerDto = answersForSend.get(i);
-          qAnswersDataTransferBizImpl.setAnswer(qAnswerDto);
-          qAnswersDataTransferBizImpl.exchangeData();
-        }
-        if (qAnswersDataTransferBizImpl.getSuccess() == qAnswersDataTransferBizImpl.getTotal()) {
-          sendNextDetail();
-        } else {
-          cancelTransfer();
-        }
-      });
-      sendDataThead.start();
-    }
-  }
-
-  private void sendPayments(long visitId) {
-    PaymentService paymentService = new PaymentServiceImpl(mainActivity);
-    List<Payment> payments = paymentService.getAllPaymentsByVisitId(visitId);
-    Thread sendDataThead = new Thread(() -> {
-
-      if (Empty.isNotEmpty(payments)) {
-        PaymentsDataTransferBizImpl paymentsDataTransferBiz = new PaymentsDataTransferBizImpl(
-            mainActivity, null);
-        paymentsDataTransferBiz.setPayments(payments);
-        paymentsDataTransferBiz.exchangeData();
-      } else {
-        sendNextDetail();
-      }
-    });
-    sendDataThead.start();
-  }
-
-  private void sendPicture(long visitId) {
-    CustomerService customerService = new CustomerServiceImpl(mainActivity);
-    File pics = customerService.getAllCustomerPicForSendByVisitId(visitId);
-    if (Empty.isEmpty(pics)) {
-      sendNextDetail();
-    }
-    Thread sendDataThead = new Thread(
-        () -> new NewCustomerPicDataTransferBizImpl(mainActivity, null, pics, visitId)
-            .exchangeData());
-    sendDataThead.start();
-  }
-
-  //Async call
-  private void sendOrder(Long orderId) {
-    SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
-    BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
-    if (Empty.isNotEmpty(saleOrder)) {
-      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity, null);
-      dataTransfer.sendSingleOrder(saleOrder);
-    } else {
-      //We have sent them before
-      sendNextDetail();
     }
   }
 
@@ -382,6 +294,7 @@ public class DataTransferDialogFragment extends DialogFragment {
         sendNextDetail();
       } else if (event.getStatusCode().equals(StatusCodes.NO_DATA_ERROR)) {
         adapter.setFinished(currentPosition, getString(StatusCodes.NO_DATA_ERROR.getMessage()));
+        sendNextDetail();
       } else if (event.getStatusCode().equals(StatusCodes.UPDATE)) {
         adapter.setUpdate(currentPosition, event.getMessage());
       }
@@ -390,37 +303,10 @@ public class DataTransferDialogFragment extends DialogFragment {
         adapter.setError(currentPosition);
         cancelTransfer();
       } else {
-        adapter.setError(currentPosition);
+        adapter.setError(currentPosition,event.getMessage());
         sendNextDetail();
       }
     }
-  }
-
-  private void sendVisit() {
-
-    List<VisitInformationDto> visitInformationList = visitService.getAllVisitDetailForSend(0L);
-    if (Empty.isEmpty(visitInformationList)) {
-      cancelTransfer();
-      return;
-    }
-    VisitInformationDataTransferBizImpl dataTransfer = new VisitInformationDataTransferBizImpl(
-        mainActivity, null);
-    Thread sendDataThead = new Thread(() -> {
-
-      for (int i = 0; i < visitInformationList.size(); i++) {
-        VisitInformationDto visitInformationDto = visitInformationList.get(i);
-        if (visitInformationDto.getDetails() == null
-            || visitInformationDto.getDetails().size() == 0) {
-          visitService.deleteVisitById(visitInformationDto.getId());
-          getActivity().runOnUiThread(this::cancelTransfer);
-          return;
-        }
-        dataTransfer.setData(visitInformationDto);
-        dataTransfer.exchangeData();
-      }
-      getActivity().runOnUiThread(this::finishTransfer);
-    });
-    sendDataThead.start();
   }
 
   private void finishTransfer() {

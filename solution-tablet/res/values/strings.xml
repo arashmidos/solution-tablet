@@ -272,10 +272,10 @@
   <string name="sending_new_customers_pic_data">در حال ارسال عکس های جدید …</string>
   <string name="message_found_no_new_customer_pic_for_send">هیچ عکس جدیدی برای ارسال یافت نشد.</string>
   <string name="new_customers_pic_transferred_successfully">عکس های جدید مشتریان با موفقیت ارسال شد</string>
-  <string name="error_new_customers_pic_transfer">خطا در ارسال عکس. لطفاً مجددا امتحان کنید</string>
-  <string name="error_updated_customers_locaction_transfer">خطا در ارسال مکان مشتریان. لطفاً مجددا امتحان کنید</string>
-  <string name="error_payments_transfer">خطا در ارسال اطلاعات وجوه دریافتی. لطفاً مجددا امتحان کنید</string>
-  <string name="error_position_transfer">خطا در ارسال اطلاعات موقعیت یاب. لطفاً مجددا امتحان کنید</string>
+  <string name="error_new_customers_pic_transfer">خطا در ارسال عکس</string>
+  <string name="error_updated_customers_locaction_transfer">خطا در ارسال مکان مشتریان</string>
+  <string name="error_payments_transfer">خطا در ارسال اطلاعات وجوه دریافتی</string>
+  <string name="error_position_transfer">خطا در ارسال اطلاعات موقعیت یاب</string>
   <string name="select_sale_type">نوع فروش را انتخاب کنید</string>
   <string name="err_reject_order_not_possible">مرجوعی برای این مشتری امکان پذیر نیست</string>
   <string name="err_reject_order_detail_not_accessable">مشاهده جزییات مرجوعی در حال حاضر امکان پذیر نیست</string>

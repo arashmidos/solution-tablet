@@ -231,7 +231,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       Thread dataTransfer = new Thread(() -> {
 
         SaleRejectsDataTransferBizImpl dataTransfer1 = new SaleRejectsDataTransferBizImpl(
-            mainActivity, null);
+            mainActivity);
         dataTransfer1.setOrder(saleOrder);
         dataTransfer1.exchangeData();
         if (dataTransfer1.getSuccess() == 1) {
@@ -255,7 +255,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       sendNextDetail();
     } else {
       QAnswersDataTransferBizImpl qAnswersDataTransferBizImpl = new QAnswersDataTransferBizImpl(
-          mainActivity, null);
+          mainActivity);
 
       Thread sendDataThead = new Thread(() -> {
 
@@ -281,7 +281,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
 
       if (Empty.isNotEmpty(payments)) {
         PaymentsDataTransferBizImpl paymentsDataTransferBiz = new PaymentsDataTransferBizImpl(
-            mainActivity, null);
+            mainActivity);
         paymentsDataTransferBiz.setPayments(payments);
         paymentsDataTransferBiz.exchangeData();
       } else {
@@ -299,7 +299,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
 
       if (Empty.isNotEmpty(customerLocationDto)) {
         UpdatedCustomerLocationDataTransferBizImpl locationDataTransferBiz =
-            new UpdatedCustomerLocationDataTransferBizImpl(mainActivity, null);
+            new UpdatedCustomerLocationDataTransferBizImpl(mainActivity);
         locationDataTransferBiz.setData(customerLocationDto);
         locationDataTransferBiz.exchangeData();
       } else {
@@ -316,7 +316,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       sendNextDetail();
     }
     Thread sendDataThead = new Thread(
-        () -> new NewCustomerPicDataTransferBizImpl(mainActivity, null, pics, visitId)
+        () -> new NewCustomerPicDataTransferBizImpl(mainActivity, pics, visitId)
             .exchangeData());
     sendDataThead.start();
   }
@@ -326,7 +326,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
     BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
     if (Empty.isNotEmpty(saleOrder)) {
-      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity, null);
+      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity);
       dataTransfer.sendSingleOrder(saleOrder);
     } else {
       //We have sent them before
@@ -355,7 +355,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       return;
     }
     VisitInformationDataTransferBizImpl dataTransfer = new VisitInformationDataTransferBizImpl(
-        mainActivity, null);
+        mainActivity);
     Thread sendDataThead = new Thread(() -> {
 
       for (int i = 0; i < visitInformationList.size(); i++) {

@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.data.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import com.parsroyal.solutiontablet.constants.QuestionType;
 
 /**
@@ -21,6 +22,7 @@ public class QuestionDto extends BaseModel {
   private String qAnswers;
   private Long status;
   @JsonProperty("id")
+  @SerializedName("id")
   private Long backendId;
   private String createDateTime;
   private QuestionType type;

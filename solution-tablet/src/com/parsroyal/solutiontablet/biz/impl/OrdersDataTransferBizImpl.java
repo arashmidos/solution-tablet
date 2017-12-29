@@ -23,12 +23,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Mahyar on 9/2/2015.
+ * Created by Arash on 29/12/2017
  */
 public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl {
 
-  public OrdersDataTransferBizImpl(Context context, ResultObserver resultObserver) {
-    super(context, resultObserver);
+  public OrdersDataTransferBizImpl(Context context) {
+    super(context);
   }
 
   @Override

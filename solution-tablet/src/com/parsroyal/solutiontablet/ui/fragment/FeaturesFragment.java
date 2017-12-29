@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
@@ -16,6 +18,8 @@ import com.parsroyal.solutiontablet.ui.adapter.FeaturesAdapter;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class FeaturesFragment extends BaseFragment {
 
@@ -74,6 +78,22 @@ public class FeaturesFragment extends BaseFragment {
   @Override
   public void onResume() {
     super.onResume();
+    EventBus.getDefault().register(this);
     mainActivity.showMenu();
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(ActionEvent event) {
+    if (event.getStatusCode() == StatusCodes.ACTION_REFRESH_DATA) {
+      List<FeatureList> featureList = FeatureList.getFeatureList(getActivity());
+      featureList.get(0).setBadger(getVisitLineSize());
+      adapter.update(featureList);
+    }
   }
 }

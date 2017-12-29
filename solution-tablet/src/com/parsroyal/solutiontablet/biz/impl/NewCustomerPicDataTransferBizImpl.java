@@ -7,6 +7,8 @@ import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerPicDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerPicDaoImpl;
+import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -51,12 +53,10 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
   private CustomerPicDao customerPicDao;
   private ResultObserver observer;
 
-  public NewCustomerPicDataTransferBizImpl(Context context, ResultObserver resultObserver,
-      File pics, Long visitId) {
+  public NewCustomerPicDataTransferBizImpl(Context context, File pics, Long visitId) {
     super(context);
     this.context = context;
     this.customerPicDao = new CustomerPicDaoImpl(context);
-    this.observer = resultObserver;
     this.pics = pics;
     this.visitId = visitId;
   }
@@ -103,7 +103,8 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
       }
     } catch (HttpServerErrorException ex) {
       Log.e(TAG, ex.getMessage(), ex);
-      if (ex.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR) && Empty.isNotEmpty(getObserver())) {
+      if (ex.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR) && Empty
+          .isNotEmpty(getObserver())) {
         getObserver().publishResult(new InternalServerError());
       } else {
         if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND) && Empty.isNotEmpty(getObserver())) {
@@ -136,34 +137,27 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
       if (Empty.isNotEmpty(visitId)) {
         //Sent single visit images
         customerPicDao.updatePicturesByVisitId(visitId);
+        EventBus.getDefault().post(new SuccessEvent(context.getString(
+            R.string.new_customers_pic_transferred_successfully), StatusCodes.SUCCESS));
       } else {
         //Sent all images
         customerPicDao.updateAllPictures();
-      }
-      if (Empty.isNotEmpty(getObserver())) {
-        getObserver()
-            .publishResult(context.getString(R.string.new_customers_pic_transferred_successfully));
-      } else {
-        EventBus.getDefault().post(
-            new SuccessEvent(context.getString(R.string.new_customers_pic_transferred_successfully),
-                StatusCodes.SUCCESS));
+        EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
+            R.string.new_customers_pic_transferred_successfully), StatusCodes.SUCCESS));
       }
     } else {
-      if (Empty.isNotEmpty(getObserver())) {
-        getObserver().publishResult(context.getString(R.string.error_new_customers_pic_transfer));
-      } else {
-        EventBus.getDefault().post(
-            new ErrorEvent(context.getString(R.string.error_new_customers_pic_transfer),
-                StatusCodes.SERVER_ERROR));
+      if (Empty.isNotEmpty(visitId)) {
+        EventBus.getDefault().post(new ErrorEvent(context.getString(
+            R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
+      }else{
+        EventBus.getDefault().post(new DataTransferErrorEvent(context.getString(
+            R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
       }
     }
   }
 
   @Override
   public void beforeTransfer() {
-    if (Empty.isNotEmpty(getObserver())) {
-      getObserver().publishResult(context.getString(R.string.sending_new_customers_pic_data));
-    }
   }
 
   @Override

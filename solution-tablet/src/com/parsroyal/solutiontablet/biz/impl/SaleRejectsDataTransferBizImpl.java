@@ -5,7 +5,6 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 
 /**
@@ -13,8 +12,8 @@ import com.parsroyal.solutiontablet.util.DateUtil;
  */
 public class SaleRejectsDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl {
 
-  public SaleRejectsDataTransferBizImpl(Context context, ResultObserver resultObserver) {
-    super(context, resultObserver);
+  public SaleRejectsDataTransferBizImpl(Context context) {
+    super(context);
   }
 
   @Override

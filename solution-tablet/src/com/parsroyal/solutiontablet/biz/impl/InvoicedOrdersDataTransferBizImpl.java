@@ -12,8 +12,8 @@ import com.parsroyal.solutiontablet.data.dao.SaleOrderItemDao;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderItemDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
@@ -30,7 +30,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 /**
- * Created by Mahyar on 8/29/2015.
+ * Created by Arash on 29/12/2017
  */
 public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
 
@@ -43,9 +43,8 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
   protected int total = 0;
   private KeyValueBiz keyValueBiz;
 
-  public InvoicedOrdersDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public InvoicedOrdersDataTransferBizImpl(Context context) {
     super(context);
-    this.resultObserver = resultObserver;
     this.saleOrderDao = new SaleOrderDaoImpl(context);
     this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
     this.keyValueBiz = new KeyValueBizImpl(context);
@@ -75,12 +74,10 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
         success++;
       }
     } else {
-      if (Empty.isNotEmpty(resultObserver)) {
-        resultObserver.publishResult(getExceptionMessage());
-      } else {
-        EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
-      }
+      EventBus.getDefault().post(new ErrorEvent(StatusCodes.DATA_STORE_ERROR));
     }
+    EventBus.getDefault()
+        .post(new DataTransferSuccessEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
   }
 
   protected String getExceptionMessage() {
@@ -133,8 +130,7 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity<BaseSaleDocument> httpEntity = new HttpEntity<>(order, headers);
-    return httpEntity;
+    return new HttpEntity<>(order, headers);
   }
 
   protected VisitInformationDetailType getVisitDetailType() {

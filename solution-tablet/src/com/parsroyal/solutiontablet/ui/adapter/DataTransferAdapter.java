@@ -19,6 +19,7 @@ import com.parsroyal.solutiontablet.data.model.DataTransferList;
 import com.parsroyal.solutiontablet.ui.adapter.DataTransferAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.DataTransferDialogFragment;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.List;
 
 /**
@@ -110,6 +111,13 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
     context.runOnUiThread(() -> notifyItemChanged(current));
   }
 
+  public void setError(int currentPosition, String message) {
+    hasError = true;
+    model.get(currentPosition).setStatus(TransferStatus.ERROR);
+    model.get(currentPosition).setResult(message);
+    context.runOnUiThread(() -> notifyItemChanged(currentPosition));
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.data_type_tv)
@@ -150,18 +158,18 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
           progressBar.setVisibility(View.VISIBLE);
           img.setImageResource(transferDetail.getImageId());
           img.setVisibility(View.INVISIBLE);
-          messageTv.setText(transferDetail.getResult());
+          messageTv.setText(NumberUtil.digitsToPersian(transferDetail.getResult()));
           break;
         case TransferStatus.ERROR:
           progressBar.setVisibility(View.INVISIBLE);
           img.setImageResource(R.drawable.ic_check_warning_24_dp);
-          messageTv.setText(transferDetail.getResult());
+          messageTv.setText(NumberUtil.digitsToPersian(transferDetail.getResult()));
           break;
         case TransferStatus.DONE:
           progressBar.setVisibility(View.INVISIBLE);
           img.setVisibility(View.VISIBLE);
           img.setImageResource(R.drawable.ic_check_circle_24_dp);
-          messageTv.setText(transferDetail.getResult());
+          messageTv.setText(NumberUtil.digitsToPersian(transferDetail.getResult()));
       }
     }
   }

@@ -99,6 +99,11 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     return features.size();
   }
 
+  public void update(List<FeatureList> featureList) {
+    this.features = featureList;
+    notifyDataSetChanged();
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.feature_img)
