@@ -152,6 +152,10 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     switch (view.getId()) {
       case R.id.close:
       case R.id.cancel_btn:
+        if (transferFinished) {
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_REFRESH_DATA));
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.SUCCESS));
+        }
         getDialog().dismiss();
         break;
       case R.id.data_transfer_btn:

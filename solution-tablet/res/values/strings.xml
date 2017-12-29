@@ -559,7 +559,11 @@
   <string name="show_question_x">نمایش سوال شماره %d</string>
   <string name="question_has_prerequisite_x">جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!</string>
   <string name="total_order_sale_tv">مجموع مبلغ سفارشات</string>
+  <string name="total_payment_tv">مجموع مبلغ دریافتی ها</string>
+  <string name="total_reject_tv">مجموع مبلغ مرجوعی ها</string>
   <string name="total_order_sale_count_tv">مجموع تعداد سفارشات</string>
+  <string name="total_payment_count_tv">مجموع تعداد دریافتی ها</string>
+  <string name="total_reject_count_tv">مجموع تعداد مرجوعی ها</string>
   <string name="provinces">استان ها</string>
   <string name="cities">شهر ها</string>
   <string name="basic">پایه</string>

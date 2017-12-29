@@ -14,6 +14,7 @@ public class ApplicationKeys {
   public static final String SETTING_STOCK_ID = "setting.stock.id";
   public static final String SETTING_BRANCH_ID = "setting.branch.id";
   public static final String SETTING_BRANCH_CODE = "setting.branch.code";
+  public static final String SETTING_STOCK_CODE = "setting.stock.code";
   public static final String SETTING_INVOICE_TYPE = "setting.invoice.type";
   public static final String SETTING_ORDER_TYPE = "setting.order.type";
   public static final String SETTING_REJECT_TYPE = "setting.reject.type";

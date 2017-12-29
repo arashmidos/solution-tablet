@@ -410,7 +410,7 @@ public class VisitDetailFragment extends BaseFragment {
   private void initFragments() {
     Bundle arguments = getArguments();
     arguments.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
-    paymentListFragment = PaymentListFragment.newInstance(arguments);
+    paymentListFragment = PaymentListFragment.newInstance(arguments,this);
     pictureFragment = PictureFragment.newInstance(arguments);
     orderListFragment = OrderListFragment.newInstance(arguments, this);
     returnListFragment = ReturnListFragment.newInstance(arguments, this);

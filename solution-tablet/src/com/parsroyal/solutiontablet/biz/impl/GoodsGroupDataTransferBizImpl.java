@@ -2,8 +2,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.GoodsGroupDao;
@@ -60,9 +58,8 @@ public class GoodsGroupDataTransferBizImpl {
         if (response.isSuccessful()) {
           List<GoodsGroup> list = response.body();
           try {
-//            List<GoodsGroup> list = new Gson().fromJson(data, new TypeToken<List<GoodsGroup>>() {
-//            }.getType());
-            if (/*Empty.isNotEmpty(data) && */Empty.isNotEmpty(list)) {
+
+            if (Empty.isNotEmpty(list)) {
 
               for (GoodsGroup group : list) {
                 group.setTitle(CharacterFixUtil.fixString(group.getTitle()));

@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -23,7 +25,9 @@ import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Shakib
@@ -34,6 +38,12 @@ public class PaymentListFragment extends BaseFragment {
   RecyclerView recyclerView;
   @BindView(R.id.fab_add_Payment)
   FloatingActionButton fabAddPayment;
+  @BindView(R.id.total_payment_amount)
+  TextView totalPaymentAmount;
+  @BindView(R.id.total_payment)
+  TextView totalPayment;
+  @BindView(R.id.total_payment_layout)
+  LinearLayout totalPaymentLayout;
 
   private PaymentService paymentService;
   private long customerId;
@@ -43,13 +53,17 @@ public class PaymentListFragment extends BaseFragment {
   private PaymentSO paymentSO;
   private PaymentAdapter adapter;
   private MainActivity mainActivity;
+  private List<PaymentListModel> model;
+  private VisitDetailFragment parent;
 
   public PaymentListFragment() {
     // Required empty public constructor
   }
 
-  public static PaymentListFragment newInstance(Bundle arguments) {
+  public static PaymentListFragment newInstance(Bundle arguments,
+      VisitDetailFragment visitDetailFragment) {
     PaymentListFragment fragment = new PaymentListFragment();
+    fragment.parent = visitDetailFragment;
     fragment.setArguments(arguments);
     return fragment;
   }
@@ -65,6 +79,10 @@ public class PaymentListFragment extends BaseFragment {
     customerService = new CustomerServiceImpl(mainActivity);
     setData();
     setUpRecyclerView();
+    if (parent==null) {
+      totalPaymentLayout.setVisibility(View.VISIBLE);
+      displayTotalPayment();
+    }
     return view;
   }
 
@@ -82,9 +100,24 @@ public class PaymentListFragment extends BaseFragment {
     }
   }
 
+
+  private void displayTotalPayment() {
+
+    long total = 0;
+    for (int i = 0; i < model.size(); i++) {
+      total += Long.parseLong(model.get(i).getAmount());
+    }
+
+    totalPayment.setText(NumberUtil.digitsToPersian(model.size()));
+    String number = String
+        .format(Locale.US, "%,d %s", total / 1000, getString(R.string.common_irr_currency));
+    totalPaymentAmount.setText(NumberUtil.digitsToPersian(number));
+  }
+
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new PaymentAdapter(mainActivity, getPaymentList(), visitId,
+    model = getPaymentList();
+    adapter = new PaymentAdapter(mainActivity, model, visitId,
         paymentSO.getCustomerBackendId() == -1);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);

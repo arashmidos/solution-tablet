@@ -29,7 +29,6 @@ import retrofit2.Response;
 public class GoodsDataTransferBizImpl {
 
   public static final String TAG = GoodsDataTransferBizImpl.class.getSimpleName();
-  private final KeyValueBiz keyValueBiz;
 
   private Context context;
   private GoodsDao goodsDao;
@@ -38,10 +37,8 @@ public class GoodsDataTransferBizImpl {
   public GoodsDataTransferBizImpl(Context context) {
     this.context = context;
     this.goodsDao = new GoodsDaoImpl(context);
-    this.keyValueBiz = new KeyValueBizImpl(context);
     this.settingService = new SettingServiceImpl(context);
   }
-
 
   public void exchangeData() {
     if (!NetworkUtil.isNetworkAvailable(context)) {

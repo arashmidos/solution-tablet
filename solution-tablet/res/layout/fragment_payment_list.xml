@@ -1,26 +1,102 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
   android:background="@color/white"
-    tools:context="com.parsroyal.solutiontablet.ui.fragment.PaymentListFragment">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_Payment"
+  tools:context="com.parsroyal.solutiontablet.ui.fragment.PaymentListFragment">
+  <LinearLayout
+    android:id="@+id/total_payment_layout"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:layout_alignParentTop="true"
+    android:background="@color/gray_f5"
+    android:orientation="horizontal"
+    android:visibility="gone">
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="0.5"
+      android:orientation="vertical">
+      <TextView
+        android:id="@+id/total_payment_amount"
+        style="@style/IranSans.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_add_24_dp_white"
-        app:backgroundTint="@color/register_payment"
-        app:borderWidth="0dp"
-        app:fabSize="normal"/>
+        android:layout_marginTop="14dp"
+        android:layout_gravity="center"
+        android:textColor="@color/green_return"
+        android:textSize="16sp"
+        tools:text="۱۲۳۴۵۶۷۸۹۰ریال" />
+      <TextView
+        android:id="@+id/total_payment_amount_tv"
+        style="@style/IranSans.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_gravity="center"
+        android:text="@string/total_payment_tv"
+        android:textColor="@color/gray_75"
+        android:textSize="12sp" />
+
+    </LinearLayout>
+    <View
+      android:id="@+id/vertical_divider"
+      android:layout_width="1dp"
+      android:layout_height="45dp"
+      android:layout_gravity="center"
+      android:background="@color/navigation_drawer_divider" />
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="0.5"
+      android:orientation="vertical">
+      <TextView
+        android:id="@+id/total_payment"
+        style="@style/IranSans.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"
+        android:textColor="@color/blue_19"
+        android:textSize="16sp"
+        tools:text="۱۲۳۴۵۶۷۸۹۰" />
+      <TextView
+        android:id="@+id/total_payment_tv"
+        style="@style/IranSans.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_gravity="center"
+        android:text="@string/total_payment_count_tv"
+        android:textColor="@color/gray_75"
+        android:textSize="12sp" />
+
+    </LinearLayout>
+
+  </LinearLayout>
+  <View
+    android:id="@+id/divider"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_below="@id/total_payment_layout"
+    android:background="@color/navigation_drawer_divider" />
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/divider" />
+
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/fab_add_Payment"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:src="@drawable/ic_add_24_dp_white"
+    app:backgroundTint="@color/register_payment"
+    app:borderWidth="0dp"
+    app:fabSize="normal" />
 </RelativeLayout>

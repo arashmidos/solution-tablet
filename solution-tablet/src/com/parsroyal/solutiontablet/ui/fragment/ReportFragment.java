@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 
@@ -60,7 +59,7 @@ public class ReportFragment extends BaseFragment {
   }
 
   private void initFragments() {
-    paymentListFragment = PaymentListFragment.newInstance(null);
+    paymentListFragment = PaymentListFragment.newInstance(null,null);
     orderListFragment = OrderListFragment.newInstance(null, null);
     returnListFragment = ReturnListFragment.newInstance(null, null);
     allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(null);

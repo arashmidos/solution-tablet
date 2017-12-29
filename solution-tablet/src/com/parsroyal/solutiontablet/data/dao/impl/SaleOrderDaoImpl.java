@@ -170,10 +170,20 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     saleOrder.setDescription(Empty.isEmpty(cursor.getString(7)) ? "" : cursor.getString(7));
     saleOrder.setCompanyId(
         Integer.valueOf(settingService.getSettingValue(ApplicationKeys.USER_COMPANY_ID)));
-    saleOrder.setStockCode(
-        Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_ID)));
-    saleOrder.setOfficeCode(
-        Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_ID)));
+    if (SaleOrderStatus.REJECTED.getId().equals(statusId)) {
+      try {
+        saleOrder.setStockCode(
+            Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE)));
+        saleOrder.setOfficeCode(
+            Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE)));
+      } catch (Exception ignore) {
+      }
+    } else {
+      saleOrder.setStockCode(
+          Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_ID)));
+      saleOrder.setOfficeCode(
+          Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_ID)));
+    }
     return saleOrder;
   }
 
