@@ -336,8 +336,17 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     while (cursor.moveToNext()) {
       CustomerListModel listModel = createListModelFromCursor(cursor);
       if (entitiesMap.containsKey(listModel.getPrimaryKey())) {
-        if ((listModel.hasOrder() || listModel.hasRejection())) {
-          entitiesMap.put(listModel.getPrimaryKey(), listModel);
+        if ((listModel.hasOrder())) {
+          entitiesMap.get(listModel.getPrimaryKey()).setHasOrder(true);
+        }
+        if (listModel.hasRejection()) {
+          entitiesMap.get(listModel.getPrimaryKey()).setHasRejection(true);
+        }
+        if (listModel.hasLocation()) {
+          entitiesMap.get(listModel.getPrimaryKey()).setHasLocation(true);
+        }
+        if (listModel.hasAnswers()) {
+          entitiesMap.get(listModel.getPrimaryKey()).setHasAnswers(true);
         }
       } else {
         entitiesMap.put(listModel.getPrimaryKey(), listModel);
@@ -379,6 +388,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     } else if (type == VisitInformationDetailType.NONE.getValue()
         || type == VisitInformationDetailType.NO_ORDER.getValue()) {
       customerListModel.setHasRejection(true);
+    } else if (type == VisitInformationDetailType.FILL_QUESTIONNAIRE.getValue()) {
+      customerListModel.setHasAnswers(true);
     }
 
     customerListModel.setLastVisit(cursor.getString(10));

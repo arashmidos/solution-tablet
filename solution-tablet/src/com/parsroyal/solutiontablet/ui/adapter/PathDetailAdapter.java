@@ -164,6 +164,8 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
     ImageView visitTodayImg;
     @BindView(R.id.has_order_img)
     ImageView hasOrderImg;
+    @BindView(R.id.has_answer_img)
+    ImageView hasAnswerImg;
     @BindView(R.id.customer_lay)
     CardView customerLay;
     private CustomerListModel model;
@@ -201,6 +203,9 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       }
 
       hasOrderImg.setVisibility(model.hasOrder() ? View.VISIBLE : View.GONE);
+
+      hasAnswerImg.setVisibility(model.hasAnswers() ? View.VISIBLE : View.GONE);
+
     }
 
     public void setListeners() {
