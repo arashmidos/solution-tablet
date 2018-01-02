@@ -1,17 +1,13 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.Manifest.permission;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -56,6 +52,7 @@ import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
+import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
@@ -64,6 +61,7 @@ import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -72,8 +70,6 @@ import org.greenrobot.eventbus.Subscribe;
 public class VisitDetailFragment extends BaseFragment {
 
   private static final String TAG = VisitDetailFragment.class.getName();
-  private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-  private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
   private static final int RESULT_OK = -1;
   private static final int RESULT_CANCELED = 0;
 
@@ -176,61 +172,6 @@ public class VisitDetailFragment extends BaseFragment {
           .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
-    }
-  }
-
-  public boolean checkPermissions() {
-    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(mainActivity,
-        permission.WRITE_EXTERNAL_STORAGE) && PackageManager.PERMISSION_GRANTED == ActivityCompat
-        .checkSelfPermission(mainActivity,
-            permission.CAMERA);
-  }
-
-  public void requestPermissions() {
-    boolean cameraShouldProvideRationale =
-        ActivityCompat.shouldShowRequestPermissionRationale(mainActivity,
-            permission.CAMERA);
-    boolean storageShouldProvideRationale =
-        ActivityCompat.shouldShowRequestPermissionRationale(mainActivity,
-            permission.WRITE_EXTERNAL_STORAGE);
-
-    // Provide an additional rationale to the user. This would happen if the user denied the
-    // request previously, but didn't check the "Don't ask again" checkbox.
-    if (cameraShouldProvideRationale && storageShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(mainActivity,
-                new String[]{permission.CAMERA, permission.WRITE_EXTERNAL_STORAGE},
-                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
-          });
-    } else if (cameraShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(mainActivity,
-                new String[]{permission.CAMERA},
-                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
-          });
-    } else if (storageShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(mainActivity, getString(R.string.permission_rationale_camera_storage),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(mainActivity,
-                new String[]{permission.WRITE_EXTERNAL_STORAGE},
-                REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
-          });
-    } else {
-      Log.i(TAG, "Requesting permission");
-      // Request permission. It's possible this can be auto answered if device policy
-      // sets the permission in a given state or the user denied the permission
-      // previously and checked "Never ask again".
-      ActivityCompat.requestPermissions(mainActivity,
-          new String[]{permission.CAMERA, permission.WRITE_EXTERNAL_STORAGE},
-          REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
     }
   }
 
@@ -410,7 +351,7 @@ public class VisitDetailFragment extends BaseFragment {
   private void initFragments() {
     Bundle arguments = getArguments();
     arguments.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
-    paymentListFragment = PaymentListFragment.newInstance(arguments,this);
+    paymentListFragment = PaymentListFragment.newInstance(arguments, this);
     pictureFragment = PictureFragment.newInstance(arguments);
     orderListFragment = OrderListFragment.newInstance(arguments, this);
     returnListFragment = ReturnListFragment.newInstance(arguments, this);
@@ -434,27 +375,9 @@ public class VisitDetailFragment extends BaseFragment {
     return MainActivity.VISIT_DETAIL_FRAGMENT_ID;
   }
 
-  public void startCameraActivity() {
-    try {
-      Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-      // Create a media file name
-      String postfix = String.valueOf((new Date().getTime()) % 1000);
-      fileUri = MediaUtil.getOutputMediaFileUri(mainActivity, MediaUtil.MEDIA_TYPE_IMAGE,
-          Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-          "IMG_" + customer.getCode() + "_" + postfix); // create a file to save the image
-      intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-      if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-      }
-    } catch (Exception e) {
-      Logger.sendError("General Exception", "Error in opening camera " + e.getMessage());
-      e.printStackTrace();
-    }
-  }
-
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+    if (requestCode == Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
       if (resultCode == RESULT_OK) {
         Bitmap bitmap = ImageUtil.decodeSampledBitmapFromUri(getActivity(), fileUri);
         bitmap = ImageUtil.getScaledBitmap(getActivity(), bitmap);
@@ -462,7 +385,14 @@ public class VisitDetailFragment extends BaseFragment {
         String s = ImageUtil.saveTempImage(bitmap, MediaUtil
             .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
                 Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-                "IMG_" + customer.getCode() + "_" + new Date().getTime()));
+                "IMG_" + customer.getCode() + "_" + (new Date().getTime())%1000));
+
+        if (!s.equals("")) {
+          File fdelete = new File(fileUri.getPath());
+          if (fdelete.exists()) {
+            fdelete.delete();
+          }
+        }
 
         CustomerPic cPic = new CustomerPic();
         cPic.setTitle(s);
@@ -558,8 +488,8 @@ public class VisitDetailFragment extends BaseFragment {
   @Subscribe
   public void getMessage(ActionEvent event) {
     if (event.getStatusCode() == StatusCodes.ACTION_START_CAMERA) {
-      if (!checkPermissions()) {
-        requestPermissions();
+      if (!CameraManager.checkPermissions(mainActivity)) {
+        CameraManager.requestPermissions(mainActivity);
       } else {
         startCameraActivity();
       }
@@ -594,5 +524,13 @@ public class VisitDetailFragment extends BaseFragment {
     } else {
       ToastUtil.toastError(getActivity(), getString(R.string.err_reject_order_not_possible));
     }
+  }
+
+  public void startCameraActivity() {
+    String postfix = String.valueOf((new Date().getTime()) % 1000);
+    fileUri = MediaUtil.getOutputMediaFileUri(mainActivity, MediaUtil.MEDIA_TYPE_IMAGE,
+        Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
+        "IMG_" + customer.getCode() + "_" + postfix); // create a file to save the image
+    CameraManager.startCameraActivity(mainActivity, fileUri, this);
   }
 }

@@ -1,8 +1,13 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -31,15 +37,23 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
+import com.parsroyal.solutiontablet.ui.adapter.NewCustomerPictureAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CityDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
+import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Shakib
@@ -47,6 +61,9 @@ import java.util.List;
 public class AddCustomerFragment extends BaseFragment implements View.OnFocusChangeListener {
 
   private static final String TAG = AddCustomerFragment.class.getName();
+  private static final int RESULT_OK = -1;
+  private static final int RESULT_CANCELED = 0;
+
   @BindView(R.id.city_tv)
   TextView cityTv;
   @BindView(R.id.state_tv)
@@ -79,6 +96,10 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   Button createBtn;
   @BindView(R.id.description_edt)
   EditText customerDescription;
+  @BindView(R.id.photo_list)
+  RecyclerView photoList;
+  @BindView(R.id.image_counter)
+  TextView imageCounter;
 
   private MainActivity mainActivity;
   private CustomerService customerService;
@@ -89,6 +110,8 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   private LabelValue selectedProvince;
   private LabelValue selectedActivity;
   private PageStatus pageStatus;
+  private NewCustomerPictureAdapter adapter;
+  private Uri fileUri;
 
   public AddCustomerFragment() {
     // Required empty public constructor
@@ -138,10 +161,27 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
     setData();
     setUpSpinners();
+    setupRecycler();
     if (pageStatus != null && pageStatus == PageStatus.VIEW) {
       disableItems();
     }
     return view;
+  }
+
+  private void setupRecycler() {
+
+    LinearLayoutManager layout = new LinearLayoutManager(getActivity(),
+        LinearLayoutManager.HORIZONTAL, true);
+    layout.setReverseLayout(true);
+    photoList.setLayoutManager(layout);
+    adapter = new NewCustomerPictureAdapter(getActivity(), new ArrayList<>(), this);
+    photoList.setAdapter(adapter);
+    updateImageCounter();
+  }
+
+  private void updateImageCounter() {
+    imageCounter.setText(NumberUtil.digitsToPersian(String.format(Locale.getDefault(),
+        "%d/%d", adapter.getItemCount() - 1, Constants.MAX_NEW_CUSTOMER_PHOTO)));
   }
 
   private void disableItems() {
@@ -453,7 +493,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     }
   }
 
-  @OnClick({R.id.create_btn, R.id.location_lay, R.id.city_tv, R.id.state_tv,R.id.activity_tv})
+  @OnClick({R.id.create_btn, R.id.location_lay, R.id.city_tv, R.id.state_tv, R.id.activity_tv})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.location_lay:
@@ -511,7 +551,55 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   }
 
   @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+      if (resultCode == RESULT_OK) {
+        Bitmap bitmap = ImageUtil.decodeSampledBitmapFromUri(getActivity(), fileUri);
+        bitmap = ImageUtil.getScaledBitmap(getActivity(), bitmap);
+
+        String s = ImageUtil.saveTempImage(bitmap, MediaUtil
+            .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
+                Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
+                "IMG_" + customer.getCode() + "_" + (new Date().getTime()) % 1000));
+
+        if (!s.equals("")) {
+          File fdelete = new File(fileUri.getPath());
+          if (fdelete.exists()) {
+            fdelete.delete();
+          }
+        }
+
+        adapter.add(s);
+        updateImageCounter();
+        if (adapter.getItemCount() == Constants.MAX_NEW_CUSTOMER_PHOTO + 1) {
+          Toast.makeText(mainActivity, "REMOVE ADD PHOTO BUTTON", Toast.LENGTH_SHORT).show();
+        }
+      } else if (resultCode == RESULT_CANCELED) {
+        // User cancelled the image capture
+      } else {
+        // Image capture failed, advise user
+      }
+    }
+  }
+
+  @Override
   public int getFragmentId() {
     return MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID;
+  }
+
+  public void takePhoto() {
+    if (!CameraManager.checkPermissions(mainActivity)) {
+      CameraManager.requestPermissions(mainActivity);
+    } else {
+      startCameraActivity();
+    }
+  }
+
+  public void startCameraActivity() {
+    String postfix = String.valueOf((new Date().getTime()) % 1000);
+    fileUri = MediaUtil.getOutputMediaFileUri(mainActivity, MediaUtil.MEDIA_TYPE_IMAGE,
+        Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
+        "IMG_N_" + postfix); // create a file to save the image
+    CameraManager.startCameraActivity(mainActivity, fileUri, this);
   }
 }

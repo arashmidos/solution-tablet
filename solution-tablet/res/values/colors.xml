@@ -26,6 +26,7 @@
   <color name="dark_blue">#ff2d6b9e</color>
   <color name="dark_gray">#ff727174</color>
   <color name="light_gray">#ffdbdcde</color>
+  <color name="gray_bd">#bdbdbd</color>
   <color name="white">#ffffff</color>
   <color name="white30">#deffffff</color>
   <color name="white_fa">#fafafa</color>

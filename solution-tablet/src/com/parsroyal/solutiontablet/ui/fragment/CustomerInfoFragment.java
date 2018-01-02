@@ -41,6 +41,7 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
@@ -56,7 +57,6 @@ import org.greenrobot.eventbus.Subscribe;
 public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCallback {
 
   private static final String TAG = CustomerInfoFragment.class.getName();
-  private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
   private final HashSet<MapView> mMaps = new HashSet<>();
   @BindView(R.id.store_tv)
   TextView storeTv;
@@ -256,8 +256,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
             .changeFragment(MainActivity.QUESTIONNAIRE_CATEGORY_FRAGMENT_ID, bundle, true);
         break;
       case R.id.register_image_lay:
-        if (!parent.checkPermissions()) {
-          parent.requestPermissions();
+        if (!CameraManager.checkPermissions(mainActivity)) {
+          CameraManager.requestPermissions(mainActivity);
         } else {
           parent.startCameraActivity();
         }

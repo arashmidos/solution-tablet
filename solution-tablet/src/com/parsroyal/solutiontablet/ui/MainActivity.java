@@ -361,7 +361,13 @@ public abstract class MainActivity extends AppCompatActivity {
         // Permission was granted.
         Fragment visitDetailFragment = getSupportFragmentManager()
             .findFragmentByTag(VisitDetailFragment.class.getSimpleName());
-        ((VisitDetailFragment) visitDetailFragment).startCameraActivity();
+        Fragment addCustomerFragment = getSupportFragmentManager()
+            .findFragmentByTag(AddCustomerFragment.class.getSimpleName());
+        if (visitDetailFragment != null && visitDetailFragment.isVisible()) {
+          ((VisitDetailFragment) visitDetailFragment).startCameraActivity();
+        } else if (addCustomerFragment != null && addCustomerFragment.isVisible()) {
+          ((AddCustomerFragment) addCustomerFragment).startCameraActivity();
+        }
       } else {
         ToastUtil.toastError(this, getString(R.string.permission_rationale_camera_storage),
             view -> {
