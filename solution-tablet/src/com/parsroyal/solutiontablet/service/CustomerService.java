@@ -20,7 +20,7 @@ public interface CustomerService extends BaseService {
 
   Customer getCustomerByBackendId(Long customerId);
 
-  void saveCustomer(Customer customer);
+  Long saveCustomer(Customer customer);
 
   List<Customer> getAllNewCustomers();
 
@@ -42,17 +42,23 @@ public interface CustomerService extends BaseService {
 
   List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
 
+  List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
+
   long savePicture(CustomerPic customerPic);
+  void savePicture(List<CustomerPic> customerPics);
 
   List<CustomerPic> getAllPicturesByCustomerBackendId(long customerBackendId);
 
   File getAllCustomerPicForSend();
 
   File getAllCustomerPicForSendByVisitId(Long visitId);
+  File getAllCustomerPicForSendByCustomerId(Long customerId);
 
-  List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
+  void deleteCustomerPic(String title, long customerId);
+
 
   void deleteAllPics();
 
   void updateCustomerPictures();
+
 }

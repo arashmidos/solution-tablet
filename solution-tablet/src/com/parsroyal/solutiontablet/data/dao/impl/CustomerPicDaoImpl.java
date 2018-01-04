@@ -114,6 +114,22 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
   }
 
   @Override
+  public List<String> getAllCustomerPicForSendByCustomerId(Long customerId) {
+    String selection =
+        " " + CustomerPic.COL_STATUS + " = ? " + " AND " + CustomerPic.COL_CUSTOMER_ID + " = ? ";
+    String[] args = {String.valueOf(CustomerStatus.NEW.getId()), String.valueOf(customerId)};
+    List<CustomerPic> result = retrieveAll(selection, args, null, null, null);
+    List<String> retVal = new ArrayList<>();
+
+    for (int i = 0; i < result.size(); i++) {
+      CustomerPic o = result.get(i);
+      retVal.add(o.getTitle());
+    }
+
+    return retVal;
+  }
+
+  @Override
   public List<CustomerPic> getAllCustomerPicturesByBackendId(long customerBackendId) {
     String selection = " " + CustomerPic.COL_CUSTOMER_BACKEND_ID + " = ? ";
     String[] args = {String.valueOf(customerBackendId)};
@@ -160,6 +176,36 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
     contentValues.put(VisitInformationDetail.COL_STATUS, CustomerStatus.SENT.getId());
     int rows = db.update(getTableName(), contentValues, whereClause, args);
     Log.d("VisitDetailUpdate", "row updated " + rows);
+    db.setTransactionSuccessful();
+    db.endTransaction();
+  }
+
+  @Override
+  public void updateAllPicturesByCustomerId(Long customerId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(context);
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    db.beginTransaction();
+    String whereClause =
+        CustomerPic.COL_STATUS + " = ? AND " + CustomerPic.COL_CUSTOMER_ID + " = ?";
+    String[] args = {String.valueOf(CustomerStatus.NEW.getId()), String.valueOf(customerId)};
+    ContentValues contentValues = new ContentValues();
+    contentValues.put(VisitInformationDetail.COL_STATUS, CustomerStatus.SENT.getId());
+    int rows = db.update(getTableName(), contentValues, whereClause, args);
+    Log.d("VisitDetailUpdate", "row updated " + rows);
+    db.setTransactionSuccessful();
+    db.endTransaction();
+  }
+
+  @Override
+  public void delete(String title, long customerId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    String sql =
+        "DELETE FROM " + CustomerPic.TABLE_NAME + " WHERE " + CustomerPic.COL_TITLE + " = ? AND "
+            + CustomerPic.COL_CUSTOMER_ID + " = ?";
+    String[] args = {title, String.valueOf(customerId)};
+    db.beginTransaction();
+    db.rawQuery(sql, args);
     db.setTransactionSuccessful();
     db.endTransaction();
   }

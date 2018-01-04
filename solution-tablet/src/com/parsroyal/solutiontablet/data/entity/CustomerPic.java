@@ -1,5 +1,9 @@
 package com.parsroyal.solutiontablet.data.entity;
 
+import com.parsroyal.solutiontablet.constants.CustomerStatus;
+import com.parsroyal.solutiontablet.util.DateUtil;
+import java.util.Date;
+
 /**
  * Created by Arash on 6/6/2016.
  */
@@ -32,6 +36,18 @@ public class CustomerPic extends BaseEntity<Long> {
   private String title;
   private Long status;
   private Long visitId;
+
+  public CustomerPic(String title, Long customerId) {
+    this.title = title;
+    this.customerId = customerId;
+    status = CustomerStatus.NEW.getId();
+    setCreateDateTime(DateUtil.convertDate(new Date(),
+        DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+  }
+
+  public CustomerPic() {
+
+  }
 
   public Long getId() {
     return id;

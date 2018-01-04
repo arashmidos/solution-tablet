@@ -13,6 +13,8 @@ public interface CustomerPicDao extends BaseDao<CustomerPic, Long> {
 
   List<String> getAllCustomerPicForSendByVisitId(Long visitId);
 
+  List<String> getAllCustomerPicForSendByCustomerId(Long customerId);
+
   List<CustomerPic> getAllCustomerPicturesByBackendId(long customerBackendId);
 
   List<CustomerPic> findCustomerPictures(CustomerPictureSO customerPictureSO);
@@ -20,4 +22,9 @@ public interface CustomerPicDao extends BaseDao<CustomerPic, Long> {
   void updateAllPictures();
 
   void updatePicturesByVisitId(Long visitId);
+
+  void updateAllPicturesByCustomerId(Long customerId);
+
+  void delete(String title, long customerId);
+
 }

@@ -580,4 +580,5 @@
   <string name="message_no_data_received">هیچ داده ای یافت نشد</string>
   <string name="get_photo">گرفتن عکس</string>
   <string name="customer_pics">تصاویر مشتری</string>
+  <string name="error_in_saving_new_customer">خطا در ثبت اطلاعات مشتری</string>
 </resources>

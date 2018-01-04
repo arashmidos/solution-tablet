@@ -78,6 +78,10 @@ public class NewCustomerPictureAdapter extends Adapter<ViewHolder> {
     notifyDataSetChanged();
   }
 
+  public List<String> getCustomerPics() {
+    return customerPics;
+  }
+
   enum ItemType {
     BUTTON(0), IMAGE(1);
 

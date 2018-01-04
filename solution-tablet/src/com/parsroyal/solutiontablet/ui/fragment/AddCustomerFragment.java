@@ -26,6 +26,7 @@ import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
@@ -333,9 +334,20 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       customer.setDescription(customerDescription.getText().toString());
 
       if (validate()) {
-        customerService.saveCustomer(customer);
-        ToastUtil.toastSuccess(getActivity(), R.string.message_customer_save_successfully);
-        mainActivity.removeFragment(AddCustomerFragment.this);
+        Long customerId = customerService.saveCustomer(customer);
+        if (Empty.isNotEmpty(customerId)) {
+          List<String> picsTitleList = adapter.getCustomerPics();
+            List<CustomerPic> customerPics=new ArrayList<>();
+          for (int i = 0; i < picsTitleList.size(); i++) {
+            CustomerPic c = new CustomerPic(picsTitleList.get(i),customerId);
+            customerPics.add(c);
+          }
+          customerService.savePicture(customerPics);
+          ToastUtil.toastSuccess(getActivity(), R.string.message_customer_save_successfully);
+          mainActivity.removeFragment(AddCustomerFragment.this);
+        } else {
+          ToastUtil.toastError(getActivity(), getString(R.string.error_in_saving_new_customer));
+        }
       }
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);

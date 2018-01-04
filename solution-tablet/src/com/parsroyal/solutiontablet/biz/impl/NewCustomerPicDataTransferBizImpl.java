@@ -11,11 +11,13 @@ import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.SuccessEvent;
+import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.InternalServerError;
 import com.parsroyal.solutiontablet.exception.TimeOutException;
 import com.parsroyal.solutiontablet.exception.URLNotFoundException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
+import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
@@ -48,17 +50,23 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
   public static final String TAG = NewCustomerPicDataTransferBizImpl.class.getSimpleName();
   private final File pics;
   private final Long visitId;
+  private final CustomerServiceImpl customerService;
+  private final CustomerDto customer;
 
   private Context context;
   private CustomerPicDao customerPicDao;
   private ResultObserver observer;
 
-  public NewCustomerPicDataTransferBizImpl(Context context, File pics, Long visitId) {
+  public NewCustomerPicDataTransferBizImpl(Context context, File pics, Long visitId,
+      Long customerId) {
     super(context);
     this.context = context;
     this.customerPicDao = new CustomerPicDaoImpl(context);
+    this.customerService = new CustomerServiceImpl(context);
     this.pics = pics;
     this.visitId = visitId;
+    this.customer = customerService.getCustomerDtoById(customerId);
+
   }
 
   @Override
@@ -73,6 +81,10 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
       httpHeaders.add("Authorization", "Bearer " + token.getValue());
 
+      if (Empty.isNotEmpty(customer)) {
+        httpHeaders.add("backendId", String.valueOf(customer.getBackendId()));
+      }
+
       RestTemplate restTemplate = new RestTemplate();
       restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
       restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -83,7 +95,11 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
       restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
       MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
-      parts.add("zipfile.zip", new FileSystemResource(pics));
+      if (Empty.isNotEmpty(customer)) {
+        parts.add("customerPics.zip", new FileSystemResource(pics));
+      } else {
+        parts.add("zipfile.zip", new FileSystemResource(pics));
+      }
       HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts,
           httpHeaders);
 
@@ -139,6 +155,8 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
         customerPicDao.updatePicturesByVisitId(visitId);
         EventBus.getDefault().post(new SuccessEvent(context.getString(
             R.string.new_customers_pic_transferred_successfully), StatusCodes.SUCCESS));
+      } else if (Empty.isNotEmpty(customer)) {
+        customerPicDao.updateAllPicturesByCustomerId(customer.getId());
       } else {
         //Sent all images
         customerPicDao.updateAllPictures();
@@ -149,7 +167,8 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
       if (Empty.isNotEmpty(visitId)) {
         EventBus.getDefault().post(new ErrorEvent(context.getString(
             R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
-      }else{
+      } else if (Empty.isNotEmpty(customer)) {
+      } else {
         EventBus.getDefault().post(new DataTransferErrorEvent(context.getString(
             R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
       }

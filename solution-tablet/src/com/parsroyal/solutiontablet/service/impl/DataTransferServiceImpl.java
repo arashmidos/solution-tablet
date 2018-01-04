@@ -282,6 +282,15 @@ public class DataTransferServiceImpl implements DataTransferService {
       CustomerDto customerDto = allNewCustomers.get(i);
       newCustomerDataTransferBiz.setCustomer(customerDto);
       newCustomerDataTransferBiz.exchangeData();
+
+      File pics = customerService.getAllCustomerPicForSendByCustomerId(customerDto.getId());
+      if (Empty.isEmpty(pics)) {
+        continue;
+      }
+
+      Log.d(TAG, "Send Pic" + pics.length());
+      new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId());
+
     }
 
     EventBus.getDefault().post(new DataTransferSuccessEvent(
@@ -427,7 +436,7 @@ public class DataTransferServiceImpl implements DataTransferService {
       Log.d(TAG, "Send Pic" + pics.length());
     }
 
-    new NewCustomerPicDataTransferBizImpl(context, pics, null).exchangeData();
+    new NewCustomerPicDataTransferBizImpl(context, pics, null, null).exchangeData();
   }
 
   public void sendAllVisitInformation() {

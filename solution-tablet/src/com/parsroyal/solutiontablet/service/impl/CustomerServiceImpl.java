@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
-  public void saveCustomer(Customer customer) {
+  public Long saveCustomer(Customer customer) {
     try {
       if (Empty.isEmpty(customer.getId())) {
         customer.setCreateDateTime(
@@ -70,15 +70,17 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setUpdateDateTime(
             DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
         customer.setStatus(CustomerStatus.NEW.getId());
-        customerDao.create(customer);
+        return customerDao.create(customer);
       } else {
         customer.setUpdateDateTime(
             DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
         customerDao.update(customer);
+        return customer.getId();
       }
     } catch (SQLiteException ex) {
       ex.printStackTrace();
     }
+    return null;
   }
 
   @Override
@@ -164,6 +166,11 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
+  public void savePicture(List<CustomerPic> customerPics) {
+    customerPicDao.bulkInsert(customerPics);
+  }
+
+  @Override
   public List<CustomerPic> getAllPicturesByCustomerBackendId(long customerBackendId) {
 
     return customerPicDao.getAllCustomerPicturesByBackendId(customerBackendId);
@@ -177,8 +184,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
     String[] picArray = new String[pics.size()];
     picArray = pics.toArray(picArray);
-    File zip = MediaUtil.zipFiles(picArray);
-    return zip;
+    return MediaUtil.zipFiles(picArray);
   }
 
   @Override
@@ -190,6 +196,22 @@ public class CustomerServiceImpl implements CustomerService {
     String[] picArray = new String[pics.size()];
     picArray = pics.toArray(picArray);
     return MediaUtil.zipFiles(picArray);
+  }
+
+  @Override
+  public File getAllCustomerPicForSendByCustomerId(Long customerId) {
+    List<String> pics = customerPicDao.getAllCustomerPicForSendByCustomerId(customerId);
+    if (pics.size() == 0) {
+      return null;
+    }
+    String[] picArray = new String[pics.size()];
+    picArray = pics.toArray(picArray);
+    return MediaUtil.zipFiles(picArray);
+  }
+
+  @Override
+  public void deleteCustomerPic(String title, long customerId) {
+    customerPicDao.delete(title,customerId);
   }
 
   @Override

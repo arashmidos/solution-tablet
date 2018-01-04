@@ -320,7 +320,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       sendNextDetail();
     }
     Thread sendDataThead = new Thread(
-        () -> new NewCustomerPicDataTransferBizImpl(mainActivity, pics, visitId)
+        () -> new NewCustomerPicDataTransferBizImpl(mainActivity, pics, visitId, null)
             .exchangeData());
     sendDataThead.start();
   }
