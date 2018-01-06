@@ -162,7 +162,8 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
     setData();
     setUpSpinners();
-    setupRecycler();
+    //TODO NEXT RELEASE
+//    setupRecycler();
     if (pageStatus != null && pageStatus == PageStatus.VIEW) {
       disableItems();
     }
@@ -331,18 +332,20 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
           NumberUtil.digitsToEnglish(regionalMunicipalityEdt.getText().toString()));
       customer.setPostalCode(NumberUtil.digitsToEnglish(postalCodeEdt.getText().toString()));
       customer.setApproved(false);
-      customer.setDescription(customerDescription.getText().toString());
+      customer.setDescription(NumberUtil
+          .digitsToEnglish(CharacterFixUtil.fixString(customerDescription.getText().toString())));
 
       if (validate()) {
         Long customerId = customerService.saveCustomer(customer);
         if (Empty.isNotEmpty(customerId)) {
-          List<String> picsTitleList = adapter.getCustomerPics();
+          //TODO:NEXT RELEASE
+          /*List<String> picsTitleList = adapter.getCustomerPics();
             List<CustomerPic> customerPics=new ArrayList<>();
           for (int i = 0; i < picsTitleList.size(); i++) {
             CustomerPic c = new CustomerPic(picsTitleList.get(i),customerId);
             customerPics.add(c);
           }
-          customerService.savePicture(customerPics);
+          customerService.savePicture(customerPics);*/
           ToastUtil.toastSuccess(getActivity(), R.string.message_customer_save_successfully);
           mainActivity.removeFragment(AddCustomerFragment.this);
         } else {

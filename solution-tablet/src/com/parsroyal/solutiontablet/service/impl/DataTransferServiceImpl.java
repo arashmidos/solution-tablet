@@ -283,13 +283,14 @@ public class DataTransferServiceImpl implements DataTransferService {
       newCustomerDataTransferBiz.setCustomer(customerDto);
       newCustomerDataTransferBiz.exchangeData();
 
-      File pics = customerService.getAllCustomerPicForSendByCustomerId(customerDto.getId());
+      //TODO NEXT RELEASE
+      /*File pics = customerService.getAllCustomerPicForSendByCustomerId(customerDto.getId());
       if (Empty.isEmpty(pics)) {
         continue;
       }
 
       Log.d(TAG, "Send Pic" + pics.length());
-      new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId());
+      new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId());*/
 
     }
 
