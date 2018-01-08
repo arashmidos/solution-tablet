@@ -15,7 +15,7 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -90,7 +90,7 @@ public class LoginDialogFragment extends DialogFragment implements TextWatcher {
 
     if (username.equals(usernameValue) && password.equals(passwordValue)) {
       Analytics.logLogin(true);
-      ((MainActivity) getActivity()).changeFragment(MainActivity.SETTING_FRAGMENT_ID, false);
+      ((OldMainActivity) getActivity()).changeFragment(OldMainActivity.SETTING_FRAGMENT_ID, false);
       LoginDialogFragment.this.dismiss();
     } else {
       errorMsg.setText(R.string.error_invalid_login);

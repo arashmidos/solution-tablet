@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/drawer_layout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/features_background"
+  tools:context="com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment">
+
+  <android.support.design.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+      android:id="@+id/app_bar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:visibility="visible">
+
+      <FrameLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:background="@color/primary"
+          app:title=""
+          app:titleTextColor="@color/white">
+
+        </android.support.v7.widget.Toolbar>
+
+        <TextView
+          android:id="@+id/toolbar_title"
+          style="@style/IranSans.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:gravity="center"
+          android:text="@string/features_list"
+          android:textColor="@android:color/white"
+          android:textSize="16sp" />
+
+        <ImageView
+          android:id="@+id/navigation_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="16dp"
+          android:layout_marginRight="16dp"
+          android:layout_gravity="end|center" />
+
+        <ImageView
+          android:id="@+id/search_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginLeft="16dp"
+          android:layout_gravity="start|center"
+          android:src="@drawable/ic_search"
+          android:tint="@android:color/white"
+          android:visibility="gone" />
+        <ImageView
+          android:id="@+id/save_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          android:layout_gravity="start|center"
+          android:src="@drawable/ic_save_24_dp"
+          android:visibility="gone" />
+      </FrameLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout xmlns:tools="http://schemas.android.com/tools"
+      android:id="@+id/container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      tools:context="com.parsroyal.solutiontablet.ui.MainActivity" />
+  </android.support.design.widget.CoordinatorLayout>
+
+  <fragment
+    android:id="@+id/navigation_drawer_fragment"
+    android:layout_width="304dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    android:name="com.parsroyal.solutiontablet.ui.fragment.NavigationDrawerFragment"
+    app:layout="@layout/fragment_navigation_drawer" />
+</android.support.v4.widget.DrawerLayout>
+

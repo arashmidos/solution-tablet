@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 
 public class BaseSaleDocument<T extends BaseSaleDocumentItem> {
+
   @JsonIgnore
   private Long id;
   private Integer companyId;
@@ -14,6 +15,7 @@ public class BaseSaleDocument<T extends BaseSaleDocumentItem> {
   private Long customer;
   private Long paymentType;
   private Integer type;
+  @JsonIgnore
   private Integer fiscalYear;
   private Integer stockCode;
   private Integer officeCode;

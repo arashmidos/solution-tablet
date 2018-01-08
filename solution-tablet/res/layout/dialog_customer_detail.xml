@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/customer_lay"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_marginTop="8dp"
+  android:layout_marginStart="8dp"
+  android:layout_marginEnd="8dp"
+  android:layout_marginLeft="8dp"
+  android:layout_marginRight="8dp"
+  android:background="@android:color/white">
+
+  <TextView
+    android:id="@+id/customer_name_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="26dp"
+    android:layout_marginBottom="12dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="20dp"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentTop="true"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:textColor="@color/black_85"
+    android:textSize="14sp"
+    tools:text="محمد رضا گلزلر"/>
+
+  <TextView
+    android:id="@+id/customer_id_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="21dp"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@+id/customer_name_tv"
+    android:ellipsize="end"
+    android:gravity="right"
+    android:maxLines="1"
+    android:textColor="@color/black_8a"
+    android:textSize="12sp"
+    tools:text="کد : 2565842"/>
+
+  <TextView
+    android:id="@+id/customer_shop_name_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="20dp"
+    android:layout_alignParentRight="true"
+    android:layout_below="@+id/customer_name_tv"
+    android:layout_toRightOf="@+id/customer_id_tv"
+    android:ellipsize="end"
+    android:gravity="right"
+    android:maxLines="1"
+    android:textColor="@color/black_8a"
+    android:textSize="12sp"
+    tools:text="فروشگاه گلزاری و پسران به جز سارا"/>
+
+  <ImageView
+    android:id="@+id/has_location_img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:layout_marginLeft="21dp"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentTop="true"
+    android:src="@drawable/ic_gps_fixed_black_18dp"/>
+
+  <ImageView
+    android:id="@+id/visit_today_img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:layout_marginLeft="14dp"
+    android:layout_toRightOf="@id/has_location_img"
+    android:src="@drawable/ic_visibility_black_18dp"/>
+
+  <ImageView
+    android:id="@+id/has_order_img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:layout_marginLeft="14dp"
+    android:layout_toRightOf="@+id/visit_today_img"
+    android:src="@drawable/ic_cart_outline_black_18dp"
+    android:tint="@color/log_in_enter_bg"/>
+
+  <ImageView
+    android:id="@+id/location_img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="20dp"
+    android:layout_alignParentRight="true"
+    android:layout_below="@id/customer_shop_name_tv"
+    android:src="@drawable/ic_location_on"
+    android:tint="@color/login_gray"/>
+
+  <TextView
+    android:id="@+id/location_tv"
+    style="@style/IranSans.Light"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="20dp"
+    android:layout_marginLeft="21dp"
+    android:layout_marginRight="14dp"
+    android:layout_below="@id/customer_shop_name_tv"
+    android:layout_toLeftOf="@id/location_img"
+    android:gravity="right"
+    android:textColor="@color/black_85"
+    android:textSize="12sp"
+    tools:text="تهران/میدان هروی/گلستان پنجم پ127"/>
+
+  <ImageView
+    android:id="@+id/mobile_img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="20dp"
+    android:layout_alignParentRight="true"
+    android:layout_below="@id/location_tv"
+    android:src="@drawable/ic_phone_android"
+    android:tint="@color/login_gray"/>
+
+  <TextView
+    android:id="@+id/mobile_tv"
+    style="@style/IranSans.Light"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="14dp"
+    android:layout_below="@id/location_tv"
+    android:layout_toLeftOf="@id/location_img"
+    android:ellipsize="end"
+    android:gravity="right"
+    android:maxLines="1"
+    android:textColor="@color/black_de"
+    android:textSize="12sp"
+    tools:text="85 88 366 0938"/>
+
+  <ImageView
+    android:id="@+id/phone_img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="47dp"
+    android:layout_below="@id/location_tv"
+    android:layout_toLeftOf="@id/mobile_tv"
+    android:rotation="270"
+    android:src="@drawable/ic_phone"
+    android:tint="@color/login_gray"/>
+
+  <TextView
+    android:id="@+id/phone_tv"
+    style="@style/IranSans.Light"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="14dp"
+    android:layout_below="@id/location_tv"
+    android:layout_toLeftOf="@id/phone_img"
+    android:ellipsize="end"
+    android:gravity="right"
+    android:maxLines="1"
+    android:textColor="@color/black_de"
+    android:textSize="12sp"
+    tools:text="85 88 366 0938"/>
+
+  <TextView
+    android:id="@+id/error_msg"
+    style="@style/IranSans"
+    android:textStyle="bold"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:layout_alignRight="@id/customer_name_tv"
+    android:layout_below="@id/phone_tv"
+    android:gravity="right"
+    android:textColor="@color/red"
+    android:textSize="12sp"
+    android:visibility="gone"
+    tools:text="فاصله شما تا مشتری بیش از حد مجاز تعریف شده است."/>
+
+  <View
+    android:id="@+id/devider_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginTop="20dp"
+    android:layout_below="@id/error_msg"
+    android:background="@color/navigation_drawer_divider"/>
+
+  <TextView
+    android:id="@+id/cancel_btn"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="21dp"
+    android:layout_marginLeft="28dp"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@id/devider_bottom"
+    android:text="@string/button_cancel"
+    android:textColor="@color/primary"
+    android:textSize="14sp"/>
+
+  <Button
+    android:id="@+id/enter_btn"
+    style="@style/IranSans.Medium"
+    android:layout_width="80dp"
+    android:layout_height="30dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="16dp"
+    android:layout_alignParentRight="true"
+    android:layout_below="@id/devider_bottom"
+    android:background="@drawable/get_data_background"
+    android:gravity="center"
+    android:text="@string/enter"
+    android:textColor="@android:color/white"
+    android:textSize="14sp"/>
+
+  <Button
+    android:id="@+id/no_visit_btn"
+    style="@style/IranSans.Medium"
+    android:layout_width="80dp"
+    android:layout_height="30dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:layout_below="@id/devider_bottom"
+    android:layout_toLeftOf="@id/enter_btn"
+    android:background="@drawable/send_data_background"
+    android:gravity="center"
+    android:text="@string/not_visited"
+    android:textColor="@color/primary"
+    android:textSize="14sp"/>
+</RelativeLayout>

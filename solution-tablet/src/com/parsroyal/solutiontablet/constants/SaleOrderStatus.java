@@ -6,7 +6,6 @@ import com.parsroyal.solutiontablet.util.ResourceUtil;
 
 /**
  * Created by Mahyar on 8/21/2015.
- * Edited by Arash on 7/8/2016
  */
 public enum SaleOrderStatus {
   DRAFT(90001L, "DRAFT"),
@@ -28,16 +27,7 @@ public enum SaleOrderStatus {
     this.title = title;
   }
 
-  public static String getDisplayTitle(Context context, Long status) {
-    SaleOrderStatus foundStatus = findById(status);
-    if (Empty.isNotEmpty(foundStatus)) {
-      return ResourceUtil.getString(context, "order_status_" + foundStatus.getTitle());
-    } else {
-      return "";
-    }
-  }
-
-  private static SaleOrderStatus findById(Long statusId) {
+  public static SaleOrderStatus findById(Long statusId) {
     for (SaleOrderStatus saleOrderStatus : SaleOrderStatus.values()) {
       if (saleOrderStatus.getId().equals(statusId)) {
         return saleOrderStatus;

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@android:color/white">
+
+  <TextView
+    android:id="@+id/title_tv"
+    style="@style/IranSans.Bold"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:layout_marginEnd="24dp"
+    android:layout_marginRight="24dp"
+    android:layout_alignParentTop="true"
+    android:gravity="right"
+    android:text="@string/register_no"
+    android:textColor="@color/black_de"
+    android:textSize="@dimen/text_large"/>
+
+  <RelativeLayout
+    android:id="@+id/spinner_lay"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:layout_marginTop="25dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_below="@id/title_tv">
+
+    <Spinner
+      android:id="@+id/no_spinner"
+      style="@style/IranSans"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@android:color/white"
+      android:gravity="right"/>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_alignParentBottom="true"
+      android:background="@color/gray_9e"/>
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_centerVertical="true"
+      android:src="@drawable/ic_arrow_drop_down"
+      android:tint="@color/gray_9e"/>
+
+  </RelativeLayout>
+  <TextView
+    android:id="@+id/error_msg"
+    android:textStyle="bold"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_below="@id/spinner_lay"
+    android:gravity="right"
+    android:text="@string/choose_one"
+    android:textColor="@color/red"
+    android:textSize="12sp"
+    android:visibility="invisible"/>
+  <Button
+    android:id="@+id/register_btn"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="36dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_alignParentRight="true"
+    android:layout_below="@id/error_msg"
+    android:paddingStart="28dp"
+    android:paddingEnd="28dp"
+    android:paddingLeft="28dp"
+    android:paddingRight="28dp"
+    android:background="@drawable/get_data_background"
+    android:gravity="center"
+    android:text="@string/register"
+    android:textColor="@android:color/white"
+    android:textSize="14sp"/>
+
+  <TextView
+    android:id="@+id/cancel_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="11dp"
+    android:layout_marginStart="40dp"
+    android:layout_marginLeft="40dp"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@id/error_msg"
+    android:text="@string/button_cancel"
+    android:textColor="@color/primary"
+    android:textSize="14sp"/>
+</RelativeLayout>

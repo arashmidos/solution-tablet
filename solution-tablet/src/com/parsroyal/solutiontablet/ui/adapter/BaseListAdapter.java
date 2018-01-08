@@ -11,13 +11,12 @@ import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.SearchEvent;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.BaseListModel;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import java.util.List;
 
 /**
@@ -26,14 +25,14 @@ import java.util.List;
 public abstract class BaseListAdapter<T extends BaseListModel> extends BaseAdapter implements
     Filterable {
 
-  public static final String TAG = VisitLinesAdapter.class.getSimpleName();
+  public static final String TAG = BaseListAdapter.class.getSimpleName();
 
-  protected MainActivity context;
+  protected OldMainActivity context;
   protected List<T> dataModel;
   protected LayoutInflater mLayoutInflater;
   protected Filter filter;
 
-  public BaseListAdapter(MainActivity context, List<T> dataModel) {
+  public BaseListAdapter(OldMainActivity context, List<T> dataModel) {
     this.context = context;
     this.dataModel = dataModel;
     this.mLayoutInflater = (LayoutInflater) context.getSystemService(
@@ -80,7 +79,7 @@ public abstract class BaseListAdapter<T extends BaseListModel> extends BaseAdapt
       }
       return convertView;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in BaseListAdapter.getView " + e.getMessage());
+      Logger.sendError( "UI Exception", "Error in BaseListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

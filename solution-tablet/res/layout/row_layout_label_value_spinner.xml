@@ -1,16 +1,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:paddingStart="16dip"
-  android:paddingEnd="16dip"
   android:orientation="horizontal">
 
   <TextView
     android:id="@+id/labelTxt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:textAppearance="?android:attr/textAppearanceMedium"/>
+    android:gravity="right"
+    style="@style/IranSans"
+    android:padding="8dp"
+    android:textColor="@color/black_21"
+    android:textSize="14sp"
+    android:textColorHint="@color/black_21"/>
 
 </LinearLayout>

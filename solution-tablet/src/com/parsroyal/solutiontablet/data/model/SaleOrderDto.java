@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.data.model;
 
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.util.DateUtil;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +25,19 @@ public class SaleOrderDto extends BaseModel {
   private String updateDateTime;
   private List<SaleOrderItemDto> orderItems;
   private Customer customer;
+
+  public SaleOrderDto(Long statusID, Customer customer) {
+    this.status = statusID;
+    this.customer = customer;
+    this.date = DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA");
+    this.amount = 0L;
+    this.customerBackendId = customer.getBackendId();
+    this.createDateTime = DateUtil.getCurrentGregorianFullWithTimeDate();
+    this.updateDateTime = DateUtil.getCurrentGregorianFullWithTimeDate();
+  }
+
+  public SaleOrderDto() {
+  }
 
   public Long getId() {
     return id;

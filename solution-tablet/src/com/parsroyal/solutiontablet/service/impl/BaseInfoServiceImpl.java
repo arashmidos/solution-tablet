@@ -57,13 +57,23 @@ public class BaseInfoServiceImpl implements BaseInfoService {
   public List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long typeId) {
     if (typeId.equals(BaseInfoTypes.REJECT_TYPE.getId())) {
       String[] reasons = {"فاسد شده", "شکسته", "ناقص"};
-      List<LabelValue> entities = new ArrayList<LabelValue>();
+      List<LabelValue> entities = new ArrayList<>();
       for (int i = 0; i < 3; i++) {
         entities.add(new LabelValue((long) i, reasons[i]));
       }
       return entities;
     }
-    return baseInfoDao.getAllBaseInfosLabelValuesByTypeId(typeId);
+    return baseInfoDao.getAllBaseInfosLabelValuesByTypeId(typeId, null);
+  }
+
+  @Override
+  public LabelValue getBaseInfoByBackendId(Long typeId, Long backendId) {
+    List<LabelValue> baseInfoList = baseInfoDao
+        .getAllBaseInfosLabelValuesByTypeId(typeId, backendId);
+    if (baseInfoList.size() > 0) {
+      return baseInfoList.get(0);
+    }
+    return null;
   }
 
   @Override
@@ -79,7 +89,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
   @Override
   public List<LabelValue> getAllPaymentType() {
     PaymentType[] payments = PaymentType.values();
-    List<LabelValue> entities = new ArrayList<LabelValue>();
+    List<LabelValue> entities = new ArrayList<>();
     for (int i = 0; i < 3; i++) {
       entities.add(new LabelValue(payments[i].getId(), payments[i].getTitle()));
     }
@@ -94,6 +104,12 @@ public class BaseInfoServiceImpl implements BaseInfoService {
   @Override
   public void deleteAllProvinces() {
     provinceDao.deleteAll();
+  }
+
+  @Override
+  public List<LabelValue> search(Long type, String constraint) {
+    return baseInfoDao.search(type, constraint);
+
   }
 
   @Override

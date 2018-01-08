@@ -1,10 +1,13 @@
 package com.parsroyal.solutiontablet.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class BaseSaleDocumentItem {
 
   private Long goods;
   private Long count1;
   private Long count2;
+  @JsonIgnore
   private Integer fiscalYear;
   private Integer companyId;
 

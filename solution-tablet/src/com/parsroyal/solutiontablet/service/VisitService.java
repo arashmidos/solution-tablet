@@ -2,11 +2,13 @@ package com.parsroyal.solutiontablet.service;
 
 import android.location.Location;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
+import com.parsroyal.solutiontablet.data.searchobject.VisitInformationDetailSO;
 import java.util.List;
 
 /**
@@ -17,6 +19,8 @@ public interface VisitService extends BaseService {
   List<VisitLine> getAllVisitLines();
 
   List<VisitLineListModel> getAllVisitLinesListModel();
+
+  VisitLineListModel getVisitLineListModelByBackendId(long visitlineBackendId);
 
   List<VisitLineListModel> getAllFilteredVisitLinesListModel(String constraint);
 
@@ -36,6 +40,8 @@ public interface VisitService extends BaseService {
 
   void updateVisitLocation(Long visitInformationId, Location location);
 
+  void updateVisitLocation(Long visitInformationId, Position position);
+
   void saveVisitDetail(VisitInformationDetail visitDetail);
 
   List<VisitInformationDetail> getAllVisitDetailById(Long visitId);
@@ -45,9 +51,13 @@ public interface VisitService extends BaseService {
   List<VisitInformationDetail> searchVisitDetail(Long visitId, VisitInformationDetailType type,
       Long typeId);
 
-  List<VisitInformationDto> getAllVisitDetailForSend();
+  List<VisitInformationDetail> searchVisitDetail(Long visitId, VisitInformationDetailType type);
+  List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailSO visitInformationDetailSo);
+
+  List<VisitInformationDto> getAllVisitDetailForSend(Long visitId);
 
   Long startAnonymousVisit();
 
   void deleteVisitById(Long visitId);
+
 }

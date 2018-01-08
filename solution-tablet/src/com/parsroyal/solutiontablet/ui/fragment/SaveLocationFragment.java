@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,7 +39,9 @@ import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.Locale;
 
 /**
@@ -60,7 +63,7 @@ public class SaveLocationFragment extends BaseFragment implements
   TextView locationMarkertext;
   @BindView(R.id.locationMarker)
   LinearLayout markerLayout;
-  private double lat, lng = 0.0;
+  private double customerLat, customerLng = 0.0;
   private long customerId;
   private long visitId;
   private GoogleApiClient googleApiClient;
@@ -70,7 +73,8 @@ public class SaveLocationFragment extends BaseFragment implements
   private CustomerService customerService;
   private VisitService visitService;
   private Customer customer;
-  private boolean isFirstTime = true;
+  private boolean firstTime = true;
+  private MainActivity mainActivity;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,16 +84,18 @@ public class SaveLocationFragment extends BaseFragment implements
 
     Bundle arguments = getArguments();
 
-    customerService = new CustomerServiceImpl(getActivity());
-    visitService = new VisitServiceImpl(getActivity());
+    mainActivity = (MainActivity) getActivity();
+    mainActivity.changeTitle(getString(R.string.register_location));
+    customerService = new CustomerServiceImpl(mainActivity);
+    visitService = new VisitServiceImpl(mainActivity);
     customerId = arguments.getLong(Constants.CUSTOMER_ID);
     visitId = arguments.getLong(Constants.VISIT_ID);
     customer = customerService.getCustomerById(customerId);
 
-    lat = customer.getxLocation();
-    lng = customer.getyLocation();
+    customerLat = customer.getxLocation();
+    customerLng = customer.getyLocation();
 
-    googleApiClient = new GoogleApiClient.Builder(getActivity())
+    googleApiClient = new GoogleApiClient.Builder(mainActivity)
         .addConnectionCallbacks(this)
         .addOnConnectionFailedListener(this)
         .addApi(LocationServices.API).build();
@@ -118,6 +124,9 @@ public class SaveLocationFragment extends BaseFragment implements
 
   @Override
   public void onConnected(@Nullable Bundle bundle) {
+    if (!isAdded()) {
+      return;
+    }
     layoutContainer.setVisibility(View.VISIBLE);
     errorMsg.setVisibility(View.GONE);
     FragmentManager fm = getChildFragmentManager();
@@ -144,31 +153,47 @@ public class SaveLocationFragment extends BaseFragment implements
   @Override
   public void onMapReady(GoogleMap googleMap) {
     map = googleMap;
+
+    //TODO: Again check for permission
     currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
-    //If we've set it before
-    if (lat != 0 && lng != 0) {
-      Marker m = map.addMarker(new MarkerOptions()
-          .position(new LatLng(lat, lng)).title("").snippet("").icon(BitmapDescriptorFactory
-              .fromResource(R.drawable.ic_action_flag)));
-      markerLayout.setVisibility(View.GONE);
-      isFirstTime = false;
-    }
     map.setMyLocationEnabled(true);
     map.getUiSettings().setZoomControlsEnabled(true);
     if (Empty.isNotEmpty(currentLocation)) {
       currentLatlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-      map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatlng, cameraZoom), 4000, null);
+    }
+    //If we've set it before
+    if (customerLat != 0 && customerLng != 0) {
+      Marker m = map.addMarker(new MarkerOptions()
+          .position(new LatLng(customerLat, customerLng)).title("").snippet("")
+          .icon(BitmapDescriptorFactory
+              .fromResource(R.drawable.ic_action_flag)));
+      map.animateCamera(
+          CameraUpdateFactory.newLatLngZoom(new LatLng(customerLat, customerLng), cameraZoom), 4000,
+          null);
+    } else {
+      if (Empty.isNotEmpty(currentLatlng)) {
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatlng, cameraZoom), 4000, null);
+      }
     }
 
-    map.setOnCameraChangeListener(cameraPosition ->
-    {
-      currentLatlng = map.getCameraPosition().target;
-      locationMarkertext.setText(getString(R.string.set_your_location));
-      if (isFirstTime) {
+    map.setOnCameraMoveStartedListener(i -> {
+      if (!firstTime) {
         map.clear();
+        markerLayout.setVisibility(View.VISIBLE);
       }
-      markerLayout.setVisibility(View.VISIBLE);
+    });
+    map.setOnCameraMoveListener(() -> {
+    });
+    map.setOnCameraIdleListener(() -> {
+
+      currentLatlng = map.getCameraPosition().target;
+      if (customerLat == 0 || customerLng == 0) {
+        markerLayout.setVisibility(View.VISIBLE);
+      }
+      if (firstTime) {
+        firstTime = false;
+      }
     });
 
     markerLayout.setOnClickListener(view ->
@@ -181,6 +206,9 @@ public class SaveLocationFragment extends BaseFragment implements
       customer.setyLocation(currentLatlng.longitude);
       customer.setStatus(CustomerStatus.UPDATED.getId());
       customerService.saveCustomer(customer);
+
+      customerLat = currentLatlng.latitude;
+      customerLng = currentLatlng.longitude;
       //
       VisitInformationDetail visitDetail = new VisitInformationDetail(visitId,
           VisitInformationDetailType.SAVE_LOCATION, 0);
@@ -190,7 +218,7 @@ public class SaveLocationFragment extends BaseFragment implements
           .position(temp).title(getString(R.string.location_set)).snippet("")
           .icon(BitmapDescriptorFactory
               .fromResource(R.drawable.ic_action_flag)));
-      isFirstTime = true;
+      ToastUtil.toastMessage(mainActivity,"ثبت موقعیت با موفقیت انجام شد!");
       m.setDraggable(true);
       markerLayout.setVisibility(View.GONE);
     });

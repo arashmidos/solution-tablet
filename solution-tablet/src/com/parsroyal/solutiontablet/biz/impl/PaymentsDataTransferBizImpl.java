@@ -1,23 +1,29 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
-import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SendStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Payment;
+import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.service.PaymentService;
+import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -29,19 +35,19 @@ import org.springframework.http.MediaType;
 public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
 
   public static final String TAG = PaymentsDataTransferBizImpl.class.getSimpleName();
-
+  private final SettingService settingService;
   private Context context;
   private PaymentService paymentService;
   private VisitService visitService;
   private ResultObserver observer;
   private List<Payment> payments;
 
-  public PaymentsDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public PaymentsDataTransferBizImpl(Context context) {
     super(context);
     this.context = context;
     paymentService = new PaymentServiceImpl(context);
     visitService = new VisitServiceImpl(context);
-    observer = resultObserver;
+    settingService = new SettingServiceImpl(context);
   }
 
   @Override
@@ -72,21 +78,31 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
             failure++;
           }
         }
-        getObserver().publishResult(String
-            .format(Locale.US, context.getString(R.string.payments_data_transferred_successfully),
-                String.valueOf(success), String.valueOf(failure)));
+
+        if (payments.size() == success) {
+          EventBus.getDefault().post(new DataTransferSuccessEvent(
+              String.format(Locale.US,
+                  context.getString(R.string.payments_data_transferred_successfully),
+                  String.valueOf(success), String.valueOf(failure)),
+              StatusCodes.SUCCESS));
+        } else {
+          EventBus.getDefault().post(new DataTransferErrorEvent(String.format(Locale.US,
+              context.getString(R.string.payments_data_transferred_successfully),
+              String.valueOf(success), String.valueOf(failure)), StatusCodes.DATA_STORE_ERROR));
+        }
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving PaymentData " + ex.getMessage());
-        getObserver().publishResult(context.getString(R.string.error_payments_transfer));
+        Logger.sendError("Data transfer", "Error in receiving PaymentData " + ex.getMessage());
+        EventBus.getDefault().post(new DataTransferErrorEvent(context.getString(
+            R.string.message_exception_in_data_store), StatusCodes.DATA_STORE_ERROR));
       }
     } else {
-      getObserver().publishResult(context.getString(R.string.message_got_no_response));
+      EventBus.getDefault().post(new DataTransferErrorEvent(
+          context.getString(R.string.message_got_no_response), StatusCodes.NO_DATA_ERROR));
     }
   }
 
   @Override
   public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.sending_payments_data));
   }
 
   @Override
@@ -96,7 +112,8 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
   @Override
   public String getMethod() {
-    return "payment/create";
+    return String
+        .format("payment/%s/create", settingService.getSettingValue(ApplicationKeys.SALESMAN_ID));
   }
 
   @Override
@@ -116,8 +133,7 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity<List<Payment>> requestEntity = new HttpEntity<>(payments, headers);
-    return requestEntity;
+    return new HttpEntity<>(payments, headers);
   }
 
   public void setPayments(List<Payment> payments) {

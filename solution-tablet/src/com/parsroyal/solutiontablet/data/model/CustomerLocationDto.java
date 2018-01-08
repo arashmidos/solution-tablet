@@ -9,6 +9,15 @@ public class CustomerLocationDto {
   private Double latitude;
   private Double longitude;
 
+  public CustomerLocationDto() {
+  }
+
+  public CustomerLocationDto(Long customerBackendId, Double latitude, Double longitude) {
+    this.customerBackendId = customerBackendId;
+    this.latitude = latitude;
+    this.longitude = longitude;
+  }
+
   public Long getCustomerBackendId() {
     return customerBackendId;
   }

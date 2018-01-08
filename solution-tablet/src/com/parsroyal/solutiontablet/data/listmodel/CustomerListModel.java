@@ -4,23 +4,33 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
 /**
- * Created by Mahyar on 7/6/2015.
+ * Created by Arash on 31/12/2017.
  */
 public class CustomerListModel extends BaseListModel implements ClusterItem {
 
-  private String address;
-  private String phoneNumber;
-  private String cellPhone;
-  private boolean hasLocation;
-  private boolean isVisited;
-  private double xlocation;
-  private double ylocation;
-  private boolean hasOrder;
-  private boolean hasRejection;
-  private Long codeNumber;
-  private Float distance;
-  private Long backendId;
-  private String lastVisit;
+  protected String address;
+  protected String phoneNumber;
+  protected String cellPhone;
+  protected boolean hasLocation;
+  protected boolean isVisited;
+  protected double xlocation;
+  protected double ylocation;
+  protected boolean hasOrder;
+  protected boolean hasRejection;
+  protected boolean hasAnswers;
+  protected Long codeNumber;
+  protected Float distance;
+  protected Long backendId;
+  protected String lastVisit;
+  protected String shopName;
+
+  public boolean hasAnswers() {
+    return hasAnswers;
+  }
+
+  public void setHasAnswers(boolean hasAnswers) {
+    this.hasAnswers = hasAnswers;
+  }
 
   public Long getBackendId() {
     return backendId;
@@ -135,4 +145,13 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   public String getSnippet() {
     return address;
   }
+
+  public String getShopName() {
+    return shopName;
+  }
+
+  public void setShopName(String shopName) {
+    this.shopName = shopName;
+  }
+
 }

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/customer_lay"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_marginTop="8dp"
+  android:layout_marginStart="8dp"
+  android:layout_marginEnd="8dp"
+  android:layout_marginLeft="8dp"
+  android:layout_marginRight="8dp"
+  android:padding="16dp"
+  android:background="@android:color/white">
+
+  <TextView
+    android:id="@+id/customer_name_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentTop="true"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:textColor="@color/black_de"
+    android:textSize="14sp"
+    tools:text="محمد رضا گلزلر" />
+
+  <TextView
+    android:id="@+id/customer_id_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@+id/customer_name_tv"
+    android:ellipsize="end"
+    android:gravity="right"
+    android:maxLines="1"
+    android:textColor="@color/black_8a"
+    android:textSize="12sp"
+    tools:text="کد : 2565842" />
+
+  <TextView
+    android:id="@+id/customer_shop_name_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_alignParentRight="true"
+    android:layout_below="@+id/customer_name_tv"
+    android:layout_toRightOf="@+id/customer_id_tv"
+    android:ellipsize="end"
+    android:gravity="right"
+    android:maxLines="1"
+    android:textColor="@color/black_8a"
+    android:textSize="12sp"
+    tools:text="فروشگاه گلزاری و پسران به جز سارا" />
+
+  <ImageView
+    android:id="@+id/has_location_img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentTop="true"
+    android:src="@drawable/ic_gps_fixed_black_18dp" />
+
+  <LinearLayout
+    android:id="@+id/edit_lay"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="28dp"
+    android:layout_below="@id/customer_id_tv"
+    android:orientation="horizontal">
+    <LinearLayout
+      android:id="@+id/delete_img_layout"
+      android:layout_width="36dp"
+      android:layout_height="36dp"
+      android:layout_marginStart="7dp"
+      android:layout_marginLeft="7dp"
+      android:gravity="center">
+      <ImageView
+        android:id="@+id/delete_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete_24_black"
+        android:tint="@color/gray_75" />
+    </LinearLayout>
+    <LinearLayout
+      android:id="@+id/edit_img_layout"
+      android:layout_width="36dp"
+      android:layout_height="36dp"
+      android:layout_marginStart="28dp"
+      android:layout_marginLeft="28dp"
+      android:gravity="center">
+      <ImageView
+        android:id="@+id/edit_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_edit_24_black"
+        android:tint="@color/gray_75" />
+    </LinearLayout>
+    <View
+      android:layout_width="0dp"
+      android:layout_height="1dp"
+      android:layout_weight="1" />
+    <LinearLayout
+      android:id="@+id/questionnaire_img_layout"
+      android:layout_width="36dp"
+      android:layout_height="36dp"
+      android:gravity="center">
+      <ImageView
+        android:id="@+id/questionnaire_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_questionnaires_24_dp" />
+    </LinearLayout>
+  </LinearLayout>
+</RelativeLayout>

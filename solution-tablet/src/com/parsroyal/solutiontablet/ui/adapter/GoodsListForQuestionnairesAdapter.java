@@ -4,7 +4,7 @@ import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import java.util.List;
 
 /**
@@ -13,15 +13,15 @@ import java.util.List;
 public class GoodsListForQuestionnairesAdapter extends BaseListAdapter<GoodsListModel> {
 
   private List<GoodsListModel> dataModel;
-  private MainActivity mainActivity;
+  private OldMainActivity oldMainActivity;
   private GoodsService goodsService;
   private Long goodsGroupBackendId;
 
-  public GoodsListForQuestionnairesAdapter(MainActivity context, List<GoodsListModel> dataModel,
+  public GoodsListForQuestionnairesAdapter(OldMainActivity context, List<GoodsListModel> dataModel,
       Long goodsGroupBackendId) {
     super(context, dataModel);
     this.dataModel = dataModel;
-    this.mainActivity = context;
+    this.oldMainActivity = context;
     this.goodsService = new GoodsServiceImpl(context);
     this.goodsGroupBackendId = goodsGroupBackendId;
   }

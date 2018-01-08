@@ -21,16 +21,24 @@ public interface QuestionnaireService extends BaseService {
   QuestionDto getQuestionDto(Long primaryKey, Long visitId, Long goodsBackendId,
       Long answersGroupNo);
 
+  QuestionDto getQuestionDtoByBackendId(Long primaryKey, Long visitId, Long goodsBackendId,
+      Long answersGroupNo);
+
   QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
       Long goodsBackendId, boolean isNext, Long answersGroupNo);
 
   Long saveAnswer(QAnswer qAnswer);
 
   List<QAnswerDto> getAllAnswersDtoForSend();
+  List<QAnswerDto> getAllAnswersDtoForSend(Long visitId);
 
   QAnswer getAnswerById(Long id);
 
   List<QuestionnaireListModel> searchForQuestionsList(QuestionnaireSo questionnaireSo);
 
   Long getNextAnswerGroupNo();
+
+  void deleteAllAnswer(Long visitId, Long answersGroupNo);
+
+  void deleteAnswerById(Long answerId);
 }

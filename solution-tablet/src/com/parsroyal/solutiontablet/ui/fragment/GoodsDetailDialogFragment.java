@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.bumptech.glide.Glide;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -29,9 +27,10 @@ import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -57,12 +56,12 @@ public class GoodsDetailDialogFragment extends DialogFragment {
   TextView goodsUnitTitle2;
   @BindView(R.id.sale_rate_count)
   TextView saleRateCount;
-  @BindView(R.id.total_amount)
+  @BindView(R.id.total_amount_title)
   TextView totalAmount;
   @BindView(R.id.goods_image)
   ImageView goodsImage;
 
-  private MainActivity context;
+  private OldMainActivity context;
   private GoodsService goodsService;
   private SettingService settingService;
 
@@ -92,7 +91,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
     View view = inflater.inflate(R.layout.fragment_goods_detail_dialog, null);
     ButterKnife.bind(this, view);
 
-    context = (MainActivity) getActivity();
+    context = (OldMainActivity) getActivity();
     Bundle arguments = getArguments();
     orderStatus = arguments.getLong(Constants.ORDER_STATUS);
     goodsBackendId = arguments.getLong(Constants.GOODS_BACKEND_ID);
@@ -103,8 +102,8 @@ public class GoodsDetailDialogFragment extends DialogFragment {
     settingService = new SettingServiceImpl(context);
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
-    saleRateEnabled = "1"
-        .equals(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE));
+    saleRateEnabled = Boolean
+        .valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE));
 
     if (orderStatus == SaleOrderStatus.REJECTED_DRAFT.getId()) {
       rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
@@ -177,7 +176,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
     fillLeftPanel();
     Glide.with(this)
         .load(MediaUtil.getGoodImage(selectedGoods.getCode()))
-        .error(R.drawable.no_image)
+      //  .error(R.drawable.no_image)
         .into(goodsImage);
     return view;
   }
@@ -210,7 +209,7 @@ public class GoodsDetailDialogFragment extends DialogFragment {
         }
       } catch (Exception ex) {
         ex.printStackTrace();
-        Crashlytics.log(Log.ERROR, "GoodDetails Left Panel", ex.getMessage());
+        Logger.sendError("GoodDetails Left Panel", ex.getMessage());
         clearLeftPanel();
       }
     } else {

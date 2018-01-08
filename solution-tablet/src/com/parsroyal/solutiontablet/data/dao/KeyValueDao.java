@@ -8,4 +8,6 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 public interface KeyValueDao extends BaseDao<KeyValue, Long> {
 
   KeyValue retrieveByKey(String settingKey);
+
+  void clearAllKeys();
 }

@@ -21,8 +21,10 @@ import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDetailDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
+import com.parsroyal.solutiontablet.data.searchobject.VisitInformationDetailSO;
 import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.service.VisitService;
+import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -68,6 +70,11 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
+  public VisitLineListModel getVisitLineListModelByBackendId(long visitlineBackendId) {
+    return visitLineDao.getVisitLineListModelByBackendId(visitlineBackendId);
+  }
+
+  @Override
   public List<VisitLineListModel> getAllFilteredVisitLinesListModel(String constraint) {
     return visitLineDao.getAllVisitLinesListModelByConstraint(constraint);
   }
@@ -95,7 +102,30 @@ public class VisitServiceImpl implements VisitService {
         DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     // -1 Means new customer without backendId
     visitInformation.setResult(-1L);
-    return saveVisit(visitInformation);
+    Position position = new PositionServiceImpl(context).getLastPosition();
+
+    if (Empty.isNotEmpty(position)) {
+      visitInformation.setxLocation(position.getLatitude());
+      visitInformation.setyLocation(position.getLongitude());
+      return saveVisit(visitInformation);
+    } else {
+      visitInformation.setxLocation(0.0);
+      visitInformation.setyLocation(0.0);
+      final Long visitId = saveVisit(visitInformation);
+      locationService.findCurrentLocation(new FindLocationListener() {
+        @Override
+        public void foundLocation(Location location) {
+          visitInformation.setxLocation(0.0);
+          visitInformation.setyLocation(0.0);
+          updateVisitLocation(visitId, location);
+        }
+
+        @Override
+        public void timeOut() {
+        }
+      });
+      return visitId;
+    }
   }
 
   @Override
@@ -139,8 +169,16 @@ public class VisitServiceImpl implements VisitService {
 
   @Override
   public void updateVisitLocation(Long visitInformationId, Location location) {
-    visitInformationDao.updateLocation(visitInformationId, location);
+    visitInformationDao
+        .updateLocation(visitInformationId, location.getLatitude(), location.getLongitude());
   }
+
+  @Override
+  public void updateVisitLocation(Long visitInformationId, Position position) {
+    visitInformationDao
+        .updateLocation(visitInformationId, position.getLatitude(), position.getLongitude());
+  }
+
 
   @Override
   public void saveVisitDetail(VisitInformationDetail visitDetail) {
@@ -176,8 +214,19 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
-  public List<VisitInformationDto> getAllVisitDetailForSend() {
-    List<VisitInformationDto> visitList = visitInformationDao.getAllVisitInformationDtoForSend();
+  public List<VisitInformationDetail> searchVisitDetail(Long visitId,
+      VisitInformationDetailType type) {
+    return visitInformationDetailDao.search(visitId, type);
+  }
+
+  @Override
+  public List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailSO visitInformationDetailSO) {
+    return visitInformationDetailDao.search(visitInformationDetailSO);
+  }
+
+  @Override
+  public List<VisitInformationDto> getAllVisitDetailForSend(Long visitId) {
+    List<VisitInformationDto> visitList = visitInformationDao.getAllVisitInformationDtoForSend(visitId);
     SaleType saleType = SaleType.getByValue(
         Long.parseLong(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE)));
     for (VisitInformationDto visit : visitList) {
@@ -221,7 +270,11 @@ public class VisitServiceImpl implements VisitService {
     if (Empty.isNotEmpty(position)) {
       visitInformation.setxLocation(position.getLatitude());
       visitInformation.setyLocation(position.getLongitude());
+    } else {
+      visitInformation.setxLocation(0.0);
+      visitInformation.setyLocation(0.0);
     }
+
     return saveVisit(visitInformation);
   }
 

@@ -5,25 +5,25 @@ package com.parsroyal.solutiontablet.data.searchobject;
  */
 public class PaymentSO extends BaseSO {
 
-  private Long sent;
+  private Long status;
   private Long customerBackendId;
 
   public PaymentSO(Long customerBackendId, Long sentStatus) {
     this.customerBackendId = customerBackendId;
-    this.sent = sentStatus;
+    this.status = sentStatus;
   }
 
   public PaymentSO(Long sentStatus) {
-    this.sent = sentStatus;
+    this.status = sentStatus;
     this.customerBackendId = -1L;
   }
 
-  public Long getSent() {
-    return sent;
+  public Long getStatus() {
+    return status;
   }
 
-  public void setSent(Long sent) {
-    this.sent = sent;
+  public void setStatus(Long status) {
+    this.status = status;
   }
 
   public Long getCustomerBackendId() {

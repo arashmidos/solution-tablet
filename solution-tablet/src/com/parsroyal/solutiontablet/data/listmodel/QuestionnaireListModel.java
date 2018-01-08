@@ -13,6 +13,8 @@ public class QuestionnaireListModel extends BaseListModel {
   private Long visitId;
   private String date;
   private Long answersGroupNo;
+  private Long status;
+  private String customerFullName;
 
   public Long getVisitId() {
     return visitId;
@@ -76,5 +78,21 @@ public class QuestionnaireListModel extends BaseListModel {
 
   public void setAnswersGroupNo(Long answersGroupNo) {
     this.answersGroupNo = answersGroupNo;
+  }
+
+  public Long getStatus() {
+    return status;
+  }
+
+  public void setStatus(Long status) {
+    this.status = status;
+  }
+
+  public String getCustomerFullName() {
+    return customerFullName;
+  }
+
+  public void setCustomerFullName(String customerFullName) {
+    this.customerFullName = customerFullName;
   }
 }

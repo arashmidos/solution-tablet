@@ -2,40 +2,40 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
-import com.parsroyal.solutiontablet.service.VisitService;
-import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
+import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 /**
- * Created by Mahyar on 8/2/2015.
+ * Created by Arash on 29/12/2017
  */
 public class VisitInformationDataTransferBizImpl extends
     AbstractDataTransferBizImpl<VisitInformationDto> {
 
   private int success = 0;
   private VisitInformationDao visitInformationDao;
-  private VisitService visitService;
   private ResultObserver observer;
   private VisitInformationDto data;
+  private int total = 0;
 
-  public VisitInformationDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public VisitInformationDataTransferBizImpl(Context context) {
     super(context);
     this.visitInformationDao = new VisitInformationDaoImpl(context);
-    this.visitService = new VisitServiceImpl(context);
-    this.observer = resultObserver;
   }
 
   @Override
@@ -52,12 +52,16 @@ public class VisitInformationDataTransferBizImpl extends
         }
 
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving VisitInformationData " + ex.getMessage());
+        Logger.sendError("Data transfer",
+            "Error in receiving VisitInformationData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
-        observer.publishResult(
-            context.getString(R.string.message_exception_in_sending_visit_information));
+
       }
     }
+    EventBus.getDefault().post(new DataTransferSuccessEvent(String
+        .format(Locale.US, context.getString(R.string.data_transfered_result),
+            String.valueOf(getSuccess()),
+            String.valueOf((total - success))), StatusCodes.UPDATE));
   }
 
   @Override
@@ -96,6 +100,7 @@ public class VisitInformationDataTransferBizImpl extends
 
   public void setData(VisitInformationDto data) {
     this.data = data;
+    total++;
   }
 
   public int getSuccess() {

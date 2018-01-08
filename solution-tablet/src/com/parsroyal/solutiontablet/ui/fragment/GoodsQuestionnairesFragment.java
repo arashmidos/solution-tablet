@@ -1,12 +1,11 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.AdapterView;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionnaireListAdapter;
 
 /**
@@ -30,18 +29,18 @@ public class GoodsQuestionnairesFragment extends GeneralQuestionnairesFragment {
       args.putLong(Constants.VISIT_ID, visitId);
       args.putLong(Constants.CUSTOMER_ID, customerId);
       args.putLong("ggBi", questionnaireListModel.getGoodsGroupBackendId());
-      mainActivity
-          .changeFragment(MainActivity.GOODS_LIST_FOR_QUESTIONNAIRES_FRAGMENT_ID, args, false);
+      oldMainActivity
+          .changeFragment(OldMainActivity.GOODS_LIST_FOR_QUESTIONNAIRES_FRAGMENT_ID, args, false);
     };
   }
 
   @Override
   protected QuestionnaireListAdapter getAdapter() {
-    return new QuestionnaireListAdapter(mainActivity, dataModel, false);
+    return new QuestionnaireListAdapter(oldMainActivity, dataModel, false);
   }
 
   @Override
   public int getFragmentId() {
-    return MainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID;
+    return OldMainActivity.GOODS_QUESTIONNAIRES_FRAGMENT_ID;
   }
 }

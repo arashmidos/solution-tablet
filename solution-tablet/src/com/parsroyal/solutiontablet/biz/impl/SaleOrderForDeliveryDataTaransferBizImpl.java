@@ -1,8 +1,6 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
-import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
@@ -11,13 +9,13 @@ import com.parsroyal.solutiontablet.data.dao.SaleOrderDao;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderItemDao;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderItemDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.model.SaleOrderList;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import org.springframework.http.HttpEntity;
@@ -36,9 +34,8 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
   private SaleOrderItemDao saleOrderItemDao;
   private KeyValueBiz keyValueBiz;
 
-  public SaleOrderForDeliveryDataTaransferBizImpl(Context context, ResultObserver resultObserver) {
+  public SaleOrderForDeliveryDataTaransferBizImpl(Context context) {
     super(context);
-    this.resultObserver = resultObserver;
     this.saleOrderDao = new SaleOrderDaoImpl(context);
     this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
     this.keyValueBiz = new KeyValueBizImpl(context);
@@ -78,7 +75,8 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
       }
 
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving SaleOrderForDeliveryData " + ex.getMessage());
+      Logger.sendError("Data transfer",
+          "Error in receiving SaleOrderForDeliveryData " + ex.getMessage());
       resultObserver.publishResult(
           context.getString(R.string.message_exception_in_transfering_sale_order_for_delivery));
     }
@@ -86,8 +84,7 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
 
   @Override
   public void beforeTransfer() {
-    resultObserver
-        .publishResult(context.getString(R.string.message_transferring_deliverable_orders));
+
   }
 
   @Override
@@ -97,7 +94,8 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
 
   @Override
   public String getMethod() {
-    return "saleorders/deliverable";
+    return String
+        .format("saleorders/%s/deliverable", keyValueBiz.findByKey(ApplicationKeys.SALESMAN_ID));
   }
 
   @Override
@@ -117,7 +115,6 @@ public class SaleOrderForDeliveryDataTaransferBizImpl extends
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    KeyValue userCodeKey = keyValueBiz.findByKey(ApplicationKeys.SETTING_USER_CODE);
-    return new HttpEntity<>(userCodeKey.getValue(), headers);
+    return new HttpEntity<>(headers);
   }
 }

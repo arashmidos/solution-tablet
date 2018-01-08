@@ -4,7 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:layout_margin="6dp"
-  tools:context=".ui.MainActivity">
+  tools:context=".ui.OldMainActivity">
 
   <TextView
     android:id="@+id/error_msg"
@@ -12,7 +12,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:textColor="@color/red"
-    tools:text="Google play is not available"/>
+    tools:text="Google play is not available" />
 
   <FrameLayout
     android:id="@+id/layout_container"
@@ -26,7 +26,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:name="com.google.android.gms.maps.SupportMapFragment"
-      tools:context=".ui.MainActivity"/>
+      tools:context=".ui.MainActivity" />
 
     <LinearLayout
       android:id="@+id/locationMarker"
@@ -35,7 +35,8 @@
       android:layout_marginBottom="30dp"
       android:layout_gravity="center"
       android:gravity="center"
-      android:orientation="vertical">
+      android:orientation="vertical"
+      android:visibility="gone">
 
       <TextView
         android:id="@+id/locationMarkertext"
@@ -46,13 +47,13 @@
         android:background="@drawable/rounded_corner_map"
         android:gravity="center"
         android:text="@string/set_your_location"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white" />
 
       <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_location"/>
+        android:src="@drawable/ic_action_location" />
     </LinearLayout>
   </FrameLayout>
 

@@ -1,10 +1,11 @@
 package com.parsroyal.solutiontablet.util;
 
+import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
-import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.Constants;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -26,12 +27,32 @@ public class MediaUtil {
   public static final int MEDIA_TYPE_IMAGE = 1;
   public static final int MEDIA_TYPE_VIDEO = 2;
   public static final int MEDIA_TYPE_ZIP = 3;
+  public static final String GOODS_IMAGES_FOLDER = Environment.getExternalStoragePublicDirectory(
+      Environment.DIRECTORY_PICTURES) + "/" + Constants.APPLICATION_NAME+"/Goods/";
   private static final int BUFFER_SIZE = 512;
-  public static final String GOODS_IMAGES_FOLDER = SolutionTabletApplication.getInstance()
-      .getCacheDir().getAbsolutePath() + "/goods/";
 
-  public static Uri getOutputMediaFileUri(int type, String directoryName, String fileName) {
-    return Uri.fromFile(getOutputMediaFile(type, directoryName, fileName));
+  public static Uri getOutputMediaFileUri(Context context, int type, String directoryName,
+      String fileName) {
+    return getUri(getOutputMediaFile(type, directoryName, fileName), context);
+  }
+
+  /**
+   * Convert File into Uri.
+   *
+   * @return uri
+   */
+  public static Uri getUri(File file, Context context) {
+    if (file != null) {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        return Uri.fromFile(file);
+      } else {
+        return FileProvider.getUriForFile(
+            context,
+            context.getApplicationContext()
+                .getPackageName(), file);
+      }
+    }
+    return null;
   }
 
   /**
@@ -124,16 +145,17 @@ public class MediaUtil {
         out.close();
       } catch (IOException e) {
         e.printStackTrace();
-        Crashlytics.log(Log.ERROR, "Zip images", e.getMessage());
+        Logger.sendError("Zip images", e.getMessage());
       }
     }
     return zip;
   }
 
   public static boolean unpackZip(File file) {
+
     File root = new File(GOODS_IMAGES_FOLDER);
     if (!root.exists()) {
-      root.mkdir();
+      root.mkdirs();
     }
 
     ZipInputStream zipInputStream;
@@ -148,7 +170,7 @@ public class MediaUtil {
 
         filename = zipEntry.getName();
 
-        FileOutputStream fout = new FileOutputStream(GOODS_IMAGES_FOLDER + "/" + filename);
+        FileOutputStream fout = new FileOutputStream(root + "/" + filename);
 
         while ((count = zipInputStream.read(buffer)) != -1) {
           fout.write(buffer, 0, count);
@@ -168,7 +190,7 @@ public class MediaUtil {
   }
 
   public static String getGoodImage(String goodsCode) {
-    File image = new File(GOODS_IMAGES_FOLDER + goodsCode + ".png");
+    File image = new File(GOODS_IMAGES_FOLDER+goodsCode + ".png");
     if (image.exists()) {
       return image.getAbsolutePath();
     } else {

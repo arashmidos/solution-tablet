@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.biz;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
@@ -15,12 +14,12 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.exception.UserNotAuthorizedException;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.LoggingRequestInterceptor;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -53,6 +52,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
   protected KeyValueDao keyValueDao;
   protected KeyValue salesmanCode;
   private KeyValue goodsRequestId;
+  protected KeyValue token;
 
   public AbstractDataTransferBizImpl(Context context) {
     this.context = context;
@@ -60,13 +60,14 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
   }
 
   public void prepare() {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
+    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
     saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
     salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
     salesmanCode = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USER_CODE);
     goodsRequestId = keyValueDao.retrieveByKey(ApplicationKeys.GOODS_REQUEST_ID);
+    token = keyValueDao.retrieveByKey(ApplicationKeys.TOKEN);
   }
 
   public boolean exchangeData() {
@@ -78,9 +79,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
 
       HttpHeaders httpHeaders = new HttpHeaders();
       httpHeaders.setContentType(getContentType());
-      HttpBasicAuthentication authentication = new HttpBasicAuthentication(username.getValue(),
-          password.getValue());
-      httpHeaders.setAuthorization(authentication);
+
       httpHeaders.add("saleType",
           Empty.isEmpty(saleType) ? ApplicationKeys.SALE_COLD : saleType.getValue());
 
@@ -91,7 +90,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
       if (Empty.isNotEmpty(goodsRequestId)) {
         httpHeaders.add("goodsRequestId", goodsRequestId.getValue());
       }
-
+      httpHeaders.add("Authorization", "Bearer " + token.getValue());
       //Make RestTemplate loggable
       System.setProperty("org.apache.commons.logging.Log",
           "org.apache.commons.logging.impl.SimpleLog");
@@ -153,7 +152,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
         getObserver().publishResult(ex);
       }
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Data transfer", "abstract exchange data " + e.getMessage());
+      Logger.sendError("Data transfer", "abstract exchange data " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       if (Empty.isNotEmpty(getObserver())) {
         getObserver().publishResult(new UnknownSystemException(e));

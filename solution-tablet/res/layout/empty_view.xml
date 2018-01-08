@@ -14,7 +14,7 @@
         android:background="@android:color/transparent"
         android:gravity="center"
         android:padding="10dp"
-        android:text="@string/no_result"
+        android:text="@string/error_unknown_system_exception"
         android:textColor="@color/dark_gray"
         android:textSize="@dimen/text_x_large"/>
 

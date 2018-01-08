@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
-import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
@@ -22,6 +21,7 @@ import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +71,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     contentValues.put(Customer.COL_MUNICIPALITY_CODE, entity.getMunicipalityCode());//21
     contentValues.put(Customer.COL_POSTAL_CODE, entity.getPostalCode());//22
     contentValues.put(Customer.COL_APPROVED, entity.isApproved() ? 1 : 0);
+    contentValues.put(Customer.COL_DESCRIPTION, entity.getDescription());
     return contentValues;
   }
 
@@ -86,7 +87,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {
+    return new String[]{
         Customer.COL_ID,
         Customer.COL_BACKEND_ID,
         Customer.COL_FULL_NAME,
@@ -110,9 +111,39 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         Customer.COL_NATIONAL_CODE,
         Customer.COL_MUNICIPALITY_CODE,
         Customer.COL_POSTAL_CODE,//22
-        Customer.COL_APPROVED
+        Customer.COL_APPROVED,
+        Customer.COL_DESCRIPTION
     };
-    return projection;
+  }
+
+  private CustomerDto createCustomerDtoFromCursor(Cursor cursor) {
+    CustomerDto customer = new CustomerDto();
+    customer.setId(cursor.getLong(0));
+    customer.setBackendId(cursor.getLong(1));
+    customer.setFullName(cursor.getString(2));
+    customer.setPhoneNumber(cursor.getString(3));
+    customer.setCellPhone(cursor.getString(4));
+    customer.setProvinceBackendId(cursor.getLong(5));
+    customer.setCityBackendId(cursor.getLong(6));
+    customer.setAddress(cursor.getString(7));
+    customer.setActivityBackendId(cursor.getLong(8));
+    customer.setStoreSurface(cursor.getInt(9));
+    customer.setStoreLocationTypeBackendId(cursor.getLong(10));
+    customer.setClassBackendId(cursor.getLong(11));
+    customer.setStatus(cursor.getLong(12));
+    customer.setCode(cursor.getString(13));
+    customer.setVisitLineBackendId(cursor.getLong(14));
+    customer.setCreateDateTime(cursor.getString(15));
+    customer.setUpdateDateTime(cursor.getString(16));
+    customer.setxLocation(cursor.getDouble(17));
+    customer.setyLocation(cursor.getDouble(18));
+    customer.setShopName(cursor.getString(19));
+    customer.setNationalCode(cursor.getString(20));
+    customer.setMunicipalityCode(cursor.getString(21));
+    customer.setPostalCode(cursor.getString(22));
+    customer.setApproved(cursor.getInt(23) == 1);
+    customer.setCustomerDescription(cursor.getString(24));
+    return customer;
   }
 
   @Override
@@ -142,16 +173,29 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     customer.setMunicipalityCode(cursor.getString(21));
     customer.setPostalCode(cursor.getString(22));
     customer.setApproved(cursor.getInt(23) == 1);
+    customer.setDescription(cursor.getString(24));
     return customer;
   }
 
   @Override
-  public List<Customer> retrieveAllNewCustomersForSend() {
+  public List<CustomerDto> retrieveAllNewCustomersForSend() {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
     String selection =
         " " + Customer.COL_STATUS + " = ? " + " AND (" + Customer.COL_BACKEND_ID + " is null or "
             + Customer.COL_BACKEND_ID + " = 0)";
     String[] args = {String.valueOf(CustomerStatus.NEW.getId())};
-    return retrieveAll(selection, args, null, null, null);
+
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+    List<CustomerDto> list = new ArrayList<>();
+
+    while (cursor.moveToNext()) {
+      list.add(createCustomerDtoFromCursor(cursor));
+    }
+    cursor.close();
+
+    return list;
   }
 
   @Override
@@ -176,14 +220,34 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     Cursor cursor = db.query(getTableName(), projection, selection, args, null, null, null);
     List<CustomerLocationDto> locationDtoList = new ArrayList<>();
     while (cursor.moveToNext()) {
-      CustomerLocationDto locationDto = new CustomerLocationDto();
-      locationDto.setCustomerBackendId(cursor.getLong(0));
-      locationDto.setLatitude(cursor.getDouble(2));
-      locationDto.setLongitude(cursor.getDouble(3));
-      locationDtoList.add(locationDto);
+      locationDtoList.add(new CustomerLocationDto(cursor.getLong(0), cursor.getDouble(2),
+          cursor.getDouble(3)));
     }
     cursor.close();
     return locationDtoList;
+  }
+
+  @Override
+  public CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String[] projection = {
+        Customer.COL_BACKEND_ID,
+        Customer.COL_STATUS,
+        Customer.COL_X_LOCATION,
+        Customer.COL_Y_LOCATION
+    };
+    String selection = Customer.COL_STATUS + " = ? AND " + Customer.COL_BACKEND_ID + " = ? ";
+    String[] args = {String.valueOf(CustomerStatus.UPDATED.getId()),
+        String.valueOf(customerBackendId)};
+    Cursor cursor = db.query(getTableName(), projection, selection, args, null, null, null);
+    CustomerLocationDto locationDto = null;
+    if (cursor.moveToNext()) {
+      locationDto = new CustomerLocationDto(cursor.getLong(0), cursor.getDouble(2),
+          cursor.getDouble(3));
+    }
+    cursor.close();
+    return locationDto;
   }
 
   @Override
@@ -216,49 +280,73 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         "vi." + VisitInformation.COL_UPDATE_DATE_TIME,
         "vd." + VisitInformationDetail.COL_TYPE,
         "vi." + VisitInformation.COL_VISIT_DATE,//10
-        "c." + Customer.COL_BACKEND_ID};
+        "c." + Customer.COL_BACKEND_ID,//11
+        "c." + Customer.COL_SHOP_NAME//12
+    };
 
     String table = getTableName() + " c " +
         "LEFT OUTER JOIN COMMER_VISIT_INFORMATION vi on c." + Customer.COL_BACKEND_ID + " = vi."
         + VisitInformation.COL_CUSTOMER_BACKEND_ID +
         " LEFT OUTER JOIN COMMER_VISIT_INFORMATION_DETAIL vd on vi._id = vd.VISIT_INFORMATION_ID ";
 
-    String orderBy = "c." + Customer.COL_ID + " ";
+    String orderBy = "c." + Customer.COL_CODE + " ASC ";
 
     String selection = "";
-    String[] args = null;
+    ArrayList<String> args = new ArrayList<>();
     if (Empty.isNotEmpty(visitLineId)) {
-      //Load all customers for Map
+
       selection = " c." + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
-      args = new String[]{String.valueOf(visitLineId)};
+      args.add(String.valueOf(visitLineId));
     } else {
-      selection =
-          "c." + Customer.COL_X_LOCATION + " is not null AND " + "c." + Customer.COL_X_LOCATION
-              + " != 0";
+      //Load all customers has location for Map or ALLCustomerList
+      if (constraint == null) {
+        selection =
+            "c." + Customer.COL_X_LOCATION + " is not null AND " + "c." + Customer.COL_X_LOCATION
+                + " != 0";
+      }
     }
 
     Cursor cursor;
     if (Empty.isNotEmpty(constraint)) {
-      selection = selection + " and ( " +
+      if (!selection.equals("")) {
+        selection = selection + " and ";
+      }
+      selection = selection + " ( " +
           "c." + Customer.COL_FULL_NAME + " like ? or " + "c." + Customer.COL_ADDRESS
           + " like ? or " +
           "c." + Customer.COL_PHONE_NUMBER + " like ? or c." + Customer.COL_CELL_PHONE
           + " like ? or c." + Customer.COL_CODE + " like ? )";
       constraint = "%" + constraint + "%";
-      String[] args2 = {String.valueOf(visitLineId), constraint, constraint, constraint, constraint,
-          constraint};
-      cursor = db.query(table, projection, selection, args2, null, null, orderBy);
+      String[] args2 = {constraint, constraint, constraint, constraint, constraint};
+      args.addAll(Arrays.asList(args2));
+//      cursor = db.query(table, projection, selection, args, null, null, orderBy);
+//    } else {
     } else {
-      cursor = db.query(table, projection, selection, args, null, null, orderBy);
+      selection =
+          selection + (selection.equals("") ? "c." : " and c.") + Customer.COL_STATUS + " <> ? ";
+      args.add(String.valueOf(CustomerStatus.NEW.getId()));
     }
+    String[] argsArray = new String[args.size()];
+    argsArray = args.toArray(argsArray);
+
+    cursor = db.query(table, projection, selection, argsArray, null, null, orderBy);
 
     Map<Long, CustomerListModel> entitiesMap = new HashMap<>();
 
     while (cursor.moveToNext()) {
       CustomerListModel listModel = createListModelFromCursor(cursor);
       if (entitiesMap.containsKey(listModel.getPrimaryKey())) {
-        if ((listModel.hasOrder() || listModel.hasRejection())) {
-          entitiesMap.put(listModel.getPrimaryKey(), listModel);
+        if ((listModel.hasOrder())) {
+          entitiesMap.get(listModel.getPrimaryKey()).setHasOrder(true);
+        }
+        if (listModel.hasRejection()) {
+          entitiesMap.get(listModel.getPrimaryKey()).setHasRejection(true);
+        }
+        if (listModel.hasLocation()) {
+          entitiesMap.get(listModel.getPrimaryKey()).setHasLocation(true);
+        }
+        if (listModel.hasAnswers()) {
+          entitiesMap.get(listModel.getPrimaryKey()).setHasAnswers(true);
         }
       } else {
         entitiesMap.put(listModel.getPrimaryKey(), listModel);
@@ -300,10 +388,13 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     } else if (type == VisitInformationDetailType.NONE.getValue()
         || type == VisitInformationDetailType.NO_ORDER.getValue()) {
       customerListModel.setHasRejection(true);
+    } else if (type == VisitInformationDetailType.FILL_QUESTIONNAIRE.getValue()) {
+      customerListModel.setHasAnswers(true);
     }
 
     customerListModel.setLastVisit(cursor.getString(10));
     customerListModel.setBackendId(cursor.getLong(11));
+    customerListModel.setShopName(cursor.getString(12));
 
     return customerListModel;
   }
@@ -312,39 +403,11 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
   public CustomerDto getCustomerDtoById(Long customerId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String[] projection = {
-        " cu." + Customer.COL_ID,
-        " cu." + Customer.COL_BACKEND_ID,
-        " cu." + Customer.COL_FULL_NAME,
-        " cu." + Customer.COL_PHONE_NUMBER,
-        " cu." + Customer.COL_CELL_PHONE,
-        " cu." + Customer.COL_PROVINCE_BACKEND_ID, //5
-        " cu." + Customer.COL_CITY_BACKEND_ID,
-        " cu." + Customer.COL_ADDRESS,
-        " cu." + Customer.COL_ACTIVITY_BACKEND_ID,
-        " cu." + Customer.COL_STORE_SURFACE,
-        " cu." + Customer.COL_STORE_LOCATION_TYPE_BACKEND_ID,//10
-        " cu." + Customer.COL_STORE_LOCATION_TYPE_BACKEND_ID,
-        " cu." + Customer.COL_STATUS,
-        " cu." + Customer.COL_CODE,
-        " cu." + Customer.COL_VISIT_LINE_BACKEND_ID,
-        " cu." + Customer.COL_CREATE_DATE_TIME,//15
-        " cu." + Customer.COL_UPDATE_DATE_TIME,
-        " cu." + Customer.COL_X_LOCATION,
-        " cu." + Customer.COL_Y_LOCATION,
-        " bi." + BaseInfo.COL_TITLE + " activityTitle",
-        " cu." + Customer.COL_SHOP_NAME, //20
-        " cu." + Customer.COL_NATIONAL_CODE,
-        " cu." + Customer.COL_MUNICIPALITY_CODE,
-        " cu." + Customer.COL_POSTAL_CODE,
-        " cu." + Customer.COL_APPROVED
-    };
-    String selection = " cu." + getPrimaryKeyColumnName() + " = ?";
+
+    String selection = getPrimaryKeyColumnName() + " = ?";
     String[] args = {String.valueOf(customerId)};
-    String table = getTableName() + " cu " +
-        " LEFT OUTER JOIN " + BaseInfo.TABLE_NAME + " bi on bi." + BaseInfo.COL_ID + " = cu."
-        + Customer.COL_ACTIVITY_BACKEND_ID;
-    Cursor cursor = db.query(table, projection, selection, args, null, null, null);
+
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
     CustomerDto customerDto = null;
     if (cursor.moveToFirst()) {
       customerDto = createCustomerDtoFromCursor(cursor);
@@ -358,9 +421,16 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-    String[] projection = {Customer.COL_ID, Customer.COL_FULL_NAME, Customer.COL_PHONE_NUMBER,
-        Customer.COL_CELL_PHONE, Customer.COL_STATUS, Customer.COL_CREATE_DATE_TIME,
-        Customer.COL_BACKEND_ID};
+    String[] projection = {
+        Customer.COL_ID,
+        Customer.COL_FULL_NAME,
+        Customer.COL_PHONE_NUMBER,
+        Customer.COL_CELL_PHONE,
+        Customer.COL_STATUS,
+        Customer.COL_CREATE_DATE_TIME,//5
+        Customer.COL_BACKEND_ID,
+        Customer.COL_SHOP_NAME
+    };
     String selection = " 1 = 1";
     List<String> argList = new ArrayList<>();
 
@@ -376,7 +446,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     }
 
     if (Empty.isNotEmpty(nCustomerSO.getSent())) {
-      if (nCustomerSO.getSent().equals(Integer.valueOf(1))) {
+      if (nCustomerSO.getSent().equals(1)) {
         selection = selection.concat(
             " AND " + Customer.COL_BACKEND_ID + " is not null AND " + Customer.COL_BACKEND_ID +
                 " != 0");
@@ -394,14 +464,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
             orderBy);
     List<NCustomerListModel> nCustomers = new ArrayList<>();
     while (cursor.moveToNext()) {
-      NCustomerListModel nCustomer = new NCustomerListModel();
-      nCustomer.setPrimaryKey(cursor.getLong(0));
-      nCustomer.setTitle(cursor.getString(1));
-      nCustomer.setPhoneNumber(cursor.getString(2));
-      nCustomer.setCellPhone(cursor.getString(3));
-      nCustomer.setStatus(cursor.getLong(4));
-      nCustomer.setCreateDateTime(cursor.getString(5));
-      nCustomer.setBackendId(cursor.getLong(6));
+      NCustomerListModel nCustomer = new NCustomerListModel(cursor.getLong(0), cursor.getString(1),
+          cursor.getString(2), cursor.getString(3), cursor.getLong(4), cursor.getString(5),
+          cursor.getLong(6), cursor.getString(7));
       nCustomers.add(nCustomer);
     }
 
@@ -473,36 +538,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     }
     cursor.close();
     return positionModelList;
-  }
-
-  protected CustomerDto createCustomerDtoFromCursor(Cursor cursor) {
-    CustomerDto customer = new CustomerDto();
-    customer.setId(cursor.getLong(0));
-    customer.setBackendId(cursor.getLong(1));
-    customer.setFullName(cursor.getString(2));
-    customer.setPhoneNumber(cursor.getString(3));
-    customer.setCellPhone(cursor.getString(4));
-    customer.setProvinceBackendId(cursor.getLong(5));
-    customer.setCityBackendId(cursor.getLong(6));
-    customer.setAddress(cursor.getString(7));
-    customer.setActivityBackendId(cursor.getLong(8));
-    customer.setStoreSurface(cursor.getInt(9));
-    customer.setStoreLocationTypeBackendId(cursor.getLong(10));
-    customer.setClassBackendId(cursor.getLong(11));
-    customer.setStatus(cursor.getLong(12));
-    customer.setCode(cursor.getString(13));
-    customer.setVisitLineBackendId(cursor.getLong(14));
-    customer.setCreateDateTime(cursor.getString(15));
-    customer.setUpdateDateTime(cursor.getString(16));
-    customer.setxLocation(cursor.getDouble(17));
-    customer.setyLocation(cursor.getDouble(18));
-    customer.setActivityTitle(cursor.getString(19));
-    customer.setShopName(cursor.getString(20));
-    customer.setNationalCode(cursor.getString(21));
-    customer.setMunicipalityCode(cursor.getString(22));
-    customer.setPostalCode(cursor.getString(23));
-    customer.setApproved(cursor.getInt(24) == 1);
-    return customer;
   }
 
   public void bulkInsert(List<Customer> list) {

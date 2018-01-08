@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/features_background"
+  android:orientation="vertical">
+
+  <android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="3dp">
+
+    <FrameLayout
+      android:id="@+id/toolbar_container"
+      android:layout_width="match_parent"
+      android:layout_height="56dp">
+
+
+      <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@android:color/white"
+        app:title=""
+        app:titleTextColor="@color/white">
+
+      </android.support.v7.widget.Toolbar>
+
+      <TextView
+        android:id="@+id/toolbar_title"
+        style="@style/IranSans.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/order_goods"
+        android:textColor="@color/primary"
+        android:textSize="16sp" />
+
+      <Button
+        android:id="@+id/close"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_gravity="center|end"
+        android:background="@drawable/ic_close_24dp"
+        android:backgroundTint="@color/login_gray" />
+    </FrameLayout>
+  </android.support.design.widget.AppBarLayout>
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" />
+
+  <RelativeLayout
+    android:id="@+id/bottom_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/payment_bottom_line">
+
+    <View
+      android:id="@+id/center_view"
+      android:layout_width="1dp"
+      android:layout_height="40dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      android:layout_centerInParent="true"
+      android:background="@color/black_10" />
+
+    <LinearLayout
+      android:id="@+id/submit_btn"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="9dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_centerVertical="true"
+      android:layout_toEndOf="@id/center_view"
+      android:layout_toRightOf="@id/center_view"
+      android:gravity="center"
+      android:orientation="horizontal">
+
+      <TextView
+        android:id="@+id/submit_tv"
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/finalize_order"
+        android:textColor="@color/log_in_enter"
+        android:textSize="14sp" />
+
+      <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
+        android:src="@drawable/ic_done" />
+    </LinearLayout>
+
+    <TextView
+      android:id="@+id/total_amount_title"
+      style="@style/IranSans"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="11dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:text="@string/orders_total_amount"
+      android:textColor="@color/white"
+      android:textSize="10sp" />
+
+    <TextView
+      android:id="@+id/total_amount_tv"
+      style="@style/IranSans.Bold"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="7dp"
+      android:layout_marginBottom="9dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_below="@id/total_amount_title"
+      android:layout_toLeftOf="@id/center_view"
+      android:layout_toStartOf="@id/center_view"
+      android:gravity="left"
+      android:textColor="@color/white"
+      android:textSize="16sp"
+      tools:text="56.556.5605ریال" />
+  </RelativeLayout>
+
+</LinearLayout>

@@ -12,7 +12,8 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.KPIDetail;
 import com.parsroyal.solutiontablet.service.KPIService;
 import com.parsroyal.solutiontablet.service.impl.KPIServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
+import com.parsroyal.solutiontablet.util.Logger;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -23,10 +24,10 @@ public class KPIListAdapter extends ArrayAdapter<KPIDetail> {
 
   private static final String TAG = KPIListAdapter.class.getSimpleName();
   private final DecimalFormat mFormat;
-  private MainActivity context;
+  private OldMainActivity context;
   private KPIService kpiService;
 
-  public KPIListAdapter(MainActivity context, List<KPIDetail> dataModel) {
+  public KPIListAdapter(OldMainActivity context, List<KPIDetail> dataModel) {
     super(context, R.layout.row_layout_kpi, dataModel);
     this.context = context;
     this.kpiService = new KPIServiceImpl(context);
@@ -60,7 +61,7 @@ public class KPIListAdapter extends ArrayAdapter<KPIDetail> {
       return convertView;
 
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in KPIListAdapter.getView " + e.getMessage());
+      Logger.sendError( "UI Exception", "Error in KPIListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

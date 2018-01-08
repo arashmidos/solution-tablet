@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
+import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.dao.QuestionDao;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
@@ -56,6 +57,13 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   }
 
   @Override
+  public QuestionDto getQuestionDtoByBackendId(Long backendId, Long visitId, Long goodsBackendId,
+      Long answersGroupNo) {
+    return questionDao.getQuestionDtoByBackendId(backendId, visitId, goodsBackendId, answersGroupNo);
+
+  }
+
+  @Override
   public QuestionDto getQuestionDto(Long questionnaireBackendId, Long visitId, Integer order,
       Long goodsBackendId, boolean isNext, Long answersGroupNo) {
     return questionDao
@@ -68,9 +76,11 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     if (Empty.isEmpty(qAnswer.getId()) || qAnswer.getId().equals(0L)) {
       qAnswer.setCreateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
       qAnswer.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
+      qAnswer.setStatus(SendStatus.NEW.getId());
       return qAnswerDao.create(qAnswer);
     } else {
       qAnswer.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
+      qAnswer.setStatus(SendStatus.NEW.getId());
       qAnswerDao.update(qAnswer);
       return qAnswer.getId();
     }
@@ -79,6 +89,20 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   @Override
   public List<QAnswerDto> getAllAnswersDtoForSend() {
     List<QAnswerDto> answersGroupList = qAnswerDao.getAllQAnswersDtoForSend();
+
+    String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
+    for (int i = 0; i < answersGroupList.size(); i++) {
+      QAnswerDto qAnswerDto = answersGroupList.get(i);
+      qAnswerDto.setAnswers(qAnswerDao.getAllAnswerDetailByGroupId(qAnswerDto.getAnswersGroupNo()));
+      qAnswerDto.setSalesmanId(Long.valueOf(salesmanId));
+    }
+
+    return answersGroupList;
+  }
+
+  @Override
+  public List<QAnswerDto> getAllAnswersDtoForSend(Long visitId) {
+    List<QAnswerDto> answersGroupList = qAnswerDao.getAllQAnswersDtoForSend(visitId);
 
     String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
     for (int i = 0; i < answersGroupList.size(); i++) {
@@ -103,6 +127,16 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   @Override
   public Long getNextAnswerGroupNo() {
     return questionnaireDao.getNextAnswerGroupNo();
+  }
+
+  @Override
+  public void deleteAllAnswer(Long visitId, Long answersGroupNo) {
+    qAnswerDao.deleteAllAnswer(visitId, answersGroupNo);
+  }
+
+  @Override
+  public void deleteAnswerById(Long answerId) {
+    qAnswerDao.delete(answerId);
   }
 
   @Override

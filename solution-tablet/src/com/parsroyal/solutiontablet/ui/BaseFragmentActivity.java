@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -16,6 +15,7 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
@@ -66,7 +66,7 @@ public class BaseFragmentActivity extends AppCompatActivity {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(this, ex);
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in updating actionbar " + ex.getMessage());
+      Logger.sendError("UI Exception", "Error in updating actionbar " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(this, new UnknownSystemException(ex));
     }
@@ -74,12 +74,7 @@ public class BaseFragmentActivity extends AppCompatActivity {
 
   public void changeMessageDialog(final String message) {
     if (progressDialog != null) {
-      runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-          progressDialog.setMessage(message);
-        }
-      });
+      runOnUiThread(() -> progressDialog.setMessage(message));
     }
   }
 

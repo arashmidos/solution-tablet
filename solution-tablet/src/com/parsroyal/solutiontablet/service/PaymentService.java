@@ -17,15 +17,11 @@ public interface PaymentService extends BaseService {
   void updatePayment(Payment payment);
 
   List<Payment> getAllPaymentsByStatus(Long status);
-
-  List<Payment> getAllPaymentByCustomerID(Long customerId);
-
-  List<PaymentListModel> getAllPaymentListModelByCustomerIdWithConstraint(Long customerId,
-      String constraint);
-
-  List<PaymentListModel> getAllPaymentsListModelByCustomerBackendId(Long customerBackendId);
+  List<Payment> getAllPaymentsByVisitId(Long visitId);
 
   List<PaymentListModel> searchForPayments(PaymentSO paymentSO);
 
   void clearAllSentPayment();
+
+  void deletePayment(Long paymentId);
 }

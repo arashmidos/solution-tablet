@@ -2,9 +2,8 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.dao.QuestionDao;
 import com.parsroyal.solutiontablet.data.dao.QuestionnaireDao;
@@ -13,78 +12,110 @@ import com.parsroyal.solutiontablet.data.dao.impl.QuestionDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.QuestionnaireDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Question;
 import com.parsroyal.solutiontablet.data.entity.Questionnaire;
+import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
 import com.parsroyal.solutiontablet.data.model.QuestionnaireDto;
 import com.parsroyal.solutiontablet.data.model.QuestionnaireDtoList;
-import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
+import com.parsroyal.solutiontablet.service.GetDataRestService;
+import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.NetworkUtil;
+import java.io.IOException;
+import org.greenrobot.eventbus.EventBus;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
- * Created by Mahyar on 7/24/2015.
+ * Created by Arash on 27/12/2017
  */
-public class QuestionnaireDataTransferBizImpl extends
-    AbstractDataTransferBizImpl<QuestionnaireDtoList> {
+public class QuestionnaireDataTransferBizImpl {
 
   public static final String TAG = QuestionnaireDataTransferBizImpl.class.getSimpleName();
-  private final SettingServiceImpl settingService;
 
   private Context context;
   private QuestionnaireDao questionnaireDao;
   private QuestionDao questionDao;
   private QAnswerDao qAnswerDao;
-  private ResultObserver resultObserver;
 
-  public QuestionnaireDataTransferBizImpl(Context context, ResultObserver resultObserver) {
-    super(context);
+  public QuestionnaireDataTransferBizImpl(Context context) {
     this.context = context;
     this.questionnaireDao = new QuestionnaireDaoImpl(context);
     this.questionDao = new QuestionDaoImpl(context);
     this.qAnswerDao = new QAnswerDaoImpl(context);
-    this.resultObserver = resultObserver;
-    this.settingService = new SettingServiceImpl(context);
   }
 
-  @Override
-  public void receiveData(QuestionnaireDtoList data) {
-    if (Empty.isNotEmpty(data) && Empty.isNotEmpty(data.getQuestionnaires())) {
-      try {
-        questionDao.deleteAll();
-        qAnswerDao.deleteAll();
-        questionnaireDao.deleteAll();
-        for (QuestionnaireDto questionnaireDto : data.getQuestionnaires()) {
-          Questionnaire questionnaire = createQuestionnaireEntityFromDto(questionnaireDto);
-
-          questionnaireDao.create(questionnaire);
-          for (QuestionDto questionDto : questionnaireDto.getQuestions()) {
-            Question question = createQuestionEntityFromDto(questionDto);
-            questionDao.create(question);
-          }
-        }
-        getObserver().publishResult(
-            context.getString(R.string.message_questionnaires_transferred_successfully));
-      } catch (Exception e) {
-        Crashlytics.log(Log.ERROR, "Data transfer",
-            "Error in receiving QuestionaireData " + e.getMessage());
-        Log.e(TAG, e.getMessage(), e);
-        getObserver().publishResult(
-            context.getString(R.string.message_exception_in_transferring_questionnaires));
-      }
+  public void exchangeData() {
+    if (!NetworkUtil.isNetworkAvailable(context)) {
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
     }
+
+    GetDataRestService restService = ServiceGenerator.createService(GetDataRestService.class);
+
+    Call<QuestionnaireDtoList> call = restService
+        .getAllQuestionnaire(DateUtil.getCurrentGregorianFullWithDate());
+
+    call.enqueue(new Callback<QuestionnaireDtoList>() {
+      @Override
+      public void onResponse(Call<QuestionnaireDtoList> call,
+          Response<QuestionnaireDtoList> response) {
+        if (response.isSuccessful()) {
+          QuestionnaireDtoList data = response.body();
+          if (Empty.isNotEmpty(data) && Empty.isNotEmpty(data.getQuestionnaires())) {
+            try {
+              questionDao.deleteAll();
+              qAnswerDao.deleteAll();
+              questionnaireDao.deleteAll();
+              for (QuestionnaireDto questionnaireDto : data.getQuestionnaires()) {
+                Questionnaire questionnaire = createQuestionnaireEntityFromDto(questionnaireDto);
+
+                questionnaireDao.create(questionnaire);
+                for (QuestionDto questionDto : questionnaireDto.getQuestions()) {
+                  Question question = createQuestionEntityFromDto(questionDto);
+                  questionDao.create(question);
+                }
+              }
+              EventBus.getDefault().post(new DataTransferSuccessEvent(
+                  context.getString(R.string.provinces_data_transferred_successfully)
+                  , StatusCodes.SUCCESS));
+            } catch (Exception e) {
+              Logger.sendError("Data transfer",
+                  "Error in receiving QuestionaireData " + e.getMessage());
+              Log.e(TAG, e.getMessage(), e);
+              EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.INVALID_DATA));
+            }
+          } else {
+            EventBus.getDefault().post(new DataTransferSuccessEvent(
+                context.getString(R.string.provinces_data_transferred_successfully)
+                , StatusCodes.SUCCESS));
+          }
+        } else {
+          try {
+            Log.d("TAG", response.errorBody().string());
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+          EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
+        }
+      }
+
+      @Override
+      public void onFailure(Call<QuestionnaireDtoList> call, Throwable t) {
+        EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NETWORK_ERROR));
+      }
+    });
   }
 
   private Question createQuestionEntityFromDto(QuestionDto questionDto) {
     return new Question(questionDto.getBackendId(), questionDto.getQuestionnaireId(),
         CharacterFixUtil.fixString(questionDto.getQuestion()), questionDto.getAnswer(),
         questionDto.getStatus(),
-        questionDto.getOrder(), questionDto.getType());
+        questionDto.getOrder(), questionDto.getType(), questionDto.isRequired(),
+        questionDto.getPrerequisite());
 
   }
 
@@ -94,43 +125,5 @@ public class QuestionnaireDataTransferBizImpl extends
         questionnaireDto.getFromDate(), questionnaireDto.getToDate(),
         questionnaireDto.getGoodsGroupId(), questionnaireDto.getCustomerGroupId(),
         questionnaireDto.getDescription(), questionnaireDto.getStatus());
-  }
-
-  @Override
-  public void beforeTransfer() {
-    getObserver()
-        .publishResult(context.getString(R.string.message_transferring_questionnaires_data));
-  }
-
-  @Override
-  public ResultObserver getObserver() {
-    return resultObserver;
-  }
-
-  @Override
-  public String getMethod() {
-    String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
-    String today = DateUtil.getCurrentGregorianFullWithDate();
-    return String.format("questionnaire/%s/%s", salesmanId, today);
-  }
-
-  @Override
-  public Class getType() {
-    return QuestionnaireDtoList.class;
-  }
-
-  @Override
-  public HttpMethod getHttpMethod() {
-    return HttpMethod.GET;
-  }
-
-  @Override
-  protected MediaType getContentType() {
-    return MediaType.APPLICATION_JSON;
-  }
-
-  @Override
-  protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    return new HttpEntity<>(headers);
   }
 }

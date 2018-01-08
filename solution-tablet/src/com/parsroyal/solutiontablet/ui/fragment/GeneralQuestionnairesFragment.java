@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
@@ -15,8 +14,9 @@ import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionnaireListAdapter;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class GeneralQuestionnairesFragment extends
 
   public static final String TAG = GeneralQuestionnairesFragment.class.getSimpleName();
 
-  protected MainActivity mainActivity;
+  protected OldMainActivity oldMainActivity;
   protected QuestionnaireService questionnaireService;
 
   protected List<QuestionnaireListModel> dataModel;
@@ -40,8 +40,8 @@ public class GeneralQuestionnairesFragment extends
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
-    mainActivity = (MainActivity) getActivity();
-    questionnaireService = new QuestionnaireServiceImpl(mainActivity);
+    oldMainActivity = (OldMainActivity) getActivity();
+    questionnaireService = new QuestionnaireServiceImpl(oldMainActivity);
 
     try {
       Bundle arguments = getArguments();
@@ -58,13 +58,13 @@ public class GeneralQuestionnairesFragment extends
       Button canclButton = (Button) buttonPanel.findViewById(R.id.cancelBtn);
       canclButton.setOnClickListener(v ->
       {
-        mainActivity.removeFragment(GeneralQuestionnairesFragment.this);
-        mainActivity.changeSidebarItem(parent);
+        oldMainActivity.removeFragment(GeneralQuestionnairesFragment.this);
+        oldMainActivity.changeSidebarItem(parent);
       });
       return view;
 
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "UI Exception",
+      Logger.sendError("UI Exception",
           "Error in creating GeneralQuestionaireFragment " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
@@ -90,7 +90,7 @@ public class GeneralQuestionnairesFragment extends
 
   @Override
   protected QuestionnaireListAdapter getAdapter() {
-    return new QuestionnaireListAdapter(mainActivity, dataModel, true);
+    return new QuestionnaireListAdapter(oldMainActivity, dataModel, true);
   }
 
   @Override
@@ -102,10 +102,11 @@ public class GeneralQuestionnairesFragment extends
       args.putLong(Constants.QUESTIONAIRE_ID, questionnaireListModel.getBackendId());
       args.putLong(Constants.VISIT_ID, visitId);
       args.putLong(Constants.CUSTOMER_ID, customerId);
-      args.putLong(Constants.ANSWERS_GROUP_NO, parent == MainActivity.NEW_CUSTOMER_FRAGMENT_ID ? 0
-          : questionnaireService.getNextAnswerGroupNo());
+      args.putLong(Constants.ANSWERS_GROUP_NO,
+          parent == OldMainActivity.NEW_CUSTOMER_FRAGMENT_ID ? 0
+              : questionnaireService.getNextAnswerGroupNo());
       args.putInt(Constants.PARENT, parent);
-      mainActivity.changeFragment(MainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
+      oldMainActivity.changeFragment(OldMainActivity.QUESTIONNAIRE_DETAIL_FRAGMENT_ID, args, false);
     };
   }
 
@@ -121,6 +122,6 @@ public class GeneralQuestionnairesFragment extends
 
   @Override
   public int getFragmentId() {
-    return MainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID;
+    return OldMainActivity.GENERAL_QUESTIONNAIRES_FRAGMENT_ID;
   }
 }

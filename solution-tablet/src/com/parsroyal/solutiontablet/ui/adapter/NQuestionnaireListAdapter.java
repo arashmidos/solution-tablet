@@ -6,14 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.Logger;
 import java.util.List;
 
 /**
@@ -25,7 +25,8 @@ public class NQuestionnaireListAdapter extends BaseListAdapter<QuestionnaireList
   private QuestionnaireSo questionnaireSo;
   private QuestionnaireService questionnaireService;
 
-  public NQuestionnaireListAdapter(MainActivity context, List<QuestionnaireListModel> dataModel) {
+  public NQuestionnaireListAdapter(OldMainActivity context,
+      List<QuestionnaireListModel> dataModel) {
     super(context, dataModel);
     this.questionnaireService = new QuestionnaireServiceImpl(context);
     this.context = context;
@@ -64,7 +65,8 @@ public class NQuestionnaireListAdapter extends BaseListAdapter<QuestionnaireList
 
       return convertView;
     } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in NQuestionaireListAdapter.getView " + e.getMessage());
+      Logger
+          .sendError("UI Exception", "Error in NQuestionaireListAdapter.getView " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       return null;
     }

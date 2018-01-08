@@ -4,15 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.PaymentDao;
+import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.data.searchobject.PaymentSO;
-import com.parsroyal.solutiontablet.util.Empty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +68,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {
+    return new String[]{
         Payment.COL_ID,
         Payment.COL_CUSTOMER_BACKEND_ID,
         Payment.COL_VISIT_BACKEND_ID,
@@ -88,7 +88,6 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         Payment.COL_TRACKING_NO,
         Payment.COL_CHEQUE_OWNER
     };
-    return projection;
   }
 
   @Override
@@ -131,46 +130,11 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
     return payment;
   }
 
-  @Override
-  public List<PaymentListModel> getAllPaymentListModelByCustomerIdWithConstraint(
-      Long customerBackendId, String constraint) {
-    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
-    SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String[] projection = {Payment.COL_ID, Payment.COL_AMOUNT, Payment.COL_CREATE_DATE_TIME,
-        Payment.COL_PAYMENT_TYPE_ID, Payment.COL_CUSTOMER_BACKEND_ID};
-    String selection = " " + Payment.COL_CUSTOMER_BACKEND_ID + " = ? ";
-    String[] args = {String.valueOf(customerBackendId)};
-    Cursor cursor = null;
-    if (Empty.isNotEmpty(constraint)) {
-//            selection = selection + " and ( " +
-//                    Payment.COL_FULL_NAME + " like ? or " + Customer.COL_ADDRESS + " like ? or " +
-//                    Customer.COL_PHONE_NUMBER + " like ? or " + Customer.COL_CELL_PHONE + " like ? or " + Customer.COL_CODE + " like ? )";
-//            constraint = "%" + constraint + "%";
-//            String[] args2 = {String.valueOf(visitLineId), constraint, constraint, constraint, constraint, constraint};
-//            cursor = db.query(getTableName(), projection, selection, args2, null, null, null);
-    } else {
-      cursor = db.query(getTableName(), projection, selection, args, null, null, null);
-    }
-
-    List<PaymentListModel> entities = new ArrayList<>();
-    while (cursor.moveToNext()) {
-      entities.add(createListModelFromCursor(cursor, true));
-    }
-    cursor.close();
-    return entities;
-  }
-
-  private PaymentListModel createListModelFromCursor(Cursor cursor, boolean simpleModel) {
-    PaymentListModel paymentListModel = new PaymentListModel();
-    paymentListModel.setPrimaryKey(cursor.getLong(0));
-    paymentListModel.setAmount(String.valueOf(cursor.getLong(1)));
-    paymentListModel.setDate(cursor.getString(2));
-    paymentListModel.setType(cursor.getString(3));
-    paymentListModel.setCustomerBackendId(cursor.getLong(4));
-    if (!simpleModel) {
-      paymentListModel.setCustomerFullName(cursor.getString(5));
-    }
-    return paymentListModel;
+  private PaymentListModel createListModelFromCursor(Cursor cursor) {
+    return new PaymentListModel(cursor.getLong(0),
+        String.valueOf(cursor.getLong(1)), cursor.getString(2), cursor.getString(3),
+        cursor.getLong(4), cursor.getString(5), cursor.getLong(6), cursor.getString(7),
+        cursor.getString(8));
   }
 
   @Override
@@ -192,19 +156,21 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
   }
 
   @Override
-  public List<Payment> findPaymentByCustomerId(Long customerID) {
+  public List<Payment> findPaymentsByVisitId(Long visitId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String selection = Payment.COL_CUSTOMER_BACKEND_ID + " = ? ";
-    String[] args = {String.valueOf(customerID)};
+    String selection = Payment.COL_VISIT_BACKEND_ID + " = ? AND " + Payment.COL_STATUS + " = ?";
+    String[] args = {String.valueOf(visitId), String.valueOf(SendStatus.NEW.getId())};
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
 
-    List<Payment> payments = new ArrayList<>();
+    List<Payment> paymentList = new ArrayList<>();
+
     while (cursor.moveToNext()) {
-      payments.add(createEntityFromCursor(cursor));
+      paymentList.add(createEntityFromCursor(cursor));
     }
+
     cursor.close();
-    return payments;
+    return paymentList;
   }
 
   @Override
@@ -212,37 +178,51 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String[] projection = {
-        "p." + Payment.COL_ID,
+        "DISTINCT p." + Payment.COL_ID,
         "p." + Payment.COL_AMOUNT,
         "p." + Payment.COL_CREATE_DATE_TIME,
         "p." + Payment.COL_PAYMENT_TYPE_ID,
         "p." + Payment.COL_CUSTOMER_BACKEND_ID,
-        "cu." + Customer.COL_FULL_NAME};
+        "cu." + Customer.COL_FULL_NAME,//5
+        "p." + Payment.COL_STATUS,
+        "bi." + BaseInfo.COL_TITLE,
+        "p." + Payment.COL_CHEQUE_BRANCH
+    };
 
-    String selection =
-        " " + "p." + Payment.COL_CUSTOMER_BACKEND_ID + " = ? and " + "p." + Payment.COL_STATUS
-            + " = ? ";
-    String[] args = {String.valueOf(paymentSO.getCustomerBackendId()),
-        String.valueOf(paymentSO.getSent())};
-    //If it's a global search
-    if (paymentSO.getCustomerBackendId() == null || paymentSO.getCustomerBackendId() == -1) {
-      Log.d("Payment.SearchAll", "Done");
-      selection = " p." + Payment.COL_STATUS + " = ? ";
-      args = new String[1];
-      args[0] = String.valueOf(paymentSO.getSent());
+    List<String> argsList = new ArrayList<>();
+
+    String selection = " 1=1 ";
+
+    if (paymentSO.getCustomerBackendId() != -1L) {
+      selection = selection + " AND p." + Payment.COL_CUSTOMER_BACKEND_ID + " = ? ";
+      argsList.add(String.valueOf(paymentSO.getCustomerBackendId()));
     }
+    if (paymentSO.getStatus().equals(SendStatus.NEW.getId())) {
+      selection =
+          selection + " AND (p." + Payment.COL_STATUS + " = ? OR p." + Payment.COL_STATUS + " = ?)";
+      argsList.add(String.valueOf(SendStatus.NEW.getId()));
+      argsList.add(String.valueOf(SendStatus.SENT.getId()));
+    } else {
+      selection =
+          selection + " AND p." + Payment.COL_STATUS + " = ? ";
+      argsList.add(String.valueOf(paymentSO.getStatus()));
+    }
+
+    String[] args = {};
 
     String table = getTableName() + " p " +
         " INNER JOIN " + Customer.TABLE_NAME + " cu on p." + Payment.COL_CUSTOMER_BACKEND_ID +
-        " = cu." + Customer.COL_BACKEND_ID;
+        " = cu." + Customer.COL_BACKEND_ID
+        + " LEFT OUTER JOIN " + BaseInfo.TABLE_NAME + " bi on p." + Payment.COL_CHEQUE_BANK +
+        " = bi." + BaseInfo.COL_BACKEND_ID + " AND bi." + BaseInfo.COL_TYPE + " = "
+        + BaseInfoTypes.BANK_NAME_TYPE.getId();
 
-    String groupBy = " p." + Payment.COL_ID;
-
-    Cursor cursor = db.query(table, projection, selection, args, groupBy, null, null);
+    Cursor cursor = db
+        .query(table, projection, selection, argsList.toArray(args), null, null, null);
 
     List<PaymentListModel> entities = new ArrayList<>();
     while (cursor.moveToNext()) {
-      entities.add(createListModelFromCursor(cursor, false));
+      entities.add(createListModelFromCursor(cursor));
     }
     cursor.close();
     return entities;

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -38,36 +39,44 @@ public class ServiceGenerator {
 
   public static <S> S createService(Class<S> serviceClass) {
 
-    String username = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
-    String password = settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD);
+//    String username = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
+//    String password = settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD);
 
-    return createService(serviceClass, username, password);
+    return createService(serviceClass, null, null);
   }
 
   public static <S> S createService(Class<S> serviceClass, String username, String password) {
-    String authToken = Credentials.basic(username, password);
+    String authToken = null;
+    if (Empty.isNotEmpty(username) && Empty.isNotEmpty(password)) {
+      authToken = Credentials.basic(username, password);
+    }
     return createService(serviceClass, authToken);
   }
 
   public static <S> S createService(Class<S> serviceClass, final String authToken) {
+    AuthenticationInterceptor interceptor;
     if (!TextUtils.isEmpty(authToken)) {
-      AuthenticationInterceptor interceptor =
-          new AuthenticationInterceptor(authToken);
-
-      if (!httpClient.interceptors().contains(interceptor)) {
-        httpClient.addInterceptor(interceptor);
-      }
-      if (BuildConfig.DEBUG) {
-        httpClient.addInterceptor(logging);
-      }
-
-      String baseUrl = new SettingServiceImpl(SolutionTabletApplication.getInstance())
-          .getSettingValue(ApplicationKeys.SETTING_SERVER_ADDRESS_1);
-      builder = new Retrofit.Builder().baseUrl(baseUrl + "/");
-      builder.addConverterFactory(GsonConverterFactory.create());
-      builder.client(httpClient.build());
-      retrofit = builder.build();
+      interceptor = new AuthenticationInterceptor(authToken);
+    } else {
+      interceptor = new AuthenticationInterceptor(null);
     }
+    httpClient.interceptors().clear();
+//    if (!httpClient.interceptors().contains(interceptor)) {
+      httpClient.addInterceptor(interceptor);
+//    }
+    if (BuildConfig.DEBUG) {
+      httpClient.addInterceptor(logging);
+    }
+
+    String baseUrl = new SettingServiceImpl(SolutionTabletApplication.getInstance())
+        .getSettingValue(ApplicationKeys.BACKEND_URI);
+    if (Empty.isEmpty(baseUrl)) {
+      baseUrl = "http://www.google.com";
+    }
+    builder = new Retrofit.Builder().baseUrl(baseUrl + "/");
+    builder.addConverterFactory(GsonConverterFactory.create());
+    builder.client(httpClient.build());
+    retrofit = builder.build();
 
     return retrofit.create(serviceClass);
   }
@@ -86,9 +95,15 @@ public class ServiceGenerator {
 
       String encodedRequest = original.url().toString();
       encodedRequest = encodedRequest.replace("|", "%7c");
-      Request.Builder builder = original.newBuilder()
-          .header("Authorization", authToken);
 
+      Request.Builder builder;
+      if (Empty.isEmpty(authToken)) {
+        String token = new SettingServiceImpl(
+            SolutionTabletApplication.getInstance()).getSettingValue(ApplicationKeys.TOKEN);
+        builder = original.newBuilder().addHeader("Authorization", "Bearer " + token);
+      } else {
+        builder = original.newBuilder().header("Authorization", authToken);
+      }
       Request request = builder.url(encodedRequest).build();
       return chain.proceed(request);
     }

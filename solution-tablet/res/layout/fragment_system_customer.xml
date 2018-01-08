@@ -1,0 +1,101 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/features_background"
+    tools:context="com.parsroyal.solutiontablet.ui.fragment.SystemCustomerFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/divider">
+    </android.support.v7.widget.RecyclerView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_customer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/divider"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add_24_dp_white"
+        app:backgroundTint="@color/primary_dark"
+        app:borderWidth="0dp"
+        app:fabSize="normal"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/bottom_bar"
+        android:background="@color/navigation_drawer_divider"/>
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/sort_lay"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4.8"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/sort_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+              style="@style/IranSans"
+                android:layout_marginRight="10dp"
+                android:text="@string/sort"
+                android:textColor="@color/login_gray"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/sort_tv"
+                android:src="@drawable/ic_sort_black_18dp"
+                android:tint="@color/login_gray"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_margin="5dp"
+            android:background="@color/features_background"/>
+
+        <RelativeLayout
+            android:id="@+id/filter_lay"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4.8"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/filter_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="@string/filter"
+              style="@style/IranSans"
+              android:textColor="@color/login_gray"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/filter_tv"
+                android:src="@drawable/ic_filter_list_black_18dp"
+                android:tint="@color/login_gray"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -29,7 +29,6 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -148,8 +147,13 @@ public class LocationUpdatesService extends Service {
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     Log.i(TAG, "Service started");
-    boolean startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
-        false);
+
+    boolean startedFromNotification = false;
+    if (Empty.isNotEmpty(intent)) {
+
+      startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
+          false);
+    }
 
     // We got here because the user decided to remove location updates from the notification.
     if (startedFromNotification) {
@@ -203,7 +207,13 @@ public class LocationUpdatesService extends Service {
 
   @Override
   public void onDestroy() {
-    serviceHandler.removeCallbacksAndMessages(null);
+    try {
+      if (serviceHandler != null) {
+        serviceHandler.removeCallbacksAndMessages(null);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -242,6 +252,9 @@ public class LocationUpdatesService extends Service {
     } catch (SecurityException unlikely) {
       GPSUtil.setRequestingLocationUpdates(this, true);
       Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.e(TAG, "Location service couldn't finish successfully!");
     }
   }
 
@@ -282,10 +295,6 @@ public class LocationUpdatesService extends Service {
   private void onNewLocation(Location location) {
     Log.i(TAG, "New location in service: " + location);
 
-    if (Empty.isNotEmpty(location)) {
-      EventBus.getDefault().post(new GPSEvent(location));
-    }
-
     if (isAccepted(location)) {
       Log.i(TAG, "location accepted");
 
@@ -308,7 +317,8 @@ public class LocationUpdatesService extends Service {
 
   private boolean isAccepted(Location location) {
     //Accept first position what ever it is
-    if (Empty.isEmpty(lastLocation) && Empty.isNotEmpty(location)) {
+    if (Empty.isEmpty(lastLocation) && Empty.isNotEmpty(location)
+        && location.getLongitude() != 0.0) {
       return true;
     }
     if ((Empty.isEmpty(location) || location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER
@@ -319,8 +329,7 @@ public class LocationUpdatesService extends Service {
     if (Empty.isNotEmpty(lastLocation)) {
 
       float distance = LocationUtil.distanceBetween(lastLocation, location);
-      if (distance
-          > MAX_ACCEPTED_DISTANCE_IN_METER /*|| distance < MIN_ACCEPTED_DISTANCE_IN_METER*/) {
+      if (distance > MAX_ACCEPTED_DISTANCE_IN_METER) {
         long lastTime = lastLocation.getTime();
         long currentTime = location.getTime();
 

@@ -39,153 +39,131 @@
     android:background="@drawable/rounded_button"
     android:src="@drawable/ic_action_filter" />
 
-  <RelativeLayout
+  <LinearLayout
     android:id="@+id/filter_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white30"
+    android:orientation="vertical"
     android:visibility="gone">
 
-    <Button
-      android:id="@+id/cancel_btn"
-      android:layout_width="wrap_content"
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginStart="20dp"
-      android:layout_marginEnd="20dp"
-      android:layout_marginLeft="20dp"
-      android:layout_marginRight="20dp"
-      android:layout_alignBaseline="@+id/filter_btn"
-      android:layout_alignBottom="@+id/filter_btn"
-      android:layout_alignTop="@+id/fromDate"
-      android:layout_toEndOf="@+id/view2"
-      android:layout_toRightOf="@+id/view2"
-      android:paddingLeft="35dp"
-      android:paddingRight="35dp"
-      android:text="@string/cancel_btn" />
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:gravity="right"
+      android:orientation="horizontal">
+      <EditText
+        android:id="@+id/fromDate"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:focusable="false"
+        android:gravity="center"
+        android:hint="--" />
 
-    <Button
-      android:id="@+id/filter_btn"
-      android:layout_width="wrap_content"
+      <TextView
+        android:id="@+id/textView42"
+        style="@style/TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sinse_date"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignBaseline="@+id/show_customers"
-      android:layout_alignBottom="@+id/show_customers"
-      android:layout_toEndOf="@+id/cancel_btn"
-      android:layout_toRightOf="@+id/cancel_btn"
-      android:paddingLeft="35dp"
-      android:paddingRight="35dp"
-      android:text="@string/filter" />
+      android:layout_marginTop="20dp"
+      android:layout_marginBottom="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:gravity="right"
+      android:orientation="horizontal">
+      <CheckBox
+        android:id="@+id/show_customers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:checked="true"
+        android:text="@string/show_customers" />
 
-    <CheckBox
-      android:id="@+id/show_customers"
-      android:layout_width="wrap_content"
+      <CheckBox
+        android:id="@+id/show_track"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:checked="true"
+        android:text="@string/show_route" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignBaseline="@+id/show_track"
-      android:layout_alignBottom="@+id/show_track"
-      android:layout_alignEnd="@+id/show_waypoints"
-      android:layout_alignLeft="@id/show_waypoints"
-      android:layout_alignRight="@+id/show_waypoints"
-      android:paddingLeft="5dp"
-      android:paddingRight="5dp"
-      android:checked="true"
-      android:text="@string/show_customers" />
-
-    <CheckBox
-      android:id="@+id/show_track"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignBaseline="@+id/fromDate"
-      android:layout_alignBottom="@+id/fromDate"
-      android:layout_alignLeft="@+id/show_snapped_track"
-      android:layout_alignRight="@+id/show_snapped_track"
-      android:paddingLeft="5dp"
-      android:paddingRight="5dp"
-      android:checked="true"
-      android:text="@string/show_route" />
-
-    <CheckBox
-      android:id="@+id/show_snapped_track"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="40dp"
-      android:layout_marginRight="40dp"
-      android:layout_alignBaseline="@+id/toDate"
-      android:layout_alignBottom="@+id/toDate"
-      android:layout_toLeftOf="@+id/toDate"
-      android:paddingLeft="5dp"
-      android:paddingRight="5dp"
-      android:text="@string/show_optimized_route" />
-
-    <CheckBox
-      android:id="@+id/show_waypoints"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginRight="30dp"
-      android:layout_alignBaseline="@+id/show_snapped_track"
-      android:layout_alignBottom="@+id/show_snapped_track"
-      android:layout_toLeftOf="@id/show_snapped_track"
-      android:paddingLeft="5dp"
-      android:paddingRight="5dp"
-      android:text="@string/show_waypoints" />
-
-    <View
-      android:id="@+id/view2"
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1" />
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:gravity="right">
+      <!--<CheckBox-->
+        <!--android:id="@+id/show_snapped_track"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingLeft="5dp"-->
+        <!--android:paddingRight="5dp"-->
+        <!--android:text="@string/show_optimized_route" />-->
+      <CheckBox
+        android:id="@+id/show_waypoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/show_waypoints" />
+    </LinearLayout>
 
     <EditText
       android:id="@+id/toDate"
       android:layout_width="110dp"
       android:layout_height="wrap_content"
-      android:layout_alignLeft="@+id/fromDate"
-      android:layout_alignStart="@+id/fromDate"
-      android:layout_below="@+id/filter_btn"
-      android:layout_gravity="center"
       android:focusable="false"
       android:gravity="center"
-      android:hint="--" />
+      android:hint="--"
+      android:visibility="gone" />
 
     <TextView
       android:id="@+id/textView43"
       style="@style/TextView.Caption"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignBaseline="@+id/toDate"
-      android:layout_alignBottom="@+id/toDate"
-      android:layout_alignLeft="@+id/textView42"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      android:layout_alignStart="@+id/textView42"
-      android:paddingRight="10dp"
       android:text="@string/toDate"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:visibility="gone" />
 
-    <EditText
-      android:id="@+id/fromDate"
-      android:layout_width="110dp"
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="7dp"
-      android:layout_marginLeft="10dp"
-      android:layout_marginRight="10dp"
-      android:layout_gravity="center"
-      android:layout_toLeftOf="@+id/textView42"
-      android:focusable="false"
+      android:layout_marginTop="16dp"
+      android:layout_marginBottom="16dp"
       android:gravity="center"
-      android:hint="--" />
+      android:orientation="horizontal">
+      <Button
+        android:id="@+id/cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/cancel_btn" />
 
-    <TextView
-      android:id="@+id/textView42"
-      style="@style/TextView.Caption"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignBaseline="@+id/fromDate"
-      android:layout_alignBottom="@+id/fromDate"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      android:paddingRight="10dp"
-      android:text="@string/sinse_date"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
-
-  </RelativeLayout>
+      <Button
+        android:id="@+id/filter_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/filter" />
+    </LinearLayout>
+  </LinearLayout>
 
 </RelativeLayout>

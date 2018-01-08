@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/features_background"
+  tools:context="com.parsroyal.solutiontablet.ui.fragment.SystemCustomerFragment">
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="90dp"
+    android:layout_marginEnd="90dp"
+    android:layout_marginLeft="90dp"
+    android:layout_marginRight="90dp"
+    android:layout_above="@id/divider" />
+
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/fab_add_customer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:layout_above="@id/divider"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:src="@drawable/ic_add_24_dp_white"
+    app:backgroundTint="@color/primary_dark"
+    app:borderWidth="0dp"
+    app:fabSize="normal" />
+
+</RelativeLayout>

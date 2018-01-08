@@ -1,5 +1,9 @@
 package com.parsroyal.solutiontablet.constants;
 
+import android.content.Context;
+import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.ResourceUtil;
+
 /**
  * Created by Arash on 2016-08-13
  */
@@ -14,6 +18,15 @@ public enum SendStatus {
   SendStatus(Long id, String title) {
     this.id = id;
     this.title = title;
+  }
+
+  private static SendStatus findById(Long statusId) {
+    for (SendStatus sendStatus : SendStatus.values()) {
+      if (sendStatus.getId().equals(statusId)) {
+        return sendStatus;
+      }
+    }
+    return null;
   }
 
   public Long getId() {

@@ -1,8 +1,6 @@
 package com.parsroyal.solutiontablet.data.entity;
 
-import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
-import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
-import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.DateUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -54,6 +52,18 @@ public class SaleOrderItem extends BaseEntity<Long> {
   private Long invoiceBackendId;
   private Long rejectBackendId;
   private Long rejectItemBackendId;
+
+  public SaleOrderItem() {
+  }
+
+  public SaleOrderItem(Long goodsBackendId, Long saleOrderId, Long invoiceBackendId) {
+    this.goodsBackendId = goodsBackendId;
+    this.goodsCount = 0L;
+    this.saleOrderId = saleOrderId;
+    this.invoiceBackendId = invoiceBackendId;
+    this.createDateTime = DateUtil.getCurrentGregorianFullWithTimeDate();
+    this.updateDateTime = DateUtil.getCurrentGregorianFullWithTimeDate();
+  }
 
   public Long getId() {
     return id;

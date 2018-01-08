@@ -14,10 +14,18 @@ public enum StatusCodes {
   INVALID_DATA(1002, R.string.message_exception_in_data_transfer),
   NETWORK_ERROR(1003,
       R.string.com_parsroyal_solutiontablet_exception_BackendIsNotReachableException),
-  DATS_STORE_ERROR(1004, R.string.message_exception_in_data_store),
+  DATA_STORE_ERROR(1004, R.string.message_exception_in_data_store),
+  NO_DATA_ERROR(1005, R.string.message_no_data_received),
+  UPDATE(1006, R.string.data_transfered_successfully),
   SERVER_ERROR(1100, R.string.com_parsroyal_solutiontablet_exception_InternalServerError),
   PERMISSION_DENIED(2001, R.string.permission_denied_explanation),
-  NEW_GPS_LOCATION(2002, R.string.message_new_gps_location);
+  NEW_GPS_LOCATION(2002, R.string.message_new_gps_location),
+  ACTION_ADD_ORDER(901, R.string.register_order),
+  ACTION_ADD_PAYMENT(902, R.string.register_payment),
+  ACTION_EXIT_VISIT(903, R.string.exit_end_visit),
+  ACTION_START_CAMERA(904, R.string.add_picture),
+  ACTION_REFRESH_DATA(905, R.string.refresh_data),
+  ;
 
   private int statusCode;
   private int message;

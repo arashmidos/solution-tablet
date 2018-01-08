@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+  <EditText
+    android:id="@+id/simple_numeric_edt"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:paddingBottom="16dp"
+    android:gravity="right"
+    android:digits="1234567890,۰۱۲۳۴۵۶۷۸۹"
+    android:hint="@string/enter_answer_here"
+    android:inputType="numberDecimal"
+    android:textColor="@color/black"
+    android:textColorHint="@color/black_35"
+    android:textSize="18sp" />
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" />
+</LinearLayout>

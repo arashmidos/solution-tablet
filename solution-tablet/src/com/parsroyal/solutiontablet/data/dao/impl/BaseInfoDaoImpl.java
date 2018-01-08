@@ -8,6 +8,7 @@ import com.parsroyal.solutiontablet.data.dao.BaseInfoDao;
 import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
+import com.parsroyal.solutiontablet.util.Empty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,13 +69,33 @@ public class BaseInfoDaoImpl extends AbstractDao<BaseInfo, Long> implements Base
   }
 
   @Override
-  public List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long typeId) {
+  public List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long typeId, Long backendId) {
     String selection = " " + BaseInfo.COL_TYPE + " = ?";
     String[] args = {String.valueOf(typeId)};
+    if (Empty.isNotEmpty(backendId)) {
+      selection = selection + " AND " + BaseInfo.COL_BACKEND_ID + " = ? ";
+      args = new String[]{String.valueOf(typeId), String.valueOf(backendId)};
+    }
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
-    List<LabelValue> entities = new ArrayList<LabelValue>();
+    List<LabelValue> entities = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      entities.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
+    }
+    cursor.close();
+    return entities;
+  }
+
+  @Override
+  public List<LabelValue> search(Long type, String constraint) {
+    String selection = " " + BaseInfo.COL_TYPE + " = ? AND " + BaseInfo.COL_TITLE + " LIKE ? ";
+    String[] args = {String.valueOf(type), "%" + constraint + "%"};
+
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+    List<LabelValue> entities = new ArrayList<>();
     while (cursor.moveToNext()) {
       entities.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
     }

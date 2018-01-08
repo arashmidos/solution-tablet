@@ -1,0 +1,121 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context="com.parsroyal.solutiontablet.ui.fragment.OrderFragment"
+  tools:ignore="contentDescription">
+
+  <android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="3dp">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      android:background="@android:color/white"
+      android:orientation="horizontal">
+
+      <ImageView
+        android:id="@+id/search_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginLeft="19dp"
+        android:layout_gravity="start|center"
+        android:src="@drawable/ic_search"
+        android:tint="@color/login_gray" />
+
+      <EditText
+        android:id="@+id/search_edt"
+        style="@style/IranSans"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@android:color/transparent"
+        android:gravity="center|right"
+        android:hint="@string/search_goods_hint"
+        android:imeOptions="actionSearch"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColorHint="@color/login_gray"
+        android:textSize="14sp" />
+
+    </LinearLayout>
+  </android.support.design.widget.AppBarLayout>
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:visibility="visible" />
+
+  <LinearLayout
+    android:id="@+id/no_good_lay"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="50dp"
+      android:layout_marginBottom="25dp"
+      android:layout_gravity="center_vertical|top"
+      android:gravity="center"
+      android:src="@drawable/im_product_not_found" />
+
+    <TextView
+      style="@style/IranSans"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:text="@string/no_good"
+      android:textColor="@color/login_gray"
+      android:textSize="14sp" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/bottom_bar"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/log_in_enter_bg"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <TextView
+      android:id="@+id/order_count_tv"
+      style="@style/IranSans"
+      android:layout_width="20dp"
+      android:layout_height="20dp"
+      android:gravity="center"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      tools:text="3" />
+
+    <TextView
+      android:id="@+id/bottom_bar_text"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:text="@string/order_goods"
+      android:textColor="@android:color/white"
+      android:textSize="14sp"
+      android:tint="@android:color/white" />
+
+    <ImageView
+      android:id="@+id/goods_cart_image"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/ic_cart_outline_black_18dp"
+      android:tint="@android:color/white" />
+
+  </LinearLayout>
+</LinearLayout>

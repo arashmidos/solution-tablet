@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@android:color/white"
+  android:orientation="vertical">
+
+  <ImageView
+    android:id="@+id/icon_img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentTop="true"
+    android:tint="@color/black_8a"/>
+
+  <TextView
+    android:id="@+id/title_tv"
+    style="@style/IranSans.Bold"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="16dp"
+    android:layout_alignParentTop="true"
+    android:layout_toLeftOf="@id/icon_img"
+    android:layout_toStartOf="@id/icon_img"
+    android:gravity="right"
+    android:textColor="@color/black_de"
+    android:textSize="@dimen/text_large"/>
+
+  <TextView
+    android:id="@+id/body_tv"
+    style="@style/IranSans"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_below="@id/title_tv"
+    android:gravity="right"
+    android:textSize="@dimen/text_normal"/>
+
+  <Button
+    android:id="@+id/positive_btn"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="36dp"
+    android:layout_marginTop="26dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_alignParentRight="true"
+    android:layout_below="@id/body_tv"
+    android:paddingStart="28dp"
+    android:paddingEnd="28dp"
+    android:paddingLeft="28dp"
+    android:paddingRight="28dp"
+    android:background="@drawable/get_data_background"
+    android:gravity="center"
+    android:textColor="@android:color/white"
+    android:textSize="14sp"/>
+
+  <TextView
+    android:id="@+id/negative_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="35dp"
+    android:layout_marginStart="40dp"
+    android:layout_marginLeft="40dp"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@id/body_tv"
+    android:textColor="@color/primary"
+    android:textSize="14sp"/>
+</RelativeLayout>

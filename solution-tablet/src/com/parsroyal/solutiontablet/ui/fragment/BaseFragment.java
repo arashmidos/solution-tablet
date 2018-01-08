@@ -19,11 +19,10 @@ public abstract class BaseFragment extends Fragment {
   }
 
   public void showProgressDialog(CharSequence message) {
-    if (this.progressDialog == null) {
-      this.progressDialog = new ProgressDialog(getActivity());
-      this.progressDialog.setIndeterminate(true);
-      this.progressDialog.setCancelable(Boolean.FALSE);
-    }
+    this.progressDialog = new ProgressDialog(getActivity());
+    this.progressDialog.setIndeterminate(true);
+    this.progressDialog.setCancelable(Boolean.FALSE);
+
     this.progressDialog.setIcon(R.drawable.ic_info_outline_24dp);
     this.progressDialog.setTitle(R.string.message_please_wait);
     this.progressDialog.setMessage(message);
@@ -43,8 +42,7 @@ public abstract class BaseFragment extends Fragment {
   }
 
   protected View getErrorPageView(LayoutInflater inflater) {
-    View view = inflater.inflate(R.layout.view_error_page, null);
-    return view;
+    return inflater.inflate(R.layout.view_error_page, null);
   }
 
   public String getFragmentTag() {

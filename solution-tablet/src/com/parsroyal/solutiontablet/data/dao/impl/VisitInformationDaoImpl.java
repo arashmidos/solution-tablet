@@ -4,11 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Location;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
@@ -103,15 +103,15 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
   }
 
   @Override
-  public void updateLocation(Long visitInformationId, Location location) {
+  public void updateLocation(Long visitInformationId, Double lat, Double lng) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     db.beginTransaction();
     String whereClause = VisitInformation.COL_ID + " = ?";
     String[] args = {String.valueOf(visitInformationId)};
     ContentValues contentValues = new ContentValues();
-    contentValues.put(VisitInformation.COL_X_LOCATION, location.getLatitude());
-    contentValues.put(VisitInformation.COL_Y_LOCATION, location.getLongitude());
+    contentValues.put(VisitInformation.COL_X_LOCATION, lat);
+    contentValues.put(VisitInformation.COL_Y_LOCATION, lng);
     db.update(getTableName(), contentValues, whereClause, args);
     db.setTransactionSuccessful();
     db.endTransaction();
@@ -135,11 +135,14 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
   }
 
   @Override
-  public List<VisitInformationDto> getAllVisitInformationDtoForSend() {
+  public List<VisitInformationDto> getAllVisitInformationDtoForSend(Long visitId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String selection = " " + VisitInformation.COL_VISIT_BACKEND_ID + " is null or "
-        + VisitInformation.COL_VISIT_BACKEND_ID + " = 0";
+    String selection = " (" + VisitInformation.COL_VISIT_BACKEND_ID + " is null or "
+        + VisitInformation.COL_VISIT_BACKEND_ID + " = 0) ";
+    if (Empty.isNotEmpty(visitId)) {
+      selection = selection + " AND " + VisitInformation.COL_ID + " = " + visitId;
+    }
     Cursor cursor = db.query(getTableName(), getProjection(), selection, null, null, null, null);
     List<VisitInformationDto> visitInformationList = new ArrayList<>();
     while (cursor.moveToNext()) {

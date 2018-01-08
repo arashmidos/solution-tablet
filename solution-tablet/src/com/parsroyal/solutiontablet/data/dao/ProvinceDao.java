@@ -10,4 +10,5 @@ import java.util.List;
 public interface ProvinceDao extends BaseDao<Province, Long> {
 
   List<LabelValue> getAllProvincesLabelValues();
+  List<LabelValue> searchProvincesLabelValues(String constraint);
 }

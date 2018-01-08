@@ -10,4 +10,5 @@ import java.util.List;
 public interface CityDao extends BaseDao<City, Long> {
 
   List<LabelValue> getAllCitiesLabelValuesForProvinceId(Long provinceId);
+  List<LabelValue> searchCitiesLabelValuesForProvinceId(Long provinceId,String constraint);
 }

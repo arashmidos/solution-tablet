@@ -14,11 +14,13 @@ import java.util.List;
  */
 public interface CustomerDao extends BaseDao<Customer, Long> {
 
-  List<Customer> retrieveAllNewCustomersForSend();
+  List<CustomerDto> retrieveAllNewCustomersForSend();
 
   List<Customer> retrieveAllNewCustomers();
 
   List<CustomerLocationDto> retrieveAllUpdatedCustomerLocationDto();
+
+  CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId);
 
   void deleteAllCustomersRelatedToVisitLines();
 

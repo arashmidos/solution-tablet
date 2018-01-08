@@ -1,0 +1,661 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:map="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/features_background"
+  android:baselineAligned="false"
+  android:orientation="horizontal"
+  tools:context="com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment"
+  tools:ignore="contentDescription">
+
+  <RelativeLayout
+    android:id="@+id/map_layout"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="0.6"
+    android:visibility="gone">
+    <com.google.android.gms.maps.MapView
+      android:id="@+id/map_item"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentTop="true"
+      map:liteMode="true"
+      map:mapType="none" />
+    <LinearLayout
+      android:id="@+id/map_toolbar"
+      android:layout_width="81dp"
+      android:layout_height="36dp"
+      android:layout_marginBottom="16dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:background="@color/white"
+      android:gravity="center_vertical"
+      android:orientation="horizontal">
+      <LinearLayout
+        android:id="@+id/edit_map_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <ImageView
+          android:id="@+id/edit_map"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="8dp"
+          android:src="@drawable/ic_map_edit_24dp"
+          android:tint="@color/black_10" />
+      </LinearLayout>
+      <View
+        android:layout_width="1dp"
+        android:layout_height="24dp"
+        android:background="@color/black_10" />
+      <LinearLayout
+        android:id="@+id/fullscreen_map_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <ImageView
+          android:id="@+id/fullscreen_map"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="8dp"
+          android:src="@drawable/ic_zoom_out_map"
+          android:tint="@color/black_10" />
+      </LinearLayout>
+
+    </LinearLayout>
+  </RelativeLayout>
+  <RelativeLayout
+    android:id="@+id/no_map_layout"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="0.6"
+    android:background="@color/features_background">
+    <View
+      android:id="@+id/center_view"
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_centerInParent="true" />
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_above="@id/center_view"
+      android:layout_centerHorizontal="true"
+      android:layout_centerVertical="true"
+      android:src="@drawable/ic_no_location_128_dp" />
+    <TextView
+      android:id="@+id/no_location_tv"
+      style="@style/IranSans"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:layout_below="@id/center_view"
+      android:gravity="center"
+      android:text="@string/no_location"
+      android:textColor="@color/gray_75"
+      android:textSize="14sp" />
+    <Button
+      android:id="@+id/register_location_btn"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="23dp"
+      android:layout_below="@id/no_location_tv"
+      android:layout_centerHorizontal="true"
+      android:paddingTop="9dp"
+      android:paddingBottom="11dp"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:background="@color/log_in_enter_bg"
+      android:gravity="center"
+      android:text="@string/register_location"
+      android:textColor="@color/white"
+      android:textSize="14sp" />
+  </RelativeLayout>
+
+  <ScrollView
+    android:id="@+id/item_bar_lay"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight=".4"
+    android:fillViewport="true">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <RelativeLayout
+        android:id="@+id/store_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white">
+
+        <ImageView
+          android:id="@+id/store_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_store"
+          android:tint="@color/login_gray" />
+
+        <ImageView
+          android:id="@+id/drop_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="20sp"
+          android:layout_marginLeft="20dp"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_arrow_drop_down"
+          android:tint="@color/primary" />
+        <TextView
+          android:id="@+id/show_more_tv"
+          style="@style/IranSans.Medium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignTop="@+id/store_tv"
+          android:layout_toEndOf="@+id/drop_img"
+          android:layout_toRightOf="@+id/drop_img"
+          android:ellipsize="end"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text="@string/show_more"
+          android:textColor="@color/primary"
+          android:textSize="12sp" />
+        <TextView
+          android:id="@+id/store_tv"
+          style="@style/IranSans"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toEndOf="@id/show_more_tv"
+          android:layout_toLeftOf="@id/store_img"
+          android:layout_toRightOf="@id/show_more_tv"
+          android:layout_toStartOf="@id/store_img"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:textColor="@color/black_85"
+          android:textSize="14sp"
+          tools:text="سوپر رفاه" />
+      </RelativeLayout>
+
+      <LinearLayout
+        android:id="@+id/customer_detail_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+          android:layout_width="56dp"
+          android:layout_height="1dp"
+          android:layout_gravity="end"
+          android:background="@android:color/white" />
+
+        <RelativeLayout
+          android:id="@+id/location_lay"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@android:color/white">
+
+          <ImageView
+            android:id="@+id/location_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_location_on_24_dp"
+            android:tint="@color/login_gray" />
+
+          <TextView
+            android:id="@+id/location_tv"
+            style="@style/IranSans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="19dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="19dp"
+            android:layout_toLeftOf="@id/location_img"
+            android:layout_toStartOf="@id/location_img"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/black_85"
+            android:textSize="14sp"
+            tools:text="تهران/میدان هروی" />
+        </RelativeLayout>
+
+        <View
+          android:layout_width="56dp"
+          android:layout_height="1dp"
+          android:layout_gravity="end"
+          android:background="@android:color/white" />
+
+
+        <RelativeLayout
+          android:id="@+id/mobile_lay"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@android:color/white">
+
+          <ImageView
+            android:id="@+id/mobile_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_phone_android_24dp"
+            android:tint="@color/login_gray" />
+
+          <TextView
+            android:id="@+id/mobile_tv"
+            style="@style/IranSans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="19dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="19dp"
+            android:layout_toLeftOf="@id/mobile_img"
+            android:layout_toStartOf="@id/mobile_img"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/black_85"
+            android:textSize="14sp"
+            tools:text="09383668885" />
+        </RelativeLayout>
+
+        <View
+          android:layout_width="56dp"
+          android:layout_height="1dp"
+          android:layout_gravity="end"
+          android:background="@android:color/white" />
+
+        <RelativeLayout
+          android:id="@+id/phone_lay"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@android:color/white">
+
+          <ImageView
+            android:id="@+id/phone_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:rotation="270"
+            android:src="@drawable/ic_phone_24dp"
+            android:tint="@color/login_gray" />
+
+          <TextView
+            android:id="@+id/phone_tv"
+            style="@style/IranSans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="19dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="19dp"
+            android:layout_toLeftOf="@id/phone_img"
+            android:layout_toStartOf="@id/phone_img"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/black_85"
+            android:textSize="14sp"
+            tools:text="تهران/میدان هروی" />
+        </RelativeLayout>
+      </LinearLayout>
+
+      <RelativeLayout
+        android:id="@+id/register_order_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white">
+
+        <ImageView
+          android:id="@+id/register_order_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_add_24dp"
+          android:tint="@color/register_order" />
+
+        <TextView
+          android:id="@+id/add_order_tv"
+          style="@style/IranSans.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toLeftOf="@id/register_order_img"
+          android:layout_toStartOf="@id/register_order_img"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text="@string/register_order"
+          android:textColor="@color/black_85"
+          android:textSize="14sp" />
+      </RelativeLayout>
+
+      <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_gravity="end"
+        android:background="@android:color/white" />
+      <RelativeLayout
+        android:id="@+id/register_return_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <ImageView
+          android:id="@+id/register_return_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_return_24_dp"
+          android:tint="@color/register_return" />
+
+        <TextView
+          style="@style/IranSans.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toLeftOf="@id/register_return_img"
+          android:layout_toStartOf="@id/register_return_img"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text="@string/register_return"
+          android:textColor="@color/black_85"
+          android:textSize="14sp" />
+      </RelativeLayout>
+
+      <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_gravity="end"
+        android:background="@android:color/white" />
+      <RelativeLayout
+        android:id="@+id/register_payment_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <ImageView
+          android:id="@+id/register_payment_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_attach_money_24dp"
+          android:tint="@color/register_payment" />
+
+        <TextView
+          style="@style/IranSans.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toLeftOf="@id/register_payment_img"
+          android:layout_toStartOf="@id/register_payment_img"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text="@string/register_payment"
+          android:textColor="@color/black_85"
+          android:textSize="14sp" />
+      </RelativeLayout>
+
+      <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_gravity="end"
+        android:background="@android:color/white" />
+
+      <RelativeLayout
+        android:id="@+id/register_questionnaire_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <ImageView
+          android:id="@+id/register_questionnaire_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_assignment_24dp"
+          android:tint="@color/blue_19" />
+
+        <TextView
+          style="@style/IranSans.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toLeftOf="@id/register_questionnaire_img"
+          android:layout_toStartOf="@id/register_questionnaire_img"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text="@string/register_questionnaire"
+          android:textColor="@color/black_85"
+          android:textSize="14sp" />
+      </RelativeLayout>
+
+      <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_gravity="end"
+        android:background="@android:color/white" />
+
+      <RelativeLayout
+        android:id="@+id/register_image_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <ImageView
+          android:id="@+id/register_image_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_camera_alt_24"
+          android:tint="@color/register_image" />
+
+        <TextView
+          style="@style/IranSans.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toLeftOf="@id/register_image_img"
+          android:layout_toStartOf="@id/register_image_img"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text="@string/register_image"
+          android:textColor="@color/black_85"
+          android:textSize="14sp" />
+      </RelativeLayout>
+
+      <RelativeLayout
+        android:id="@+id/no_activity_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white">
+
+        <ImageView
+          android:id="@+id/no_activity_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_non_action_24_dp" />
+
+        <TextView
+          style="@style/IranSans.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toLeftOf="@id/no_activity_img"
+          android:layout_toStartOf="@id/no_activity_img"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text="@string/add_none"
+          android:textColor="@color/black_85"
+          android:textSize="14sp" />
+      </RelativeLayout>
+
+      <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_gravity="end"
+        android:background="@android:color/white" />
+
+      <RelativeLayout
+        android:id="@+id/end_and_exit_visit_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white">
+
+        <ImageView
+          android:id="@+id/end_and_exit_visit_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_run_24_dp" />
+
+        <TextView
+          style="@style/IranSans.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="19dp"
+          android:layout_toLeftOf="@id/end_and_exit_visit_img"
+          android:layout_toStartOf="@id/end_and_exit_visit_img"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text="@string/exit_end_visit"
+          android:textColor="@color/black_85"
+          android:textSize="14sp" />
+      </RelativeLayout>
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white" />
+    </LinearLayout>
+  </ScrollView>
+</LinearLayout>

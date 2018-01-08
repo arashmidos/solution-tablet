@@ -2,14 +2,17 @@ package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.GoodsDao;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderDao;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderItemDao;
+import com.parsroyal.solutiontablet.data.dao.VisitInformationDetailDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.GoodsDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderItemDaoImpl;
+import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDetailDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
@@ -48,7 +51,13 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
   @Override
   public List<SaleOrderListModel> findOrders(SaleOrderSO saleOrderSO) {
-    return saleOrderDao.searchForOrders(saleOrderSO);
+
+    List<SaleOrderListModel> orders = saleOrderDao.searchForOrders(saleOrderSO);
+    for (int i = 0; i < orders.size(); i++) {
+      SaleOrderListModel order = orders.get(i);
+      order.setOrderCount(saleOrderItemDao.getAllOrderItemsDtoByOrderId(order.getId()).size());
+    }
+    return orders;
   }
 
   @Override
@@ -154,9 +163,12 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     SaleOrder order = createOrderFromDto(orderDto);
 
     if (Empty.isEmpty(order.getId())) {
+      order.setCreateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
+      order.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
       Long newId = saleOrderDao.create(order);
       order.setId(newId);
     } else {
+      order.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
       saleOrderDao.update(order);
     }
 
@@ -215,6 +227,38 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     }
   }
 
+  @Override
+  public void deleteOrder(Long orderId) {
+    SaleOrder order = saleOrderDao.retrieve(orderId);
+    if (Empty.isEmpty(order)) {
+      return;
+    }
+    //Delete order items
+    List<SaleOrderItemDto> orderItems = saleOrderItemDao
+        .getAllOrderItemsDtoByOrderId(order.getId());
+
+    boolean isReject = SaleOrderStatus.REJECTED.getId().equals(order.getStatus());
+    for (SaleOrderItemDto saleOrderItemDto : orderItems) {
+      if (Empty.isNotEmpty(saleOrderItemDto.getGoodsCount()) && !isReject) {
+        //If its not rejected, return goods item back to inventory
+        Goods goods = goodsDao.retrieveByBackendId(saleOrderItemDto.getGoodsBackendId());
+        if( goods!=null) {
+          goods.setExisting(goods.getExisting() + saleOrderItemDto.getGoodsCount());
+          goodsDao.update(goods);
+        }
+      }
+      saleOrderItemDao.delete(saleOrderItemDto.getId());
+
+    }
+    saleOrderDao.delete(order.getId());
+
+    //Delete visit detail
+    VisitInformationDetailDao visitInformationDetailDao = new VisitInformationDetailDaoImpl(
+        context);
+    visitInformationDetailDao.deleteVisitDetail(isReject ? VisitInformationDetailType.CREATE_REJECT
+        : VisitInformationDetailType.CREATE_ORDER, orderId);
+  }
+
   private SaleOrder createOrderFromDto(SaleOrderDto orderDto) {
     SaleOrder order = new SaleOrder();
     order.setId(orderDto.getId());
@@ -228,6 +272,8 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     order.setStatus(orderDto.getStatus());
     order.setBackendId(orderDto.getBackendId());
     order.setInvoiceBackendId(orderDto.getInvoiceBackendId());
+    order.setCreateDateTime(orderDto.getCreateDateTime());
+    order.setUpdateDateTime(orderDto.getUpdateDateTime());
     return order;
   }
 

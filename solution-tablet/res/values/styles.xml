@@ -10,7 +10,9 @@
   </style>
 
 
-  <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"/>
+  <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimaryDark">@color/primary_dark</item>
+  </style>
 
   <style name="MyActionBar" parent="Theme.AppCompat.Light">
     <item name="android:background">#3F51B5</item>
@@ -22,6 +24,11 @@
   <style name="TextView.PageTitle">
     <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
     <item name="android:textColor">@color/light_orange</item>
+  </style>
+
+  <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
+    <item name="android:textColor">@color/primary</item>
+    <item name="android:textSize">10sp</item>
   </style>
 
   <style name="TextView.Caption">
@@ -80,4 +87,36 @@
   </style>
 
   <style name="Widget.GifView" parent="@android:style/Widget"/>
+
+  <style name="myDialog" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="android:windowMinWidthMajor">97%</item>
+    <item name="android:windowMinWidthMinor">97%</item>
+    <item name="colorPrimary">#3F51B5</item>
+  </style>
+
+  <style name="myCheckBox" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="fontPath">fonts/IRANSansMobile.ttf</item>
+    <item name="colorPrimary">#3F51B5</item>
+  </style>
+
+  <!--fonts-->
+  <style name="IranSans">
+    <item name="fontPath">fonts/IRANSansMobile.ttf</item>
+  </style>
+
+  <style name="IranSans.Bold">
+    <item name="fontPath">fonts/IRANSansMobile_Bold.ttf</item>
+  </style>
+
+  <style name="IranSans.Light">
+    <item name="fontPath">fonts/IRANSansMobile_Light.ttf</item>
+  </style>
+
+  <style name="IranSans.Medium">
+    <item name="fontPath">fonts/IRANSansMobile_Medium.ttf</item>
+  </style>
+
+  <style name="IranSans.Ultra">
+    <item name="fontPath">fonts/IRANSansMobile_UltraLight.ttf</item>
+  </style>
 </resources>

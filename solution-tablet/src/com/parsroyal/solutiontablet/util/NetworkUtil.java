@@ -5,18 +5,24 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Base64;
 import android.util.Log;
+import com.google.gson.Gson;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
+import com.parsroyal.solutiontablet.data.response.UserInfoResponse;
+import com.parsroyal.solutiontablet.service.SettingService;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import org.springframework.util.Base64Utils;
 
 /**
  * Created by Mahyar on 6/9/2015.
- * Edited by Arash on 6/29/2016
  */
 public class NetworkUtil {
 
@@ -36,7 +42,8 @@ public class NetworkUtil {
         URL url = new URL(toTestUrl);   // Change to "http://google.com" for www  test.
         HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
 
-        String encoded = Base64
+        String encoded
+            = Base64
             .encodeToString((username + ":" + password).getBytes("UTF-8"), Base64.NO_WRAP);
         //urlc.setRequestProperty("Authorization", "Basic " + encoded);
         urlc.setRequestProperty("Authorization", "Basic " + encoded);
@@ -87,5 +94,31 @@ public class NetworkUtil {
         = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
     return activeNetworkInfo != null;
+  }
+
+  public static UserInfoResponse extractUserInfo(String jwt) {
+    String[] split = jwt.split("\\.");
+
+    byte[] body = Base64.decode(split[1], Base64.URL_SAFE);
+    String bodyText = "";
+    try {
+      bodyText = new String(body, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }
+
+    UserInfoResponse userInfoResponse = new Gson().fromJson(bodyText, UserInfoResponse.class);
+    return userInfoResponse;
+  }
+
+  public static boolean isTokenExpired() {
+    SettingService settingService = new SettingServiceImpl(SolutionTabletApplication.getInstance());
+    String expire = settingService.getSettingValue(ApplicationKeys.TOKEN_EXPIRE_DATE);
+    if (Empty.isEmpty(expire)) {
+      return true;
+    }
+    Date expireDate = new Date(Long.valueOf(expire)*1000);
+
+    return (expireDate.compareTo(new Date()) < 0);
   }
 }

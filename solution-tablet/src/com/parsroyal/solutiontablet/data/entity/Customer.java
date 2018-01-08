@@ -1,7 +1,5 @@
 package com.parsroyal.solutiontablet.data.entity;
 
-import com.parsroyal.solutiontablet.util.Empty;
-
 /**
  * Created by Mahyar on 6/14/2015.
  */
@@ -30,6 +28,7 @@ public class Customer extends BaseEntity<Long> {
   public static final String COL_MUNICIPALITY_CODE = "MUNICIPALITY_CODE";
   public static final String COL_POSTAL_CODE = "POSTAL_CODE";
   public static final String COL_APPROVED = "APPROVED";
+  public static final String COL_DESCRIPTION = "DESCRIPTION";
 
   public static final String TABLE_NAME = "COMMER_CUSTOMER";
 
@@ -57,7 +56,8 @@ public class Customer extends BaseEntity<Long> {
       " " + Customer.COL_NATIONAL_CODE + " TEXT," +
       " " + Customer.COL_MUNICIPALITY_CODE + " TEXT," +
       " " + Customer.COL_POSTAL_CODE + " TEXT," +
-      " " + Customer.COL_APPROVED + " INTEGER" +
+      " " + Customer.COL_APPROVED + " INTEGER," +
+      " " + Customer.COL_DESCRIPTION + " TEXT" +
       " );";
 
   private Long id;
@@ -83,6 +83,17 @@ public class Customer extends BaseEntity<Long> {
   private String nationalCode;
   private String municipalityCode;
   private boolean approved = true;
+  private String description;
+
+  public Customer(Double xLocation, String fullName, String shopName, String code) {
+    this.xLocation = xLocation;
+    this.fullName = fullName;
+    this.shopName = shopName;
+    this.code = code;
+  }
+
+  public Customer() {
+  }
 
   public boolean isApproved() {
     return approved;
@@ -268,52 +279,6 @@ public class Customer extends BaseEntity<Long> {
     this.salesmanId = salesmanId;
   }
 
-  public String getString() {
-    StringBuilder sb = new StringBuilder();
-
-    sb.append(this.getId());
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.fullName) ? this.fullName : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.phoneNumber) ? this.phoneNumber : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.cellPhone) ? this.cellPhone : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.provinceBackendId) ? this.provinceBackendId : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.cityBackendId) ? this.cityBackendId : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.address) ? this.address : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.activityBackendId) ? this.activityBackendId : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.storeSurface) ? this.storeSurface : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.storeLocationTypeBackendId) ? this.storeLocationTypeBackendId
-        : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.createDateTime) ? this.createDateTime : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.updateDateTime) ? this.updateDateTime : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.xLocation) ? this.xLocation : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.yLocation) ? this.yLocation : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.classBackendId) ? this.classBackendId : "NULL");
-    //New
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.shopName) ? this.shopName : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.postalCode) ? this.postalCode : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.nationalCode) ? this.nationalCode : "NULL");
-    sb.append("&");
-    sb.append(Empty.isNotEmpty(this.municipalityCode) ? this.municipalityCode
-        : "NULL");
-    return sb.toString();
-  }
-
   @Override
   public Long getPrimaryKey() {
     return id;
@@ -331,5 +296,13 @@ public class Customer extends BaseEntity<Long> {
     } else {
       return false;
     }
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }

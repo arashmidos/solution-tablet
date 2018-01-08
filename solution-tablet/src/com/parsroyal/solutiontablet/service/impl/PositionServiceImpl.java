@@ -39,7 +39,8 @@ public class PositionServiceImpl implements PositionService {
           DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
       return positionDao.create(position);
     } else {
-      position.setUpdateDateTime(new Date().toString());
+      position.setUpdateDateTime(
+          DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
       positionDao.update(position);
       return position.getId();
     }

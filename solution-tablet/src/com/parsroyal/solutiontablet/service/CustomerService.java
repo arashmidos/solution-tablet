@@ -20,15 +20,17 @@ public interface CustomerService extends BaseService {
 
   Customer getCustomerByBackendId(Long customerId);
 
-  void saveCustomer(Customer customer);
+  Long saveCustomer(Customer customer);
 
   List<Customer> getAllNewCustomers();
 
   void deleteCustomer(Long id);
 
-  List<Customer> getAllNewCustomersForSend();
+  List<CustomerDto> getAllNewCustomersForSend();
 
   List<CustomerLocationDto> getAllUpdatedCustomerLocation();
+
+  CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId);
 
   List<Customer> getAllCustomersByVisitLineBackendId(Long visitLineId);
 
@@ -40,11 +42,23 @@ public interface CustomerService extends BaseService {
 
   List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
 
+  List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
+
   long savePicture(CustomerPic customerPic);
+  void savePicture(List<CustomerPic> customerPics);
+
+  List<CustomerPic> getAllPicturesByCustomerBackendId(long customerBackendId);
 
   File getAllCustomerPicForSend();
 
-  List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
+  File getAllCustomerPicForSendByVisitId(Long visitId);
+  File getAllCustomerPicForSendByCustomerId(Long customerId);
+
+  void deleteCustomerPic(String title, long customerId);
+
 
   void deleteAllPics();
+
+  void updateCustomerPictures();
+
 }

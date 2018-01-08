@@ -12,14 +12,12 @@ public interface PaymentDao extends BaseDao<Payment, Long> {
 
   Payment getPaymentById(Long paymentID);
 
-  List<PaymentListModel> getAllPaymentListModelByCustomerIdWithConstraint(Long customerId,
-      String constraint);
-
   List<Payment> findPaymentsByStatusId(Long statusId);
 
-  List<Payment> findPaymentByCustomerId(Long customerID);
+  List<Payment> findPaymentsByVisitId(Long visitId);
 
   List<PaymentListModel> searchForPayments(PaymentSO paymentSO);
 
   void deleteAllSentPayment();
+
 }

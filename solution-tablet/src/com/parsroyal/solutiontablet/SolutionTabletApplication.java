@@ -1,20 +1,24 @@
 package com.parsroyal.solutiontablet;
 
-import android.app.Application;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
-
+import android.util.DisplayMetrics;
 import com.crashlytics.android.Crashlytics;
-import com.parsroyal.solutiontablet.util.TypefaceUtil;
-
+import com.parsroyal.solutiontablet.constants.Constants;
 import io.fabric.sdk.android.Fabric;
+import java.util.Locale;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by Mahyar on 7/8/2015.
  */
-public class SolutionTabletApplication extends Application {
+public class SolutionTabletApplication extends MultiDexApplication {
 
   public static SolutionTabletApplication sInstance;
 
@@ -27,7 +31,7 @@ public class SolutionTabletApplication extends Application {
   public static SharedPreferences getPreference() {
     if (sPreference == null) {
       sPreference = PreferenceManager.getDefaultSharedPreferences(
-              sInstance.getApplicationContext());
+          sInstance.getApplicationContext());
     }
 
     return sPreference;
@@ -38,15 +42,30 @@ public class SolutionTabletApplication extends Application {
     super.onCreate();
     sInstance = this;
 
-//    if (!BuildConfig.DEBUG) {
+    if (!BuildConfig.DEBUG) {
       Fabric.with(this, new Crashlytics());
-//    }
-    try {
-      TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/IRANSansMobile.ttf");
-      AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "Resource exception", "Error in overriding fonts" + e.getMessage());
-      e.printStackTrace();
     }
+
+    MultiDex.install(this);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+          .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+          .setFontAttrId(R.attr.fontPath)
+          .build());
+    }
+
+    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
+    setLanguage();
+  }
+
+  public void setLanguage() {
+    Locale locale = new Locale(Constants.DEFAULT_LANGUAGE);
+
+    Resources res = getResources();
+    DisplayMetrics dm = res.getDisplayMetrics();
+    Configuration conf = res.getConfiguration();
+    conf.locale = locale;
+    res.updateConfiguration(conf, dm);
   }
 }

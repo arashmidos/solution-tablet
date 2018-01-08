@@ -2,10 +2,9 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.KeyValueBiz;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
@@ -14,25 +13,29 @@ import com.parsroyal.solutiontablet.data.dao.impl.QAnswerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.model.CustomerDto;
+import com.parsroyal.solutiontablet.data.response.CustomerResponse;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.nio.charset.Charset;
-import java.util.Arrays;
+import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
-import java.util.List;
+import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 /**
- * Created by Mahyar on 6/23/2015.
+ * Created by Arash on 1119/2017.
  */
-public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
+public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<CustomerResponse> {
 
   public static final String TAG = NewCustomerDataTransferBizImpl.class.getSimpleName();
 
@@ -42,67 +45,57 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
   private VisitInformationDao visitInformationDao;
   private QAnswerDao qAnswerDao;
   private ResultObserver observer;
-  private KeyValueBiz keyValueBiz;
+  private CustomerDto customer;
+  private int success = 0;
+  private int total = 0;
 
-  public NewCustomerDataTransferBizImpl(Context context, ResultObserver resultObserver) {
+  public NewCustomerDataTransferBizImpl(Context context) {
     super(context);
     this.context = context;
     this.customerDao = new CustomerDaoImpl(context);
     this.visitInformationDao = new VisitInformationDaoImpl(context);
     this.qAnswerDao = new QAnswerDaoImpl(context);
     this.customerService = new CustomerServiceImpl(context);
-    this.observer = resultObserver;
-    this.keyValueBiz = new KeyValueBizImpl(context);
   }
 
   @Override
-  public void receiveData(String response) {
+  public void receiveData(CustomerResponse response) {
     if (Empty.isNotEmpty(response)) {
       try {
-        String[] rows = response.split("[\n]");
-        for (int i = 0; i < rows.length; i++) {
-          String row = rows[i];
-          String[] columns = row.split("[&]");
-          Long customerId = Long.parseLong(columns[0]);
-          Long backendId = Long.parseLong(columns[1]);
-          String code = columns[2];
+        CustomerDto persistedCustomer = response.getCustomer();
+        Long customerId = customer.getId();
+        Customer tempCustomer = customerDao.retrieve(customerId);
+        if (Empty.isNotEmpty(tempCustomer)) {
+          Long backendId = persistedCustomer.getId();
+          tempCustomer.setBackendId(backendId);
+          tempCustomer.setCode(persistedCustomer.getCode());
+          tempCustomer.setUpdateDateTime(DateUtil
+              .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+          customerDao.update(tempCustomer);
 
-          Customer customer = customerDao.retrieve(customerId);
-          if (Empty.isNotEmpty(customer)) {
-            customer.setBackendId(backendId);
-            customer.setCode(code);
-            customer.setUpdateDateTime(DateUtil
-                .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-            customerDao.update(customer);
+//           Update Visits
+          VisitInformation visitList = visitInformationDao.retrieveForNewCustomer(customerId);
 
-            //Update Visits
-            VisitInformation visitList = visitInformationDao.retrieveForNewCustomer(customerId);
-
-            if (visitList != null) {
-              visitList.setCustomerBackendId(backendId);
-              visitInformationDao.update(visitList);
-            }
-
-            //update answers
-            qAnswerDao.updateCustomerBackendIdForAnswers(customerId, backendId);
+          if (visitList != null) {
+            visitList.setCustomerBackendId(backendId);
+            visitInformationDao.update(visitList);
           }
+
+          //update answers
+          qAnswerDao.updateCustomerBackendIdForAnswers(customerId, backendId);
         }
-        getObserver()
-            .publishResult(context.getString(R.string.new_customers_data_transferred_successfully));
+//        }
+        success++;
       } catch (Exception ex) {
-        Crashlytics.log(Log.ERROR, "Data transfer", "Error in receiving NewCustomerData " + ex.getMessage());
+        Logger.sendError("Data transfer", "Error in receiving NewCustomerData " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
-        getObserver()
-            .publishResult(context.getString(R.string.message_exception_in_sending_new_customers));
       }
-    } else {
-      getObserver().publishResult(context.getString(R.string.message_got_no_response));
+      EventBus.getDefault().post(new DataTransferSuccessEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
     }
   }
 
   @Override
   public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.sending_new_customers_data));
   }
 
   @Override
@@ -112,12 +105,12 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
 
   @Override
   public String getMethod() {
-    return "customer/new";
+    return "customers";
   }
 
   @Override
   public Class getType() {
-    return String.class;
+    return CustomerResponse.class;
   }
 
   @Override
@@ -127,38 +120,24 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
 
   @Override
   protected MediaType getContentType() {
-    MediaType contentType = new MediaType("TEXT", "PLAIN", Charset.forName("UTF-8"));
-    return contentType;
+    return MediaType.APPLICATION_JSON;
   }
 
   @Override
   protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    headers
-        .add("branchCode", keyValueBiz.findByKey(ApplicationKeys.SETTING_BRANCH_CODE).getValue());
 
-    List<Customer> allNewCustomersForSend = customerService.getAllNewCustomersForSend();
-    String customersString = getCustomersString(allNewCustomersForSend);
-    headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN));
-    HttpEntity<String> httpEntity = new HttpEntity<String>(customersString, headers);
-    return httpEntity;
+    return new HttpEntity<>(customer, headers);
   }
 
-  private String getCustomersString(List<Customer> allNewCustomersForSend) {
-    StringBuilder sb = new StringBuilder();
-    boolean firstLine = true;
-    for (Customer customer : allNewCustomersForSend) {
-      String customerString = customer.getString();
-      customerString = customerString.trim().replaceAll("[\n]", "");
-      customerString = customerString.trim().replace("\n", "");
-      if (firstLine) {
-        sb.append(customerString);
-        firstLine = false;
-        continue;
-      }
-      sb.append("\n");
-      sb.append(customerString);
-    }
+  public void setCustomer(CustomerDto customer) {
+    this.customer = customer;
+    total++;
+  }
 
-    return sb.toString();
+  public String getSuccessfulMessage() {
+    return NumberUtil.digitsToPersian(String
+        .format(Locale.getDefault(), context.getString(R.string.data_transfered_result),
+            String.valueOf(success),
+            String.valueOf(total - success)));
   }
 }

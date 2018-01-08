@@ -1,7 +1,8 @@
 package com.parsroyal.solutiontablet.ui;
 
 import android.Manifest;
-import android.app.Dialog;
+import android.Manifest.permission;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,21 +15,21 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.TextView;
 import butterknife.BindView;
-import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
@@ -38,123 +39,107 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
-import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationUpdatesService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.adapter.DrawerArrayAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
+import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
+import com.parsroyal.solutiontablet.ui.fragment.AnonymousQuestionnaireFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
-import com.parsroyal.solutiontablet.ui.fragment.CustomerDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.CustomersFragment;
-import com.parsroyal.solutiontablet.ui.fragment.DataTransferFragment;
-import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.GoodsListFragment;
-import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NCustomerDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.NCustomersFragment;
-import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.OrdersListFragment;
-import com.parsroyal.solutiontablet.ui.fragment.PaymentDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.PaymentFragment;
-import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.CustomerFragment;
+import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
+import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.PathFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesCategoryFragment;
+import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
+import com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment;
+import com.parsroyal.solutiontablet.ui.fragment.ReportFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
-import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.VisitLinesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.dialog.LoginDialogFragment;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
-import com.parsroyal.solutiontablet.util.ResourceUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
- * Created by Mahyar on 6/2/2015.
+ * Created by Arash 2017-09-16
  */
-public class MainActivity extends BaseFragmentActivity implements ResultObserver {
+public abstract class MainActivity extends AppCompatActivity {
 
-  public static final String TAG = MainActivity.class.getSimpleName();
-
-  public static final int CUSTOMER_LIST_FRAGMENT_ID = 0;
-  public static final int NEW_CUSTOMER_FRAGMENT_ID = 1;
+  public static final int FEATURE_FRAGMENT_ID = 0;
+  public static final int CUSTOMER_LIST_FRAGMENT_ID = 1;
   public static final int NEW_CUSTOMER_DETAIL_FRAGMENT_ID = 2;
-  public static final int CUSTOMERS_FRAGMENT_ID = 3;
-  public static final int CUSTOMER_DETAIL_FRAGMENT_ID = 4;
+  public static final int CUSTOMER_ORDER_FRAGMENT_ID = 3;
+  public static final int ORDER_FRAGMENT_ID = 4;
   public static final int VISIT_DETAIL_FRAGMENT_ID = 5;
-  public static final int GENERAL_QUESTIONNAIRES_FRAGMENT_ID = 6;
-  public static final int QUESTIONNAIRE_DETAIL_FRAGMENT_ID = 7;
-  public static final int GOODS_QUESTIONNAIRES_FRAGMENT_ID = 8;
-  public static final int GOODS_LIST_FOR_QUESTIONNAIRES_FRAGMENT_ID = 9;
-  public static final int SETTING_FRAGMENT_ID = 10;
+  public static final int REGISTER_PAYMENT_FRAGMENT = 6;
+  public static final int CUSTOMER_FRAGMENT = 7;
+  public static final int ORDER_INFO_FRAGMENT = 8;
+  public static final int CUSTOMER_SEARCH_FRAGMENT = 9;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
-  public static final int DASHBOARD_FRAGMENT_ID = 12;
+  public static final int USER_TRACKING_FRAGMENT_ID = 12;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
-  public static final int ORDERS_LIST_FRAGMENT = 14;
-  public static final int ORDER_DETAIL_FRAGMENT_ID = 15;
+  public static final int REPORT_FRAGMENT = 14;
   public static final int GOODS_LIST_FRAGMENT_ID = 16;
   public static final int SAVE_LOCATION_FRAGMENT_ID = 17;
-  public static final int PAYMENT_FRAGMENT_ID = 18;
-  public static final int PAYMENT_DETAIL_FRAGMENT_ID = 19;
-  public static final int USER_TRACKING_FRAGMENT_ID = 20;
-  public static final int KPI_CUSTOMER_FRAGMENT_ID = 21;
-  public static final int KPI_SALESMAN_FRAGMENT_ID = 22;
-  public static final int FUNDS_FRAGMENT_ID = 23;
-  public static final int CUSTOMER_TRACKING_FRAGMENT_ID = 24;
-  public static final int BASE_TRACKING_FRAGMENT_ID = 25;
-  public static final int QUESTIONAIRE_LIST_FRAGMENT_ID = 26;
+  public static final int QUESTIONNAIRE_CATEGORY_FRAGMENT_ID = 18;
+  public static final int QUESTIONNAIRE_LIST_FRAGMENT_ID = 19;
+  public static final int QUESTION_LIST_FRAGMENT_ID = 20;
+  public static final int ALL_QUESTIONNAIRE_FRAGMENT_ID = 21;
+  public static final int ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID = 22;
+  public static final int PATH_FRAGMENT_ID = 27;
+  public static final int PATH_DETAIL_FRAGMENT_ID = 28;
+  public static final int SYSTEM_CUSTOMER_FRAGMENT = 29;
+  public static final int NEW_CUSTOMER_FRAGMENT_ID = 30;
+  public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
+  public static final int CUSTOMER_INFO_FRAGMENT = 32;
 
-  private final Integer[] drawerItemTitles = {
-      R.string.setting,
-      R.string.data_transfer,
-      R.string.about_us,
-      R.string.version,
-      R.string.exit
-  };
-  private final Integer[] drawerItemImages = {
-      R.drawable.ic_settings_43dp,
-      R.drawable.ic_transform_43dp,
-      R.drawable.ic_aboutus_43dp,
-      R.drawable.ic_version_43dp,
-      R.drawable.ic_exit_43dp,
-  };
-  @BindView(R.id.mainLayout)
-  LinearLayout mainLayout;
-  private DrawerLayout mDrawerLayout;
-  private ListView drawerItemsList;
-  private ImageView customerListTabIv;
-  private ImageView newCustomerTabIv;
-  private ImageView dashBoardTabIv;
-  private ImageView ordersTabIv;
-  private ImageView goodsTabIv;
-  private ImageView userPerformanceTabIv;
-  private ImageView fundsTabIv;
-  private ImageView questionaireTabIv;
-  private DataTransferService dataTransferService;
-  private SettingService settingService;
-  private boolean isMenuEnabled = true;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-  private LocationUpdatesService gpsRecieverService = null;
+  private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
+  private static final String TAG = MainActivity.class.getName();
+  protected ProgressDialog progressDialog;
+  protected BaseFragment currentFragment;
+  protected LocationUpdatesService gpsRecieverService = null;
+  protected DataTransferService dataTransferService;
+  protected boolean boundToGpsService = false;
+  protected final ServiceConnection serviceConnection = new ServiceConnection() {
 
-  private boolean boundToGpsService = false;
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+      LocationUpdatesService.LocalBinder binder = (LocationUpdatesService.LocalBinder) service;
+      gpsRecieverService = binder.getService();
+      boundToGpsService = true;
+      if (!checkPermissions()) {
+        requestPermissions();
+      } else {
+        gpsRecieverService.requestLocationUpdates();
+      }
+    }
 
-  private BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+      gpsRecieverService = null;
+      boundToGpsService = false;
+    }
+  };
+  protected BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
       if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
@@ -165,413 +150,42 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
       }
     }
   };
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.toolbar_title)
+  TextView toolbarTitle;
+  @BindView(R.id.search_img)
+  ImageView searchImg;
+  @BindView(R.id.save_img)
+  ImageView saveImg;
+  @BindView(R.id.container)
+  FrameLayout container;
+  @BindView(R.id.navigation_img)
+  ImageView navigationImg;
+  @Nullable
+  @BindView(R.id.detail_tv)
+  TextView detailTv;
 
-  // Monitors the state of the connection to the service.
-  private final ServiceConnection serviceConnection = new ServiceConnection() {
-
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-      LocationUpdatesService.LocalBinder binder = (LocationUpdatesService.LocalBinder) service;
-      gpsRecieverService = binder.getService();
-      boundToGpsService = true;
-      gpsRecieverService.requestLocationUpdates();
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-      gpsRecieverService = null;
-      boundToGpsService = false;
-    }
-  };
-
-
-  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    dataTransferService = new DataTransferServiceImpl(this);
-    settingService = new SettingServiceImpl(this);
-    setContentView(R.layout.activity_main);
-    ButterKnife.bind(this);
 
-    setupSidebar();
-    setupActionbar();
-    setupDrawer();
-    initialize();
+    dataTransferService = new DataTransferServiceImpl(this);
+
     if (!BuildConfig.DEBUG) {
       logUser();
     }
-
-    if (!checkPermissions()) {
-      requestPermissions();
-    }
   }
 
-  public void startGpsService() {
-    gpsRecieverService.requestLocationUpdates();
-  }
 
-  private void logUser() {
-    Crashlytics.setUserName(userFullNameTxt.getText().toString());
-    Crashlytics.setString("Company", companyNameTxt.getText().toString());
-
-    KeyValue saleType = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
-    Crashlytics.setString("Sale Type", saleType == null ? "" : saleType.getValue());
-  }
-
-  private void initialize() {
-    changeFragment(NEW_CUSTOMER_FRAGMENT_ID, false);
-  }
-
-  private void setupSidebar() {
-    View.OnClickListener sideBarItemsOnClickListener = view ->
-    {
-      if (isMenuEnabled || BuildConfig.DEBUG) {
-        int fragmentId = Integer.parseInt(view.getTag().toString());
-        changeFragment(fragmentId, true);
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof UpdateEvent) {
+      installNewVersion();
+    } else if (event instanceof ErrorEvent) {
+      if (event.getStatusCode() == StatusCodes.PERMISSION_DENIED) {
+        requestPermissions();
       }
-    };
-    customerListTabIv = (ImageView) findViewById(R.id.customerListTabIv);
-    customerListTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    newCustomerTabIv = (ImageView) findViewById(R.id.newCustomerTabIv);
-    newCustomerTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    dashBoardTabIv = (ImageView) findViewById(R.id.dashboardTabIv);
-    dashBoardTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    ordersTabIv = (ImageView) findViewById(R.id.ordersTabIv);
-    ordersTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    goodsTabIv = (ImageView) findViewById(R.id.goodsTabIv);
-    goodsTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    userPerformanceTabIv = (ImageView) findViewById(R.id.userPerformanceTabIv);
-    userPerformanceTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    fundsTabIv = (ImageView) findViewById(R.id.fundsTabIv);
-    fundsTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    questionaireTabIv = (ImageView) findViewById(R.id.questionaryTabIv);
-    questionaireTabIv.setOnClickListener(sideBarItemsOnClickListener);
-  }
-
-  public void changeSidebarItem(int fragmentId) {
-    setAllImagesInactive();
-    String contentName = "";
-    switch (fragmentId) {
-      case 0:
-        customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list_active);
-        contentName = "Customer List";
-        break;
-      case 1:
-        newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer_active);
-        contentName = "New Customer";
-        break;
-      case 12:
-        dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_active);
-        contentName = "Map";
-        break;
-      case 14:
-        ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_active);
-        contentName = "Reports";
-        break;
-      case 16:
-        goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods_active);
-        contentName = "Goods List";
-        break;
-      case KPI_SALESMAN_FRAGMENT_ID://22
-        userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance_active);
-        contentName = "User KPI";
-        break;
-      case FUNDS_FRAGMENT_ID://23
-        fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report_active);
-        contentName = "Payment Reports";
-        break;
-      case QUESTIONAIRE_LIST_FRAGMENT_ID://26
-        questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_active);
-        contentName = "New Questionnaire";
-        break;
     }
-    Analytics.logContentView(contentName);
-  }
-
-  private void setAllImagesInactive() {
-    customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
-    dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
-    newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
-    ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
-    goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
-    userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
-    fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
-    questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_inactive);
-  }
-
-  public void changeFragment(int fragmentId, boolean addToBackStack) {
-    BaseFragment fragment = findFragment(fragmentId, new Bundle());
-    if (Empty.isNotEmpty(fragment) && !fragment.isVisible()) {
-      commitFragment(fragment.getFragmentTag(), fragment, addToBackStack);
-    }
-  }
-
-  public void changeFragment(int fragmentId, Bundle args, boolean addToBackStack) {
-    BaseFragment fragment = findFragment(fragmentId, args);
-    if (Empty.isNotEmpty(fragment) && !fragment.isVisible()) {
-      if (Empty.isNotEmpty(args)) {
-        fragment.setArguments(args);
-      }
-      commitFragment(fragment.getFragmentTag(), fragment, addToBackStack);
-    }
-  }
-
-  private void commitFragment(String fragmentTag, BaseFragment fragment, boolean addToBackStack) {
-    FragmentTransaction fragmentTransaction;
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.contentFrame, fragment, fragmentTag);
-    fragmentTransaction.addToBackStack(fragmentTag);
-    fragmentTransaction.commit();
-  }
-
-  private BaseFragment findFragment(int fragmentId, Bundle args) {
-    BaseFragment fragment = null;
-    int parent = 0;
-    switch (fragmentId) {
-      case CUSTOMER_LIST_FRAGMENT_ID:
-        fragment = new VisitLinesFragment();
-        break;
-      case NEW_CUSTOMER_FRAGMENT_ID:
-        fragment = new NCustomersFragment();
-        changeSidebarItem(MainActivity.NEW_CUSTOMER_FRAGMENT_ID);
-        break;
-      case NEW_CUSTOMER_DETAIL_FRAGMENT_ID:
-        fragment = new NCustomerDetailFragment();
-        changeSidebarItem(MainActivity.NEW_CUSTOMER_FRAGMENT_ID);
-        break;
-      case CUSTOMERS_FRAGMENT_ID:
-        fragment = new CustomersFragment();
-        changeSidebarItem(MainActivity.CUSTOMER_LIST_FRAGMENT_ID);
-        break;
-      case CUSTOMER_DETAIL_FRAGMENT_ID:
-        fragment = new CustomerDetailFragment();
-        changeSidebarItem(MainActivity.CUSTOMER_LIST_FRAGMENT_ID);
-        break;
-      case VISIT_DETAIL_FRAGMENT_ID:
-        fragment = new VisitDetailFragment();
-        changeSidebarItem(MainActivity.CUSTOMER_LIST_FRAGMENT_ID);
-        setMenuEnabled(false);
-        break;
-      case GENERAL_QUESTIONNAIRES_FRAGMENT_ID://6
-        fragment = new GeneralQuestionnairesFragment();
-        parent = args.getInt(Constants.PARENT, 0);
-        changeSidebarItem(parent);
-        break;
-      case QUESTIONNAIRE_DETAIL_FRAGMENT_ID:
-        fragment = new QuestionnaireDetailFragment();
-        parent = args.getInt(Constants.PARENT);
-        changeSidebarItem(parent);
-        break;
-      case GOODS_QUESTIONNAIRES_FRAGMENT_ID://8
-        fragment = new GoodsQuestionnairesFragment();
-        changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
-        break;
-      case GOODS_LIST_FOR_QUESTIONNAIRES_FRAGMENT_ID:
-        fragment = new GoodsListForQuestionnairesFragment();
-        break;
-      case SETTING_FRAGMENT_ID:
-        fragment = new SettingFragment();
-        changeSidebarItem(-1);
-        break;
-      case DATA_TRANSFER_FRAGMENT_ID:
-        if (isDataTransferPossible()) {
-          fragment = new DataTransferFragment();
-          changeSidebarItem(-1);
-        }
-        break;
-      case DASHBOARD_FRAGMENT_ID:
-        fragment = new UserTrackingFragment();
-        changeSidebarItem(DASHBOARD_FRAGMENT_ID);
-        break;
-      case ABOUT_US_FRAGMENT_ID:
-        fragment = new AboutUsFragment();
-        changeSidebarItem(-1);
-        break;
-      case ORDERS_LIST_FRAGMENT:
-        fragment = new OrdersListFragment();
-        changeSidebarItem(ORDERS_LIST_FRAGMENT);
-        break;
-      case ORDER_DETAIL_FRAGMENT_ID:
-        fragment = new OrderDetailFragment();
-        changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
-        break;
-      case GOODS_LIST_FRAGMENT_ID:
-        fragment = new GoodsListFragment();
-        args.putBoolean("view_all", true);
-        fragment.setArguments(args);
-        changeSidebarItem(GOODS_LIST_FRAGMENT_ID);
-        break;
-      case SAVE_LOCATION_FRAGMENT_ID:
-        fragment = new SaveLocationFragment();
-        changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
-        break;
-      case PAYMENT_FRAGMENT_ID://18
-        fragment = new PaymentFragment();
-        changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
-        break;
-      case PAYMENT_DETAIL_FRAGMENT_ID://19
-        fragment = new PaymentDetailFragment();
-        changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
-        break;
-      case USER_TRACKING_FRAGMENT_ID://20
-        fragment = new UserTrackingFragment();
-        changeSidebarItem(-1);
-        break;
-      case KPI_CUSTOMER_FRAGMENT_ID: //21
-        fragment = new KPIFragment();
-        changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
-        break;
-      case KPI_SALESMAN_FRAGMENT_ID: //22
-        fragment = new KPIFragment();
-        changeSidebarItem(KPI_SALESMAN_FRAGMENT_ID);
-        break;
-      case FUNDS_FRAGMENT_ID: //23
-        fragment = new PaymentFragment();
-        changeSidebarItem(FUNDS_FRAGMENT_ID);
-        break;
-      case QUESTIONAIRE_LIST_FRAGMENT_ID://26
-        fragment = new QuestionnairesListFragment();
-        if (Empty.isNotEmpty(args)) {
-          fragment.setArguments(args);
-        }
-        changeSidebarItem(args.getInt(Constants.PARENT, QUESTIONAIRE_LIST_FRAGMENT_ID));
-
-    }
-    Analytics.logContentView("Fragment " + String.valueOf(fragmentId));
-    return fragment;
-  }
-
-  private boolean isDataTransferPossible() {
-    boolean dataTransferPossible = dataTransferService.isDataTransferPossible();
-    boolean networkAvailable = NetworkUtil.isNetworkAvailable(this);
-
-    if (!dataTransferPossible) {
-      ToastUtil.toastError(this, R.string.message_required_setting_for_data_transfer_not_found);
-    }
-
-    if (!networkAvailable) {
-      ToastUtil.toastError(this, R.string.message_device_does_not_have_active_internet_connection);
-    }
-
-    return dataTransferPossible && networkAvailable;
-  }
-
-  private void setupDrawer() {
-    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-    DrawerArrayAdapter adapter = new DrawerArrayAdapter(MainActivity.this, drawerItemTitles,
-        drawerItemImages);
-    drawerItemsList = (ListView) findViewById(R.id.left_drawer);
-
-    drawerItemsList.setAdapter(adapter);
-    drawerItemsList.setOnItemClickListener((parent, view, position, id) ->
-    {
-      switch (position) {
-        case 0:
-          if (Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME))
-              && Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD))
-              && !BuildConfig.DEBUG) {
-            settingLoginDialog();
-            closeDrawer();
-          } else {
-            changeFragment(SETTING_FRAGMENT_ID, false);
-            closeDrawer();
-          }
-          break;
-        case 1:
-          changeFragment(DATA_TRANSFER_FRAGMENT_ID, false);
-          closeDrawer();
-          break;
-        case 2:
-          changeFragment(ABOUT_US_FRAGMENT_ID, false);
-          closeDrawer();
-          break;
-        case 3:
-          showVersionDialog();
-          break;
-        case 4:
-          showDialogForExit();
-          break;
-      }
-    });
-
-    menuIv.setOnClickListener(v ->
-    {
-      if (isMenuEnabled || BuildConfig.DEBUG) {
-        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-          closeDrawer();
-        } else {
-          openDrawer();
-        }
-      }
-    });
-  }
-
-  private void showVersionDialog() {
-    DialogUtil.showMessageDialog(this, getString(R.string.version),
-        String.format(Locale.US, getString(R.string.your_version), BuildConfig.VERSION_NAME));
-  }
-
-  private void settingLoginDialog() {
-    DialogFragment loginDialog = LoginDialogFragment.newInstance();
-    loginDialog.show(getSupportFragmentManager(), "login_dialog");
-  }
-
-  @Override
-  public void onBackPressed() {
-    try {
-      FragmentManager supportFragmentManager = getSupportFragmentManager();
-
-      if (supportFragmentManager.getBackStackEntryCount() > 1) {
-        FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager
-            .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 2);
-        String tag = backStackEntryAt.getName();
-        BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
-        if (Empty.isNotEmpty(lastFragment)) {
-          findFragment(lastFragment.getFragmentId(), new Bundle());
-        }
-        super.onBackPressed();
-      } else {
-        showDialogForExit();
-      }
-    } catch (Exception e) {
-      Crashlytics.log(Log.ERROR, "UI Exception", "Error in backPressed " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
-    }
-  }
-
-  protected void showDialogForExit() {
-    DialogUtil.showConfirmDialog(this, getString(R.string.message_exit),
-        getString(R.string.message_do_you_want_to_exit),
-        (dialog, which) ->
-        {
-          dialog.dismiss();
-          finish();
-        });
-  }
-
-  public void openDrawer() {
-    mDrawerLayout.openDrawer(Gravity.LEFT);
-  }
-
-  public void closeDrawer() {
-    mDrawerLayout.closeDrawer(Gravity.LEFT);
-  }
-
-  public void removeFragment(Fragment fragment) {
-    FragmentManager manager = getSupportFragmentManager();
-    FragmentTransaction trans = manager.beginTransaction();
-    trans.remove(fragment);
-    trans.commit();
-    manager.popBackStack();
-  }
-
-  public boolean isMenuEnabled() {
-    return isMenuEnabled;
-  }
-
-  public void setMenuEnabled(boolean menuEnabled) {
-    isMenuEnabled = menuEnabled;
   }
 
   @Override
@@ -591,114 +205,62 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
     }
   }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    if (!GPSUtil.isGpsAvailable(this)) {
-      showGpsOffDialog();
-      Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
+  public void showProgressDialog(CharSequence message) {
+    if (this.progressDialog == null) {
+      this.progressDialog = new ProgressDialog(this);
+      this.progressDialog.setIndeterminate(true);
+      this.progressDialog.setCancelable(Boolean.FALSE);
     }
-
-    registerReceiver(gpsStatusReceiver, new IntentFilter("android.location.PROVIDERS_CHANGED"));
-    new TrackerAlarmReceiver().setAlarm(this);
+    this.progressDialog.setIcon(R.drawable.ic_action_info);
+    this.progressDialog.setTitle(R.string.message_please_wait);
+    this.progressDialog.setMessage(message);
+    this.progressDialog.show();
   }
 
-  @Override
-  protected void onPause() {
-    super.onPause();
-    unregisterReceiver(gpsStatusReceiver);
+  public void dismissProgressDialog() {
+    if (this.progressDialog != null) {
+      this.progressDialog.dismiss();
+    }
   }
 
-  @Override
-  protected void onStop() {
-    if (boundToGpsService) {
-      // Unbind from the service. This signals to the service that this activity is no longer
-      // in the foreground, and the service can respond by promoting itself to a foreground
-      // service.
-      unbindService(serviceConnection);
-      boundToGpsService = false;
-    }
-    super.onStop();
-    EventBus.getDefault().unregister(this);
-  }
-
-  @Subscribe
-  public void getMessage(Event event) {
-    if (event instanceof UpdateEvent) {
-      installNewVersion();
-    } else if (event instanceof ErrorEvent) {
-      if (event.getStatusCode() == StatusCodes.PERMISSION_DENIED) {
-        requestPermissions();
-      }
-    }
+  protected void showDialogForExit() {
+    DialogUtil.showConfirmDialog(this, getString(R.string.message_exit),
+        getString(R.string.message_do_you_want_to_exit),
+        (dialog, which) ->
+        {
+          dialog.dismiss();
+          finish();
+        });
   }
 
   private void installNewVersion() {
     DialogUtil.showCustomDialog(this, getString(R.string.message_update_title),
-        getString(R.string.message_update_alert), "", (dialogInterface, i) ->
-        {
+        getString(R.string.message_update_alert), "", (dialogInterface, i) -> {
           dialogInterface.dismiss();
           DialogUtil.showCustomDialog(MainActivity.this, getString(R.string.warning),
               getString(R.string.message_alert_send_data),
               "",
-              (dialog, i1) ->
-              {
+              (dialog, i1) -> {
                 dialog.dismiss();
                 showProgressDialog(getString(R.string.message_sending_data));
-                new Thread(() ->
-                {
+                new Thread(() -> {
                   try {
-                    dataTransferService.sendAllData(MainActivity.this);
+                    dataTransferService.sendAllData(null);
                   } catch (Exception ex) {
-                    Crashlytics.log(Log.ERROR, "Install Update",
+                    Logger.sendError("Install Update",
                         "Error in installing new version" + ex.getMessage());
                     ex.printStackTrace();
                     ToastUtil
                         .toastError(MainActivity.this, R.string.error_unknown_system_exception);
                   }
                 }).start();
-              },
-              "",
-              (dialogInterface1, i12) -> doInstall(), Constants.ICON_WARNING);
-        }, "", (dialogInterface, i) ->
-        {
+              }, "", (dialogInterface1, i12) -> doInstall(), Constants.ICON_WARNING);
+        }, "", (dialogInterface, i) -> {
           dialogInterface.dismiss();
           if (PreferenceHelper.isForceExit()) {
             finish();
           }
         }, Constants.ICON_MESSAGE);
-  }
-
-  private void showGpsOffDialog() {
-    Dialog dialog = new AlertDialog.Builder(this)
-        .setTitle(getString(R.string.error_gps_is_disabled))
-
-        .setNegativeButton(getString(R.string.no), (dialog1, which) -> finish())
-        .setPositiveButton(getString(R.string.yes), (dialog12, which) ->
-        {
-          Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-          startActivity(intent);
-        })
-        .create();
-    dialog.show();
-  }
-
-  @Override
-  public void publishResult(BusinessException ex) {
-    changeMessageDialog(ResourceUtil.getString(this, ex.getClass().getCanonicalName()));
-  }
-
-  @Override
-  public void publishResult(String message) {
-    changeMessageDialog(message);
-  }
-
-  @Override
-  public void finished(boolean success) {
-    dismissProgressDialog();
-    if (success) {
-      doInstall();
-    }
   }
 
   private void doInstall() {
@@ -712,44 +274,50 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         finish();
       }
     } catch (Exception ex) {
-      Crashlytics.log(Log.ERROR, "Install Update", "Error in installing update" + ex.getMessage());
+      Logger.sendError("Install Update", "Error in installing update" + ex.getMessage());
       ToastUtil.toastError(MainActivity.this, R.string.err_update_failed);
     }
   }
 
-  private void requestPermissions() {
-    boolean shouldProvideRationale =
-        ActivityCompat.shouldShowRequestPermissionRationale(this,
-            Manifest.permission.ACCESS_FINE_LOCATION);
-
-    // Provide an additional rationale to the user. This would happen if the user denied the
-    // request previously, but didn't check the "Don't ask again" checkbox.
-    if (shouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(this, getString(R.string.permission_rationale),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                REQUEST_PERMISSIONS_REQUEST_CODE);
-          });
-    } else {
-      Log.i(TAG, "Requesting permission");
-      // Request permission. It's possible this can be auto answered if device policy
-      // sets the permission in a given state or the user denied the permission
-      // previously and checked "Never ask again".
-      ActivityCompat.requestPermissions(MainActivity.this,
-          new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-          REQUEST_PERMISSIONS_REQUEST_CODE);
-    }
+  public void startGpsService() {
+    gpsRecieverService.requestLocationUpdates();
   }
 
-  /**
-   * Returns the current state of the permissions needed.
-   */
-  private boolean checkPermissions() {
-    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-        Manifest.permission.ACCESS_FINE_LOCATION);
+  @Override
+  protected void onResume() {
+    super.onResume();
+    if (!checkPermissions()) {
+      requestPermissions();
+    }
+
+    if (!GPSUtil.isGpsAvailable(this)) {
+      showGpsOffDialog();
+      Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
+    }
+
+    registerReceiver(gpsStatusReceiver, new IntentFilter("android.location.PROVIDERS_CHANGED"));
+    new TrackerAlarmReceiver().setAlarm(this);
+    navigationImg.setVisibility(View.VISIBLE);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    unregisterReceiver(gpsStatusReceiver);
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    if (boundToGpsService) {
+      // Unbind from the service. This signals to the service that this activity is no longer
+      // in the foreground, and the service can respond by promoting itself to a foreground
+      // service.
+      unbindService(serviceConnection);
+      boundToGpsService = false;
+    }
+    super.onStop();
+    EventBus.getDefault().unregister(this);
   }
 
   /**
@@ -764,7 +332,9 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
         // If user interaction was interrupted, the permission request is cancelled and you
         // receive empty arrays.
         Log.i(TAG, "User interaction was cancelled.");
-      } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      } else if ((grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+          && grantResults[1] == PackageManager.PERMISSION_GRANTED) || (grantResults.length == 1
+          && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
         // Permission was granted.
         gpsRecieverService.requestLocationUpdates();
       } else {
@@ -780,7 +350,398 @@ public class MainActivity extends BaseFragmentActivity implements ResultObserver
               startActivity(intent);
             });
       }
+    } else if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE) {
+      if (grantResults.length <= 0) {
+        // If user interaction was interrupted, the permission request is cancelled and you
+        // receive empty arrays.
+        Log.i(TAG, "User interaction was cancelled.");
+      } else if ((grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+          && grantResults[1] == PackageManager.PERMISSION_GRANTED) || (grantResults.length == 1
+          && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+        // Permission was granted.
+        Fragment visitDetailFragment = getSupportFragmentManager()
+            .findFragmentByTag(VisitDetailFragment.class.getSimpleName());
+        Fragment addCustomerFragment = getSupportFragmentManager()
+            .findFragmentByTag(AddCustomerFragment.class.getSimpleName());
+        if (visitDetailFragment != null && visitDetailFragment.isVisible()) {
+          ((VisitDetailFragment) visitDetailFragment).startCameraActivity();
+        } else if (addCustomerFragment != null && addCustomerFragment.isVisible()) {
+          ((AddCustomerFragment) addCustomerFragment).startCameraActivity();
+        }
+      } else {
+        ToastUtil.toastError(this, getString(R.string.permission_rationale_camera_storage),
+            view -> {
+              // Build intent that displays the App settings screen.
+              Intent intent = new Intent();
+              intent.setAction(
+                  Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+              Uri uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null);
+              intent.setData(uri);
+              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+              startActivity(intent);
+            });
+      }
     }
   }
-}
 
+  public void hideKeyboard() {
+    InputMethodManager imm = (InputMethodManager) this
+        .getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(container.getWindowToken(), 0);
+  }
+
+  private void showGpsOffDialog() {
+    DialogUtil.showCustomDialog(this, getString(R.string.warning),
+        getString(R.string.error_gps_is_disabled), "", (dialog, which) -> {
+          Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+          startActivity(intent);
+        }, "", (dialog, which) -> finish(), Constants.ICON_MESSAGE);
+  }
+
+  private void logUser() {
+    SettingService settingService = new SettingServiceImpl(this);
+    Crashlytics.setUserName(settingService.getSettingValue(ApplicationKeys.USER_FULL_NAME));
+    Crashlytics
+        .setString("Company", settingService.getSettingValue(ApplicationKeys.USER_COMPANY_NAME));
+
+    KeyValue saleType = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
+    Crashlytics.setString("Sale Type", saleType == null ? "" : saleType.getValue());
+  }
+
+  private void requestPermissions() {
+    boolean shouldProvideRationale =
+        ActivityCompat.shouldShowRequestPermissionRationale(this,
+            Manifest.permission.ACCESS_FINE_LOCATION);
+    boolean storageShouldProvideRationale =
+        ActivityCompat.shouldShowRequestPermissionRationale(this,
+            permission.WRITE_EXTERNAL_STORAGE);
+
+    // Provide an additional rationale to the user. This would happen if the user denied the
+    // request previously, but didn't check the "Don't ask again" checkbox.
+    if (shouldProvideRationale && storageShouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      try {
+        ToastUtil.toastError(this, getString(R.string.permission_rationale_storage_location),
+            view -> {
+              // Request permission
+              ActivityCompat.requestPermissions(MainActivity.this,
+                  new String[]{permission.ACCESS_FINE_LOCATION, permission.WRITE_EXTERNAL_STORAGE},
+                  REQUEST_PERMISSIONS_REQUEST_CODE);
+
+            });
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    } else if (shouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(this, getString(R.string.permission_rationale_location),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(this,
+                new String[]{permission.ACCESS_FINE_LOCATION},
+                REQUEST_PERMISSIONS_REQUEST_CODE);
+          });
+    } else if (storageShouldProvideRationale) {
+      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(this, getString(R.string.permission_rationale_storage),
+          view -> {
+            // Request permission
+            ActivityCompat.requestPermissions(this,
+                new String[]{permission.WRITE_EXTERNAL_STORAGE},
+                REQUEST_PERMISSIONS_REQUEST_CODE);
+          });
+    } else {
+      Log.i(TAG, "Requesting permission");
+      // Request permission. It's possible this can be auto answered if device policy
+      // sets the permission in a given state or the user denied the permission
+      // previously and checked "Never ask again".
+      ActivityCompat.requestPermissions(MainActivity.this,
+          new String[]{permission.ACCESS_FINE_LOCATION, permission.WRITE_EXTERNAL_STORAGE},
+          REQUEST_PERMISSIONS_REQUEST_CODE);
+    }
+  }
+
+  private boolean isDataTransferPossible() {
+    boolean dataTransferPossible = dataTransferService.isDataTransferPossible();
+    boolean networkAvailable = NetworkUtil.isNetworkAvailable(this);
+
+    if (!dataTransferPossible) {
+      ToastUtil.toastError(this, R.string.message_required_setting_for_data_transfer_not_found);
+    }
+
+    if (!networkAvailable) {
+      ToastUtil.toastError(this, R.string.message_device_does_not_have_active_internet_connection);
+    }
+
+    return dataTransferPossible && networkAvailable;
+  }
+
+  /**
+   * Returns the current state of the permissions needed.
+   */
+  private boolean checkPermissions() {
+    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+        Manifest.permission.ACCESS_FINE_LOCATION) &&
+        PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+            permission.WRITE_EXTERNAL_STORAGE);
+  }
+
+  public void showFeaturesFragment() {
+    changeFragment(MainActivity.FEATURE_FRAGMENT_ID, true);
+  }
+
+  public void showCustomersListFragment() {
+    changeFragment(MainActivity.CUSTOMER_LIST_FRAGMENT_ID, true);
+  }
+
+  protected BaseFragment getLastFragment() {
+    FragmentManager supportFragmentManager = getSupportFragmentManager();
+    if (supportFragmentManager.getBackStackEntryCount() > 1) {
+      FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager
+          .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 1);
+      String tag = backStackEntryAt.getName();
+      BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
+      return lastFragment;
+    }
+    return null;
+  }
+
+  public void removeFragment(Fragment fragment) {
+    FragmentManager manager = getSupportFragmentManager();
+    FragmentTransaction trans = manager.beginTransaction();
+    trans.remove(fragment);
+    trans.commit();
+    manager.popBackStack();
+  }
+
+  public void navigateToFragment(String fragmentName) {
+    FragmentManager fm = getSupportFragmentManager();
+    fm.popBackStack(fragmentName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+  }
+
+  protected void commitFragment(String fragmentTag, BaseFragment fragment, boolean addToBackStack) {
+    try {
+      if (!isFinishing()) {
+        FragmentTransaction fragmentTransaction;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container, fragment, fragmentTag);
+        fragmentTransaction.addToBackStack(fragmentTag);
+        fragmentTransaction.commit();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      ToastUtil.toastError(this, R.string.error_unknown_system_exception);
+    } finally {
+      Logger.sendError("MainActivity", "Exception in commitFragment");
+    }
+  }
+
+  public void changeFragment(int fragmentId, boolean addToBackStack) {
+    currentFragment = findFragment(fragmentId, new Bundle());
+    if (Empty.isNotEmpty(currentFragment) && !currentFragment.isVisible()) {
+      commitFragment(currentFragment.getFragmentTag(), currentFragment, addToBackStack);
+    }
+  }
+
+  public void changeFragment(int fragmentId, Bundle args, boolean addToBackStack) {
+    currentFragment = findFragment(fragmentId, args);
+    if (Empty.isNotEmpty(currentFragment) && !currentFragment.isVisible()) {
+      if (Empty.isNotEmpty(args)) {
+        currentFragment.setArguments(args);
+      }
+      commitFragment(currentFragment.getFragmentTag(), currentFragment, addToBackStack);
+    }
+  }
+
+  public abstract void onNavigationTapped();
+
+  @OnClick({R.id.navigation_img, R.id.search_img, R.id.save_img})
+  public void onClick(View view) {
+    switch (view.getId()) {
+      case R.id.navigation_img:
+        onNavigationTapped();
+        break;
+      case R.id.search_img:
+        changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
+        break;
+      case R.id.save_img:
+        onSaveImageClicked(true);
+        break;
+    }
+  }
+
+  public void onSaveImageClicked(boolean isRequiredMode) {
+    Fragment questionnaireCategoryFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionnairesCategoryFragment.class.getSimpleName());
+    Fragment questionnaireListFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionnaireListFragment.class.getSimpleName());
+    Fragment questionsListFragment = getSupportFragmentManager()
+        .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
+    if (questionsListFragment != null && questionsListFragment.isVisible()) {
+      if (!isRequiredMode || ((QuestionsListFragment) questionsListFragment)
+          .hasRequiredQuestionAnswer()) {
+        saveImg.setVisibility(View.GONE);
+        ((QuestionsListFragment) questionsListFragment).closeVisit();
+        if (questionnaireCategoryFragment != null) {
+          navigateToFragment(QuestionnairesCategoryFragment.class.getSimpleName());
+        } else if (questionnaireListFragment != null) {
+          navigateToFragment(QuestionnaireListFragment.class.getSimpleName());
+        } else {
+          onBackPressed();
+        }
+      } else {
+        ToastUtil.toastError(this, "لطفا به همه سوالات ستاره دار پاسخ بدهید");
+      }
+    }
+  }
+
+  @Override
+  public void onBackPressed() {
+    hideKeyboard();
+    try {
+      FragmentManager supportFragmentManager = getSupportFragmentManager();
+      if (supportFragmentManager.getBackStackEntryCount() > 1) {
+        FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager
+            .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 2);
+        String tag = backStackEntryAt.getName();
+        BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
+        if (Empty.isNotEmpty(lastFragment)) {
+          findFragment(lastFragment.getFragmentId(), new Bundle());
+        }
+        BaseFragment lastItem = getLastFragment();
+        if (Empty.isNotEmpty(lastFragment)) {
+          if (lastItem instanceof VisitDetailFragment) {
+            ((VisitDetailFragment) lastItem).finishVisiting();
+            return;
+          }
+        }
+        super.onBackPressed();
+      } else {
+        showDialogForExit();
+      }
+    } catch (Exception e) {
+      Logger.sendError("UI Exception", "Error in backPressed " + e.getMessage());
+      Log.e(TAG, e.getMessage(), e);
+    }
+  }
+
+  public void setNavigationToolbarIcon(int id) {
+    navigationImg.setImageResource(id);
+  }
+
+  public abstract void changeTitle(String title);
+
+  public void changeDetailContent(String content) {
+    detailTv.setText(content);
+  }
+
+  public void setToolbarIconVisibility(int id, int visibility) {
+    View view = findViewById(id);
+    view.setVisibility(visibility);
+  }
+
+  public abstract void customizeToolbar(int fragmentId);
+
+  protected BaseFragment findFragment(int fragmentId, Bundle args) {
+    BaseFragment fragment = null;
+    int parent = 0;
+    if (fragmentId == FEATURE_FRAGMENT_ID) {
+      setNavigationToolbarIcon(R.drawable.ic_menu);
+    } else {
+      setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
+    }
+
+    //show search icon in customer fragment
+    if (fragmentId == CUSTOMER_FRAGMENT) {
+      searchImg.setVisibility(View.VISIBLE);
+    } else {
+      searchImg.setVisibility(View.GONE);
+    }
+    //show save icon in question list fragment
+    if (fragmentId != QUESTION_LIST_FRAGMENT_ID) {
+      saveImg.setVisibility(View.GONE);
+    }
+    customizeToolbar(fragmentId);
+    switch (fragmentId) {
+      case FEATURE_FRAGMENT_ID:
+        fragment = FeaturesFragment.newInstance();
+        break;
+      case CUSTOMER_LIST_FRAGMENT_ID:
+        fragment = PathDetailFragment.newInstance();
+        break;
+      case VISIT_DETAIL_FRAGMENT_ID:
+        fragment = VisitDetailFragment.newInstance();
+        break;
+      case ORDER_INFO_FRAGMENT:
+        fragment = OrderInfoFragment.newInstance();
+        break;
+      case REGISTER_PAYMENT_FRAGMENT:
+        fragment = RegisterPaymentFragment.newInstance();
+        break;
+      case CUSTOMER_FRAGMENT:
+        fragment = CustomerFragment.newInstance();
+        break;
+      case CUSTOMER_SEARCH_FRAGMENT:
+        fragment = CustomerSearchFragment.newInstance();
+        break;
+
+      case NEW_CUSTOMER_DETAIL_FRAGMENT_ID:
+        fragment = AddCustomerFragment.newInstance();
+        break;
+      case REPORT_FRAGMENT:
+        fragment = ReportFragment.newInstance();
+        break;
+      case ABOUT_US_FRAGMENT_ID:
+        fragment = new AboutUsFragment();
+        break;
+      case GOODS_LIST_FRAGMENT_ID:
+        fragment = OrderFragment.newInstance();
+        break;
+      case SAVE_LOCATION_FRAGMENT_ID:
+        fragment = new SaveLocationFragment();
+        break;
+      case QUESTIONNAIRE_CATEGORY_FRAGMENT_ID:
+        fragment = QuestionnairesCategoryFragment.newInstance();
+        break;
+      case QUESTIONNAIRE_LIST_FRAGMENT_ID:
+        fragment = QuestionnaireListFragment.newInstance();
+        break;
+      case QUESTION_LIST_FRAGMENT_ID:
+        fragment = QuestionsListFragment.newInstance();
+        break;
+      case USER_TRACKING_FRAGMENT_ID://20
+        fragment = new UserTrackingFragment();
+        break;
+      case PATH_FRAGMENT_ID:
+        fragment = PathFragment.newInstance();
+        break;
+      case ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID:
+        fragment = AnonymousQuestionnaireFragment.newInstance();
+        break;
+      case PATH_DETAIL_FRAGMENT_ID:
+        fragment = PathDetailFragment.newInstance();
+        break;
+    }
+    Analytics.logContentView("Fragment " + String.valueOf(fragmentId));
+    return fragment;
+  }
+
+
+  public abstract void closeDrawer();
+
+  @Override
+  protected void attachBaseContext(Context newBase) {
+    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+  }
+
+  public void showMenu() {
+    navigationImg.setVisibility(View.VISIBLE);
+    navigationImg.setImageResource(R.drawable.ic_menu);
+  }
+
+  public void showNav() {
+    navigationImg.setVisibility(View.VISIBLE);
+    navigationImg.setImageResource(R.drawable.ic_arrow_forward);
+  }
+}

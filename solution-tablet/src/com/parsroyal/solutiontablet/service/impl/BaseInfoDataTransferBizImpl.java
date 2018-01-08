@@ -1,82 +1,80 @@
 package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
+import android.util.Log;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.BaseInfoDao;
 import com.parsroyal.solutiontablet.data.dao.impl.BaseInfoDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.BaseInfo;
+import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.BaseInfoList;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
+import com.parsroyal.solutiontablet.service.GetDataRestService;
+import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import com.parsroyal.solutiontablet.util.NetworkUtil;
+import java.io.IOException;
+import org.greenrobot.eventbus.EventBus;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
- * Created by Mahyar on 6/20/2015.
+ * Created by Arash on 27/12/2017
  */
-public class BaseInfoDataTransferBizImpl extends AbstractDataTransferBizImpl<BaseInfoList> {
+public class BaseInfoDataTransferBizImpl {
 
   private BaseInfoDao baseInfoDao;
   private Context context;
-  private ResultObserver observer;
 
-  public BaseInfoDataTransferBizImpl(Context context, ResultObserver resultObserver) {
-    super(context);
+  public BaseInfoDataTransferBizImpl(Context context) {
     this.context = context;
-    this.observer = resultObserver;
     this.baseInfoDao = new BaseInfoDaoImpl(context);
   }
 
-  @Override
-  public void receiveData(BaseInfoList data) {
-    if (Empty.isNotEmpty(data)) {
-      baseInfoDao.deleteAll();
-      for (BaseInfo baseInfo : data.getBaseInfoList()) {
-        baseInfo.setTitle(CharacterFixUtil.fixString(baseInfo.getTitle()));
-        baseInfoDao.create(baseInfo);
-      }
+  public void exchangeData() {
+    if (!NetworkUtil.isNetworkAvailable(context)) {
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
     }
-    getObserver()
-        .publishResult(context.getString(R.string.message_base_info_transferred_successfully));
-  }
 
-  @Override
-  public void beforeTransfer() {
-    getObserver().publishResult(context.getString(R.string.message_transferring_base_info_data));
-  }
+    GetDataRestService restService = ServiceGenerator.createService(GetDataRestService.class);
 
-  @Override
-  public ResultObserver getObserver() {
-    return observer;
-  }
+    Call<BaseInfoList> call = restService.getAllBaseInfo();
 
-  @Override
-  public String getMethod() {
-    return "baseinfo/all";
-  }
+    call.enqueue(new Callback<BaseInfoList>() {
+      @Override
+      public void onResponse(Call<BaseInfoList> call, Response<BaseInfoList> response) {
+        if (response.isSuccessful()) {
+          BaseInfoList baseInfoList = response.body();
+          if (Empty.isNotEmpty(baseInfoList)) {
+            baseInfoDao.deleteAll();
+            for (BaseInfo baseInfo : baseInfoList.getBaseInfoList()) {
+              baseInfo.setTitle(CharacterFixUtil.fixString(baseInfo.getTitle()));
+            }
+            baseInfoDao.bulkInsert(baseInfoList.getBaseInfoList());
 
-  @Override
-  public Class getType() {
-    return BaseInfoList.class;
-  }
+            EventBus.getDefault().post(new DataTransferSuccessEvent(
+                context.getString(R.string.provinces_data_transferred_successfully)
+                , StatusCodes.SUCCESS));
+          } else {
+            EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.INVALID_DATA));
+          }
+        } else {
+          try {
+            Log.d("TAG", response.errorBody().string());
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+          EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
+        }
+      }
 
-  @Override
-  public HttpMethod getHttpMethod() {
-    return HttpMethod.GET;
-  }
-
-  @Override
-  protected MediaType getContentType() {
-    return MediaType.APPLICATION_JSON;
-  }
-
-  @Override
-  protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    HttpEntity requestEntity = new HttpEntity<String>(headers);
-    return requestEntity;
+      @Override
+      public void onFailure(Call<BaseInfoList> call, Throwable t) {
+        EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NETWORK_ERROR));
+      }
+    });
   }
 }

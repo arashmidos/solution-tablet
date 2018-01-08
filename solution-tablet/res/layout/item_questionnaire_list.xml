@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main_lay"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+  <TextView
+    android:id="@+id/title_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="11dp"
+    android:layout_marginBottom="11dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_alignParentTop="true"
+    android:gravity="right"
+    android:textColor="@color/primary_dark"
+    android:textSize="14sp"
+    tools:text="نظرسنجی تاثیر تبلیغات محیطی برادران خسروی (به جز
+سارا) در فروش محصولات جدید سان استار" />
+  <ImageView
+    android:id="@+id/questionnaire_img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_alignParentRight="true"
+    android:layout_below="@id/title_tv"
+    android:src="@drawable/ic_list_shapes_18_dp"
+    android:tint="@color/black_55" />
+  <TextView
+    android:id="@+id/questionnaire_size_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="12dp"
+    android:layout_marginRight="12dp"
+    android:layout_below="@id/title_tv"
+    android:layout_toLeftOf="@id/questionnaire_img" />
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginTop="14dp"
+    android:layout_below="@id/questionnaire_img"
+    android:background="@color/navigation_drawer_divider" />
+</RelativeLayout>

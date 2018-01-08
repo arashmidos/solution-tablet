@@ -38,7 +38,7 @@ import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.KPIService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.KPIServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.KPIListAdapter;
 import com.parsroyal.solutiontablet.ui.component.GaugeView;
 import com.parsroyal.solutiontablet.ui.component.XYMarkerView;
@@ -71,7 +71,7 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
   ListView listView;
   @BindView(R.id.chart)
   BarChart barChart;
-  private MainActivity mainActivity;
+  private OldMainActivity oldMainActivity;
   private CustomerService customerService;
   private KPIService kpiService;
   private long customerBackendId = -1;
@@ -85,9 +85,9 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    mainActivity = (MainActivity) getActivity();
-    customerService = new CustomerServiceImpl(mainActivity);
-    kpiService = new KPIServiceImpl(mainActivity);
+    oldMainActivity = (OldMainActivity) getActivity();
+    customerService = new CustomerServiceImpl(oldMainActivity);
+    kpiService = new KPIServiceImpl(oldMainActivity);
 
     Bundle arguments = getArguments();
     if (Empty.isNotEmpty(arguments)) {
@@ -206,8 +206,8 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
 
   @Override
   public int getFragmentId() {
-    return isCustomerKPI ? MainActivity.KPI_CUSTOMER_FRAGMENT_ID
-        : MainActivity.KPI_SALESMAN_FRAGMENT_ID;
+    return isCustomerKPI ? OldMainActivity.KPI_CUSTOMER_FRAGMENT_ID
+        : OldMainActivity.KPI_SALESMAN_FRAGMENT_ID;
   }
 
   @Override
@@ -216,8 +216,8 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
       @Override
       public void run() {
         ToastUtil.toastError(getActivity(), ex);
-        mainActivity.removeFragment(KPIFragment.this);
-        mainActivity.changeSidebarItem(0);
+        oldMainActivity.removeFragment(KPIFragment.this);
+        oldMainActivity.changeSidebarItem(0);
       }
     });
   }
@@ -283,13 +283,13 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
         gaugeValueTv2.setText(String.valueOf(0));
         kpiDetails = kpiDto.getDetails();
 
-        adapter = new KPIListAdapter((MainActivity) getActivity(), kpiDetails);
+        adapter = new KPIListAdapter((OldMainActivity) getActivity(), kpiDetails);
         listView.setAdapter(adapter);
         customizeChart();
       } else {
         ToastUtil.toastError(getActivity(),
             getString(R.string.com_parsroyal_solutiontablet_exception_UnknownSystemException));
-        mainActivity.removeFragment(KPIFragment.this);
+        oldMainActivity.removeFragment(KPIFragment.this);
       }
     }
   }

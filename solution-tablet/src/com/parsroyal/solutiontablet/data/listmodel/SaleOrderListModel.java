@@ -13,6 +13,41 @@ public class SaleOrderListModel extends BaseListModel {
   private String customerName;
   private Long status;
   private Long customerBackendId;
+  private String description;
+  private String createdDateTime;
+  private Long visitId;
+  private int orderCount;
+
+  public SaleOrderListModel(Long id, Long backendId, String date, Long amount,
+      String paymentTypeTitle, String customerName, Long status, Long customerBackendId) {
+    this.id = id;
+    this.backendId = backendId;
+    this.date = date;
+    this.amount = amount;
+    this.paymentTypeTitle = paymentTypeTitle;
+    this.customerName = customerName;
+    this.status = status;
+    this.customerBackendId = customerBackendId;
+  }
+
+  public SaleOrderListModel() {
+  }
+
+  public Long getVisitId() {
+    return visitId;
+  }
+
+  public void setVisitId(Long visitId) {
+    this.visitId = visitId;
+  }
+
+  public String getCreatedDateTime() {
+    return createdDateTime;
+  }
+
+  public void setCreatedDateTime(String createdDateTime) {
+    this.createdDateTime = createdDateTime;
+  }
 
   public Long getCustomerBackendId() {
     return customerBackendId;
@@ -100,5 +135,21 @@ public class SaleOrderListModel extends BaseListModel {
   @Override
   public int hashCode() {
     return id.hashCode();
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public int getOrderCount() {
+    return orderCount;
+  }
+
+  public void setOrderCount(int orderCount) {
+    this.orderCount = orderCount;
   }
 }

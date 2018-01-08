@@ -26,4 +26,5 @@ public interface PositionService extends BaseService {
   List<LatLng> getAllPositionLatLng();
 
   Position getLastPosition();
+
 }
