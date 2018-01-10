@@ -69,7 +69,7 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {
+    return new String[]{
         Goods.COL_ID,
         Goods.COL_BACKEND_ID,
         Goods.COL_TITLE,
@@ -89,7 +89,6 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
         Goods.COL_CREATE_DATE_TIME,
         Goods.COL_UPDATE_DATE_TIME
     };
-    return projection;
   }
 
   @Override
