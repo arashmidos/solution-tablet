@@ -70,7 +70,8 @@ public class GoodsGroupDataTransferBizImpl {
                   context.getString(R.string.provinces_data_transferred_successfully)
                   , StatusCodes.SUCCESS));
             } else {
-              EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.INVALID_DATA));
+              EventBus.getDefault().post(new DataTransferSuccessEvent(
+                  context.getString(R.string.message_no_goods_group), StatusCodes.UPDATE));
             }
 
           } catch (Exception ex) {

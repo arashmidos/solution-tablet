@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -32,7 +33,7 @@ public class ServiceGenerator {
   //Change different level of logging here
   private static HttpLoggingInterceptor logging =
       new HttpLoggingInterceptor()
-          .setLevel(HttpLoggingInterceptor.Level.BASIC);
+          .setLevel(Level.BODY);
   private static Retrofit.Builder builder;
   private static SettingService settingService = new SettingServiceImpl(
       SolutionTabletApplication.getInstance());
