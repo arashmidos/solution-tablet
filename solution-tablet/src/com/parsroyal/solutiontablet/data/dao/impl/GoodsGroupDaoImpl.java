@@ -3,8 +3,12 @@ package com.parsroyal.solutiontablet.data.dao.impl;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.data.dao.GoodsGroupDao;
 import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
+import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Mahyar on 7/24/2015.
@@ -48,7 +52,7 @@ public class GoodsGroupDaoImpl extends AbstractDao<GoodsGroup, Long> implements 
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {
+    return new String[]{
         GoodsGroup.COL_ID,
         GoodsGroup.COL_BACKEND_ID,
         GoodsGroup.COL_PARENT_BACKEND_ID,
@@ -58,7 +62,6 @@ public class GoodsGroupDaoImpl extends AbstractDao<GoodsGroup, Long> implements 
         GoodsGroup.COL_CREATE_DATE_TIME,
         GoodsGroup.COL_UPDATE_DATE_TIME
     };
-    return projection;
   }
 
   @Override
@@ -73,5 +76,51 @@ public class GoodsGroupDaoImpl extends AbstractDao<GoodsGroup, Long> implements 
     group.setCreateDateTime(cursor.getString(6));
     group.setUpdateDateTime(cursor.getString(7));
     return group;
+  }
+
+  @Override
+  public List<GoodsGroup> getCategories() {
+
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String selection = GoodsGroup.COL_LEVEL + " = ?";
+    String[] args = {String.valueOf(1)};
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+    List<GoodsGroup> goodsGroups = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      goodsGroups.add(createEntityFromCursor(cursor));
+    }
+    cursor.close();
+    return goodsGroups;
+  }
+
+  @Override
+  public List<GoodsGroup> getChilds(Long goodsGroupBackendId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String selection = GoodsGroup.COL_PARENT_BACKEND_ID + " = ?";
+    String[] args = {String.valueOf(goodsGroupBackendId)};
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+    List<GoodsGroup> goodsGroups = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      goodsGroups.add(createEntityFromCursor(cursor));
+    }
+    cursor.close();
+    return goodsGroups;
+  }
+
+  @Override
+  public GoodsGroup retrieveByBackendId(Long goodsGroupBackendId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String selection = GoodsGroup.COL_BACKEND_ID + " = ?";
+    String[] args = {String.valueOf(goodsGroupBackendId)};
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+    GoodsGroup entity = null;
+    if (cursor.moveToFirst()) {
+      entity = createEntityFromCursor(cursor);
+    }
+    cursor.close();
+    return entity;
   }
 }

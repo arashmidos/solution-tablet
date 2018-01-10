@@ -1,9 +1,11 @@
 package com.parsroyal.solutiontablet.data.entity;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by Mahyar on 7/23/2015.
  */
-public class GoodsGroup extends BaseEntity<Long> {
+public class GoodsGroup extends BaseEntity<Long> implements Comparable<GoodsGroup>{
 
   public static final String TABLE_NAME = "COMMER_GOODS_GROUP";
 
@@ -83,5 +85,10 @@ public class GoodsGroup extends BaseEntity<Long> {
   @Override
   public Long getPrimaryKey() {
     return id;
+  }
+
+  @Override
+  public int compareTo(@NonNull GoodsGroup goodsGroup) {
+    return backendId.compareTo(goodsGroup.backendId);
   }
 }
