@@ -556,6 +556,7 @@
   <string name="send_data_completed_successfully">ارسال اطلاعات با موفقیت انجام شد</string>
   <string name="get_data_completed_successfully">دریافت اطلاعات با موفقیت انجام شد</string>
   <string name="error_in_sending_data">خطا در ارسال اطلاعات</string>
+  <string name="error_in_exchanging_data">خطا در تبادل اطلاعات</string>
   <string name="show_question_x">نمایش سوال شماره %d</string>
   <string name="question_has_prerequisite_x">جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!</string>
   <string name="total_order_sale_tv">مجموع مبلغ سفارشات</string>
@@ -581,4 +582,5 @@
   <string name="get_photo">گرفتن عکس</string>
   <string name="customer_pics">تصاویر مشتری</string>
   <string name="error_in_saving_new_customer">خطا در ثبت اطلاعات مشتری</string>
+  <string name="message_no_goods_group">هیچ گروه کالایی دریافت نشد</string>
 </resources>

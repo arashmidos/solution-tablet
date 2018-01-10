@@ -263,8 +263,6 @@
           android:background="@color/white"
           android:textColor="@color/black_21"
           android:textSize="14sp"
-          android:focusable="true"
-          android:focusableInTouchMode="true"
           android:gravity="right|center"
           android:text="@string/city" />
 
@@ -301,8 +299,6 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@android:color/white"
-          android:focusable="true"
-          android:focusableInTouchMode="true"
           android:gravity="right|center"
           android:text="@string/state" />
 

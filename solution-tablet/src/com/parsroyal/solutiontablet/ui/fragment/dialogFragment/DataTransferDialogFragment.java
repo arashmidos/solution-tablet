@@ -11,46 +11,26 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.impl.NewCustomerPicDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.PaymentsDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.Constants.SendOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferOrder;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
-import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
-import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.DataTransferList;
-import com.parsroyal.solutiontablet.data.model.QAnswerDto;
-import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
-import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.PaymentService;
-import com.parsroyal.solutiontablet.service.QuestionnaireService;
-import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.VisitService;
-import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.DataTransferAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
-import java.io.File;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -87,6 +67,7 @@ public class DataTransferDialogFragment extends DialogFragment {
   private DataTransferServiceImpl dataTransferService;
   private boolean isGet;
   private DataTransferAdapter adapter;
+  private boolean canceled;
 
   public DataTransferDialogFragment() {
     // Required empty public constructor
@@ -192,6 +173,7 @@ public class DataTransferDialogFragment extends DialogFragment {
   private void startTransfer() {
     transferStarted = true;
     transferFinished = false;
+    canceled = false;
     currentPosition = -1;
     switchButtonState();
     sendNextDetail();
@@ -200,12 +182,20 @@ public class DataTransferDialogFragment extends DialogFragment {
   private void switchButtonState() {
     if (transferStarted && !transferFinished) {
       dataTransferBtn.setVisibility(View.INVISIBLE);
-      uploadDataBtnDisabled.setVisibility(View.VISIBLE);
       progressBar.setVisibility(View.VISIBLE);
+      uploadDataBtnDisabled.setVisibility(View.VISIBLE);
     } else {
-      dataTransferBtn.setVisibility(View.VISIBLE);
-      uploadDataBtnDisabled.setVisibility(View.GONE);
-      progressBar.setVisibility(View.GONE);
+//      if (canceled) {
+//TODO: :Later put retry here
+//      }else {
+        dataTransferBtn.setVisibility(View.VISIBLE);
+        uploadDataBtnDisabled.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+        dataTransferBtn.setText(R.string.finish);
+
+        dataTransferBtn
+            .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_white_18_dp, 0);
+//      }
     }
   }
 
@@ -252,7 +242,7 @@ public class DataTransferDialogFragment extends DialogFragment {
       case SendOrder.ADDRESS:
         Thread t2 = new Thread(() -> dataTransferService.sendAllUpdatedCustomers());
         t2.start();
-                break;
+        break;
       case SendOrder.POSITION:
         Thread t3 = new Thread(() -> dataTransferService.sendAllPositions());
         t3.start();
@@ -303,7 +293,7 @@ public class DataTransferDialogFragment extends DialogFragment {
         adapter.setError(currentPosition);
         cancelTransfer();
       } else {
-        adapter.setError(currentPosition,event.getMessage());
+        adapter.setError(currentPosition, event.getMessage());
         sendNextDetail();
       }
     }
@@ -317,19 +307,15 @@ public class DataTransferDialogFragment extends DialogFragment {
       transferFinished = true;
       cancelBtn.setVisibility(View.GONE);
       switchButtonState();
-      dataTransferBtn.setText(R.string.finish);
-
-      dataTransferBtn
-          .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_white_18_dp, 0);
     });
   }
 
   private void cancelTransfer() {
     transferFinished = true;
+    canceled = true;
     mainActivity.runOnUiThread(() -> {
       switchButtonState();
-//      adapter.setError(currentPosition);
-      ToastUtil.toastError(root, getString(R.string.error_in_sending_data));
+      ToastUtil.toastError(root, getString(R.string.error_in_exchanging_data));
     });
   }
 

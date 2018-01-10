@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -97,8 +98,10 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   Button createBtn;
   @BindView(R.id.description_edt)
   EditText customerDescription;
+  @Nullable
   @BindView(R.id.photo_list)
   RecyclerView photoList;
+  @Nullable
   @BindView(R.id.image_counter)
   TextView imageCounter;
 
@@ -167,6 +170,9 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     if (pageStatus != null && pageStatus == PageStatus.VIEW) {
       disableItems();
     }
+
+    cityTv.setFocusable(false);
+    stateTv.setFocusable(false);
     return view;
   }
 
