@@ -280,6 +280,7 @@ public class DataTransferDialogFragment extends DialogFragment {
   public void getMessage(DataTransferEvent event) {
     if (event instanceof DataTransferSuccessEvent) {
       if (event.getStatusCode().equals(StatusCodes.SUCCESS)) {
+        adapter.setUpdate(currentPosition,event.getMessage());
         adapter.setFinished(currentPosition);
         sendNextDetail();
       } else if (event.getStatusCode().equals(StatusCodes.NO_DATA_ERROR)) {

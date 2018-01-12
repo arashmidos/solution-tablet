@@ -258,7 +258,7 @@ public class OrderInfoFragment extends BaseFragment {
           if (!pageStatus.equals(Constants.VIEW)) {
             saveOrder(statusId);
           }
-          if (visitId != 0l) {//TODO WHY?
+          if (visitId != 0l) {// WHY?
             mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
           } else {
             mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());

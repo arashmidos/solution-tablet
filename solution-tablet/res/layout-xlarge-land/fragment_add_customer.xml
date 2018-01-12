@@ -547,8 +547,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:gravity="right|center"
             android:text="@string/activity_type"
             android:textColor="@color/black_21"
@@ -673,9 +671,7 @@
           tools:text="@string/customer_description" />
 
       </android.support.design.widget.TextInputLayout>
-      <!--TODO:NEXT RELEASE-->
       <RelativeLayout
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -704,7 +700,6 @@
           tools:text="1/10" />
 
       </RelativeLayout>
-      <!--TODO:NEXT RELEASE-->
       <android.support.v7.widget.RecyclerView
         android:id="@+id/photo_list"
         android:layout_width="match_parent"
@@ -713,15 +708,13 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:padding="16dp"
-        android:visibility="gone"
         android:background="@color/gray_f5" />
-      <!--TODO: NEXT RELEASE 120-32dp -->
     <Button
       android:id="@+id/create_btn"
       style="@style/IranSans.Medium"
       android:layout_width="match_parent"
       android:layout_height="36dp"
-      android:layout_marginTop="120dp"
+      android:layout_marginTop="32dp"
       android:layout_marginBottom="16dp"
       android:layout_marginLeft="16dp"
       android:layout_marginRight="16dp"

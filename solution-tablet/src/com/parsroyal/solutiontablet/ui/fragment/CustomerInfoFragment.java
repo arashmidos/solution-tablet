@@ -248,7 +248,6 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         goToRegisterPaymentFragment();
         break;
       case R.id.register_questionnaire_lay:
-        //TODO :if only one category exist we should skip this fragment
         Bundle bundle = getArguments();
         bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
         bundle.putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());

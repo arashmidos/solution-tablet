@@ -204,8 +204,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
 
       hasOrderImg.setVisibility(model.hasOrder() ? View.VISIBLE : View.GONE);
 
-//      hasAnswerImg.setVisibility(model.hasAnswers() ? View.VISIBLE : View.GONE);
-//TODO: NEXT RELEASE
+      hasAnswerImg.setVisibility(model.hasAnswers() ? View.VISIBLE : View.GONE);
     }
 
     public void setListeners() {

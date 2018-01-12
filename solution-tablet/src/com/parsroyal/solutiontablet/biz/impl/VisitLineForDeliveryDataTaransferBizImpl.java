@@ -125,7 +125,7 @@ public class VisitLineForDeliveryDataTaransferBizImpl extends AbstractDataTransf
 //    GET /visit-lines/delivery/{distributorCode}
     String url = String.format("visit-lines/delivery/%s",
         settingService
-            .getSettingValue(ApplicationKeys.SETTING_USER_CODE));//TODO LATER ? DISTRIBUTER ID
+            .getSettingValue(ApplicationKeys.SETTING_USER_CODE));//LATER ? DISTRIBUTER ID
     Log.d(TAG, "Calling service:" + url);
     return url;
   }

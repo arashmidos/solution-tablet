@@ -539,8 +539,6 @@
           android:background="@color/white"
           android:textColor="@color/black_21"
           android:textSize="14sp"
-          android:focusable="true"
-          android:focusableInTouchMode="true"
           android:gravity="right|center"
           android:text="@string/activity_type" />
 
@@ -665,12 +663,50 @@
         tools:text="@string/customer_description" />
 
     </android.support.design.widget.TextInputLayout>
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp">
+
+      <TextView
+        style="@style/IranSans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/customer_pics"
+        android:textColor="@color/black_21"
+        android:textSize="14sp" />
+      <TextView
+        android:id="@+id/image_counter"
+        style="@style/IranSans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/customer_pics"
+        android:textColor="@color/gray_bd"
+        android:textSize="14sp"
+        tools:text="1/10" />
+
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/photo_list"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:padding="16dp"
+      android:background="@color/gray_f5" />
     <Button
       android:id="@+id/create_btn"
       style="@style/IranSans.Medium"
       android:layout_width="match_parent"
       android:layout_height="36dp"
-      android:layout_marginTop="60dp"
+      android:layout_marginTop="32dp"
       android:layout_marginBottom="16dp"
       android:layout_marginStart="16dp"
       android:layout_marginEnd="16dp"

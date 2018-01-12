@@ -273,7 +273,7 @@ public class SystemCustomerFragment extends BaseFragment {
 
     @Override
     protected void onPreExecute() {
-      super.onPreExecute();//TODO: Shakib,Show progressbar
+      super.onPreExecute();// Shakib,Show progressbar
     }
 
 
@@ -287,7 +287,7 @@ public class SystemCustomerFragment extends BaseFragment {
 
     @Override
     protected void onPostExecute(List<CustomerListModel> customerListModels) {
-      //// TODO: Shakib, hide progressbar
+      // Shakib, hide progressbar
       customerList = customerListModels;
       adapter.update(customerList);
       adapter.notifyDataSetChanged();

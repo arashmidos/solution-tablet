@@ -139,7 +139,7 @@ public class DataTransferServiceImpl implements DataTransferService {
       getAllGoods();
       getAllVisitLines();
     }
-//todo
+
 //    uiObserver.finished(true);
   }
 
@@ -283,14 +283,14 @@ public class DataTransferServiceImpl implements DataTransferService {
       newCustomerDataTransferBiz.setCustomer(customerDto);
       newCustomerDataTransferBiz.exchangeData();
 
-      //TODO NEXT RELEASE
-      /*File pics = customerService.getAllCustomerPicForSendByCustomerId(customerDto.getId());
+
+      File pics = customerService.getAllCustomerPicForSendByCustomerId(customerDto.getId());
       if (Empty.isEmpty(pics)) {
         continue;
       }
 
       Log.d(TAG, "Send Pic" + pics.length());
-      new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId());*/
+      new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId());
 
     }
 

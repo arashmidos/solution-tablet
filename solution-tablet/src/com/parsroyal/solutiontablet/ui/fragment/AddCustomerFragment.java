@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -98,10 +96,8 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   Button createBtn;
   @BindView(R.id.description_edt)
   EditText customerDescription;
-  @Nullable
   @BindView(R.id.photo_list)
   RecyclerView photoList;
-  @Nullable
   @BindView(R.id.image_counter)
   TextView imageCounter;
 
@@ -116,6 +112,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   private PageStatus pageStatus;
   private NewCustomerPictureAdapter adapter;
   private Uri fileUri;
+  private List<String> picList;
 
   public AddCustomerFragment() {
     // Required empty public constructor
@@ -165,8 +162,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
     setData();
     setUpSpinners();
-    //TODO NEXT RELEASE
-//    setupRecycler();
+    setupRecycler();
     if (pageStatus != null && pageStatus == PageStatus.VIEW) {
       disableItems();
     }
@@ -177,19 +173,25 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   }
 
   private void setupRecycler() {
+    if (customer.getId() != null) {
 
+      picList = customerService.getAllPicturesTitleByCustomerId(customer.getId());
+    }else{
+      picList = new ArrayList<>();
+    }
     LinearLayoutManager layout = new LinearLayoutManager(getActivity(),
         LinearLayoutManager.HORIZONTAL, true);
     layout.setReverseLayout(true);
     photoList.setLayoutManager(layout);
-    adapter = new NewCustomerPictureAdapter(getActivity(), new ArrayList<>(), this);
+    adapter = new NewCustomerPictureAdapter(getActivity(), picList, this);
     photoList.setAdapter(adapter);
     updateImageCounter();
   }
 
   private void updateImageCounter() {
     imageCounter.setText(NumberUtil.digitsToPersian(String.format(Locale.getDefault(),
-        "%d/%d", adapter.getItemCount() - 1, Constants.MAX_NEW_CUSTOMER_PHOTO)));
+        "%d/%d", adapter.isMaxReached() ? adapter.getItemCount() : adapter.getItemCount() - 1,
+        Constants.MAX_NEW_CUSTOMER_PHOTO)));
   }
 
   private void disableItems() {
@@ -344,14 +346,14 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       if (validate()) {
         Long customerId = customerService.saveCustomer(customer);
         if (Empty.isNotEmpty(customerId)) {
-          //TODO:NEXT RELEASE
-          /*List<String> picsTitleList = adapter.getCustomerPics();
-            List<CustomerPic> customerPics=new ArrayList<>();
+
+          List<String> picsTitleList = adapter.getCustomerPics();
+          List<CustomerPic> customerPics = new ArrayList<>();
           for (int i = 0; i < picsTitleList.size(); i++) {
-            CustomerPic c = new CustomerPic(picsTitleList.get(i),customerId);
+            CustomerPic c = new CustomerPic(picsTitleList.get(i), customerId);
             customerPics.add(c);
           }
-          customerService.savePicture(customerPics);*/
+          customerService.savePicture(customerPics);
           ToastUtil.toastSuccess(getActivity(), R.string.message_customer_save_successfully);
           mainActivity.removeFragment(AddCustomerFragment.this);
         } else {
@@ -581,7 +583,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
         String s = ImageUtil.saveTempImage(bitmap, MediaUtil
             .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
                 Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-                "IMG_" + customer.getCode() + "_" + (new Date().getTime()) % 1000));
+                "IMG_N_"  + (new Date().getTime()) % 1000));
 
         if (!s.equals("")) {
           File fdelete = new File(fileUri.getPath());
@@ -592,9 +594,6 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
         adapter.add(s);
         updateImageCounter();
-        if (adapter.getItemCount() == Constants.MAX_NEW_CUSTOMER_PHOTO + 1) {
-          Toast.makeText(mainActivity, "REMOVE ADD PHOTO BUTTON", Toast.LENGTH_SHORT).show();
-        }
       } else if (resultCode == RESULT_CANCELED) {
         // User cancelled the image capture
       } else {

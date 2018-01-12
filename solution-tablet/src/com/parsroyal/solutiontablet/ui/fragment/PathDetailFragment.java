@@ -120,7 +120,7 @@ public class PathDetailFragment extends BaseFragment implements
     mainActivity = (MainActivity) getActivity();
     customerService = new CustomerServiceImpl(mainActivity);
     visitService = new VisitServiceImpl(mainActivity);
-    //TODO MAP
+    //MAP
     /*SupportMapFragment mapFragment =
         (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
     new OnMapAndViewReadyListener(mapFragment, this);*/
@@ -436,7 +436,7 @@ public class PathDetailFragment extends BaseFragment implements
 
     @Override
     protected void onPreExecute() {
-      super.onPreExecute();//TODO: Shakib,Show progressbar
+      super.onPreExecute();
     }
 
 
@@ -450,7 +450,7 @@ public class PathDetailFragment extends BaseFragment implements
 
     @Override
     protected void onPostExecute(List<CustomerListModel> customerListModels) {
-      //// TODO: Shakib, hide progressbar
+      ////  Shakib, hide progressbar
       customerList = customerListModels;
       if (customerList == null || customerList.size() == 0) {
         noCustomerLay.setVisibility(View.VISIBLE);

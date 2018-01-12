@@ -49,6 +49,10 @@ public interface CustomerService extends BaseService {
 
   List<CustomerPic> getAllPicturesByCustomerBackendId(long customerBackendId);
 
+  List<CustomerPic> getAllPicturesByCustomerId(long customerId);
+
+  List<String> getAllPicturesTitleByCustomerId(long customerId);
+
   File getAllCustomerPicForSend();
 
   File getAllCustomerPicForSendByVisitId(Long visitId);

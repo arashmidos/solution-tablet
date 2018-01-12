@@ -173,8 +173,6 @@ public class QuestionsListFragment extends BaseFragment {
       }
       return false;
     });
-    //TODO: Show buttons
-
   }
 
   public void closeVisit() {

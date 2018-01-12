@@ -268,7 +268,6 @@ public class AddOrderDialogFragment extends DialogFragment {
 
       @Override
       public void afterTextChanged(Editable s) {
-        //TODO why this method change the size of screen?
         fillDetailPanel();
         errorMsg.setVisibility(View.GONE);
       }
