@@ -57,7 +57,7 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
     holder.setData(position);
     if (!MultiScreenUtility.isTablet(context)) {
-      lastItem(position == model.size(), holder);
+      lastItem(position == model.size()-1, holder);
     }
   }
 
@@ -70,7 +70,7 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
     } else {
       parameter.setMargins(0, 0, 0, 0);
     }
-    holder.bottomLine.setVisibility(isLastItem ? View.GONE : View.VISIBLE);
+//    holder.bottomLine.setVisibility(isLastItem ? View.GONE : View.VISIBLE);
     holder.mainLay.setLayoutParams(parameter);
   }
 

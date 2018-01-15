@@ -41,6 +41,7 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
   private PositionDto positionDto;
   private int success = 0;
   private int total = 0;
+  private boolean noUpdate;
 
   public PositionDataTransferBizImpl(Context context) {
     super(context);
@@ -64,8 +65,10 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
       Crashlytics
           .log(Log.ERROR, "Data transfer", "Error in receiving PositionData " + ex.getMessage());
     }
-    EventBus.getDefault()
-        .post(new DataTransferSuccessEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
+    if (!noUpdate) {
+      EventBus.getDefault()
+          .post(new DataTransferSuccessEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
+    }
   }
 
   public String getSuccessfulMessage() {
@@ -122,5 +125,9 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
 
   public void sendAllData() {
     exchangeData();
+  }
+
+  public void setNoUpdate(boolean noUpdate) {
+    this.noUpdate = noUpdate;
   }
 }
