@@ -176,7 +176,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     if (customer.getId() != null) {
 
       picList = customerService.getAllPicturesTitleByCustomerId(customer.getId());
-    }else{
+    } else {
       picList = new ArrayList<>();
     }
     LinearLayoutManager layout = new LinearLayoutManager(getActivity(),
@@ -353,7 +353,8 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
             CustomerPic c = new CustomerPic(picsTitleList.get(i), customerId);
             customerPics.add(c);
           }
-          customerService.savePicture(customerPics);
+          customerService.savePicture(customerPics, customerId);
+
           ToastUtil.toastSuccess(getActivity(), R.string.message_customer_save_successfully);
           mainActivity.removeFragment(AddCustomerFragment.this);
         } else {
@@ -495,7 +496,6 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
         return (((c < 2) && (r == c)) || ((c >= 2) && ((11 - c) == r)));
       }
-
     }
   }
 
@@ -583,7 +583,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
         String s = ImageUtil.saveTempImage(bitmap, MediaUtil
             .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
                 Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-                "IMG_N_"  + (new Date().getTime()) % 1000));
+                "IMG_N_" + (new Date().getTime()) % 1000));
 
         if (!s.equals("")) {
           File fdelete = new File(fileUri.getPath());

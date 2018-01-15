@@ -55,7 +55,6 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
   private Context context;
   private CustomerPicDao customerPicDao;
-  private ResultObserver observer;
 
   public NewCustomerPicDataTransferBizImpl(Context context, File pics, Long visitId,
       Long customerId) {
@@ -181,12 +180,12 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
   @Override
   public ResultObserver getObserver() {
-    return observer;
+    return null;
   }
 
   @Override
   public String getMethod() {
-    return "customers/images";
+    return Empty.isNotEmpty(customer) ? "customers/saveCustomerPics" : "customers/images";
   }
 
   @Override

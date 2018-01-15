@@ -36,6 +36,7 @@ public class NewCustomerPictureAdapter extends Adapter<ViewHolder> {
     this.customerPics = customerPics;
     this.context = context;
     inflater = LayoutInflater.from(context);
+    maxReached = customerPics.size() == Constants.MAX_NEW_CUSTOMER_PHOTO;
   }
 
   public boolean isMaxReached() {

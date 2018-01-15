@@ -95,7 +95,6 @@ public class DataTransferServiceImpl implements DataTransferService {
     this.visitService = new VisitServiceImpl(context);
   }
 
-  @Override
   public void getAllData() {
     backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
@@ -281,17 +280,17 @@ public class DataTransferServiceImpl implements DataTransferService {
     for (int i = 0; i < allNewCustomers.size(); i++) {
       CustomerDto customerDto = allNewCustomers.get(i);
       newCustomerDataTransferBiz.setCustomer(customerDto);
-      newCustomerDataTransferBiz.exchangeData();
+      boolean isSuccess = newCustomerDataTransferBiz.exchangeData();
 
+      if (isSuccess) {
+        File pics = customerService.getAllCustomerPicForSendByCustomerId(customerDto.getId());
+        if (Empty.isEmpty(pics)) {
+          continue;
+        }
 
-      File pics = customerService.getAllCustomerPicForSendByCustomerId(customerDto.getId());
-      if (Empty.isEmpty(pics)) {
-        continue;
+        Log.d(TAG, "Send Pic" + pics.length());
+        new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId()).exchangeData();
       }
-
-      Log.d(TAG, "Send Pic" + pics.length());
-      new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId());
-
     }
 
     EventBus.getDefault().post(new DataTransferSuccessEvent(
@@ -500,56 +499,5 @@ public class DataTransferServiceImpl implements DataTransferService {
 
     return !(Empty.isEmpty(backendUri) || Empty.isEmpty(username) ||
         Empty.isEmpty(password) || Empty.isEmpty(salesmanId));
-  }
-
-  @Override
-  public GoodsDtoList getRejectedData(ResultObserver uiObserver, Long customerId) {
-    backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
-    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
-    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
-    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-    if (Empty.isEmpty(backendUri)) {
-      throw new InvalidServerAddressException();
-    }
-
-    if (Empty.isEmpty(username)) {
-      throw new UsernameNotProvidedForConnectingToServerException();
-    }
-
-    if (Empty.isEmpty(password)) {
-      throw new PasswordNotProvidedForConnectingToServerException();
-    }
-
-    if (Empty.isEmpty(salesmanId)) {
-      throw new SalesmanIdNotProvidedForConnectingToServerException();
-    }
-
-    final ResultObserver resultObserver = prepareResultObserverForDataTransfer(uiObserver);
-
-    return getAllRejectedGoods(resultObserver, customerId);
-  }
-
-  private GoodsDtoList getAllRejectedGoods(ResultObserver observer, Long customerId) {
-    return new RejectedGoodsDataTransferBizImpl(context)
-        .getAllRejectedData(backendUri, username, password, salesmanId, customerId);
-  }
-
-  private ResultObserver prepareResultObserverForDataTransfer(final ResultObserver uiObserver) {
-    ResultObserver resultObserver = new ResultObserver() {
-      @Override
-      public void publishResult(BusinessException ex) {
-        uiObserver.publishResult(ex);
-      }
-
-      @Override
-      public void publishResult(String message) {
-        uiObserver.publishResult(message);
-      }
-
-      @Override
-      public void finished(boolean result) {
-      }
-    };
-    return resultObserver;
   }
 }

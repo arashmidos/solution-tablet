@@ -166,7 +166,8 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
-  public void savePicture(List<CustomerPic> customerPics) {
+  public void savePicture(List<CustomerPic> customerPics, Long customerId) {
+    customerPicDao.deleteAll(CustomerPic.COL_CUSTOMER_ID, String.valueOf(customerId));
     customerPicDao.bulkInsert(customerPics);
   }
 
@@ -220,7 +221,7 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public void deleteCustomerPic(String title, long customerId) {
-    customerPicDao.delete(title,customerId);
+    customerPicDao.delete(title, customerId);
   }
 
   @Override

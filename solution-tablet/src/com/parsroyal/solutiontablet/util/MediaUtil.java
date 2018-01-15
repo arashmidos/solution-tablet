@@ -128,7 +128,7 @@ public class MediaUtil {
           while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1) {
             out.write(data, 0, count);
           }
-        } catch (IOException e) {
+        } catch (Exception e) {
           e.printStackTrace();
         } finally {
           try {

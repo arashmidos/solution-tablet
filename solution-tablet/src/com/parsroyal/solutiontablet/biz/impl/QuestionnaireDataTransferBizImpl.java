@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
 import com.parsroyal.solutiontablet.data.dao.QuestionDao;
@@ -79,9 +78,7 @@ public class QuestionnaireDataTransferBizImpl {
                   questionDao.create(question);
                 }
               }
-              EventBus.getDefault().post(new DataTransferSuccessEvent(
-                  context.getString(R.string.provinces_data_transferred_successfully)
-                  , StatusCodes.SUCCESS));
+              EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.SUCCESS));
             } catch (Exception e) {
               Logger.sendError("Data transfer",
                   "Error in receiving QuestionaireData " + e.getMessage());
@@ -89,9 +86,7 @@ public class QuestionnaireDataTransferBizImpl {
               EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.INVALID_DATA));
             }
           } else {
-            EventBus.getDefault().post(new DataTransferSuccessEvent(
-                context.getString(R.string.provinces_data_transferred_successfully)
-                , StatusCodes.SUCCESS));
+            EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
           }
         } else {
           try {

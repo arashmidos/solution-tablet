@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.GoodsGroupDao;
 import com.parsroyal.solutiontablet.data.dao.impl.GoodsGroupDaoImpl;
@@ -66,12 +65,10 @@ public class GoodsGroupDataTransferBizImpl {
               }
               goodsGroupDao.bulkInsert(list);
 
-              EventBus.getDefault().post(new DataTransferSuccessEvent(
-                  context.getString(R.string.provinces_data_transferred_successfully)
-                  , StatusCodes.SUCCESS));
+              EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.SUCCESS));
             } else {
-              EventBus.getDefault().post(new DataTransferSuccessEvent(
-                  context.getString(R.string.message_no_goods_group), StatusCodes.UPDATE));
+              EventBus.getDefault()
+                  .post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
             }
 
           } catch (Exception ex) {

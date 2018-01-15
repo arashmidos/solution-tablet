@@ -9,7 +9,6 @@ import com.parsroyal.solutiontablet.data.dao.impl.ProvinceDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Province;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
-import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.model.ProvinceList;
 import com.parsroyal.solutiontablet.service.GetDataRestService;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
@@ -56,11 +55,10 @@ public class ProvinceDataTransferBizImpl {
             }
             provinceDao.bulkInsert(provinceList.getProvinceList());
             EventBus.getDefault().post(
-                new DataTransferSuccessEvent(
-                    context.getString(R.string.provinces_data_transferred_successfully)
-                    , StatusCodes.SUCCESS));
+                new DataTransferSuccessEvent("", StatusCodes.SUCCESS));
           } else {
-            EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.INVALID_DATA));
+            EventBus.getDefault().post(new DataTransferSuccessEvent(
+                context.getString(R.string.message_no_data_received), StatusCodes.NO_DATA_ERROR));
           }
         } else {
           try {
