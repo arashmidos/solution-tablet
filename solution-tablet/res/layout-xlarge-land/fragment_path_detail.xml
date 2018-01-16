@@ -15,7 +15,7 @@
       android:id="@+id/search_bar_lay"
       android:layout_width="match_parent"
       android:layout_height="48dp"
-      android:background="@android:color/white"
+      android:background="@color/white"
       android:orientation="horizontal"
       android:visibility="gone">
 

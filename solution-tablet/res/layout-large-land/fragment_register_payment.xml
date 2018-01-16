@@ -3,7 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@android:color/white"
+  android:background="@color/white"
   android:orientation="horizontal"
   android:weightSum="10"
   tools:context="com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment">
@@ -404,7 +404,7 @@
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
+                android:background="@color/white"
                 android:gravity="right"
                 android:prompt="@string/number" />
 
@@ -445,7 +445,7 @@
       android:background="@color/payment_bottom_line"
       android:gravity="center"
       android:text="@string/submit"
-      android:textColor="@android:color/white"
+      android:textColor="@color/white"
       android:textSize="14sp" />
   </LinearLayout>
 </LinearLayout>

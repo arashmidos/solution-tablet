@@ -3,7 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@android:color/white"
+  android:background="@color/white"
   android:elevation="3dp"
   android:focusable="true"
   android:focusableInTouchMode="true"
@@ -22,7 +22,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@android:color/white"
+        android:background="@color/white"
         app:title=""
         app:titleTextColor="@color/white">
 
@@ -187,7 +187,7 @@
             style="@style/IranSans"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:background="@color/white"
             android:gravity="right"
             android:prompt="@string/number" />
 
@@ -377,7 +377,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register_order"
-        android:textColor="@android:color/white"
+        android:textColor="@color/white"
         android:textSize="14sp" />
       <ImageView
         android:id="@+id/register_order_image"

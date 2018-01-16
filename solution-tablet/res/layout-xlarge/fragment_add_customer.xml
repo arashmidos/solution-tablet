@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@android:color/white"
+  android:background="@color/white"
   android:orientation="horizontal"
   android:weightSum="1"
   tools:context="com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment"
@@ -510,7 +510,7 @@
             style="@style/IranSans"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:background="@color/white"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="right" />
@@ -621,7 +621,7 @@
             style="@style/IranSans"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:background="@color/white"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="right"
@@ -720,7 +720,7 @@
         android:background="@color/payment_bottom_line"
         android:gravity="center"
         android:text="@string/create_save"
-        android:textColor="@android:color/white"
+        android:textColor="@color/white"
         android:textSize="14sp" />
     </LinearLayout>
 

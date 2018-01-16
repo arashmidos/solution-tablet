@@ -3,7 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@android:color/white">
+  android:background="@color/white">
 
   <TextView
     android:id="@+id/title_tv"
@@ -35,7 +35,7 @@
       style="@style/IranSans"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@android:color/white"
+      android:background="@color/white"
       android:gravity="right"/>
 
     <View
@@ -86,7 +86,7 @@
     android:background="@drawable/get_data_background"
     android:gravity="center"
     android:text="@string/register"
-    android:textColor="@android:color/white"
+    android:textColor="@color/white"
     android:textSize="14sp"/>
 
   <TextView

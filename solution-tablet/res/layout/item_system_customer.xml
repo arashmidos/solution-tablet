@@ -10,7 +10,7 @@
   android:layout_marginLeft="8dp"
   android:layout_marginRight="8dp"
   android:padding="16dp"
-  android:background="@android:color/white">
+  android:background="@color/white">
 
   <TextView
     android:id="@+id/customer_name_tv"

@@ -2,7 +2,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@android:color/white"
+  android:background="@color/white"
   android:layoutDirection="ltr"
   android:orientation="vertical"
   tools:context="com.parsroyal.solutiontablet.ui.fragment.NavigationDrawerFragment"
@@ -492,7 +492,7 @@
         android:layout_toLeftOf="@+id/download_icon"
         android:layout_toStartOf="@+id/download_icon"
         android:text="@string/get_data"
-        android:textColor="@android:color/white"
+        android:textColor="@color/white"
         android:textSize="@dimen/text_small" />
     </RelativeLayout>
   </LinearLayout>

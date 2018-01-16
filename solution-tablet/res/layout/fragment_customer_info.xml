@@ -120,7 +120,7 @@
         android:layout_marginTop="8dp"
         android:paddingStart="10dp"
         android:paddingLeft="10dp"
-        android:background="@android:color/white">
+        android:background="@color/white">
 
         <ImageView
           android:id="@+id/minus_img"
@@ -177,7 +177,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@android:color/white">
+        android:background="@color/white">
 
         <ImageView
           android:id="@+id/store_img"
@@ -251,13 +251,13 @@
           android:layout_width="56dp"
           android:layout_height="1dp"
           android:layout_gravity="end"
-          android:background="@android:color/white" />
+          android:background="@color/white" />
 
         <RelativeLayout
           android:id="@+id/location_lay"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@android:color/white">
+          android:background="@color/white">
 
           <ImageView
             android:id="@+id/location_img"
@@ -297,14 +297,14 @@
           android:layout_width="56dp"
           android:layout_height="1dp"
           android:layout_gravity="end"
-          android:background="@android:color/white" />
+          android:background="@color/white" />
 
 
         <RelativeLayout
           android:id="@+id/mobile_lay"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@android:color/white">
+          android:background="@color/white">
 
           <ImageView
             android:id="@+id/mobile_img"
@@ -344,13 +344,13 @@
           android:layout_width="56dp"
           android:layout_height="1dp"
           android:layout_gravity="end"
-          android:background="@android:color/white" />
+          android:background="@color/white" />
 
         <RelativeLayout
           android:id="@+id/phone_lay"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@android:color/white">
+          android:background="@color/white">
 
           <ImageView
             android:id="@+id/phone_img"
@@ -393,7 +393,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@android:color/white">
+        android:background="@color/white">
         <ImageView
           android:id="@+id/alert_img"
           android:layout_width="wrap_content"
@@ -445,13 +445,13 @@
         android:layout_width="56dp"
         android:layout_height="1dp"
         android:layout_gravity="end"
-        android:background="@android:color/white" />
+        android:background="@color/white" />
 
       <RelativeLayout
         android:id="@+id/register_return_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:background="@color/white">
 
         <ImageView
           android:id="@+id/register_return_img"
@@ -490,12 +490,12 @@
         android:layout_width="56dp"
         android:layout_height="1dp"
         android:layout_gravity="end"
-        android:background="@android:color/white" />
+        android:background="@color/white" />
       <RelativeLayout
         android:id="@+id/register_payment_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:background="@color/white">
 
         <ImageView
           android:id="@+id/register_payment_img"
@@ -534,13 +534,13 @@
         android:layout_width="56dp"
         android:layout_height="1dp"
         android:layout_gravity="end"
-        android:background="@android:color/white" />
+        android:background="@color/white" />
 
       <RelativeLayout
         android:id="@+id/register_questionnaire_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:background="@color/white">
 
         <ImageView
           android:id="@+id/register_questionnaire_img"
@@ -579,13 +579,13 @@
         android:layout_width="56dp"
         android:layout_height="1dp"
         android:layout_gravity="end"
-        android:background="@android:color/white" />
+        android:background="@color/white" />
 
       <RelativeLayout
         android:id="@+id/register_image_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:background="@color/white">
 
         <ImageView
           android:id="@+id/register_image_img"
@@ -625,7 +625,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@android:color/white">
+        android:background="@color/white">
 
         <ImageView
           android:id="@+id/no_activity_img"
@@ -663,14 +663,14 @@
         android:layout_width="56dp"
         android:layout_height="1dp"
         android:layout_gravity="end"
-        android:background="@android:color/white" />
+        android:background="@color/white" />
 
       <RelativeLayout
         android:id="@+id/end_and_exit_visit_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
-        android:background="@android:color/white">
+        android:background="@color/white">
 
         <ImageView
           android:id="@+id/end_and_exit_visit_img"
