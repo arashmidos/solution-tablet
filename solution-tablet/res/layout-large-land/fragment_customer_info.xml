@@ -132,7 +132,65 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical">
+      <RelativeLayout
+        android:id="@+id/credit_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingStart="10dp"
+        android:paddingLeft="10dp"
+        android:background="@android:color/white">
 
+        <ImageView
+          android:id="@+id/minus_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="10sp"
+          android:layout_marginLeft="10dp"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_minus_box_18_dp"
+          android:visibility="gone" />
+        <TextView
+          android:id="@+id/credit_tv"
+          style="@style/IranSans"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="10dp"
+          android:layout_marginLeft="10dp"
+          android:layout_alignTop="@+id/credit_title_tv"
+          android:layout_toEndOf="@+id/minus_img"
+          android:layout_toRightOf="@+id/minus_img"
+          android:ellipsize="end"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:textColor="@color/green_return"
+          android:textSize="14sp"
+          tools:text="12000ریال" />
+        <TextView
+          android:id="@+id/credit_title_tv"
+          style="@style/IranSans"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="18dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:layout_toEndOf="@id/credit_tv"
+          android:layout_toRightOf="@id/credit_tv"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text="@string/customer_credit_title"
+          android:textColor="@color/black_85"
+          android:textSize="14sp" />
+      </RelativeLayout>
       <RelativeLayout
         android:id="@+id/store_lay"
         android:layout_width="match_parent"
@@ -354,8 +412,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@android:color/white">
-
+        android:background="@color/white">
+        <ImageView
+          android:id="@+id/alert_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16sp"
+          android:layout_marginLeft="16dp"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_alert_24_dp"
+          android:visibility="gone" />
         <ImageView
           android:id="@+id/register_order_img"
           android:layout_width="wrap_content"
@@ -379,7 +447,9 @@
           android:layout_marginEnd="19dp"
           android:layout_marginLeft="8dp"
           android:layout_marginRight="19dp"
+          android:layout_toEndOf="@id/alert_img"
           android:layout_toLeftOf="@id/register_order_img"
+          android:layout_toRightOf="@id/alert_img"
           android:layout_toStartOf="@id/register_order_img"
           android:ellipsize="end"
           android:gravity="start"
