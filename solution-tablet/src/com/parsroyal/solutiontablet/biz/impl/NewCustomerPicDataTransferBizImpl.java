@@ -170,6 +170,7 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
         EventBus.getDefault().post(new DataTransferErrorEvent(context.getString(
             R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
       }
+
     }
   }
 

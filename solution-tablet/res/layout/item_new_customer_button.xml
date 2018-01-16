@@ -3,6 +3,7 @@
   android:layout_width="90dp"
   android:layout_height="79dp"
   android:id="@+id/create_photo_layout"
+  android:layout_marginRight="16dp"
   android:background="@color/white">
   <ImageView
     android:id="@+id/pic_img"
