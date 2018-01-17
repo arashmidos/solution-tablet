@@ -52,8 +52,7 @@ public class VisitLineDataTaransferBizImpl {
 
     Call<List<VisitLineDto>> call = restService
         .getAllVisitLines(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE),
-            settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)
-        );
+            settingService.getSettingValue(ApplicationKeys.SALESMAN_ID));
 
     call.enqueue(new Callback<List<VisitLineDto>>() {
       @Override

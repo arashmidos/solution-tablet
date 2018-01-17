@@ -244,8 +244,7 @@ public class VisitDetailFragment extends BaseFragment {
           SaleOrderStatus.DRAFT.getId());
       mainActivity.removeFragment(this);
     } catch (Exception ex) {
-      Crashlytics
-          .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
+
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
@@ -385,7 +384,7 @@ public class VisitDetailFragment extends BaseFragment {
         String s = ImageUtil.saveTempImage(bitmap, MediaUtil
             .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
                 Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-                "IMG_" + customer.getCode() + "_" + (new Date().getTime())%1000));
+                "IMG_" + customer.getCode() + "_" + (new Date().getTime()) % 1000));
 
         if (!s.equals("")) {
           File fdelete = new File(fileUri.getPath());
@@ -419,6 +418,11 @@ public class VisitDetailFragment extends BaseFragment {
    */
   public void openOrderDetailFragment(Long statusID) {
 
+    if (SaleOrderStatus.DRAFT.getId().equals(statusID) && customer.getRemainedCredit() != null
+        && customer.getRemainedCredit().longValue() < 0) {
+      ToastUtil.toastError(mainActivity, R.string.error_order_is_not_available_for_this_customer);
+      return;
+    }
     orderDto = saleOrderService
         .findOrderDtoByCustomerBackendIdAndStatus(customer.getBackendId(), statusID);
     if (Empty.isEmpty(orderDto) || statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {

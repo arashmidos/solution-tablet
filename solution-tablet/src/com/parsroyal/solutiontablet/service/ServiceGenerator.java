@@ -1,12 +1,20 @@
 package com.parsroyal.solutiontablet.service;
 
 import android.text.TextUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
@@ -40,9 +48,6 @@ public class ServiceGenerator {
 
   public static <S> S createService(Class<S> serviceClass) {
 
-//    String username = settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME);
-//    String password = settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD);
-
     return createService(serviceClass, null, null);
   }
 
@@ -75,10 +80,29 @@ public class ServiceGenerator {
       baseUrl = "http://www.google.com";
     }
     builder = new Retrofit.Builder().baseUrl(baseUrl + "/");
-    builder.addConverterFactory(GsonConverterFactory.create());
+
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    gsonBuilder.registerTypeAdapter(BigDecimal.class,  new JsonSerializer<BigDecimal>() {
+      @Override
+      public JsonElement serialize(final BigDecimal src, final Type typeOfSrc, final JsonSerializationContext context) {
+
+        return new JsonPrimitive(src);
+      }
+    });
+
+    Gson gson = gsonBuilder.create();
+    builder.addConverterFactory(GsonConverterFactory.create(gson));
     builder.client(httpClient.build());
     retrofit = builder.build();
-
+//    Gson gson = new GsonBuilder()
+//        .registerTypeAdapter(Id.class, new IdTypeAdapter())
+//        .enableComplexMapKeySerialization()
+//        .serializeNulls()
+//        .setDateFormat(DateFormat.LONG)
+//        .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+//        .setPrettyPrinting()
+//        .setVersion(1.0)
+//        .create();
     return retrofit.create(serviceClass);
   }
 

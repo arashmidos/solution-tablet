@@ -584,4 +584,6 @@
   <string name="error_in_saving_new_customer">خطا در ثبت اطلاعات مشتری</string>
   <string name="message_no_goods_group">هیچ گروه کالایی دریافت نشد</string>
   <string name="customer_credit_title">میزان اعتبار مشتری</string>
+  <string name="unknown">نا معلوم</string>
+  <string name="error_order_is_not_available_for_this_customer">ثبت سفارش برای این مشتری مقدور نمی باشد</string>
 </resources>

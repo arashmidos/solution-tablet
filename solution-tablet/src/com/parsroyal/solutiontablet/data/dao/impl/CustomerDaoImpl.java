@@ -20,6 +20,7 @@ import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Mahyar on 6/19/2015.
+ * Created by Arash on 1/16/2018.
  */
 public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements CustomerDao {
 
@@ -65,13 +66,15 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     contentValues.put(Customer.COL_CREATE_DATE_TIME, entity.getCreateDateTime());//15
     contentValues.put(Customer.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
     contentValues.put(Customer.COL_X_LOCATION, entity.getxLocation());
-    contentValues.put(Customer.COL_Y_LOCATION, entity.getyLocation());//18
-    contentValues.put(Customer.COL_SHOP_NAME, entity.getShopName());//19
+    contentValues.put(Customer.COL_Y_LOCATION, entity.getyLocation());
+    contentValues.put(Customer.COL_SHOP_NAME, entity.getShopName());
     contentValues.put(Customer.COL_NATIONAL_CODE, entity.getNationalCode());//20
-    contentValues.put(Customer.COL_MUNICIPALITY_CODE, entity.getMunicipalityCode());//21
-    contentValues.put(Customer.COL_POSTAL_CODE, entity.getPostalCode());//22
+    contentValues.put(Customer.COL_MUNICIPALITY_CODE, entity.getMunicipalityCode());
+    contentValues.put(Customer.COL_POSTAL_CODE, entity.getPostalCode());
     contentValues.put(Customer.COL_APPROVED, entity.isApproved() ? 1 : 0);
     contentValues.put(Customer.COL_DESCRIPTION, entity.getDescription());
+    contentValues.put(Customer.COL_REMAINED_CREDIT,
+        entity.getRemainedCredit() == null ? null : entity.getRemainedCredit().longValue());//25
     return contentValues;
   }
 
@@ -106,13 +109,14 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         Customer.COL_CREATE_DATE_TIME,//15
         Customer.COL_UPDATE_DATE_TIME,
         Customer.COL_X_LOCATION,
-        Customer.COL_Y_LOCATION,//18
+        Customer.COL_Y_LOCATION,
         Customer.COL_SHOP_NAME,
-        Customer.COL_NATIONAL_CODE,
+        Customer.COL_NATIONAL_CODE,//20
         Customer.COL_MUNICIPALITY_CODE,
-        Customer.COL_POSTAL_CODE,//22
+        Customer.COL_POSTAL_CODE,
         Customer.COL_APPROVED,
-        Customer.COL_DESCRIPTION
+        Customer.COL_DESCRIPTION,
+        Customer.COL_REMAINED_CREDIT//25
     };
   }
 
@@ -143,6 +147,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     customer.setPostalCode(cursor.getString(22));
     customer.setApproved(cursor.getInt(23) == 1);
     customer.setCustomerDescription(cursor.getString(24));
+    customer.setRemainedCredit(cursor.getLong(25));
     return customer;
   }
 
@@ -174,6 +179,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     customer.setPostalCode(cursor.getString(22));
     customer.setApproved(cursor.getInt(23) == 1);
     customer.setDescription(cursor.getString(24));
+    customer.setRemainedCredit(BigDecimal.valueOf(cursor.getLong(25)));
     return customer;
   }
 
@@ -447,13 +453,11 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
     if (Empty.isNotEmpty(nCustomerSO.getSent())) {
       if (nCustomerSO.getSent().equals(1)) {
-        selection = selection.concat(
-            " AND " + Customer.COL_BACKEND_ID + " is not null AND " + Customer.COL_BACKEND_ID +
-                " != 0");
+        selection = selection.concat(" AND " + Customer.COL_BACKEND_ID + " is not null AND "
+            + Customer.COL_BACKEND_ID + " != 0");
       } else {
-        selection = selection
-            .concat(" AND " + Customer.COL_BACKEND_ID + " is  null OR " + Customer.COL_BACKEND_ID +
-                " = 0");
+        selection = selection.concat(" AND " + Customer.COL_BACKEND_ID + " is  null OR "
+            + Customer.COL_BACKEND_ID + " = 0");
       }
     }
 

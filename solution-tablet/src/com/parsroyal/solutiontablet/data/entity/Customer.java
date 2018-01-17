@@ -1,7 +1,9 @@
 package com.parsroyal.solutiontablet.data.entity;
 
+import java.math.BigDecimal;
+
 /**
- * Created by Mahyar on 6/14/2015.
+ * Created by Arash on 1/16/2018.
  */
 
 public class Customer extends BaseEntity<Long> {
@@ -29,6 +31,7 @@ public class Customer extends BaseEntity<Long> {
   public static final String COL_POSTAL_CODE = "POSTAL_CODE";
   public static final String COL_APPROVED = "APPROVED";
   public static final String COL_DESCRIPTION = "DESCRIPTION";
+  public static final String COL_REMAINED_CREDIT = "REMAINED_CREDIT";
 
   public static final String TABLE_NAME = "COMMER_CUSTOMER";
 
@@ -57,7 +60,8 @@ public class Customer extends BaseEntity<Long> {
       " " + Customer.COL_MUNICIPALITY_CODE + " TEXT," +
       " " + Customer.COL_POSTAL_CODE + " TEXT," +
       " " + Customer.COL_APPROVED + " INTEGER," +
-      " " + Customer.COL_DESCRIPTION + " TEXT" +
+      " " + Customer.COL_DESCRIPTION + " TEXT," +
+      " " + Customer.COL_REMAINED_CREDIT + " INTEGER" +
       " );";
 
   private Long id;
@@ -84,6 +88,7 @@ public class Customer extends BaseEntity<Long> {
   private String municipalityCode;
   private boolean approved = true;
   private String description;
+  private BigDecimal remainedCredit;
 
   public Customer(Double xLocation, String fullName, String shopName, String code) {
     this.xLocation = xLocation;
@@ -93,6 +98,14 @@ public class Customer extends BaseEntity<Long> {
   }
 
   public Customer() {
+  }
+
+  public BigDecimal getRemainedCredit() {
+    return remainedCredit;
+  }
+
+  public void setRemainedCredit(BigDecimal remainedCredit) {
+    this.remainedCredit = remainedCredit;
   }
 
   public boolean isApproved() {
@@ -288,11 +301,7 @@ public class Customer extends BaseEntity<Long> {
   public boolean equals(Object o) {
     if (o instanceof Customer) {
       Customer cu = (Customer) o;
-      if (this.getBackendId().equals(cu.getBackendId())) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.getBackendId().equals(cu.getBackendId());
     } else {
       return false;
     }
