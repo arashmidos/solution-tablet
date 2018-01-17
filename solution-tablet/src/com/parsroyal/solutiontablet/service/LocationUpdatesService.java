@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -231,6 +232,13 @@ public class LocationUpdatesService extends Service {
       return;
     }
     try {
+      LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+      try {
+        Log.d(TAG ,"Removing Test providers");
+        lm.removeTestProvider(LocationManager.GPS_PROVIDER);
+      } catch (IllegalArgumentException error) {
+        Log.d(TAG,"Got exception in removing test provider");
+      }
       fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,
           Looper.myLooper());
     } catch (SecurityException unlikely) {

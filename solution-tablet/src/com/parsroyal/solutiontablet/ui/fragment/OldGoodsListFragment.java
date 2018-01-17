@@ -137,7 +137,8 @@ public class OldGoodsListFragment extends BaseFragment {
       return view;
     } catch (Exception e) {
       Crashlytics
-          .log(Log.ERROR, "UI Exception", "Error in creating OldGoodsListFragment " + e.getMessage());
+          .log(Log.ERROR, "UI Exception",
+              "Error in creating OldGoodsListFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);

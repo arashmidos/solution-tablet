@@ -15,7 +15,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by Mahyar on 6/22/2015.
  * Edited by Arash on 6/29/2016
  */
 public class LocationServiceImpl implements LocationService, LocationListener {

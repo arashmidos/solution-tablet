@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -114,6 +115,7 @@ public abstract class MainActivity extends AppCompatActivity {
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
   private static final String TAG = MainActivity.class.getName();
+  public static int batteryLevel = -1;
   protected ProgressDialog progressDialog;
   protected BaseFragment currentFragment;
   protected LocationUpdatesService gpsRecieverService = null;
@@ -165,6 +167,34 @@ public abstract class MainActivity extends AppCompatActivity {
   @Nullable
   @BindView(R.id.detail_tv)
   TextView detailTv;
+  public static String batteryStatusTitle;
+  private BroadcastReceiver batInfoReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context ctxt, Intent intent) {
+      batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+      int deviceStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+
+      if(deviceStatus == BatteryManager.BATTERY_STATUS_CHARGING){
+        batteryStatusTitle ="Charging";
+      }
+
+      if(deviceStatus == BatteryManager.BATTERY_STATUS_DISCHARGING){
+        batteryStatusTitle = "Discharging";
+      }
+
+      if (deviceStatus == BatteryManager.BATTERY_STATUS_FULL){
+        batteryStatusTitle = "Battery Full";
+      }
+
+      if(deviceStatus == BatteryManager.BATTERY_STATUS_UNKNOWN){
+        batteryStatusTitle = "Unknown";
+      }
+
+      if (deviceStatus == BatteryManager.BATTERY_STATUS_NOT_CHARGING){
+        batteryStatusTitle = "Not Charging";
+      }
+    }
+  };
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -174,6 +204,8 @@ public abstract class MainActivity extends AppCompatActivity {
     if (!BuildConfig.DEBUG) {
       logUser();
     }
+
+    registerReceiver(batInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
   }
 
 

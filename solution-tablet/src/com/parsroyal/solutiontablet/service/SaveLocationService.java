@@ -15,7 +15,9 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
+import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.greenrobot.eventbus.EventBus;
 
@@ -69,6 +71,12 @@ public class SaveLocationService extends IntentService {
     Log.i(TAG, "Saving location " + location);
 
     final Position position = new Position(location);
+    try {
+      position.setMockLocation(GPSUtil.isLocationMock(this, location) ? 1 : 0);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+
     position.setSalesmanId(salesmanId);
     positionService.savePosition(position);
     EventBus.getDefault().post(new GPSEvent(location));
