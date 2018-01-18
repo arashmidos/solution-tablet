@@ -1,8 +1,6 @@
 package com.parsroyal.solutiontablet.util;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,8 +10,6 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -70,82 +66,33 @@ public class GPSUtil {
   }
 
   public static List<String> getListOfFakeLocationApps(Context context) {
-    List<String> runningApps = getRunningApps(context, false);
-    for (int i = runningApps.size() - 1; i >= 0; i--) {
-      String app = runningApps.get(i);
-      if (!hasAppPermission(context, app, "android.permission.ACCESS_MOCK_LOCATION")) {
-        runningApps.remove(i);
+    PackageManager p = context.getPackageManager();
+    final List<PackageInfo> appinstall = p.getInstalledPackages(PackageManager.GET_PERMISSIONS |
+        PackageManager.GET_PROVIDERS);
+
+    List<String> runningApps = new ArrayList<>();//getRunningApps(context, false);
+    for (PackageInfo packageInfo : appinstall) {
+//      Log.d(TAG, "Installed package :" + packageInfo.packageName);
+//      Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
+//      Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
+//    for (int i = runningApps.size() - 1; i >= 0; i--) {
+//      String app = runningApps.get(i);
+      if (hasAppPermission(packageInfo)) {
+        runningApps.add(packageInfo.packageName);
       }
     }
+
     return runningApps;
   }
 
-  private static List<String> getRunningApps(Context context, boolean includeSystem) {
-    ActivityManager activityManager = (ActivityManager) context
-        .getSystemService(Context.ACTIVITY_SERVICE);
+  private static boolean hasAppPermission(PackageInfo packageInfo) {
 
-    List<String> runningApps = new ArrayList<>();
-
-    try {
-      List<ActivityManager.RunningAppProcessInfo> runAppsList = activityManager
-          .getRunningAppProcesses();
-      for (ActivityManager.RunningAppProcessInfo processInfo : runAppsList) {
-        Collections.addAll(runningApps, processInfo.pkgList);
-      }
-
-      //can throw securityException at api<18 (maybe need "android.permission.GET_TASKS")
-      List<ActivityManager.RunningTaskInfo> runningTasks = activityManager.getRunningTasks(1000);
-      for (ActivityManager.RunningTaskInfo taskInfo : runningTasks) {
-        runningApps.add(taskInfo.topActivity.getPackageName());
-      }
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
-
-    List<ActivityManager.RunningServiceInfo> runningServices = activityManager
-        .getRunningServices(1000);
-    for (ActivityManager.RunningServiceInfo serviceInfo : runningServices) {
-      runningApps.add(serviceInfo.service.getPackageName());
-    }
-
-    runningApps = new ArrayList<>(new HashSet<>(runningApps));
-
-    if (!includeSystem) {
-      for (int i = runningApps.size() - 1; i >= 0; i--) {
-        String app = runningApps.get(i);
-        if (isSystemPackage(context, app)) {
-          runningApps.remove(i);
+    if (packageInfo.requestedPermissions != null) {
+      for (String requestedPermission : packageInfo.requestedPermissions) {
+        if (requestedPermission.equals("android.permission.ACCESS_MOCK_LOCATION")) {
+          return true;
         }
       }
-    }
-    return runningApps;
-  }
-
-  private static boolean isSystemPackage(Context context, String app) {
-    PackageManager packageManager = context.getPackageManager();
-    try {
-      PackageInfo pkgInfo = packageManager.getPackageInfo(app, 0);
-      return (pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
-    } catch (PackageManager.NameNotFoundException e) {
-      e.printStackTrace();
-    }
-    return false;
-  }
-
-  private static boolean hasAppPermission(Context context, String app, String permission) {
-    PackageManager packageManager = context.getPackageManager();
-    PackageInfo packageInfo;
-    try {
-      packageInfo = packageManager.getPackageInfo(app, PackageManager.GET_PERMISSIONS);
-      if (packageInfo.requestedPermissions != null) {
-        for (String requestedPermission : packageInfo.requestedPermissions) {
-          if (requestedPermission.equals(permission)) {
-            return true;
-          }
-        }
-      }
-    } catch (PackageManager.NameNotFoundException e) {
-      e.printStackTrace();
     }
     return false;
   }

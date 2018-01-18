@@ -15,7 +15,6 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -66,11 +65,16 @@ public class SaveLocationService extends IntentService {
 
       salesmanId = Long.parseLong(salesmanIdKeyValue.getValue());
     }
+
+    Position position;
     Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
-
     Log.i(TAG, "Saving location " + location);
+    if (location == null) {
+      position = intent.getParcelableExtra(LocationUpdatesService.EXTRA_POSITION);
+    } else {
+      position = new Position(location);
+    }
 
-    final Position position = new Position(location);
     try {
       position.setMockLocation(GPSUtil.isLocationMock(this, location) ? 1 : 0);
     } catch (Exception ex) {

@@ -60,6 +60,7 @@ public class LocationUpdatesService extends Service {
   private static final String PACKAGE_NAME = "com.parsroyal.solutiontablet.service";
   public static final String ACTION_BROADCAST = PACKAGE_NAME + ".broadcast";
   public static final String EXTRA_LOCATION = PACKAGE_NAME + ".location";
+  public static final String EXTRA_POSITION = PACKAGE_NAME + ".position";
   private static final String TAG = LocationUpdatesService.class.getSimpleName();
   private static final String EXTRA_STARTED_FROM_NOTIFICATION = PACKAGE_NAME +
       ".started_from_notification";

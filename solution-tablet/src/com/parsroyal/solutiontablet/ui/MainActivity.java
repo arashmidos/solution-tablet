@@ -43,8 +43,11 @@ import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationUpdatesService;
+import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl.GpsStatus;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
@@ -75,6 +78,7 @@ import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -116,6 +120,7 @@ public abstract class MainActivity extends AppCompatActivity {
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
   private static final String TAG = MainActivity.class.getName();
   public static int batteryLevel = -1;
+  public static String batteryStatusTitle;
   protected ProgressDialog progressDialog;
   protected BaseFragment currentFragment;
   protected LocationUpdatesService gpsRecieverService = null;
@@ -141,17 +146,6 @@ public abstract class MainActivity extends AppCompatActivity {
       boundToGpsService = false;
     }
   };
-  protected BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
-        if (!GPSUtil.isGpsAvailable(context)) {
-          showGpsOffDialog();
-          Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
-        }
-      }
-    }
-  };
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.toolbar_title)
@@ -167,31 +161,45 @@ public abstract class MainActivity extends AppCompatActivity {
   @Nullable
   @BindView(R.id.detail_tv)
   TextView detailTv;
-  public static String batteryStatusTitle;
-  private BroadcastReceiver batInfoReceiver = new BroadcastReceiver() {
+  private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context ctxt, Intent intent) {
       batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
       int deviceStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
 
-      if(deviceStatus == BatteryManager.BATTERY_STATUS_CHARGING){
-        batteryStatusTitle ="Charging";
+      if (deviceStatus == BatteryManager.BATTERY_STATUS_CHARGING) {
+        batteryStatusTitle = "Charging";
       }
 
-      if(deviceStatus == BatteryManager.BATTERY_STATUS_DISCHARGING){
+      if (deviceStatus == BatteryManager.BATTERY_STATUS_DISCHARGING) {
         batteryStatusTitle = "Discharging";
       }
 
-      if (deviceStatus == BatteryManager.BATTERY_STATUS_FULL){
+      if (deviceStatus == BatteryManager.BATTERY_STATUS_FULL) {
         batteryStatusTitle = "Battery Full";
       }
 
-      if(deviceStatus == BatteryManager.BATTERY_STATUS_UNKNOWN){
+      if (deviceStatus == BatteryManager.BATTERY_STATUS_UNKNOWN) {
         batteryStatusTitle = "Unknown";
       }
 
-      if (deviceStatus == BatteryManager.BATTERY_STATUS_NOT_CHARGING){
+      if (deviceStatus == BatteryManager.BATTERY_STATUS_NOT_CHARGING) {
         batteryStatusTitle = "Not Charging";
+      }
+    }
+  };
+  private PositionService positionService;
+  protected BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      if (intent.getAction() != null && intent.getAction()
+          .matches("android.location.PROVIDERS_CHANGED")) {
+        if (!GPSUtil.isGpsAvailable(context)) {
+          showGpsOffDialog();
+          positionService.sendGpsChangedPosition(GpsStatus.OFF);
+        } else {
+          positionService.sendGpsChangedPosition(GpsStatus.ON);
+        }
       }
     }
   };
@@ -200,12 +208,11 @@ public abstract class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
 
     dataTransferService = new DataTransferServiceImpl(this);
+    positionService = new PositionServiceImpl(this);
 
     if (!BuildConfig.DEBUG) {
       logUser();
     }
-
-    registerReceiver(batInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
   }
 
 
@@ -328,14 +335,34 @@ public abstract class MainActivity extends AppCompatActivity {
     }
 
     registerReceiver(gpsStatusReceiver, new IntentFilter("android.location.PROVIDERS_CHANGED"));
+    registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
     new TrackerAlarmReceiver().setAlarm(this);
     navigationImg.setVisibility(View.VISIBLE);
+
+    List<String> fakeApps = GPSUtil.getListOfFakeLocationApps(this);
+    if (fakeApps.size() > 0) {
+      showFakeGpsDetected(fakeApps);
+    }
+  }
+
+  private void showFakeGpsDetected(List<String> fakeApps) {
+
+    StringBuilder s = new StringBuilder("");
+    for (int i = 0; i < fakeApps.size(); i++) {
+      s.append("-").append(fakeApps.get(i)).append("\n");
+    }
+    String message = String.format(getString(R.string.error_fake_gps_detected), s.toString());
+
+    DialogUtil.showCustomDialog(this, getString(R.string.warning),
+        message, "تایید", (dialog, which) -> finish(), null, null, Constants.ICON_MESSAGE);
   }
 
   @Override
   protected void onPause() {
     super.onPause();
     unregisterReceiver(gpsStatusReceiver);
+    unregisterReceiver(batteryInfoReceiver);
   }
 
   @Override
