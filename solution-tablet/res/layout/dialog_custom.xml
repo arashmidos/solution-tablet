@@ -45,6 +45,7 @@
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:layout_below="@id/title_tv"
+    android:textColor="@color/gray_75"
     android:gravity="right"
     android:textSize="@dimen/text_normal"/>
 

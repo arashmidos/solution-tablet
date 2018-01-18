@@ -588,7 +588,7 @@
   <string name="error_order_is_not_available_for_this_customer">ثبت سفارش برای این مشتری مقدور نمی باشد</string>
   <string name="error_fake_gps_detected">بازاریاب گرامی\n
   به دلیل نصب بودن برنامه های زیر امکان استفاده از این اپلیکیشن وجود ندارد:\n
-    %s\n
+    \n%s\n
     نرم افزارهای بالا را حذف کرده یا با پشتیبان خود تماس بگیرید
   </string>
 

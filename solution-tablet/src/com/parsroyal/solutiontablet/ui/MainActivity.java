@@ -341,7 +341,7 @@ public abstract class MainActivity extends AppCompatActivity {
     navigationImg.setVisibility(View.VISIBLE);
 
     List<String> fakeApps = GPSUtil.getListOfFakeLocationApps(this);
-    if (fakeApps.size() > 0) {
+    if (fakeApps.size() > 0 && !BuildConfig.DEBUG) {
       showFakeGpsDetected(fakeApps);
     }
   }

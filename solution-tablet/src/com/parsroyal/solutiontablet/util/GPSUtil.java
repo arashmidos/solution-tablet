@@ -1,8 +1,10 @@
 package com.parsroyal.solutiontablet.util;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -70,15 +72,16 @@ public class GPSUtil {
     final List<PackageInfo> appinstall = p.getInstalledPackages(PackageManager.GET_PERMISSIONS |
         PackageManager.GET_PROVIDERS);
 
-    List<String> runningApps = new ArrayList<>();//getRunningApps(context, false);
+    List<String> runningApps = new ArrayList<>();
     for (PackageInfo packageInfo : appinstall) {
-//      Log.d(TAG, "Installed package :" + packageInfo.packageName);
-//      Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
-//      Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
-//    for (int i = runningApps.size() - 1; i >= 0; i--) {
-//      String app = runningApps.get(i);
+
       if (hasAppPermission(packageInfo)) {
-        runningApps.add(packageInfo.packageName);
+        try {
+          ApplicationInfo applicationInfo = p.getApplicationInfo(packageInfo.packageName, 0);
+          runningApps.add(p.getApplicationLabel(applicationInfo).toString());
+        } catch (NameNotFoundException e) {
+          e.printStackTrace();
+        }
       }
     }
 
