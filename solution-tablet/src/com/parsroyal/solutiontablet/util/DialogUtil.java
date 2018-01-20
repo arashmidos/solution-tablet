@@ -54,6 +54,7 @@ public class DialogUtil {
     }
 
     AlertDialog alertDialog = dialogBuilder.create();
+    alertDialog.setCancelable(false);
     alertDialog.show();
 
     negativeTv.setOnClickListener(v -> {

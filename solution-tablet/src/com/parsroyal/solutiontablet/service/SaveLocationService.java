@@ -17,6 +17,7 @@ import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
+import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.greenrobot.eventbus.EventBus;
 
@@ -82,6 +83,14 @@ public class SaveLocationService extends IntentService {
     }
 
     position.setSalesmanId(salesmanId);
+    Position lastPosition = positionService.getLastPosition();
+    if (lastPosition != null) {
+      float distanceInMeter = LocationUtil
+          .distanceBetween(position.getLocation(), lastPosition.getLocation());
+      position.setDistanceInMeter(distanceInMeter);
+    }else{
+      position.setDistanceInMeter(0);
+    }
     positionService.savePosition(position);
     EventBus.getDefault().post(new GPSEvent(location));
   }

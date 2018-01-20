@@ -23,6 +23,7 @@ public class PositionDto extends BaseModel {
   private int batteryLevel;
   private String batteryStatus;
   private String createDateTime;
+  private double distanceInMeter;
 
   public PositionDto() {
   }
@@ -160,5 +161,13 @@ public class PositionDto extends BaseModel {
 
   public void setCreateDateTime(String createDateTime) {
     this.createDateTime = createDateTime;
+  }
+
+  public void setDistanceInMeter(double distanceInMeter) {
+    this.distanceInMeter = distanceInMeter;
+  }
+
+  public double getDistanceInMeter() {
+    return distanceInMeter;
   }
 }

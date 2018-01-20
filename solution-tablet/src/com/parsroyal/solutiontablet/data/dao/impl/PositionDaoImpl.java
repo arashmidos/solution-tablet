@@ -41,7 +41,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     contentValues.put(Position.COL_LONGITUDE, entity.getLongitude());
     contentValues.put(Position.COL_SPEED, entity.getSpeed());
     contentValues.put(Position.COL_STATUS, entity.getStatus());
-    contentValues.put(Position.COL_GPS_DATE, DateUtil.convertDate(
+    contentValues.put(Position.COL_GPS_DATE, entity.getDate() == null ? null : DateUtil.convertDate(
         entity.getDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));//5
     contentValues.put(Position.COL_GPS_OFF, entity.getGpsOff());
     contentValues.put(Position.COL_MODE, entity.getMode());
@@ -54,6 +54,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     contentValues.put(Position.COL_ROOTED, entity.isRooted() ? 1 : 0);
     contentValues.put(Position.COL_BATTERY_LEVEL, entity.getBatteryLevel());//15
     contentValues.put(Position.COL_BATTERY_STATUS, entity.getBatteryStatus());
+    contentValues.put(Position.COL_DISTANCE, entity.getDistanceInMeter());
     return contentValues;
   }
 
@@ -86,7 +87,8 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
         Position.COL_MOCK_LOCATION,
         Position.COL_ROOTED,
         Position.COL_BATTERY_LEVEL,//15
-        Position.COL_BATTERY_STATUS
+        Position.COL_BATTERY_STATUS,
+        Position.COL_DISTANCE
     };
   }
 
@@ -112,6 +114,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setRooted(cursor.getInt(14) == 1);
     position.setBatteryLevel(cursor.getInt(15));
     position.setBatteryStatus(cursor.getString(16));
+    position.setDistanceInMeter(cursor.getDouble(17));
     return position;
   }
 
@@ -122,9 +125,9 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setLatitude(cursor.getDouble(1));
     position.setLongitude(cursor.getDouble(2));
     position.setSpeed(cursor.getFloat(3));
-    position.setDate(DateUtil
-        .convertStringToDate(cursor.getString(5), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
-            "EN"));
+    String date = cursor.getString(5);
+    position.setDate(date == null ? null : DateUtil.convertStringToDate(
+        date, DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     position.setGpsOff(cursor.getInt(6));
     position.setMode(cursor.getInt(7));
     position.setPersonId(cursor.getLong(8));
@@ -134,6 +137,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setRooted(cursor.getInt(14));
     position.setBatteryLevel(cursor.getInt(15));
     position.setBatteryStatus(cursor.getString(16));
+    position.setDistanceInMeter(cursor.getDouble(17));
 
     return position;
   }

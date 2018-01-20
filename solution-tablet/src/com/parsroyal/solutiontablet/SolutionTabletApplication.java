@@ -10,8 +10,10 @@ import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.DisplayMetrics;
 import com.crashlytics.android.Crashlytics;
+import com.instacart.library.truetime.TrueTime;
 import com.parsroyal.solutiontablet.constants.Constants;
 import io.fabric.sdk.android.Fabric;
+import java.io.IOException;
 import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -57,6 +59,14 @@ public class SolutionTabletApplication extends MultiDexApplication {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
     setLanguage();
+
+    new Thread(() -> {
+      try {
+        TrueTime.build().initialize();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }).start();
   }
 
   public void setLanguage() {

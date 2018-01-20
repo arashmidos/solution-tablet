@@ -122,6 +122,14 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
           .format(SQL_ADD_COLUMN, Customer.TABLE_NAME, Customer.COL_REMAINED_CREDIT, "INTEGER"));
       db.execSQL(String
           .format(SQL_ADD_COLUMN, Position.TABLE_NAME, Position.COL_MOCK_LOCATION, "INTEGER"));
+      db.execSQL(String
+          .format(SQL_ADD_COLUMN, Position.TABLE_NAME, Position.COL_ROOTED, "INTEGER"));
+      db.execSQL(String
+          .format(SQL_ADD_COLUMN, Position.TABLE_NAME, Position.COL_BATTERY_LEVEL, "INTEGER"));
+      db.execSQL(String
+          .format(SQL_ADD_COLUMN, Position.TABLE_NAME, Position.COL_BATTERY_STATUS, "TEXT"));
+      db.execSQL(String
+          .format(SQL_ADD_COLUMN, Position.TABLE_NAME, Position.COL_DISTANCE, "REAL"));
     }
   }
 }

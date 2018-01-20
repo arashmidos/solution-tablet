@@ -50,7 +50,7 @@ public class QuestionDetailBottomSheet extends QuestionDetailDialogFragment {
     getDialog().setOnShowListener(dialog -> {
       BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) getDialog();
 
-      bottomSheet = (FrameLayout) bottomSheetDialog
+      bottomSheet = bottomSheetDialog
           .findViewById(android.support.design.R.id.design_bottom_sheet);
       CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) bottomSheet
           .getLayoutParams();

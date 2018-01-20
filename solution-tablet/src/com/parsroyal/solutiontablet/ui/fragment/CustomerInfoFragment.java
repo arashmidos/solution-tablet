@@ -243,10 +243,9 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     creditRemained =
         customer.getRemainedCredit() == null ? null : customer.getRemainedCredit().longValue();
     if (creditRemained != null) {
-      creditTv.setText(NumberUtil
-          .digitsToPersian(
-              String.format(Locale.getDefault(), "%,d %s", creditRemained / 1000, getString(
-                  R.string.common_irr_currency))));
+      creditTv.setText(NumberUtil.digitsToPersian(
+          String.format(Locale.getDefault(), "%,d %s", Math.abs(creditRemained / 1000), getString(
+              R.string.common_irr_currency))));
       if (creditRemained < 0) {
         creditTv.setTextColor(getResources().getColor(R.color.remove_red));
         minusImg.setVisibility(View.VISIBLE);

@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.data.entity;
 
 import android.location.Location;
+import com.instacart.library.truetime.TrueTime;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -28,6 +29,7 @@ public class Position extends BaseEntity<Long> {
   public static final String COL_ROOTED = "ROOTED";
   public static final String COL_BATTERY_LEVEL = "BATTERY_LEVEL";
   public static final String COL_BATTERY_STATUS = "BATTERY_STATUS";
+  public static final String COL_DISTANCE = "DISTANCE";
 
   public static final String CREATE_TABLE_SCRIPT = "CREATE TABLE " + Position.TABLE_NAME + " (" +
       " " + Position.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -46,7 +48,8 @@ public class Position extends BaseEntity<Long> {
       " " + Position.COL_MOCK_LOCATION + " INTEGER," +
       " " + Position.COL_ROOTED + " INTEGER," +
       " " + Position.COL_BATTERY_LEVEL + " INTEGER," +
-      " " + Position.COL_BATTERY_STATUS + " TEXT" +
+      " " + Position.COL_BATTERY_STATUS + " TEXT," +
+      " " + Position.COL_DISTANCE + " REAL" +
       " );";
 
   private Long id;
@@ -64,6 +67,7 @@ public class Position extends BaseEntity<Long> {
   private boolean rooted;
   private int batteryLevel;
   private String batteryStatus;
+  private Double distanceInMeter;
 
   public Position(Double latitude, Double longitude, Float speed, int gpsOff, int mode,
       Float accuracy) {
@@ -79,7 +83,7 @@ public class Position extends BaseEntity<Long> {
     this.batteryLevel = MainActivity.batteryLevel;
     this.batteryStatus = MainActivity.batteryStatusTitle;
     this.rooted = GPSUtil.isDeviceRooted();
-
+    this.date = TrueTime.now();
   }
 
   public Position() {
@@ -223,5 +227,13 @@ public class Position extends BaseEntity<Long> {
 
   public void setBatteryStatus(String batteryStatus) {
     this.batteryStatus = batteryStatus;
+  }
+
+  public Double getDistanceInMeter() {
+    return distanceInMeter;
+  }
+
+  public void setDistanceInMeter(double distanceInMeter) {
+    this.distanceInMeter = distanceInMeter;
   }
 }
