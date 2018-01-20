@@ -622,7 +622,13 @@ public abstract class MainActivity extends AppCompatActivity {
         onNavigationTapped();
         break;
       case R.id.search_img:
-        changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
+        Fragment orderFragment = getSupportFragmentManager()
+            .findFragmentByTag(OrderFragment.class.getSimpleName());
+        if (orderFragment != null && orderFragment.isVisible()) {
+          ((OrderFragment) orderFragment).onSearchClicked();
+        } else {
+          changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
+        }
         break;
       case R.id.save_img:
         onSaveImageClicked(true);
@@ -672,6 +678,11 @@ public abstract class MainActivity extends AppCompatActivity {
         if (Empty.isNotEmpty(lastFragment)) {
           if (lastItem instanceof VisitDetailFragment) {
             ((VisitDetailFragment) lastItem).finishVisiting();
+            return;
+          } else if (lastItem instanceof OrderFragment && !((OrderFragment) lastItem)
+              .isExpandableVisible()) {
+            ((OrderFragment) lastItem).onBackPressed();
+            showNav();
             return;
           }
         }
@@ -802,5 +813,9 @@ public abstract class MainActivity extends AppCompatActivity {
   public void showNav() {
     navigationImg.setVisibility(View.VISIBLE);
     navigationImg.setImageResource(R.drawable.ic_arrow_forward);
+  }
+
+  public void searchImageVisibility(int visibility) {
+    searchImg.setVisibility(visibility);
   }
 }

@@ -35,6 +35,7 @@ public class DialogUtil {
     View dialogView = inflater.inflate(R.layout.dialog_custom, null);
     dialogBuilder.setView(dialogView);
 
+    dialogBuilder.setCancelable(false);
     TextView titleTv = dialogView.findViewById(R.id.title_tv);
     TextView bodyTv = dialogView.findViewById(R.id.body_tv);
     TextView negativeTv = dialogView.findViewById(R.id.negative_tv);

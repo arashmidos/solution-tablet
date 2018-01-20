@@ -10,6 +10,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
 
 public class MobileMainActivity extends MainActivity {
@@ -79,10 +80,14 @@ public class MobileMainActivity extends MainActivity {
   public void onNavigationTapped() {
     Fragment featureFragment = getSupportFragmentManager()
         .findFragmentByTag(FeaturesFragment.class.getSimpleName());
+    Fragment orderFragment = getSupportFragmentManager()
+        .findFragmentByTag(OrderFragment.class.getSimpleName());
     Fragment questionsListFragment = getSupportFragmentManager()
         .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
     if (questionsListFragment != null && questionsListFragment.isVisible()) {
       ((QuestionsListFragment) questionsListFragment).exit();
+    } else if (orderFragment != null && orderFragment.isVisible()) {
+      ((OrderFragment) orderFragment).onBackPressed();
     } else if (featureFragment != null && featureFragment.isVisible()) {
       if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
         drawerLayout.closeDrawer(GravityCompat.END);

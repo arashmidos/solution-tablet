@@ -1,10 +1,12 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -24,11 +26,13 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Goods;
+import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
+import com.parsroyal.solutiontablet.data.model.GoodsGroupExpand;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -37,7 +41,10 @@ import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.adapter.BreadCrumbAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.GoodsCategoryAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.GoodsExpandAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.AddOrderBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
@@ -52,6 +59,7 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -77,8 +85,19 @@ public class OrderFragment extends BaseFragment {
   TextView bottomBarText;
   @BindView(R.id.goods_cart_image)
   ImageView goodsCartImage;
+  @BindView(R.id.close_search_img)
+  ImageView closeSearchImg;
+  @BindView(R.id.expandable_recycler_view)
+  RecyclerView expandableRecyclerView;
+  @BindView(R.id.category_recycler_view)
+  RecyclerView categoryRecyclerView;
+  @BindView(R.id.bread_crumb_recycler_view)
+  RecyclerView breadCrumbRecyclerView;
+  @BindView(R.id.app_bar)
+  AppBarLayout appBarLayout;
+  @BindView(R.id.bread_crumb_lay)
+  LinearLayout breadCrumbLay;
 
-  private boolean isClose = false;
   private List<Goods> goodsList;
   private GoodsService goodsService;
   private GoodsAdapter adapter;
@@ -94,6 +113,11 @@ public class OrderFragment extends BaseFragment {
   private GoodsDtoList rejectedGoodsList;
   private String constraint;
   private String pageStatus;
+  private long currentGoodGroupId;
+  private GoodsExpandAdapter goodsExpandAdapter;
+  private BreadCrumbAdapter breadCrumbAdapter;
+  private GoodsCategoryAdapter goodsCategoryAdapter;
+  private List<GoodsGroup> breadCrumbList = new ArrayList<>();
 
   public OrderFragment() {
     // Required empty public constructor
@@ -112,7 +136,6 @@ public class OrderFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     goodsService = new GoodsServiceImpl(mainActivity);
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
-
     try {
       Bundle args = getArguments();
       readOnly = args.getBoolean(Constants.READ_ONLY);
@@ -148,36 +171,182 @@ public class OrderFragment extends BaseFragment {
     return view;
   }
 
-  //set up recycler view
-  private void setData() {
-    if (isRejected()) {
-      rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
+  private List<GoodsGroupExpand> getExpandList() {
+    Map<GoodsGroup, List<GoodsGroup>> goodsGroups = goodsService.getCategories();
+    List<GoodsGroupExpand> goodsGroupExpands = new ArrayList<>();
+    goodsGroupExpands
+        .add(new GoodsGroupExpand(getString(R.string.show_all_goods), new ArrayList<>()));
+    for (Map.Entry<GoodsGroup, List<GoodsGroup>> entry : goodsGroups.entrySet()) {
+      goodsGroupExpands.add(new GoodsGroupExpand(entry.getKey().getTitle(), entry.getValue()));
+    }
+    return goodsGroupExpands;
+  }
 
-      adapter = new GoodsAdapter(mainActivity, this, rejectedGoodsList.getGoodsDtoList(), readOnly,
-          true);
-      bottomBar.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
-      bottomBarText.setText(R.string.reject_goods);
-      goodsCartImage.setVisibility(View.GONE);
+  public void setUpExpandRecyclerView() {
+    currentGoodGroupId = -1L;
+    breadCrumbList.clear();
+    breadCrumbList.add(new GoodsGroup(getString(R.string.categories), 0));
+    mainActivity.changeTitle(mainActivity.getString(R.string.categories));
+    if (goodsExpandAdapter == null) {
+      goodsExpandAdapter = new GoodsExpandAdapter(mainActivity, getExpandList(), this);
+      LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
+      expandableRecyclerView.setAdapter(goodsExpandAdapter);
+      expandableRecyclerView.setLayoutManager(layoutManager);
+    }
 
+    recyclerView.setVisibility(View.GONE);
+    categoryRecyclerView.setVisibility(View.GONE);
+    expandableRecyclerView.setVisibility(View.VISIBLE);
+    appBarLayout.setVisibility(View.GONE);
+    breadCrumbLay.setVisibility(View.GONE);
+    mainActivity.searchImageVisibility(View.GONE);
+  }
+
+  public void onBreadCrumbClicked(GoodsGroup goodsGroup) {
+    if (goodsGroup.getLevel() == 0 || goodsGroup.getLevel() == 1) {
+      setUpExpandRecyclerView();
+    } else {
+      setUpCategoryRecyclerView(goodsService.getChilds(goodsGroup.getBackendId()));
+    }
+  }
+
+  public void setUpBreadCrumbRecyclerView(GoodsGroup goodsGroup) {
+    if (breadCrumbList.size() > 0 && breadCrumbList.contains(goodsGroup)) {
+      int pos = breadCrumbList.indexOf(goodsGroup);
+      int size = breadCrumbList.size();
+      for (int i = size - 1; i > pos; i--) {
+        breadCrumbList.remove(i);
+      }
+    } else {
+      breadCrumbList.add(goodsGroup);
+    }
+    if (breadCrumbAdapter == null) {
+      breadCrumbAdapter = new BreadCrumbAdapter(breadCrumbList, mainActivity, this);
+      LayoutManager layoutManager = new LinearLayoutManager(mainActivity,
+          LinearLayoutManager.HORIZONTAL, true);
+      breadCrumbRecyclerView.setAdapter(breadCrumbAdapter);
+      breadCrumbRecyclerView.setLayoutManager(layoutManager);
+    } else {
+      breadCrumbAdapter.update(breadCrumbList);
+    }
+    if (breadCrumbList.size() > 0) {
+      breadCrumbRecyclerView.smoothScrollToPosition(breadCrumbList.size() - 1);
+    }
+  }
+
+  public void setUpCategoryRecyclerView(List<GoodsGroup> goodsGroups) {
+    if (goodsGroups.size() > 0) {
+      currentGoodGroupId = goodsGroups.get(0).getBackendId();
+      GoodsGroup goodsGroup = goodsService.getParent(currentGoodGroupId);
+      mainActivity.changeTitle(goodsGroup.getTitle());
+      setUpBreadCrumbRecyclerView(goodsGroup);
+    }
+    if (goodsCategoryAdapter == null) {
+      goodsCategoryAdapter = new GoodsCategoryAdapter(goodsGroups, mainActivity, this);
+      LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
+      categoryRecyclerView.setLayoutManager(layoutManager);
+      categoryRecyclerView.setAdapter(goodsCategoryAdapter);
+    } else {
+      goodsCategoryAdapter.updateAll(goodsGroups);
+    }
+    recyclerView.setVisibility(View.GONE);
+    expandableRecyclerView.setVisibility(View.GONE);
+    categoryRecyclerView.setVisibility(View.VISIBLE);
+    appBarLayout.setVisibility(View.GONE);
+    noGoodLay.setVisibility(View.GONE);
+    breadCrumbLay.setVisibility(View.VISIBLE);
+    mainActivity.searchImageVisibility(View.GONE);
+  }
+
+  public void setUpGoodsRecyclerView(long backendId) {
+    goodsSo = new GoodsSo();
+    if (adapter == null) {
+      if (isRejected()) {
+        rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
+
+        adapter = new GoodsAdapter(mainActivity, this, rejectedGoodsList.getGoodsDtoList(),
+            readOnly,
+            true);
+        bottomBar.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
+        bottomBarText.setText(R.string.reject_goods);
+        goodsCartImage.setVisibility(View.GONE);
+      } else {
+        goodsSo.setConstraint("");
+        if (backendId != -1L) {
+          goodsSo.setGoodsGroupBackendId(backendId);
+        }
+        adapter = new GoodsAdapter(mainActivity, this, goodsService.searchForGoodsList(goodsSo),
+            readOnly, false);
+      }
+      if (MultiScreenUtility.isTablet(mainActivity)) {
+        RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
+        recyclerView.setLayoutManager(rtlGridLayoutManager);
+      } else {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+        recyclerView.setLayoutManager(linearLayoutManager);
+      }
+      recyclerView.setAdapter(adapter);
     } else {
       goodsSo.setConstraint("");
-      adapter = new GoodsAdapter(mainActivity, this, goodsService.searchForGoodsList(goodsSo),
-          readOnly, false);
+      if (backendId != -1L) {
+        goodsSo.setGoodsGroupBackendId(backendId);
+      }
+      adapter.update(goodsService.searchForGoodsList(goodsSo));
     }
+    if (adapter.getItemCount() > 0) {
+      currentGoodGroupId = backendId;
+      if (backendId != -1) {
+        GoodsGroup goodsGroup = goodsService.getCurrent(currentGoodGroupId);
+        mainActivity.changeTitle(goodsGroup.getTitle());
+        setUpBreadCrumbRecyclerView(goodsGroup);
+      } else {
+        mainActivity.changeTitle(mainActivity.getString(R.string.goods));
+      }
+      recyclerView.setVisibility(View.VISIBLE);
+      expandableRecyclerView.setVisibility(View.GONE);
+      categoryRecyclerView.setVisibility(View.GONE);
+      appBarLayout.setVisibility(View.GONE);
+      breadCrumbLay.setVisibility(View.VISIBLE);
+      mainActivity.searchImageVisibility(View.VISIBLE);
+      if (backendId == -1) {
+        mainActivity.searchImageVisibility(View.GONE);
+        breadCrumbLay.setVisibility(View.GONE);
+        appBarLayout.setVisibility(View.VISIBLE);
+        closeSearchImg.setVisibility(View.GONE);
+      } else {
+        mainActivity.searchImageVisibility(View.VISIBLE);
+        breadCrumbLay.setVisibility(View.VISIBLE);
+        appBarLayout.setVisibility(View.GONE);
+        closeSearchImg.setVisibility(View.VISIBLE);
+      }
+    } else {
+      ToastUtil.toastMessage(getActivity(), R.string.no_goods);
+    }
+  }
+
+  //set up recycler view
+  private void setData() {
+    setUpExpandRecyclerView();
+//    if (isRejected()) {
+//      rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
+//
+//      adapter = new GoodsAdapter(mainActivity, this, rejectedGoodsList.getGoodsDtoList(), readOnly,
+//          true);
+//      bottomBar.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
+//      bottomBarText.setText(R.string.reject_goods);
+//      goodsCartImage.setVisibility(View.GONE);
+//
+//    } else {
+//      goodsSo.setConstraint("");
+//      adapter = new GoodsAdapter(mainActivity, this, goodsService.searchForGoodsList(goodsSo),
+//          readOnly, false);
+//    }
 
     if (!readOnly) {
       orderCountTv
           .setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
     }
 
-    if (MultiScreenUtility.isTablet(mainActivity)) {
-      RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
-      recyclerView.setLayoutManager(rtlGridLayoutManager);
-    } else {
-      LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
-      recyclerView.setLayoutManager(linearLayoutManager);
-    }
-    recyclerView.setAdapter(adapter);
   }
 
   /*
@@ -215,10 +384,8 @@ public class OrderFragment extends BaseFragment {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (TextUtils.isEmpty(s.toString())) {
-          isClose = false;
           searchImg.setImageResource(R.drawable.ic_search);
         } else {
-          isClose = true;
           searchImg.setImageResource(R.drawable.ic_close_24dp);
         }
       }
@@ -257,13 +424,17 @@ public class OrderFragment extends BaseFragment {
     orderCountTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
   }
 
-  @OnClick({R.id.search_img, R.id.bottom_bar})
+  @OnClick({R.id.search_img, R.id.bottom_bar, R.id.cancel_bread_crumb_btn, R.id.close_search_img})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.search_img:
-        if (isClose) {
-          searchEdt.setText("");
-        }
+        searchEdt.setText("");
+        break;
+      case R.id.close_search_img:
+        onDismissSearchClicked();
+        break;
+      case R.id.cancel_bread_crumb_btn:
+        setUpExpandRecyclerView();
         break;
       case R.id.bottom_bar:
         if (order.getOrderItems().size() == 0) {
@@ -442,5 +613,51 @@ public class OrderFragment extends BaseFragment {
   @Override
   public int getFragmentId() {
     return MainActivity.GOODS_LIST_FRAGMENT_ID;
+  }
+
+  public boolean isExpandableVisible() {
+    return expandableRecyclerView.getVisibility() == View.VISIBLE;
+  }
+
+  public void onBackPressed() {
+    try {
+      if (expandableRecyclerView.getVisibility() == View.VISIBLE) {
+        mainActivity.onBackPressed();
+      } else if (categoryRecyclerView.getVisibility() == View.VISIBLE) {
+        if (goodsCategoryAdapter.getItemByPosition(0).getLevel() == 3) {
+          setUpExpandRecyclerView();
+        } else {
+          setUpCategoryRecyclerView(goodsService.getUpLevel(currentGoodGroupId));
+        }
+      } else if (recyclerView.getVisibility() == View.VISIBLE) {
+        List<GoodsGroup> goodsGroups = goodsService.getCurrentLevel(currentGoodGroupId);
+        if ((goodsGroups != null && goodsGroups.size() > 0 && goodsGroups.get(0).getLevel() < 3)
+            || goodsGroups == null) {
+          setUpExpandRecyclerView();
+        } else {
+          setUpCategoryRecyclerView(goodsGroups);
+        }
+      } else {
+        mainActivity.onBackPressed();
+        mainActivity.searchImageVisibility(View.GONE);
+      }
+    } catch (Exception e) {
+      mainActivity.onBackPressed();
+      mainActivity.searchImageVisibility(View.GONE);
+    }
+  }
+
+  public void onSearchClicked() {
+    mainActivity.searchImageVisibility(View.GONE);
+    breadCrumbLay.setVisibility(View.GONE);
+    appBarLayout.setVisibility(View.VISIBLE);
+  }
+
+  public void onDismissSearchClicked() {
+    searchEdt.setText("");
+    mainActivity.hideKeyboard();
+    mainActivity.searchImageVisibility(View.VISIBLE);
+    breadCrumbLay.setVisibility(View.VISIBLE);
+    appBarLayout.setVisibility(View.GONE);
   }
 }
