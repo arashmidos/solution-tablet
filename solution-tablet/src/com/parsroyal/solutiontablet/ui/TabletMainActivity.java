@@ -30,6 +30,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.component.CrossfadeWrapper;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
+import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -155,8 +156,12 @@ public class TabletMainActivity extends MainActivity {
         .findFragmentByTag(FeaturesFragment.class.getSimpleName());
     Fragment questionsListFragment = getSupportFragmentManager()
         .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
+    Fragment orderFragment = getSupportFragmentManager()
+        .findFragmentByTag(OrderFragment.class.getSimpleName());
     if (questionsListFragment != null && questionsListFragment.isVisible()) {
       ((QuestionsListFragment) questionsListFragment).exit();
+    } else if (orderFragment != null && orderFragment.isVisible()) {
+      ((OrderFragment) orderFragment).onBackPressed();
     } else if (featureFragment != null && featureFragment.isVisible()) {
       if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
         drawerLayout.closeDrawer(GravityCompat.END);

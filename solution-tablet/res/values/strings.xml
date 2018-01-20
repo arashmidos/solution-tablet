@@ -583,4 +583,7 @@
   <string name="customer_pics">تصاویر مشتری</string>
   <string name="error_in_saving_new_customer">خطا در ثبت اطلاعات مشتری</string>
   <string name="message_no_goods_group">هیچ گروه کالایی دریافت نشد</string>
+  <string name="categories">دسته بندی ها</string>
+  <string name="show_all_goods">نمایش همه محصولات</string>
+  <string name="no_goods">هیچ کالایی یافت نشد .</string>
 </resources>

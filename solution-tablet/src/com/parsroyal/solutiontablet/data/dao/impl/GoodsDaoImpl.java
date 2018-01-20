@@ -193,6 +193,7 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
             + ", " + Goods.COL_CUSTOMER_PRICE //10
             + ", " + Goods.COL_DEFAULT_UNIT
             + ", " + Goods.COL_SALE_RATE
+            + ", " + Goods.COL_GROUP_BACKEND_ID
             + " FROM COMMER_GOODS WHERE 1=1";
     if (Empty.isNotEmpty(goodsSo.getGoodsGroupBackendId())) {
       sql = sql.concat(" AND GROUP_BACKEND_ID = ? ");
@@ -250,6 +251,7 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     goods.setCustomerPrice(cursor.getLong(10));
     goods.setDefaultUnit(cursor.getInt(11));
     goods.setSaleRate(cursor.getLong(12));
+    goods.setGroupBackendId(cursor.getLong(13));
     return goods;
   }
 

@@ -86,6 +86,36 @@ public class GoodsServiceImpl implements GoodsService {
   }
 
   @Override
+  public GoodsGroup getParent(Long goodsGroupBackendId) {
+    GoodsGroup currentGoodsGroup = goodsGroupDao.retrieveByBackendId(goodsGroupBackendId);
+    if (Empty.isNotEmpty(currentGoodsGroup)) {
+      GoodsGroup parent = goodsGroupDao.retrieveByBackendId(currentGoodsGroup.getParentBackendId());
+      if (Empty.isNotEmpty(parent)) {
+        return parent;
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public GoodsGroup getCurrent(Long goodsGroupBackendId) {
+    GoodsGroup currentGoodsGroup = goodsGroupDao.retrieveByBackendId(goodsGroupBackendId);
+    if (Empty.isNotEmpty(currentGoodsGroup)) {
+        return currentGoodsGroup;
+    }
+    return null;
+  }
+
+  @Override
+  public List<GoodsGroup> getCurrentLevel(Long goodsGroupBackendId) {
+    GoodsGroup currentGoodsGroup = goodsGroupDao.retrieveByBackendId(goodsGroupBackendId);
+    if (Empty.isNotEmpty(currentGoodsGroup)) {
+      return goodsGroupDao.getChilds(currentGoodsGroup.getParentBackendId());
+    }
+    return null;
+  }
+
+  @Override
   public void deleteAll() {
     goodsDao.deleteAll();
   }

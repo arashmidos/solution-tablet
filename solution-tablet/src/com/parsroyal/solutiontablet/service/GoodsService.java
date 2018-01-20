@@ -27,4 +27,10 @@ public interface GoodsService extends BaseService {
   List<GoodsGroup> getChilds(Long goodsGroupBackendId);
 
   List<GoodsGroup> getUpLevel(Long goodsGroupBackendId);
+
+  List<GoodsGroup> getCurrentLevel(Long goodsGroupBackendId);
+
+  GoodsGroup getParent(Long goodsGroupBackendId);
+
+  GoodsGroup getCurrent(Long goodsGroupBackendId);
 }

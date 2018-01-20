@@ -1,11 +1,13 @@
 package com.parsroyal.solutiontablet.data.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 /**
  * Created by Mahyar on 7/23/2015.
  */
-public class GoodsGroup extends BaseEntity<Long> implements Comparable<GoodsGroup>{
+public class GoodsGroup extends BaseEntity<Long> implements Comparable<GoodsGroup> {
 
   public static final String TABLE_NAME = "COMMER_GOODS_GROUP";
 
@@ -33,6 +35,14 @@ public class GoodsGroup extends BaseEntity<Long> implements Comparable<GoodsGrou
   private String title;
   private String code;
   private Integer level;
+
+  public GoodsGroup() {
+  }
+
+  public GoodsGroup(String title, Integer level) {
+    this.title = title;
+    this.level = level;
+  }
 
   public Long getId() {
     return id;
@@ -90,5 +100,19 @@ public class GoodsGroup extends BaseEntity<Long> implements Comparable<GoodsGrou
   @Override
   public int compareTo(@NonNull GoodsGroup goodsGroup) {
     return backendId.compareTo(goodsGroup.backendId);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (!(obj instanceof GoodsGroup)) {
+      return false;
+    }
+    if (((GoodsGroup) obj).getId() != null && ((GoodsGroup) obj).getId().equals(this.id)) {
+      return true;
+    }
+    return false;
   }
 }

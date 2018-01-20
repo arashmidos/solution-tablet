@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.Goods;
+import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -74,6 +75,13 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
   public void update(List<Goods> goodsList) {
     this.goodsList = goodsList;
     notifyDataSetChanged();
+  }
+
+  public Goods getItemByPosition(int pos) {
+    if (pos < goodsList.size()) {
+      return goodsList.get(pos);
+    }
+    return null;
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
