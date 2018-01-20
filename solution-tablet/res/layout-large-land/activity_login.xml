@@ -31,7 +31,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/enter_system"
-        android:textColor="@android:color/white"
+        android:textColor="@color/white"
         android:textSize="16sp"/>
     </FrameLayout>
   </android.support.design.widget.AppBarLayout>
@@ -54,7 +54,7 @@
 
     <ScrollView
       android:layout_width="0dp"
-      android:background="@android:color/white"
+      android:background="@color/white"
       android:layout_height="match_parent"
       android:layout_weight="1"
       android:layout_marginTop="24dp"
@@ -68,7 +68,7 @@
         android:paddingEnd="48dp"
         android:paddingLeft="48dp"
         android:paddingRight="48dp"
-        android:background="@android:color/white"
+        android:background="@color/white"
         android:orientation="vertical">
 
 

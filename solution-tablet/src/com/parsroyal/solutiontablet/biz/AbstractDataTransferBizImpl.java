@@ -166,14 +166,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
   }
 
   protected String makeUrl(String serverAddress1, String method) {
-    Log.i(TAG, "Trying to reach url with server addresses");
-    if (/*NetworkUtil.isURLReachable(context, serverAddress1)*/true) {
-      Log.i(TAG, "Server address 1 is available");
       return serverAddress1 + "/" + method;
-    } else {
-      Log.i(TAG, "Server addresses are not available");
-      throw new BackendIsNotReachableException();
-    }
   }
 
   public abstract void receiveData(T data);

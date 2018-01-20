@@ -24,13 +24,13 @@ import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 
 /**
- * Created by Mahyar on 6/4/2015.
+ * Created by Arash on 1/16/2018.
  */
 public class CommerDatabaseHelper extends SQLiteOpenHelper {
 
   public static final String TAG = CommerDatabaseHelper.class.getSimpleName();
   private static final String DATABASE_NAME = "Commer";
-  private static final Integer DATABASE_VERSION = 12;
+  private static final Integer DATABASE_VERSION = 13;
   private static final String SQL_ADD_COLUMN = "ALTER TABLE %s ADD COLUMN %s %s ";
 
   private static CommerDatabaseHelper sInstance;
@@ -116,6 +116,12 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
     if (oldVersion < 12) {
       db.execSQL(String
           .format(SQL_ADD_COLUMN, CustomerPic.TABLE_NAME, CustomerPic.COL_CUSTOMER_ID, "INTEGER"));
+    }
+    if (oldVersion < 13) {
+      db.execSQL(String
+          .format(SQL_ADD_COLUMN, Customer.TABLE_NAME, Customer.COL_REMAINED_CREDIT, "INTEGER"));
+      db.execSQL(String
+          .format(SQL_ADD_COLUMN, Position.TABLE_NAME, Position.COL_MOCK_LOCATION, "INTEGER"));
     }
   }
 }

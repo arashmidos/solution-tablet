@@ -42,14 +42,18 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     contentValues.put(Position.COL_SPEED, entity.getSpeed());
     contentValues.put(Position.COL_STATUS, entity.getStatus());
     contentValues.put(Position.COL_GPS_DATE, DateUtil.convertDate(
-        entity.getDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        entity.getDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));//5
     contentValues.put(Position.COL_GPS_OFF, entity.getGpsOff());
     contentValues.put(Position.COL_MODE, entity.getMode());
     contentValues.put(Position.COL_SALESMAN_ID, entity.getSalesmanId());
     contentValues.put(Position.COL_BACKEND_ID, entity.getBackendId());
-    contentValues.put(Position.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
+    contentValues.put(Position.COL_CREATE_DATE_TIME, entity.getCreateDateTime());//10
     contentValues.put(Position.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
     contentValues.put(Position.COL_ACCURACY, entity.getAccuracy());
+    contentValues.put(Position.COL_MOCK_LOCATION, entity.getMockLocation());
+    contentValues.put(Position.COL_ROOTED, entity.isRooted() ? 1 : 0);
+    contentValues.put(Position.COL_BATTERY_LEVEL, entity.getBatteryLevel());//15
+    contentValues.put(Position.COL_BATTERY_STATUS, entity.getBatteryStatus());
     return contentValues;
   }
 
@@ -65,7 +69,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {
+    return new String[]{
         Position.COL_ID,
         Position.COL_LATITUDE,
         Position.COL_LONGITUDE,
@@ -78,9 +82,12 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
         Position.COL_BACKEND_ID,
         Position.COL_CREATE_DATE_TIME,//10
         Position.COL_UPDATE_DATE_TIME,
-        Position.COL_ACCURACY
+        Position.COL_ACCURACY,
+        Position.COL_MOCK_LOCATION,
+        Position.COL_ROOTED,
+        Position.COL_BATTERY_LEVEL,//15
+        Position.COL_BATTERY_STATUS
     };
-    return projection;
   }
 
   @Override
@@ -92,9 +99,8 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setLongitude(cursor.getDouble(2));
     position.setSpeed(cursor.getFloat(3));
     position.setStatus(cursor.getInt(4));
-    position.setDate(DateUtil
-        .convertStringToDate(cursor.getString(5), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
-            "EN"));
+    position.setDate(DateUtil.convertStringToDate(cursor.getString(5),
+        DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     position.setGpsOff(cursor.getInt(6));
     position.setMode(cursor.getInt(7));
     position.setSalesmanId(cursor.getLong(8));
@@ -102,10 +108,14 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setCreateDateTime(cursor.getString(10));
     position.setUpdateDateTime(cursor.getString(11));
     position.setAccuracy(cursor.getFloat(12));
+    position.setMockLocation(cursor.getInt(13));
+    position.setRooted(cursor.getInt(14) == 1);
+    position.setBatteryLevel(cursor.getInt(15));
+    position.setBatteryStatus(cursor.getString(16));
     return position;
   }
 
-  protected PositionDto createDtoFromCursor(Cursor cursor) {
+  private PositionDto createDtoFromCursor(Cursor cursor) {
     PositionDto position = new PositionDto();
 
     position.setId(cursor.getLong(0));
@@ -118,7 +128,12 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setGpsOff(cursor.getInt(6));
     position.setMode(cursor.getInt(7));
     position.setPersonId(cursor.getLong(8));
+    position.setCreateDateTime(cursor.getString(10));
     position.setAccuracy(cursor.getFloat(12));
+    position.setMockLocation(cursor.getInt(13));
+    position.setRooted(cursor.getInt(14));
+    position.setBatteryLevel(cursor.getInt(15));
+    position.setBatteryStatus(cursor.getString(16));
 
     return position;
   }

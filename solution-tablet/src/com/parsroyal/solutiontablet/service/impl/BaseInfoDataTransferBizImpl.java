@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.BaseInfoDao;
 import com.parsroyal.solutiontablet.data.dao.impl.BaseInfoDaoImpl;
@@ -55,11 +54,9 @@ public class BaseInfoDataTransferBizImpl {
             }
             baseInfoDao.bulkInsert(baseInfoList.getBaseInfoList());
 
-            EventBus.getDefault().post(new DataTransferSuccessEvent(
-                context.getString(R.string.provinces_data_transferred_successfully)
-                , StatusCodes.SUCCESS));
+            EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.SUCCESS));
           } else {
-            EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.INVALID_DATA));
+            EventBus.getDefault().post(new DataTransferSuccessEvent(StatusCodes.NO_DATA_ERROR));
           }
         } else {
           try {

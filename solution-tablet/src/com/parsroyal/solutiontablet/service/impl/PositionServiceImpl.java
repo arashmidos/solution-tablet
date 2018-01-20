@@ -1,12 +1,16 @@
 package com.parsroyal.solutiontablet.service.impl;
 
+import static com.parsroyal.solutiontablet.service.LocationUpdatesService.EXTRA_POSITION;
+
 import android.content.Context;
+import android.content.Intent;
 import com.google.android.gms.maps.model.LatLng;
 import com.parsroyal.solutiontablet.data.dao.PositionDao;
 import com.parsroyal.solutiontablet.data.dao.impl.PositionDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.service.PositionService;
+import com.parsroyal.solutiontablet.service.SaveLocationService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.Date;
@@ -77,7 +81,23 @@ public class PositionServiceImpl implements PositionService {
   }
 
   @Override
+  public void sendGpsChangedPosition(GpsStatus gpsStatus) {
+    Position position = positionDao.getLastPosition();
+    position.setId(null);
+    position.setGpsOff(gpsStatus.equals(GpsStatus.OFF) ? 1 : 0);
+    Intent intent = new Intent(context, SaveLocationService.class);
+    intent.putExtra(EXTRA_POSITION, position);
+
+    context.startService(intent);
+
+  }
+
+  @Override
   public void deleteAll() {
     positionDao.deleteAll();
+  }
+
+  public enum GpsStatus {
+    OFF, ON
   }
 }

@@ -55,7 +55,6 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
   private Context context;
   private CustomerPicDao customerPicDao;
-  private ResultObserver observer;
 
   public NewCustomerPicDataTransferBizImpl(Context context, File pics, Long visitId,
       Long customerId) {
@@ -85,9 +84,9 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
         httpHeaders.add("backendId", String.valueOf(customer.getBackendId()));
       }
 
+      //
       RestTemplate restTemplate = new RestTemplate();
       restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-      restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
       FormHttpMessageConverter formConverter = new FormHttpMessageConverter();
       formConverter.setCharset(Charset.forName("UTF8"));
       restTemplate.getMessageConverters().add(formConverter);
@@ -153,8 +152,7 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
       if (Empty.isNotEmpty(visitId)) {
         //Sent single visit images
         customerPicDao.updatePicturesByVisitId(visitId);
-        EventBus.getDefault().post(new SuccessEvent(context.getString(
-            R.string.new_customers_pic_transferred_successfully), StatusCodes.SUCCESS));
+        EventBus.getDefault().post(new SuccessEvent("", StatusCodes.SUCCESS));
       } else if (Empty.isNotEmpty(customer)) {
         customerPicDao.updateAllPicturesByCustomerId(customer.getId());
       } else {
@@ -172,6 +170,7 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
         EventBus.getDefault().post(new DataTransferErrorEvent(context.getString(
             R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
       }
+
     }
   }
 
@@ -181,12 +180,12 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
   @Override
   public ResultObserver getObserver() {
-    return observer;
+    return null;
   }
 
   @Override
   public String getMethod() {
-    return "customers/images";
+    return Empty.isNotEmpty(customer) ? "customers/saveCustomerPics" : "customers/images";
   }
 
   @Override

@@ -2,6 +2,9 @@ package com.parsroyal.solutiontablet.data.entity;
 
 import android.location.Location;
 import com.parsroyal.solutiontablet.constants.SendStatus;
+import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.GPSUtil;
 import java.util.Date;
 
 /**
@@ -21,6 +24,10 @@ public class Position extends BaseEntity<Long> {
   public static final String COL_MODE = "MODE";
   public static final String COL_SALESMAN_ID = "SALESMAN_ID";
   public static final String COL_BACKEND_ID = "BACKEND_ID";
+  public static final String COL_MOCK_LOCATION = "MOCK_LOCATION";
+  public static final String COL_ROOTED = "ROOTED";
+  public static final String COL_BATTERY_LEVEL = "BATTERY_LEVEL";
+  public static final String COL_BATTERY_STATUS = "BATTERY_STATUS";
 
   public static final String CREATE_TABLE_SCRIPT = "CREATE TABLE " + Position.TABLE_NAME + " (" +
       " " + Position.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -35,7 +42,11 @@ public class Position extends BaseEntity<Long> {
       " " + Position.COL_BACKEND_ID + " INTEGER," +
       " " + Position.COL_ACCURACY + " REAL," +
       " " + Position.COL_CREATE_DATE_TIME + " TEXT," +
-      " " + Position.COL_UPDATE_DATE_TIME + " TEXT" +
+      " " + Position.COL_UPDATE_DATE_TIME + " TEXT," +
+      " " + Position.COL_MOCK_LOCATION + " INTEGER," +
+      " " + Position.COL_ROOTED + " INTEGER," +
+      " " + Position.COL_BATTERY_LEVEL + " INTEGER," +
+      " " + Position.COL_BATTERY_STATUS + " TEXT" +
       " );";
 
   private Long id;
@@ -49,17 +60,26 @@ public class Position extends BaseEntity<Long> {
   private Long salesmanId;
   private Long backendId;
   private Float accuracy;
+  private int mockLocation;
+  private boolean rooted;
+  private int batteryLevel;
+  private String batteryStatus;
 
-  public Position(Double latitude, Double longitude, Float speed, Date date, int gpsOff, int mode,
+  public Position(Double latitude, Double longitude, Float speed, int gpsOff, int mode,
       Float accuracy) {
     this.latitude = latitude;
     this.longitude = longitude;
     this.speed = speed;
     this.status = SendStatus.NEW.getId().intValue();
-    this.date = date;
+    this.createDateTime = DateUtil
+        .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     this.gpsOff = gpsOff;
     this.mode = mode;
     this.accuracy = accuracy;
+    this.batteryLevel = MainActivity.batteryLevel;
+    this.batteryStatus = MainActivity.batteryStatusTitle;
+    this.rooted = GPSUtil.isDeviceRooted();
+
   }
 
   public Position() {
@@ -70,7 +90,7 @@ public class Position extends BaseEntity<Long> {
   }
 
   public Position(Location l) {
-    this(l.getLatitude(), l.getLongitude(), l.getSpeed(), new Date(), 0, 0, l.getAccuracy());
+    this(l.getLatitude(), l.getLongitude(), l.getSpeed(), 0, 0, l.getAccuracy());
   }
 
   public Long getId() {
@@ -171,5 +191,37 @@ public class Position extends BaseEntity<Long> {
     location.setLatitude(latitude);
     location.setLongitude(longitude);
     return location;
+  }
+
+  public int getMockLocation() {
+    return mockLocation;
+  }
+
+  public void setMockLocation(int mockLocation) {
+    this.mockLocation = mockLocation;
+  }
+
+  public boolean isRooted() {
+    return rooted;
+  }
+
+  public void setRooted(boolean rooted) {
+    this.rooted = rooted;
+  }
+
+  public int getBatteryLevel() {
+    return batteryLevel;
+  }
+
+  public void setBatteryLevel(int batteryLevel) {
+    this.batteryLevel = batteryLevel;
+  }
+
+  public String getBatteryStatus() {
+    return batteryStatus;
+  }
+
+  public void setBatteryStatus(String batteryStatus) {
+    this.batteryStatus = batteryStatus;
   }
 }

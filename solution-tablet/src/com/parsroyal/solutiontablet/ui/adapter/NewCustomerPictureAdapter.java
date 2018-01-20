@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.ui.adapter.NewCustomerPictureAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
 import java.util.List;
@@ -27,6 +28,7 @@ public class NewCustomerPictureAdapter extends Adapter<ViewHolder> {
   private List<String> customerPics;
   private Context context;
   private LayoutInflater inflater;
+  private boolean maxReached;
 
   public NewCustomerPictureAdapter(Context context, List<String> customerPics,
       AddCustomerFragment addCustomerFragment) {
@@ -34,6 +36,11 @@ public class NewCustomerPictureAdapter extends Adapter<ViewHolder> {
     this.customerPics = customerPics;
     this.context = context;
     inflater = LayoutInflater.from(context);
+    maxReached = customerPics.size() == Constants.MAX_NEW_CUSTOMER_PHOTO;
+  }
+
+  public boolean isMaxReached() {
+    return maxReached;
   }
 
   @Override
@@ -43,29 +50,30 @@ public class NewCustomerPictureAdapter extends Adapter<ViewHolder> {
       view = inflater.inflate(R.layout.item_new_customer_button, parent, false);
     } else {
       view = inflater.inflate(R.layout.item_new_customer_pic_list, parent, false);
+      //TODO: If its first item after maxReached, get padding right 16dp
     }
     return new ViewHolder(view);
   }
 
   @Override
   public int getItemViewType(int position) {
-    return position == 0 ? ItemType.BUTTON.value : ItemType.IMAGE.value;
+    return position == 0 && !maxReached ? ItemType.BUTTON.value : ItemType.IMAGE.value;
   }
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
-    if (position == 0) {
+    if (position == 0 && !maxReached) {
       holder.createPhotoLayout.setOnClickListener(view -> {
         parent.takePhoto();
       });
     } else {
-      holder.setData(position - 1);
+      holder.setData(maxReached ? position : position - 1);
     }
   }
 
   @Override
   public int getItemCount() {
-    return customerPics.size() + 1;
+    return maxReached ? customerPics.size() : customerPics.size() + 1;
   }
 
   public void updateList(List<String> customerPics) {
@@ -75,6 +83,9 @@ public class NewCustomerPictureAdapter extends Adapter<ViewHolder> {
 
   public void add(String newImage) {
     customerPics.add(newImage);
+    if (customerPics.size() == Constants.MAX_NEW_CUSTOMER_PHOTO) {
+      maxReached = true;
+    }
     notifyDataSetChanged();
   }
 

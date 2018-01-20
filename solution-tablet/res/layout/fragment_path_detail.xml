@@ -14,7 +14,7 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="48dp"
-      android:background="@android:color/white"
+      android:background="@color/white"
       android:orientation="horizontal">
 
       <ImageView
@@ -60,7 +60,7 @@
     android:layout_width="match_parent"
     android:layout_height="42dp"
     android:layout_gravity="bottom"
-    android:background="@android:color/white"
+    android:background="@color/white"
     android:orientation="horizontal">
 
     <TextView
@@ -114,7 +114,7 @@
     android:layout_width="match_parent"
     android:layout_height="36dp"
     android:paddingRight="16dp"
-    android:background="@color/customers_title_background"
+    android:background="@color/gray_f5"
     android:gravity="right|center"
     android:text="@string/customers"
     android:textColor="@color/black_85"
@@ -163,7 +163,7 @@
     android:layout_width="match_parent"
     android:layout_height="42dp"
     android:layout_gravity="bottom"
-    android:background="@android:color/white"
+    android:background="@color/white"
     android:orientation="horizontal">
 
     <RelativeLayout

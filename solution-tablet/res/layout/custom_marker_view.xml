@@ -16,7 +16,7 @@
     android:singleLine="true"
     android:text=""
     android:textAppearance="?android:attr/textAppearanceSmall"
-    android:textColor="@android:color/white"
+    android:textColor="@color/white"
     android:textSize="12dp"/>
 
 </RelativeLayout>

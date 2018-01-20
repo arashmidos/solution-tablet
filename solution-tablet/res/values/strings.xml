@@ -316,7 +316,7 @@
   <string name="sinse_date">تاریخ:</string>
   <string name="toDate">الی :</string>
   <string name="filter">فیلتر</string>
-  <string name="error_gps_is_disabled">موقعیت یاب دستگاه فعال نیست. آیا میخواهید GPS را روشن کنید؟</string>
+  <string name="error_gps_is_disabled">موقعیت یاب دستگاه فعال نیست. روشن بودن موقعیت یاب برای کارکرد برنامه ضروری است. آیا میخواهید GPS را روشن کنید؟</string>
   <string name="error_report_is_huge">زمان گزارش نمی تواند بیش از 5 روز باشد</string>
   <string name="error_report_date_invalid">زمان گزارش را اشتباه وارد کرده اید</string>
   <string name="gps_tracking_disabled">موقعیت یاب غیر فعال شد</string>
@@ -583,7 +583,16 @@
   <string name="customer_pics">تصاویر مشتری</string>
   <string name="error_in_saving_new_customer">خطا در ثبت اطلاعات مشتری</string>
   <string name="message_no_goods_group">هیچ گروه کالایی دریافت نشد</string>
+  <string name="customer_credit_title">میزان اعتبار مشتری</string>
+  <string name="unknown">نا معلوم</string>
   <string name="categories">دسته بندی ها</string>
   <string name="show_all_goods">نمایش همه محصولات</string>
   <string name="no_goods">هیچ کالایی یافت نشد .</string>
+  <string name="error_order_is_not_available_for_this_customer">ثبت سفارش برای این مشتری مقدور نمی باشد</string>
+  <string name="error_fake_gps_detected">بازاریاب گرامی\n
+  به دلیل نصب بودن برنامه های زیر امکان استفاده از این اپلیکیشن وجود ندارد:\n
+    \n%s\n
+    نرم افزارهای بالا را حذف کرده یا با پشتیبان خود تماس بگیرید
+  </string>
+
 </resources>

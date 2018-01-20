@@ -40,7 +40,7 @@
           android:layout_height="match_parent"
           android:gravity="center"
           android:text="@string/features_list"
-          android:textColor="@android:color/white"
+          android:textColor="@color/white"
           android:textSize="16sp" />
 
         <ImageView

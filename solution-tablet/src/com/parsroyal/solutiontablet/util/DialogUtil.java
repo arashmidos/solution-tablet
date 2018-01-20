@@ -36,11 +36,11 @@ public class DialogUtil {
     dialogBuilder.setView(dialogView);
 
     dialogBuilder.setCancelable(false);
-    TextView titleTv = (TextView) dialogView.findViewById(R.id.title_tv);
-    TextView bodyTv = (TextView) dialogView.findViewById(R.id.body_tv);
-    TextView negativeTv = (TextView) dialogView.findViewById(R.id.negative_tv);
-    Button positiveBtn = (Button) dialogView.findViewById(R.id.positive_btn);
-    ImageView icon = (ImageView) dialogView.findViewById(R.id.icon_img);
+    TextView titleTv = dialogView.findViewById(R.id.title_tv);
+    TextView bodyTv = dialogView.findViewById(R.id.body_tv);
+    TextView negativeTv = dialogView.findViewById(R.id.negative_tv);
+    Button positiveBtn = dialogView.findViewById(R.id.positive_btn);
+    ImageView icon = dialogView.findViewById(R.id.icon_img);
 
     titleTv.setText(title);
     icon.setImageResource(iconType);

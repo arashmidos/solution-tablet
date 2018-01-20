@@ -18,6 +18,11 @@ public class PositionDto extends BaseModel {
   private Long personId;
   private Float accuracy;
   private SaleType saleType;
+  private int mockLocation;
+  private int rooted;
+  private int batteryLevel;
+  private String batteryStatus;
+  private String createDateTime;
 
   public PositionDto() {
   }
@@ -35,6 +40,30 @@ public class PositionDto extends BaseModel {
     this.personId = personId;
     this.accuracy = accuracy;
     this.saleType = saleType;
+  }
+
+  public int getRooted() {
+    return rooted;
+  }
+
+  public void setRooted(int rooted) {
+    this.rooted = rooted;
+  }
+
+  public int getBatteryLevel() {
+    return batteryLevel;
+  }
+
+  public void setBatteryLevel(int batteryLevel) {
+    this.batteryLevel = batteryLevel;
+  }
+
+  public String getBatteryStatus() {
+    return batteryStatus;
+  }
+
+  public void setBatteryStatus(String batteryStatus) {
+    this.batteryStatus = batteryStatus;
   }
 
   public Long getId() {
@@ -115,5 +144,21 @@ public class PositionDto extends BaseModel {
 
   public void setSaleType(SaleType saleType) {
     this.saleType = saleType;
+  }
+
+  public int getMockLocation() {
+    return mockLocation;
+  }
+
+  public void setMockLocation(int mockLocation) {
+    this.mockLocation = mockLocation;
+  }
+
+  public String getCreateDateTime() {
+    return createDateTime;
+  }
+
+  public void setCreateDateTime(String createDateTime) {
+    this.createDateTime = createDateTime;
   }
 }

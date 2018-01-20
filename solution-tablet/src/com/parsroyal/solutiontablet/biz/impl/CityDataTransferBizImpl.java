@@ -56,7 +56,7 @@ public class CityDataTransferBizImpl {
 
             EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.SUCCESS));
           } else {
-            EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.INVALID_DATA));
+            EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
           }
         } else {
           try {

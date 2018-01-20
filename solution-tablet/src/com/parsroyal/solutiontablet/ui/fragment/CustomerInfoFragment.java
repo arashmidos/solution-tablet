@@ -43,11 +43,13 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.DialogUtil;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
+import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -97,6 +99,12 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   @Nullable
   @BindView(R.id.scroll_container)
   LinearLayout scrollContainer;
+  @BindView(R.id.minus_img)
+  ImageView minusImg;
+  @BindView(R.id.credit_tv)
+  TextView creditTv;
+  @BindView(R.id.alert_img)
+  ImageView alertImg;
 
   private boolean isShowMore = true;
   private long customerId;
@@ -113,6 +121,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   private VisitDetailFragment parent;
   private boolean expandedMap = false;
   private QuestionnaireServiceImpl questionnaireService;
+  private Long creditRemained;
 
 
   public CustomerInfoFragment() {
@@ -155,6 +164,10 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     questionnaireService = new QuestionnaireServiceImpl(mainActivity);
 
     customer = customerService.getCustomerById(customerId);
+
+    if (Empty.isEmpty(customer)) {
+      return inflater.inflate(R.layout.empty_view, container, false);
+    }
 
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
@@ -226,6 +239,22 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       noMapLayout.setVisibility(View.VISIBLE);
       mapLayout.setVisibility(View.GONE);
     }
+
+    creditRemained =
+        customer.getRemainedCredit() == null ? null : customer.getRemainedCredit().longValue();
+    if (creditRemained != null) {
+      creditTv.setText(NumberUtil
+          .digitsToPersian(
+              String.format(Locale.getDefault(), "%,d %s", creditRemained / 1000, getString(
+                  R.string.common_irr_currency))));
+      if (creditRemained < 0) {
+        creditTv.setTextColor(getResources().getColor(R.color.remove_red));
+        minusImg.setVisibility(View.VISIBLE);
+        alertImg.setVisibility(View.VISIBLE);
+      }
+    } else {
+      creditTv.setText(R.string.unknown);
+    }
   }
 
   @Optional
@@ -239,7 +268,13 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         parent.openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
         break;
       case R.id.register_order_lay:
-        parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+        if (creditRemained != null && creditRemained < 0 && true) {
+          //TODO: Add Setting for check remained credit
+          ToastUtil.toastError(mainActivity,
+              getString(R.string.error_order_is_not_available_for_this_customer));
+        } else {
+          parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+        }
         break;
       case R.id.register_location_btn:
         mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, getArguments(), true);
@@ -248,7 +283,6 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         goToRegisterPaymentFragment();
         break;
       case R.id.register_questionnaire_lay:
-        //TODO :if only one category exist we should skip this fragment
         Bundle bundle = getArguments();
         bundle.putInt(Constants.PARENT, MainActivity.CUSTOMER_INFO_FRAGMENT);
         bundle.putLong(Constants.ANSWERS_GROUP_NO, questionnaireService.getNextAnswerGroupNo());
@@ -351,5 +385,10 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   @Override
   public int getFragmentId() {
     return MainActivity.CUSTOMER_INFO_FRAGMENT;
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
   }
 }

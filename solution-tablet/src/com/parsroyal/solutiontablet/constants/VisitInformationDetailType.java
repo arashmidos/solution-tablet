@@ -7,9 +7,9 @@ import com.parsroyal.solutiontablet.R;
  */
 public enum VisitInformationDetailType {
   CREATE_ORDER(10L, R.string.title_order, R.drawable.ic_cart_24_dp),
-  DELIVER_ORDER(11L, R.string.title_order, R.drawable.ic_cart_24_dp),//TODO: Later, Need update image and title
+  DELIVER_ORDER(11L, R.string.title_order, R.drawable.ic_cart_24_dp),// Later, Need update image and title
   CREATE_REJECT(20L, R.string.title_reject, R.drawable.ic_return_24_dp),
-  CREATE_INVOICE(30L, R.string.title_factor, R.drawable.ic_cart_24_dp),//TODO: Later,Need update image
+  CREATE_INVOICE(30L, R.string.title_factor, R.drawable.ic_cart_24_dp),// Later,Need update image
   TAKE_PICTURE(40L, R.string.images, R.drawable.ic_camera_24_dp),
   FILL_QUESTIONNAIRE(50L, R.string.questionnaires_x, R.drawable.ic_assignment_blue_24dp),
   SAVE_LOCATION(60L, R.string.location, R.drawable.ic_location_on_24dp),

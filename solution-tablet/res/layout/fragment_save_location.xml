@@ -47,7 +47,7 @@
         android:background="@drawable/rounded_corner_map"
         android:gravity="center"
         android:text="@string/set_your_location"
-        android:textColor="@android:color/white" />
+        android:textColor="@color/white" />
 
       <ImageView
         android:id="@+id/imageView1"

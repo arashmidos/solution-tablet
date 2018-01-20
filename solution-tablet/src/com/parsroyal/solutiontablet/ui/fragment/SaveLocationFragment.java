@@ -154,7 +154,6 @@ public class SaveLocationFragment extends BaseFragment implements
   public void onMapReady(GoogleMap googleMap) {
     map = googleMap;
 
-    //TODO: Again check for permission
     currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
     map.setMyLocationEnabled(true);

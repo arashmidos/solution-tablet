@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -59,6 +60,7 @@ public class LocationUpdatesService extends Service {
   private static final String PACKAGE_NAME = "com.parsroyal.solutiontablet.service";
   public static final String ACTION_BROADCAST = PACKAGE_NAME + ".broadcast";
   public static final String EXTRA_LOCATION = PACKAGE_NAME + ".location";
+  public static final String EXTRA_POSITION = PACKAGE_NAME + ".position";
   private static final String TAG = LocationUpdatesService.class.getSimpleName();
   private static final String EXTRA_STARTED_FROM_NOTIFICATION = PACKAGE_NAME +
       ".started_from_notification";
@@ -231,6 +233,13 @@ public class LocationUpdatesService extends Service {
       return;
     }
     try {
+      LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+      try {
+        Log.d(TAG ,"Removing Test providers");
+        lm.removeTestProvider(LocationManager.GPS_PROVIDER);
+      } catch (IllegalArgumentException error) {
+        Log.d(TAG,"Got exception in removing test provider");
+      }
       fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,
           Looper.myLooper());
     } catch (SecurityException unlikely) {

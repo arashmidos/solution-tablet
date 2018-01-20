@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.service;
 import com.google.android.gms.maps.model.LatLng;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.model.PositionDto;
+import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl.GpsStatus;
 import java.util.Date;
 import java.util.List;
 
@@ -27,4 +28,5 @@ public interface PositionService extends BaseService {
 
   Position getLastPosition();
 
+  void sendGpsChangedPosition(GpsStatus gpsStatus);
 }

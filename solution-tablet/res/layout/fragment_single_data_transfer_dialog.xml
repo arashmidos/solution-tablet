@@ -20,7 +20,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@android:color/white"
+        android:background="@color/white"
         app:title=""
         app:titleTextColor="@color/white">
 
@@ -67,6 +67,12 @@
       android:id="@+id/get_button_layout"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content">
+      <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
       <Button
         android:id="@+id/data_transfer_btn"
         style="@style/IranSans.Medium"
@@ -103,13 +109,6 @@
         android:textColor="@color/white"
         android:visibility="gone"
         android:textSize="14sp" />
-
-      <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
     </RelativeLayout>
     <TextView
       android:id="@+id/cancel_btn"

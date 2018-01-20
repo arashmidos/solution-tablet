@@ -3,7 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@android:color/white"
+  android:background="@color/white"
   android:orientation="vertical"
   tools:context=".ui.LoginActivity">
 
@@ -31,7 +31,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/enter_system"
-        android:textColor="@android:color/white"
+        android:textColor="@color/white"
         android:textSize="16sp"/>
     </FrameLayout>
   </android.support.design.widget.AppBarLayout>

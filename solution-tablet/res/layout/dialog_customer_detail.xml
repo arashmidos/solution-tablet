@@ -9,7 +9,7 @@
   android:layout_marginEnd="8dp"
   android:layout_marginLeft="8dp"
   android:layout_marginRight="8dp"
-  android:background="@android:color/white">
+  android:background="@color/white">
 
   <TextView
     android:id="@+id/customer_name_tv"
@@ -217,7 +217,7 @@
     android:background="@drawable/get_data_background"
     android:gravity="center"
     android:text="@string/enter"
-    android:textColor="@android:color/white"
+    android:textColor="@color/white"
     android:textSize="14sp"/>
 
   <Button
