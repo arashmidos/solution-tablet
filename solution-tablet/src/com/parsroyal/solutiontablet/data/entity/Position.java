@@ -6,6 +6,7 @@ import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.GPSUtil;
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -30,6 +31,7 @@ public class Position extends BaseEntity<Long> {
   public static final String COL_BATTERY_LEVEL = "BATTERY_LEVEL";
   public static final String COL_BATTERY_STATUS = "BATTERY_STATUS";
   public static final String COL_DISTANCE = "DISTANCE";
+  public static final String COL_NETWORK_DATE = "NETWORK_DATE";
 
   public static final String CREATE_TABLE_SCRIPT = "CREATE TABLE " + Position.TABLE_NAME + " (" +
       " " + Position.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -42,14 +44,15 @@ public class Position extends BaseEntity<Long> {
       " " + Position.COL_MODE + " INTEGER," +
       " " + Position.COL_SALESMAN_ID + " INTEGER," +
       " " + Position.COL_BACKEND_ID + " INTEGER," +
-      " " + Position.COL_ACCURACY + " REAL," +
+      " " + Position.COL_ACCURACY + " REAL," +//10
       " " + Position.COL_CREATE_DATE_TIME + " TEXT," +
       " " + Position.COL_UPDATE_DATE_TIME + " TEXT," +
       " " + Position.COL_MOCK_LOCATION + " INTEGER," +
       " " + Position.COL_ROOTED + " INTEGER," +
       " " + Position.COL_BATTERY_LEVEL + " INTEGER," +
       " " + Position.COL_BATTERY_STATUS + " TEXT," +
-      " " + Position.COL_DISTANCE + " REAL" +
+      " " + Position.COL_DISTANCE + " REAL," +
+      " " + Position.COL_NETWORK_DATE + " TEXT" +//18
       " );";
 
   private Long id;
@@ -68,9 +71,10 @@ public class Position extends BaseEntity<Long> {
   private int batteryLevel;
   private String batteryStatus;
   private Double distanceInMeter;
+  private Date networkDate;
 
   public Position(Double latitude, Double longitude, Float speed, int gpsOff, int mode,
-      Float accuracy) {
+      Float accuracy, long gpsTime) {
     this.latitude = latitude;
     this.longitude = longitude;
     this.speed = speed;
@@ -83,7 +87,19 @@ public class Position extends BaseEntity<Long> {
     this.batteryLevel = MainActivity.batteryLevel;
     this.batteryStatus = MainActivity.batteryStatusTitle;
     this.rooted = GPSUtil.isDeviceRooted();
-    this.date = TrueTime.now();
+    this.date = new Date(gpsTime);
+    try {
+      this.networkDate = TrueTime.now();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      new Thread(() -> {
+        try {
+          TrueTime.build().initialize();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }).start();
+    }
   }
 
   public Position() {
@@ -94,7 +110,7 @@ public class Position extends BaseEntity<Long> {
   }
 
   public Position(Location l) {
-    this(l.getLatitude(), l.getLongitude(), l.getSpeed(), 0, 0, l.getAccuracy());
+    this(l.getLatitude(), l.getLongitude(), l.getSpeed(), 0, 0, l.getAccuracy(), l.getTime());
   }
 
   public Long getId() {
@@ -235,5 +251,13 @@ public class Position extends BaseEntity<Long> {
 
   public void setDistanceInMeter(double distanceInMeter) {
     this.distanceInMeter = distanceInMeter;
+  }
+
+  public Date getNetworkDate() {
+    return networkDate;
+  }
+
+  public void setNetworkDate(Date networkDate) {
+    this.networkDate = networkDate;
   }
 }

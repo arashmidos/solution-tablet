@@ -75,7 +75,7 @@ public class GPSUtil {
     List<String> runningApps = new ArrayList<>();
     for (PackageInfo packageInfo : appinstall) {
 
-      if (hasAppPermission(packageInfo)) {
+      if (hasAppPermission(packageInfo) && !packageInfo.packageName.equals("com.parsroyal.solutionmobile")) {
         try {
           ApplicationInfo applicationInfo = p.getApplicationInfo(packageInfo.packageName, 0);
           runningApps.add(p.getApplicationLabel(applicationInfo).toString());

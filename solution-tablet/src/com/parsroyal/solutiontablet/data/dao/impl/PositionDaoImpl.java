@@ -55,6 +55,9 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     contentValues.put(Position.COL_BATTERY_LEVEL, entity.getBatteryLevel());//15
     contentValues.put(Position.COL_BATTERY_STATUS, entity.getBatteryStatus());
     contentValues.put(Position.COL_DISTANCE, entity.getDistanceInMeter());
+    contentValues.put(Position.COL_NETWORK_DATE,
+        entity.getNetworkDate() == null ? null : DateUtil.convertDate(
+            entity.getNetworkDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));//18
     return contentValues;
   }
 
@@ -88,7 +91,8 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
         Position.COL_ROOTED,
         Position.COL_BATTERY_LEVEL,//15
         Position.COL_BATTERY_STATUS,
-        Position.COL_DISTANCE
+        Position.COL_DISTANCE,
+        Position.COL_NETWORK_DATE//18
     };
   }
 
@@ -115,6 +119,9 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setBatteryLevel(cursor.getInt(15));
     position.setBatteryStatus(cursor.getString(16));
     position.setDistanceInMeter(cursor.getDouble(17));
+    position.setNetworkDate(DateUtil.convertStringToDate(cursor.getString(18),
+        DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+
     return position;
   }
 
@@ -126,7 +133,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setLongitude(cursor.getDouble(2));
     position.setSpeed(cursor.getFloat(3));
     String date = cursor.getString(5);
-    position.setDate(date == null ? null : DateUtil.convertStringToDate(
+    position.setDate(Empty.isEmpty(date) ? null : DateUtil.convertStringToDate(
         date, DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     position.setGpsOff(cursor.getInt(6));
     position.setMode(cursor.getInt(7));
@@ -138,6 +145,9 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setBatteryLevel(cursor.getInt(15));
     position.setBatteryStatus(cursor.getString(16));
     position.setDistanceInMeter(cursor.getDouble(17));
+    String networkDate = cursor.getString(18);
+    position.setNetworkDate(Empty.isEmpty(networkDate) ? null : DateUtil.convertStringToDate(
+        networkDate, DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
 
     return position;
   }

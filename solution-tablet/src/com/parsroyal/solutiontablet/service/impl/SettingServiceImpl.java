@@ -66,6 +66,11 @@ public class SettingServiceImpl implements SettingService {
         String.valueOf(settingDetail.isUseSaleRate())));
     keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE,
         String.valueOf(settingDetail.isCheckDistanceFromCustomer())));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE,
+        String.valueOf(settingDetail.isCheckCustomerCredit())));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_DISTANCE_CUSTOMER_VALUE,
+        String.valueOf(settingDetail.getCheckDistanceFromCustomerValue())));
+
     try {
       keyValueBiz
           .save(new KeyValue(ApplicationKeys.SETTING_STOCK_CODE, settingDetail.getStockCode()));

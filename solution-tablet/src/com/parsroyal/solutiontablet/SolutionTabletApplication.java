@@ -9,6 +9,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.instacart.library.truetime.TrueTime;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -61,10 +62,15 @@ public class SolutionTabletApplication extends MultiDexApplication {
     setLanguage();
 
     new Thread(() -> {
-      try {
-        TrueTime.build().initialize();
-      } catch (IOException e) {
-        e.printStackTrace();
+      boolean syncNetworkTime = false;
+      while (!syncNetworkTime) {
+        try {
+          TrueTime.build().withServerResponseDelayMax(500).initialize();
+          syncNetworkTime = true;
+          Log.i("Network Time", "**Synced with network");
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }
     }).start();
   }

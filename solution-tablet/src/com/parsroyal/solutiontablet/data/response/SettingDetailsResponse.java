@@ -30,12 +30,18 @@ public class SettingDetailsResponse extends Response {
   @SerializedName("order.type")
   @Expose
   private String orderType;
+  @SerializedName("check.distance.from.customer.value")
+  @Expose
+  private String checkDistanceFromCustomerValue;
   @SerializedName("use.sale.rate")
   @Expose
   private boolean useSaleRate;
   @SerializedName("check.distance.from.customer")
   @Expose
   private boolean checkDistanceFromCustomer;
+  @SerializedName("check.customer.credit")
+  @Expose
+  private boolean checkCustomerCredit;
 
   public String getStockCode() {
     return stockCode;
@@ -109,4 +115,19 @@ public class SettingDetailsResponse extends Response {
     this.orderType = orderType;
   }
 
+  public boolean isCheckCustomerCredit() {
+    return checkCustomerCredit;
+  }
+
+  public void setCheckCustomerCredit(boolean checkCustomerCredit) {
+    this.checkCustomerCredit = checkCustomerCredit;
+  }
+
+  public String getCheckDistanceFromCustomerValue() {
+    return checkDistanceFromCustomerValue;
+  }
+
+  public void setCheckDistanceFromCustomerValue(String checkDistanceFromCustomerValue) {
+    this.checkDistanceFromCustomerValue = checkDistanceFromCustomerValue;
+  }
 }

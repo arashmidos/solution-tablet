@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.content.IntentSender.SendIntentException;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -70,7 +69,6 @@ import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.MapServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
@@ -160,6 +158,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   private boolean distanceServiceEnabled;
   private MainActivity context;
   private List<LatLng> lastRoute;
+  private float distanceAllowed;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -187,6 +186,9 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     if (BuildConfig.DEBUG) {
       distanceServiceEnabled = false;
     }
+    String distance = settingService
+        .getSettingValue(ApplicationKeys.SETTING_DISTANCE_CUSTOMER_VALUE);
+    distanceAllowed = Empty.isEmpty(distance) ? Constants.MAX_DISTANCE : Float.valueOf(distance);
 
     loadCalendars();
 
@@ -364,7 +366,6 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
       errorMsg.setText(String.format(Locale.US, getString(R.string.error_google_play_not_available),
           result.getErrorCode()));
       // Already attempting to resolve an error.
-      return;
     } else if (result.hasResolution()) {
       try {
         mResolvingError = true;
@@ -437,7 +438,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     map.setOnInfoWindowClickListener(marker ->
     {
       Float distance = clickedClusterItem.getDistance();
-      if (distanceServiceEnabled && distance > Constants.MAX_DISTANCE) {
+      if (distanceServiceEnabled && distance > distanceAllowed) {
         ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
         return;
       }

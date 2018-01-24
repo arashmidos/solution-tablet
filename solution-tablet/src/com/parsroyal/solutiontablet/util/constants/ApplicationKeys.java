@@ -1,7 +1,7 @@
 package com.parsroyal.solutiontablet.util.constants;
 
 /**
- * Created by Mahyar on 6/4/2015.
+ * Created by Arash on 2018-01-24
  */
 public class ApplicationKeys {
 
@@ -11,6 +11,8 @@ public class ApplicationKeys {
   public static final String SETTING_USER_CODE = "setting.user.code";
   public static final String SETTING_SALE_TYPE = "setting.sale.type";
   public static final String SETTING_CALCULATE_DISTANCE_ENABLE = "setting.distance.enable";
+  public static final String SETTING_DISTANCE_CUSTOMER_VALUE = "setting.distance.value";
+  public static final String SETTING_CHECK_CREDIT_ENABLE = "setting.check.credit";
   public static final String SETTING_STOCK_ID = "setting.stock.id";
   public static final String SETTING_BRANCH_ID = "setting.branch.id";
   public static final String SETTING_BRANCH_CODE = "setting.branch.code";

@@ -331,6 +331,7 @@ public abstract class MainActivity extends AppCompatActivity {
 
     if (!GPSUtil.isGpsAvailable(this)) {
       showGpsOffDialog();
+      positionService.sendGpsChangedPosition(GpsStatus.OFF);
       Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
     }
 

@@ -2,20 +2,13 @@ package com.parsroyal.solutiontablet.ui;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -36,13 +29,11 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.exception.BusinessException;
-import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationUpdatesService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.adapter.DrawerArrayAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
@@ -55,27 +46,21 @@ import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
-import com.parsroyal.solutiontablet.ui.fragment.dialog.LoginDialogFragment;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by Mahyar on 6/2/2015.
  */
 public class OldMainActivity extends BaseFragmentActivity implements ResultObserver {
-
-  public static final String TAG = OldMainActivity.class.getSimpleName();
 
   public static final int CUSTOMER_LIST_FRAGMENT_ID = 0;
   public static final int NEW_CUSTOMER_FRAGMENT_ID = 1;
@@ -105,20 +90,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
   public static final int BASE_TRACKING_FRAGMENT_ID = 25;
   public static final int QUESTIONAIRE_LIST_FRAGMENT_ID = 26;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-  private final Integer[] drawerItemTitles = {
-      R.string.setting,
-      R.string.data_transfer,
-      R.string.about_us,
-      R.string.version,
-      R.string.exit
-  };
-  private final Integer[] drawerItemImages = {
-//      R.drawable.ic_settings_43dp,
-//      R.drawable.ic_transform_43dp,
-//      R.drawable.ic_aboutus_43dp,
-//      R.drawable.ic_version_43dp,
-//      R.drawable.ic_exit_43dp,
-  };
+
   @BindView(R.id.mainLayout)
   LinearLayout mainLayout;
   private DrawerLayout mDrawerLayout;
@@ -136,36 +108,6 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
   private boolean isMenuEnabled = true;
   private LocationUpdatesService gpsRecieverService = null;
 
-  private boolean boundToGpsService = false;
-  // Monitors the state of the connection to the service.
-  private final ServiceConnection serviceConnection = new ServiceConnection() {
-
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-      LocationUpdatesService.LocalBinder binder = (LocationUpdatesService.LocalBinder) service;
-      gpsRecieverService = binder.getService();
-      boundToGpsService = true;
-      gpsRecieverService.requestLocationUpdates();
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-      gpsRecieverService = null;
-      boundToGpsService = false;
-    }
-  };
-  private BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
-        if (!GPSUtil.isGpsAvailable(context)) {
-          showGpsOffDialog();
-          Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
-        }
-      }
-    }
-  };
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -176,11 +118,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
 
     setupSidebar();
     setupActionbar();
-    setupDrawer();
     initialize();
-    if (!BuildConfig.DEBUG) {
-      logUser();
-    }
 
     if (!checkPermissions()) {
       requestPermissions();
@@ -211,26 +149,25 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeFragment(fragmentId, true);
       }
     };
-    customerListTabIv = (ImageView) findViewById(R.id.customerListTabIv);
+    customerListTabIv = findViewById(R.id.customerListTabIv);
     customerListTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    newCustomerTabIv = (ImageView) findViewById(R.id.newCustomerTabIv);
+    newCustomerTabIv = findViewById(R.id.newCustomerTabIv);
     newCustomerTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    dashBoardTabIv = (ImageView) findViewById(R.id.dashboardTabIv);
+    dashBoardTabIv = findViewById(R.id.dashboardTabIv);
     dashBoardTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    ordersTabIv = (ImageView) findViewById(R.id.ordersTabIv);
+    ordersTabIv = findViewById(R.id.ordersTabIv);
     ordersTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    goodsTabIv = (ImageView) findViewById(R.id.goodsTabIv);
+    goodsTabIv = findViewById(R.id.goodsTabIv);
     goodsTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    userPerformanceTabIv = (ImageView) findViewById(R.id.userPerformanceTabIv);
+    userPerformanceTabIv = findViewById(R.id.userPerformanceTabIv);
     userPerformanceTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    fundsTabIv = (ImageView) findViewById(R.id.fundsTabIv);
+    fundsTabIv = findViewById(R.id.fundsTabIv);
     fundsTabIv.setOnClickListener(sideBarItemsOnClickListener);
-    questionaireTabIv = (ImageView) findViewById(R.id.questionaryTabIv);
+    questionaireTabIv = findViewById(R.id.questionaryTabIv);
     questionaireTabIv.setOnClickListener(sideBarItemsOnClickListener);
   }
 
   public void changeSidebarItem(int fragmentId) {
-    setAllImagesInactive();
     String contentName = "";
     switch (fragmentId) {
       case 0:
@@ -267,17 +204,6 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         break;
     }
     Analytics.logContentView(contentName);
-  }
-
-  private void setAllImagesInactive() {
-    /*customerListTabIv.setImageResource(R.drawable.ic_sidebar_customer_list);
-    dashBoardTabIv.setImageResource(R.drawable.ic_sidebar_map_inactive);
-    newCustomerTabIv.setImageResource(R.drawable.ic_sidebar_new_customer);
-    ordersTabIv.setImageResource(R.drawable.ic_sidebar_report_inactive);
-    goodsTabIv.setImageResource(R.drawable.ic_sidebar_goods);
-    userPerformanceTabIv.setImageResource(R.drawable.ic_sidebar_salesman_performance);
-    fundsTabIv.setImageResource(R.drawable.ic_sidebar_cash_report);
-    questionaireTabIv.setImageResource(R.drawable.ic_sidebar_questionaire_inactive);*/
   }
 
   public void changeFragment(int fragmentId, boolean addToBackStack) {
@@ -438,61 +364,6 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
     return dataTransferPossible && networkAvailable;
   }
 
-  private void setupDrawer() {
-    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-    DrawerArrayAdapter adapter = new DrawerArrayAdapter(OldMainActivity.this, drawerItemTitles,
-        drawerItemImages);
-    drawerItemsList = (ListView) findViewById(R.id.left_drawer);
-
-    drawerItemsList.setAdapter(adapter);
-    drawerItemsList.setOnItemClickListener((parent, view, position, id) ->
-    {
-      switch (position) {
-        case 0:
-          if (Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME))
-              && Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SETTING_PASSWORD))
-              && !BuildConfig.DEBUG) {
-            settingLoginDialog();
-            closeDrawer();
-          } else {
-            changeFragment(SETTING_FRAGMENT_ID, false);
-            closeDrawer();
-          }
-          break;
-        case 1:
-          changeFragment(DATA_TRANSFER_FRAGMENT_ID, false);
-          closeDrawer();
-          break;
-        case 2:
-          changeFragment(ABOUT_US_FRAGMENT_ID, false);
-          closeDrawer();
-          break;
-        case 3:
-//          showVersionDialog();
-          break;
-        case 4:
-          showDialogForExit();
-          break;
-      }
-    });
-
-    menuIv.setOnClickListener(v ->
-    {
-      if (isMenuEnabled || BuildConfig.DEBUG) {
-        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-          closeDrawer();
-        } else {
-          openDrawer();
-        }
-      }
-    });
-  }
-
-  private void settingLoginDialog() {
-    DialogFragment loginDialog = LoginDialogFragment.newInstance();
-    loginDialog.show(getSupportFragmentManager(), "login_dialog");
-  }
-
   @Override
   public void onBackPressed() {
     try {
@@ -548,54 +419,6 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
 
   public void setMenuEnabled(boolean menuEnabled) {
     isMenuEnabled = menuEnabled;
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    EventBus.getDefault().register(this);
-    // Bind to the service. If the service is in foreground mode, this signals to the service
-    // that since this activity is in the foreground, the service can exit foreground mode.
-    bindService(new Intent(this, LocationUpdatesService.class), serviceConnection,
-        Context.BIND_AUTO_CREATE);
-
-    if (Updater.updateExist()) {
-      PreferenceHelper.setForceExit(true);
-      installNewVersion();
-    } else {
-      Updater.checkAppUpdate(this);
-    }
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    if (!GPSUtil.isGpsAvailable(this)) {
-      showGpsOffDialog();
-      Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
-    }
-
-    registerReceiver(gpsStatusReceiver, new IntentFilter("android.location.PROVIDERS_CHANGED"));
-    new TrackerAlarmReceiver().setAlarm(this);
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    unregisterReceiver(gpsStatusReceiver);
-  }
-
-  @Override
-  protected void onStop() {
-    if (boundToGpsService) {
-      // Unbind from the service. This signals to the service that this activity is no longer
-      // in the foreground, and the service can respond by promoting itself to a foreground
-      // service.
-      unbindService(serviceConnection);
-      boundToGpsService = false;
-    }
-    super.onStop();
-    EventBus.getDefault().unregister(this);
   }
 
   @Subscribe

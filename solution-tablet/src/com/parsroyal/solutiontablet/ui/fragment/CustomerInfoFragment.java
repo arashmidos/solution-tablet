@@ -122,6 +122,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   private boolean expandedMap = false;
   private QuestionnaireServiceImpl questionnaireService;
   private Long creditRemained;
+  private boolean checkCreditEnabled;
 
 
   public CustomerInfoFragment() {
@@ -170,6 +171,9 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     }
 
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+    String checkCredit = settingService
+        .getSettingValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE);
+    checkCreditEnabled = Empty.isEmpty(checkCredit) ? false : Boolean.valueOf(checkCredit);
 
     setData();
 
@@ -267,8 +271,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         parent.openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
         break;
       case R.id.register_order_lay:
-        if (creditRemained != null && creditRemained < 0 && true) {
-          //TODO: Add Setting for check remained credit
+        if (creditRemained != null && creditRemained < 0 && checkCreditEnabled) {
           ToastUtil.toastError(mainActivity,
               getString(R.string.error_order_is_not_available_for_this_customer));
         } else {

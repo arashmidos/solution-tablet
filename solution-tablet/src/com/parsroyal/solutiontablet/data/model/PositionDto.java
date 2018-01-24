@@ -24,6 +24,7 @@ public class PositionDto extends BaseModel {
   private String batteryStatus;
   private String createDateTime;
   private double distanceInMeter;
+  private Date networkDate;
 
   public PositionDto() {
   }
@@ -163,11 +164,19 @@ public class PositionDto extends BaseModel {
     this.createDateTime = createDateTime;
   }
 
+  public double getDistanceInMeter() {
+    return distanceInMeter;
+  }
+
   public void setDistanceInMeter(double distanceInMeter) {
     this.distanceInMeter = distanceInMeter;
   }
 
-  public double getDistanceInMeter() {
-    return distanceInMeter;
+  public Date getNetworkDate() {
+    return networkDate;
+  }
+
+  public void setNetworkDate(Date networkDate) {
+    this.networkDate = networkDate;
   }
 }
