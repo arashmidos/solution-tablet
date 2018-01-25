@@ -41,8 +41,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     contentValues.put(Position.COL_LONGITUDE, entity.getLongitude());
     contentValues.put(Position.COL_SPEED, entity.getSpeed());
     contentValues.put(Position.COL_STATUS, entity.getStatus());
-    contentValues.put(Position.COL_GPS_DATE, entity.getDate() == null ? null : DateUtil.convertDate(
-        entity.getDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));//5
+    contentValues.put(Position.COL_GPS_DATE, entity.getDate());//5
     contentValues.put(Position.COL_GPS_OFF, entity.getGpsOff());
     contentValues.put(Position.COL_MODE, entity.getMode());
     contentValues.put(Position.COL_SALESMAN_ID, entity.getSalesmanId());
@@ -55,9 +54,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     contentValues.put(Position.COL_BATTERY_LEVEL, entity.getBatteryLevel());//15
     contentValues.put(Position.COL_BATTERY_STATUS, entity.getBatteryStatus());
     contentValues.put(Position.COL_DISTANCE, entity.getDistanceInMeter());
-    contentValues.put(Position.COL_NETWORK_DATE,
-        entity.getNetworkDate() == null ? null : DateUtil.convertDate(
-            entity.getNetworkDate(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));//18
+    contentValues.put(Position.COL_NETWORK_DATE, entity.getNetworkDate());//18
     return contentValues;
   }
 
@@ -105,8 +102,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setLongitude(cursor.getDouble(2));
     position.setSpeed(cursor.getFloat(3));
     position.setStatus(cursor.getInt(4));
-    position.setDate(DateUtil.convertStringToDate(cursor.getString(5),
-        DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+    position.setDate(cursor.getString(5));
     position.setGpsOff(cursor.getInt(6));
     position.setMode(cursor.getInt(7));
     position.setSalesmanId(cursor.getLong(8));
@@ -119,8 +115,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setBatteryLevel(cursor.getInt(15));
     position.setBatteryStatus(cursor.getString(16));
     position.setDistanceInMeter(cursor.getDouble(17));
-    position.setNetworkDate(DateUtil.convertStringToDate(cursor.getString(18),
-        DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+    position.setNetworkDate(cursor.getLong(18));
 
     return position;
   }
@@ -133,21 +128,23 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setLongitude(cursor.getDouble(2));
     position.setSpeed(cursor.getFloat(3));
     String date = cursor.getString(5);
-    position.setDate(Empty.isEmpty(date) ? null : DateUtil.convertStringToDate(
-        date, DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+    Date toDate = DateUtil.convertStringToDate(date,
+        DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    position.setDate(toDate == null ? 0 : toDate.getTime());
     position.setGpsOff(cursor.getInt(6));
     position.setMode(cursor.getInt(7));
     position.setPersonId(cursor.getLong(8));
-    position.setCreateDateTime(cursor.getString(10));
+    String createDate = cursor.getString(10);
+    Date toCreateDate = DateUtil.convertStringToDate(createDate,
+        DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    position.setCreateDateTime(toCreateDate == null ? 0 : toCreateDate.getTime());
     position.setAccuracy(cursor.getFloat(12));
     position.setMockLocation(cursor.getInt(13));
     position.setRooted(cursor.getInt(14));
     position.setBatteryLevel(cursor.getInt(15));
     position.setBatteryStatus(cursor.getString(16));
     position.setDistanceInMeter(cursor.getDouble(17));
-    String networkDate = cursor.getString(18);
-    position.setNetworkDate(Empty.isEmpty(networkDate) ? null : DateUtil.convertStringToDate(
-        networkDate, DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+    position.setNetworkDate(cursor.getLong(18));
 
     return position;
   }

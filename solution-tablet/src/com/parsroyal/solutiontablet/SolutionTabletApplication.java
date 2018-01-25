@@ -15,11 +15,13 @@ import com.instacart.library.truetime.TrueTime;
 import com.parsroyal.solutiontablet.constants.Constants;
 import io.fabric.sdk.android.Fabric;
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
- * Created by Mahyar on 7/8/2015.
+ * Created by Arash on 2018-01-25
  */
 public class SolutionTabletApplication extends MultiDexApplication {
 
@@ -38,6 +40,14 @@ public class SolutionTabletApplication extends MultiDexApplication {
     }
 
     return sPreference;
+  }
+
+  public static Date getTrueTime() {
+    if (TrueTime.isInitialized()) {
+      return TrueTime.now();
+    } else {
+      return null;
+    }
   }
 
   @Override
@@ -61,18 +71,21 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
     setLanguage();
 
-    new Thread(() -> {
-      boolean syncNetworkTime = false;
-      while (!syncNetworkTime) {
-        try {
-          TrueTime.build().withServerResponseDelayMax(500).initialize();
-          syncNetworkTime = true;
-          Log.i("Network Time", "**Synced with network");
-        } catch (IOException e) {
-          e.printStackTrace();
+    if (!TrueTime.isInitialized()) {
+      new Thread(() -> {
+        boolean syncNetworkTime = false;
+        while (!syncNetworkTime) {
+          try {
+            TrueTime.build().withServerResponseDelayMax(500).withSharedPreferences(this)
+                .initialize();
+            syncNetworkTime = true;
+
+            Log.i("Network Time", "**Synced with network");
+          } catch (IOException ignore) {
+          }
         }
-      }
-    }).start();
+      }).start();
+    }
   }
 
   public void setLanguage() {

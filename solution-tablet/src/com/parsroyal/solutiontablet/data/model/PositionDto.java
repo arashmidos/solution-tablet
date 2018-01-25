@@ -12,7 +12,7 @@ public class PositionDto extends BaseModel {
   private Double latitude;
   private Double longitude;
   private Float speed;
-  private Date date;
+  private Long date;
   private int gpsOff;
   private int mode;
   private Long personId;
@@ -22,26 +22,11 @@ public class PositionDto extends BaseModel {
   private int rooted;
   private int batteryLevel;
   private String batteryStatus;
-  private String createDateTime;
+  private Long createDateTime;
   private double distanceInMeter;
-  private Date networkDate;
+  private Long networkDate;
 
   public PositionDto() {
-  }
-
-  public PositionDto(Long id, Double latitude, Double longitude, Float speed, Date date, int gpsOff,
-      int mode, Long personId, Float accuracy,
-      SaleType saleType) {
-    this.id = id;
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.speed = speed;
-    this.date = date;
-    this.gpsOff = gpsOff;
-    this.mode = mode;
-    this.personId = personId;
-    this.accuracy = accuracy;
-    this.saleType = saleType;
   }
 
   public int getRooted() {
@@ -100,11 +85,11 @@ public class PositionDto extends BaseModel {
     this.speed = speed;
   }
 
-  public Date getDate() {
+  public Long getDate() {
     return date;
   }
 
-  public void setDate(Date date) {
+  public void setDate(Long date) {
     this.date = date;
   }
 
@@ -156,11 +141,11 @@ public class PositionDto extends BaseModel {
     this.mockLocation = mockLocation;
   }
 
-  public String getCreateDateTime() {
+  public Long getCreateDateTime() {
     return createDateTime;
   }
 
-  public void setCreateDateTime(String createDateTime) {
+  public void setCreateDateTime(Long createDateTime) {
     this.createDateTime = createDateTime;
   }
 
@@ -172,11 +157,11 @@ public class PositionDto extends BaseModel {
     this.distanceInMeter = distanceInMeter;
   }
 
-  public Date getNetworkDate() {
+  public Long getNetworkDate() {
     return networkDate;
   }
 
-  public void setNetworkDate(Date networkDate) {
+  public void setNetworkDate(Long networkDate) {
     this.networkDate = networkDate;
   }
 }

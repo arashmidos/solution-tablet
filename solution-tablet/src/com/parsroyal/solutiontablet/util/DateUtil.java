@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.util;
 
 import com.parsroyal.solutiontablet.exception.InvalidDateStringException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -84,6 +85,24 @@ public class DateUtil {
     String englishDate = formatter.format(date);
     englishDate = NumberUtil.digitsToEnglish(englishDate);
     return englishDate;
+  }
+
+  public static String getZFormattedDate(Date date) {
+    if (date == null) {
+      return null;
+    }
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    return sdf.format(date);
+  }
+
+  public static Date convertZFormattedDate(String timeZone) {
+    try {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+      return sdf.parse(timeZone);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return new Date();
   }
 
   public static String getCurrentYearStartDate() {
@@ -448,5 +467,15 @@ public class DateUtil {
     return diff / (24 * 60 * 60 * 1000);
   }
 
-
+  public static Date convertNetworkDateToLocal(Date date) {
+    try {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss");
+      sdf.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
+      String iranTime = sdf.format(date);
+      return sdf.parse(iranTime);
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 }

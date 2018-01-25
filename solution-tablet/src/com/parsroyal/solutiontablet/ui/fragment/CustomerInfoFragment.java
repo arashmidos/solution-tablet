@@ -254,6 +254,9 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         creditTv.setTextColor(getResources().getColor(R.color.remove_red));
         minusImg.setVisibility(View.VISIBLE);
         alertImg.setVisibility(View.VISIBLE);
+      } else {
+        minusImg.setVisibility(View.GONE);
+        alertImg.setVisibility(View.GONE);
       }
     } else {
       creditTv.setText(R.string.unknown);

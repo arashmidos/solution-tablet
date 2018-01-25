@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
@@ -33,8 +32,8 @@ import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.LocationUtil;
 import org.greenrobot.eventbus.EventBus;
 
@@ -116,7 +115,13 @@ public class LocationUpdatesService extends Service {
         return;
       }
       fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
+      fusedLocationClient.getLastLocation()
+          .addOnSuccessListener(location -> {
+            // Got last known location. In some rare situations this can be null.
+            if (location != null) {
+              onNewLocation(location);
+            }
+          });
       locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -226,7 +231,6 @@ public class LocationUpdatesService extends Service {
 
   public void requestLocationUpdates() {
     Log.i(TAG, "Requesting location updates");
-    GPSUtil.setRequestingLocationUpdates(this, true);
 
     startService(new Intent(getApplicationContext(), LocationUpdatesService.class));
     if (fusedLocationClient == null) {
@@ -244,7 +248,6 @@ public class LocationUpdatesService extends Service {
       fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,
           Looper.myLooper());
     } catch (SecurityException unlikely) {
-      GPSUtil.setRequestingLocationUpdates(this, false);
       Log.e(TAG, "Lost location permission. Could not request updates. " + unlikely);
     }
   }
@@ -257,10 +260,8 @@ public class LocationUpdatesService extends Service {
     Log.i(TAG, "Removing location updates");
     try {
       fusedLocationClient.removeLocationUpdates(locationCallback);
-      GPSUtil.setRequestingLocationUpdates(this, false);
       stopSelf();
     } catch (SecurityException unlikely) {
-      GPSUtil.setRequestingLocationUpdates(this, true);
       Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
     } catch (Exception e) {
       e.printStackTrace();
@@ -298,9 +299,12 @@ public class LocationUpdatesService extends Service {
       lastLocation.setLongitude(lastPosition.getLongitude());
       lastLocation.setSpeed(lastPosition.getSpeed());
       lastLocation.setAccuracy(lastPosition.getAccuracy());
-      lastLocation.setTime(lastPosition.getDate().getTime());
+
+      lastLocation.setTime(DateUtil.convertStringToDate(lastPosition.getDate(),
+          DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN").getTime());
     }
   }
+
 
   private void onNewLocation(Location location) {
     Log.i(TAG, "New location in service: " + location);

@@ -76,6 +76,7 @@ public class DialogUtil {
     progressDialog.setIcon(R.drawable.ic_info_outline_24dp);
     progressDialog.setTitle(R.string.message_please_wait);
     progressDialog.setMessage(message);
+
     progressDialog.show();
   }
 

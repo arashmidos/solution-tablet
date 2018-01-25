@@ -8,7 +8,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import java.io.File;
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import java.util.List;
  */
 public class GPSUtil {
 
-  static final String KEY_REQUESTING_LOCATION_UPDATES = "requesting_locaction_updates";
   private static boolean deviceChecked = false;
   private static boolean deviceRooted;
 
@@ -29,30 +27,11 @@ public class GPSUtil {
     return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
   }
 
-  /**
-   * Returns true if requesting location updates, otherwise returns false.
-   *
-   * @param context The {@link Context}.
-   */
-  public static boolean requestingLocationUpdates(Context context) {
-    return PreferenceManager.getDefaultSharedPreferences(context)
-        .getBoolean(KEY_REQUESTING_LOCATION_UPDATES, false);
-  }
-
-  /**
-   * Stores the location updates state in SharedPreferences.
-   *
-   * @param requestingLocationUpdates The location updates state.
-   */
-  public static void setRequestingLocationUpdates(Context context,
-      boolean requestingLocationUpdates) {
-    PreferenceManager.getDefaultSharedPreferences(context)
-        .edit()
-        .putBoolean(KEY_REQUESTING_LOCATION_UPDATES, requestingLocationUpdates)
-        .apply();
-  }
 
   public static boolean isLocationMock(Context context, Location location) {
+    if (Empty.isEmpty(location)) {
+      return false;
+    }
     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
       return location.isFromMockProvider();
     } else {
@@ -75,7 +54,8 @@ public class GPSUtil {
     List<String> runningApps = new ArrayList<>();
     for (PackageInfo packageInfo : appinstall) {
 
-      if (hasAppPermission(packageInfo) && !packageInfo.packageName.equals("com.parsroyal.solutionmobile")) {
+      if (hasAppPermission(packageInfo) && !packageInfo.packageName
+          .equals("com.parsroyal.solutionmobile")) {
         try {
           ApplicationInfo applicationInfo = p.getApplicationInfo(packageInfo.packageName, 0);
           runningApps.add(p.getApplicationLabel(applicationInfo).toString());

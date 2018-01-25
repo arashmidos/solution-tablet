@@ -172,9 +172,8 @@ public class QAnswerDaoImpl extends AbstractDao<QAnswer, Long> implements QAnswe
   }
 
   private QAnswerDto createDtoFromEntity(Cursor cursor) {
-    Date date = DateUtil
-        .convertStringToDate(cursor.getString(2), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME,
-            "EN");
+    Date date = DateUtil.convertStringToDate(cursor.getString(2),
+        DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     return new QAnswerDto(cursor.getLong(0), cursor.getLong(1), date, cursor.getLong(4),
         cursor.getLong(3));
   }

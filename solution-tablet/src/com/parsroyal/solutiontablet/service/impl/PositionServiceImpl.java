@@ -5,6 +5,8 @@ import static com.parsroyal.solutiontablet.service.LocationUpdatesService.EXTRA_
 import android.content.Context;
 import android.content.Intent;
 import com.google.android.gms.maps.model.LatLng;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.PositionDao;
 import com.parsroyal.solutiontablet.data.dao.impl.PositionDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Position;
@@ -37,8 +39,6 @@ public class PositionServiceImpl implements PositionService {
   @Override
   public Long savePosition(Position position) {
     if (Empty.isEmpty(position.getId())) {
-      position.setCreateDateTime(
-          DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
       position.setUpdateDateTime(
           DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
       return positionDao.create(position);
@@ -83,13 +83,20 @@ public class PositionServiceImpl implements PositionService {
   @Override
   public void sendGpsChangedPosition(GpsStatus gpsStatus) {
     Position position = positionDao.getLastPosition();
+    if (position == null) {
+      position = new Position();
+    }
     position.setId(null);
+    position.setStatus(SendStatus.NEW.getId().intValue());
+    Date trueTime = SolutionTabletApplication.getTrueTime();
+    position.setNetworkDate(trueTime == null ? null : trueTime.getTime());
+    position.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+    position.setDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     position.setGpsOff(gpsStatus.equals(GpsStatus.OFF) ? 1 : 0);
     Intent intent = new Intent(context, SaveLocationService.class);
     intent.putExtra(EXTRA_POSITION, position);
 
     context.startService(intent);
-
   }
 
   @Override

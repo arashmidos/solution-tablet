@@ -71,7 +71,10 @@ public class SaveLocationService extends IntentService {
     Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
     Log.i(TAG, "Saving location " + location);
     if (location == null) {
-      position = intent.getParcelableExtra(LocationUpdatesService.EXTRA_POSITION);
+      position = (Position) intent.getSerializableExtra(LocationUpdatesService.EXTRA_POSITION);
+      if (position == null) {
+        return;
+      }
     } else {
       position = new Position(location);
     }
@@ -83,7 +86,7 @@ public class SaveLocationService extends IntentService {
     }
 
     position.setSalesmanId(salesmanId);
-    Position lastPosition = positionService.getLastPosition();
+    Position lastPosition = positionService.getLastPosition();//TODO: Optimize
     if (lastPosition != null) {
       float distanceInMeter = LocationUtil
           .distanceBetween(position.getLocation(), lastPosition.getLocation());
