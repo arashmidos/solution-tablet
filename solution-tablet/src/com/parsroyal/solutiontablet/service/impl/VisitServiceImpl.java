@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 import android.location.Location;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.SaleType;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
@@ -88,6 +89,8 @@ public class VisitServiceImpl implements VisitService {
     visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
     visitInformation.setUpdateDateTime(
         DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+    Date networkDate = SolutionTabletApplication.getTrueTime();
+    visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
     return saveVisit(visitInformation);
   }
 
@@ -100,6 +103,8 @@ public class VisitServiceImpl implements VisitService {
     visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
     visitInformation.setUpdateDateTime(
         DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+    Date networkDate = SolutionTabletApplication.getTrueTime();
+    visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
     // -1 Means new customer without backendId
     visitInformation.setResult(-1L);
     Position position = new PositionServiceImpl(context).getLastPosition();
@@ -220,13 +225,15 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
-  public List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailSO visitInformationDetailSO) {
+  public List<VisitInformationDetail> searchVisitDetail(
+      VisitInformationDetailSO visitInformationDetailSO) {
     return visitInformationDetailDao.search(visitInformationDetailSO);
   }
 
   @Override
   public List<VisitInformationDto> getAllVisitDetailForSend(Long visitId) {
-    List<VisitInformationDto> visitList = visitInformationDao.getAllVisitInformationDtoForSend(visitId);
+    List<VisitInformationDto> visitList = visitInformationDao
+        .getAllVisitInformationDtoForSend(visitId);
     SaleType saleType = SaleType.getByValue(
         Long.parseLong(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE)));
     for (VisitInformationDto visit : visitList) {
@@ -265,6 +272,8 @@ public class VisitServiceImpl implements VisitService {
         DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     // -2 Means visit without customer
     visitInformation.setResult(-2L);
+    Date networkDate = SolutionTabletApplication.getTrueTime();
+    visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
     Position position = new PositionServiceImpl(context).getLastPosition();
 
     if (Empty.isNotEmpty(position)) {

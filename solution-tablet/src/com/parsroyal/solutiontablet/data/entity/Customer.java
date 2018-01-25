@@ -88,7 +88,7 @@ public class Customer extends BaseEntity<Long> {
   private String municipalityCode;
   private boolean approved = true;
   private String description;
-  private BigDecimal remainedCredit;
+  private Double remainedCredit;
 
   public Customer(Double xLocation, String fullName, String shopName, String code) {
     this.xLocation = xLocation;
@@ -100,11 +100,11 @@ public class Customer extends BaseEntity<Long> {
   public Customer() {
   }
 
-  public BigDecimal getRemainedCredit() {
+  public Double getRemainedCredit() {
     return remainedCredit;
   }
 
-  public void setRemainedCredit(BigDecimal remainedCredit) {
+  public void setRemainedCredit(Double remainedCredit) {
     this.remainedCredit = remainedCredit;
   }
 

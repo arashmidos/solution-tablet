@@ -32,7 +32,7 @@ public class CustomerDto extends BaseModel {
   private String postalCode;
   private boolean isApproved;
   private String customerDescription;
-  private Long remainedCredit;
+  private Double remainedCredit;
 
   public boolean isApproved() {
     return isApproved;
@@ -250,11 +250,11 @@ public class CustomerDto extends BaseModel {
     this.customerDescription = customerDescription;
   }
 
-  public Long getRemainedCredit() {
+  public Double getRemainedCredit() {
     return remainedCredit;
   }
 
-  public void setRemainedCredit(Long remainedCredit) {
+  public void setRemainedCredit(Double remainedCredit) {
     this.remainedCredit = remainedCredit;
   }
 }

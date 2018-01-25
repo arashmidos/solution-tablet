@@ -5,9 +5,10 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ResourceUtil;
 
 /**
- * Created by Mahyar on 8/21/2015.
+ * Created by Arash on 2018-01-26
  */
 public enum SaleOrderStatus {
+  GIFT(10L, "GIFT"),
   DRAFT(90001L, "DRAFT"),
   SENT(90002L, "SENT"),
   DELIVERABLE(90003L, "DELIVERABLE"),

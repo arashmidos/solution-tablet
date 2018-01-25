@@ -3,7 +3,7 @@ package com.parsroyal.solutiontablet.data.entity;
 import com.parsroyal.solutiontablet.util.Empty;
 
 /**
- * Created by Mahyar on 7/16/2015.
+ * Created by Arash 2018-01-25
  */
 public class VisitInformation extends BaseEntity<Long> {
 
@@ -18,6 +18,8 @@ public class VisitInformation extends BaseEntity<Long> {
   public static final String COL_CUSTOMER_BACKEND_ID = "CUSTOMER_BACKEND_ID";
   public static final String COL_RESULT = "RESULT";
   public static final String COL_CUSTOMER_ID = "CUSTOMER_ID";
+  public static final String COL_NETWORK_DATE = "NETWORK_DATE";
+
   public static final String CREATE_TABLE_SQL =
       "CREATE TABLE " + VisitInformation.TABLE_NAME + " (" +
           " " + VisitInformation.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -25,13 +27,14 @@ public class VisitInformation extends BaseEntity<Long> {
           " " + VisitInformation.COL_START_TIME + " TEXT," +
           " " + VisitInformation.COL_VISIT_BACKEND_ID + " INTEGER," +
           " " + VisitInformation.COL_END_TIME + " TEXT," +
-          " " + VisitInformation.COL_X_LOCATION + " REAL," +
+          " " + VisitInformation.COL_X_LOCATION + " REAL," +//5
           " " + VisitInformation.COL_Y_LOCATION + " REAL," +
           " " + VisitInformation.COL_CUSTOMER_BACKEND_ID + " INTEGER," +
           " " + VisitInformation.COL_RESULT + " INTEGER," +
           " " + VisitInformation.COL_CREATE_DATE_TIME + " TEXT," +
-          " " + VisitInformation.COL_UPDATE_DATE_TIME + " TEXT," +
-          " " + VisitInformation.COL_CUSTOMER_ID + " INTEGER" +
+          " " + VisitInformation.COL_UPDATE_DATE_TIME + " TEXT," +//10
+          " " + VisitInformation.COL_CUSTOMER_ID + " INTEGER," +
+          " " + VisitInformation.COL_NETWORK_DATE + " INTEGER" +
           " );";
   private Long id;
   private String visitDate;
@@ -43,6 +46,7 @@ public class VisitInformation extends BaseEntity<Long> {
   private Long result;
   private Long visitBackendId;
   private Long customerId;
+  private Long networkDate;
 
   public Long getCustomerId() {
     return customerId;
@@ -150,4 +154,11 @@ public class VisitInformation extends BaseEntity<Long> {
   }
 
 
+  public Long getNetworkDate() {
+    return networkDate;
+  }
+
+  public void setNetworkDate(Long networkDate) {
+    this.networkDate = networkDate;
+  }
 }

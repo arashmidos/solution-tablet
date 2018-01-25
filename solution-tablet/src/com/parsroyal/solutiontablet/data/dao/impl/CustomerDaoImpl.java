@@ -74,7 +74,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     contentValues.put(Customer.COL_APPROVED, entity.isApproved() ? 1 : 0);
     contentValues.put(Customer.COL_DESCRIPTION, entity.getDescription());
     contentValues.put(Customer.COL_REMAINED_CREDIT,
-        entity.getRemainedCredit() == null ? null : entity.getRemainedCredit().longValue());//25
+        entity.getRemainedCredit());//25
     return contentValues;
   }
 
@@ -147,7 +147,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     customer.setPostalCode(cursor.getString(22));
     customer.setApproved(cursor.getInt(23) == 1);
     customer.setCustomerDescription(cursor.getString(24));
-    customer.setRemainedCredit(cursor.getLong(25));
+    customer.setRemainedCredit(cursor.getDouble(25));
     return customer;
   }
 
@@ -179,7 +179,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     customer.setPostalCode(cursor.getString(22));
     customer.setApproved(cursor.getInt(23) == 1);
     customer.setDescription(cursor.getString(24));
-    customer.setRemainedCredit(BigDecimal.valueOf(cursor.getLong(25)));
+    customer.setRemainedCredit(cursor.getDouble(25));
     return customer;
   }
 

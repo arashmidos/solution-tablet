@@ -78,7 +78,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {
+    return new String[]{
         SaleOrder.COL_ID,
         SaleOrder.COL_NUMBER,
         SaleOrder.COL_AMOUNT,
@@ -93,7 +93,6 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         SaleOrder.COL_CREATE_DATE_TIME,
         SaleOrder.COL_UPDATE_DATE_TIME
     };
-    return projection;
   }
 
   @Override
@@ -352,11 +351,13 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     String selection = SaleOrder.COL_ID + " = ? AND ("
         + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? OR "
+        + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? )";
     String[] args = {String.valueOf(orderId),
         String.valueOf(SaleOrderStatus.READY_TO_SEND.getId()),
         String.valueOf(SaleOrderStatus.REJECTED.getId()),
-        String.valueOf(SaleOrderStatus.INVOICED.getId())
+        String.valueOf(SaleOrderStatus.INVOICED.getId()),
+        String.valueOf(SaleOrderStatus.GIFT.getId())
     };
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
 

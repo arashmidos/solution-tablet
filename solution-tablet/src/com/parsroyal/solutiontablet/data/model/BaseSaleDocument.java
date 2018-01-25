@@ -20,6 +20,7 @@ public class BaseSaleDocument<T extends BaseSaleDocumentItem> {
   private Integer stockCode;
   private Integer officeCode;
   private List<T> items;
+  private Long status;
 
   public Long getId() {
     return id;
@@ -123,5 +124,13 @@ public class BaseSaleDocument<T extends BaseSaleDocumentItem> {
 
   public void setItems(List<T> items) {
     this.items = items;
+  }
+
+  public Long getStatus() {
+    return status;
+  }
+
+  public void setStatus(Long status) {
+    this.status = status;
   }
 }

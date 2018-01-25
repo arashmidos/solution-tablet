@@ -87,6 +87,7 @@ public class DateUtil {
     return englishDate;
   }
 
+
   public static String getZFormattedDate(Date date) {
     if (date == null) {
       return null;
@@ -477,5 +478,12 @@ public class DateUtil {
       e.printStackTrace();
       return null;
     }
+  }
+
+  public static String getZonedDate(Date date) {
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss");
+    sdf.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
+    return sdf.format(date);
   }
 }

@@ -121,7 +121,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   private VisitDetailFragment parent;
   private boolean expandedMap = false;
   private QuestionnaireServiceImpl questionnaireService;
-  private Long creditRemained;
+  private Double creditRemained;
   private boolean checkCreditEnabled;
 
 
@@ -244,12 +244,13 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       mapLayout.setVisibility(View.GONE);
     }
 
-    creditRemained =
-        customer.getRemainedCredit() == null ? null : customer.getRemainedCredit().longValue();
+    creditRemained = customer.getRemainedCredit();
     if (creditRemained != null) {
-      creditTv.setText(NumberUtil.digitsToPersian(
-          String.format(Locale.getDefault(), "%,d %s", Math.abs(creditRemained / 1000), getString(
-              R.string.common_irr_currency))));
+
+      String text = NumberUtil.digitsToPersian(
+          String.format(Locale.getDefault(), "%,f", Math.abs(creditRemained / 1000)));
+      String text2 = text.substring(0, text.indexOf("."));
+      creditTv.setText(text2+" "+getString(R.string.common_irr_currency));
       if (creditRemained < 0) {
         creditTv.setTextColor(getResources().getColor(R.color.remove_red));
         minusImg.setVisibility(View.VISIBLE);

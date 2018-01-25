@@ -132,6 +132,8 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
           .format(SQL_ADD_COLUMN, Position.TABLE_NAME, Position.COL_DISTANCE, "REAL"));
       db.execSQL(String
           .format(SQL_ADD_COLUMN, Position.TABLE_NAME, Position.COL_NETWORK_DATE, "INTEGER"));
+      db.execSQL(String
+          .format(SQL_ADD_COLUMN, VisitInformation.TABLE_NAME, VisitInformation.COL_NETWORK_DATE, "INTEGER"));
     }
   }
 }

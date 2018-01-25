@@ -20,6 +20,7 @@ public class VisitInformationDto extends BaseModel {
   private Long salesmanId;
   private SaleType saleType;
   private List<VisitInformationDetailDto> details;
+  private String networkDate;
 
   public Long getId() {
     return id;
@@ -99,5 +100,13 @@ public class VisitInformationDto extends BaseModel {
 
   public void setSaleType(SaleType saleType) {
     this.saleType = saleType;
+  }
+
+  public String getNetworkDate() {
+    return networkDate;
+  }
+
+  public void setNetworkDate(String networkDate) {
+    this.networkDate = networkDate;
   }
 }

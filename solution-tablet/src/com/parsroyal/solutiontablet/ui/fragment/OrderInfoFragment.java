@@ -13,18 +13,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.biz.impl.GiftDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
+import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -51,6 +60,7 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import java.util.Locale;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * @author Shakib
@@ -90,6 +100,10 @@ public class OrderInfoFragment extends BaseFragment {
   EditText descriptionEdt;
   @BindView(R.id.description_lay)
   TextInputLayout descriptionLayout;
+  @BindView(R.id.register_gift_tv)
+  TextView registerGiftTv;
+  @BindView(R.id.order_gift_layout)
+  LinearLayout orderGiftLayout;
 
   private LabelValue selectedItem = null;
   private MainActivity mainActivity;
@@ -106,6 +120,8 @@ public class OrderInfoFragment extends BaseFragment {
   private VisitService visitService;
   private String pageStatus;
   private PaymentMethodAdapter adapter;
+  private boolean giftRequestSent;
+  private Long orderBackendId;
 
   public OrderInfoFragment() {
     // Required empty public constructor
@@ -197,6 +213,7 @@ public class OrderInfoFragment extends BaseFragment {
         paymentTypeTitle.setText(R.string.select_reason_to_return);
       }
       descriptionLayout.setHint(getString(R.string.reject_description));
+      orderGiftLayout.setVisibility(View.GONE);
     } else if (selectedItem != null) {
       setPaymentMethod(selectedItem);
     } else {
@@ -205,6 +222,7 @@ public class OrderInfoFragment extends BaseFragment {
     if (pageStatus.equals(Constants.VIEW)) {
       submitOrderBtn.setText(getString(R.string.close));
       descriptionEdt.setEnabled(false);
+      orderGiftLayout.setVisibility(View.GONE);
     }
     if (MultiScreenUtility.isTablet(mainActivity)) {
       setUpRecyclerView();
@@ -222,12 +240,38 @@ public class OrderInfoFragment extends BaseFragment {
     paymentMethodTv.setText(NumberUtil.digitsToPersian(selectedItem.getLabel()));
   }
 
-  @OnClick({R.id.payment_method_tv, R.id.submit_order_btn})
+  @OnClick({R.id.payment_method_tv, R.id.submit_order_btn, R.id.order_gift_layout,
+      R.id.register_gift_tv})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.payment_method_tv:
         if (!pageStatus.equals(Constants.VIEW) && !MultiScreenUtility.isTablet(mainActivity)) {
           showPaymentMethodDialog();
+        }
+        break;
+      case R.id.order_gift_layout:
+      case R.id.register_gift_tv:
+        if (giftRequestSent) {
+          registerGiftTv.setText("در حال دریافت اطلاعات ...");
+          new GiftDataTransferBizImpl(mainActivity).exchangeData(orderBackendId);
+        } else {
+          order = saleOrderService.findOrderDtoById(orderId);
+          if (validateOrderForSave()) {
+            order.setStatus(SaleOrderStatus.GIFT.getId());
+            order.setPaymentTypeBackendId(selectedItem.getValue());
+            order.setDescription(descriptionEdt.getText().toString());
+            order.setSalesmanId(
+                Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
+            saleOrderService.saveOrder(order);
+            SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
+            BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
+            registerGiftTv.setText("در حال ارسال ...");
+            if (Empty.isNotEmpty(saleOrder)) {
+              saleOrder.setStatus(SaleOrderStatus.GIFT.getId());
+              OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity);
+              dataTransfer.sendSingleOrder(saleOrder);
+            }
+          }
         }
         break;
       case R.id.submit_order_btn:
@@ -399,5 +443,32 @@ public class OrderInfoFragment extends BaseFragment {
   @Override
   public int getFragmentId() {
     return MainActivity.ORDER_INFO_FRAGMENT;
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+  }
+
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof ErrorEvent) {
+      registerGiftTv.setText("خطا در ارتباط با سرور");
+    } else if (event instanceof SendOrderEvent) {
+      if (event.getStatusCode() == StatusCodes.SUCCESS) {
+        registerGiftTv.setText("مشاهده تخفیف و جوایز");
+        giftRequestSent = true;
+        orderBackendId = ((SendOrderEvent) event).getOrderId();
+      }
+    } else if (event instanceof DataTransferSuccessEvent) {
+      if (event.getStatusCode() == StatusCodes.SUCCESS) {
+        registerGiftTv.setText("مشاهده تخفیف و جوایز");
+        DialogUtil.showConfirmDialog(mainActivity, "تخفیف و جوایز", event.getMessage(),
+            (dialogInterface, i) -> dialogInterface.dismiss());
+      } else if (event.getStatusCode() == StatusCodes.NO_DATA_ERROR) {
+        registerGiftTv.setText("تلاش مجدد");
+
+      }
+    }
   }
 }
