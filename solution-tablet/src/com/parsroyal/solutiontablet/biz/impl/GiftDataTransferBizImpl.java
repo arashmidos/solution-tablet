@@ -62,7 +62,8 @@ public class GiftDataTransferBizImpl {
 
       @Override
       public void onFailure(Call<String> call, Throwable t) {
-        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+//        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+        EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
       }
     });
   }

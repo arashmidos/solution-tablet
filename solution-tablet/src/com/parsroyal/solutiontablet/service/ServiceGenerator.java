@@ -90,7 +90,8 @@ public class ServiceGenerator {
       }
     });
 
-    Gson gson = gsonBuilder.create();
+    Gson gson = gsonBuilder.setLenient().create();
+
     builder.addConverterFactory(GsonConverterFactory.create(gson));
     builder.client(httpClient.build());
     retrofit = builder.build();

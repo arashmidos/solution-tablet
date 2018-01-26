@@ -60,6 +60,7 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 /**
@@ -267,7 +268,7 @@ public class OrderInfoFragment extends BaseFragment {
             BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
             registerGiftTv.setText("در حال ارسال ...");
             if (Empty.isNotEmpty(saleOrder)) {
-              saleOrder.setStatus(SaleOrderStatus.GIFT.getId());
+              saleOrder.setStatusCode(SaleOrderStatus.GIFT.getId());
               OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity);
               dataTransfer.sendSingleOrder(saleOrder);
             }
@@ -308,6 +309,18 @@ public class OrderInfoFragment extends BaseFragment {
             mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
           }
         });
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
   }
 
   private void saveOrder(Long statusId) {
@@ -463,8 +476,8 @@ public class OrderInfoFragment extends BaseFragment {
     } else if (event instanceof DataTransferSuccessEvent) {
       if (event.getStatusCode() == StatusCodes.SUCCESS) {
         registerGiftTv.setText("مشاهده تخفیف و جوایز");
-        DialogUtil.showConfirmDialog(mainActivity, "تخفیف و جوایز", event.getMessage(),
-            (dialogInterface, i) -> dialogInterface.dismiss());
+        DialogUtil.showCustomDialog(mainActivity, "تخفیف و جوایز", event.getMessage(),"تایید",
+            (dialogInterface, i) -> dialogInterface.dismiss(),"",null,Constants.ICON_MESSAGE);
       } else if (event.getStatusCode() == StatusCodes.NO_DATA_ERROR) {
         registerGiftTv.setText("تلاش مجدد");
 
