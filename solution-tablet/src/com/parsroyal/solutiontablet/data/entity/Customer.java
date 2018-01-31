@@ -1,7 +1,5 @@
 package com.parsroyal.solutiontablet.data.entity;
 
-import java.math.BigDecimal;
-
 /**
  * Created by Arash on 1/16/2018.
  */

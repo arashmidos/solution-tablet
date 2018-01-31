@@ -362,8 +362,12 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    unregisterReceiver(gpsStatusReceiver);
-    unregisterReceiver(batteryInfoReceiver);
+    try {
+      unregisterReceiver(gpsStatusReceiver);
+      unregisterReceiver(batteryInfoReceiver);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   @Override

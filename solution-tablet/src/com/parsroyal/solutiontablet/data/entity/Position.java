@@ -78,21 +78,24 @@ public class Position extends BaseEntity<Long> {
     this.longitude = longitude;
     this.speed = speed;
     this.status = SendStatus.NEW.getId().intValue();
-    this.createDateTime = DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    this.createDateTime = DateUtil
+        .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     this.gpsOff = gpsOff;
     this.mode = mode;
     this.accuracy = accuracy;
     this.batteryLevel = MainActivity.batteryLevel;
     this.batteryStatus = MainActivity.batteryStatusTitle;
     this.rooted = GPSUtil.isDeviceRooted();
-    this.date = DateUtil.convertDate(new Date(gpsTime), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    this.date = DateUtil
+        .convertDate(new Date(gpsTime), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     Date trueTime = SolutionTabletApplication.getTrueTime();
     this.networkDate = trueTime == null ? null : trueTime.getTime();
   }
 
   public Position() {
     this.status = SendStatus.NEW.getId().intValue();
-    this.createDateTime = DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    this.createDateTime = DateUtil
+        .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     this.batteryLevel = MainActivity.batteryLevel;
     this.batteryStatus = MainActivity.batteryStatusTitle;
     this.rooted = GPSUtil.isDeviceRooted();
@@ -203,8 +206,8 @@ public class Position extends BaseEntity<Long> {
 
   public Location getLocation() {
     Location location = new Location("Dummy");
-    location.setLatitude(latitude);
-    location.setLongitude(longitude);
+    location.setLatitude(latitude == null ? null : latitude);
+    location.setLongitude(longitude == null ? null : longitude);
     return location;
   }
 

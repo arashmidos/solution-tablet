@@ -188,8 +188,12 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     }
     String distance = settingService
         .getSettingValue(ApplicationKeys.SETTING_DISTANCE_CUSTOMER_VALUE);
-    distanceAllowed = Empty.isEmpty(distance) ? Constants.MAX_DISTANCE : Float.valueOf(distance);
-
+    try {
+      distanceAllowed = Empty.isEmpty(distance) || "null".equals(distance) ? Constants.MAX_DISTANCE
+          : Float.valueOf(distance);
+    } catch (NumberFormatException ex) {
+      ex.printStackTrace();
+    }
     loadCalendars();
 
     googleApiClient = new Builder(context)
@@ -435,8 +439,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     map.setOnMarkerClickListener(clusterManager);
     map.setOnInfoWindowClickListener(clusterManager);
     map.setInfoWindowAdapter(clusterManager.getMarkerManager());
-    map.setOnInfoWindowClickListener(marker ->
-    {
+    map.setOnInfoWindowClickListener(marker ->    {
       Float distance = clickedClusterItem.getDistance();
       if (distanceServiceEnabled && distance > distanceAllowed) {
         ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
