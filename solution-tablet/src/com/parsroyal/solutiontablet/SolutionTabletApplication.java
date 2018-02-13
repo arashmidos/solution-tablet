@@ -15,7 +15,6 @@ import com.instacart.library.truetime.TrueTime;
 import com.parsroyal.solutiontablet.constants.Constants;
 import io.fabric.sdk.android.Fabric;
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -43,11 +42,14 @@ public class SolutionTabletApplication extends MultiDexApplication {
   }
 
   public static Date getTrueTime() {
-    if (TrueTime.isInitialized()) {
-      return TrueTime.now();
-    } else {
-      return null;
+    try {
+      if (TrueTime.isInitialized()) {
+        return TrueTime.now();
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
     }
+    return null;
   }
 
   @Override

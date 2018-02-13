@@ -25,7 +25,8 @@ public enum StatusCodes {
   ACTION_EXIT_VISIT(903, R.string.exit_end_visit),
   ACTION_START_CAMERA(904, R.string.add_picture),
   ACTION_REFRESH_DATA(905, R.string.refresh_data),
-  ;
+  ACTION_FINISH_TRANSFER(906, R.string.finish_transfer),
+  ACTION_CANCEL_TRANSFER(907, R.string.cancel_transfer);
 
   private int statusCode;
   private int message;

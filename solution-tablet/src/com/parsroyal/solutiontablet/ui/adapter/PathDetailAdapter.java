@@ -64,7 +64,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
   private final LocationService locationService;
   private final SaleOrderService orderService;
   private final long visitlineBackendId;
-  private final float distanceAllowed;
+  private float distanceAllowed;
   private SettingService settingService;
   private LayoutInflater inflater;
   private MainActivity mainActivity;
@@ -87,7 +87,16 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
         .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE));
     String distance = settingService
         .getSettingValue(ApplicationKeys.SETTING_DISTANCE_CUSTOMER_VALUE);
-    distanceAllowed = Empty.isEmpty(distance) ? Constants.MAX_DISTANCE : Float.valueOf(distance);
+
+    if (distanceServiceEnabled) {
+      try {
+        distanceAllowed =
+            Empty.isEmpty(distance) || "null".equals(distance) ? Constants.MAX_DISTANCE
+                : Float.valueOf(distance);
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+      }
+    }
   }
 
   @Override

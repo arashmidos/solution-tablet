@@ -89,6 +89,7 @@ public class Position extends BaseEntity<Long> {
     this.date = DateUtil
         .convertDate(new Date(gpsTime), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     Date trueTime = SolutionTabletApplication.getTrueTime();
+
     this.networkDate = trueTime == null ? null : trueTime.getTime();
   }
 

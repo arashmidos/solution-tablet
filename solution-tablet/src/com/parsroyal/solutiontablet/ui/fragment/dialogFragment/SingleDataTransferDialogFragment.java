@@ -29,6 +29,8 @@ import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
@@ -74,6 +76,8 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   ProgressBar progressBar;
   @BindView(R.id.cancel_btn)
   TextView cancelBtn;
+  @BindView(R.id.root)
+  View root;
 
   private MainActivity mainActivity;
   private long orderId;
@@ -200,6 +204,9 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       sendVisit();
       return;
     }
+    if (currentPosition > model.size()) {
+      return;
+    }
     VisitInformationDetail visitDetail = model.get(currentPosition);
 //    adapter.setCurrent(currentPosition);
     currentModel = visitDetail;
@@ -241,7 +248,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         if (dataTransfer1.getSuccess() == 1) {
           sendNextDetail();
         } else {
-          cancelTransfer();
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
         }
       });
       dataTransfer.start();
@@ -271,7 +278,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         if (qAnswersDataTransferBizImpl.getSuccess() == qAnswersDataTransferBizImpl.getTotal()) {
           sendNextDetail();
         } else {
-          cancelTransfer();
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
         }
       });
       sendDataThead.start();
@@ -287,7 +294,11 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         PaymentsDataTransferBizImpl paymentsDataTransferBiz = new PaymentsDataTransferBizImpl(
             mainActivity);
         paymentsDataTransferBiz.setPayments(payments);
-        paymentsDataTransferBiz.exchangeData();
+        try {
+          paymentsDataTransferBiz.exchangeData();
+        } catch (Exception ex) {
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
+        }
       } else {
         sendNextDetail();
       }
@@ -319,9 +330,15 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     if (Empty.isEmpty(pics)) {
       sendNextDetail();
     }
-    Thread sendDataThead = new Thread(
-        () -> new NewCustomerPicDataTransferBizImpl(mainActivity, pics, visitId, null)
-            .exchangeData());
+    Thread sendDataThead = new Thread(() -> {
+      try {
+        new NewCustomerPicDataTransferBizImpl(mainActivity, pics, visitId, null)
+            .exchangeData();
+      } catch (Exception ex) {
+        EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
+      }
+
+    });
     sendDataThead.start();
   }
 
@@ -348,6 +365,16 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       }
     } else if (event instanceof ErrorEvent) {
       cancelTransfer();
+    } else if (event instanceof ActionEvent) {
+      if (event.getStatusCode() == StatusCodes.ACTION_FINISH_TRANSFER) {
+        finishTransfer();
+      } else if (event.getStatusCode() == StatusCodes.ACTION_CANCEL_TRANSFER) {
+        cancelTransfer();
+      }
+    } else if (event instanceof DataTransferSuccessEvent) {
+      sendNextDetail();
+    } else if (event instanceof DataTransferErrorEvent) {
+      cancelTransfer();
     }
   }
 
@@ -355,7 +382,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
 
     List<VisitInformationDto> visitInformationList = visitService.getAllVisitDetailForSend(visitId);
     if (Empty.isEmpty(visitInformationList)) {
-      cancelTransfer();
+      EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
       return;
     }
     VisitInformationDataTransferBizImpl dataTransfer = new VisitInformationDataTransferBizImpl(
@@ -367,21 +394,22 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         if (visitInformationDto.getDetails() == null
             || visitInformationDto.getDetails().size() == 0) {
           visitService.deleteVisitById(visitInformationDto.getId());
-          getActivity().runOnUiThread(this::cancelTransfer);
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
           return;
         }
         dataTransfer.setData(visitInformationDto);
         dataTransfer.exchangeData();
       }
-      getActivity().runOnUiThread(this::finishTransfer);
+      EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_FINISH_TRANSFER));
     });
     sendDataThead.start();
   }
 
   private void finishTransfer() {
-    getActivity().runOnUiThread(() -> {
+    mainActivity.runOnUiThread(() -> {
+
       adapter.setCurrent(++currentPosition);
-      ToastUtil.toastMessage(getActivity(), getString(R.string.send_data_completed_successfully));
+      ToastUtil.toastMessage(root, getString(R.string.send_data_completed_successfully));
       transferFinished = true;
       cancelBtn.setVisibility(View.GONE);
       switchButtonState();
@@ -393,11 +421,12 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   }
 
   private void cancelTransfer() {
-    transferFinished = true;
-    getActivity().runOnUiThread(() -> {
+    mainActivity.runOnUiThread(() -> {
+      transferFinished = true;
+
       switchButtonState();
       adapter.setError(currentPosition);
-      ToastUtil.toastError(getActivity(), getString(R.string.error_in_sending_data));
+      ToastUtil.toastError(root, getString(R.string.error_in_sending_data));
     });
   }
 

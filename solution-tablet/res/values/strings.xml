@@ -594,5 +594,7 @@
     \n%s\n
     نرم افزارهای بالا را حذف کرده یا با پشتیبان خود تماس بگیرید
   </string>
+  <string name="finish_transfer">پایان بروزرسانی</string>
+  <string name="cancel_transfer">لغو ارسال</string>
 
 </resources>

@@ -2,9 +2,11 @@ package com.parsroyal.solutiontablet.biz;
 
 import android.content.Context;
 import android.util.Log;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.exception.BackendIsNotReachableException;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.InternalServerError;
@@ -20,6 +22,7 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -124,6 +127,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
       }
     } catch (ResourceAccessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
       if (Empty.isNotEmpty(getObserver())) {
         getObserver().publishResult(new TimeOutException());
       }
