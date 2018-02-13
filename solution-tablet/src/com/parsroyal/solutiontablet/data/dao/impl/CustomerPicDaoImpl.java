@@ -25,7 +25,7 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
   public CustomerPicDaoImpl(Context context) {
     this.context = context;
   }
-
+  
   @Override
   protected Context getContext() {
     return context;

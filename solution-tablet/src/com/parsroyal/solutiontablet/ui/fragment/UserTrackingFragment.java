@@ -611,22 +611,6 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     polylines.add(polyline);
   }
 
-  /*private void drawSnappedRoute(List<LatLng> route) {
-    try {
-      //Double check if user unchecked the option
-      if (showSnappedTrack.isChecked()) {
-        PolylineOptions polyOptions = new PolylineOptions();
-        polyOptions.color(getResources().getColor(colors[4]));
-        polyOptions.width(4);
-        polyOptions.addAll(route);
-        snappedPolyline = map.addPolyline(polyOptions);
-        polylines.add(snappedPolyline);
-      }
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
-  }*/
-
   @Override
   public void onDateSet(int id, @Nullable Calendar calendar, int day, int month, int year) {
     int tempYear = year % 100;
@@ -701,27 +685,4 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
       markerOptions.icon(icon);
     }
   }
-
-  /*private class AsyncRouteLoader extends AsyncTask<List<LatLng>, Void, List<LatLng>> {
-
-    @Override
-    protected void onPreExecute() {
-      //We can later show a smooth linear progressbar here, but not for now
-    }
-
-    @Override
-    protected List<LatLng> doInBackground(List<LatLng>... params) {
-      if (Empty.isNotEmpty(getActivity())) {
-        return MapServiceImpl.snapToRoads(getActivity(), params[0]);
-      }
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(List<LatLng> list) {
-      if (Empty.isNotEmpty(list)) {
-        drawSnappedRoute(list);
-      }
-    }
-  }*/
 }

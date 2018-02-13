@@ -384,7 +384,7 @@ public class VisitDetailFragment extends BaseFragment {
         String s = ImageUtil.saveTempImage(bitmap, MediaUtil
             .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
                 Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-                "IMG_" + customer.getCode() + "_" + (new Date().getTime()) % 1000));
+                "IMG_" + customer.getBackendId() + "_" + (new Date().getTime()) % 1000));
 
         if (!s.equals("")) {
           File fdelete = new File(fileUri.getPath());
@@ -534,7 +534,7 @@ public class VisitDetailFragment extends BaseFragment {
     String postfix = String.valueOf((new Date().getTime()) % 1000);
     fileUri = MediaUtil.getOutputMediaFileUri(mainActivity, MediaUtil.MEDIA_TYPE_IMAGE,
         Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-        "IMG_" + customer.getCode() + "_" + postfix); // create a file to save the image
+        "IMG_" + customer.getBackendId() + "_" + postfix); // create a file to save the image
     CameraManager.startCameraActivity(mainActivity, fileUri, this);
   }
 }
