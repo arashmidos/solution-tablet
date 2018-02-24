@@ -596,5 +596,6 @@
   </string>
   <string name="finish_transfer">پایان بروزرسانی</string>
   <string name="cancel_transfer">لغو ارسال</string>
+  <string name="edit_location_permission_denied">شما مجاز به تغییر آدرس مشتری نیستید</string>
 
 </resources>

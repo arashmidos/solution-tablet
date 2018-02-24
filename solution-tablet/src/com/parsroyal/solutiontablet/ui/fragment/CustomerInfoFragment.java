@@ -321,7 +321,11 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         break;
       case R.id.edit_map:
       case R.id.edit_map_layout:
-        mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, getArguments(), true);
+        if (Empty.isNotEmpty(customer.getxLocation()) && customer.getxLocation() != 0.0) {
+          ToastUtil.toastError(getActivity(), getString(R.string.edit_location_permission_denied));
+        } else {
+          mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, getArguments(), true);
+        }
         break;
       case R.id.fullscreen_map_layout:
       case R.id.fullscreen_map:
