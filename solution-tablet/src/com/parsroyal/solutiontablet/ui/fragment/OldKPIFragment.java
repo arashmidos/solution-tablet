@@ -32,17 +32,12 @@ import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.model.KPIDetail;
-import com.parsroyal.solutiontablet.data.model.KPIDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.KPIService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.KPIServiceImpl;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.KPIListAdapter;
 import com.parsroyal.solutiontablet.ui.component.GaugeView;
-import com.parsroyal.solutiontablet.ui.component.XYMarkerView;
-import com.parsroyal.solutiontablet.ui.formatter.XAxisValueFormatter;
 import com.parsroyal.solutiontablet.ui.formatter.YAxisValueFormatter;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -54,10 +49,10 @@ import java.util.List;
 /**
  * Created by Arash on 2016-09-21.
  */
-public class KPIFragment extends BaseFragment implements ResultObserver,
+public class OldKPIFragment extends BaseFragment implements ResultObserver,
     OnChartValueSelectedListener {
 
-  public static final String TAG = KPIFragment.class.getSimpleName();
+  public static final String TAG = OldKPIFragment.class.getSimpleName();
   protected RectF mOnValueSelectedRectF = new RectF();
   @BindView(R.id.gauge_value1)
   TextView gaugeValueTv1;
@@ -76,7 +71,7 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
   private KPIService kpiService;
   private long customerBackendId = -1;
   private boolean isCustomerKPI;
-  private KPIDto kpiDto = null;
+  //  private KPIDto kpiDto = null;
   private ListAdapter adapter;
   private Typeface mTfLight;
   private List<KPIDetail> kpiDetails;
@@ -87,7 +82,7 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
       Bundle savedInstanceState) {
     oldMainActivity = (OldMainActivity) getActivity();
     customerService = new CustomerServiceImpl(oldMainActivity);
-    kpiService = new KPIServiceImpl(oldMainActivity);
+//    kpiService = new KPIServiceImpl(oldMainActivity);
 
     Bundle arguments = getArguments();
     if (Empty.isNotEmpty(arguments)) {
@@ -126,7 +121,7 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
     barChart.setPinchZoom(true);
     barChart.setDrawGridBackground(false);
 
-    IAxisValueFormatter xAxisFormatter = new XAxisValueFormatter(kpiDetails);
+//    IAxisValueFormatter xAxisFormatter = new XAxisValueFormatter(kpiDetails);
 
     XAxis xAxis = barChart.getXAxis();
     xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -134,7 +129,7 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
     xAxis.setDrawGridLines(false);
     xAxis.setGranularity(1f); // only intervals of 1 day
     xAxis.setLabelCount(7);
-    xAxis.setValueFormatter(xAxisFormatter);
+//    xAxis.setValueFormatter(xAxisFormatter);
 
     IAxisValueFormatter custom = new YAxisValueFormatter();
 
@@ -164,9 +159,9 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
     l.setTextSize(11f);
     l.setXEntrySpace(4f);
 
-    XYMarkerView mv = new XYMarkerView(getActivity(), xAxisFormatter);
-    mv.setChartView(barChart); // For bounds control
-    barChart.setMarker(mv); // Set the marker to the chart
+//    XYMarkerView mv = new XYMarkerView(getActivity(), xAxisFormatter);
+//    mv.setChartView(barChart); // For bounds control
+//    barChart.setMarker(mv); // Set the marker to the chart
 
     setData();
   }
@@ -175,7 +170,7 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
     ArrayList<BarEntry> yVals1 = new ArrayList<>();
 
     for (int i = 0; i < kpiDetails.size(); i++) {
-      yVals1.add(new BarEntry(i, kpiDetails.get(i).getValue().floatValue()));
+//      yVals1.add(new BarEntry(i, kpiDetails.get(i).getValue().floatValue()));
     }
 
     BarDataSet set1;
@@ -216,7 +211,7 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
       @Override
       public void run() {
         ToastUtil.toastError(getActivity(), ex);
-        oldMainActivity.removeFragment(KPIFragment.this);
+        oldMainActivity.removeFragment(OldKPIFragment.this);
         oldMainActivity.changeSidebarItem(0);
       }
     });
@@ -259,8 +254,8 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
     @Override
     protected Void doInBackground(Long... params) {
       try {
-        kpiDto = isCustomerKPI ? kpiService.getCustomerKPI(params[0], KPIFragment.this) :
-            kpiService.getSalesmanKPI(KPIFragment.this);
+//        kpiDto = isCustomerKPI ? kpiService.getCustomerKPI(params[0], OldKPIFragment.this) :
+//            kpiService.getSalesmanKPI(OldKPIFragment.this);
       } catch (BusinessException ex) {
         Log.e(TAG, ex.getMessage(), ex);
 
@@ -276,21 +271,21 @@ public class KPIFragment extends BaseFragment implements ResultObserver,
     protected void onPostExecute(Void aVoid) {
       dismissProgressDialog();
 
-      if (Empty.isNotEmpty(kpiDto)) {
-        gaugeView1.setTargetValue(kpiDto.getKpiGauge().floatValue());
-        gaugeView2.setTargetValue(0);
-        gaugeValueTv1.setText(kpiDto.getKpiGauge() + "");
-        gaugeValueTv2.setText(String.valueOf(0));
-        kpiDetails = kpiDto.getDetails();
+//      if (Empty.isNotEmpty(kpiDto)) {
+//        gaugeView1.setTargetValue(kpiDto.getKpiGauge().floatValue());
+//        gaugeView2.setTargetValue(0);
+//        gaugeValueTv1.setText(kpiDto.getKpiGauge() + "");
+//        gaugeValueTv2.setText(String.valueOf(0));
+//        kpiDetails = kpiDto.getDetails();
 
-        adapter = new KPIListAdapter((OldMainActivity) getActivity(), kpiDetails);
-        listView.setAdapter(adapter);
-        customizeChart();
-      } else {
-        ToastUtil.toastError(getActivity(),
-            getString(R.string.com_parsroyal_solutiontablet_exception_UnknownSystemException));
-        oldMainActivity.removeFragment(KPIFragment.this);
-      }
+//        adapter = new KPIListAdapter((OldMainActivity) getActivity(), kpiDetails);
+      listView.setAdapter(adapter);
+      customizeChart();
+//      } else {
+      ToastUtil.toastError(getActivity(),
+          getString(R.string.com_parsroyal_solutiontablet_exception_UnknownSystemException));
+      oldMainActivity.removeFragment(OldKPIFragment.this);
     }
   }
+//  }
 }

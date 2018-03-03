@@ -2,6 +2,10 @@ package com.parsroyal.solutiontablet.data.listmodel;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Arash on 31/12/2017.
@@ -23,6 +27,42 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   protected Long backendId;
   protected String lastVisit;
   protected String shopName;
+  protected boolean addLocation;
+  protected boolean hasPayment;
+  protected boolean hasPicture;
+  protected HashSet<VisitInformationDetailType> details = new HashSet<>();
+
+  public void addDetail(VisitInformationDetailType detailType) {
+    details.add(detailType);
+  }
+
+  public HashSet<VisitInformationDetailType> getDetails() {
+    return details;
+  }
+
+  public boolean isAddLocation() {
+    return addLocation;
+  }
+
+  public void setAddLocation(boolean addLocation) {
+    this.addLocation = addLocation;
+  }
+
+  public boolean isHasPayment() {
+    return hasPayment;
+  }
+
+  public void setHasPayment(boolean hasPayment) {
+    this.hasPayment = hasPayment;
+  }
+
+  public boolean isHasPicture() {
+    return hasPicture;
+  }
+
+  public void setHasPicture(boolean hasPicture) {
+    this.hasPicture = hasPicture;
+  }
 
   public boolean hasAnswers() {
     return hasAnswers;
@@ -153,5 +193,6 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   public void setShopName(String shopName) {
     this.shopName = shopName;
   }
+
 
 }

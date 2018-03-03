@@ -70,6 +70,10 @@ public class Constants {
   public static final String ORIGIN_VISIT_ID = "ORIGIN_VISIT_ID";
   public static final int MAX_NEW_CUSTOMER_PHOTO = 10;
   public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+  public static final String REPORT_TYPE = "REPORT_TYPE";
+  public static final String REPORT_SALESMAN = "REPORT_SALESMAN";
+  public static final String REPORT_CUSTOMER = "REPORT_CUSTOMER";
+  public static final String REPORT_ITEM = "REPORT_ITEM";
 
   public class TransferStatus {
 

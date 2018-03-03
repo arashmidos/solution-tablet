@@ -597,5 +597,8 @@
   <string name="finish_transfer">پایان بروزرسانی</string>
   <string name="cancel_transfer">لغو ارسال</string>
   <string name="edit_location_permission_denied">شما مجاز به تغییر آدرس مشتری نیستید</string>
+  <string name="my_kpi">گزارش عملکرد من</string>
+  <string name="my_kpi_list">گزارشات عملکرد من</string>
+  <string name="error_connectin_server">خطا در ارتباط با سرور</string>
 
 </resources>

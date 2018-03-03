@@ -1,60 +1,64 @@
 package com.parsroyal.solutiontablet.service.impl;
 
-import android.content.Context;
-import com.parsroyal.solutiontablet.biz.impl.KPIDataTransferBizImpl;
-import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
-import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.KeyValue;
-import com.parsroyal.solutiontablet.data.model.KPIDto;
-import com.parsroyal.solutiontablet.exception.InvalidServerAddressException;
-import com.parsroyal.solutiontablet.exception.PasswordNotProvidedForConnectingToServerException;
-import com.parsroyal.solutiontablet.exception.UsernameNotProvidedForConnectingToServerException;
+
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.KpiEvent;
+import com.parsroyal.solutiontablet.data.model.KPIDetail;
 import com.parsroyal.solutiontablet.service.KPIService;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
-import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import com.parsroyal.solutiontablet.service.ServiceGenerator;
+import com.parsroyal.solutiontablet.util.NetworkUtil;
+import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
- * Created by Mahyar on 6/4/2015.
+ * Created by arash on 2/19/18.
  */
-public class KPIServiceImpl implements KPIService {
 
-  private Context context;
-  private KeyValueDao keyValueDao;
+public class KPIServiceImpl {
 
-  private KeyValue serverAddress1;
-  private KeyValue username;
-  private KeyValue password;
 
-  public KPIServiceImpl(Context context) {
-    this.context = context;
-    this.keyValueDao = new KeyValueDaoImpl(context);
+  public void getCustomerReportsList() {
+    getReport(0, 0);
   }
 
-  @Override
-  public KPIDto getCustomerKPI(long customerBackendId, ResultObserver observer) {
-    serverAddress1 = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
-    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
-    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
-    if (Empty.isEmpty(serverAddress1)) {
-      throw new InvalidServerAddressException();
-    }
-
-    if (Empty.isEmpty(username)) {
-      throw new UsernameNotProvidedForConnectingToServerException();
-    }
-
-    if (Empty.isEmpty(password)) {
-      throw new PasswordNotProvidedForConnectingToServerException();
-    }
-
-    KPIDataTransferBizImpl kpiDataTransferBiz = new KPIDataTransferBizImpl(context, observer);
-    return kpiDataTransferBiz.exchangeData(customerBackendId);
-
+  public void getSalesmanReportsList() {
+    getReport(100, 0);
   }
 
-  @Override
-  public KPIDto getSalesmanKPI(ResultObserver observer) {
-    return getCustomerKPI(-1, observer);
+  public void getReport(int reportId, long serialId) {
+    if (!NetworkUtil.isNetworkAvailable(SolutionTabletApplication.getInstance())) {
+      EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
+      return;
+    }
+    KPIService restService = ServiceGenerator.createService(KPIService.class);
+
+    Call<List<KPIDetail>> call = restService.getReport(reportId, serialId);
+
+    call.enqueue(new Callback<List<KPIDetail>>() {
+      @Override
+      public void onResponse(Call<List<KPIDetail>> call, Response<List<KPIDetail>> response) {
+        if (response.isSuccessful()) {
+          List<KPIDetail> categoryList = response.body();
+          if (categoryList != null && categoryList.size() > 0) {
+
+            EventBus.getDefault().post(new KpiEvent(categoryList));
+          } else {
+            EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_DATA_ERROR));
+          }
+        } else {
+          EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
+        }
+      }
+
+      @Override
+      public void onFailure(Call<List<KPIDetail>> call, Throwable t) {
+        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+      }
+    });
   }
 }

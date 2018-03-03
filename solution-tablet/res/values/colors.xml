@@ -84,4 +84,7 @@
   <color name="register_image">#673ab7</color>
   <color name="register_return">#f57f17</color>
   <color name="register_return_dark">#dc7316</color>
+  <color name="shimmer_color">#80ffffff</color>
+  <color name="gray_72">#727272</color>
+  <color name="gray_1e">#1e000000</color>
 </resources>

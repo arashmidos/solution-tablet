@@ -52,4 +52,6 @@ public enum VisitInformationDetailType {
   public int getDrawable() {
     return drawable;
   }
+
+
 }

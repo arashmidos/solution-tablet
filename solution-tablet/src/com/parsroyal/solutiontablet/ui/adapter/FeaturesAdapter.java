@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
@@ -18,6 +18,7 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.ReportListActivity;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
@@ -87,8 +88,10 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
         case 5://Questionnaire
           context.changeFragment(MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID, true);
           break;
-        case 6://Settings
-          ToastUtil.toastMessage(context, R.string.error_message_there_is_no_settings);
+        case 6://Report
+          Intent intent = new Intent(context, ReportListActivity.class);
+          intent.putExtra(Constants.REPORT_TYPE, Constants.REPORT_SALESMAN);
+          context.startActivity(intent);
           break;
       }
     });

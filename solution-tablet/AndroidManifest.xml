@@ -15,7 +15,8 @@
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.RECORD_AUDIO" />
   <uses-permission android:name="android.permission.GET_TASKS" />
-  <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"
+  <uses-permission
+    android:name="android.permission.ACCESS_MOCK_LOCATION"
     tools:ignore="MockLocation" />
 
   <uses-feature android:name="android.hardware.camera" />
@@ -76,6 +77,17 @@
     <activity
       android:label=""
       android:name=".ui.TabletMainActivity"
+      android:screenOrientation="landscape"
+      android:theme="@style/NoActionBar" />
+    <activity
+      android:name=".ui.activity.ReportListActivity"
+      android:theme="@style/NoActionBar" />
+    <activity
+      android:name=".ui.activity.MobileReportDetailActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/NoActionBar" />
+    <activity
+      android:name=".ui.activity.TabletReportDetailActivity"
       android:screenOrientation="landscape"
       android:theme="@style/NoActionBar" />
 

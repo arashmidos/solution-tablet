@@ -1,9 +1,5 @@
 package com.parsroyal.solutiontablet.constants;
 
-import android.content.Context;
-import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.ResourceUtil;
-
 /**
  * Created by Arash on 2016-08-13
  */

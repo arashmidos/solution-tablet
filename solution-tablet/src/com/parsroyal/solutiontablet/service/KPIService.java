@@ -1,14 +1,23 @@
 package com.parsroyal.solutiontablet.service;
 
-import com.parsroyal.solutiontablet.data.model.KPIDto;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
+import com.parsroyal.solutiontablet.data.model.KPIDetail;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 /**
  * Created by Arash on 2016-09-21.
  */
 public interface KPIService {
 
-  KPIDto getCustomerKPI(long customerBackendId, ResultObserver observer);
+  @GET("kpi/activityReport/0/0")
+  Call<List<KPIDetail>> getCustomerReportsList();
 
-  KPIDto getSalesmanKPI(ResultObserver observer);
+  @GET("kpi/activityReport/100/0")
+  Call<List<KPIDetail>> getSalesmanReportsList();
+
+  @GET("kpi/activityReport/{report_id}/{serial_id}")
+  Call<List<KPIDetail>> getReport(@Path("report_id") int reportId,
+      @Path("serial_id") long serialId);
 }

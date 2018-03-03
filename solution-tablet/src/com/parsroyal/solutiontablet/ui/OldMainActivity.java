@@ -39,7 +39,6 @@ import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
-import com.parsroyal.solutiontablet.ui.fragment.KPIFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OldVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
@@ -326,12 +325,12 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(-1);
         break;
       case KPI_CUSTOMER_FRAGMENT_ID: //21
-        fragment = new KPIFragment();
-        changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
+//        fragment = new OldKPIFragment();
+//        changeSidebarItem(CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case KPI_SALESMAN_FRAGMENT_ID: //22
-        fragment = new KPIFragment();
-        changeSidebarItem(KPI_SALESMAN_FRAGMENT_ID);
+//        fragment = new OldKPIFragment();
+//        changeSidebarItem(KPI_SALESMAN_FRAGMENT_ID);
         break;
       case FUNDS_FRAGMENT_ID: //23
 //        fragment = new PaymentFragment();

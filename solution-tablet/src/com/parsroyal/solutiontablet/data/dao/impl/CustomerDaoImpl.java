@@ -20,7 +20,6 @@ import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -344,15 +343,36 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
       if (entitiesMap.containsKey(listModel.getPrimaryKey())) {
         if ((listModel.hasOrder())) {
           entitiesMap.get(listModel.getPrimaryKey()).setHasOrder(true);
+          entitiesMap.get(listModel.getPrimaryKey())
+              .addDetail(VisitInformationDetailType.CREATE_ORDER);
         }
         if (listModel.hasRejection()) {
           entitiesMap.get(listModel.getPrimaryKey()).setHasRejection(true);
+          entitiesMap.get(listModel.getPrimaryKey())
+              .addDetail(VisitInformationDetailType.CREATE_REJECT);
         }
         if (listModel.hasLocation()) {
           entitiesMap.get(listModel.getPrimaryKey()).setHasLocation(true);
         }
         if (listModel.hasAnswers()) {
           entitiesMap.get(listModel.getPrimaryKey()).setHasAnswers(true);
+          entitiesMap.get(listModel.getPrimaryKey())
+              .addDetail(VisitInformationDetailType.FILL_QUESTIONNAIRE);
+        }
+        if (listModel.isAddLocation()) {
+          entitiesMap.get(listModel.getPrimaryKey()).setAddLocation(true);
+          entitiesMap.get(listModel.getPrimaryKey())
+              .addDetail(VisitInformationDetailType.SAVE_LOCATION);
+        }
+        if (listModel.isHasPayment()) {
+          entitiesMap.get(listModel.getPrimaryKey()).setHasPayment(true);
+          entitiesMap.get(listModel.getPrimaryKey()).addDetail(VisitInformationDetailType.CASH);
+        }
+        if (listModel.isHasPicture()) {
+          entitiesMap.get(listModel.getPrimaryKey()).setHasPicture(true);
+          entitiesMap.get(listModel.getPrimaryKey())
+              .addDetail(VisitInformationDetailType.TAKE_PICTURE);
+
         }
       } else {
         entitiesMap.put(listModel.getPrimaryKey(), listModel);
@@ -396,6 +416,12 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
       customerListModel.setHasRejection(true);
     } else if (type == VisitInformationDetailType.FILL_QUESTIONNAIRE.getValue()) {
       customerListModel.setHasAnswers(true);
+    } else if (type == VisitInformationDetailType.CASH.getValue()) {
+      customerListModel.setHasPayment(true);
+    } else if (type == VisitInformationDetailType.TAKE_PICTURE.getValue()) {
+      customerListModel.setHasPicture(true);
+    } else if (type == VisitInformationDetailType.SAVE_LOCATION.getValue()) {
+      customerListModel.setAddLocation(true);
     }
 
     customerListModel.setLastVisit(cursor.getString(10));
