@@ -1,0 +1,86 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_fa"
+    android:orientation="horizontal"
+    android:weightSum="1.1">
+
+    <TextView
+      android:id="@+id/column4"
+      style="@style/IranSans"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.20"
+      android:layout_marginTop="13dp"
+      android:layout_marginBottom="13dp"
+      android:layout_marginLeft="16dp"
+      android:ellipsize="end"
+      android:gravity="left"
+      android:textColor="@color/black_21"
+      android:textSize="14sp"
+      tools:text="column4" />
+    <TextView
+      android:id="@+id/column3"
+      style="@style/IranSans"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.20"
+      android:layout_marginTop="13dp"
+      android:layout_marginBottom="13dp"
+      android:ellipsize="end"
+      android:gravity="right"
+      android:textColor="@color/black_21"
+      android:textSize="14sp"
+      tools:text="column4" />
+    <TextView
+      android:id="@+id/column2"
+      style="@style/IranSans"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.20"
+      android:layout_marginTop="13dp"
+      android:layout_marginBottom="13dp"
+      android:ellipsize="end"
+      android:gravity="right"
+      android:textColor="@color/black_21"
+      android:textSize="14sp"
+      tools:text="column4" />
+    <TextView
+      android:id="@+id/column1"
+      style="@style/IranSans"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.20"
+      android:layout_marginTop="13dp"
+      android:layout_marginBottom="13dp"
+      android:ellipsize="end"
+      android:gravity="right"
+      android:textColor="@color/black_21"
+      android:textSize="14sp"
+      tools:text="column4" />
+    <TextView
+      android:id="@+id/title"
+      style="@style/IranSans.Medium"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.30"
+      android:layout_marginTop="13dp"
+      android:layout_marginBottom="13dp"
+      android:layout_marginRight="16dp"
+      android:ellipsize="end"
+      android:gravity="right"
+      android:textColor="@color/black_21"
+      android:textSize="14sp"
+      tools:text="column4" />
+  </LinearLayout>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/gray_1e" />
+</LinearLayout>

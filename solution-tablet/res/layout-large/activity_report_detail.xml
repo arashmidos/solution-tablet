@@ -36,6 +36,7 @@
       android:src="@drawable/ic_back_24_dp" />
   </RelativeLayout>
   <LinearLayout
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -45,21 +46,21 @@
       style="@style/IranSans.Medium"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="0.25"
+      android:layout_weight="0.20"
       android:layout_marginTop="13dp"
       android:layout_marginBottom="13dp"
       android:layout_marginLeft="16dp"
       android:ellipsize="end"
-      android:gravity="right"
+      android:gravity="left"
       android:textColor="@color/gray_72"
       android:textSize="14sp"
-      tools:text="column1" />
+      tools:text="column4" />
     <TextView
       android:id="@+id/column3"
       style="@style/IranSans.Medium"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="0.25"
+      android:layout_weight="0.20"
       android:layout_marginTop="13dp"
       android:layout_marginBottom="13dp"
       android:ellipsize="end"
@@ -71,7 +72,7 @@
       style="@style/IranSans.Medium"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="0.25"
+      android:layout_weight="0.20"
       android:layout_marginTop="13dp"
       android:layout_marginBottom="13dp"
       android:ellipsize="end"
@@ -83,7 +84,19 @@
       style="@style/IranSans.Medium"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="0.25"
+      android:layout_weight="0.20"
+      android:layout_marginTop="13dp"
+      android:layout_marginBottom="13dp"
+      android:ellipsize="end"
+      android:gravity="right"
+      android:textColor="@color/gray_72"
+      android:textSize="14sp" />
+    <TextView
+      android:id="@+id/title"
+      style="@style/IranSans.Bold"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.30"
       android:layout_marginTop="13dp"
       android:layout_marginBottom="13dp"
       android:layout_marginRight="16dp"
@@ -100,7 +113,7 @@
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:shimmer_demo_layout="@layout/layout_shimmer_kpi"
+    app:shimmer_demo_layout="@layout/layout_shimmer_kpi_detail_tablet"
     app:shimmer_demo_shimmer_color="@color/shimmer_color" />
 
 </LinearLayout>

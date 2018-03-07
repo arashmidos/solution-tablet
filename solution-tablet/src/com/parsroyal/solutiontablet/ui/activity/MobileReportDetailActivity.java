@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import butterknife.BindView;
@@ -20,7 +19,6 @@ import com.parsroyal.solutiontablet.data.model.KPIDetail;
 import com.parsroyal.solutiontablet.service.impl.KPIServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.adapter.ReportDetailAdapter;
-import com.parsroyal.solutiontablet.ui.adapter.ReportListAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -59,12 +57,8 @@ public class MobileReportDetailActivity extends AppCompatActivity {
 
   private void setUpRecyclerView() {
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-    /*DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
-        recyclerView.getContext(), layoutManager.getOrientation());
-    recyclerView.addItemDecoration(dividerItemDecoration);*/
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.showShimmerAdapter();
-
   }
 
   @OnClick(R.id.back_img)
@@ -109,7 +103,7 @@ public class MobileReportDetailActivity extends AppCompatActivity {
       }
     } else if (event instanceof KpiEvent) {
       List<KPIDetail> detailList = ((KpiEvent) event).getDetailList();
-      listAdapter = new ReportDetailAdapter(this, detailList, reportType,kpiDetail);
+      listAdapter = new ReportDetailAdapter(this, detailList, reportType, kpiDetail);
       recyclerView.setAdapter(listAdapter);
       recyclerView.hideShimmerAdapter();
     }
