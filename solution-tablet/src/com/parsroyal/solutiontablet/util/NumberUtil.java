@@ -58,8 +58,7 @@ public class NumberUtil {
     char[] english = ("0123456789").toCharArray();
 
     for (int i = 0; i < english.length; i++) {
-      input = input.replaceAll(String.valueOf(english[i])
-          , String.valueOf(persian[i]));
+      input = input.replaceAll(String.valueOf(english[i]), String.valueOf(persian[i]));
     }
 
     return input;

@@ -19,6 +19,7 @@ import com.parsroyal.solutiontablet.data.event.KpiEvent;
 import com.parsroyal.solutiontablet.data.model.KPIDetail;
 import com.parsroyal.solutiontablet.service.impl.KPIServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.ui.adapter.ReportDetailAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.ReportListAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -32,7 +33,7 @@ public class MobileReportDetailActivity extends AppCompatActivity {
 
   @BindView(R.id.recycler_view)
   ShimmerRecyclerView recyclerView;
-  private ReportListAdapter listAdapter;
+  private ReportDetailAdapter listAdapter;
   private KPIDetail kpiDetail;
   private String reportType;
   private long customerBackendId;
@@ -40,7 +41,7 @@ public class MobileReportDetailActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_report_list);
+    setContentView(R.layout.activity_report_detail);
     ButterKnife.bind(this);
     setUpRecyclerView();
 
@@ -58,9 +59,9 @@ public class MobileReportDetailActivity extends AppCompatActivity {
 
   private void setUpRecyclerView() {
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+    /*DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
         recyclerView.getContext(), layoutManager.getOrientation());
-    recyclerView.addItemDecoration(dividerItemDecoration);
+    recyclerView.addItemDecoration(dividerItemDecoration);*/
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.showShimmerAdapter();
 
@@ -108,7 +109,7 @@ public class MobileReportDetailActivity extends AppCompatActivity {
       }
     } else if (event instanceof KpiEvent) {
       List<KPIDetail> detailList = ((KpiEvent) event).getDetailList();
-      listAdapter = new ReportListAdapter(this, detailList, reportType);
+      listAdapter = new ReportDetailAdapter(this, detailList, reportType,kpiDetail);
       recyclerView.setAdapter(listAdapter);
       recyclerView.hideShimmerAdapter();
     }
