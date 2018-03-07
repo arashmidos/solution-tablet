@@ -74,6 +74,7 @@ public class Constants {
   public static final String REPORT_SALESMAN = "REPORT_SALESMAN";
   public static final String REPORT_CUSTOMER = "REPORT_CUSTOMER";
   public static final String REPORT_ITEM = "REPORT_ITEM";
+  public static final String REPORT_CUSTOMER_ID = "REPORT_CUSTOMER_ID";
 
   public class TransferStatus {
 

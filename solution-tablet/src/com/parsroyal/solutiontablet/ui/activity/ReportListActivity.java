@@ -31,6 +31,7 @@ public class ReportListActivity extends AppCompatActivity {
   ShimmerRecyclerView recyclerView;
   private ReportListAdapter listAdapter;
   private String reportType;
+  private long customerBackendId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +43,9 @@ public class ReportListActivity extends AppCompatActivity {
     Intent intent = getIntent();
     if (intent != null) {
       reportType = intent.getStringExtra(Constants.REPORT_TYPE);
-      if (reportType == null) {
+      customerBackendId = intent.getLongExtra(Constants.REPORT_CUSTOMER_ID, -1);
+      if (reportType == null || customerBackendId == -1) {
         setContentView(R.layout.view_error_page);
-        return;
       }
     }
   }
@@ -97,7 +98,7 @@ public class ReportListActivity extends AppCompatActivity {
       }
     } else if (event instanceof KpiEvent) {
       List<KPIDetail> detailList = ((KpiEvent) event).getDetailList();
-      listAdapter = new ReportListAdapter(this, detailList,reportType);
+      listAdapter = new ReportListAdapter(this, detailList, reportType,customerBackendId);
       recyclerView.setAdapter(listAdapter);
       recyclerView.hideShimmerAdapter();
 

@@ -65,7 +65,7 @@ public class TabletReportDetailActivity extends AppCompatActivity {
     if (intent != null) {
       kpiDetail = (KPIDetail) intent.getSerializableExtra(Constants.REPORT_ITEM);
       reportType = intent.getStringExtra(Constants.REPORT_TYPE);
-      customerBackendId = intent.getLongExtra(Constants.CUSTOMER_BACKEND_ID, -1);
+      customerBackendId = intent.getLongExtra(Constants.REPORT_CUSTOMER_ID, -1);
       if (kpiDetail == null || Empty.isEmpty(reportType)) {
         setContentView(R.layout.view_error_page);
         return;
@@ -100,7 +100,8 @@ public class TabletReportDetailActivity extends AppCompatActivity {
     if (reportType != null && reportType.equals(Constants.REPORT_SALESMAN)) {
       kpiService.getReport(kpiDetail.getId(),
           Long.parseLong(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
-    } else if (Constants.REPORT_CUSTOMER.equals(reportType) && customerBackendId != -1) {
+    } else if (Constants.REPORT_CUSTOMER.equals(reportType) && customerBackendId != -1
+        && customerBackendId != 0) {
       kpiService.getReport(kpiDetail.getId(), customerBackendId);
     }
   }

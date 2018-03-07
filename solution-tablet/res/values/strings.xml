@@ -600,5 +600,6 @@
   <string name="my_kpi">گزارش عملکرد من</string>
   <string name="my_kpi_list">گزارشات عملکرد من</string>
   <string name="error_connectin_server">خطا در ارتباط با سرور</string>
+  <string name="customer_report">گزارش عملکرد مشتری</string>
 
 </resources>

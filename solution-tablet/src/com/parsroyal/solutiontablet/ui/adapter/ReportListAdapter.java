@@ -26,14 +26,17 @@ import java.util.List;
 public class ReportListAdapter extends Adapter<ViewHolder> {
 
   private final String reportType;
+  private long customerBackendId;
   private AppCompatActivity context;
   private List<KPIDetail> list = new ArrayList<>();
   private LayoutInflater layoutInflater;
 
-  public ReportListAdapter(AppCompatActivity context, List<KPIDetail> list, String reportType) {
+  public ReportListAdapter(AppCompatActivity context, List<KPIDetail> list, String reportType,
+      long customerBackendId) {
     this.context = context;
     this.list = list;
     this.reportType = reportType;
+    this.customerBackendId = customerBackendId;
     this.layoutInflater = LayoutInflater.from(context);
   }
 
@@ -86,6 +89,7 @@ public class ReportListAdapter extends Adapter<ViewHolder> {
               TabletReportDetailActivity.class : MobileReportDetailActivity.class);
           intent.putExtra(Constants.REPORT_ITEM, kpiDetail);
           intent.putExtra(Constants.REPORT_TYPE, reportType);
+          intent.putExtra(Constants.REPORT_CUSTOMER_ID, customerBackendId);
           context.startActivity(intent);
           break;
       }

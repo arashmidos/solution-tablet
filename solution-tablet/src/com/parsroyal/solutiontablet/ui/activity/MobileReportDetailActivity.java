@@ -47,7 +47,7 @@ public class MobileReportDetailActivity extends AppCompatActivity {
     if (intent != null) {
       kpiDetail = (KPIDetail) intent.getSerializableExtra(Constants.REPORT_ITEM);
       reportType = intent.getStringExtra(Constants.REPORT_TYPE);
-      customerBackendId = intent.getLongExtra(Constants.CUSTOMER_BACKEND_ID, -1);
+      customerBackendId = intent.getLongExtra(Constants.REPORT_CUSTOMER_ID, -1);
       if (kpiDetail == null || Empty.isEmpty(reportType)) {
         setContentView(R.layout.view_error_page);
         return;
