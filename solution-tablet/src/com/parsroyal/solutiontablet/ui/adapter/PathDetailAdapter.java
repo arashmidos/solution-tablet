@@ -15,18 +15,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.CustomerInfoBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CustomerInfoDialogFragment;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Shakib
@@ -134,6 +138,8 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
     ImageView visitTodayImg;
     @BindView(R.id.has_order_img)
     ImageView hasOrderImg;
+    @BindView(R.id.counter_img)
+    TextView counterImg;
     @BindView(R.id.has_answer_img)
     ImageView hasAnswerImg;
     @BindView(R.id.customer_lay)
@@ -172,9 +178,29 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
             .setColorFilter(ContextCompat.getColor(mainActivity, R.color.badger_background));
       }
 
-      hasOrderImg.setVisibility(model.hasOrder() ? View.VISIBLE : View.GONE);
+      ArrayList<VisitInformationDetailType> list = new ArrayList<>();
+      list.addAll(model.getDetails());
 
-      hasAnswerImg.setVisibility(model.hasAnswers() ? View.VISIBLE : View.GONE);
+      if (list.size() > 0) {
+        hasOrderImg.setVisibility(View.VISIBLE);
+        hasOrderImg.setImageResource(list.get(0).getDrawable());
+      } else {
+        hasOrderImg.setVisibility(View.GONE);
+      }
+      if (list.size() > 1) {
+        hasAnswerImg.setVisibility(View.VISIBLE);
+        hasAnswerImg.setImageResource(list.get(1).getDrawable());
+      } else {
+        hasAnswerImg.setVisibility(View.GONE);
+      }
+
+      if (list.size() > 2) {
+        counterImg.setVisibility(View.VISIBLE);
+        counterImg
+            .setText(NumberUtil.digitsToPersian(String.format(Locale.US, "+%d", list.size() - 2)));
+      } else {
+        counterImg.setVisibility(View.GONE);
+      }
     }
 
     public void setListeners() {
@@ -183,8 +209,15 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
 
     private void showCustomerDetailDialog() {
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
-      CustomerInfoDialogFragment customerInfoDialogFragment = CustomerInfoDialogFragment
-          .newInstance(PathDetailAdapter.this, model, position);
+
+      CustomerInfoDialogFragment customerInfoDialogFragment;
+      if (MultiScreenUtility.isTablet(mainActivity)) {
+        customerInfoDialogFragment = CustomerInfoBottomSheet
+            .newInstance(PathDetailAdapter.this, model, position);
+      } else {
+        customerInfoDialogFragment = CustomerInfoDialogFragment
+            .newInstance(PathDetailAdapter.this, model, position);
+      }
       customerInfoDialogFragment.show(ft, "customer info");
     }
   }

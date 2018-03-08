@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main_lay"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@color/gray_f5">
+
+  <ImageView
+    android:id="@+id/img"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_centerVertical="true"
+    tools:src="@drawable/ic_attach_money_24dp" />
+
+  <TextView
+    android:id="@+id/data_type_tv"
+    style="@style/IranSans"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:layout_centerVertical="true"
+    android:layout_toLeftOf="@+id/img"
+    android:layout_toStartOf="@+id/img"
+    android:textColor="@color/black_85"
+    android:textSize="14sp"
+    tools:text="ثبت سفارش" />
+
+  <View
+    android:id="@+id/bottom_line"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginRight="56dp"
+    android:layout_below="@id/data_type_tv"
+    android:background="@color/navigation_drawer_divider" />
+</RelativeLayout>

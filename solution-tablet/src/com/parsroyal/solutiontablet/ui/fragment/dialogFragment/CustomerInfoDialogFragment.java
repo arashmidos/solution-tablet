@@ -1,11 +1,12 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +43,7 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.activity.ReportListActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.VisitActivityAdapter;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -48,6 +51,7 @@ import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.util.HashSet;
 
 public class CustomerInfoDialogFragment extends DialogFragment {
 
@@ -78,17 +82,22 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   ImageView visitTodayImg;
   @BindView(R.id.root)
   LinearLayout root;
-  private MainActivity mainActivity;
-  private CustomerListModel model;
-  private CustomerServiceImpl customerService;
-  private SettingServiceImpl settingService;
-  private boolean distanceServiceEnabled;
-  private float distanceAllowed;
-  private VisitService visitService;
-  private LocationService locationService;
-  private SaleOrderService orderService;
-  private PathDetailAdapter adapter;
-  private int position;
+  @BindView(R.id.activity_layout)
+  RelativeLayout activityLayout;
+  @BindView(R.id.list_layout)
+  NestedScrollView listLayout;
+  protected MainActivity mainActivity;
+  protected CustomerListModel model;
+  protected CustomerServiceImpl customerService;
+  protected SettingServiceImpl settingService;
+  protected boolean distanceServiceEnabled;
+  protected float distanceAllowed;
+  protected VisitService visitService;
+  protected LocationService locationService;
+  protected SaleOrderService orderService;
+  protected PathDetailAdapter adapter;
+  protected int position;
+  protected VisitActivityAdapter activityAdapter;
 
   public CustomerInfoDialogFragment() {
     // Required empty public constructor
@@ -106,15 +115,21 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
+    if (!getTAG().contains("Sheet")) {
+      setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
+    }
     setRetainInstance(true);
+  }
+
+  protected String getTAG() {
+    return TAG;
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.fragment_customer_detail, container, false);
+    View view = inflater.inflate(getLayout(), container, false);
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     customerService = new CustomerServiceImpl(mainActivity);
@@ -125,10 +140,32 @@ public class CustomerInfoDialogFragment extends DialogFragment {
 
     initialize();
     setData();
+    setupRecycler();
     return view;
   }
 
-  private void initialize() {
+  protected int getLayout() {
+    if (!getTAG().contains("Sheet")) {
+      setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
+      return R.layout.fragment_customer_detail;
+    }
+    return R.layout.fragment_customer_detail_bottom_sheet;
+  }
+
+  protected void setupRecycler() {
+
+    HashSet<VisitInformationDetailType> details = model.getDetails();
+    if (details.isEmpty()) {
+      activityLayout.setVisibility(View.GONE);
+      listLayout.setVisibility(View.GONE);
+    } else {
+      activityAdapter = new VisitActivityAdapter(getActivity(), details);
+      list.setLayoutManager(new LinearLayoutManager(getActivity()));
+      list.setAdapter(activityAdapter);
+    }
+  }
+
+  protected void initialize() {
     distanceServiceEnabled = Boolean.valueOf(settingService
         .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE));
     String distance = settingService
@@ -145,7 +182,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     }
   }
 
-  private void setData() {
+  protected void setData() {
 
     customerShopNameTv.setText(model.getShopName());
     customerNameTv.setText(model.getTitle());
@@ -211,7 +248,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     }
   }
 
-  private void checkEnter() {
+  protected void checkEnter() {
     CustomerDto customer = customerService.getCustomerDtoById(model.getPrimaryKey());
     if (!distanceServiceEnabled || hasAcceptableDistance(customer) || BuildConfig.DEBUG) {
       doEnter(customer);
@@ -221,7 +258,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     }
   }
 
-  private void showWantsDialog() {
+  protected void showWantsDialog() {
     DialogUtil.showConfirmDialog(mainActivity, "", "آیا از ثبت عدم ویزیت اطمینان دارید؟",
         (dialog, which) -> {
           addNotVisited();
@@ -229,7 +266,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
         });
   }
 
-  private void addNotVisited() {
+  protected void addNotVisited() {
     Long visitId = visitService.startVisiting(model.getBackendId());
     VisitInformationDetail visitInformationDetail = new VisitInformationDetail(
         visitId, VisitInformationDetailType.NONE, 0);
@@ -239,7 +276,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     adapter.notifyItemHasRejection(position);
   }
 
-  private boolean hasAcceptableDistance(CustomerDto customer) {
+  protected boolean hasAcceptableDistance(CustomerDto customer) {
 
     Position position = new PositionServiceImpl(mainActivity).getLastPosition();
     Float distance;
@@ -264,7 +301,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   }
 
 
-  private void doEnter(CustomerDto customer) {
+  protected void doEnter(CustomerDto customer) {
     try {
       final Long visitInformationId = visitService.startVisiting(customer.getBackendId());
 

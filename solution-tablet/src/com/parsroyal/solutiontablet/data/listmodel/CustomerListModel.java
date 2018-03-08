@@ -3,9 +3,7 @@ package com.parsroyal.solutiontablet.data.listmodel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Arash on 31/12/2017.
@@ -31,6 +29,11 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   protected boolean hasPayment;
   protected boolean hasPicture;
   protected HashSet<VisitInformationDetailType> details = new HashSet<>();
+  private boolean hasRejectOrder;
+
+  public boolean isHasRejectOrder() {
+    return hasRejectOrder;
+  }
 
   public void addDetail(VisitInformationDetailType detailType) {
     details.add(detailType);
@@ -195,4 +198,7 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   }
 
 
+  public void sethasRejectOrder(boolean hasRejectOrder) {
+    this.hasRejectOrder = hasRejectOrder;
+  }
 }

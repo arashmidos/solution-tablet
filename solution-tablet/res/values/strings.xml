@@ -292,26 +292,12 @@
   <string name="google_map_snap_to_roads_key">AIzaSyCaFd0Cqu8hJ9ibKfleQE-CC9I3pchRxts</string>
   <string name="error_google_play_not_available">سرویس گوگل پلی نصب نیست یا احتیاج به بروز رسانی دارد.\n\n کد خطا %1$d</string>
   <string name="location_set">ثبت شد!</string>
-  <string name="tracking_no">شماره پیگیری</string>
-  <string name="cheque_date">تاریخ چک:</string>
   <string name="cheque_date_payment">تاریخ چک</string>
-  <string name="cheque_date_sample">95/05/31</string>
-  <string name="cheque_number">شماره چک:</string>
   <string name="cheque_number_payment">شماره چک</string>
-  <string name="cheque_account_number">شماره حساب:</string>
-  <string name="cheque_branch">شعبه:</string>
-  <string name="cheque_bank">بانک:</string>
   <string name="cheque_account_owner">صاحب چک:</string>
   <string name="cheque_owner_hint">نام و نام خانوادگی</string>
   <string name="next">بعدی</string>
   <string name="prev">قبلی</string>
-  <string name="user_code">کد کاربر</string>
-  <string name="sale_type_label">نوع فروش</string>
-  <string name="sub_address">آدرس فرعی</string>
-  <string name="main_address">آدرس اصلی</string>
-  <string name="gps_interval">زمان ارسال</string>
-  <string name="seconds">( ثانیه )</string>
-  <string name="gps_setting">تنظیمات موقعیت یاب</string>
   <string name="enable_gps_service">سرویس موقعیت یاب فعال باشد</string>
   <string name="sinse_date">تاریخ:</string>
   <string name="toDate">الی :</string>
@@ -419,6 +405,7 @@
   <string name="customer_information">اطلاعات مشتری</string>
   <string name="orders">سفارشات</string>
   <string name="payments">دریافتی ها</string>
+  <string name="visit_payment">دریافتی</string>
   <string name="payments_x">دریافتی های</string>
   <string name="questionnaire">پرسشنامه</string>
   <string name="x_customers">%1$d مشتری</string>
@@ -601,5 +588,7 @@
   <string name="my_kpi_list">گزارشات عملکرد من</string>
   <string name="error_connectin_server">خطا در ارتباط با سرور</string>
   <string name="customer_report">گزارش عملکرد مشتری</string>
+  <string name="visit_or_none">ویزیت / ثبت عدم</string>
+  <string name="activities_done">فعالیت های انجام شده</string>
 
 </resources>

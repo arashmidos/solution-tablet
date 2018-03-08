@@ -44,7 +44,8 @@ public class ReportListActivity extends AppCompatActivity {
     if (intent != null) {
       reportType = intent.getStringExtra(Constants.REPORT_TYPE);
       customerBackendId = intent.getLongExtra(Constants.REPORT_CUSTOMER_ID, -1);
-      if (reportType == null || customerBackendId == -1) {
+      if (reportType == null || (reportType.equals(Constants.REPORT_CUSTOMER)
+          && customerBackendId == -1)) {
         setContentView(R.layout.view_error_page);
       }
     }
@@ -98,7 +99,7 @@ public class ReportListActivity extends AppCompatActivity {
       }
     } else if (event instanceof KpiEvent) {
       List<KPIDetail> detailList = ((KpiEvent) event).getDetailList();
-      listAdapter = new ReportListAdapter(this, detailList, reportType,customerBackendId);
+      listAdapter = new ReportListAdapter(this, detailList, reportType, customerBackendId);
       recyclerView.setAdapter(listAdapter);
       recyclerView.hideShimmerAdapter();
 

@@ -340,42 +340,39 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
     while (cursor.moveToNext()) {
       CustomerListModel listModel = createListModelFromCursor(cursor);
-      if (entitiesMap.containsKey(listModel.getPrimaryKey())) {
-        if ((listModel.hasOrder())) {
-          entitiesMap.get(listModel.getPrimaryKey()).setHasOrder(true);
-          entitiesMap.get(listModel.getPrimaryKey())
-              .addDetail(VisitInformationDetailType.CREATE_ORDER);
-        }
-        if (listModel.hasRejection()) {
-          entitiesMap.get(listModel.getPrimaryKey()).setHasRejection(true);
-          entitiesMap.get(listModel.getPrimaryKey())
-              .addDetail(VisitInformationDetailType.CREATE_REJECT);
-        }
-        if (listModel.hasLocation()) {
-          entitiesMap.get(listModel.getPrimaryKey()).setHasLocation(true);
-        }
-        if (listModel.hasAnswers()) {
-          entitiesMap.get(listModel.getPrimaryKey()).setHasAnswers(true);
-          entitiesMap.get(listModel.getPrimaryKey())
-              .addDetail(VisitInformationDetailType.FILL_QUESTIONNAIRE);
-        }
-        if (listModel.isAddLocation()) {
-          entitiesMap.get(listModel.getPrimaryKey()).setAddLocation(true);
-          entitiesMap.get(listModel.getPrimaryKey())
-              .addDetail(VisitInformationDetailType.SAVE_LOCATION);
-        }
-        if (listModel.isHasPayment()) {
-          entitiesMap.get(listModel.getPrimaryKey()).setHasPayment(true);
-          entitiesMap.get(listModel.getPrimaryKey()).addDetail(VisitInformationDetailType.CASH);
-        }
-        if (listModel.isHasPicture()) {
-          entitiesMap.get(listModel.getPrimaryKey()).setHasPicture(true);
-          entitiesMap.get(listModel.getPrimaryKey())
-              .addDetail(VisitInformationDetailType.TAKE_PICTURE);
-
-        }
-      } else {
-        entitiesMap.put(listModel.getPrimaryKey(), listModel);
+      Long primaryKey = listModel.getPrimaryKey();
+      if (!entitiesMap.containsKey(primaryKey)) {
+        entitiesMap.put(primaryKey, listModel);
+      }
+      if ((listModel.hasOrder())) {
+        entitiesMap.get(primaryKey).setHasOrder(true);
+        entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.CREATE_ORDER);
+      }
+      if (listModel.hasRejection()) {
+        entitiesMap.get(primaryKey).setHasRejection(true);
+      }
+      if (listModel.isHasRejectOrder()) {
+        entitiesMap.get(primaryKey).sethasRejectOrder(true);
+        entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.CREATE_REJECT);
+      }
+      if (listModel.hasLocation()) {
+        entitiesMap.get(primaryKey).setHasLocation(true);
+      }
+      if (listModel.hasAnswers()) {
+        entitiesMap.get(primaryKey).setHasAnswers(true);
+        entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.FILL_QUESTIONNAIRE);
+      }
+      if (listModel.isAddLocation()) {
+        entitiesMap.get(primaryKey).setAddLocation(true);
+        entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.SAVE_LOCATION);
+      }
+      if (listModel.isHasPayment()) {
+        entitiesMap.get(primaryKey).setHasPayment(true);
+        entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.CASH);
+      }
+      if (listModel.isHasPicture()) {
+        entitiesMap.get(primaryKey).setHasPicture(true);
+        entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.TAKE_PICTURE);
       }
     }
     cursor.close();
@@ -422,6 +419,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
       customerListModel.setHasPicture(true);
     } else if (type == VisitInformationDetailType.SAVE_LOCATION.getValue()) {
       customerListModel.setAddLocation(true);
+    } else if (type == VisitInformationDetailType.CREATE_REJECT.getValue()) {
+      customerListModel.sethasRejectOrder(true);
     }
 
     customerListModel.setLastVisit(cursor.getString(10));
