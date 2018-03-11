@@ -31,6 +31,7 @@ public class Position extends BaseEntity<Long> {
   public static final String COL_BATTERY_STATUS = "BATTERY_STATUS";
   public static final String COL_DISTANCE = "DISTANCE";
   public static final String COL_NETWORK_DATE = "NETWORK_DATE";
+  public static final String COL_IMEI = "IMEI";
 
   public static final String CREATE_TABLE_SCRIPT = "CREATE TABLE " + Position.TABLE_NAME + " (" +
       " " + Position.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -51,7 +52,8 @@ public class Position extends BaseEntity<Long> {
       " " + Position.COL_BATTERY_LEVEL + " INTEGER," +
       " " + Position.COL_BATTERY_STATUS + " TEXT," +
       " " + Position.COL_DISTANCE + " REAL," +
-      " " + Position.COL_NETWORK_DATE + " INTEGER" +//18
+      " " + Position.COL_NETWORK_DATE + " INTEGER," +//18
+      " " + Position.COL_IMEI + " TEXT" +//19
       " );";
 
   private Long id;
@@ -71,6 +73,7 @@ public class Position extends BaseEntity<Long> {
   private String batteryStatus;
   private Double distanceInMeter;
   private Long networkDate;
+  private String imei;
 
   public Position(Double latitude, Double longitude, Float speed, int gpsOff, int mode,
       Float accuracy, long gpsTime) {
@@ -91,6 +94,7 @@ public class Position extends BaseEntity<Long> {
     Date trueTime = SolutionTabletApplication.getTrueTime();
 
     this.networkDate = trueTime == null ? null : trueTime.getTime();
+    this.imei = SolutionTabletApplication.getInstance().getInstanceId();
   }
 
   public Position() {
@@ -102,6 +106,7 @@ public class Position extends BaseEntity<Long> {
     this.rooted = GPSUtil.isDeviceRooted();
     Date trueTime = SolutionTabletApplication.getTrueTime();
     this.networkDate = trueTime == null ? null : trueTime.getTime();
+    this.imei = SolutionTabletApplication.getInstance().getInstanceId();
   }
 
   public Position(Long id) {
@@ -258,5 +263,13 @@ public class Position extends BaseEntity<Long> {
 
   public void setNetworkDate(Long networkDate) {
     this.networkDate = networkDate;
+  }
+
+  public String getImei() {
+    return imei;
+  }
+
+  public void setImei(String imei) {
+    this.imei = imei;
   }
 }

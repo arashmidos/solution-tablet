@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.Settings.Secure;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
@@ -98,5 +99,9 @@ public class SolutionTabletApplication extends MultiDexApplication {
     Configuration conf = res.getConfiguration();
     conf.locale = locale;
     res.updateConfiguration(conf, dm);
+  }
+
+  public String getInstanceId() {
+    return Secure.getString(getContentResolver(), Secure.ANDROID_ID);
   }
 }

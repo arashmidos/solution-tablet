@@ -143,11 +143,18 @@ public class ReportDetailAdapter extends Adapter<ViewHolder> {
       if (Empty.isNotEmpty(kpiDetail.getTitle())) {
         title.setText(NumberUtil.digitsToPersian(kpiDetail.getTitle()));
       }
-
-      column1.setText(NumberUtil.digitsToPersian(kpiDetail.getColumn1()));
-      column2.setText(NumberUtil.digitsToPersian(kpiDetail.getColumn2()));
-      column3.setText(NumberUtil.digitsToPersian(kpiDetail.getColumn3()));
-      column4.setText(NumberUtil.digitsToPersian(kpiDetail.getColumn4()));
+      if (Empty.isNotEmpty(kpi.getColumn1())) {
+        column1.setText(NumberUtil.digitsToPersian(kpiDetail.getColumn1()));
+      }
+      if (Empty.isNotEmpty(kpi.getColumn2())) {
+        column2.setText(NumberUtil.digitsToPersian(kpiDetail.getColumn2()));
+      }
+      if (Empty.isNotEmpty(kpi.getColumn3())) {
+        column3.setText(NumberUtil.digitsToPersian(kpiDetail.getColumn3()));
+      }
+      if (Empty.isNotEmpty(kpi.getColumn4())) {
+        column4.setText(NumberUtil.digitsToPersian(kpiDetail.getColumn4()));
+      }
     }
   }
 }

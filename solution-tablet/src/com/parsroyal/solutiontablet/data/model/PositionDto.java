@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.data.model;
 
 import com.parsroyal.solutiontablet.constants.SaleType;
-import java.util.Date;
 
 /**
  * Created by Arash 2017-08-22
@@ -25,8 +24,17 @@ public class PositionDto extends BaseModel {
   private Long createDateTime;
   private double distanceInMeter;
   private Long networkDate;
+  private String imei;
 
   public PositionDto() {
+  }
+
+  public String getImei() {
+    return imei;
+  }
+
+  public void setImei(String imei) {
+    this.imei = imei;
   }
 
   public int getRooted() {

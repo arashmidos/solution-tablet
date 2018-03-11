@@ -55,6 +55,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     contentValues.put(Position.COL_BATTERY_STATUS, entity.getBatteryStatus());
     contentValues.put(Position.COL_DISTANCE, entity.getDistanceInMeter());
     contentValues.put(Position.COL_NETWORK_DATE, entity.getNetworkDate());//18
+    contentValues.put(Position.COL_IMEI, entity.getImei());//19
     return contentValues;
   }
 
@@ -89,7 +90,8 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
         Position.COL_BATTERY_LEVEL,//15
         Position.COL_BATTERY_STATUS,
         Position.COL_DISTANCE,
-        Position.COL_NETWORK_DATE//18
+        Position.COL_NETWORK_DATE,//18
+        Position.COL_IMEI
     };
   }
 
@@ -116,6 +118,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setBatteryStatus(cursor.getString(16));
     position.setDistanceInMeter(cursor.getDouble(17));
     position.setNetworkDate(cursor.getLong(18));
+    position.setImei(cursor.getString(19));
 
     return position;
   }
@@ -145,6 +148,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setBatteryStatus(cursor.getString(16));
     position.setDistanceInMeter(cursor.getDouble(17));
     position.setNetworkDate(cursor.getLong(18));
+    position.setImei(cursor.getString(19));
 
     return position;
   }
