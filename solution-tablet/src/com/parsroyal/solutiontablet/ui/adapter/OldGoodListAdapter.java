@@ -63,7 +63,7 @@ public class OldGoodListAdapter extends UltimateViewAdapter<OldGoodListAdapter.M
     holder.setData(good, position);
     Glide.with(context)
         .load(MediaUtil.getGoodImage(good.getCode()))
-        .error(R.drawable.goods_default)
+        .error(Glide.with(context).load(R.drawable.goods_default))
         .into(holder.imageView);
   }
 

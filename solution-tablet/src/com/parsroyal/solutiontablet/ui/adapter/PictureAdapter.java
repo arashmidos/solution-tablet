@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.ui.adapter.PictureAdapter.ViewHolder;
-import com.parsroyal.solutiontablet.util.MediaUtil;
 import java.util.List;
 
 /**
@@ -69,7 +68,7 @@ public class PictureAdapter extends Adapter<ViewHolder> {
       this.customerPic = customerPic;
       Glide.with(context)
           .load(customerPic.getTitle())
-          .error(R.drawable.goods_default)
+          .error(Glide.with(context).load(R.drawable.goods_default))
           .into(picImg);
     }
   }

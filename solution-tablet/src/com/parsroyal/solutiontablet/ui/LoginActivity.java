@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -79,6 +81,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
   EditText passwordEdt;
   @BindView(R.id.password_lay)
   TextInputLayout passwordLay;
+  @BindView(R.id.log_in_btn)
+  CircularProgressButton logInBtn;
 
   private SaleType selectedRole;
   private SettingService settingService;
@@ -211,7 +215,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
   }
 
   private void doLogin() {
-    DialogUtil.showProgressDialog(this, getString(R.string.authenticate_user));
+    logInBtn.startAnimation();
     RestAuthenticateServiceImpl.getCompanyInfo(this, companyCodeEdt.getText().toString());
   }
 
@@ -232,28 +236,29 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
   @Subscribe
   public void getMessage(Object response) {
-    DialogUtil.dismissProgressDialog();
+
     if (response instanceof CompanyInfoResponse) {
 
-      CompanyInfoResponse companyInfoResponse = (CompanyInfoResponse) response;
-      settingService
-          .saveSetting(ApplicationKeys.USER_COMPANY_KEY, companyInfoResponse.getCompanyKey());
-      settingService
-          .saveSetting(ApplicationKeys.USER_COMPANY_NAME, companyInfoResponse.getCompanyName());
-      settingService.saveSetting(ApplicationKeys.BACKEND_URI, companyInfoResponse.getBackendUri());
-      DialogUtil.showProgressDialog(this, getString(R.string.updating_user_info));
-      RestAuthenticateServiceImpl
-          .getCompanySetting(this, companyInfoResponse.getBackendUri(),
-              userNameEdt.getText().toString(), passwordEdt.getText().toString(), selectedRole);
+      CompanyInfoResponse companyInfo = (CompanyInfoResponse) response;
+      settingService.saveSetting(ApplicationKeys.USER_COMPANY_KEY, companyInfo.getCompanyKey());
+      settingService.saveSetting(ApplicationKeys.USER_COMPANY_NAME, companyInfo.getCompanyName());
+      settingService.saveSetting(ApplicationKeys.BACKEND_URI, companyInfo.getBackendUri());
+
+      RestAuthenticateServiceImpl.getCompanySetting(this, companyInfo.getBackendUri(),
+          userNameEdt.getText().toString(), passwordEdt.getText().toString(), selectedRole);
     } else if (response instanceof SettingResponse) {
+
+      logInBtn.doneLoadingAnimation(ContextCompat.getColor(this, R.color.log_in_enter_bg),
+          BitmapFactory.decodeResource(getResources(), R.drawable.ic_check_white_18_dp));
+
       String token = ((SettingResponse) response).getToken();
 
       UserInfoResponse userInfo = NetworkUtil.extractUserInfo(token);
 
       settingService.saveSetting((SettingResponse) response);
       settingService.saveUserInfo(userInfo);
-      settingService.saveSetting(ApplicationKeys.SETTING_SALE_TYPE,
-          String.valueOf(selectedRole.getValue()));
+      settingService
+          .saveSetting(ApplicationKeys.SETTING_SALE_TYPE, String.valueOf(selectedRole.getValue()));
       settingService
           .saveSetting(ApplicationKeys.SETTING_USERNAME, userNameEdt.getText().toString());
       settingService
@@ -268,6 +273,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
       startActivity(intent);
       finish();
     } else if (response instanceof ErrorEvent) {
+      logInBtn.revertAnimation();
       if (((ErrorEvent) response).getStatusCode() == StatusCodes.NETWORK_ERROR) {
         ToastUtil.toastError(this, R.string.error_no_network);
       } else {
@@ -293,4 +299,9 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
   }
 
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    logInBtn.dispose();
+  }
 }

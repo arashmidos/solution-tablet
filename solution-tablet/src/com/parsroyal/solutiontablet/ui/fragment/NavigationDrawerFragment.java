@@ -142,7 +142,7 @@ public class NavigationDrawerFragment extends BaseFragment {
       case R.id.about_us:
         mainActivity.changeFragment(MainActivity.ABOUT_US_FRAGMENT_ID, true);
         break;
-      case R.id.body_log_out:
+      case R.id.body_log_out://TODO Stop Location Srvice
         settingService.clearAllSettings();
         startActivity(new Intent(mainActivity, LoginActivity.class));
         mainActivity.finish();

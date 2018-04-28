@@ -1,10 +1,13 @@
 package com.parsroyal.solutiontablet.ui;
 
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.transition.ChangeBounds;
 import android.util.Log;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +31,9 @@ public class MobileMainActivity extends MainActivity {
 
     setContentView(R.layout.activity_main_mobile);
     ButterKnife.bind(this);
+    if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+      getWindow().setSharedElementEnterTransition(new ChangeBounds().setDuration(1000));
+    }
 
     showFeaturesFragment();
   }

@@ -32,32 +32,32 @@
         android:gravity="center"
         android:text="@string/enter_system"
         android:textColor="@color/white"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
     </FrameLayout>
   </android.support.design.widget.AppBarLayout>
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:layout_marginLeft="96dp"
     android:layout_marginRight="96dp"
+    android:orientation="horizontal"
     android:weightSum="2">
 
     <ImageView
       android:layout_width="0dp"
       android:layout_height="match_parent"
-      android:paddingRight="96dp"
       android:layout_weight="1"
+      android:paddingRight="96dp"
       android:scaleType="center"
-      android:src="@drawable/logo"/>
+      android:src="@drawable/logo" />
 
     <ScrollView
       android:layout_width="0dp"
-      android:background="@color/white"
       android:layout_height="match_parent"
       android:layout_weight="1"
       android:layout_marginTop="24dp"
+      android:background="@color/white"
       android:elevation="3dp">
 
       <LinearLayout
@@ -74,7 +74,7 @@
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="45dp"
+          android:layout_height="wrap_content"
           android:layout_marginTop="32dp"
           android:orientation="horizontal">
 
@@ -82,7 +82,7 @@
             android:id="@+id/company_code_lay"
             style="@style/IranSans"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
             android:hint="@string/company_code"
@@ -92,38 +92,36 @@
             <EditText
               android:id="@+id/company_code_edt"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/edit_text_state_background"
+              android:layout_height="wrap_content"
               android:gravity="right|center_vertical"
               android:imeOptions="actionNext"
               android:inputType="text"
               android:maxLines="1"
               android:textColor="@android:color/black"
               android:textSize="@dimen/text_normal"
-              tools:text="sunstar"/>
-
+              tools:text="sunstar" />
           </android.support.design.widget.TextInputLayout>
 
           <ImageView
             android:id="@+id/company_code_icon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginLeft="19dp"
-            android:layout_gravity="right|center"
             android:src="@drawable/ic_business"
-            android:tint="@color/login_gray"/>
+            android:tint="@color/login_gray" />
         </LinearLayout>
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="45dp"
-          android:layout_marginTop="32dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="24dp"
           android:orientation="horizontal">
 
           <android.support.design.widget.TextInputLayout
             android:id="@+id/user_name_lay"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
             android:hint="@string/username"
@@ -134,38 +132,37 @@
               android:id="@+id/user_name_edt"
               style="@style/IranSans"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/edit_text_state_background"
+              android:layout_height="wrap_content"
               android:gravity="right|center_vertical"
               android:imeOptions="actionNext"
               android:inputType="text"
               android:maxLines="1"
               android:textColor="@android:color/black"
               android:textSize="14sp"
-              tools:text="آقا آٰرش"/>
+              tools:text="آقا آٰرش" />
 
           </android.support.design.widget.TextInputLayout>
 
           <ImageView
             android:id="@+id/user_name_icon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginLeft="19dp"
-            android:layout_gravity="right|center"
             android:src="@drawable/ic_person"
-            android:tint="@color/login_gray"/>
+            android:tint="@color/login_gray" />
         </LinearLayout>
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="45dp"
-          android:layout_marginTop="32dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="24dp"
           android:orientation="horizontal">
 
           <android.support.design.widget.TextInputLayout
             android:id="@+id/password_lay"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
             android:hint="@string/password"
@@ -176,37 +173,36 @@
               android:id="@+id/password_edt"
               style="@style/IranSans"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/edit_text_state_background"
+              android:layout_height="wrap_content"
               android:gravity="right|center_vertical"
-              android:imeOptions="actionNext"
+              android:imeOptions="actionDone"
               android:inputType="textPassword"
               android:maxLines="1"
               android:textColor="@android:color/black"
               android:textSize="14sp"
-              tools:text="123456"/>
+              tools:text="123456" />
 
           </android.support.design.widget.TextInputLayout>
 
           <ImageView
             android:id="@+id/password_icon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginLeft="19dp"
-            android:layout_gravity="right|center"
             android:src="@drawable/ic_vpn_key_black_24dp"
-            android:tint="@color/login_gray"/>
+            android:tint="@color/login_gray" />
         </LinearLayout>
         <TextView
           style="@style/IranSans.Medium"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="56dp"
+          android:layout_marginTop="48dp"
           android:layout_marginBottom="16dp"
           android:gravity="right"
           android:text="@string/choose_sale_type"
           android:textColor="@color/login_gray"
-          android:textSize="12sp"/>
+          android:textSize="12sp" />
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -229,7 +225,7 @@
               android:layout_marginBottom="10dp"
               android:layout_centerHorizontal="true"
               android:src="@drawable/ic_truck_delivery_black_24dp"
-              android:tint="@color/login_gray"/>
+              android:tint="@color/login_gray" />
 
             <TextView
               android:id="@+id/distributor_tv"
@@ -241,7 +237,7 @@
               android:layout_centerHorizontal="true"
               android:text="@string/sale_type_distributor"
               android:textColor="@color/login_gray"
-              android:textSize="12sp"/>
+              android:textSize="12sp" />
 
             <View
               android:id="@+id/distributor_bottom_line"
@@ -249,13 +245,13 @@
               android:layout_height="2dp"
               android:layout_alignParentBottom="true"
               android:background="@color/primary"
-              android:visibility="gone"/>
+              android:visibility="gone" />
           </RelativeLayout>
 
           <View
             android:layout_width="0dp"
             android:layout_height="2dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
           <RelativeLayout
             android:id="@+id/merchandiser_lay"
@@ -272,7 +268,7 @@
               android:layout_marginBottom="10dp"
               android:layout_centerHorizontal="true"
               android:src="@drawable/ic_truck_delivery_black_24dp"
-              android:tint="@color/login_gray"/>
+              android:tint="@color/login_gray" />
 
             <TextView
               android:id="@+id/merchandiser_tv"
@@ -284,7 +280,7 @@
               android:layout_centerHorizontal="true"
               android:text="@string/sale_type_hot"
               android:textColor="@color/login_gray"
-              android:textSize="12sp"/>
+              android:textSize="12sp" />
 
             <View
               android:id="@+id/merchandiser_bottom_line"
@@ -292,13 +288,13 @@
               android:layout_height="2dp"
               android:layout_alignParentBottom="true"
               android:background="@color/primary"
-              android:visibility="gone"/>
+              android:visibility="gone" />
           </RelativeLayout>
 
           <View
             android:layout_width="0dp"
             android:layout_height="2dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
           <RelativeLayout
             android:id="@+id/sales_man_lay"
@@ -315,7 +311,7 @@
               android:layout_marginBottom="10dp"
               android:layout_centerHorizontal="true"
               android:src="@drawable/ic_assignment_black_24dp"
-              android:tint="@color/login_gray"/>
+              android:tint="@color/login_gray" />
 
             <TextView
               android:id="@+id/sales_man_tv"
@@ -327,7 +323,7 @@
               android:layout_centerHorizontal="true"
               android:text="@string/sale_type_cold"
               android:textColor="@color/login_gray"
-              android:textSize="12sp"/>
+              android:textSize="12sp" />
 
             <View
               android:id="@+id/sales_man_bottom_line"
@@ -335,22 +331,26 @@
               android:layout_height="2dp"
               android:layout_alignParentBottom="true"
               android:background="@color/primary"
-              android:visibility="gone"/>
+              android:visibility="gone" />
           </RelativeLayout>
 
         </LinearLayout>
-        <Button
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
           android:id="@+id/log_in_btn"
           style="@style/IranSans.Medium"
           android:layout_width="match_parent"
           android:layout_height="41dp"
           android:layout_marginTop="32dp"
           android:layout_marginBottom="32dp"
-          android:background="@color/log_in_enter_bg"
+          android:background="@drawable/rec_green"
           android:gravity="center"
           android:text="@string/enter"
           android:textColor="@color/log_in_enter"
-          android:textSize="14sp"/>
+          android:textSize="14sp"
+          android:transitionName="transition"
+          app:spinning_bar_color="#FFF"
+          app:spinning_bar_padding="6dp"
+          app:spinning_bar_width="4dp" />
       </LinearLayout>
     </ScrollView>
   </LinearLayout>

@@ -123,7 +123,7 @@ public class NewCustomerPictureAdapter extends Adapter<ViewHolder> {
       this.customerPic = customerPics.get(position);
       Glide.with(context)
           .load(customerPic)
-          .error(R.drawable.goods_default)
+          .error(Glide.with(context).load(R.drawable.goods_default))
           .into(picImg);
     }
   }

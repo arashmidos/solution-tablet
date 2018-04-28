@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,7 @@ public class GoodImageFragment extends BaseFragment {
     ButterKnife.bind(this, view);
     Glide.with(getActivity())
         .load(imagePath)
-        .error(R.drawable.goods_default)
+        .error(Glide.with(getActivity()).load(R.drawable.goods_default))
         .into(goodImg);
     return view;
   }

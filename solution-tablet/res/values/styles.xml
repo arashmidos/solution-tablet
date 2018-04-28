@@ -12,6 +12,7 @@
 
   <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorPrimaryDark">@color/primary_dark</item>
+    <item name="colorAccent">@color/primary</item>
   </style>
 
   <style name="MyActionBar" parent="Theme.AppCompat.Light">
@@ -29,6 +30,12 @@
   <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
     <item name="android:textColor">@color/primary</item>
     <item name="android:textSize">10sp</item>
+  </style>
+
+  <style name="MyTextInput">
+    <item name="colorControlNormal">@color/login_gray</item>
+    <item name="colorControlActivated">@color/primary</item>
+    <item name="colorControlHighlight">@color/primary</item>
   </style>
 
   <style name="TextView.Caption">
@@ -86,7 +93,7 @@
     <item name="colorButtonNormal">@color/gray</item>
   </style>
 
-  <style name="Widget.GifView" parent="@android:style/Widget"/>
+  <style name="Widget.GifView" parent="@android:style/Widget" />
 
   <style name="myDialog" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="android:windowMinWidthMajor">97%</item>

@@ -17,7 +17,6 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.Goods;
-import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -128,7 +127,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
       this.good = good;
       Glide.with(context)
           .load(MediaUtil.getGoodImage(good.getCode()))
-          .error(R.drawable.goods_default)
+          .error(Glide.with(context).load(R.drawable.goods_default))
           .into(goodImg);
       goodNameTv.setText(NumberUtil.digitsToPersian(good.getTitle()));
       goodCodeTv.setText(
@@ -189,7 +188,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
               .inflate(R.layout.image_fullscreen_layout, null);
           Glide.with(context)
               .load(MediaUtil.getGoodImage(good.getCode()))
-              .error(R.drawable.goods_default)
+              .error(Glide.with(context).load(R.drawable.goods_default))
               .into((ImageView) view.findViewById(R.id.good_image));
           settingsDialog.setContentView(view);
           settingsDialog.show();

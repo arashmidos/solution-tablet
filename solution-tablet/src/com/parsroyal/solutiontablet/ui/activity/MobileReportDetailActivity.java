@@ -102,10 +102,10 @@ public class MobileReportDetailActivity extends AppCompatActivity {
           ToastUtil.toastError(this, getString(R.string.error_connectin_server));
       }
     } else if (event instanceof KpiEvent) {
-      List<KPIDetail> detailList = ((KpiEvent) event).getDetailList();
+     /* List<KPIDetail> detailList = ((KpiEvent) event).getDetailList();
       listAdapter = new ReportDetailAdapter(this, detailList, reportType, kpiDetail);
       recyclerView.setAdapter(listAdapter);
-      recyclerView.hideShimmerAdapter();
+      recyclerView.hideShimmerAdapter();*/
     }
 
   }
