@@ -9,13 +9,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserInfoDetailsResponse {
 
-  @SerializedName("salesmanId")
+  @SerializedName(value = "salesmanId", alternate = "distributorId")
   @Expose
   private Integer salesmanId;
-  @SerializedName("salesmanCode")
+  @SerializedName(value = "salesmanCode", alternate = "distributorCode")
   @Expose
   private Integer salesmanCode;
-  @SerializedName("salesmanName")
+  @SerializedName(value = "salesmanName", alternate = "distributorName")
   @Expose
   private String salesmanName;
   @SerializedName("companyId")

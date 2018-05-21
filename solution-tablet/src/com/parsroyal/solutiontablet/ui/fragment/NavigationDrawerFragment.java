@@ -17,6 +17,7 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.SaleType;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
@@ -42,6 +43,8 @@ public class NavigationDrawerFragment extends BaseFragment {
   ImageView dropImg;
   @BindView(R.id.user_name_tv)
   TextView userNameTv;
+  @BindView(R.id.user_role_tv)
+  TextView userRole;
 
   private boolean isLogOutMode = false;
   private MainActivity mainActivity;
@@ -67,12 +70,20 @@ public class NavigationDrawerFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     settingService = new SettingServiceImpl(mainActivity);
 
+    baseInfoService = new BaseInfoServiceImpl(mainActivity);
+
+    setData();
+    return view;
+  }
+
+  private void setData() {
     footerLogOut.setText(String.format(getString(R.string.name_version), BuildConfig.VERSION_NAME));
     String fullName = settingService.getSettingValue(ApplicationKeys.USER_FULL_NAME);
     userNameTv.setText(Empty.isNotEmpty(fullName) ? fullName : "");
-    baseInfoService = new BaseInfoServiceImpl(mainActivity);
-
-    return view;
+    String role = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+    if (Empty.isNotEmpty(role)) {
+      userRole.setText(SaleType.getByValue(Long.parseLong(role)).getRole());
+    }
   }
 
   @OnClick({R.id.user_name_tv, R.id.features_list_lay, R.id.today_paths_lay, R.id.reports_lay,

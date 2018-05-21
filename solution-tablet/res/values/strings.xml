@@ -590,5 +590,8 @@
   <string name="customer_report">گزارش عملکرد مشتری</string>
   <string name="visit_or_none">ویزیت / ثبت عدم</string>
   <string name="activities_done">فعالیت های انجام شده</string>
+  <string name="collector">مامور وصول</string>
+  <string name="merchandiser_title">مرچندایزر</string>
+  <string name="agent">نماینده</string>
 
 </resources>

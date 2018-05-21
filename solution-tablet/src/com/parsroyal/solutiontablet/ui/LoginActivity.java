@@ -53,14 +53,14 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
   View distributorBottomLine;
   @BindView(R.id.distributor_lay)
   RelativeLayout distributorLay;
-  @BindView(R.id.merchandiser_icon)
-  ImageView merchandiserIcon;
-  @BindView(R.id.merchandiser_tv)
-  TextView merchandiserTv;
-  @BindView(R.id.merchandiser_bottom_line)
-  View merchandiserBottomLine;
-  @BindView(R.id.merchandiser_lay)
-  RelativeLayout merchandiserLay;
+  @BindView(R.id.hot_icon)
+  ImageView hotIcon;
+  @BindView(R.id.hot_tv)
+  TextView hotTv;
+  @BindView(R.id.hot_bottom_line)
+  View hotBottomLine;
+  @BindView(R.id.hot_lay)
+  RelativeLayout hotLay;
   @BindView(R.id.sales_man_icon)
   ImageView salesManIcon;
   @BindView(R.id.sales_man_tv)
@@ -83,9 +83,37 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
   TextInputLayout passwordLay;
   @BindView(R.id.log_in_btn)
   CircularProgressButton logInBtn;
+  @BindView(R.id.agent_icon)
+  ImageView agentIcon;
+  @BindView(R.id.agent_tv)
+  TextView agentTv;
+  @BindView(R.id.agent_bottom_line)
+  View agentBottomLine;
+  @BindView(R.id.agent_lay)
+  RelativeLayout agentLay;
+  @BindView(R.id.merchandiser_icon)
+  ImageView merchandiserIcon;
+  @BindView(R.id.merchandiser_tv)
+  TextView merchandiserTv;
+  @BindView(R.id.merchandiser_bottom_line)
+  View merchandiserBottomLine;
+  @BindView(R.id.merchandiser_lay)
+  RelativeLayout merchandiserLay;
+  @BindView(R.id.collector_icon)
+  ImageView collectorIcon;
+  @BindView(R.id.collector_tv)
+  TextView collectorTv;
+  @BindView(R.id.collector_bottom_line)
+  View collectorBottomLine;
+  @BindView(R.id.collector_lay)
+  RelativeLayout collectorLay;
 
-  private SaleType selectedRole;
+  private SaleType selectedRole = SaleType.COLD;
   private SettingService settingService;
+  private RelativeLayout[] roleLayouts;
+  private ImageView[] roleIcons;
+  private TextView[] roleTitles;
+  private View[] roleLines;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +126,14 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     setContentView(R.layout.activity_login);
     ButterKnife.bind(this);
 
+    roleLayouts = new RelativeLayout[]{distributorLay, hotLay, salesManLay, agentLay,
+        merchandiserLay, collectorLay};
+    roleIcons = new ImageView[]{distributorIcon, hotIcon, salesManIcon, agentIcon,
+        merchandiserIcon, collectorIcon};
+    roleTitles = new TextView[]{distributorTv, hotTv, salesManTv, agentTv, merchandiserTv,
+        collectorTv};
+    roleLines = new View[]{distributorBottomLine, hotBottomLine, salesManBottomLine,
+        agentBottomLine, merchandiserBottomLine, collectorBottomLine};
     onEditTextFocus();
     onSalesManTapped();
 
@@ -119,24 +155,35 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         });
   }
 
-  @OnClick({R.id.distributor_lay, R.id.merchandiser_lay, R.id.sales_man_lay, R.id.log_in_btn})
+  @OnClick({R.id.distributor_lay, R.id.hot_lay, R.id.sales_man_lay, R.id.log_in_btn, R.id.agent_lay,
+      R.id.merchandiser_lay, R.id.collector_lay})
   public void onClick(View view) {
+    deselectRole(selectedRole.getOrder());
     switch (view.getId()) {
       case R.id.distributor_lay:
-        onDistributorTapped();
+        selectedRole = SaleType.DISTRIBUTOR;
         break;
-      case R.id.merchandiser_lay:
-        onMerchandiserTapped();
+      case R.id.hot_lay:
+        selectedRole = SaleType.HOT;
         break;
       case R.id.sales_man_lay:
-        onSalesManTapped();
+        selectedRole = SaleType.COLD;
+        break;
+      case R.id.agent_lay:
+        selectedRole = SaleType.AGENT;
+        break;
+      case R.id.merchandiser_lay:
+        selectedRole = SaleType.MERCHANDISER;
+        break;
+      case R.id.collector_lay:
+        selectedRole = SaleType.COLLECTOR;
         break;
       case R.id.log_in_btn:
         if (validate()) {
           doLogin();
         }
-        break;
     }
+    selectRole(selectedRole.getOrder());
   }
 
   private boolean validate() {
@@ -160,25 +207,9 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     return true;
   }
 
-  private void onDistributorTapped() {
-    selectedRole = SaleType.DISTRIBUTOR;
-    onRoleSelected(distributorLay, distributorIcon, distributorTv, distributorBottomLine);
-    onRoleDeSelected(salesManLay, salesManIcon, salesManTv, salesManBottomLine);
-    onRoleDeSelected(merchandiserLay, merchandiserIcon, merchandiserTv, merchandiserBottomLine);
-  }
-
   private void onSalesManTapped() {
     selectedRole = SaleType.COLD;
-    onRoleDeSelected(distributorLay, distributorIcon, distributorTv, distributorBottomLine);
-    onRoleSelected(salesManLay, salesManIcon, salesManTv, salesManBottomLine);
-    onRoleDeSelected(merchandiserLay, merchandiserIcon, merchandiserTv, merchandiserBottomLine);
-  }
-
-  private void onMerchandiserTapped() {
-    selectedRole = SaleType.HOT;
-    onRoleDeSelected(distributorLay, distributorIcon, distributorTv, distributorBottomLine);
-    onRoleDeSelected(salesManLay, salesManIcon, salesManTv, salesManBottomLine);
-    onRoleSelected(merchandiserLay, merchandiserIcon, merchandiserTv, merchandiserBottomLine);
+    selectRole(selectedRole.getOrder());
   }
 
   private void onEditTextFocus() {
@@ -198,20 +229,18 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     });
   }
 
-  private void onRoleSelected(RelativeLayout selectedLay, ImageView selectedIcon,
-      TextView selectedTextView, View selectedView) {
-    selectedLay.setBackgroundResource(R.drawable.role_selected);
-    selectedIcon.setColorFilter(ContextCompat.getColor(this, R.color.primary));
-    selectedTextView.setTextColor(ContextCompat.getColor(this, R.color.primary));
-    selectedView.setVisibility(View.VISIBLE);
+  private void selectRole(int order) {
+    roleLayouts[order].setBackgroundResource(R.drawable.role_selected);
+    roleIcons[order].setColorFilter(ContextCompat.getColor(this, R.color.primary));
+    roleTitles[order].setTextColor(ContextCompat.getColor(this, R.color.primary));
+    roleLines[order].setVisibility(View.VISIBLE);
   }
 
-  private void onRoleDeSelected(RelativeLayout selectedLay, ImageView selectedIcon,
-      TextView selectedTextView, View selectedView) {
-    selectedLay.setBackgroundResource(R.drawable.role_default);
-    selectedIcon.setColorFilter(ContextCompat.getColor(this, R.color.login_gray));
-    selectedTextView.setTextColor(ContextCompat.getColor(this, R.color.login_gray));
-    selectedView.setVisibility(View.GONE);
+  private void deselectRole(int order) {
+    roleLayouts[order].setBackgroundResource(R.drawable.role_default);
+    roleIcons[order].setColorFilter(ContextCompat.getColor(this, R.color.login_gray));
+    roleTitles[order].setTextColor(ContextCompat.getColor(this, R.color.login_gray));
+    roleLines[order].setVisibility(View.GONE);
   }
 
   private void doLogin() {

@@ -107,8 +107,7 @@ public class NetworkUtil {
       e.printStackTrace();
     }
 
-    UserInfoResponse userInfoResponse = new Gson().fromJson(bodyText, UserInfoResponse.class);
-    return userInfoResponse;
+    return new Gson().fromJson(bodyText, UserInfoResponse.class);
   }
 
   public static boolean isTokenExpired() {
