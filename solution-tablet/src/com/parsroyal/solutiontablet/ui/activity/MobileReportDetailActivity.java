@@ -50,7 +50,6 @@ public class MobileReportDetailActivity extends AppCompatActivity {
       customerBackendId = intent.getLongExtra(Constants.REPORT_CUSTOMER_ID, -1);
       if (kpiDetail == null || Empty.isEmpty(reportType)) {
         setContentView(R.layout.view_error_page);
-        return;
       }
     }
   }
@@ -102,10 +101,10 @@ public class MobileReportDetailActivity extends AppCompatActivity {
           ToastUtil.toastError(this, getString(R.string.error_connectin_server));
       }
     } else if (event instanceof KpiEvent) {
-     /* List<KPIDetail> detailList = ((KpiEvent) event).getDetailList();
+      List<KPIDetail> detailList = ((KpiEvent) event).getDetailList();
       listAdapter = new ReportDetailAdapter(this, detailList, reportType, kpiDetail);
       recyclerView.setAdapter(listAdapter);
-      recyclerView.hideShimmerAdapter();*/
+      recyclerView.hideShimmerAdapter();
     }
 
   }

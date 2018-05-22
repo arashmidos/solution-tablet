@@ -28,6 +28,9 @@ public class ApplicationKeys {
   public static final String USER_COMPANY_KEY = "user.company.key";
   public static final String SALESMAN_ID = "salesman.id";
 
+  public static final String SALE_AGENT = "6";
+  public static final String SALE_MERCHANDISER = "5";
+  public static final String SALE_COLLECTOR = "4";
   public static final String SALE_DISTRIBUTER = "3";
   public static final String SALE_HOT = "2";
   public static final String SALE_COLD = "1";

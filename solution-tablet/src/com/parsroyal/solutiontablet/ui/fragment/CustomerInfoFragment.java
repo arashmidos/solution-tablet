@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -41,6 +42,7 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.ReportListActivity;
 import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -276,7 +278,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   @OnClick({R.id.show_more_tv, R.id.register_order_lay, R.id.register_payment_lay,
       R.id.register_questionnaire_lay, R.id.register_image_lay, R.id.end_and_exit_visit_lay,
       R.id.no_activity_lay, R.id.register_location_btn, R.id.edit_map, R.id.fullscreen_map,
-      R.id.register_return_lay, R.id.edit_map_layout, R.id.fullscreen_map_layout})
+      R.id.register_return_lay, R.id.edit_map_layout, R.id.fullscreen_map_layout,R.id.customer_report_lay})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_return_lay:
@@ -330,6 +332,12 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       case R.id.fullscreen_map_layout:
       case R.id.fullscreen_map:
         toggleMapFullScreen();
+        break;
+      case R.id.customer_report_lay:
+        Intent intent = new Intent(mainActivity, ReportListActivity.class);
+        intent.putExtra(Constants.REPORT_TYPE, Constants.REPORT_CUSTOMER);
+        intent.putExtra(Constants.REPORT_CUSTOMER_ID, customer.getBackendId());
+        mainActivity.startActivity(intent);
         break;
     }
   }

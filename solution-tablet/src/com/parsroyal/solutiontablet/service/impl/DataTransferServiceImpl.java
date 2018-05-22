@@ -192,12 +192,12 @@ public class DataTransferServiceImpl implements DataTransferService {
       EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
     }
   }
-
+//TODO:CURRENT
   private void getAllDeliverableGoods() {
-    boolean success = false;
-//    observer.publishResult(context.getString(R.string.message_transferring_deliverable_goods_data));
-    for (int i = 0; i < 3 && !success; i++) {
-      success = new DeliverableGoodsDataTransferBizImpl(context).exchangeData();
+    try {
+      new DeliverableGoodsDataTransferBizImpl(context).exchangeData();
+    } catch (Exception ex) {
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
     }
   }
 

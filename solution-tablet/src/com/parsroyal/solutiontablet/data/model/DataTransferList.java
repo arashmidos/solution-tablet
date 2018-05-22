@@ -3,8 +3,9 @@ package com.parsroyal.solutiontablet.data.model;
 
 import android.content.Context;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.Constants.SendOrder;
-import com.parsroyal.solutiontablet.constants.Constants.TransferOrder;
+import com.parsroyal.solutiontablet.constants.Constants.TransferGetDistributorOrder;
+import com.parsroyal.solutiontablet.constants.Constants.TransferGetOrder;
+import com.parsroyal.solutiontablet.constants.Constants.TransferSendOrder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,23 +31,23 @@ public class DataTransferList {
   public static List<DataTransferList> dataTransferGetList(Context context) {
     List<DataTransferList> featureList = new ArrayList<>();
     featureList.add(
-        new DataTransferList(TransferOrder.PROVINCE, R.drawable.ic_state_24_dp,
+        new DataTransferList(TransferGetOrder.PROVINCE, R.drawable.ic_state_24_dp,
             context.getString(R.string.provinces)));
     featureList.add(
-        new DataTransferList(TransferOrder.CITY, R.drawable.ic_city_24_dp,
+        new DataTransferList(TransferGetOrder.CITY, R.drawable.ic_city_24_dp,
             context.getString(R.string.cities)));
     featureList.add(
-        new DataTransferList(TransferOrder.INFO, R.drawable.ic_info_24_dp,
+        new DataTransferList(TransferGetOrder.INFO, R.drawable.ic_info_24_dp,
             context.getString(R.string.basic)));
-    featureList.add(new DataTransferList(TransferOrder.GOODS_GROUP, R.drawable.ic_category_24_dp,
+    featureList.add(new DataTransferList(TransferGetOrder.GOODS_GROUP, R.drawable.ic_category_24_dp,
         context.getString(R.string.goods_category)));
-    featureList.add(new DataTransferList(TransferOrder.QUESTIONNAIRE, R.drawable.ic_list_24_dp,
+    featureList.add(new DataTransferList(TransferGetOrder.QUESTIONNAIRE, R.drawable.ic_list_24_dp,
         context.getString(R.string.questionnaires)));
-    featureList.add(new DataTransferList(TransferOrder.GOODS, R.drawable.ic_product_info_24_dp,
+    featureList.add(new DataTransferList(TransferGetOrder.GOODS, R.drawable.ic_product_info_24_dp,
         context.getString(R.string.goods)));
-    featureList.add(new DataTransferList(TransferOrder.VISITLINE, R.drawable.ic_path_24_dp,
+    featureList.add(new DataTransferList(TransferGetOrder.VISITLINE, R.drawable.ic_path_24_dp,
         context.getString(R.string.visit_lines)));
-    featureList.add(new DataTransferList(TransferOrder.GOODS_IMAGES, R.drawable.ic_image_24_dp,
+    featureList.add(new DataTransferList(TransferGetOrder.GOODS_IMAGES, R.drawable.ic_image_24_dp,
         context.getString(R.string.goods_images)));
 
     return featureList;
@@ -54,29 +55,64 @@ public class DataTransferList {
 
   public static List<DataTransferList> dataTransferSendList(Context context) {
     List<DataTransferList> featureList = new ArrayList<>();
-    featureList.add(new DataTransferList(SendOrder.NEW_CUSTOMERS, R.drawable.ic_customers_24_dp,
-        context.getString(R.string.new_customers)));
-    featureList.add(new DataTransferList(SendOrder.ADDRESS, R.drawable.ic_address_24_dp,
+    featureList
+        .add(new DataTransferList(TransferSendOrder.NEW_CUSTOMERS, R.drawable.ic_customers_24_dp,
+            context.getString(R.string.new_customers)));
+    featureList.add(new DataTransferList(TransferSendOrder.ADDRESS, R.drawable.ic_address_24_dp,
         context.getString(R.string.address)));
-    featureList.add(new DataTransferList(SendOrder.POSITION, R.drawable.ic_location_blue_24_dp,
-        context.getString(R.string.salesman_location)));
-    featureList.add(new DataTransferList(SendOrder.QUESTIONNAIRE, R.drawable.ic_list_24_dp,
+    featureList
+        .add(new DataTransferList(TransferSendOrder.POSITION, R.drawable.ic_location_blue_24_dp,
+            context.getString(R.string.salesman_location)));
+    featureList.add(new DataTransferList(TransferSendOrder.QUESTIONNAIRE, R.drawable.ic_list_24_dp,
         context.getString(R.string.questionnaires)));
-    featureList.add(new DataTransferList(SendOrder.PAYMENT, R.drawable.ic_currency_24_dp,
+    featureList.add(new DataTransferList(TransferSendOrder.PAYMENT, R.drawable.ic_currency_24_dp,
         context.getString(R.string.payment)));
-    featureList.add(new DataTransferList(SendOrder.ORDER, R.drawable.ic_cart_24_dp,
+    featureList.add(new DataTransferList(TransferSendOrder.ORDER, R.drawable.ic_cart_24_dp,
         context.getString(R.string.order)));
     //FACTOR HOT SALE
-//    featureList.add(new DataTransferList(SendOrder.ORDER, R.drawable.ic_cart_24_dp,
+//    featureList.add(new DataTransferList(TransferSendOrder.ORDER, R.drawable.ic_cart_24_dp,
 //        context.getString(R.string.order)));
 
-    featureList.add(new DataTransferList(SendOrder.RETURN_ORDER, R.drawable.ic_return_24_dp,
+    featureList.add(new DataTransferList(TransferSendOrder.RETURN_ORDER, R.drawable.ic_return_24_dp,
         context.getString(R.string.return_order)));
-    featureList.add(new DataTransferList(SendOrder.VISIT_DETAIL, R.drawable.ic_visit_24_dp,
+    featureList.add(new DataTransferList(TransferSendOrder.VISIT_DETAIL, R.drawable.ic_visit_24_dp,
         context.getString(R.string.visit_detail)));
     //////////
-    featureList.add(new DataTransferList(SendOrder.CUSTOMER_PICS, R.drawable.ic_camera_24_dp,
-        context.getString(R.string.image)));
+    featureList
+        .add(new DataTransferList(TransferSendOrder.CUSTOMER_PICS, R.drawable.ic_camera_24_dp,
+            context.getString(R.string.image)));
+
+    return featureList;
+  }
+
+  public static List<DataTransferList> dataTransferDistributorGetList(Context context) {
+    List<DataTransferList> featureList = new ArrayList<>();
+    featureList.add(
+        new DataTransferList(TransferGetOrder.PROVINCE, R.drawable.ic_state_24_dp,
+            context.getString(R.string.provinces)));
+    featureList.add(
+        new DataTransferList(TransferGetOrder.CITY, R.drawable.ic_city_24_dp,
+            context.getString(R.string.cities)));
+    featureList.add(
+        new DataTransferList(TransferGetOrder.INFO, R.drawable.ic_info_24_dp,
+            context.getString(R.string.basic)));
+    featureList.add(new DataTransferList(TransferGetOrder.GOODS_GROUP, R.drawable.ic_category_24_dp,
+        context.getString(R.string.goods_category)));
+    featureList.add(new DataTransferList(TransferGetOrder.QUESTIONNAIRE, R.drawable.ic_list_24_dp,
+        context.getString(R.string.questionnaires)));
+
+    featureList.add(new DataTransferList(TransferGetDistributorOrder.GOODS_FOR_DELIVERY,
+        R.drawable.ic_product_info_24_dp,
+        context.getString(R.string.goods_for_delivery)));
+    featureList.add(new DataTransferList(TransferGetDistributorOrder.VISITLINES_FOR_DELIVERY,
+        R.drawable.ic_path_24_dp,
+        context.getString(R.string.visit_lines)));
+    featureList.add(new DataTransferList(TransferGetDistributorOrder.ORDERS_FOR_DELIVERY,
+        R.drawable.ic_cart_24_dp,
+        context.getString(R.string.orders_for_delivery)));
+
+    featureList.add(new DataTransferList(TransferGetOrder.GOODS_IMAGES, R.drawable.ic_image_24_dp,
+        context.getString(R.string.goods_images)));
 
     return featureList;
   }

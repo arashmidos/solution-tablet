@@ -593,5 +593,7 @@
   <string name="collector">مامور وصول</string>
   <string name="merchandiser_title">مرچندایزر</string>
   <string name="agent">نماینده</string>
+  <string name="goods_for_delivery">کالاهای قابل تحویل</string>
+  <string name="orders_for_delivery">سفارش های قابل تحویل</string>
 
 </resources>

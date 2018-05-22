@@ -85,7 +85,7 @@ public class Constants {
     public static final int CANCELED = 4;
   }
 
-  public class TransferOrder {
+  public class TransferGetOrder {
 
     public static final int PROVINCE = 1;
     public static final int CITY = 2;
@@ -97,7 +97,14 @@ public class Constants {
     public static final int GOODS_IMAGES = 8;
   }
 
-  public class SendOrder {
+  public class TransferGetDistributorOrder {
+
+    public static final int GOODS_FOR_DELIVERY = 10;
+    public static final int VISITLINES_FOR_DELIVERY = 11;
+    public static final int ORDERS_FOR_DELIVERY = 12;
+  }
+
+  public class TransferSendOrder {
 
     public static final int NEW_CUSTOMERS = 20;
     public static final int ADDRESS = 21;

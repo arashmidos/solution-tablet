@@ -16,8 +16,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.constants.Constants.SendOrder;
-import com.parsroyal.solutiontablet.constants.Constants.TransferOrder;
+import com.parsroyal.solutiontablet.constants.Constants.TransferGetDistributorOrder;
+import com.parsroyal.solutiontablet.constants.Constants.TransferSendOrder;
+import com.parsroyal.solutiontablet.constants.Constants.TransferGetOrder;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
@@ -26,11 +27,13 @@ import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.DataTransferList;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.DataTransferAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,6 +71,7 @@ public class DataTransferDialogFragment extends DialogFragment {
   private boolean isGet;
   private DataTransferAdapter adapter;
   private boolean canceled;
+  private SettingServiceImpl settingService;
 
   public DataTransferDialogFragment() {
     // Required empty public constructor
@@ -94,6 +98,7 @@ public class DataTransferDialogFragment extends DialogFragment {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     dataTransferService = new DataTransferServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl(mainActivity);
 
     Bundle args = getArguments();
     if (Empty.isNotEmpty(args)) {
@@ -122,7 +127,14 @@ public class DataTransferDialogFragment extends DialogFragment {
   private void setData() {
 
     if (isGet) {
+      String saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+      if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+
+      model = getDistributorReceiveModel();
+      }else{
+
       model = getReceiveModel();
+      }
       dataTransferBtn.setText(getString(R.string.get_data));
 
       dataTransferBtn
@@ -139,6 +151,10 @@ public class DataTransferDialogFragment extends DialogFragment {
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
+  }
+
+  private List<DataTransferList> getDistributorReceiveModel() {
+    return DataTransferList.dataTransferDistributorGetList(mainActivity);
   }
 
   private List<DataTransferList> getReceiveModel() {
@@ -211,66 +227,68 @@ public class DataTransferDialogFragment extends DialogFragment {
     currentModel = model.get(currentPosition);
 
     switch (currentModel.getId()) {
-      case TransferOrder.PROVINCE:
+      case TransferGetOrder.PROVINCE:
         dataTransferService.getAllProvinces();
         break;
-      case TransferOrder.CITY:
+      case TransferGetOrder.CITY:
         dataTransferService.getAllCities();
         break;
-      case TransferOrder.INFO:
+      case TransferGetOrder.INFO:
         dataTransferService.getAllBaseInfos();
         break;
-      case TransferOrder.GOODS_GROUP:
+      case TransferGetOrder.GOODS_GROUP:
         dataTransferService.getAllGoodsGroups();
         break;
-      case TransferOrder.QUESTIONNAIRE:
+      case TransferGetOrder.QUESTIONNAIRE:
         dataTransferService.getAllQuestionnaires();
         break;
-      case TransferOrder.GOODS:
+      case TransferGetOrder.GOODS:
         dataTransferService.getAllGoods();
         break;
-      case TransferOrder.VISITLINE:
+      case TransferGetOrder.VISITLINE:
         dataTransferService.getAllVisitLines();
         break;
-      case TransferOrder.GOODS_IMAGES:
+      case TransferGetOrder.GOODS_IMAGES:
         Updater.downloadGoodsImages(getActivity());
         break;
-      case SendOrder.NEW_CUSTOMERS:
+      case TransferSendOrder.NEW_CUSTOMERS:
         Thread t = new Thread(() -> dataTransferService.sendAllNewCustomers());
         t.start();
         break;
-      case SendOrder.ADDRESS:
+      case TransferSendOrder.ADDRESS:
         Thread t2 = new Thread(() -> dataTransferService.sendAllUpdatedCustomers());
         t2.start();
         break;
-      case SendOrder.POSITION:
+      case TransferSendOrder.POSITION:
         Thread t3 = new Thread(() -> dataTransferService.sendAllPositions());
         t3.start();
         break;
-      case SendOrder.QUESTIONNAIRE:
+      case TransferSendOrder.QUESTIONNAIRE:
         Thread t4 = new Thread(() -> dataTransferService.sendAllAnswers());
         t4.start();
         break;
-      case SendOrder.PAYMENT:
+      case TransferSendOrder.PAYMENT:
         Thread t5 = new Thread(() -> dataTransferService.sendAllPayments());
         t5.start();
         break;
-      case SendOrder.ORDER:
+      case TransferSendOrder.ORDER:
         Thread t6 = new Thread(() -> dataTransferService.sendAllOrders());
         t6.start();
         break;
-      case SendOrder.RETURN_ORDER:
+      case TransferSendOrder.RETURN_ORDER:
         Thread t7 = new Thread(() -> dataTransferService.sendAllSaleRejects());
         t7.start();
         break;
-      case SendOrder.VISIT_DETAIL:
+      case TransferSendOrder.VISIT_DETAIL:
         Thread t8 = new Thread(() -> dataTransferService.sendAllVisitInformation());
         t8.start();
         break;
-      case SendOrder.CUSTOMER_PICS:
+      case TransferSendOrder.CUSTOMER_PICS:
         Thread t9 = new Thread(() -> dataTransferService.sendAllCustomerPics());
         t9.start();
         break;
+      case TransferGetDistributorOrder.GOODS_FOR_DELIVERY:
+
       default:
 
     }
