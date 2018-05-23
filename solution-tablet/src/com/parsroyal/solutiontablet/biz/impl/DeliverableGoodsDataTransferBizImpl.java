@@ -7,10 +7,13 @@ import com.google.gson.reflect.TypeToken;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.GoodsDao;
 import com.parsroyal.solutiontablet.data.dao.impl.GoodsDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
@@ -20,6 +23,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,7 +37,6 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
   public static final String TAG = DeliverableGoodsDataTransferBizImpl.class.getSimpleName();
 
   private Context context;
-  private ResultObserver resultObserver;
   private GoodsDao goodsDao;
   private KeyValueBiz keyValueBiz;
   private SettingService settingService;
@@ -66,18 +69,18 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
             goodsDao.create(goods);
           }
         }
-
-        resultObserver.publishResult(
-            context.getString(R.string.message_deliverable_goods_transferred_successfully));
+        EventBus.getDefault().post(new DataTransferSuccessEvent(
+            context.getString(R.string.message_deliverable_goods_transferred_successfully),
+            StatusCodes.SUCCESS));
 
       } catch (Exception ex) {
         Logger.sendError("Data transfer", "Error in receiving DeliverableGoods " + ex.getMessage());
         Log.e(TAG, ex.getMessage(), ex);
-        resultObserver.publishResult(
-            context.getString(R.string.message_exception_in_transferring_deliverable_goods));
+        EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
       }
     } else {
-      resultObserver.publishResult(context.getString(R.string.message_no_goods_transferred));
+      EventBus.getDefault().post(new DataTransferSuccessEvent(
+          "context.getString(R.string.message_no_goods_transferred)", StatusCodes.NO_DATA_ERROR));
     }
   }
 
@@ -87,7 +90,7 @@ public class DeliverableGoodsDataTransferBizImpl extends AbstractDataTransferBiz
 
   @Override
   public ResultObserver getObserver() {
-    return resultObserver;
+    return null;
   }
 
   @Override

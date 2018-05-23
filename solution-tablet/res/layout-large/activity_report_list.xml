@@ -40,6 +40,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@id/toolbar"
+    app:shimmer_demo_reverse_animation="true"
     app:shimmer_demo_layout="@layout/layout_shimmer_kpi"
     app:shimmer_demo_shimmer_color="@color/shimmer_color" />
 

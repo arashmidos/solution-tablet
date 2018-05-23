@@ -193,7 +193,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
   }
 //TODO:CURRENT
-  private void getAllDeliverableGoods() {
+  public void getAllDeliverableGoods() {
     try {
       new DeliverableGoodsDataTransferBizImpl(context).exchangeData();
     } catch (Exception ex) {

@@ -11,14 +11,15 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetDistributorOrder;
-import com.parsroyal.solutiontablet.constants.Constants.TransferSendOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetOrder;
+import com.parsroyal.solutiontablet.constants.Constants.TransferSendOrder;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
@@ -130,10 +131,10 @@ public class DataTransferDialogFragment extends DialogFragment {
       String saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
       if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
 
-      model = getDistributorReceiveModel();
-      }else{
+        model = getDistributorReceiveModel();
+      } else {
 
-      model = getReceiveModel();
+        model = getReceiveModel();
       }
       dataTransferBtn.setText(getString(R.string.get_data));
 
@@ -204,13 +205,13 @@ public class DataTransferDialogFragment extends DialogFragment {
 //      if (canceled) {
 //TODO: :Later put retry here
 //      }else {
-        dataTransferBtn.setVisibility(View.VISIBLE);
-        uploadDataBtnDisabled.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
-        dataTransferBtn.setText(R.string.finish);
+      dataTransferBtn.setVisibility(View.VISIBLE);
+      uploadDataBtnDisabled.setVisibility(View.GONE);
+      progressBar.setVisibility(View.GONE);
+      dataTransferBtn.setText(R.string.finish);
 
-        dataTransferBtn
-            .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_white_18_dp, 0);
+      dataTransferBtn
+          .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_white_18_dp, 0);
 //      }
     }
   }
@@ -288,7 +289,17 @@ public class DataTransferDialogFragment extends DialogFragment {
         t9.start();
         break;
       case TransferGetDistributorOrder.GOODS_FOR_DELIVERY:
-
+        Thread t10 = new Thread(() -> dataTransferService.getAllDeliverableGoods());
+        t10.start();
+        break;
+      case TransferGetDistributorOrder.ORDERS_FOR_DELIVERY:
+        Toast.makeText(mainActivity, "Orders For Delivery", Toast.LENGTH_SHORT).show();
+        break;
+      case TransferGetDistributorOrder.VISITLINES_FOR_DELIVERY:
+        Toast.makeText(mainActivity, "Visitlines For Delivery", Toast.LENGTH_SHORT).show();
+        break;
+      case TransferGetDistributorOrder.GOODS_REQUEST:
+        Toast.makeText(mainActivity, "Getting Good request id", Toast.LENGTH_SHORT).show();
       default:
 
     }
@@ -298,7 +309,7 @@ public class DataTransferDialogFragment extends DialogFragment {
   public void getMessage(DataTransferEvent event) {
     if (event instanceof DataTransferSuccessEvent) {
       if (event.getStatusCode().equals(StatusCodes.SUCCESS)) {
-        adapter.setUpdate(currentPosition,event.getMessage());
+        adapter.setUpdate(currentPosition, event.getMessage());
         adapter.setFinished(currentPosition);
         sendNextDetail();
       } else if (event.getStatusCode().equals(StatusCodes.NO_DATA_ERROR)) {

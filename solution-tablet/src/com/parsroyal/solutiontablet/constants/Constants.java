@@ -102,6 +102,7 @@ public class Constants {
     public static final int GOODS_FOR_DELIVERY = 10;
     public static final int VISITLINES_FOR_DELIVERY = 11;
     public static final int ORDERS_FOR_DELIVERY = 12;
+    public static final int GOODS_REQUEST = 13;
   }
 
   public class TransferSendOrder {
