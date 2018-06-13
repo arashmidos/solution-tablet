@@ -203,7 +203,6 @@ public class DataTransferDialogFragment extends DialogFragment {
       uploadDataBtnDisabled.setVisibility(View.VISIBLE);
     } else {
 //      if (canceled) {
-//TODO: :Later put retry here
 //      }else {
       dataTransferBtn.setVisibility(View.VISIBLE);
       uploadDataBtnDisabled.setVisibility(View.GONE);
@@ -292,11 +291,13 @@ public class DataTransferDialogFragment extends DialogFragment {
         Thread t10 = new Thread(() -> dataTransferService.getAllDeliverableGoods());
         t10.start();
         break;
-      case TransferGetDistributorOrder.ORDERS_FOR_DELIVERY:
-        Toast.makeText(mainActivity, "Orders For Delivery", Toast.LENGTH_SHORT).show();
-        break;
       case TransferGetDistributorOrder.VISITLINES_FOR_DELIVERY:
-        Toast.makeText(mainActivity, "Visitlines For Delivery", Toast.LENGTH_SHORT).show();
+        Thread t11 = new Thread(() -> dataTransferService.getAllVisitLinesForDelivery());
+        t11.start();
+        break;
+      case TransferGetDistributorOrder.ORDERS_FOR_DELIVERY:
+        Thread t12 = new Thread(() -> dataTransferService.getAllOrdersForDelivery());
+        t12.start();
         break;
       case TransferGetDistributorOrder.GOODS_REQUEST:
         Toast.makeText(mainActivity, "Getting Good request id", Toast.LENGTH_SHORT).show();

@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.GoodsDao;
 import com.parsroyal.solutiontablet.data.dao.impl.GoodsDaoImpl;
@@ -51,8 +50,7 @@ public class GoodsDataTransferBizImpl {
         .getAllGoods(settingService.getSettingValue(ApplicationKeys.USER_COMPANY_ID),
             settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_ID),
             settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE),
-            settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)
-        );
+            settingService.getSettingValue(ApplicationKeys.SALESMAN_ID));
 
     call.enqueue(new Callback<List<Goods>>() {
       @Override

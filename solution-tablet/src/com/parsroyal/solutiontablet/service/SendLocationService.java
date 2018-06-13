@@ -46,6 +46,7 @@ public class SendLocationService extends IntentService {
 
   @Override
   protected void onHandleIntent(@Nullable Intent intent) {
+
     Log.i(TAG, "Send locations...");
     String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
     String saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);

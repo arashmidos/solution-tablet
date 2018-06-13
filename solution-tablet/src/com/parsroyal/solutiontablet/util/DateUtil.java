@@ -140,6 +140,12 @@ public class DateUtil {
     return cal.getTime();
   }
 
+  public static boolean isTooOld(Date date) {
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.YEAR, 2000);
+    return date.before(cal.getTime());
+  }
+
   public static int getToday() {
     Calendar cal = Calendar.getInstance();
     return cal.get(Calendar.DAY_OF_WEEK);

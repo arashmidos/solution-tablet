@@ -343,6 +343,7 @@ public class LocationUpdatesService extends Service {
 
     if (Empty.isNotEmpty(lastLocation)) {
 
+
       float distance = LocationUtil.distanceBetween(lastLocation, location);
       if (distance > MAX_ACCEPTED_DISTANCE_IN_METER) {
         long lastTime = lastLocation.getTime();

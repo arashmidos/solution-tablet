@@ -133,14 +133,17 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     String date = cursor.getString(5);
     Date toDate = DateUtil.convertStringToDate(date,
         DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
-    position.setDate(toDate == null ? 0 : toDate.getTime());
+    position.setDate(
+        toDate == null || DateUtil.isTooOld(toDate) ? new Date().getTime() : toDate.getTime());
     position.setGpsOff(cursor.getInt(6));
     position.setMode(cursor.getInt(7));
     position.setPersonId(cursor.getLong(8));
     String createDate = cursor.getString(10);
     Date toCreateDate = DateUtil.convertStringToDate(createDate,
         DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
-    position.setCreateDateTime(toCreateDate == null ? 0 : toCreateDate.getTime());
+    position.setCreateDateTime(
+        toCreateDate == null || DateUtil.isTooOld(toCreateDate) ? new Date().getTime()
+            : toCreateDate.getTime());
     position.setAccuracy(cursor.getFloat(12));
     position.setMockLocation(cursor.getInt(13));
     position.setRooted(cursor.getInt(14));

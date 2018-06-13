@@ -439,7 +439,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     map.setOnMarkerClickListener(clusterManager);
     map.setOnInfoWindowClickListener(clusterManager);
     map.setInfoWindowAdapter(clusterManager.getMarkerManager());
-    map.setOnInfoWindowClickListener(marker ->    {
+    map.setOnInfoWindowClickListener(marker -> {
       Float distance = clickedClusterItem.getDistance();
       if (distanceServiceEnabled && distance > distanceAllowed) {
         ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
@@ -510,6 +510,8 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     switch (view.getId()) {
       case R.id.filter_btn:
         doFilter();
+        filterLayout.setVisibility(View.GONE);
+        filter.setVisibility(View.VISIBLE);
         break;
       case R.id.cancel_btn:
         filterLayout.setVisibility(View.GONE);

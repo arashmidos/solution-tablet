@@ -578,6 +578,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         customer.setFullName(CharacterFixUtil.fixString(customer.getFullName()));
         customer.setShopName(CharacterFixUtil.fixString(customer.getShopName()));
         customer.setAddress(CharacterFixUtil.fixString(customer.getAddress()));
+        customer.setApproved(true);
         customer.setCreateDateTime(
             DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
         customer.setUpdateDateTime(

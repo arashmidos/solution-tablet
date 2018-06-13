@@ -89,9 +89,11 @@ public class PositionServiceImpl implements PositionService {
     position.setId(null);
     position.setStatus(SendStatus.NEW.getId().intValue());
     Date trueTime = SolutionTabletApplication.getTrueTime();
-    position.setNetworkDate(trueTime == null ? null : trueTime.getTime());
-    position.setCreateDateTime(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-    position.setDate(DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+    position.setNetworkDate(trueTime == null ? new Date().getTime() : trueTime.getTime());
+    position.setCreateDateTime(
+        DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+    position.setDate(
+        DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     position.setGpsOff(gpsStatus.equals(GpsStatus.OFF) ? 1 : 0);
     Intent intent = new Intent(context, SaveLocationService.class);
     intent.putExtra(EXTRA_POSITION, position);

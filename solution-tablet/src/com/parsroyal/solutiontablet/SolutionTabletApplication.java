@@ -11,7 +11,6 @@ import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import com.amitshekhar.DebugDB;
 import com.crashlytics.android.Crashlytics;
 import com.instacart.library.truetime.TrueTime;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -80,8 +79,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
         boolean syncNetworkTime = false;
         while (!syncNetworkTime) {
           try {
-            TrueTime.build().withServerResponseDelayMax(500).withSharedPreferences(this)
-                .initialize();
+            TrueTime.build().withServerResponseDelayMax(500).initialize();
             syncNetworkTime = true;
 
             Log.i("Network Time", "**Synced with network");
@@ -91,7 +89,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
       }).start();
     }
 
-    Log.d("DebugDB", "***>>> DB Address:"+DebugDB.getAddressLog());
+//    Log.d("DebugDB", "***>>> DB Address:"+DebugDB.getAddressLog());
   }
 
   public void setLanguage() {

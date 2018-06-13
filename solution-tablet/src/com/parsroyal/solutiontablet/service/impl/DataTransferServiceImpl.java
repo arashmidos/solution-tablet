@@ -17,7 +17,6 @@ import com.parsroyal.solutiontablet.biz.impl.PositionDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.ProvinceDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QuestionnaireDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.RejectedGoodsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleOrderForDeliveryDataTaransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
@@ -37,11 +36,9 @@ import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
-import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.data.model.QAnswerDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
-import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.InvalidServerAddressException;
 import com.parsroyal.solutiontablet.exception.PasswordNotProvidedForConnectingToServerException;
 import com.parsroyal.solutiontablet.exception.SalesmanIdNotProvidedForConnectingToServerException;
@@ -192,7 +189,7 @@ public class DataTransferServiceImpl implements DataTransferService {
       EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
     }
   }
-//TODO:CURRENT
+
   public void getAllDeliverableGoods() {
     try {
       new DeliverableGoodsDataTransferBizImpl(context).exchangeData();
@@ -201,20 +198,19 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
   }
 
-  private void getAllVisitLinesForDelivery() {
-    boolean success = false;
-//    observer.publishResult(context.getString(R.string.message_transferring_visit_lines_data));
-
-    for (int i = 0; i < 3 && !success; i++) {
-      success = new VisitLineForDeliveryDataTaransferBizImpl(context).exchangeData();
+  public void getAllVisitLinesForDelivery() {
+    try {
+      new VisitLineForDeliveryDataTaransferBizImpl(context).exchangeData();
+    } catch (Exception ex) {
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
     }
   }
 
-  private void getAllOrdersForDelivery() {
-    boolean success = false;
-//    observer.publishResult(context.getString(R.string.message_transferring_deliverable_orders));
-    for (int i = 0; i < 3 && !success; i++) {
-      success = new SaleOrderForDeliveryDataTaransferBizImpl(context).exchangeData();
+  public void getAllOrdersForDelivery() {
+    try {
+      new SaleOrderForDeliveryDataTaransferBizImpl(context).exchangeData();
+    } catch (Exception ex) {
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
     }
   }
 
@@ -289,7 +285,8 @@ public class DataTransferServiceImpl implements DataTransferService {
         }
 
         Log.d(TAG, "Send Pic" + pics.length());
-        new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId()).exchangeData();
+        new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId())
+            .exchangeData();
       }
     }
 

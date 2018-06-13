@@ -91,11 +91,14 @@ public class SaveLocationService extends IntentService {
       float distanceInMeter = LocationUtil
           .distanceBetween(position.getLocation(), lastPosition.getLocation());
       position.setDistanceInMeter(distanceInMeter);
-    }else{
+    } else {
       position.setDistanceInMeter(0);
     }
     positionService.savePosition(position);
     EventBus.getDefault().post(new GPSEvent(location));
+
+    Intent service = new Intent(this, SendLocationService.class);
+    startService(service);
   }
 
   /**

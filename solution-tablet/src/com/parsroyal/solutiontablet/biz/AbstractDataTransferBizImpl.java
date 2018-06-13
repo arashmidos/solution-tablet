@@ -40,22 +40,21 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Created by Mahyar on 6/18/2015.
+ * Created by Arash on 6/18/2015.
  */
 public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
 
-  public static final String TAG = AbstractDataTransferBizImpl.class.getSimpleName();
+  public static final String TAG = "AbstractDatrBizImpl";
   protected Context context;
   protected KeyValue serverAddress1;
   protected KeyValue username;
   protected KeyValue password;
   protected KeyValue salesmanId;
   protected KeyValue saleType;
-
   protected KeyValueDao keyValueDao;
   protected KeyValue salesmanCode;
-  private KeyValue goodsRequestId;
   protected KeyValue token;
+  private KeyValue goodsRequestId;
 
   public AbstractDataTransferBizImpl(Context context) {
     this.context = context;
@@ -156,7 +155,6 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
         getObserver().publishResult(ex);
       }
     } catch (Exception e) {
-      Logger.sendError("Data transfer", "abstract exchange data " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       if (Empty.isNotEmpty(getObserver())) {
         getObserver().publishResult(new UnknownSystemException(e));
@@ -170,7 +168,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
   }
 
   protected String makeUrl(String serverAddress1, String method) {
-      return serverAddress1 + "/" + method;
+    return serverAddress1 + "/" + method;
   }
 
   public abstract void receiveData(T data);

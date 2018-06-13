@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.data.entity;
 
 import android.location.Location;
+import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.ui.MainActivity;
@@ -77,36 +78,34 @@ public class Position extends BaseEntity<Long> {
 
   public Position(Double latitude, Double longitude, Float speed, int gpsOff, int mode,
       Float accuracy, long gpsTime) {
+    this();
     this.latitude = latitude;
     this.longitude = longitude;
     this.speed = speed;
-    this.status = SendStatus.NEW.getId().intValue();
+    Date gpsDate = new Date(gpsTime);
+    if (DateUtil.isTooOld(gpsDate)) {
+      gpsDate = new Date();
+    }
     this.createDateTime = DateUtil
-        .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+        .convertDate(gpsDate, DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     this.gpsOff = gpsOff;
-    this.mode = mode;
     this.accuracy = accuracy;
-    this.batteryLevel = MainActivity.batteryLevel;
-    this.batteryStatus = MainActivity.batteryStatusTitle;
-    this.rooted = GPSUtil.isDeviceRooted();
-    this.date = DateUtil
-        .convertDate(new Date(gpsTime), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
-    Date trueTime = SolutionTabletApplication.getTrueTime();
-
-    this.networkDate = trueTime == null ? null : trueTime.getTime();
-    this.imei = SolutionTabletApplication.getInstance().getInstanceId();
   }
 
   public Position() {
     this.status = SendStatus.NEW.getId().intValue();
     this.createDateTime = DateUtil
         .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
+    this.date = DateUtil
+        .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     this.batteryLevel = MainActivity.batteryLevel;
     this.batteryStatus = MainActivity.batteryStatusTitle;
     this.rooted = GPSUtil.isDeviceRooted();
     Date trueTime = SolutionTabletApplication.getTrueTime();
-    this.networkDate = trueTime == null ? null : trueTime.getTime();
+
+    this.networkDate = trueTime == null ? new Date().getTime() : trueTime.getTime();
     this.imei = SolutionTabletApplication.getInstance().getInstanceId();
+    this.mode = BuildConfig.VERSION_CODE;
   }
 
   public Position(Long id) {
@@ -212,8 +211,8 @@ public class Position extends BaseEntity<Long> {
 
   public Location getLocation() {
     Location location = new Location("Dummy");
-    location.setLatitude(latitude == null ? null : latitude);
-    location.setLongitude(longitude == null ? null : longitude);
+    location.setLatitude(latitude);
+    location.setLongitude(longitude);
     return location;
   }
 

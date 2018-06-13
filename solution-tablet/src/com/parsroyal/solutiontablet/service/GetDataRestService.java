@@ -2,10 +2,12 @@ package com.parsroyal.solutiontablet.service;
 
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
+import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.model.BaseInfoList;
 import com.parsroyal.solutiontablet.data.model.CityList;
 import com.parsroyal.solutiontablet.data.model.ProvinceList;
 import com.parsroyal.solutiontablet.data.model.QuestionnaireDtoList;
+import com.parsroyal.solutiontablet.data.model.SaleOrderList;
 import com.parsroyal.solutiontablet.data.model.VisitLineDto;
 import java.util.List;
 import retrofit2.Call;
@@ -45,4 +47,9 @@ public interface GetDataRestService {
   Call<List<VisitLineDto>> getAllVisitLines(@Path("sale_type") String SaleType,
       @Path("salesman_id") String salesmanId);
 
+  @GET("visit-lines/delivery/{distributor_id}")
+  Call<List<VisitLineDto>> getAllVisitLinesForDelivery(@Path("distributor_id") String distributorId);
+
+  @GET("saleorders/{distributor_id}/deliverable")
+  Call<SaleOrderList> getAllSaleOrderForDelivery(@Path("distributor_id") String distributorId);
 }

@@ -36,6 +36,7 @@ public class TrackerAlarmReceiver extends WakefulBroadcastReceiver {
       Log.i(TAG, "required information is available. trying to set alarm and run service");
       Intent service = new Intent(context, SendLocationService.class);
       startWakefulService(context, service);
+
     } else {
       Log.i(TAG, "required information is not available");
     }
