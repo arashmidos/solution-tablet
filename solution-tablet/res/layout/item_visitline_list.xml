@@ -29,6 +29,7 @@
       android:layout_height="175dp"
       android:clickable="false"
       map:liteMode="true"
+      android:visibility="gone"
       map:mapType="none" />
 
     <View

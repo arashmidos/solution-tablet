@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -57,7 +56,6 @@ public class OrderDetailFragment extends BaseFragment {
 
   private Long orderStatus;
   private GoodsDtoList rejectedGoodsList;
-  private OldOrderInfoFragment orderInfoFrg;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,85 +74,56 @@ public class OrderDetailFragment extends BaseFragment {
       order = saleOrderService.findOrderDtoById(orderId);
       orderStatus = order.getStatus();
       View view = context.getLayoutInflater().inflate(R.layout.fragment_order_detail, null);
-      tabContainer = (TabContainer) view.findViewById(R.id.tabContainer);
-      actionsLayout = (LinearLayout) view.findViewById(R.id.actionsLayout);
+      tabContainer = view.findViewById(R.id.tabContainer);
+      actionsLayout = view.findViewById(R.id.actionsLayout);
 
       if (isRejected()) {
         rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
       }
-      {
-        ParsRoyalTab tab = new ParsRoyalTab(context);
 
-        tab.setText(String.format(Locale.US, getString(R.string.title_items_x), getProperTitle()));
+      ParsRoyalTab tab = new ParsRoyalTab(context);
 
-        tab.setOnClickListener(v ->
-        {
+      tab.setText(String.format(Locale.US, getString(R.string.title_items_x), getProperTitle()));
+
+      tab.setOnClickListener(v -> {
+        FragmentManager childFragMan = getChildFragmentManager();
+        FragmentTransaction childFragTrans = childFragMan.beginTransaction();
+        OldOrderItemsFragment oldOrderItemsFragment = new OldOrderItemsFragment();
+
+        Bundle args = new Bundle();
+        args.putLong(Constants.ORDER_ID, order.getId());
+        args.putBoolean(Constants.DISABLED, isDisable());
+        args.putLong(Constants.ORDER_STATUS, orderStatus);
+        args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+        oldOrderItemsFragment.setArguments(args);
+
+        childFragTrans.replace(R.id.orderDetailContentFrame, oldOrderItemsFragment);
+        childFragTrans.commit();
+
+      });
+      tabContainer.addTab(tab);
+
+      if (orderStatus.equals(SaleOrderStatus.DRAFT.getId())
+          || orderStatus.equals(SaleOrderStatus.READY_TO_SEND.getId())
+          || orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
+        ParsRoyalTab tab2 = new ParsRoyalTab(context);
+        tab2.setText(getString(R.string.title_goods_list));
+        tab2.setActivated(true);
+        tab2.setOnClickListener(v -> {
           FragmentManager childFragMan = getChildFragmentManager();
           FragmentTransaction childFragTrans = childFragMan.beginTransaction();
-          OldOrderItemsFragment oldOrderItemsFragment = new OldOrderItemsFragment();
 
-          Bundle args = new Bundle();
-          args.putLong(Constants.ORDER_ID, order.getId());
-          args.putBoolean(Constants.DISABLED, isDisable());
-          args.putLong(Constants.ORDER_STATUS, orderStatus);
-          args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
-          oldOrderItemsFragment.setArguments(args);
-
-          childFragTrans.replace(R.id.orderDetailContentFrame, oldOrderItemsFragment);
-          childFragTrans.commit();
-
-        });
-        tabContainer.addTab(tab);
-      }
-
-      {
-        ParsRoyalTab tab = new ParsRoyalTab(context);
-        tab.setText(String.format(Locale.US, getString(R.string.title_x_detail), getProperTitle()));
-        tab.setActivated(true);
-        tab.setOnClickListener(v ->
-        {
-          FragmentManager childFragMan = getChildFragmentManager();
-          FragmentTransaction childFragTrans = childFragMan.beginTransaction();
-          orderInfoFrg = new OldOrderInfoFragment();
+          OldGoodsListFragment oldGoodsListFragment = new OldGoodsListFragment();
           Bundle args = new Bundle();
           args.putLong(Constants.ORDER_ID, orderId);
-          args.putString(Constants.SALE_TYPE, saleType);
-          orderInfoFrg.setArguments(args);
-          childFragTrans.replace(R.id.orderDetailContentFrame, orderInfoFrg);
+          args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+          oldGoodsListFragment.setArguments(args);
+
+          childFragTrans.replace(R.id.orderDetailContentFrame, oldGoodsListFragment);
           childFragTrans.commit();
-
         });
-        tabContainer.addTab(tab);
-        tabContainer.activeTab(tab);
-      }
-
-      {
-        if (orderStatus.equals(SaleOrderStatus.DRAFT.getId())
-            || orderStatus.equals(SaleOrderStatus.READY_TO_SEND.getId())
-            || orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()))
-
-        {
-          ParsRoyalTab tab = new ParsRoyalTab(context);
-          tab.setText(getString(R.string.title_goods_list));
-          tab.setActivated(true);
-          tab.setOnClickListener(v ->
-          {
-            FragmentManager childFragMan = getChildFragmentManager();
-            FragmentTransaction childFragTrans = childFragMan.beginTransaction();
-
-            OldGoodsListFragment oldGoodsListFragment = new OldGoodsListFragment();
-            Bundle args = new Bundle();
-            args.putLong(Constants.ORDER_ID, orderId);
-            args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
-            oldGoodsListFragment.setArguments(args);
-
-            childFragTrans.replace(R.id.orderDetailContentFrame, oldGoodsListFragment);
-            childFragTrans.commit();
-
-          });
-          tabContainer.addTab(tab);
-          tabContainer.activeTab(tab);
-        }
+        tabContainer.addTab(tab2);
+        tabContainer.activeTab(tab2);
       }
 
       actionsLayout.addView(createActionButton(context.getString(R.string.title_cancel),
@@ -168,26 +137,20 @@ public class OrderDetailFragment extends BaseFragment {
                 String.format(Locale.US, getString(R.string.title_cancel_sale_x),
                     getProperTitle()), SaleOrderStatus.CANCELED.getId()));
 
-        deliverOrderBtn = createActionButton(getString(R.string.title_deliver_sale_x)
-            + getProperTitle(), v ->
-        {
+        deliverOrderBtn = createActionButton(getString(R.string.title_deliver_sale_x), v -> {
           if (validateOrderForDeliver()) {
             showSaveOrderConfirmDialog(getString(R.string.title_deliver_sale_x)
                 + getProperTitle(), SaleOrderStatus.INVOICED.getId());
           }
         });
-
         actionsLayout.addView(cancelOrderBtn);
         actionsLayout.addView(deliverOrderBtn);
       }
 
       if (SaleOrderStatus.READY_TO_SEND.getId().equals(orderStatus)
           || SaleOrderStatus.DRAFT.getId().equals(orderStatus)
-          || SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus))
-
-      {
-        saveOrderBtn = createActionButton(context.getString(R.string.title_save_order), v ->
-        {
+          || SaleOrderStatus.REJECTED_DRAFT.getId().equals(orderStatus)) {
+        saveOrderBtn = createActionButton(context.getString(R.string.title_save_order), v -> {
           order = saleOrderService.findOrderDtoById(orderId);
           if (validateOrderForSave()) {
             if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
@@ -209,10 +172,6 @@ public class OrderDetailFragment extends BaseFragment {
 
       return view;
     } catch (Exception e) {
-      Crashlytics
-          .log(Log.ERROR, "UI Exception",
-              "Error in creating OrderDetailFragment " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);
     }
@@ -229,7 +188,6 @@ public class OrderDetailFragment extends BaseFragment {
     return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
         orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
         orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
-
   }
 
   /*
@@ -266,8 +224,7 @@ public class OrderDetailFragment extends BaseFragment {
 
   private void showSaveOrderConfirmDialog(String title, final Long statusId) {
     DialogUtil.showConfirmDialog(context, title,
-        context.getString(R.string.message_are_you_sure), (dialog, which) ->
-        {
+        context.getString(R.string.message_are_you_sure), (dialog, which) -> {
           saveOrder(statusId);
           context.removeFragment(OrderDetailFragment.this);
         });
@@ -277,21 +234,20 @@ public class OrderDetailFragment extends BaseFragment {
     try {
       order.setStatus(statusId);
 
-      long selectedPaymentType = orderInfoFrg.getSelectedPaymentType();
+      long selectedPaymentType = 0;//orderInfoFrg.getSelectedPaymentType();
       if (isRejected()) {
         //Add reason or reject to orders
       } else {
         order.setPaymentTypeBackendId(selectedPaymentType);
       }
 
-      String description = orderInfoFrg.getDescription();
+      String description = "";//orderInfoFrg.getDescription();
       order.setDescription(description);
 
       //Distributer should not enter his salesmanId.
       if (!SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus)) {
-        order
-            .setSalesmanId(
-                Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
+        order.setSalesmanId(
+            Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
       }
       long typeId = saleOrderService.saveOrder(order);
 

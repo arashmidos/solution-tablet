@@ -98,6 +98,7 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int CUSTOMER_FRAGMENT = 7;
   public static final int ORDER_INFO_FRAGMENT = 8;
   public static final int CUSTOMER_SEARCH_FRAGMENT = 9;
+  public static final int DELIVERY_FRAGMENT_ID = 10;
   public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
   public static final int USER_TRACKING_FRAGMENT_ID = 12;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
@@ -760,7 +761,6 @@ public abstract class MainActivity extends AppCompatActivity {
       case CUSTOMER_SEARCH_FRAGMENT:
         fragment = CustomerSearchFragment.newInstance();
         break;
-
       case NEW_CUSTOMER_DETAIL_FRAGMENT_ID:
         fragment = AddCustomerFragment.newInstance();
         break;

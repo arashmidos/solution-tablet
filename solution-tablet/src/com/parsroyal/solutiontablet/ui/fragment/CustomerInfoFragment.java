@@ -3,7 +3,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,13 +33,9 @@ import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
-import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.activity.ReportListActivity;
 import com.parsroyal.solutiontablet.util.CameraManager;
@@ -113,13 +108,9 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   private long visitId;
   private CustomerServiceImpl customerService;
   private SettingServiceImpl settingService;
-  private VisitServiceImpl visitService;
-  private BaseInfoServiceImpl baseInfoService;
-  private LocationServiceImpl locationService;
   private Customer customer;
   private String saleType;
   private MainActivity mainActivity;
-  private SaleOrderServiceImpl saleOrderService;
   private VisitDetailFragment parent;
   private boolean expandedMap = false;
   private QuestionnaireServiceImpl questionnaireService;
@@ -160,10 +151,6 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     mainActivity = (MainActivity) getActivity();
     customerService = new CustomerServiceImpl(mainActivity);
     settingService = new SettingServiceImpl(mainActivity);
-    visitService = new VisitServiceImpl(mainActivity);
-    baseInfoService = new BaseInfoServiceImpl(mainActivity);
-    locationService = new LocationServiceImpl(mainActivity);
-    saleOrderService = new SaleOrderServiceImpl(mainActivity);
     questionnaireService = new QuestionnaireServiceImpl(mainActivity);
 
     customer = customerService.getCustomerById(customerId);
@@ -175,7 +162,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
     String checkCredit = settingService
         .getSettingValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE);
-    checkCreditEnabled = Empty.isEmpty(checkCredit) ? false : Boolean.valueOf(checkCredit);
+    checkCreditEnabled = Empty.isEmpty(checkCredit) || "null".equals(checkCredit) ? false
+        : Boolean.valueOf(checkCredit);
 
     setData();
 
@@ -278,7 +266,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   @OnClick({R.id.show_more_tv, R.id.register_order_lay, R.id.register_payment_lay,
       R.id.register_questionnaire_lay, R.id.register_image_lay, R.id.end_and_exit_visit_lay,
       R.id.no_activity_lay, R.id.register_location_btn, R.id.edit_map, R.id.fullscreen_map,
-      R.id.register_return_lay, R.id.edit_map_layout, R.id.fullscreen_map_layout,R.id.customer_report_lay})
+      R.id.register_return_lay, R.id.edit_map_layout, R.id.fullscreen_map_layout,
+      R.id.customer_report_lay})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_return_lay:
@@ -402,9 +391,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         goToRegisterPaymentFragment();
       }
     } else if (event instanceof ErrorEvent) {
-      Log.i(TAG, "Error");
       DialogUtil.dismissProgressDialog();
-      ToastUtil.toastError(mainActivity, "این عملیات امکان پذیر نیست");
+      ToastUtil.toastError(mainActivity, getString(R.string.operation_not_permitted));
     }
   }
 

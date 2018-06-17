@@ -27,11 +27,11 @@ import java.util.List;
 
 public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
 
-  private final HashSet<MapView> mMaps = new HashSet<>();
+//  private final HashSet<MapView> mMaps = new HashSet<>();
   private List<VisitLineListModel> visitLineList;
   private LayoutInflater inflater;
   private MainActivity mainActivity;
-  private LatLng loation = new LatLng(35.6892, 51.3890);
+//  private LatLng loation = new LatLng(35.6892, 51.3890);
 
 
   public PathAdapter(MainActivity mainActivity, List<VisitLineListModel> visitLineList) {
@@ -40,14 +40,14 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
     inflater = LayoutInflater.from(mainActivity);
   }
 
-  private static void setMapLocation(GoogleMap map, LatLng data) {
+  /*private static void setMapLocation(GoogleMap map, LatLng data) {
     // Add a marker for this item and set the camera
     map.moveCamera(CameraUpdateFactory.newLatLngZoom(data, 13f));
     map.addMarker(new MarkerOptions().position(data));
 
     // Set the map type back to normal.
     map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-  }
+  }*/
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -59,19 +59,19 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
   public void onBindViewHolder(ViewHolder holder, int position) {
     VisitLineListModel model = visitLineList.get(position);
     holder.setData(model, position);
-    holder.initializeMapView();
+//    holder.initializeMapView();
     // Keep track of MapView
-    mMaps.add(holder.mapView);
+//    mMaps.add(holder.mapView);
 
-    holder.mapView.setTag(loation);
+//    holder.mapView.setTag(loation);
 
     // Ensure the map has been initialised by the on map ready callback in ViewHolder.
     // If it is not ready yet, it will be initialised with the NamedLocation set as its tag
     // when the callback is received.
-    if (holder.map != null) {
-      // The map is already ready to be used
-      setMapLocation(holder.map, loation);
-    }
+//    if (holder.map != null) {
+//       The map is already ready to be used
+//      setMapLocation(holder.map, loation);
+//    }
   }
 
   @Override
@@ -79,7 +79,7 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
     return visitLineList.size();
   }
 
-  public class ViewHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
+  public class ViewHolder extends RecyclerView.ViewHolder/* implements OnMapReadyCallback*/ {
 
     @BindView(R.id.visitline_name)
     TextView visitlineName;
@@ -114,7 +114,7 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
           .format(mainActivity.getString(R.string.x_customers), model.getCustomerCount())));
     }
 
-    @Override
+   /* @Override
     public void onMapReady(GoogleMap googleMap) {
       MapsInitializer.initialize(mainActivity.getApplicationContext());
       map = googleMap;
@@ -125,18 +125,18 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
       if (data != null) {
         setMapLocation(map, data);
       }
-    }
+    }*/
 
     /**
      * Initialises the MapView by calling its lifecycle methods.
      */
-    public void initializeMapView() {
+   /* public void initializeMapView() {
       if (mapView != null) {
         // Initialise the MapView
         mapView.onCreate(null);
         // Set the map ready callback to receive the GoogleMap object
         mapView.getMapAsync(this);
       }
-    }
+    }*/
   }
 }

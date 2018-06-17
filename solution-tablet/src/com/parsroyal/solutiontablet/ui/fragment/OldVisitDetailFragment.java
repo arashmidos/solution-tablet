@@ -121,14 +121,12 @@ public class OldVisitDetailFragment extends BaseFragment implements ResultObserv
       saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
       View view = inflater.inflate(R.layout.fragment_visit_detail, null);
-      mainLayout = (GridView) view.findViewById(R.id.mainLayout);
+      mainLayout =  view.findViewById(R.id.mainLayout);
       mainLayout.setAdapter(new MainLayoutAdapter());
       setItemClickListener();
 
       return view;
     } catch (Exception ex) {
-      Logger.sendError("UI Exception", "Error in creating OldVisitDetailFragment " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
       return inflater.inflate(R.layout.view_error_page, null);
     }
   }
@@ -340,9 +338,6 @@ public class OldVisitDetailFragment extends BaseFragment implements ResultObserv
       orderDto.setId(id);
       return orderDto;
     } catch (Exception e) {
-      Logger.sendError("Data Storage Exception",
-          "Error in creating draft order " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(oldMainActivity, new UnknownSystemException(e));
     }
     return null;

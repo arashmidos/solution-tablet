@@ -56,7 +56,7 @@ public class OldOrderItemsFragment extends BaseFragment {
       saleOrderService = new SaleOrderServiceImpl(getActivity());
 
       View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_order_items, null);
-      dataTb = (TableLayout) view.findViewById(R.id.orderItemsDataTable);
+      dataTb = view.findViewById(R.id.orderItemsDataTable);
       if (isRejected()) {
         orderItems = saleOrderService.getLocalOrderItemDtoList(orderId, rejectedGoodsList);
 
@@ -70,7 +70,8 @@ public class OldOrderItemsFragment extends BaseFragment {
 
     } catch (Exception e) {
       Crashlytics
-          .log(Log.ERROR, "UI Exception", "Error in creating OldOrderItemsFragment " + e.getMessage());
+          .log(Log.ERROR, "UI Exception",
+              "Error in creating OldOrderItemsFragment " + e.getMessage());
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
       return inflater.inflate(R.layout.view_error_page, null);
@@ -88,45 +89,37 @@ public class OldOrderItemsFragment extends BaseFragment {
     final Goods goods = item.getGoods();
 
     View itemView = getActivity().getLayoutInflater().inflate(R.layout.row_layout_order_item, null);
-    TextView goodNameTv = (TextView) itemView.findViewById(R.id.goodNameTv);
-    TextView goodAmountTv = (TextView) itemView.findViewById(R.id.goodAmountTv);
-    TextView unit1CountTv = (TextView) itemView.findViewById(R.id.unit1CountTv);
-    TextView unit2CountTv = (TextView) itemView.findViewById(R.id.unit2CountTv);
-    TextView itemAmountTv = (TextView) itemView.findViewById(R.id.itemAmountTv);
-    ImageButton editItemIb = (ImageButton) itemView.findViewById(R.id.editItemIb);
-    ImageButton deleteItemIb = (ImageButton) itemView.findViewById(R.id.deleteItemIb);
+    TextView goodNameTv = itemView.findViewById(R.id.goodNameTv);
+    TextView goodAmountTv = itemView.findViewById(R.id.goodAmountTv);
+    TextView unit1CountTv = itemView.findViewById(R.id.unit1CountTv);
+    TextView unit2CountTv = itemView.findViewById(R.id.unit2CountTv);
+    TextView itemAmountTv = itemView.findViewById(R.id.itemAmountTv);
+    ImageButton editItemIb = itemView.findViewById(R.id.editItemIb);
+    ImageButton deleteItemIb = itemView.findViewById(R.id.deleteItemIb);
 
-    {
-      if (Empty.isNotEmpty(goods)) {
-        goodNameTv.setText(Empty.isNotEmpty(goods.getTitle()) ? goods.getTitle() : "--");
+    if (Empty.isNotEmpty(goods)) {
+      goodNameTv.setText(Empty.isNotEmpty(goods.getTitle()) ? goods.getTitle() : "--");
 
-        Double price = Double.valueOf(goods.getPrice()) / 1000D;
-        goodAmountTv.setText(NumberUtil.getCommaSeparated(price));
-      }
+      Double price = Double.valueOf(goods.getPrice()) / 1000D;
+      goodAmountTv.setText(NumberUtil.getCommaSeparated(price));
     }
-    {
-      Double count = Double.valueOf(item.getGoodsCount()) / 1000D;
-      unit1CountTv.setText(NumberUtil.formatDoubleWith2DecimalPlaces(count) + (
-          Empty.isNotEmpty(goods.getUnit1Title()) ?
-              goods.getUnit1Title() :
-              isRejected() ? "" : "--"));
+
+    Double count = Double.valueOf(item.getGoodsCount()) / 1000D;
+    unit1CountTv.setText(NumberUtil.formatDoubleWith2DecimalPlaces(count) + (
+        Empty.isNotEmpty(goods.getUnit1Title()) ?
+            goods.getUnit1Title() : isRejected() ? "" : "--"));
+
+    if (Empty.isNotEmpty(goods.getUnit1Count()) && !goods.getUnit1Count().equals(0L)) {
+      Double secondUnitCount =
+          Double.valueOf(item.getGoodsCount()) / Double.valueOf(goods.getUnit1Count());
+      secondUnitCount = secondUnitCount / 1000D;
+      unit2CountTv.setText(NumberUtil.formatDoubleWith2DecimalPlaces(secondUnitCount) + (
+          Empty.isNotEmpty(goods.getUnit2Title()) ?
+              goods.getUnit2Title() : isRejected() ? "" : "--"));
     }
-    {
-      if (Empty.isNotEmpty(goods.getUnit1Count()) && !goods.getUnit1Count().equals(0L)) {
-        Double secondUnitCount =
-            Double.valueOf(item.getGoodsCount()) / Double.valueOf(goods.getUnit1Count());
-        secondUnitCount = secondUnitCount / 1000D;
-        unit2CountTv.setText(
-            NumberUtil.formatDoubleWith2DecimalPlaces(secondUnitCount) + (
-                Empty.isNotEmpty(goods.getUnit2Title()) ?
-                    goods.getUnit2Title() :
-                    isRejected() ? "" : "--"));
-      }
-    }
-    {
-      Double itemAmount = Double.valueOf(item.getAmount()) / 1000D;
-      itemAmountTv.setText(NumberUtil.getCommaSeparated(itemAmount));
-    }
+
+    Double itemAmount = Double.valueOf(item.getAmount()) / 1000D;
+    itemAmountTv.setText(NumberUtil.getCommaSeparated(itemAmount));
 
     if (disabled) {
       editItemIb.setVisibility(View.INVISIBLE);

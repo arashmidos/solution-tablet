@@ -7,8 +7,9 @@ import com.parsroyal.solutiontablet.R;
  */
 public enum VisitInformationDetailType {
   CREATE_ORDER(10L, R.string.title_order, R.drawable.ic_cart_24_dp, R.string.title_order),
-  DELIVER_ORDER(11L, R.string.title_order, R.drawable.ic_cart_24_dp,
-      R.string.title_order),// Later, Need update image and title
+  // Later, Need update image and title
+  DELIVER_ORDER(11L, R.string.title_order, R.drawable.ic_cart_24_dp, R.string.title_order),
+
   CREATE_REJECT(20L, R.string.title_reject, R.drawable.ic_return_24_dp, R.string.title_reject),
   CREATE_INVOICE(30L, R.string.title_factor, R.drawable.ic_cart_24_dp,
       R.string.title_factor),// Later,Need update image
@@ -24,6 +25,7 @@ public enum VisitInformationDetailType {
   private final int drawable;
   private final int visitTitle;
   private long value;
+
   VisitInformationDetailType(long value, int title, int drawable, int visitTitle) {
     this.value = value;
     this.title = title;

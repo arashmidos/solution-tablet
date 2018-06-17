@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
 public class ReportFragment extends BaseFragment {
 
@@ -25,6 +27,8 @@ public class ReportFragment extends BaseFragment {
   private OrderListFragment orderListFragment;
   private ReturnListFragment returnListFragment;
   private AllQuestionnaireListFragment allQuestionnaireListFragment;
+  private String saleType;
+  private DeliveryListFragment deliveryListFragment;
 
   public ReportFragment() {
     // Required empty public constructor
@@ -43,6 +47,8 @@ public class ReportFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     mainActivity.changeTitle(getString(R.string.reports));
     tabs.setupWithViewPager(viewpager);
+    saleType = new SettingServiceImpl(mainActivity)
+        .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
     initFragments();
     setUpViewPager();
     viewpager.setCurrentItem(3);
@@ -54,13 +60,21 @@ public class ReportFragment extends BaseFragment {
     viewPagerAdapter.add(allQuestionnaireListFragment, getString(R.string.questionnaire));
     viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
     viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
-    viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
+    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+      viewPagerAdapter.add(deliveryListFragment, getString(R.string.delivered_orders));
+    } else {
+      viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
+    }
     viewpager.setAdapter(viewPagerAdapter);
   }
 
   private void initFragments() {
-    paymentListFragment = PaymentListFragment.newInstance(null,null);
-    orderListFragment = OrderListFragment.newInstance(null, null);
+    paymentListFragment = PaymentListFragment.newInstance(null, null);
+    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+      deliveryListFragment = DeliveryListFragment.newInstance(null, null);
+    } else {
+      orderListFragment = OrderListFragment.newInstance(null, null);
+    }
     returnListFragment = ReturnListFragment.newInstance(null, null);
     allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(null);
   }

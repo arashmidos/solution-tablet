@@ -90,6 +90,7 @@ public class VisitDetailFragment extends BaseFragment {
   private CustomerDetailViewPagerAdapter viewPagerAdapter;
   private CustomerInfoFragment customerInfoFragment;
   private OrderListFragment orderListFragment;
+  private DeliveryListFragment deliveryListFragment;
   private PaymentListFragment paymentListFragment;
   private ReturnListFragment returnListFragment;
   private PictureFragment pictureFragment;
@@ -194,10 +195,10 @@ public class VisitDetailFragment extends BaseFragment {
     View dialogView = inflater.inflate(R.layout.dialog_register_no, null);
     dialogBuilder.setView(dialogView);
 
-    Button registerNoBtn = (Button) dialogView.findViewById(R.id.register_btn);
-    TextView cancelTv = (TextView) dialogView.findViewById(R.id.cancel_tv);
-    TextView errorMessage = (TextView) dialogView.findViewById(R.id.error_msg);
-    Spinner noSpinner = (Spinner) dialogView.findViewById(R.id.no_spinner);
+    Button registerNoBtn = dialogView.findViewById(R.id.register_btn);
+    TextView cancelTv = dialogView.findViewById(R.id.cancel_tv);
+    TextView errorMessage = dialogView.findViewById(R.id.error_msg);
+    Spinner noSpinner = dialogView.findViewById(R.id.no_spinner);
     AlertDialog alertDialog = dialogBuilder.create();
 
     wants.add(new LabelValue(-1l, mainActivity.getString(R.string.reason_register_no)));
@@ -352,7 +353,11 @@ public class VisitDetailFragment extends BaseFragment {
     arguments.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     paymentListFragment = PaymentListFragment.newInstance(arguments, this);
     pictureFragment = PictureFragment.newInstance(arguments);
-    orderListFragment = OrderListFragment.newInstance(arguments, this);
+    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+      deliveryListFragment = DeliveryListFragment.newInstance(arguments, this);
+    } else {
+      orderListFragment = OrderListFragment.newInstance(arguments, this);
+    }
     returnListFragment = ReturnListFragment.newInstance(arguments, this);
     customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
     allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(arguments);
@@ -364,7 +369,11 @@ public class VisitDetailFragment extends BaseFragment {
     viewPagerAdapter.add(allQuestionnaireListFragment, getString(R.string.questionnaire));
     viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
     viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
-    viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
+    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+      viewPagerAdapter.add(deliveryListFragment, getString(R.string.orders_for_delivery));
+    } else {
+      viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
+    }
     viewPagerAdapter.add(customerInfoFragment, getString(R.string.customer_information));
     viewpager.setAdapter(viewPagerAdapter);
   }

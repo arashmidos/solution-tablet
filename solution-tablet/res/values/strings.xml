@@ -175,7 +175,6 @@
 
   <string name="order_status_DRAFT">پیشنویس</string>
   <string name="order_status_SENT">ارسال شده</string>
-  <string name="order_status_DELIVERABLE">قابل تحویل</string>
   <string name="order_status_INVOICED">فاکتور شده</string>
   <string name="order_status_CANCELED">ابطال شده</string>
   <string name="order_status_SENT_INVOICE">فاکتور شده و ارسال شده</string>
@@ -595,5 +594,7 @@
   <string name="agent">نماینده</string>
   <string name="goods_for_delivery">کالاهای قابل تحویل</string>
   <string name="orders_for_delivery">سفارش های قابل تحویل</string>
+  <string name="delivered_orders">تحویل داده شده ها</string>
+  <string name="operation_not_permitted">این عملیات امکان پذیر نیست</string>
 
 </resources>

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -23,8 +21,7 @@ import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
-import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.ui.adapter.DeliveryAdapter;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
@@ -35,7 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 /**
  * @author arash
  */
-public class OrderListFragment extends BaseFragment {
+public class DeliveryListFragment extends BaseFragment {
 
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
@@ -48,9 +45,8 @@ public class OrderListFragment extends BaseFragment {
   @BindView(R.id.total_sale)
   LinearLayout totalSale;
 
-
   private Long visitId;
-  private OrderAdapter adapter;
+  private DeliveryAdapter adapter;
   private MainActivity mainActivity;
   private SaleOrderServiceImpl saleOrderService;
   private SaleOrderSO saleOrderSO = new SaleOrderSO();
@@ -59,12 +55,12 @@ public class OrderListFragment extends BaseFragment {
   private String saleType;
   private List<SaleOrderListModel> model;
 
-  public OrderListFragment() {
+  public DeliveryListFragment() {
     // Required empty public constructor
   }
 
-  public static OrderListFragment newInstance(Bundle arguments, VisitDetailFragment parent) {
-    OrderListFragment orderListFragment = new OrderListFragment();
+  public static DeliveryListFragment newInstance(Bundle arguments, VisitDetailFragment parent) {
+    DeliveryListFragment orderListFragment = new DeliveryListFragment();
     orderListFragment.parent = parent;
     orderListFragment.setArguments(arguments);
     return orderListFragment;
@@ -87,14 +83,11 @@ public class OrderListFragment extends BaseFragment {
       visitId = args.getLong(Constants.VISIT_ID, -1);
     }
     setUpRecyclerView();
+    fabAddOrder.setVisibility(View.GONE);
     if (parent == null) {
       //Report
-      fabAddOrder.setVisibility(View.GONE);
       totalSale.setVisibility(View.VISIBLE);
-      displayTotalSale();
-    }
-    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
-      fabAddOrder.setVisibility(View.GONE);
+      displayTotalSale();//TODO:
     }
 
     return view;
@@ -116,37 +109,26 @@ public class OrderListFragment extends BaseFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     model = getOrderList();
-    adapter = new OrderAdapter(mainActivity, model, parent == null, visitId, saleType);
+    adapter = new DeliveryAdapter(mainActivity, model, parent == null, visitId, saleType);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
-    if (!Empty.isEmpty(getArguments())) {
-      recyclerView.addOnScrollListener(new OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-          super.onScrolled(recyclerView, dx, dy);
-          if (dy > 0) {
-            fabAddOrder.setVisibility(View.GONE);
-          } else {
-            fabAddOrder.setVisibility(View.VISIBLE);
-          }
-        }
-      });
-    }
   }
 
   private List<SaleOrderListModel> getOrderList() {
     if (parent != null) {
       saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
+      saleOrderSO.setStatusId(SaleOrderStatus.DELIVERABLE.getId());
+    } else {
+      saleOrderSO.setStatusId(SaleOrderStatus.DELIVERED.getId());
     }
     saleOrderSO.setIgnoreDraft(true);
-    saleOrderSO.setStatusId(SaleOrderStatus.READY_TO_SEND.getId());
     return saleOrderService.findOrders(saleOrderSO);
   }
 
   @Override
   public int getFragmentId() {
-    return 0;
+    return MainActivity.DELIVERY_FRAGMENT_ID;
   }
 
   @Override
@@ -167,17 +149,5 @@ public class OrderListFragment extends BaseFragment {
       model = getOrderList();
       adapter.update(model);
     }
-  }
-
-  @OnClick(R.id.fab_add_order)
-  public void onClick() {
-    if (parent != null) {
-      parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
-    }
-  }
-
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
   }
 }
