@@ -26,7 +26,6 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.DeliveryAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
 import com.parsroyal.solutiontablet.util.DateUtil;
-import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
@@ -151,23 +150,28 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
     }
 
     private void changeVisibility() {
-      if (order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
-        if (!MultiScreenUtility.isTablet(context)) {
-          editImageLayout.setVisibility(View.GONE);
-          deleteImageLayout.setVisibility(View.GONE);
-          uploadImageLayout.setVisibility(View.GONE);
-        } else {
-          editImageLayout.setVisibility(View.INVISIBLE);
-          deleteImageLayout.setVisibility(View.INVISIBLE);
-          uploadImageLayout.setVisibility(View.INVISIBLE);
-        }
-
-        orderStatusTv.setVisibility(View.VISIBLE);
+      if (!MultiScreenUtility.isTablet(context)) {
+        editImageLayout.setVisibility(View.GONE);
+        deleteImageLayout.setVisibility(View.GONE);
+        uploadImageLayout.setVisibility(View.GONE);
+      } else {
+        editImageLayout.setVisibility(View.INVISIBLE);
+        deleteImageLayout.setVisibility(View.INVISIBLE);
+        uploadImageLayout.setVisibility(View.INVISIBLE);
       }
 
-      uploadImageLayout.setVisibility(View.GONE);
-      deleteImageLayout.setVisibility(View.GONE);
-      editImageLayout.setVisibility(View.GONE);
+      orderStatusTv.setVisibility(View.VISIBLE);
+      Long status = order.getStatus();
+      if (SaleOrderStatus.DELIVERABLE.getId().equals(status)) {
+        orderStatusTv.setText("قابل تحویل");
+      } else if (SaleOrderStatus.DELIVERABLE_SENT.getId().equals(status)) {
+        orderStatusTv.setText("ارسال شده");
+      } else if (SaleOrderStatus.DELIVERED.getId().equals(status)) {
+        orderStatusTv.setText("تحویل داده شده");
+      } else if (SaleOrderStatus.CANCELED.getId().equals(status)) {
+        orderStatusTv.setText("باطل شده");
+      }
+
       if (isFromReport) {
         customerNameTv.setVisibility(View.VISIBLE);
       } else {
@@ -194,7 +198,7 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
           Bundle args = new Bundle();
           args.putLong(Constants.ORDER_ID, order.getId());
           args.putString(Constants.SALE_TYPE, saleType);
-          args.putLong(Constants.VISIT_ID, order.getVisitId());
+          args.putLong(Constants.VISIT_ID, visitId);
           args.putBoolean(Constants.READ_ONLY, false);
           setPageStatus(args);
           mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);

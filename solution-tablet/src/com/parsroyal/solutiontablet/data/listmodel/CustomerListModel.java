@@ -30,6 +30,15 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   protected boolean hasPicture;
   protected HashSet<VisitInformationDetailType> details = new HashSet<>();
   private boolean hasRejectOrder;
+  private boolean hasDelivery;
+
+  public boolean isHasDelivery() {
+    return hasDelivery;
+  }
+
+  public void setHasDelivery(boolean hasDelivery) {
+    this.hasDelivery = hasDelivery;
+  }
 
   public boolean isHasRejectOrder() {
     return hasRejectOrder;

@@ -257,17 +257,20 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
           argsList.add(String.valueOf(SaleOrderStatus.SENT.getId()));
         } else if (statusId.equals(SaleOrderStatus.DELIVERED.getId())) {
           argsList.add(String.valueOf(VisitInformationDetailType.DELIVER_ORDER.getValue()));
-          sql = sql.concat(
-              " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
+          sql = sql.concat(" AND ( o." + SaleOrder.COL_STATUS + " = ? OR o."
+              + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ?) ");
           argsList.add(String.valueOf(statusId));
           argsList.add(String.valueOf(SaleOrderStatus.DELIVERABLE_SENT.getId()));
+          argsList.add(String.valueOf(SaleOrderStatus.CANCELED.getId()));
         } else if (statusId.equals(SaleOrderStatus.DELIVERABLE.getId())) {
           argsList.add("0");
-          sql = sql.concat(
-              " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ?) ");
+          sql = sql.concat(" AND ( o." + SaleOrder.COL_STATUS + " = ? OR o."
+              + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS
+              + " = ? OR o." + SaleOrder.COL_STATUS + " = ?) ");
           argsList.add(String.valueOf(statusId));
           argsList.add(String.valueOf(SaleOrderStatus.DELIVERED.getId()));
           argsList.add(String.valueOf(SaleOrderStatus.DELIVERABLE_SENT.getId()));
+          argsList.add(String.valueOf(SaleOrderStatus.CANCELED.getId()));
         } else if (statusId.equals(SaleOrderStatus.REJECTED.getId())) {
           argsList.add(String.valueOf(VisitInformationDetailType.CREATE_REJECT.getValue()));
           sql = sql.concat(" ").concat(

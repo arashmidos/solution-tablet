@@ -27,7 +27,15 @@
         app:titleTextColor="@color/white">
 
       </android.support.v7.widget.Toolbar>
-
+      <Button
+        android:id="@+id/cancel_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:visibility="gone"
+        android:layout_gravity="center|start"
+        android:text="@string/title_cancel_sale_order"
+        android:textColor="@color/red" />
       <TextView
         android:id="@+id/toolbar_title"
         style="@style/IranSans.Medium"

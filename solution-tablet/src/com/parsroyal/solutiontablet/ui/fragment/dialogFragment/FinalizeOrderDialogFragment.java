@@ -5,9 +5,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,21 +17,30 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
+import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
+import com.parsroyal.solutiontablet.exception.BusinessException;
+import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderFinalizeAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
+import com.parsroyal.solutiontablet.util.DialogUtil;
+import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import org.greenrobot.eventbus.EventBus;
 
 public class FinalizeOrderDialogFragment extends DialogFragment {
 
+  private static final String TAG = FinalizeOrderDialogFragment.class.getSimpleName();
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
   @BindView(R.id.total_amount_title)
@@ -42,6 +53,8 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   TextView toolbarTitle;
   @BindView(R.id.bottom_layout)
   ViewGroup bottomLayout;
+  @BindView(R.id.cancel_order)
+  Button cancelButton;
 
   private OrderFinalizeAdapter adapter;
   private MainActivity mainActivity;
@@ -52,6 +65,8 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   private Long orderStatus;
   private String pageStatus;
   private GoodsDtoList rejectedGoodsList;
+  private long visitId;
+
 
   public FinalizeOrderDialogFragment() {
     // Required empty public constructor
@@ -83,6 +98,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     orderStatus = arguments.getLong(Constants.ORDER_STATUS);
     pageStatus = arguments.getString(Constants.PAGE_STATUS);
     order = saleOrderService.findOrderDtoById(orderId);
+    visitId = arguments.getLong(Constants.VISIT_ID, -1);
     rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
 
     setData();
@@ -91,11 +107,13 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   }
 
   private void setData() {
-    totalAmountTv.setText(
-        NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(order.getAmount() / 1000) + " " +
-            getString(R.string.common_irr_currency)));
+    totalAmountTv.setText(NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(
+        order.getAmount() / 1000) + " " + getString(R.string.common_irr_currency)));
     if (pageStatus.equals(Constants.VIEW)) {
       submitTv.setText(R.string.payment_detail);
+    } else if (orderStatus.equals(SaleOrderStatus.DELIVERABLE.getId())) {
+      cancelButton.setVisibility(View.VISIBLE);
+      submitTv.setText("تحویل سفارش");
     }
 
     if (isRejected()) {
@@ -134,12 +152,12 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     recyclerView.setAdapter(adapter);
   }
 
-  @OnClick({R.id.close, R.id.submit_btn, R.id.bottom_layout})
+  @OnClick({R.id.close, R.id.submit_btn, R.id.bottom_layout, R.id.cancel_order})
   public void onClick(View view) {
     switch (view.getId()) {
-      case R.id.close:
+      case R.id.close://TODO: CHECK IF IS DISTRIBUTOR
         getDialog().dismiss();
-        if (pageStatus.equals(Constants.VIEW)) {
+        if (pageStatus.equals(Constants.VIEW)|| isDelivery()) {
           mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
         }
         break;
@@ -148,6 +166,47 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
         orderFragment.goToOrderInfoFragment();
         getDialog().dismiss();
         break;
+      case R.id.cancel_order:
+        showSaveOrderConfirmDialog(getString(R.string.title_cancel_sale_order),
+            SaleOrderStatus.CANCELED.getId());
+        break;
+    }
+  }
+
+  private boolean isDelivery() {
+    return orderStatus.equals(SaleOrderStatus.DELIVERABLE.getId()) ||
+     orderStatus.equals(SaleOrderStatus.DELIVERED.getId()) ||
+     orderStatus.equals(SaleOrderStatus.DELIVERABLE_SENT.getId());
+  }
+
+  private void showSaveOrderConfirmDialog(String title, final Long statusId) {
+    DialogUtil.showConfirmDialog(mainActivity, title,
+        mainActivity.getString(R.string.message_are_you_sure),
+        (dialog, which) -> saveOrder(statusId));
+  }
+
+  private void saveOrder(Long statusId) {
+    try {
+      order.setStatus(statusId);
+
+//      String description = "";//orderInfoFrg.getDescription();
+//      order.setDescription(description);
+
+      long typeId = saleOrderService.saveOrder(order);
+
+      VisitInformationDetail visitDetail = new VisitInformationDetail(visitId,
+          VisitInformationDetailType.DELIVER_ORDER, typeId);
+      new VisitServiceImpl(mainActivity).saveVisitDetail(visitDetail);
+      getDialog().dismiss();
+      mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+    } catch (BusinessException ex) {
+      Log.e(TAG, ex.getMessage(), ex);
+      ToastUtil.toastError(mainActivity, ex);
+    } catch (Exception ex) {
+      Logger.sendError("Data Storage Exception",
+          "Error in saving new order detail " + ex.getMessage());
+      Log.e(TAG, ex.getMessage(), ex);
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
   }
 

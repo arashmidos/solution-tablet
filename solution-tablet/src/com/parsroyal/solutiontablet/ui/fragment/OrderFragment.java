@@ -520,6 +520,7 @@ public class OrderFragment extends BaseFragment {
     bundle.putLong(Constants.ORDER_STATUS, orderStatus);
     bundle.putString(Constants.PAGE_STATUS, pageStatus);
     bundle.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
+    bundle.putLong(Constants.VISIT_ID, visitId);
     finalizeOrderDialogFragment.setArguments(bundle);
 
     finalizeOrderDialogFragment.show(ft, "order");

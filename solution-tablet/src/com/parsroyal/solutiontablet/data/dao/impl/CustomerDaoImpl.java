@@ -374,6 +374,10 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         entitiesMap.get(primaryKey).setHasPicture(true);
         entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.TAKE_PICTURE);
       }
+      if (listModel.isHasDelivery()) {
+        entitiesMap.get(primaryKey).setHasDelivery(true);
+        entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.DELIVER_ORDER);
+      }
     }
     cursor.close();
     return new ArrayList<>(entitiesMap.values());
@@ -421,6 +425,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
       customerListModel.setAddLocation(true);
     } else if (type == VisitInformationDetailType.CREATE_REJECT.getValue()) {
       customerListModel.sethasRejectOrder(true);
+    } else if (type == VisitInformationDetailType.DELIVER_ORDER.getValue()) {
+      customerListModel.setHasDelivery(true);
     }
 
     customerListModel.setLastVisit(cursor.getString(10));

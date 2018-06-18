@@ -203,7 +203,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       }
     }
 
-    public void setListeners() {
+    void setListeners() {
       customerLay.setOnClickListener(v -> showCustomerDetailDialog());
     }
 
