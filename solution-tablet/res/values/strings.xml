@@ -161,18 +161,9 @@
         وب محصولات خود را با کیفیتی شایسته به بازار عرضه نماید تا به این وسیله گامی بزرگ در جهت پیشرفت صنایع گوناگون در
         کشور عزیزمان برداشته شود.
     </string>
-  <string name="message_deliverable_goods_transferred_successfully">اطلاعات کالاهای قابل تحویل با موفقیت منتقل شد.</string>
-  <string name="message_exception_in_transferring_deliverable_goods">خطا در انتقال کالاهای قابل تحویل</string>
-  <string name="message_transferring_deliverable_goods_data">در حال انتقال کالاهای قابل تحویل …</string>
   <string name="message_exit">خروج از برنامه</string>
   <string name="message_do_you_want_to_exit">آیا می خواهید از برنامه خارج شوید؟</string>
-  <string name="message_exception_in_transfering_sale_order_for_delivery">خطا در انتقال سفارشات قابل تحویل</string>
-  <string name="message_found_no_deliverable_orders">هیچ سفارش قابل تحویلی وجود ندارد.</string>
-  <string name="message_transferring_deliverable_orders">در حال انتقال سفارشات قابل تحویل …</string>
-  <string name="message_deliverable_orders_transferred_successfully">سفارشات قابل تحویل با موفقیت منتقل شد.</string>
   <string name="common_irr_currency">ریال</string>
-
-
   <string name="order_status_DRAFT">پیشنویس</string>
   <string name="order_status_SENT">ارسال شده</string>
   <string name="order_status_INVOICED">فاکتور شده</string>
@@ -200,6 +191,7 @@
     </string>
   <string name="title_delete_order_item">حذف آیتم سفارش</string>
   <string name="message_are_you_sure">آیا مطمئن هستید؟</string>
+  <string name="message_are_you_sure_not_recoverable">آیا مطمئن هستید؟ این عملیات برگشت پذیر نیست</string>
   <string name="title_cancel">انصراف</string>
   <string name="title_cancel_sale_order">ابطال سفارش</string>
   <string name="title_cancel_sale_x">"ابطال %1$s"</string>
@@ -596,5 +588,9 @@
   <string name="orders_for_delivery">سفارش های قابل تحویل</string>
   <string name="delivered_orders">تحویل داده شده ها</string>
   <string name="operation_not_permitted">این عملیات امکان پذیر نیست</string>
+  <string name="request_gift">درخواست تخفیف و جوایز</string>
+  <string name="getting_info">در حال دریافت اطلاعات ...</string>
+  <string name="sending">در حال ارسال ...</string>
+  <string name="goods_request">درخواست کالا</string>
 
 </resources>

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/root"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/features_background"
@@ -17,6 +18,16 @@
       android:layout_width="match_parent"
       android:layout_height="56dp">
 
+      <Button
+        android:id="@+id/cancel_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_gravity="center|start"
+        android:text="@string/title_cancel_sale_order"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
       <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

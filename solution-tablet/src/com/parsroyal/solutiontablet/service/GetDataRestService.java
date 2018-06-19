@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.service;
 
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
-import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.model.BaseInfoList;
 import com.parsroyal.solutiontablet.data.model.CityList;
 import com.parsroyal.solutiontablet.data.model.ProvinceList;
@@ -52,4 +51,7 @@ public interface GetDataRestService {
 
   @GET("saleorders/{distributor_id}/deliverable")
   Call<SaleOrderList> getAllSaleOrderForDelivery(@Path("distributor_id") String distributorId);
+
+  @GET("users/goodsrequest/{usercode}")
+  Call<String> getGoodsRequest(@Path("usercode") String userCode);
 }

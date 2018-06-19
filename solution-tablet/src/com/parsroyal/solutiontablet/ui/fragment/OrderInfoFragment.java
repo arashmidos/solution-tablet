@@ -195,15 +195,15 @@ public class OrderInfoFragment extends BaseFragment {
     String orderDate = order.getDate();
     dateTv.setText(Empty.isNotEmpty(orderDate) ? NumberUtil.digitsToPersian(orderDate) : "--");
     Long number = order.getNumber();
-    orderCodeTv.setText(
-        Empty.isNotEmpty(number) && order.getNumber() != 0 ? NumberUtil
-            .digitsToPersian(String.valueOf(number)) : "--");
+    orderCodeTv.setText(Empty.isNotEmpty(number) && order.getNumber() != 0 ? NumberUtil
+        .digitsToPersian(String.valueOf(number)) : "--");
 
     String title = getProperTitle();
 
     dateTitleTv.setText(String.format(Locale.US, getString(R.string.date_x), title));
     orderCodeTitleTv.setText(String.format(Locale.US, getString(R.string.number_x), title));
     submitOrderBtn.setText(String.format(Locale.US, getString(R.string.x_order_submit), title));
+    descriptionEdt.setText(String.format(Locale.US, getString(R.string.description_x), title));
 
     if (isRejected()) {
       amountTv.setText(R.string.amount_to_return);
@@ -253,7 +253,7 @@ public class OrderInfoFragment extends BaseFragment {
       case R.id.order_gift_layout:
       case R.id.register_gift_tv:
         if (giftRequestSent) {
-          registerGiftTv.setText("در حال دریافت اطلاعات ...");
+          registerGiftTv.setText(R.string.getting_info);
           new GiftDataTransferBizImpl(mainActivity).exchangeData(orderBackendId);
         } else {
           order = saleOrderService.findOrderDtoById(orderId);
@@ -266,7 +266,7 @@ public class OrderInfoFragment extends BaseFragment {
             saleOrderService.saveOrder(order);
             SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
             BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
-            registerGiftTv.setText("در حال ارسال ...");
+            registerGiftTv.setText(R.string.sending);
             if (Empty.isNotEmpty(saleOrder)) {
               saleOrder.setStatusCode(SaleOrderStatus.GIFT.getId());
               OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity);
@@ -282,6 +282,9 @@ public class OrderInfoFragment extends BaseFragment {
               .equals(SaleOrderStatus.REJECTED.getId())) {
             showSaveOrderConfirmDialog(getString(R.string.title_save_order),
                 SaleOrderStatus.REJECTED.getId());
+          } else if (isDelivery()) {
+            showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                SaleOrderStatus.DELIVERED.getId());
           } else {
             if (isCold()) {
               showSaveOrderConfirmDialog(getString(R.string.title_save_order),
@@ -298,16 +301,12 @@ public class OrderInfoFragment extends BaseFragment {
 
   private void showSaveOrderConfirmDialog(String title, final Long statusId) {
     DialogUtil.showConfirmDialog(mainActivity, title,
-        getString(R.string.message_are_you_sure), (dialog, which) ->
-        {
+        getString(R.string.message_are_you_sure), (dialog, which) -> {
           if (!pageStatus.equals(Constants.VIEW)) {
             saveOrder(statusId);
           }
-          if (visitId != 0l) {// WHY?
-            mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
-          } else {
-            mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
-          }
+
+          mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
         });
   }
 
@@ -406,6 +405,10 @@ public class OrderInfoFragment extends BaseFragment {
     }
   }
 
+  private boolean isDelivery() {
+    return SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus);
+  }
+
   /*
    @return true if it's one of the REJECTED states
     */
@@ -476,8 +479,8 @@ public class OrderInfoFragment extends BaseFragment {
     } else if (event instanceof DataTransferSuccessEvent) {
       if (event.getStatusCode() == StatusCodes.SUCCESS) {
         registerGiftTv.setText("مشاهده تخفیف و جوایز");
-        DialogUtil.showCustomDialog(mainActivity, "تخفیف و جوایز", event.getMessage(),"تایید",
-            (dialogInterface, i) -> dialogInterface.dismiss(),"",null,Constants.ICON_MESSAGE);
+        DialogUtil.showCustomDialog(mainActivity, "تخفیف و جوایز", event.getMessage(), "تایید",
+            (dialogInterface, i) -> dialogInterface.dismiss(), "", null, Constants.ICON_MESSAGE);
       } else if (event.getStatusCode() == StatusCodes.NO_DATA_ERROR) {
         registerGiftTv.setText("تلاش مجدد");
 

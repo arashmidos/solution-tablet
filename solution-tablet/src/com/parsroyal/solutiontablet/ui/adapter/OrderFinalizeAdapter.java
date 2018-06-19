@@ -157,12 +157,13 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
           .into(goodImg);
       goodTitleTv.setText(NumberUtil.digitsToPersian(item.getGoods().getTitle()));
       Double goodsAmount = Double.valueOf(item.getGoods().getPrice()) / 1000D;
-      amountTv.setText(NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(goodsAmount)) + " " +
-          mainActivity.getString(R.string.common_irr_currency));
+      amountTv.setText(String.format("%s %s", NumberUtil.digitsToPersian(
+          NumberUtil.getCommaSeparated(goodsAmount)),
+          mainActivity.getString(R.string.common_irr_currency)));
       Double totalAmount = Double.valueOf(item.getAmount()) / 1000D;
-      totalAmountTv
-          .setText(NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(totalAmount)) + " " +
-              mainActivity.getString(R.string.common_irr_currency));
+      totalAmountTv.setText(String.format("%s %s",
+          NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(totalAmount)),
+          mainActivity.getString(R.string.common_irr_currency)));
       countTv.setText(NumberUtil.digitsToPersian(String.valueOf(item.getGoodsCount() / 1000)));
       unit2CountTv
           .setText(NumberUtil.digitsToPersian(String.valueOf(item.getGoodsUnit2Count() / 1000)));
@@ -192,7 +193,10 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
     private void deleteItem() {
       DialogUtil
           .showConfirmDialog(mainActivity, mainActivity.getString(R.string.title_delete_order_item),
-              mainActivity.getString(R.string.message_are_you_sure), (dialog, which) -> {
+              mainActivity.getString(
+                  SaleOrderStatus.DELIVERABLE.getId().equals(order.getStatus()) ?
+                      R.string.message_are_you_sure_not_recoverable :
+                      R.string.message_are_you_sure), (dialog, which) -> {
                 try {
                   saleOrderService.deleteOrderItem(item.getId(), isRejected(order.getStatus()));
 

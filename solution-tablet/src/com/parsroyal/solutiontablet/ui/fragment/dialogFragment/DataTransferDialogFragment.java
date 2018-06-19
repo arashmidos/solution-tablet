@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetDistributorOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetOrder;
@@ -300,7 +301,8 @@ public class DataTransferDialogFragment extends DialogFragment {
         t12.start();
         break;
       case TransferGetDistributorOrder.GOODS_REQUEST:
-        Toast.makeText(mainActivity, "Getting Good request id", Toast.LENGTH_SHORT).show();
+        Thread t13 = new Thread(() -> dataTransferService.getGoodRequest());
+        t13.start();
       default:
 
     }

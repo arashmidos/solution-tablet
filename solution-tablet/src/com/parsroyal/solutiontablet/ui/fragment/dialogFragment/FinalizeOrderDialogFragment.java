@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +58,8 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   ViewGroup bottomLayout;
   @BindView(R.id.cancel_order)
   Button cancelButton;
+  @BindView(R.id.root)
+  LinearLayout root;
 
   private OrderFinalizeAdapter adapter;
   private MainActivity mainActivity;
@@ -85,6 +90,26 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     setRetainInstance(true);
   }
 
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new Dialog(getActivity(), getTheme()){
+      @Override
+      public void onBackPressed() {
+        if (pageStatus.equals(Constants.VIEW) || isDelivery()) {
+          if (SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus)
+              && !validateOrderForDeliver()) {
+          } else {
+            getDialog().dismiss();
+            mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+          }
+        } else {
+          getDialog().dismiss();
+        }
+      }
+    };
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
@@ -105,6 +130,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     setUpRecyclerView();
     return view;
   }
+
 
   private void setData() {
     totalAmountTv.setText(NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(
@@ -155,16 +181,29 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   @OnClick({R.id.close, R.id.submit_btn, R.id.bottom_layout, R.id.cancel_order})
   public void onClick(View view) {
     switch (view.getId()) {
-      case R.id.close://TODO: CHECK IF IS DISTRIBUTOR
-        getDialog().dismiss();
-        if (pageStatus.equals(Constants.VIEW)|| isDelivery()) {
-          mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+      case R.id.close:
+        if (pageStatus.equals(Constants.VIEW) || isDelivery()) {
+          if (SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus)
+              && !validateOrderForDeliver()) {
+          } else {
+            getDialog().dismiss();
+            mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+          }
+        } else {
+          getDialog().dismiss();
         }
         break;
       case R.id.bottom_layout:
       case R.id.submit_btn:
-        orderFragment.goToOrderInfoFragment();
-        getDialog().dismiss();
+        if (SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus)) {
+          if (validateOrderForDeliver()) {
+            orderFragment.goToOrderInfoFragment();
+            getDialog().dismiss();
+          }
+        } else {
+          orderFragment.goToOrderInfoFragment();
+          getDialog().dismiss();
+        }
         break;
       case R.id.cancel_order:
         showSaveOrderConfirmDialog(getString(R.string.title_cancel_sale_order),
@@ -173,10 +212,18 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     }
   }
 
+  private boolean validateOrderForDeliver() {
+    if (order.getOrderItems().size() == 0) {
+      ToastUtil.toastError(root, R.string.message_order_has_no_item);
+      return false;
+    }
+    return true;
+  }
+
   private boolean isDelivery() {
     return orderStatus.equals(SaleOrderStatus.DELIVERABLE.getId()) ||
-     orderStatus.equals(SaleOrderStatus.DELIVERED.getId()) ||
-     orderStatus.equals(SaleOrderStatus.DELIVERABLE_SENT.getId());
+        orderStatus.equals(SaleOrderStatus.DELIVERED.getId()) ||
+        orderStatus.equals(SaleOrderStatus.DELIVERABLE_SENT.getId());
   }
 
   private void showSaveOrderConfirmDialog(String title, final Long statusId) {
@@ -201,12 +248,12 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
       mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(mainActivity, ex);
+      ToastUtil.toastError(root, ex);
     } catch (Exception ex) {
       Logger.sendError("Data Storage Exception",
           "Error in saving new order detail " + ex.getMessage());
       Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+      ToastUtil.toastError(root, new UnknownSystemException(ex));
     }
   }
 
@@ -218,4 +265,5 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     }
     super.onDestroyView();
   }
+
 }

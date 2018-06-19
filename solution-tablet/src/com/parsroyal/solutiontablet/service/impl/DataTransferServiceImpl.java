@@ -214,6 +214,14 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
   }
 
+  public void getGoodRequest() {
+    try {
+      new GoodsRequestDataTransferBizImpl(context).exchangeData();
+    } catch (Exception ex) {
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
+    }
+  }
+
   public void getAllGoods() {
     try {
       new GoodsDataTransferBizImpl(context).exchangeData();
@@ -384,6 +392,7 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   public void sendAllInvoicedOrders() {
+//    if( saleType.)
     List<BaseSaleDocument> saleOrders = saleOrderService
         .findOrderDocumentByStatus(SaleOrderStatus.INVOICED.getId());
     if (Empty.isNotEmpty(saleOrders)) {

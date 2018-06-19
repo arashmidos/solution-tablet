@@ -87,6 +87,9 @@ public class DataTransferList {
 
   public static List<DataTransferList> dataTransferDistributorGetList(Context context) {
     List<DataTransferList> featureList = new ArrayList<>();
+    featureList.add(new DataTransferList(TransferGetDistributorOrder.GOODS_REQUEST,
+        R.drawable.ic_truck_24dp,
+        context.getString(R.string.goods_request)));
     featureList.add(
         new DataTransferList(TransferGetOrder.PROVINCE, R.drawable.ic_state_24_dp,
             context.getString(R.string.provinces)));
