@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
+import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
@@ -14,25 +15,34 @@ import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderItemDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
+import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
+import com.parsroyal.solutiontablet.service.RestService;
+import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.io.IOException;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Arash on 29/12/2017
  */
-public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
+public class InvoicedOrdersDataTransfer extends AbstractDataTransferBizImpl<String> {
 
   protected ResultObserver resultObserver;
   protected SaleOrderDao saleOrderDao;
@@ -43,12 +53,14 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
   protected int total = 0;
   private KeyValueBiz keyValueBiz;
 
-  public InvoicedOrdersDataTransferBizImpl(Context context) {
+  public InvoicedOrdersDataTransfer(Context context) {
     super(context);
     this.saleOrderDao = new SaleOrderDaoImpl(context);
     this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
     this.keyValueBiz = new KeyValueBizImpl(context);
     visitService = new VisitServiceImpl(context);
+    saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
+
   }
 
   public int getSuccess() {
@@ -93,10 +105,60 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
 
   protected void updateOrderStatus(Long invoiceBackendId, SaleOrder saleOrder) {
     saleOrder.setInvoiceBackendId(invoiceBackendId);
-    saleOrder.setStatus(SaleOrderStatus.SENT_INVOICE.getId());
+    if (ApplicationKeys.SALE_DISTRIBUTER.equals(saleType.getValue())) {
+      saleOrder.setStatus(SaleOrderStatus.DELIVERABLE_SENT.getId());
+    } else {
+      saleOrder.setStatus(SaleOrderStatus.SENT_INVOICE.getId());
+    }
     saleOrder.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
     saleOrderDao.update(saleOrder);
     visitService.updateVisitDetailId(getVisitDetailType(), saleOrder.getId(), invoiceBackendId);
+  }
+
+  public void sendSingleInvoice(BaseSaleDocument baseSaleDocument) {
+    if (!NetworkUtil.isNetworkAvailable(context)) {
+      EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
+    }
+
+    this.order = baseSaleDocument;
+
+    RestService restService = ServiceGenerator.createService(RestService.class);
+
+    Call<String> call = restService.sendInvoice((SaleOrderDocument) baseSaleDocument);
+
+    call.enqueue(new Callback<String>() {
+      @Override
+      public void onResponse(Call<String> call, Response<String> response) {
+        if (response.isSuccessful()) {
+          String OrderBackendId = response.body();
+          if (OrderBackendId != null) {
+            receiveData(OrderBackendId);
+            if (getSuccess() == 1) {
+              EventBus.getDefault().post(new SendOrderEvent(StatusCodes.SUCCESS,
+                  Long.valueOf(OrderBackendId), getSuccessfulMessage()));
+            } else {
+              EventBus.getDefault().post(new SendOrderEvent(
+                  StatusCodes.SERVER_ERROR, order.getId(), getExceptionMessage()));
+            }
+          } else {
+            EventBus.getDefault().post(new ErrorEvent(StatusCodes.INVALID_DATA));
+          }
+        } else {
+          try {
+            Log.d("TAG", response.errorBody().string());
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+          EventBus.getDefault().post(
+              new SendOrderEvent(StatusCodes.SERVER_ERROR, order.getId(), getExceptionMessage()));
+        }
+      }
+
+      @Override
+      public void onFailure(Call<String> call, Throwable t) {
+        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+      }
+    });
   }
 
   @Override
@@ -134,8 +196,7 @@ public class InvoicedOrdersDataTransferBizImpl extends AbstractDataTransferBizIm
   }
 
   protected VisitInformationDetailType getVisitDetailType() {
-    String saleType = keyValueBiz.findByKey(ApplicationKeys.SETTING_SALE_TYPE).getValue();
-    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+    if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER)) {
       return VisitInformationDetailType.DELIVER_ORDER;
     }
     return VisitInformationDetailType.CREATE_INVOICE;

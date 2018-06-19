@@ -10,7 +10,7 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 /**
  * Created by Arash on 7/8/2016.
  */
-public class SaleRejectsDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl {
+public class SaleRejectsDataTransferBizImpl extends InvoicedOrdersDataTransfer {
 
   public SaleRejectsDataTransferBizImpl(Context context) {
     super(context);

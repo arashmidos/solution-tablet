@@ -120,7 +120,7 @@ public class SingleDataTransferAdapter extends Adapter<ViewHolder> {
       this.position = position;
       if (position == model.size()) {
         //Visit is always the latest
-        dataTypeTv.setText("ارسال اطلاعات بازدید");
+        dataTypeTv.setText(R.string.send_visit_detail_info);
       } else {
         this.visitDetail = model.get(position);
 

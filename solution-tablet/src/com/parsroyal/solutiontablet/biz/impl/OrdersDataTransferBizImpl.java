@@ -13,7 +13,6 @@ import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
 import com.parsroyal.solutiontablet.service.RestService;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import java.io.IOException;
@@ -25,7 +24,7 @@ import retrofit2.Response;
 /**
  * Created by Arash on 29/12/2017
  */
-public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransferBizImpl {
+public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransfer {
 
   public OrdersDataTransferBizImpl(Context context) {
     super(context);

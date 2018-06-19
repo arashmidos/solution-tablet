@@ -553,7 +553,12 @@ public class OrderFragment extends BaseFragment {
       goodsList = goodsService.searchForGoodsList(goodsSo);
       if (goodsList.size() > 0) {
         showGoodsList();
+        if (adapter == null) {
+          adapter = new GoodsAdapter(mainActivity, this, goodsList, readOnly, false);
+          recyclerView.setAdapter(adapter);
+        }
         adapter.update(goodsList);
+
       } else {
         showEmptyList();
       }

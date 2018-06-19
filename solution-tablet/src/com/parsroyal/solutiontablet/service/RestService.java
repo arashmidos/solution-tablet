@@ -1,9 +1,7 @@
 package com.parsroyal.solutiontablet.service;
 
 import com.google.gson.JsonArray;
-import com.parsroyal.solutiontablet.data.model.ProvinceList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
-import com.parsroyal.solutiontablet.data.model.SaleRejectDocument;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,6 +16,9 @@ public interface RestService {
 
   @POST("saleorders")
   Call<String> sendOrder(@Body SaleOrderDocument saleDocument);
+
+  @POST("saleinvoices")
+  Call<String> sendInvoice(@Body SaleOrderDocument saleDocument);
 
   @GET("goods/{customerId}/reject")
   Call<JsonArray> getAllRejectedData(@Path("customerId") Long customerBackendId);

@@ -147,7 +147,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       date = DateUtil.addDaysToDate(date, 1, false);
       ((SaleOrderDocument) saleOrder)
           .setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
-    } else if (SaleOrderStatus.INVOICED.getId().equals(statusId)) {
+    } else if (SaleOrderStatus.INVOICED.getId().equals(statusId) || SaleOrderStatus.DELIVERED.getId().equals(statusId)
+        || SaleOrderStatus.CANCELED.getId().equals(statusId)) {
       saleOrder = new SaleInvoiceDocument();
       saleOrder.setType(
           Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE)));
@@ -189,9 +190,9 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       }
     } else {
       saleOrder.setStockCode(
-          Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_ID)));
+          Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE)));
       saleOrder.setOfficeCode(
-          Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_ID)));
+          Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE)));
     }
     return saleOrder;
   }
@@ -383,6 +384,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         String.valueOf(SaleOrderStatus.READY_TO_SEND.getId()),
         String.valueOf(SaleOrderStatus.REJECTED.getId()),
         String.valueOf(SaleOrderStatus.INVOICED.getId()),
+        String.valueOf(SaleOrderStatus.DELIVERED.getId()),
         String.valueOf(SaleOrderStatus.GIFT.getId())
     };
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);

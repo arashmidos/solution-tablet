@@ -8,7 +8,7 @@ import com.parsroyal.solutiontablet.biz.impl.DeliverableGoodsDataTransferBizImpl
 import com.parsroyal.solutiontablet.biz.impl.GoodsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.GoodsGroupDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.NewCustomerDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.NewCustomerPicDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
@@ -392,12 +392,36 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   public void sendAllInvoicedOrders() {
-//    if( saleType.)
-    List<BaseSaleDocument> saleOrders = saleOrderService
-        .findOrderDocumentByStatus(SaleOrderStatus.INVOICED.getId());
+    saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
+
+    List<BaseSaleDocument> saleOrders;
+    if (ApplicationKeys.SALE_DISTRIBUTER.equals(saleType.getValue())) {
+      saleOrders = saleOrderService.findOrderDocumentByStatus(SaleOrderStatus.DELIVERED.getId());
+    } else {
+      saleOrders = saleOrderService.findOrderDocumentByStatus(SaleOrderStatus.INVOICED.getId());
+    }
     if (Empty.isNotEmpty(saleOrders)) {
-      InvoicedOrdersDataTransferBizImpl dataTransfer = new InvoicedOrdersDataTransferBizImpl(
-          context);
+      InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(context);
+      for (int i = 0; i < saleOrders.size(); i++) {
+        BaseSaleDocument baseSaleDocument = saleOrders.get(i);
+        dataTransfer.setOrder(baseSaleDocument);
+        dataTransfer.exchangeData();
+      }
+      EventBus.getDefault().post(new DataTransferSuccessEvent(
+          dataTransfer.getSuccessfulMessage(), StatusCodes.SUCCESS));
+    } else {
+      EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
+          R.string.message_no_invoice_found), StatusCodes.NO_DATA_ERROR));
+    }
+  }
+//TODO
+  public void sendAllCanceledOrders() {
+
+    List<BaseSaleDocument> saleOrders = saleOrderService
+        .findOrderDocumentByStatus(SaleOrderStatus.CANCELED.getId());
+
+    if (Empty.isNotEmpty(saleOrders)) {
+      InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(context);
       for (int i = 0; i < saleOrders.size(); i++) {
         BaseSaleDocument baseSaleDocument = saleOrders.get(i);
         dataTransfer.setOrder(baseSaleDocument);

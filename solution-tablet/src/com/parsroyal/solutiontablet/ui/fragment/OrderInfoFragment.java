@@ -203,7 +203,7 @@ public class OrderInfoFragment extends BaseFragment {
     dateTitleTv.setText(String.format(Locale.US, getString(R.string.date_x), title));
     orderCodeTitleTv.setText(String.format(Locale.US, getString(R.string.number_x), title));
     submitOrderBtn.setText(String.format(Locale.US, getString(R.string.x_order_submit), title));
-    descriptionEdt.setText(String.format(Locale.US, getString(R.string.description_x), title));
+    descriptionLayout.setHint(String.format(Locale.US, getString(R.string.description_x), title));
 
     if (isRejected()) {
       amountTv.setText(R.string.amount_to_return);
@@ -406,7 +406,7 @@ public class OrderInfoFragment extends BaseFragment {
   }
 
   private boolean isDelivery() {
-    return SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus);
+    return SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus) || SaleOrderStatus.DELIVERED.getId().equals(orderStatus);
   }
 
   /*

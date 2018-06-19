@@ -115,6 +115,7 @@ public class Constants {
     public static final int ORDER = 25;
     public static final int RETURN_ORDER = 26;
     public static final int VISIT_DETAIL = 27;
+    public static final int INVOICES = 28;
     public static final int CUSTOMER_PICS = 29;
   }
 }

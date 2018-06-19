@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.NewCustomerPicDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PaymentsDataTransferBizImpl;
@@ -230,6 +231,8 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       case CASH:
         sendPayments(visitDetail.getVisitInformationId());
         break;
+      case DELIVER_ORDER:
+        sendInvoice(visitDetail.getTypeId());
       default:
     }
   }
@@ -349,6 +352,18 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     if (Empty.isNotEmpty(saleOrder)) {
       OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity);
       dataTransfer.sendSingleOrder(saleOrder);
+    } else {
+      //We have sent them before
+      sendNextDetail();
+    }
+  }
+
+  private void sendInvoice(Long orderId) {
+    SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
+    if (Empty.isNotEmpty(saleOrder)) {
+      InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(mainActivity);
+      dataTransfer.sendSingleInvoice(saleOrder);
     } else {
       //We have sent them before
       sendNextDetail();

@@ -592,5 +592,7 @@
   <string name="getting_info">در حال دریافت اطلاعات ...</string>
   <string name="sending">در حال ارسال ...</string>
   <string name="goods_request">درخواست کالا</string>
+  <string name="invoices">فاکتورها</string>
+  <string name="send_visit_detail_info">ارسال اطلاعات بازدید</string>
 
 </resources>

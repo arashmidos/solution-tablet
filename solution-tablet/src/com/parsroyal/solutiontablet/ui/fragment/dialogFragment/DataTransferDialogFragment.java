@@ -11,12 +11,10 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetDistributorOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetOrder;
@@ -74,6 +72,7 @@ public class DataTransferDialogFragment extends DialogFragment {
   private DataTransferAdapter adapter;
   private boolean canceled;
   private SettingServiceImpl settingService;
+  private String saleType;
 
   public DataTransferDialogFragment() {
     // Required empty public constructor
@@ -127,11 +126,10 @@ public class DataTransferDialogFragment extends DialogFragment {
 
   //set up recycler view
   private void setData() {
+    saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
     if (isGet) {
-      String saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
       if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
-
         model = getDistributorReceiveModel();
       } else {
 
@@ -164,8 +162,9 @@ public class DataTransferDialogFragment extends DialogFragment {
   }
 
   private List<DataTransferList> getSendModel() {
-    return DataTransferList.dataTransferSendList(mainActivity);
+    return DataTransferList.dataTransferSendList(mainActivity, saleType);
   }
+
 
   @OnClick({R.id.close, R.id.data_transfer_btn, R.id.cancel_btn})
   public void onClick(View view) {
@@ -287,6 +286,10 @@ public class DataTransferDialogFragment extends DialogFragment {
       case TransferSendOrder.CUSTOMER_PICS:
         Thread t9 = new Thread(() -> dataTransferService.sendAllCustomerPics());
         t9.start();
+        break;
+      case TransferSendOrder.INVOICES:
+        Thread t14 = new Thread(() -> dataTransferService.sendAllInvoicedOrders());
+        t14.start();
         break;
       case TransferGetDistributorOrder.GOODS_FOR_DELIVERY:
         Thread t10 = new Thread(() -> dataTransferService.getAllDeliverableGoods());

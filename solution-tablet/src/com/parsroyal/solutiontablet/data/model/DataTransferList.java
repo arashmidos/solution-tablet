@@ -6,6 +6,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetDistributorOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferSendOrder;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class DataTransferList {
     return featureList;
   }
 
-  public static List<DataTransferList> dataTransferSendList(Context context) {
+  public static List<DataTransferList> dataTransferSendList(Context context, String saleType) {
     List<DataTransferList> featureList = new ArrayList<>();
     featureList
         .add(new DataTransferList(TransferSendOrder.NEW_CUSTOMERS, R.drawable.ic_customers_24_dp,
@@ -72,7 +73,10 @@ public class DataTransferList {
     //FACTOR HOT SALE
 //    featureList.add(new DataTransferList(TransferSendOrder.ORDER, R.drawable.ic_cart_24_dp,
 //        context.getString(R.string.order)));
-
+    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+      featureList.add(new DataTransferList(TransferSendOrder.INVOICES, R.drawable.ic_truck_24dp,
+        context.getString(R.string.invoices)));
+    }
     featureList.add(new DataTransferList(TransferSendOrder.RETURN_ORDER, R.drawable.ic_return_24_dp,
         context.getString(R.string.return_order)));
     featureList.add(new DataTransferList(TransferSendOrder.VISIT_DETAIL, R.drawable.ic_visit_24_dp,
