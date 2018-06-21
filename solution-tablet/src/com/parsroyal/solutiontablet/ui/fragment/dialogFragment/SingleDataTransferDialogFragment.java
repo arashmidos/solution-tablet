@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.biz.impl.CanceledOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.NewCustomerPicDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
@@ -24,6 +25,7 @@ import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Payment;
@@ -91,6 +93,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   private List<VisitInformationDetail> model;
   private int currentPosition = -1;
   private VisitInformation visit;
+  private boolean transferSuccess;
 
   public SingleDataTransferDialogFragment() {
     // Required empty public constructor
@@ -157,7 +160,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     switch (view.getId()) {
       case R.id.close:
       case R.id.cancel_btn:
-        if (transferFinished) {
+        if (transferFinished && transferSuccess) {
           EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_REFRESH_DATA));
           EventBus.getDefault().post(new ActionEvent(StatusCodes.SUCCESS));
         }
@@ -178,6 +181,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   private void startTransfer() {
     transferStarted = true;
     transferFinished = false;
+    transferSuccess= false;
     currentPosition = -1;
     switchButtonState();
     sendNextDetail();
@@ -362,8 +366,27 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
     BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
     if (Empty.isNotEmpty(saleOrder)) {
-      InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(mainActivity);
-      dataTransfer.sendSingleInvoice(saleOrder);
+      if (saleOrder.getStatusCode().equals(SaleOrderStatus.CANCELED.getId())) {
+        Thread sendDataThead = new Thread(() -> {
+          try {
+            CanceledOrdersDataTransfer ordersDataTransfer = new CanceledOrdersDataTransfer(
+                mainActivity);
+            ordersDataTransfer.setOrder(saleOrder);
+            ordersDataTransfer.exchangeData();
+            if (ordersDataTransfer.getSuccess() == 1) {
+              sendNextDetail();
+            }else{
+              EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
+            }
+          } catch (Exception ex) {
+            EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
+          }
+        });
+        sendDataThead.start();
+      } else {
+        InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(mainActivity);
+        dataTransfer.sendSingleInvoice(saleOrder);
+      }
     } else {
       //We have sent them before
       sendNextDetail();
@@ -426,6 +449,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       adapter.setCurrent(++currentPosition);
       ToastUtil.toastMessage(root, getString(R.string.send_data_completed_successfully));
       transferFinished = true;
+      transferSuccess = true;
       cancelBtn.setVisibility(View.GONE);
       switchButtonState();
       uploadDataBtn.setText(R.string.finish);

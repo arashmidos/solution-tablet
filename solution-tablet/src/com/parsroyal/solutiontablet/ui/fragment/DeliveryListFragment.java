@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -44,6 +45,10 @@ public class DeliveryListFragment extends BaseFragment {
   TextView totalOrderSale;
   @BindView(R.id.total_sale)
   LinearLayout totalSale;
+  @BindView(R.id.total_order_sale_amount_tv)
+  TextView totalOrderSaleAmountTv;
+  @BindView(R.id.total_order_sale_tv)
+  TextView totalOrderSaleTv;
 
   private Long visitId;
   private DeliveryAdapter adapter;
@@ -54,6 +59,7 @@ public class DeliveryListFragment extends BaseFragment {
   private SettingServiceImpl settingService;
   private String saleType;
   private List<SaleOrderListModel> model;
+  private Unbinder unbinder;
 
   public DeliveryListFragment() {
     // Required empty public constructor
@@ -72,7 +78,7 @@ public class DeliveryListFragment extends BaseFragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_new_order_list, container, false);
     mainActivity = (MainActivity) getActivity();
-    ButterKnife.bind(this, view);
+    unbinder = ButterKnife.bind(this, view);
     Bundle args = getArguments();
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
     settingService = new SettingServiceImpl(mainActivity);
@@ -104,6 +110,8 @@ public class DeliveryListFragment extends BaseFragment {
     String number = String
         .format(Locale.US, "%,d %s", total / 1000, getString(R.string.common_irr_currency));
     totalOrderSaleAmount.setText(NumberUtil.digitsToPersian(number));
+    totalOrderSaleAmountTv.setText(R.string.total_invoice_sale_tv);
+    totalOrderSaleTv.setText(R.string.total_invoice_sale_count_tv);
   }
 
   //set up recycler view
@@ -149,5 +157,11 @@ public class DeliveryListFragment extends BaseFragment {
       model = getOrderList();
       adapter.update(model);
     }
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
   }
 }

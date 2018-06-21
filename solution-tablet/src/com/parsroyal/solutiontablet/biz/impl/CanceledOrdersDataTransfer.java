@@ -71,36 +71,29 @@ public class CanceledOrdersDataTransfer {
 
     Call<String> call = restService.cancelOrders(((SaleInvoiceDocument) order).getSaleOrderId());
 
-    call.enqueue(new Callback<String>() {
-      @Override
-      public void onResponse(Call<String> call, Response<String> response) {
-        if (response.isSuccessful()) {
-          String cancelResponse = response.body();
-          if (Empty.isNotEmpty(cancelResponse) && "1".equals(cancelResponse)) {
-            SaleOrder saleOrder = saleOrderDao.retrieve(order.getId());
-            saleOrder.setStatus(SaleOrderStatus.DELIVERABLE_SENT.getId());
-            saleOrderDao.update(saleOrder);
-            success++;
+    try {
+      Response<String> response = call.execute();
+      if (response.isSuccessful()) {
+        String cancelResponse = response.body();
+        if (Empty.isNotEmpty(cancelResponse) && "1".equals(cancelResponse)) {
+          SaleOrder saleOrder = saleOrderDao.retrieve(order.getId());
+          saleOrder.setStatus(SaleOrderStatus.DELIVERABLE_SENT.getId());
+          saleOrderDao.update(saleOrder);
+          success++;
 //            EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.SUCCESS));
-          } else {
-//            EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
-          }
         } else {
-          try {
-            Log.d("TAG", response.errorBody().string());
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
-//          EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
+//            EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
         }
+      } else {
+        try {
+          Log.d("TAG", response.errorBody().string());
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+//          EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
       }
-
-      @Override
-      public void onFailure(Call<String> call, Throwable t) {
-        Log.d(TAG, t.getLocalizedMessage());
-//        EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NETWORK_ERROR));
-      }
-    });
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
-
 }

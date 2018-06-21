@@ -300,14 +300,15 @@ public class OrderInfoFragment extends BaseFragment {
   }
 
   private void showSaveOrderConfirmDialog(String title, final Long statusId) {
-    DialogUtil.showConfirmDialog(mainActivity, title,
-        getString(R.string.message_are_you_sure), (dialog, which) -> {
-          if (!pageStatus.equals(Constants.VIEW)) {
+    if (!pageStatus.equals(Constants.VIEW)) {
+      DialogUtil.showConfirmDialog(mainActivity, title,
+          getString(R.string.message_are_you_sure), (dialog, which) -> {
             saveOrder(statusId);
-          }
-
-          mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
-        });
+            mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+          });
+    } else {
+      mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+    }
   }
 
   @Override
@@ -406,7 +407,8 @@ public class OrderInfoFragment extends BaseFragment {
   }
 
   private boolean isDelivery() {
-    return SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus) || SaleOrderStatus.DELIVERED.getId().equals(orderStatus);
+    return SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus) || SaleOrderStatus.DELIVERED
+        .getId().equals(orderStatus);
   }
 
   /*

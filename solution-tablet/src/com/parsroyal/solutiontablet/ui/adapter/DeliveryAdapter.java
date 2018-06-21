@@ -21,7 +21,6 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.data.listmodel.SaleOrderListModel;
-import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.DeliveryAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
@@ -38,7 +37,6 @@ import java.util.Locale;
 
 public class DeliveryAdapter extends Adapter<ViewHolder> {
 
-  private final SaleOrderServiceImpl saleOrderService;
   private LayoutInflater inflater;
   private Context context;
   private boolean isFromReport;
@@ -56,7 +54,6 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
     this.mainActivity = (MainActivity) context;
     this.isFromReport = isFromReport;
     inflater = LayoutInflater.from(context);
-    saleOrderService = new SaleOrderServiceImpl(mainActivity);
   }
 
   @Override
@@ -129,7 +126,7 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
       this.position = position;
       this.order = order;
 
-      String orderCode = "کد سفارش : " + NumberUtil.digitsToPersian(String.valueOf(order.getId()));
+      String orderCode = "کد فاکتور : " + NumberUtil.digitsToPersian(String.valueOf(order.getId()));
       orderCodeTv.setText(orderCode);
       customerNameTv.setText(order.getCustomerName());
 
@@ -163,13 +160,13 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
       orderStatusTv.setVisibility(View.VISIBLE);
       Long status = order.getStatus();
       if (SaleOrderStatus.DELIVERABLE.getId().equals(status)) {
-        orderStatusTv.setText("قابل تحویل");
+        orderStatusTv.setText(R.string.deliverable);
       } else if (SaleOrderStatus.DELIVERABLE_SENT.getId().equals(status)) {
-        orderStatusTv.setText("ارسال شده");
+        orderStatusTv.setText(R.string.sent);
       } else if (SaleOrderStatus.DELIVERED.getId().equals(status)) {
-        orderStatusTv.setText("تحویل داده شده");
+        orderStatusTv.setText(R.string.delivered);
       } else if (SaleOrderStatus.CANCELED.getId().equals(status)) {
-        orderStatusTv.setText("باطل شده");
+        orderStatusTv.setText(R.string.canceled);
       }
 
       if (isFromReport) {
@@ -233,7 +230,6 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
         args.putString(Constants.PAGE_STATUS, Constants.EDIT);
       }
     }
-
 
     private void openSendDataDialog() {
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
