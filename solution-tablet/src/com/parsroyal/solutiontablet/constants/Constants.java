@@ -117,5 +117,6 @@ public class Constants {
     public static final int VISIT_DETAIL = 27;
     public static final int INVOICES = 28;
     public static final int CUSTOMER_PICS = 29;
+    public static final int CANCELED_INVOICES = 30;
   }
 }

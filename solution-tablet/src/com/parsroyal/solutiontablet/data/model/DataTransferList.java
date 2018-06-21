@@ -76,6 +76,8 @@ public class DataTransferList {
     if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
       featureList.add(new DataTransferList(TransferSendOrder.INVOICES, R.drawable.ic_truck_24dp,
         context.getString(R.string.invoices)));
+      featureList.add(new DataTransferList(TransferSendOrder.CANCELED_INVOICES, R.drawable.ic_truck_24dp,
+          context.getString(R.string.canceled_invoices)));
     }
     featureList.add(new DataTransferList(TransferSendOrder.RETURN_ORDER, R.drawable.ic_return_24_dp,
         context.getString(R.string.return_order)));

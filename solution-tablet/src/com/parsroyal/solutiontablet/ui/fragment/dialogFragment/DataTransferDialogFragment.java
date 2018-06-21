@@ -291,6 +291,10 @@ public class DataTransferDialogFragment extends DialogFragment {
         Thread t14 = new Thread(() -> dataTransferService.sendAllInvoicedOrders());
         t14.start();
         break;
+      case TransferSendOrder.CANCELED_INVOICES:
+        Thread t15 = new Thread(() -> dataTransferService.sendAllCanceledOrders());
+        t15.start();
+        break;
       case TransferGetDistributorOrder.GOODS_FOR_DELIVERY:
         Thread t10 = new Thread(() -> dataTransferService.getAllDeliverableGoods());
         t10.start();

@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.service.impl;
 import android.content.Context;
 import android.util.Log;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.biz.impl.CanceledOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.CityDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.DeliverableGoodsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.GoodsDataTransferBizImpl;
@@ -414,14 +415,14 @@ public class DataTransferServiceImpl implements DataTransferService {
           R.string.message_no_invoice_found), StatusCodes.NO_DATA_ERROR));
     }
   }
-//TODO
+
   public void sendAllCanceledOrders() {
 
     List<BaseSaleDocument> saleOrders = saleOrderService
         .findOrderDocumentByStatus(SaleOrderStatus.CANCELED.getId());
 
     if (Empty.isNotEmpty(saleOrders)) {
-      InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(context);
+      CanceledOrdersDataTransfer dataTransfer = new CanceledOrdersDataTransfer(context);
       for (int i = 0; i < saleOrders.size(); i++) {
         BaseSaleDocument baseSaleDocument = saleOrders.get(i);
         dataTransfer.setOrder(baseSaleDocument);

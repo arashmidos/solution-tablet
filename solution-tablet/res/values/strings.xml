@@ -593,6 +593,7 @@
   <string name="sending">در حال ارسال ...</string>
   <string name="goods_request">درخواست کالا</string>
   <string name="invoices">فاکتورها</string>
+  <string name="canceled_invoices">فاکتورهای باطل شده</string>
   <string name="send_visit_detail_info">ارسال اطلاعات بازدید</string>
 
 </resources>
