@@ -340,7 +340,6 @@
   <string name="error_filter_is_not_correct">عدد وارد شده صحیح نیست.</string>
   <string name="error_sale_rate_not_correct">ضریب فروش این کالا باید %1$s %2$s‌ باشد</string>
   <string name="get_catalog">دریافت عکس کالاها</string>
-  <string name="message_exception_in_data_transfer">خطا در ارتباط با سرور</string>
   <string name="data_transfered_successfully">انتقال اطلاعات با موفقیت انجام شد</string>
   <string name="error_no_network">خطا در اتصال به اینترنت</string>
   <string name="message_exception_in_data_store">خطا در ذخیره سازی اطلاعات</string>
@@ -579,7 +578,7 @@
   <string name="edit_location_permission_denied">شما مجاز به تغییر آدرس مشتری نیستید</string>
   <string name="my_kpi">گزارش عملکرد من</string>
   <string name="my_kpi_list">گزارشات عملکرد من</string>
-  <string name="error_connectin_server">خطا در ارتباط با سرور</string>
+  <string name="error_connecting_server">خطا در ارتباط با سرور</string>
   <string name="customer_report">گزارش عملکرد مشتری</string>
   <string name="visit_or_none">ویزیت / ثبت عدم</string>
   <string name="activities_done">فعالیت های انجام شده</string>
@@ -601,5 +600,8 @@
   <string name="sent">ارسال شده</string>
   <string name="delivered">تحویل داده شده</string>
   <string name="canceled">باطل شده</string>
+  <string name="view_gift">مشاهده تخفیف و جوایز</string>
+  <string name="retry">تلاش مجدد</string>
+  <string name="gift">تخفیف و جوایز</string>
 
 </resources>

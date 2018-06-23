@@ -3,7 +3,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 import android.content.Context;
 import android.util.Log;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
-import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.service.GetDataRestService;
@@ -11,6 +10,7 @@ import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import java.io.IOException;
+import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,16 +36,16 @@ public class GiftDataTransferBizImpl {
 
     GetDataRestService restService = ServiceGenerator.createService(GetDataRestService.class);
 
-    Call<String> call = restService.getGiftResult(String.valueOf(orderBackendId));
+    Call<List<String>> call = restService.getGiftResult(String.valueOf(orderBackendId));
 
-    call.enqueue(new Callback<String>() {
+    call.enqueue(new Callback<List<String>>() {
       @Override
-      public void onResponse(Call<String> call, Response<String> response) {
+      public void onResponse(Call<List<String>> call, Response<List<String>> response) {
         if (response.isSuccessful()) {
-          String data = response.body();
+          List<String> data = response.body();
           if (Empty.isNotEmpty(data)) {
 
-            EventBus.getDefault().post(new DataTransferSuccessEvent(data, StatusCodes.SUCCESS));
+            EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.SUCCESS, data));
 
           } else {
             EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
@@ -61,7 +61,7 @@ public class GiftDataTransferBizImpl {
       }
 
       @Override
-      public void onFailure(Call<String> call, Throwable t) {
+      public void onFailure(Call<List<String>> call, Throwable t) {
 //        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
         EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
       }

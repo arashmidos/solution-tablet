@@ -95,7 +95,7 @@ public class ReportListActivity extends AppCompatActivity {
           ToastUtil.toastMessage(this, R.string.message_no_data_received);
           break;
         default:
-          ToastUtil.toastError(this, getString(R.string.error_connectin_server));
+          ToastUtil.toastError(this, getString(R.string.error_connecting_server));
       }
     } else if (event instanceof KpiEvent) {
       List<KPIDetail> detailList = ((KpiEvent) event).getDetailList();

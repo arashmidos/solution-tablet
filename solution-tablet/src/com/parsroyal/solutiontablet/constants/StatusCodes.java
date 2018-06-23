@@ -11,7 +11,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 public enum StatusCodes {
   SUCCESS(200, R.string.data_transfered_successfully),
   NO_NETWORK(1001, R.string.error_no_network),
-  INVALID_DATA(1002, R.string.message_exception_in_data_transfer),
+  INVALID_DATA(1002, R.string.error_connecting_server),
   NETWORK_ERROR(1003,
       R.string.com_parsroyal_solutiontablet_exception_BackendIsNotReachableException),
   DATA_STORE_ERROR(1004, R.string.message_exception_in_data_store),

@@ -35,7 +35,7 @@ public interface GetDataRestService {
   Call<QuestionnaireDtoList> getAllQuestionnaire(@Path("today") String today);
 
   @GET("saleorders/{orderId}/giftResult")
-  Call<String> getGiftResult(@Path("orderId") String orderId);
+  Call<List<String>> getGiftResult(@Path("orderId") String orderId);
 
   @GET("goods/{company_id}/{stock_id}/{sale_type}/{salesman_id}")
   Call<List<Goods>> getAllGoods(@Path("company_id") String companyId,

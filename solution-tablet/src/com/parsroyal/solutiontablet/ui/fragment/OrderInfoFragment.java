@@ -50,6 +50,7 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentMethodAdapter;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.GiftResultDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PaymentMethodDialogFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -254,18 +255,23 @@ public class OrderInfoFragment extends BaseFragment {
       case R.id.register_gift_tv:
         if (giftRequestSent) {
           registerGiftTv.setText(R.string.getting_info);
-          new GiftDataTransferBizImpl(mainActivity).exchangeData(orderBackendId);
+          new GiftDataTransferBizImpl(mainActivity).exchangeData(1267699L/*orderBackendId*/);
         } else {
           order = saleOrderService.findOrderDtoById(orderId);
           if (validateOrderForSave()) {
             order.setStatus(SaleOrderStatus.GIFT.getId());
             order.setPaymentTypeBackendId(selectedItem.getValue());
             order.setDescription(descriptionEdt.getText().toString());
-            order.setSalesmanId(
-                Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
-            saleOrderService.saveOrder(order);
+            if (!isDelivery()) {
+              order.setSalesmanId(
+                  Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
+            } else {
+              order.setId(null);
+            }
+
+            Long newOrderId = saleOrderService.saveOrder(order);
             SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
-            BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
+            BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(newOrderId);
             registerGiftTv.setText(R.string.sending);
             if (Empty.isNotEmpty(saleOrder)) {
               saleOrder.setStatusCode(SaleOrderStatus.GIFT.getId());
@@ -470,23 +476,26 @@ public class OrderInfoFragment extends BaseFragment {
 
   @Subscribe
   public void getMessage(Event event) {
+
     if (event instanceof ErrorEvent) {
-      registerGiftTv.setText("خطا در ارتباط با سرور");
+      registerGiftTv.setText(R.string.error_connecting_server);
     } else if (event instanceof SendOrderEvent) {
       if (event.getStatusCode() == StatusCodes.SUCCESS) {
-        registerGiftTv.setText("مشاهده تخفیف و جوایز");
+        registerGiftTv.setText(R.string.view_gift);
         giftRequestSent = true;
         orderBackendId = ((SendOrderEvent) event).getOrderId();
       }
     } else if (event instanceof DataTransferSuccessEvent) {
       if (event.getStatusCode() == StatusCodes.SUCCESS) {
-        registerGiftTv.setText("مشاهده تخفیف و جوایز");
-        DialogUtil.showCustomDialog(mainActivity, "تخفیف و جوایز", event.getMessage(), "تایید",
-            (dialogInterface, i) -> dialogInterface.dismiss(), "", null, Constants.ICON_MESSAGE);
+        registerGiftTv.setText(R.string.view_gift);
+        FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+        GiftResultDialogFragment paymentMethodDialogFragment = GiftResultDialogFragment
+            .newInstance(((DataTransferSuccessEvent) event).getGiftData());
+        paymentMethodDialogFragment.show(ft, "gift");
       } else if (event.getStatusCode() == StatusCodes.NO_DATA_ERROR) {
-        registerGiftTv.setText("تلاش مجدد");
-
+        registerGiftTv.setText(R.string.retry);
       }
     }
   }
+
 }
