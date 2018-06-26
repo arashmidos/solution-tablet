@@ -115,6 +115,12 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
     notifyDataSetChanged();
   }
 
+  private boolean isDelivery() {
+    return order.getStatus().equals(SaleOrderStatus.DELIVERABLE.getId()) ||
+        order.getStatus().equals(SaleOrderStatus.DELIVERED.getId()) ||
+        order.getStatus().equals(SaleOrderStatus.DELIVERABLE_SENT.getId());
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.good_img)
@@ -160,7 +166,11 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       amountTv.setText(String.format("%s %s", NumberUtil.digitsToPersian(
           NumberUtil.getCommaSeparated(goodsAmount)),
           mainActivity.getString(R.string.common_irr_currency)));
-      Double totalAmount = Double.valueOf(item.getAmount()) / 1000D;
+
+      Double totalAmount= Double.valueOf(item.getAmount()) / 1000D;
+    /*  if (isDelivery()) {
+        totalAmount = item.getGoodsCount() * goodsAmount / 1000;
+      }*/
       totalAmountTv.setText(String.format("%s %s",
           NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(totalAmount)),
           mainActivity.getString(R.string.common_irr_currency)));

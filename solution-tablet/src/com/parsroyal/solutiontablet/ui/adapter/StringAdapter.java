@@ -89,7 +89,9 @@ public class StringAdapter extends RecyclerView.Adapter<StringAdapter.ViewHolder
     public void setData(String model, int position) {
       this.model = model;
       this.position = position;
-      paymentMethodTv.setText(NumberUtil.digitsToPersian(model));
+      if( model!=null && !"".equals(model)) {
+        paymentMethodTv.setText(NumberUtil.digitsToPersian(model.trim()));
+      }
 //      if (selectedItem != null && model.getLabel().equals(selectedItem.getLabel())) {
 //        mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_dark));
 //        paymentMethodTv.setTextColor(ContextCompat.getColor(context, android.R.color.white));

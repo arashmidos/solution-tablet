@@ -51,6 +51,7 @@ import com.parsroyal.solutiontablet.service.PaymentService;
 import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
+import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -65,10 +66,9 @@ import org.greenrobot.eventbus.EventBus;
 public class DataTransferServiceImpl implements DataTransferService {
 
   public static final String TAG = DataTransferServiceImpl.class.getSimpleName();
-
+  private final SettingService settingService;
   private Context context;
   private KeyValueDao keyValueDao;
-
   private CustomerService customerService;
   private QuestionnaireService questionnaireService;
   private SaleOrderService saleOrderService;
@@ -91,6 +91,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     this.paymentService = new PaymentServiceImpl(context);
     this.positionService = new PositionServiceImpl(context);
     this.visitService = new VisitServiceImpl(context);
+    this.settingService = new SettingServiceImpl(context);
   }
 
   public void getAllData() {
@@ -405,6 +406,12 @@ public class DataTransferServiceImpl implements DataTransferService {
       InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(context);
       for (int i = 0; i < saleOrders.size(); i++) {
         BaseSaleDocument baseSaleDocument = saleOrders.get(i);
+        if (ApplicationKeys.SALE_DISTRIBUTER.equals(saleType.getValue())) {
+          baseSaleDocument.setStockCode(
+              Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE)));
+          baseSaleDocument.setOfficeCode(
+              Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE)));
+        }
         dataTransfer.setOrder(baseSaleDocument);
         dataTransfer.exchangeData();
       }

@@ -17,7 +17,7 @@ import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
-import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
+import com.parsroyal.solutiontablet.data.model.SaleInvoiceDocument;
 import com.parsroyal.solutiontablet.service.RestService;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.service.VisitService;
@@ -123,8 +123,8 @@ public class InvoicedOrdersDataTransfer extends AbstractDataTransferBizImpl<Stri
     this.order = baseSaleDocument;
 
     RestService restService = ServiceGenerator.createService(RestService.class);
-
-    Call<String> call = restService.sendInvoice((SaleOrderDocument) baseSaleDocument);
+//TODO:LAter change for hot sale
+    Call<String> call = restService.sendInvoice(3L, (SaleInvoiceDocument) baseSaleDocument);
 
     call.enqueue(new Callback<String>() {
       @Override

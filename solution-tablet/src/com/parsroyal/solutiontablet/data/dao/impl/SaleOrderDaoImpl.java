@@ -148,8 +148,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       ((SaleOrderDocument) saleOrder)
           .setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
     } else if (SaleOrderStatus.INVOICED.getId().equals(statusId) || SaleOrderStatus.DELIVERED
-        .getId().equals(statusId)
-        || SaleOrderStatus.CANCELED.getId().equals(statusId)) {
+        .getId().equals(statusId)        || SaleOrderStatus.CANCELED.getId().equals(statusId)) {
       saleOrder = new SaleInvoiceDocument();
       saleOrder.setType(
           Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE)));

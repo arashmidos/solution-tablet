@@ -36,6 +36,7 @@ public class MobileMainActivity extends MainActivity {
     }
 
     showFeaturesFragment();
+
   }
 
   @Override

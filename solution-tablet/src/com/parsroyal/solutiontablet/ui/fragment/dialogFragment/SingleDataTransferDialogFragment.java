@@ -47,16 +47,19 @@ import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.PaymentService;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
+import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SingleDataTransferAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.File;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -94,6 +97,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   private int currentPosition = -1;
   private VisitInformation visit;
   private boolean transferSuccess;
+  private SettingService settingService;
 
   public SingleDataTransferDialogFragment() {
     // Required empty public constructor
@@ -128,6 +132,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       }
 
       visitService = new VisitServiceImpl(mainActivity);
+      settingService = new SettingServiceImpl(mainActivity);
       visit = visitService.getVisitInformationById(visitId);
       if (Empty.isEmpty(visit)) {
         return inflater.inflate(R.layout.empty_view, container, false);
@@ -384,6 +389,10 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         });
         sendDataThead.start();
       } else {
+        saleOrder.setStockCode(
+            Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE)));
+        saleOrder.setOfficeCode(
+            Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE)));
         InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(mainActivity);
         dataTransfer.sendSingleInvoice(saleOrder);
       }

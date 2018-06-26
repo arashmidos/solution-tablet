@@ -101,6 +101,11 @@
     <item name="colorPrimary">#3F51B5</item>
   </style>
 
+  <style name="myDialog2" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="android:background">#80000000</item>
+    <item name="colorPrimary">#3F51B5</item>
+  </style>
+
   <style name="myCheckBox" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="fontPath">fonts/IRANSansMobile.ttf</item>
     <item name="colorPrimary">#3F51B5</item>

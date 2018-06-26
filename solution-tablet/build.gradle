@@ -29,9 +29,9 @@ android {
     defaultConfig {
         applicationId "com.parsroyal.solutionmobile"
         minSdkVersion 17
-        targetSdkVersion 27
-        versionCode 102
-        versionName "2.15.3"
+        targetSdkVersion 25
+        versionCode 103
+        versionName "2.16.0"
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled true

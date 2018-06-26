@@ -255,7 +255,7 @@ public class OrderInfoFragment extends BaseFragment {
       case R.id.register_gift_tv:
         if (giftRequestSent) {
           registerGiftTv.setText(R.string.getting_info);
-          new GiftDataTransferBizImpl(mainActivity).exchangeData(1267699L/*orderBackendId*/);
+          new GiftDataTransferBizImpl(mainActivity).exchangeData(orderBackendId);
         } else {
           order = saleOrderService.findOrderDtoById(orderId);
           if (validateOrderForSave()) {
