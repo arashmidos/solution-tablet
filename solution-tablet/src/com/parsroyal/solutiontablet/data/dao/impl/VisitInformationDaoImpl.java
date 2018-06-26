@@ -10,6 +10,7 @@ import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
@@ -179,7 +180,8 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     entity.setyLocation(cursor.isNull(8) ? null : cursor.getDouble(8));
     entity.setSalesmanId(
         Long.valueOf(PreferenceHelper.retrieveByKey(ApplicationKeys.SALESMAN_ID).getValue()));
-    entity.setNetworkDate(DateUtil.getZonedDate(new Date(cursor.getLong(12))));
+    entity.setNetworkDate(
+        NumberUtil.digitsToEnglish(DateUtil.getZonedDate(new Date(cursor.getLong(12)))));
 
     return entity;
   }
