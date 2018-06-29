@@ -149,6 +149,7 @@
             android:tint="@color/login_gray" />
 
           <TextView
+            android:id="@+id/today_lines_tv"
             style="@style/IranSans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

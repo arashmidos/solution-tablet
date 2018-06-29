@@ -126,7 +126,7 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
       this.position = position;
       this.order = order;
 
-      String orderCode = "کد فاکتور : " + NumberUtil.digitsToPersian(String.valueOf(order.getId()));
+      String orderCode = "کد سفارش : " + NumberUtil.digitsToPersian(String.valueOf(order.getNumber()));
       orderCodeTv.setText(orderCode);
       customerNameTv.setText(order.getCustomerName());
 

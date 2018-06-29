@@ -98,6 +98,7 @@ public class VisitDetailFragment extends BaseFragment {
   private Customer customer;
   private SaleOrderDto orderDto;
   private String saleType;
+  private long visitLineBackendId;
 
 
   public VisitDetailFragment() {
@@ -135,6 +136,7 @@ public class VisitDetailFragment extends BaseFragment {
       saleOrderService = new SaleOrderServiceImpl(mainActivity);
 
       visitId = args.getLong(Constants.ORIGIN_VISIT_ID);
+      visitLineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
       saleType = new SettingServiceImpl(mainActivity)
           .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 

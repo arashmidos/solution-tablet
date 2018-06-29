@@ -17,10 +17,12 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.activity.ReportListActivity;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 
 /**
@@ -30,6 +32,7 @@ import java.util.List;
 public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHolder> {
 
   private final BaseInfoServiceImpl baseInfoService;
+  private final String saleType;
   private LayoutInflater inflater;
   private MainActivity context;
   private List<FeatureList> features;
@@ -39,6 +42,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     this.features = features;
     inflater = LayoutInflater.from(context);
     baseInfoService = new BaseInfoServiceImpl(context);
+    saleType = new SettingServiceImpl(context).getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
   }
 
   @Override
@@ -60,13 +64,16 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     holder.featureTitleTv.setText(feature.getTitle());
     holder.featureLay.setOnClickListener(v -> {
       if (baseInfoService.getAllProvinces().size() == 0) {
+
         ToastUtil.toastError(context, R.string.error_message_no_data);
         return;
       }
       switch (position) {
         case 0://Paths
           if (features.get(0).getBadger() == 0) {
-            ToastUtil.toastError(context, R.string.error_no_visitline);
+            ToastUtil.toastError(context, ApplicationKeys.SALE_DISTRIBUTER.equals(saleType)
+                ? R.string.error_no_request_line
+                : R.string.error_no_visitline);
             return;
           }
           context.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);

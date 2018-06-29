@@ -45,6 +45,8 @@ public class NavigationDrawerFragment extends BaseFragment {
   TextView userNameTv;
   @BindView(R.id.user_role_tv)
   TextView userRole;
+  @BindView(R.id.today_lines_tv)
+  TextView todayLinesTv;
 
   private boolean isLogOutMode = false;
   private MainActivity mainActivity;
@@ -84,9 +86,13 @@ public class NavigationDrawerFragment extends BaseFragment {
     if (Empty.isNotEmpty(role)) {
       userRole.setText(SaleType.getByValue(Long.parseLong(role)).getRole());
     }
+    if (ApplicationKeys.SALE_DISTRIBUTER.equals(role)) {
+      todayLinesTv.setText(R.string.today_request_line);
+    }
+
   }
 
-  @OnClick({ R.id.features_list_lay, R.id.today_paths_lay, R.id.reports_lay,
+  @OnClick({R.id.features_list_lay, R.id.today_paths_lay, R.id.reports_lay,
       R.id.customers_lay, R.id.map_lay, R.id.setting_lay, R.id.about_us, R.id.body_log_out,
       R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay, R.id.questionnaire_lay, R.id.header})
   public void onClick(View view) {

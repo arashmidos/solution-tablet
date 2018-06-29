@@ -3,6 +3,8 @@ package com.parsroyal.solutiontablet.data.model;
 
 import android.content.Context;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +24,13 @@ public class FeatureList {
   }
 
   public static List<FeatureList> getFeatureList(Context context) {
+    String saleType = new SettingServiceImpl(context)
+        .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+
     List<FeatureList> featureList = new ArrayList<>();
     featureList.add(new FeatureList(0, R.drawable.ic_near_me_black_48dp,
-        context.getString(R.string.today_paths)));
+        ApplicationKeys.SALE_DISTRIBUTER.equals(saleType) ? context.getString(R.string.today_request_line)
+            : context.getString(R.string.today_paths)));
     featureList.add(
         new FeatureList(0, R.drawable.ic_group_black_48dp, context.getString(R.string.customers)));
     featureList.add(new FeatureList(0, R.drawable.ic_assignment_black_48dp,

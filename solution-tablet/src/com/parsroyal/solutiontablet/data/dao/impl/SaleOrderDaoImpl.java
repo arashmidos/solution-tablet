@@ -148,7 +148,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       ((SaleOrderDocument) saleOrder)
           .setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
     } else if (SaleOrderStatus.INVOICED.getId().equals(statusId) || SaleOrderStatus.DELIVERED
-        .getId().equals(statusId)        || SaleOrderStatus.CANCELED.getId().equals(statusId)) {
+        .getId().equals(statusId) || SaleOrderStatus.CANCELED.getId().equals(statusId)) {
       saleOrder = new SaleInvoiceDocument();
       saleOrder.setType(
           Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE)));
@@ -235,7 +235,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         "c." + Customer.COL_BACKEND_ID + "," +
         "o." + SaleOrder.COL_CREATE_DATE_TIME + "," +
         "o." + SaleOrder.COL_DESCRIPTION + "," +
-        "vd." + VisitInformationDetail.COL_VISIT_INFORMATION_ID +//10
+        "vd." + VisitInformationDetail.COL_VISIT_INFORMATION_ID +","+
+        "o." + SaleOrder.COL_NUMBER +//11
         " FROM " + SaleOrder.TABLE_NAME + " o " +
         " INNER JOIN " + Customer.TABLE_NAME + " c on c." + Customer.COL_BACKEND_ID + " = o."
         + SaleOrder.COL_CUSTOMER_BACKEND_ID +
@@ -315,6 +316,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       order.setCreatedDateTime(cursor.getString(8));
       order.setDescription(cursor.getString(9));
       order.setVisitId(cursor.getLong(10));
+      order.setNumber(cursor.getLong(11));
       returnOrders.add(order);
     }
 

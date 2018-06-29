@@ -93,9 +93,10 @@ public class DataTransferList {
 
   public static List<DataTransferList> dataTransferDistributorGetList(Context context) {
     List<DataTransferList> featureList = new ArrayList<>();
+    /*
     featureList.add(new DataTransferList(TransferGetDistributorOrder.GOODS_REQUEST,
         R.drawable.ic_truck_24dp,
-        context.getString(R.string.goods_request)));
+        context.getString(R.string.goods_request)));*/
     featureList.add(
         new DataTransferList(TransferGetOrder.PROVINCE, R.drawable.ic_state_24_dp,
             context.getString(R.string.provinces)));
@@ -115,7 +116,7 @@ public class DataTransferList {
         context.getString(R.string.goods_for_delivery)));
     featureList.add(new DataTransferList(TransferGetDistributorOrder.VISITLINES_FOR_DELIVERY,
         R.drawable.ic_path_24_dp,
-        context.getString(R.string.visit_lines)));
+        context.getString(R.string.today_request_line)));
     featureList.add(new DataTransferList(TransferGetDistributorOrder.ORDERS_FOR_DELIVERY,
         R.drawable.ic_cart_24_dp,
         context.getString(R.string.orders_for_delivery)));

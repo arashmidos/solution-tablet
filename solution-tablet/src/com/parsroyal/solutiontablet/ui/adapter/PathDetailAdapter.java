@@ -211,6 +211,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
 
       CustomerInfoDialogFragment customerInfoDialogFragment;
+      model.setVisitlineBackendId(visitlineBackendId);
       if (MultiScreenUtility.isTablet(mainActivity)) {
         customerInfoDialogFragment = CustomerInfoBottomSheet
             .newInstance(PathDetailAdapter.this, model, position);

@@ -167,7 +167,7 @@
   <string name="order_status_DRAFT">پیشنویس</string>
   <string name="order_status_SENT">ارسال شده</string>
   <string name="order_status_INVOICED">فاکتور شده</string>
-  <string name="order_status_CANCELED">ابطال شده</string>
+  <string name="order_status_CANCELED">بایگانی شده</string>
   <string name="order_status_SENT_INVOICE">فاکتور شده و ارسال شده</string>
   <string name="order_status_READY_TO_SEND">آماده ارسال</string>
   <string name="order_status_REJECTED_DRAFT">پیشنویس مرجوعی</string>
@@ -193,12 +193,12 @@
   <string name="message_are_you_sure">آیا مطمئن هستید؟</string>
   <string name="message_are_you_sure_not_recoverable">آیا مطمئن هستید؟ این عملیات برگشت پذیر نیست</string>
   <string name="title_cancel">انصراف</string>
-  <string name="title_cancel_sale_order">ابطال سفارش</string>
-  <string name="title_cancel_sale_x">"ابطال %1$s"</string>
+  <string name="title_cancel_sale_order">بایگانی سفارش</string>
+  <string name="title_cancel_sale_x">"بایگانی %1$s"</string>
   <string name="title_deliver_sale_order">تحویل سفارش</string>
   <string name="title_deliver_sale_x">"تحویل "</string>
   <string name="title_save_order">ذخیره</string>
-  <string name="message_order_has_no_item">سفارش هیچ آیتمی ندارد. می توانید سفارش را ابطال کنید.</string>
+  <string name="message_order_has_no_item">سفارش هیچ آیتمی ندارد. می توانید سفارش را بایگانی کنید.</string>
   <string name="message_order_has_no_item_for_save">سفارش هیچ آیتمی ندارد.</string>
   <string name="message_x_has_no_item_for_save">" هیچ آیتمی ندارد."</string>
   <string name="message_no_invoice_found">هیچ فاکتوری برای ارسال یافت نشد.</string>
@@ -373,6 +373,7 @@
   <string name="features_list">فهرست امکانات</string>
   <string name="customers">مشتریان</string>
   <string name="today_paths">مسیر های امروز</string>
+  <string name="today_request_line">درخواست های امروز</string>
   <string name="map">نقشه</string>
   <string name="reports">گزارشات</string>
   <string name="log_out">خروج از حساب کاربری</string>
@@ -485,6 +486,7 @@
   <string name="message_customer_class_is_required">وارد کردن کلاس مشتری اجباری است.</string>
   <string name="message_activity_type_is_required">وارد کردن نوع فعالیت اجباری است.</string>
   <string name="error_no_visitline">هیچ خط ویزیتی یافت نشد. به قسمت دریافت اطلاعات مراجعه کنید</string>
+  <string name="error_no_request_line">هیچ درخواستی یافت نشد. به قسمت دریافت اطلاعات مراجعه کنید</string>
   <string name="not_implemented_yet">در این نسخه فعال نیست</string>
   <string name="error_message_there_is_no_settings">هیچ تنظیم قابل نمایشی وجود ندارد</string>
   <string name="payment_detail">جزییات پرداخت</string>
@@ -594,12 +596,12 @@
   <string name="sending">در حال ارسال ...</string>
   <string name="goods_request">درخواست کالا</string>
   <string name="invoices">فاکتورها</string>
-  <string name="canceled_invoices">فاکتورهای باطل شده</string>
+  <string name="canceled_invoices">فاکتورهای بایگانی شده</string>
   <string name="send_visit_detail_info">ارسال اطلاعات بازدید</string>
   <string name="deliverable">قابل تحویل</string>
   <string name="sent">ارسال شده</string>
   <string name="delivered">تحویل داده شده</string>
-  <string name="canceled">باطل شده</string>
+  <string name="canceled">بایگانی شده</string>
   <string name="view_gift">مشاهده تخفیف و جوایز</string>
   <string name="retry">تلاش مجدد</string>
   <string name="gift">تخفیف و جوایز</string>

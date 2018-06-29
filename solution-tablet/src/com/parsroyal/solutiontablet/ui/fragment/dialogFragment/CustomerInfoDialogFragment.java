@@ -56,6 +56,18 @@ import java.util.HashSet;
 public class CustomerInfoDialogFragment extends DialogFragment {
 
   private static final String TAG = CustomerInfoDialogFragment.class.getSimpleName();
+  protected MainActivity mainActivity;
+  protected CustomerListModel model;
+  protected CustomerServiceImpl customerService;
+  protected SettingServiceImpl settingService;
+  protected boolean distanceServiceEnabled;
+  protected float distanceAllowed;
+  protected VisitService visitService;
+  protected LocationService locationService;
+  protected SaleOrderService orderService;
+  protected PathDetailAdapter adapter;
+  protected int position;
+  protected VisitActivityAdapter activityAdapter;
   @BindView(R.id.customer_name_tv)
   TextView customerNameTv;
   @BindView(R.id.customer_shop_name_tv)
@@ -86,18 +98,6 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   RelativeLayout activityLayout;
   @BindView(R.id.list_layout)
   NestedScrollView listLayout;
-  protected MainActivity mainActivity;
-  protected CustomerListModel model;
-  protected CustomerServiceImpl customerService;
-  protected SettingServiceImpl settingService;
-  protected boolean distanceServiceEnabled;
-  protected float distanceAllowed;
-  protected VisitService visitService;
-  protected LocationService locationService;
-  protected SaleOrderService orderService;
-  protected PathDetailAdapter adapter;
-  protected int position;
-  protected VisitActivityAdapter activityAdapter;
 
   public CustomerInfoDialogFragment() {
     // Required empty public constructor
@@ -250,6 +250,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
 
   protected void checkEnter() {
     CustomerDto customer = customerService.getCustomerDtoById(model.getPrimaryKey());
+
     if (!distanceServiceEnabled || hasAcceptableDistance(customer) || BuildConfig.DEBUG) {
       doEnter(customer);
       dismiss();
@@ -329,14 +330,15 @@ public class CustomerInfoDialogFragment extends DialogFragment {
       args.putLong(Constants.VISIT_ID, visitInformationId);
       args.putLong(Constants.ORIGIN_VISIT_ID, visitInformationId);
       args.putLong(Constants.CUSTOMER_ID, customer.getId());
+      args.putLong(Constants.VISITLINE_BACKEND_ID, model.getVisitlineBackendId());
       mainActivity.changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, true);
 
     } catch (BusinessException e) {
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(mainActivity, e);
     } catch (Exception e) {
-      Crashlytics
-          .log(Log.ERROR, "General Exception", "Error in entering customer " + e.getMessage());
+     /* Crashlytics
+          .log(Log.ERROR, "General Exception", "Error in entering customer " + e.getMessage());*/
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
     }

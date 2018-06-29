@@ -31,6 +31,15 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   protected HashSet<VisitInformationDetailType> details = new HashSet<>();
   private boolean hasRejectOrder;
   private boolean hasDelivery;
+  private Long visitlineBackendId;
+
+  public Long getVisitlineBackendId() {
+    return visitlineBackendId;
+  }
+
+  public void setVisitlineBackendId(Long visitlineBackendId) {
+    this.visitlineBackendId = visitlineBackendId;
+  }
 
   public boolean isHasDelivery() {
     return hasDelivery;
