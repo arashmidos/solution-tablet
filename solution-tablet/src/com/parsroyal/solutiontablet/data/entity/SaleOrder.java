@@ -25,6 +25,7 @@ public class SaleOrder extends BaseEntity<Long> {
   public static final String COL_BACKEND_ID = "BACKEND_ID";
   public static final String COL_INVOICE_BACKEND_ID = "INVOICE_BACKEND_ID";
   public static final String COL_REJECT_TYPE_BACKEND_ID = "REJECT_TYPE_BACKEND_ID";
+  public static final String COL_VISITLINE_BACKEND_ID = "VISITLINE_BACKEND_ID";
 
   public static final String CREATE_TABLE_SCRIPT = "CREATE TABLE " + SaleOrder.TABLE_NAME + " (" +
       " " + SaleOrder.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -40,7 +41,8 @@ public class SaleOrder extends BaseEntity<Long> {
       " " + SaleOrder.COL_INVOICE_BACKEND_ID + " INTEGER," +
       " " + SaleOrder.COL_CREATE_DATE_TIME + " TEXT," +
       " " + SaleOrder.COL_UPDATE_DATE_TIME + " TEXT," +
-      " " + SaleOrder.COL_REJECT_TYPE_BACKEND_ID + " INTEGER" +
+      " " + SaleOrder.COL_REJECT_TYPE_BACKEND_ID + " INTEGER," +
+      " " + SaleOrder.COL_VISITLINE_BACKEND_ID + " INTEGER" +
       " );";
 
   private Long id;
@@ -59,6 +61,7 @@ public class SaleOrder extends BaseEntity<Long> {
 
   private List<SaleOrderItem> orderItems;
   private Long rejectType;
+  private long visitlineBackendId;
 
   public Long getRejectType() {
     return rejectType;
@@ -183,5 +186,13 @@ public class SaleOrder extends BaseEntity<Long> {
   @Override
   public Long getPrimaryKey() {
     return id;
+  }
+
+  public void setVisitlineBackendId(long visitlineBackendId) {
+    this.visitlineBackendId = visitlineBackendId;
+  }
+
+  public long getVisitlineBackendId() {
+    return visitlineBackendId;
   }
 }

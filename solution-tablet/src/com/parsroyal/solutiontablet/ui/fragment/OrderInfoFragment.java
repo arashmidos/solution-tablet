@@ -124,6 +124,7 @@ public class OrderInfoFragment extends BaseFragment {
   private PaymentMethodAdapter adapter;
   private boolean giftRequestSent;
   private Long orderBackendId;
+  private long visitlineBackendId;
 
   public OrderInfoFragment() {
     // Required empty public constructor
@@ -162,6 +163,7 @@ public class OrderInfoFragment extends BaseFragment {
       orderStatus = order.getStatus();
       saleType = args.getString(Constants.SALE_TYPE, "");
       visitId = args.getLong(Constants.VISIT_ID, -1);
+      visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
 
       setData();
 
@@ -346,6 +348,7 @@ public class OrderInfoFragment extends BaseFragment {
         order.setSalesmanId(
             Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
       }
+        order.setVisitlineBackendId(visitlineBackendId);
       long typeId = saleOrderService.saveOrder(order);
       if (visitId != 0L) {
         VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, getDetailType(),

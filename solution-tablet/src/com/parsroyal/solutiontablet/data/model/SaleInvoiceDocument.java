@@ -7,6 +7,15 @@ public class SaleInvoiceDocument extends BaseSaleDocument<SaleInvoiceItem> {
   private Long saleOrderId;
   @JsonIgnore
   private Long rejectType;
+  private Long visitlineBackendId;
+
+  public Long getVisitlineBackendId() {
+    return visitlineBackendId;
+  }
+
+  public void setVisitlineBackendId(Long visitlineBackendId) {
+    this.visitlineBackendId = visitlineBackendId;
+  }
 
   public Long getRejectType() {
     return rejectType;

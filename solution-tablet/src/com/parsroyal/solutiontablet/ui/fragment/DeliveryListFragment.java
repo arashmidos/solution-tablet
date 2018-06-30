@@ -60,6 +60,7 @@ public class DeliveryListFragment extends BaseFragment {
   private String saleType;
   private List<SaleOrderListModel> model;
   private Unbinder unbinder;
+  private long visitlineBackendId;
 
   public DeliveryListFragment() {
     // Required empty public constructor
@@ -87,6 +88,7 @@ public class DeliveryListFragment extends BaseFragment {
 
     if (args != null) {
       visitId = args.getLong(Constants.VISIT_ID, -1);
+      visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
     }
     setUpRecyclerView();
     fabAddOrder.setVisibility(View.GONE);
@@ -117,7 +119,8 @@ public class DeliveryListFragment extends BaseFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     model = getOrderList();
-    adapter = new DeliveryAdapter(mainActivity, model, parent == null, visitId, saleType);
+    adapter = new DeliveryAdapter(mainActivity, model, parent == null, visitId, saleType,
+        visitlineBackendId);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);

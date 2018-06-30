@@ -72,6 +72,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   private String pageStatus;
   private GoodsDtoList rejectedGoodsList;
   private long visitId;
+  private long visitlineBackendId;
 
 
   public FinalizeOrderDialogFragment() {
@@ -123,6 +124,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     orderId = arguments.getLong(Constants.ORDER_ID);
     orderStatus = arguments.getLong(Constants.ORDER_STATUS);
     pageStatus = arguments.getString(Constants.PAGE_STATUS);
+    visitlineBackendId = arguments.getLong(Constants.VISITLINE_BACKEND_ID);
     order = saleOrderService.findOrderDtoById(orderId);
     visitId = arguments.getLong(Constants.VISIT_ID, -1);
     rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);

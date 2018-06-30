@@ -64,6 +64,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     contentValues.put(SaleOrder.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(SaleOrder.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
     contentValues.put(SaleOrder.COL_REJECT_TYPE_BACKEND_ID, entity.getRejectType());
+    contentValues.put(SaleOrder.COL_VISITLINE_BACKEND_ID, entity.getVisitlineBackendId());
     return contentValues;
   }
 
@@ -93,7 +94,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         SaleOrder.COL_INVOICE_BACKEND_ID,
         SaleOrder.COL_CREATE_DATE_TIME,
         SaleOrder.COL_UPDATE_DATE_TIME,
-        SaleOrder.COL_REJECT_TYPE_BACKEND_ID
+        SaleOrder.COL_REJECT_TYPE_BACKEND_ID,//13
+        SaleOrder.COL_VISITLINE_BACKEND_ID
     };
   }
 
@@ -115,6 +117,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     saleOrder.setCreateDateTime(cursor.getString(11));
     saleOrder.setUpdateDateTime(cursor.getString(12));
     saleOrder.setRejectType(cursor.getLong(13));
+    saleOrder.setVisitlineBackendId(cursor.getLong(14));
     return saleOrder;
   }
 
@@ -135,6 +138,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     saleOrder.setCreateDateTime(cursor.getString(11));
     saleOrder.setUpdateDateTime(cursor.getString(12));
     saleOrder.setRejectType(cursor.getLong(13));
+    saleOrder.setVisitlineBackendId(cursor.getLong(14));
     return saleOrder;
   }
 
@@ -159,6 +163,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
 
       ((SaleInvoiceDocument) saleOrder).setSaleOrderId(cursor.getLong(9));
       ((SaleInvoiceDocument) saleOrder).setRejectType(cursor.getLong(13));
+      ((SaleInvoiceDocument) saleOrder).setVisitlineBackendId(cursor.getLong(14));
       saleOrder.setStatusCode(statusId);
     } else if (SaleOrderStatus.REJECTED.getId().equals(statusId)) {
       saleOrder = new SaleRejectDocument();

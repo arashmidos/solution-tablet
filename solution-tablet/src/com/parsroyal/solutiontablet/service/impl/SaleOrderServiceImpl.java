@@ -275,6 +275,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     order.setCreateDateTime(orderDto.getCreateDateTime());
     order.setUpdateDateTime(orderDto.getUpdateDateTime());
     order.setRejectType(orderDto.getRejectType());
+    order.setVisitlineBackendId(orderDto.getVisitlineBackendId());
     return order;
   }
 

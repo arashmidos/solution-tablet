@@ -37,6 +37,7 @@ import java.util.Locale;
 
 public class DeliveryAdapter extends Adapter<ViewHolder> {
 
+  private final long visitlineBackendId;
   private LayoutInflater inflater;
   private Context context;
   private boolean isFromReport;
@@ -46,13 +47,14 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
   private String saleType;
 
   public DeliveryAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromReport,
-      Long visitId, String saleType) {
+      Long visitId, String saleType, long visitlineBackendId) {
     this.context = context;
     this.visitId = visitId == null ? 0 : visitId;
     this.orders = orders;
     this.saleType = saleType;
     this.mainActivity = (MainActivity) context;
     this.isFromReport = isFromReport;
+    this.visitlineBackendId=visitlineBackendId;
     inflater = LayoutInflater.from(context);
   }
 
@@ -196,6 +198,7 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
           args.putLong(Constants.ORDER_ID, order.getId());
           args.putString(Constants.SALE_TYPE, saleType);
           args.putLong(Constants.VISIT_ID, visitId);
+          args.putLong(Constants.VISITLINE_BACKEND_ID,visitlineBackendId);
           args.putBoolean(Constants.READ_ONLY, false);
           setPageStatus(args);
           mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
