@@ -143,6 +143,8 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
       db.execSQL(String
           .format(SQL_ADD_COLUMN, SaleOrder.TABLE_NAME, SaleOrder.COL_REJECT_TYPE_BACKEND_ID,
               "INTEGER"));
+      db.execSQL(String
+          .format(SQL_ADD_COLUMN, Payment.TABLE_NAME, Payment.COL_VISITLINE_BACKEND_ID, "INTEGER"));
     }
   }
 }

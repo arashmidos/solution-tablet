@@ -23,6 +23,7 @@ public class Payment extends BaseEntity<Long> {
   public static final String COL_DESCRIPTION = "DESCRIPTION";
   public static final String COL_BACKEND_ID = "BACKEND_ID";
   public static final String COL_STATUS = "STATUS";
+  public static final String COL_VISITLINE_BACKEND_ID = "VISITLINE_BACKEND_ID";
 
   public static final String CREATE_TABLE_SCRIPT = "CREATE TABLE " + Payment.TABLE_NAME + " (" +
       " " + Payment.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -42,7 +43,8 @@ public class Payment extends BaseEntity<Long> {
       " " + Payment.COL_BACKEND_ID + " INTEGER," +
       " " + Payment.COL_STATUS + " INTEGER," +
       " " + Payment.COL_CREATE_DATE_TIME + " TEXT," +
-      " " + Payment.COL_UPDATE_DATE_TIME + " TEXT" +
+      " " + Payment.COL_UPDATE_DATE_TIME + " TEXT," +
+      " " + Payment.COL_VISITLINE_BACKEND_ID + " INTEGER" +
       " );";
 
   private Long id;
@@ -61,6 +63,7 @@ public class Payment extends BaseEntity<Long> {
   private Long backendId;
   private Long status;
   private String chequeOwner;
+  private long visitlineBackendId;
 
   @Override
   public Long getPrimaryKey() {
@@ -193,5 +196,13 @@ public class Payment extends BaseEntity<Long> {
 
   public void setChequeBank(Long chequeBank) {
     this.chequeBank = chequeBank;
+  }
+
+  public void setVisitlineBackendId(long visitlineBackendId) {
+    this.visitlineBackendId = visitlineBackendId;
+  }
+
+  public long getVisitlineBackendId() {
+    return visitlineBackendId;
   }
 }

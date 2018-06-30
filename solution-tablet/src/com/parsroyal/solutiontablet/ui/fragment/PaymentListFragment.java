@@ -55,6 +55,7 @@ public class PaymentListFragment extends BaseFragment {
   private MainActivity mainActivity;
   private List<PaymentListModel> model;
   private VisitDetailFragment parent;
+  private long visitlineBackendId;
 
   public PaymentListFragment() {
     // Required empty public constructor
@@ -93,6 +94,7 @@ public class PaymentListFragment extends BaseFragment {
       customerId = arguments.getLong(Constants.CUSTOMER_ID);
       visitId = arguments.getLong(Constants.VISIT_ID);
       customer = customerService.getCustomerById(customerId);
+      visitlineBackendId = arguments.getLong(Constants.VISITLINE_BACKEND_ID);
       paymentSO = new PaymentSO(customer.getBackendId(), SendStatus.NEW.getId());
     } else {
       fabAddPayment.setVisibility(View.GONE);
@@ -151,6 +153,7 @@ public class PaymentListFragment extends BaseFragment {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);
+    args.putLong(Constants.VISITLINE_BACKEND_ID,visitlineBackendId);
     mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true);
   }
 }

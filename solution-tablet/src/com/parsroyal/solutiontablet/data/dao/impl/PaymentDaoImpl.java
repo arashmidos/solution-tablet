@@ -53,6 +53,8 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
     contentValues.put(Payment.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
     contentValues.put(Payment.COL_TRACKING_NO, entity.getTrackingNo());
     contentValues.put(Payment.COL_CHEQUE_OWNER, entity.getChequeOwner());
+    contentValues.put(Payment.COL_VISITLINE_BACKEND_ID, entity.getVisitlineBackendId());
+
     return contentValues;
   }
 
@@ -86,7 +88,8 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         Payment.COL_CREATE_DATE_TIME,//14
         Payment.COL_UPDATE_DATE_TIME,
         Payment.COL_TRACKING_NO,
-        Payment.COL_CHEQUE_OWNER
+        Payment.COL_CHEQUE_OWNER,
+        Payment.COL_VISITLINE_BACKEND_ID//18
     };
   }
 
@@ -112,6 +115,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
     payment.setUpdateDateTime(cursor.getString(15));
     payment.setTrackingNo(cursor.getString(16));
     payment.setChequeOwner(cursor.getString(17));
+    payment.setVisitlineBackendId(cursor.getLong(18));
     return payment;
   }
 

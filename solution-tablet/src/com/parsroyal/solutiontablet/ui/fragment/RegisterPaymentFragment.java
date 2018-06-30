@@ -121,6 +121,7 @@ public class RegisterPaymentFragment extends BaseFragment {
   private long amountValue;
   private int paymentTypePos = 0;
   private long visitId;
+  private long visitlineBackendId;
 
   public RegisterPaymentFragment() {
     // Required empty public constructor
@@ -182,6 +183,7 @@ public class RegisterPaymentFragment extends BaseFragment {
         customer = customerService
             .getCustomerByBackendId(arguments.getLong(Constants.CUSTOMER_BACKEND_ID));
         visitId = arguments.getLong(Constants.VISIT_ID);
+        visitlineBackendId = arguments.getLong(Constants.VISITLINE_BACKEND_ID);
       } else {
         ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_data);
         mainActivity.removeFragment(RegisterPaymentFragment.this);
@@ -190,10 +192,10 @@ public class RegisterPaymentFragment extends BaseFragment {
       Log.e(getFragmentTag(), ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
-      Logger
-          .sendError("UI Exception", "Error in creating PaymentDetailFragment " + ex.getMessage());
       Log.e(getFragmentTag(), ex.getMessage(), ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
+      Logger
+          .sendError("UI Exception", "Error in creating PaymentDetailFragment " + ex.getMessage());
     }
 
     if (Empty.isEmpty(customer)) {
@@ -457,6 +459,7 @@ public class RegisterPaymentFragment extends BaseFragment {
         }
         payment.setStatus(SendStatus.NEW.getId());
         payment.setVisitBackendId(visitId);
+        payment.setVisitlineBackendId(visitlineBackendId);
         long paymentId = paymentService.savePayment(payment);
 
         VisitInformationDetail visitDetail = new VisitInformationDetail(visitId,
