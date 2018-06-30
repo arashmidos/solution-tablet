@@ -63,6 +63,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     contentValues.put(SaleOrder.COL_INVOICE_BACKEND_ID, entity.getInvoiceBackendId());
     contentValues.put(SaleOrder.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(SaleOrder.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
+    contentValues.put(SaleOrder.COL_REJECT_TYPE_BACKEND_ID, entity.getRejectType());
     return contentValues;
   }
 
@@ -91,7 +92,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         SaleOrder.COL_BACKEND_ID,
         SaleOrder.COL_INVOICE_BACKEND_ID,
         SaleOrder.COL_CREATE_DATE_TIME,
-        SaleOrder.COL_UPDATE_DATE_TIME
+        SaleOrder.COL_UPDATE_DATE_TIME,
+        SaleOrder.COL_REJECT_TYPE_BACKEND_ID
     };
   }
 
@@ -112,6 +114,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     saleOrder.setInvoiceBackendId(cursor.getLong(10));
     saleOrder.setCreateDateTime(cursor.getString(11));
     saleOrder.setUpdateDateTime(cursor.getString(12));
+    saleOrder.setRejectType(cursor.getLong(13));
     return saleOrder;
   }
 
@@ -131,6 +134,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     saleOrder.setInvoiceBackendId(cursor.getLong(10));
     saleOrder.setCreateDateTime(cursor.getString(11));
     saleOrder.setUpdateDateTime(cursor.getString(12));
+    saleOrder.setRejectType(cursor.getLong(13));
     return saleOrder;
   }
 
@@ -154,6 +158,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
           Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE)));
 
       ((SaleInvoiceDocument) saleOrder).setSaleOrderId(cursor.getLong(9));
+      ((SaleInvoiceDocument) saleOrder).setRejectType(cursor.getLong(13));
       saleOrder.setStatusCode(statusId);
     } else if (SaleOrderStatus.REJECTED.getId().equals(statusId)) {
       saleOrder = new SaleRejectDocument();
@@ -235,7 +240,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         "c." + Customer.COL_BACKEND_ID + "," +
         "o." + SaleOrder.COL_CREATE_DATE_TIME + "," +
         "o." + SaleOrder.COL_DESCRIPTION + "," +
-        "vd." + VisitInformationDetail.COL_VISIT_INFORMATION_ID +","+
+        "vd." + VisitInformationDetail.COL_VISIT_INFORMATION_ID + "," +
         "o." + SaleOrder.COL_NUMBER +//11
         " FROM " + SaleOrder.TABLE_NAME + " o " +
         " INNER JOIN " + Customer.TABLE_NAME + " c on c." + Customer.COL_BACKEND_ID + " = o."

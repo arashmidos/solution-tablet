@@ -25,6 +25,7 @@ public class SaleOrderDto extends BaseModel {
   private String updateDateTime;
   private List<SaleOrderItemDto> orderItems;
   private Customer customer;
+  private Long rejectType;
 
   public SaleOrderDto(Long statusID, Customer customer) {
     this.status = statusID;
@@ -37,6 +38,14 @@ public class SaleOrderDto extends BaseModel {
   }
 
   public SaleOrderDto() {
+  }
+
+  public Long getRejectType() {
+    return rejectType;
+  }
+
+  public void setRejectType(Long rejectType) {
+    this.rejectType = rejectType;
   }
 
   public Long getId() {

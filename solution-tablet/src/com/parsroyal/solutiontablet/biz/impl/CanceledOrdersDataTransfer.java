@@ -69,14 +69,15 @@ public class CanceledOrdersDataTransfer {
 
     PostDataRestService restService = ServiceGenerator.createService(PostDataRestService.class);
 
-    Call<String> call = restService.cancelOrders(((SaleInvoiceDocument) order).getSaleOrderId());
+    SaleInvoiceDocument invoiceDocument = (SaleInvoiceDocument) this.order;
+    Call<String> call = restService.cancelOrders(invoiceDocument.getSaleOrderId(),invoiceDocument.getRejectType());
 
     try {
       Response<String> response = call.execute();
       if (response.isSuccessful()) {
         String cancelResponse = response.body();
         if (Empty.isNotEmpty(cancelResponse) && "1".equals(cancelResponse)) {
-          SaleOrder saleOrder = saleOrderDao.retrieve(order.getId());
+          SaleOrder saleOrder = saleOrderDao.retrieve(this.order.getId());
           saleOrder.setStatus(SaleOrderStatus.DELIVERABLE_SENT.getId());
           saleOrderDao.update(saleOrder);
           success++;

@@ -47,6 +47,7 @@
       android:layout_alignParentRight="true"
       android:layout_alignParentTop="true"
       android:background="@drawable/badger_background"
+      android:paddingTop="2dp"
       android:gravity="center"
       android:textColor="@color/white"
       android:textSize="12sp"

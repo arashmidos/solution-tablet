@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -206,8 +207,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
         }
         break;
       case R.id.cancel_order:
-        showSaveOrderConfirmDialog(getString(R.string.title_cancel_sale_order),
-            SaleOrderStatus.CANCELED.getId());
+        showSaveOrderConfirmDialog(getString(R.string.title_cancel_sale_order));
         break;
     }
   }
@@ -226,15 +226,23 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
         orderStatus.equals(SaleOrderStatus.DELIVERABLE_SENT.getId());
   }
 
-  private void showSaveOrderConfirmDialog(String title, final Long statusId) {
+  private void showSaveOrderConfirmDialog(String title) {
     DialogUtil.showConfirmDialog(mainActivity, title,
         mainActivity.getString(R.string.message_are_you_sure),
-        (dialog, which) -> saveOrder(statusId));
+        (dialog, which) -> showRejectTypeDialog());
   }
 
-  private void saveOrder(Long statusId) {
+  private void showRejectTypeDialog() {
+    FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+    DeliveryRejectDialogFragment deliveryRejectDialogFragment = DeliveryRejectDialogFragment
+        .newInstance(mainActivity,this);
+    deliveryRejectDialogFragment.show(ft, "payment method");
+  }
+
+  public void saveOrder(Long psn) {
     try {
-      order.setStatus(statusId);
+      order.setStatus(SaleOrderStatus.CANCELED.getId());
+      order.setRejectType(psn);
 
 //      String description = "";//orderInfoFrg.getDescription();
 //      order.setDescription(description);
