@@ -14,7 +14,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 
 /**
- * Created by Mahyar on 6/23/2015.
+ * Created by Arash on 6/23/2015.
  */
 public class DialogUtil {
 

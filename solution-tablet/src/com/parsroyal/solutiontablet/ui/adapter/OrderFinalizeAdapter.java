@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -143,6 +145,8 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
     TextView unit1TitleTv;
     @BindView(R.id.unit2_title_tv)
     TextView unit2TitleTv;
+    @BindView(R.id.root_layout)
+    RelativeLayout rootLayout;
 
     private SaleOrderItemDto item;
     private int position;
@@ -167,18 +171,28 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
           NumberUtil.getCommaSeparated(goodsAmount)),
           mainActivity.getString(R.string.common_irr_currency)));
 
-      Double totalAmount= Double.valueOf(item.getAmount()) / 1000D;
-    /*  if (isDelivery()) {
-        totalAmount = item.getGoodsCount() * goodsAmount / 1000;
-      }*/
+      Double totalAmount = Double.valueOf(item.getAmount()) / 1000D;
+      if (isDelivery() && totalAmount == 0.0) {
+        editImg.setVisibility(View.GONE);
+        deleteImg.setVisibility(View.GONE);
+        rootLayout.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.gift));
+      } else {
+        editImg.setVisibility(View.VISIBLE);
+        deleteImg.setVisibility(View.VISIBLE);
+        rootLayout.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.white));
+      }
       totalAmountTv.setText(String.format("%s %s",
           NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(totalAmount)),
           mainActivity.getString(R.string.common_irr_currency)));
       countTv.setText(NumberUtil.digitsToPersian(String.valueOf(item.getGoodsCount() / 1000)));
       unit2CountTv
           .setText(NumberUtil.digitsToPersian(String.valueOf(item.getGoodsUnit2Count() / 1000)));
-      unit1TitleTv.setText(NumberUtil.digitsToPersian(item.getGoods().getUnit1Title()));
-      unit2TitleTv.setText(NumberUtil.digitsToPersian(item.getGoods().getUnit2Title()));
+      String unit1Title = item.getGoods().getUnit1Title();
+      unit1TitleTv
+          .setText(Empty.isEmpty(unit1Title) ? "--" : NumberUtil.digitsToPersian(unit1Title));
+      String unit2Title = item.getGoods().getUnit2Title();
+      unit2TitleTv
+          .setText(Empty.isEmpty(unit2Title) ? "--" : NumberUtil.digitsToPersian(unit2Title));
       this.item = item;
       this.goods = item.getGoods();
       this.position = position;
@@ -192,45 +206,89 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
     public void onClick(View view) {
       switch (view.getId()) {
         case R.id.edit_img:
-          editItem();
+          if (isDelivery()) {
+            showEditConfirm();
+          } else {
+            editItem();
+          }
           break;
         case R.id.delete_img:
-          deleteItem();
+          showConfirmDelete();
           break;
       }
     }
 
-    private void deleteItem() {
+    private void showEditConfirm() {
+      DialogUtil
+          .showConfirmDialog(mainActivity, mainActivity.getString(R.string.message_are_you_sure),
+              mainActivity.getString(R.string.message_edit_removes_gift),
+              (dialog, which) -> {
+                removeAllGifts();
+                parent.setOrderChanged();
+                editItem();
+              });
+    }
+
+    private void removeAllGifts() {
+      try {
+        for (SaleOrderItemDto orderItem : orderItems) {
+          if (orderItem.getAmount() == 0) {
+            saleOrderService.deleteOrderItem(orderItem.getId(), false);
+          }
+        }
+
+        orderItems = saleOrderService.getOrderItemDtoList(order.getId());
+
+        saleOrderService.updateOrderAmount(order.getId());
+
+        notifyDataSetChanged();
+        parent.updateList();
+
+      } catch (BusinessException ex) {
+        Log.e(TAG, ex.getMessage(), ex);
+        ToastUtil.toastError(mainActivity, ex);
+      } catch (Exception ex) {
+        Log.e(TAG, ex.getMessage(), ex);
+        ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+      }
+    }
+
+    private void showConfirmDelete() {
       DialogUtil
           .showConfirmDialog(mainActivity, mainActivity.getString(R.string.title_delete_order_item),
-              mainActivity.getString(
-                  SaleOrderStatus.DELIVERABLE.getId().equals(order.getStatus()) ?
-                      R.string.message_are_you_sure_not_recoverable :
-                      R.string.message_are_you_sure), (dialog, which) -> {
-                try {
-                  saleOrderService.deleteOrderItem(item.getId(), isRejected(order.getStatus()));
-
-                  if (isRejected(order.getStatus())) {
-                    goods.setExisting(goods.getExisting() + item.getGoodsCount());
-                    orderItems = saleOrderService
-                        .getLocalOrderItemDtoList(order.getId(), goodsDtoList);
-                  } else {
-                    orderItems = saleOrderService.getOrderItemDtoList(order.getId());
-                  }
-                  saleOrderService.updateOrderAmount(order.getId());
-                  notifyDataSetChanged();
-                  parent.updateList();
-
-                } catch (BusinessException ex) {
-                  Log.e(TAG, ex.getMessage(), ex);
-                  ToastUtil.toastError(mainActivity, ex);
-                } catch (Exception ex) {
-                  Logger.sendError("Data Storage Exception",
-                      "Error in deleting order items " + ex.getMessage());
-                  Log.e(TAG, ex.getMessage(), ex);
-                  ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+              mainActivity.getString(SaleOrderStatus.DELIVERABLE.getId().equals(order.getStatus()) ?
+                  R.string.message_are_you_sure_not_recoverable :
+                  R.string.message_are_you_sure), (dialog, which) -> {
+                if (isDelivery()) {
+                  removeAllGifts();
+                  parent.setOrderChanged();
                 }
+                deleteItem();
               });
+    }
+
+    private void deleteItem() {
+      try {
+        saleOrderService.deleteOrderItem(item.getId(), isRejected(order.getStatus()));
+
+        if (isRejected(order.getStatus())) {
+          goods.setExisting(goods.getExisting() + item.getGoodsCount());
+          orderItems = saleOrderService
+              .getLocalOrderItemDtoList(order.getId(), goodsDtoList);
+        } else {
+          orderItems = saleOrderService.getOrderItemDtoList(order.getId());
+        }
+        saleOrderService.updateOrderAmount(order.getId());
+        notifyDataSetChanged();
+        parent.updateList();
+
+      } catch (BusinessException ex) {
+        Log.e(TAG, ex.getMessage(), ex);
+        ToastUtil.toastError(mainActivity, ex);
+      } catch (Exception ex) {
+        Log.e(TAG, ex.getMessage(), ex);
+        ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+      }
     }
 
     /*

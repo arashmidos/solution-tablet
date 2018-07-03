@@ -106,7 +106,10 @@ public class InvoicedOrdersDataTransfer extends AbstractDataTransferBizImpl<Stri
   protected void updateOrderStatus(Long invoiceBackendId, SaleOrder saleOrder) {
     saleOrder.setInvoiceBackendId(invoiceBackendId);
     if (ApplicationKeys.SALE_DISTRIBUTER.equals(saleType.getValue())) {
-      saleOrder.setStatus(SaleOrderStatus.DELIVERABLE_SENT.getId());
+      if (!order.getStatusCode().equals(SaleOrderStatus.INVOICE_GIFT.getId()) && !order
+          .getStatusCode().equals(SaleOrderStatus.GIFT.getId())) {
+        saleOrder.setStatus(SaleOrderStatus.DELIVERABLE_SENT.getId());
+      }
     } else {
       saleOrder.setStatus(SaleOrderStatus.SENT_INVOICE.getId());
     }

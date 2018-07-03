@@ -12,6 +12,7 @@
   card_view:cardElevation="3dp">
 
   <RelativeLayout
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white">

@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.impl.GiftDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -28,6 +29,7 @@ import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
@@ -36,6 +38,7 @@ import com.parsroyal.solutiontablet.data.event.SendOrderEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
+import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.BaseInfoService;
@@ -125,6 +128,8 @@ public class OrderInfoFragment extends BaseFragment {
   private boolean giftRequestSent;
   private Long orderBackendId;
   private long visitlineBackendId;
+  private Long newOrderId;
+  private long rejectType;
 
   public OrderInfoFragment() {
     // Required empty public constructor
@@ -147,11 +152,7 @@ public class OrderInfoFragment extends BaseFragment {
     View view = inflater.inflate(R.layout.fragment_new_order_info, container, false);
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
-    saleOrderService = new SaleOrderServiceImpl(mainActivity);
-    customerService = new CustomerServiceImpl(mainActivity);
-    baseInfoService = new BaseInfoServiceImpl(mainActivity);
-    settingService = new SettingServiceImpl(mainActivity);
-    visitService = new VisitServiceImpl(mainActivity);
+    initializeServices();
 
     Bundle args = getArguments();
 
@@ -164,6 +165,7 @@ public class OrderInfoFragment extends BaseFragment {
       saleType = args.getString(Constants.SALE_TYPE, "");
       visitId = args.getLong(Constants.VISIT_ID, -1);
       visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
+      rejectType = args.getLong(Constants.REJECT_TYPE_ID);
 
       setData();
 
@@ -173,18 +175,17 @@ public class OrderInfoFragment extends BaseFragment {
     }
   }
 
+  private void initializeServices() {
+    saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    customerService = new CustomerServiceImpl(mainActivity);
+    baseInfoService = new BaseInfoServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl(mainActivity);
+    visitService = new VisitServiceImpl(mainActivity);
+  }
+
   private void setData() {
-    if (selectedItem != null) {
-      paymentMethodTv.setText(NumberUtil.digitsToPersian(selectedItem.getLabel()));
-    } else {
-      Long paymentTypeBackendId = order.getPaymentTypeBackendId();
-      if (Empty.isNotEmpty(paymentTypeBackendId) && paymentTypeBackendId != 0L) {
-        selectedItem = baseInfoService
-            .getBaseInfoByBackendId(BaseInfoTypes.PAYMENT_TYPE.getId(), paymentTypeBackendId);
-        paymentMethodTv.setText(NumberUtil.digitsToPersian(selectedItem.getLabel()));
-        setPaymentMethod(selectedItem);
-      }
-    }
+    //Set Payment type
+    setPaymentType();
 
     mainActivity.changeTitle(
         isRejected() ? getString(R.string.return_info) : getString(R.string.payment_info));
@@ -203,8 +204,15 @@ public class OrderInfoFragment extends BaseFragment {
 
     String title = getProperTitle();
 
-    dateTitleTv.setText(String.format(Locale.US, getString(R.string.date_x), title));
-    orderCodeTitleTv.setText(String.format(Locale.US, getString(R.string.number_x), title));
+    if (isDelivery()) {
+      dateTitleTv.setText(
+          String.format(Locale.US, getString(R.string.date_x), getString(R.string.title_order)));
+      orderCodeTitleTv.setText(
+          String.format(Locale.US, getString(R.string.number_x), getString(R.string.title_order)));
+    } else {
+      dateTitleTv.setText(String.format(Locale.US, getString(R.string.date_x), title));
+      orderCodeTitleTv.setText(String.format(Locale.US, getString(R.string.number_x), title));
+    }
     submitOrderBtn.setText(String.format(Locale.US, getString(R.string.x_order_submit), title));
     descriptionLayout.setHint(String.format(Locale.US, getString(R.string.description_x), title));
 
@@ -239,6 +247,20 @@ public class OrderInfoFragment extends BaseFragment {
     }
   }
 
+  private void setPaymentType() {
+    if (selectedItem != null) {
+      paymentMethodTv.setText(NumberUtil.digitsToPersian(selectedItem.getLabel()));
+    } else {
+      Long paymentTypeBackendId = order.getPaymentTypeBackendId();
+      if (Empty.isNotEmpty(paymentTypeBackendId) && paymentTypeBackendId != 0L) {
+        selectedItem = baseInfoService
+            .getBaseInfoByBackendId(BaseInfoTypes.PAYMENT_TYPE.getId(), paymentTypeBackendId);
+        paymentMethodTv.setText(NumberUtil.digitsToPersian(selectedItem.getLabel()));
+        setPaymentMethod(selectedItem);
+      }
+    }
+  }
+
   public void setPaymentMethod(LabelValue paymentMethod) {
     selectedItem = paymentMethod;
     paymentMethodTv.setText(NumberUtil.digitsToPersian(selectedItem.getLabel()));
@@ -257,28 +279,47 @@ public class OrderInfoFragment extends BaseFragment {
       case R.id.register_gift_tv:
         if (giftRequestSent) {
           registerGiftTv.setText(R.string.getting_info);
-          new GiftDataTransferBizImpl(mainActivity).exchangeData(orderBackendId);
+          new GiftDataTransferBizImpl(mainActivity).exchangeData(orderBackendId, saleType.equals(
+              ApplicationKeys.SALE_COLD) ? "0" : "1");
         } else {
           order = saleOrderService.findOrderDtoById(orderId);
           if (validateOrderForSave()) {
-            order.setStatus(SaleOrderStatus.GIFT.getId());
             order.setPaymentTypeBackendId(selectedItem.getValue());
             order.setDescription(descriptionEdt.getText().toString());
+            order.setVisitlineBackendId(visitlineBackendId);
             if (!isDelivery()) {
+              order.setStatus(SaleOrderStatus.GIFT.getId());
               order.setSalesmanId(
                   Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
             } else {
               order.setId(null);
+              order.setStatus(SaleOrderStatus.INVOICE_GIFT.getId());
+            }
+            newOrderId = saleOrderService.saveOrder(order);
+            //save order items
+            if (isDelivery()) {
+              List<SaleOrderItemDto> items = order.getOrderItems();
+              for (SaleOrderItemDto item : items) {
+
+                saleOrderService.saveOrderItem(new SaleOrderItem(item.getGoodsBackendId(),
+                    newOrderId, item.getInvoiceBackendId(), item.getGoodsCount()));
+              }
             }
 
-            Long newOrderId = saleOrderService.saveOrder(order);
             SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
             BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(newOrderId);
             registerGiftTv.setText(R.string.sending);
             if (Empty.isNotEmpty(saleOrder)) {
               saleOrder.setStatusCode(SaleOrderStatus.GIFT.getId());
-              OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity);
-              dataTransfer.sendSingleOrder(saleOrder);
+              if (isDelivery()) {
+                InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(
+                    mainActivity);
+                dataTransfer.sendSingleInvoice(saleOrder);
+              } else {
+                OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(
+                    mainActivity);
+                dataTransfer.sendSingleOrder(saleOrder);
+              }
             }
           }
         }
@@ -344,11 +385,17 @@ public class OrderInfoFragment extends BaseFragment {
       }
 
       //Distributer should not enter his salesmanId.
-      if (!SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus)) {
+      if (!isDelivery()) {
         order.setSalesmanId(
             Long.valueOf(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));
+      } else {
+//        if (newOrderId != null) {
+//          order.setId(newOrderId);
+          order.setInvoiceBackendId(orderBackendId);
+//        }
+        order.setRejectType(rejectType);
       }
-        order.setVisitlineBackendId(visitlineBackendId);
+      order.setVisitlineBackendId(visitlineBackendId);
       long typeId = saleOrderService.saveOrder(order);
       if (visitId != 0L) {
         VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, getDetailType(),

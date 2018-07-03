@@ -29,14 +29,14 @@ public class GiftDataTransferBizImpl {
     this.context = context;
   }
 
-  public void exchangeData(Long orderBackendId) {
+  public void exchangeData(Long orderBackendId, String saleType) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
     }
 
     GetDataRestService restService = ServiceGenerator.createService(GetDataRestService.class);
 
-    Call<List<String>> call = restService.getGiftResult(String.valueOf(orderBackendId));
+    Call<List<String>> call = restService.getGiftResult(saleType,String.valueOf(orderBackendId));
 
     call.enqueue(new Callback<List<String>>() {
       @Override

@@ -191,7 +191,7 @@
     </string>
   <string name="title_delete_order_item">حذف آیتم سفارش</string>
   <string name="message_are_you_sure">آیا مطمئن هستید؟</string>
-  <string name="message_are_you_sure_not_recoverable">آیا مطمئن هستید؟ این عملیات برگشت پذیر نیست</string>
+  <string name="message_are_you_sure_not_recoverable">با حذف این آیتم کلیه تخفیفات و جوایز حذف می شوند. این عملیات برگشت پذیر نیست. آیا مطمئن هستید؟</string>
   <string name="title_cancel">انصراف</string>
   <string name="title_cancel_sale_order">بایگانی سفارش</string>
   <string name="title_cancel_sale_x">"بایگانی %1$s"</string>
@@ -605,5 +605,7 @@
   <string name="view_gift">مشاهده تخفیف و جوایز</string>
   <string name="retry">تلاش مجدد</string>
   <string name="gift">تخفیف و جوایز</string>
+  <string name="edit_item">ویرایش آیتم سفارش</string>
+  <string name="message_edit_removes_gift">با ویرایش این آیتم کلیه تخفیفات و جوایز حذف می شوند. این عملیات برگشت پذیر نیست</string>
 
 </resources>

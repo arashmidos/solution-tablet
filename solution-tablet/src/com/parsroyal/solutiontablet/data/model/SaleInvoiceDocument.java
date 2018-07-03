@@ -1,13 +1,19 @@
 package com.parsroyal.solutiontablet.data.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class SaleInvoiceDocument extends BaseSaleDocument<SaleInvoiceItem> {
 
   private Long saleOrderId;
-  @JsonIgnore
   private Long rejectType;
   private Long visitlineBackendId;
+  private Long invoiceBackendId;
+
+  public Long getInvoiceBackendId() {
+    return invoiceBackendId;
+  }
+
+  public void setInvoiceBackendId(Long invoiceBackendId) {
+    this.invoiceBackendId = invoiceBackendId;
+  }
 
   public Long getVisitlineBackendId() {
     return visitlineBackendId;

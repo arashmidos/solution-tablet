@@ -156,7 +156,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       ((SaleOrderDocument) saleOrder)
           .setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
     } else if (SaleOrderStatus.INVOICED.getId().equals(statusId) || SaleOrderStatus.DELIVERED
-        .getId().equals(statusId) || SaleOrderStatus.CANCELED.getId().equals(statusId)) {
+        .getId().equals(statusId) || SaleOrderStatus.CANCELED.getId().equals(statusId)
+        || SaleOrderStatus.INVOICE_GIFT.getId().equals(statusId)) {
       saleOrder = new SaleInvoiceDocument();
       saleOrder.setType(
           Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_INVOICE_TYPE)));
@@ -164,7 +165,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       ((SaleInvoiceDocument) saleOrder).setSaleOrderId(cursor.getLong(9));
       ((SaleInvoiceDocument) saleOrder).setRejectType(cursor.getLong(13));
       ((SaleInvoiceDocument) saleOrder).setVisitlineBackendId(cursor.getLong(14));
-      saleOrder.setStatusCode(statusId);
+      ((SaleInvoiceDocument) saleOrder).setInvoiceBackendId(cursor.getLong(10));
+
     } else if (SaleOrderStatus.REJECTED.getId().equals(statusId)) {
       saleOrder = new SaleRejectDocument();
       saleOrder.setType(
@@ -394,6 +396,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? OR "
+        + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? )";
     String[] args = {String.valueOf(orderId),
         String.valueOf(SaleOrderStatus.READY_TO_SEND.getId()),
@@ -401,6 +404,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         String.valueOf(SaleOrderStatus.INVOICED.getId()),
         String.valueOf(SaleOrderStatus.DELIVERED.getId()),
         String.valueOf(SaleOrderStatus.CANCELED.getId()),
+        String.valueOf(SaleOrderStatus.INVOICE_GIFT.getId()),
         String.valueOf(SaleOrderStatus.GIFT.getId())
     };
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);

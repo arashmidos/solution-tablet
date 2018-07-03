@@ -137,8 +137,8 @@
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_marginEnd="8dp"
-          android:layout_toEndOf="@id/date_title_tv"
-          android:layout_toStartOf="@id/divider"
+          android:layout_toStartOf="@id/date_title_tv"
+          android:layout_toEndOf="@id/divider"
           android:gravity="center|start"
           android:textColor="@color/black_85"
           android:textSize="12sp" />
@@ -158,10 +158,11 @@
         <TextView
           android:id="@+id/order_code_tv"
           style="@style/IranSans.Medium"
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="8dp"
+          android:layout_alignParentStart="true"
           android:layout_toStartOf="@id/order_code_title_tv"
           android:gravity="center|start"
           android:textColor="@color/black_85"

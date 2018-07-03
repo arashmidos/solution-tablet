@@ -36,16 +36,19 @@ public class DeliveryRejectDialogFragment extends DialogFragment {
   private BaseInfoServiceImpl baseInfoService;
   private MainActivity context;
   private FinalizeOrderDialogFragment parent;
+  private boolean isCanceled;
 
   public DeliveryRejectDialogFragment() {
     // Required empty public constructor
   }
 
   public static DeliveryRejectDialogFragment newInstance(
-      MainActivity mainActivity, FinalizeOrderDialogFragment finalizeOrderDialogFragment) {
+      MainActivity mainActivity, FinalizeOrderDialogFragment finalizeOrderDialogFragment,
+      boolean isCanceled) {
     DeliveryRejectDialogFragment fragment = new DeliveryRejectDialogFragment();
     fragment.context = mainActivity;
     fragment.parent = finalizeOrderDialogFragment;
+    fragment.isCanceled = isCanceled;
     return fragment;
   }
 
@@ -64,6 +67,8 @@ public class DeliveryRejectDialogFragment extends DialogFragment {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     baseInfoService = new BaseInfoServiceImpl(mainActivity);
+
+    toolbarTitle.setText(R.string.reject_reason_title);
     setUpRecyclerView();
 
     return view;
@@ -90,7 +95,11 @@ public class DeliveryRejectDialogFragment extends DialogFragment {
         break;
       case R.id.submit_btn:
         if( selectedItem!=null) {
-          parent.saveOrder(selectedItem.getValue());
+          if( isCanceled) {
+            parent.saveOrder(selectedItem.getValue());
+          }else{
+            parent.setRejectType(selectedItem.getValue());
+          }
           getDialog().dismiss();
         }
         break;

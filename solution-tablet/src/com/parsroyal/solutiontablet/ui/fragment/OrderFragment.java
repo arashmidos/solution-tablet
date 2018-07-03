@@ -447,7 +447,7 @@ public class OrderFragment extends BaseFragment {
     }
   }
 
-  public void goToOrderInfoFragment() {
+  public void goToOrderInfoFragment(Long rejectType) {
     Bundle args = new Bundle();
     args.putLong(Constants.ORDER_ID, orderId);
     args.putString(Constants.SALE_TYPE, saleType);
@@ -455,6 +455,9 @@ public class OrderFragment extends BaseFragment {
     args.putLong(Constants.VISIT_ID, visitId);
     args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
     args.putLong(Constants.VISITLINE_BACKEND_ID, visitlineBackendId);
+    if (rejectType != null) {
+      args.putLong(Constants.REJECT_TYPE_ID, rejectType);
+    }
 
     mainActivity.changeFragment(MainActivity.ORDER_INFO_FRAGMENT, args, true);
   }

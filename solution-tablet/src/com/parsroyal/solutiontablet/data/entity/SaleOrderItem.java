@@ -65,6 +65,12 @@ public class SaleOrderItem extends BaseEntity<Long> {
     this.updateDateTime = DateUtil.getCurrentGregorianFullWithTimeDate();
   }
 
+  public SaleOrderItem(Long goodsBackendId, Long saleOrderId, Long invoiceBackendId,
+      Long goodsCount) {
+    this(goodsBackendId, saleOrderId, invoiceBackendId);
+    this.goodsCount = goodsCount;
+  }
+
   public Long getId() {
     return id;
   }

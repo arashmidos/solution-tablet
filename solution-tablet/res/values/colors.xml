@@ -88,4 +88,5 @@
   <color name="shimmer_color">#80ffffff</color>
   <color name="gray_72">#727272</color>
   <color name="gray_1e">#1e000000</color>
+  <color name="gift">#FFF9C4</color>
 </resources>

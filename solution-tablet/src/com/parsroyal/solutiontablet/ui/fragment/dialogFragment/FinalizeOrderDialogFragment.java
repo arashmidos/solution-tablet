@@ -73,6 +73,8 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   private GoodsDtoList rejectedGoodsList;
   private long visitId;
   private long visitlineBackendId;
+  private boolean orderChanged = false;
+  private Long rejectType;
 
 
   public FinalizeOrderDialogFragment() {
@@ -95,7 +97,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   @NonNull
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new Dialog(getActivity(), getTheme()){
+    return new Dialog(getActivity(), getTheme()) {
       @Override
       public void onBackPressed() {
         if (pageStatus.equals(Constants.VIEW) || isDelivery()) {
@@ -200,11 +202,15 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
       case R.id.submit_btn:
         if (SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus)) {
           if (validateOrderForDeliver()) {
-            orderFragment.goToOrderInfoFragment();
-            getDialog().dismiss();
+            if( orderChanged) {
+              showRejectTypeDialog(false);
+            }else {
+              orderFragment.goToOrderInfoFragment(rejectType);
+              getDialog().dismiss();
+            }
           }
         } else {
-          orderFragment.goToOrderInfoFragment();
+          orderFragment.goToOrderInfoFragment(null);
           getDialog().dismiss();
         }
         break;
@@ -231,13 +237,13 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   private void showSaveOrderConfirmDialog(String title) {
     DialogUtil.showConfirmDialog(mainActivity, title,
         mainActivity.getString(R.string.message_are_you_sure),
-        (dialog, which) -> showRejectTypeDialog());
+        (dialog, which) -> showRejectTypeDialog(true));
   }
 
-  private void showRejectTypeDialog() {
+  private void showRejectTypeDialog(boolean isCanceled) {
     FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
     DeliveryRejectDialogFragment deliveryRejectDialogFragment = DeliveryRejectDialogFragment
-        .newInstance(mainActivity,this);
+        .newInstance(mainActivity, this,isCanceled);
     deliveryRejectDialogFragment.show(ft, "payment method");
   }
 
@@ -276,4 +282,11 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     super.onDestroyView();
   }
 
+  public void setOrderChanged() {
+    orderChanged = true;
+  }
+
+  public void setRejectType(Long value) {
+    this.rejectType = value;
+  }
 }

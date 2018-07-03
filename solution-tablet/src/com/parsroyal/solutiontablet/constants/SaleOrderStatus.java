@@ -5,6 +5,7 @@ package com.parsroyal.solutiontablet.constants;
  */
 public enum SaleOrderStatus {
   GIFT(10L, "GIFT"),
+  INVOICE_GIFT(11L, "INVOICE_GIFT"),
   DRAFT(90001L, "DRAFT"),
   SENT(90002L, "SENT"),
   DELIVERABLE(90003L, "DELIVERABLE"),
