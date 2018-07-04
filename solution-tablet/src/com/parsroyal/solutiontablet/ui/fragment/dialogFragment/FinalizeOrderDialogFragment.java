@@ -288,5 +288,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
 
   public void setRejectType(Long value) {
     this.rejectType = value;
+    orderFragment.goToOrderInfoFragment(rejectType);
+    getDialog().dismiss();
   }
 }

@@ -49,10 +49,11 @@ public class VisitLineDataTaransferBizImpl {
     }
 
     GetDataRestService restService = ServiceGenerator.createService(GetDataRestService.class);
-
+    String check = settingService.getSettingValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE);
     Call<List<VisitLineDto>> call = restService
         .getAllVisitLines(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE),
-            settingService.getSettingValue(ApplicationKeys.SALESMAN_ID));
+            settingService.getSettingValue(ApplicationKeys.SALESMAN_ID),
+            "true".equals(check) ? "1" : "0");
 
     call.enqueue(new Callback<List<VisitLineDto>>() {
       @Override

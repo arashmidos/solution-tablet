@@ -114,7 +114,6 @@ public class DeliveryReturnAdapter extends RecyclerView.Adapter<DeliveryReturnAd
         if (parent != null) {
           parent.setRejectType(selectedItem);
         }
-
       });
     }
   }

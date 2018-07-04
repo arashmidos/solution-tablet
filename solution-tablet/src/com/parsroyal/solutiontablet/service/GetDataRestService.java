@@ -43,9 +43,9 @@ public interface GetDataRestService {
       @Path("stock_id") String stockId,
       @Path("sale_type") String SaleType, @Path("salesman_id") String salesmanId);
 
-  @GET("visit-lines/{sale_type}/{salesman_id}")
+  @GET("visit-lines/{sale_type}/{salesman_id}/{checkCredit}")
   Call<List<VisitLineDto>> getAllVisitLines(@Path("sale_type") String SaleType,
-      @Path("salesman_id") String salesmanId);
+      @Path("salesman_id") String salesmanId,@Path("checkCredit") String checkCredit);
 
   @GET("visit-lines/delivery/{distributor_id}")
   Call<List<VisitLineDto>> getAllVisitLinesForDelivery(

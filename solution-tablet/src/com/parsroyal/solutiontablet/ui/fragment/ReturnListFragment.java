@@ -141,7 +141,7 @@ public class ReturnListFragment extends BaseFragment {
 
   @Subscribe
   public void getMessage(ErrorEvent event) {
-    if (event.getMessage().equals("reject")) {
+    if (Empty.isNotEmpty(event.getMessage()) && event.getMessage().equals("reject")) {
 
       DialogUtil.dismissProgressDialog();
       ToastUtil.toastError(mainActivity,

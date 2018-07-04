@@ -406,12 +406,12 @@ public class DataTransferServiceImpl implements DataTransferService {
       InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(context);
       for (int i = 0; i < saleOrders.size(); i++) {
         BaseSaleDocument baseSaleDocument = saleOrders.get(i);
-        if (ApplicationKeys.SALE_DISTRIBUTER.equals(saleType.getValue())) {
+        /*if (ApplicationKeys.SALE_DISTRIBUTER.equals(saleType.getValue())) {
           baseSaleDocument.setStockCode(
               Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE)));
           baseSaleDocument.setOfficeCode(
               Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE)));
-        }
+        }*/
         dataTransfer.setOrder(baseSaleDocument);
         dataTransfer.exchangeData();
       }

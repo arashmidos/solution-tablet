@@ -190,6 +190,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     saleOrder.setPaymentType(cursor.getLong(4));
     saleOrder.setSalesman(cursor.getLong(5));
     saleOrder.setCustomer(cursor.getLong(6));
+    saleOrder.setStatus(statusId);
     saleOrder.setDescription(Empty.isEmpty(cursor.getString(7)) ? "" : cursor.getString(7));
     saleOrder.setCompanyId(
         Integer.valueOf(settingService.getSettingValue(ApplicationKeys.USER_COMPANY_ID)));

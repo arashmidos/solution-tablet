@@ -48,7 +48,7 @@
       android:layout_marginRight="16dp"
       android:lineSpacingExtra="6sp"
       android:textColor="@color/primary_dark"
-      android:textSize="@dimen/text_x_large"
+      android:textSize="18sp"
       tools:text="مسیر پاسداران - هروی" />
 
     <RelativeLayout

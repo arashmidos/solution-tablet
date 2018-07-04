@@ -21,6 +21,16 @@ public class BaseSaleDocument<T extends BaseSaleDocumentItem> {
   private Integer officeCode;
   private List<T> items;
   private Long statusCode;
+  @JsonIgnore
+  private Long status;
+
+  public Long getStatus() {
+    return status;
+  }
+
+  public void setStatus(Long status) {
+    this.status = status;
+  }
 
   public Long getId() {
     return id;

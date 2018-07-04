@@ -173,9 +173,14 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         break;
       case R.id.data_transfer_btn:
         if (transferFinished) {
-          EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_REFRESH_DATA));
-          EventBus.getDefault().post(new ActionEvent(StatusCodes.SUCCESS));
-          getDialog().dismiss();
+          if (transferSuccess) {
+            EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_REFRESH_DATA));
+            EventBus.getDefault().post(new ActionEvent(StatusCodes.SUCCESS));
+            getDialog().dismiss();
+          } else {
+            setUpRecyclerView();
+            startTransfer();
+          }
         } else {
           startTransfer();
         }
@@ -186,7 +191,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   private void startTransfer() {
     transferStarted = true;
     transferFinished = false;
-    transferSuccess= false;
+    transferSuccess = false;
     currentPosition = -1;
     switchButtonState();
     sendNextDetail();
@@ -371,7 +376,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
     BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
     if (Empty.isNotEmpty(saleOrder)) {
-      if (saleOrder.getStatusCode().equals(SaleOrderStatus.CANCELED.getId())) {
+      if (saleOrder.getStatus().equals(SaleOrderStatus.CANCELED.getId())) {
         Thread sendDataThead = new Thread(() -> {
           try {
             CanceledOrdersDataTransfer ordersDataTransfer = new CanceledOrdersDataTransfer(
@@ -380,7 +385,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
             ordersDataTransfer.exchangeData();
             if (ordersDataTransfer.getSuccess() == 1) {
               sendNextDetail();
-            }else{
+            } else {
               EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
             }
           } catch (Exception ex) {
@@ -471,8 +476,10 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   private void cancelTransfer() {
     mainActivity.runOnUiThread(() -> {
       transferFinished = true;
+      transferSuccess = false;
 
       switchButtonState();
+      uploadDataBtn.setText(getString(R.string.retry));
       adapter.setError(currentPosition);
       ToastUtil.toastError(root, getString(R.string.error_in_sending_data));
     });
