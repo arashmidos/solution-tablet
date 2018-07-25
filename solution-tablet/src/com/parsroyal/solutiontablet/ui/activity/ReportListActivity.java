@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -29,6 +30,8 @@ public class ReportListActivity extends AppCompatActivity {
 
   @BindView(R.id.recycler_view)
   ShimmerRecyclerView recyclerView;
+  @BindView(R.id.toolbar_title_tv)
+  TextView toolbarTitleTv;
   private ReportListAdapter listAdapter;
   private String reportType;
   private long customerBackendId;
@@ -79,6 +82,7 @@ public class ReportListActivity extends AppCompatActivity {
     if (reportType != null && reportType.equals(Constants.REPORT_SALESMAN)) {
       new KPIServiceImpl().getSalesmanReportsList();
     } else {
+      toolbarTitleTv.setText(R.string.customer_report);
       new KPIServiceImpl().getCustomerReportsList();
     }
   }

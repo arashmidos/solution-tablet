@@ -50,7 +50,6 @@ public class NewCustomerPictureAdapter extends Adapter<ViewHolder> {
       view = inflater.inflate(R.layout.item_new_customer_button, parent, false);
     } else {
       view = inflater.inflate(R.layout.item_new_customer_pic_list, parent, false);
-      //TODO: If its first item after maxReached, get padding right 16dp
     }
     return new ViewHolder(view);
   }

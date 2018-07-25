@@ -23,7 +23,7 @@ public class ToastUtil {
     Snacky.Builder builder = Snacky.builder();
     boolean isTablet;
     if (activity != null) {
-      builder.setActivty(activity);
+      builder.setActivity(activity);
       isTablet = MultiScreenUtility.isTablet(activity);
     } else if (view != null) {
       builder.setView(view);
@@ -70,7 +70,7 @@ public class ToastUtil {
     Snacky.Builder builder = Snacky.builder();
     boolean isTablet;
     if (activity != null) {
-      builder.setActivty(activity);
+      builder.setActivity(activity);
       isTablet = MultiScreenUtility.isTablet(activity);
     } else if (view != null) {
       builder.setView(view);
@@ -118,7 +118,7 @@ public class ToastUtil {
     boolean isTablet;
     String okButton;
     if (activity != null) {
-      builder.setActivty(activity);
+      builder.setActivity(activity);
       isTablet = MultiScreenUtility.isTablet(activity);
       okButton = activity.getString(R.string.button_ok);
     } else if (view != null) {

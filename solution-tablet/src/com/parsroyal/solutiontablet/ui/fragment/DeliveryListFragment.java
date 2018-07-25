@@ -95,7 +95,7 @@ public class DeliveryListFragment extends BaseFragment {
     if (parent == null) {
       //Report
       totalSale.setVisibility(View.VISIBLE);
-      displayTotalSale();//TODO:
+      displayTotalSale();
     }
 
     return view;
