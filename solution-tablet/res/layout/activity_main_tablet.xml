@@ -40,22 +40,23 @@
         <TextView
           android:id="@+id/toolbar_title"
           style="@style/IranSans.Medium"
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:layout_marginEnd="72dp"
-          android:layout_marginRight="72dp"
+          android:layout_gravity="center"
           android:gravity="right|center"
+          android:text="@string/features_list"
           android:textColor="@color/white"
+          android:visibility="gone"
           android:textSize="16sp" />
 
         <ImageView
           android:id="@+id/navigation_img"
-          android:src="@drawable/ic_arrow_forward"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginEnd="16dp"
           android:layout_marginRight="16dp"
-          android:layout_gravity="end|center" />
+          android:layout_gravity="end|center"
+          android:src="@drawable/ic_arrow_forward" />
 
         <ImageView
           android:id="@+id/search_img"
@@ -86,6 +87,19 @@
           android:textColor="@color/white"
           android:textSize="14sp"
           android:visibility="gone" />
+
+        <Chronometer
+          android:id="@+id/chronometer"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_gravity="start"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="18sp"
+          android:visibility="visible"
+          tools:visibility="visible" />
       </FrameLayout>
     </android.support.design.widget.AppBarLayout>
 

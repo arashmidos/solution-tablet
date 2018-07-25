@@ -159,7 +159,10 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
 
     public void setData(SaleOrderItemDto item, int position) {
       if (item.getGoods() == null) {
-        throw new IllegalArgumentException();
+        ToastUtil.toastError(mainActivity,
+            mainActivity.getString(R.string.error_order_incomplete_not_deliverable));
+        parent.close();
+        return;
       }
       Glide.with(mainActivity)
           .load(MediaUtil.getGoodImage(item.getGoods().getCode()))

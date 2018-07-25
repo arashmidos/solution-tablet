@@ -5,8 +5,8 @@
   android:id="@+id/drawer_layout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:transitionName="transition"
   android:background="@color/features_background"
+  android:transitionName="transition"
   tools:context="com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment">
 
   <android.support.design.widget.CoordinatorLayout
@@ -37,8 +37,9 @@
         <TextView
           android:id="@+id/toolbar_title"
           style="@style/IranSans.Medium"
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="match_parent"
+          android:layout_gravity="center"
           android:gravity="center"
           android:text="@string/features_list"
           android:textColor="@color/white"
@@ -72,6 +73,20 @@
           android:paddingRight="16dp"
           android:src="@drawable/ic_save_24_dp"
           android:visibility="gone" />
+        <TextView
+          android:id="@+id/chronometer"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_gravity="start"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+          android:gravity="center"
+          android:maxLines="1"
+          android:textColor="@color/white"
+          android:textSize="18sp"
+          tools:text="10:20"
+          android:visibility="gone"
+          tools:visibility="visible" />
       </FrameLayout>
     </android.support.design.widget.AppBarLayout>
 

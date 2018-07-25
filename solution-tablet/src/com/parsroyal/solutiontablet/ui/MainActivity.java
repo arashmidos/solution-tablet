@@ -162,6 +162,9 @@ public abstract class MainActivity extends AppCompatActivity {
   @Nullable
   @BindView(R.id.detail_tv)
   TextView detailTv;
+  @BindView(R.id.chronometer)
+  TextView chronometer;
+
   private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context ctxt, Intent intent) {
@@ -342,10 +345,10 @@ public abstract class MainActivity extends AppCompatActivity {
     new TrackerAlarmReceiver().setAlarm(this);
     navigationImg.setVisibility(View.VISIBLE);
 
-    List<String> fakeApps = GPSUtil.getListOfFakeLocationApps(this);
+    /*List<String> fakeApps = GPSUtil.getListOfFakeLocationApps(this);
     if (fakeApps.size() > 0 && !BuildConfig.DEBUG) {
       showFakeGpsDetected(fakeApps);
-    }
+    }*///TODO: Time consuming, do it in async
   }
 
   private void showFakeGpsDetected(List<String> fakeApps) {
@@ -706,7 +709,21 @@ public abstract class MainActivity extends AppCompatActivity {
     navigationImg.setImageResource(id);
   }
 
-  public abstract void changeTitle(String title);
+  public void changeTitle(String title) {
+    toolbarTitle.setText(title);
+  }
+
+  public void setTimer(String text) {
+    runOnUiThread(() -> chronometer.setText(text));
+  }
+
+  public void showTimer() {
+    chronometer.setVisibility(View.VISIBLE);
+  }
+
+  public void hideTimer() {
+    chronometer.setVisibility(View.GONE);
+  }
 
   public void changeDetailContent(String content) {
     detailTv.setText(content);
@@ -715,6 +732,9 @@ public abstract class MainActivity extends AppCompatActivity {
   public void setToolbarIconVisibility(int id, int visibility) {
     View view = findViewById(id);
     view.setVisibility(visibility);
+    if (visibility == View.VISIBLE) {
+      hideTimer();
+    }
   }
 
   public abstract void customizeToolbar(int fragmentId);
@@ -734,10 +754,16 @@ public abstract class MainActivity extends AppCompatActivity {
     } else {
       searchImg.setVisibility(View.GONE);
     }
-    //show save icon in question list fragment
+    //hide save icon in question list fragment
     if (fragmentId != QUESTION_LIST_FRAGMENT_ID) {
       saveImg.setVisibility(View.GONE);
     }
+
+    //hide timer in visit detail fragment
+    if (fragmentId != VISIT_DETAIL_FRAGMENT_ID) {
+      hideTimer();
+    }
+
     customizeToolbar(fragmentId);
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
@@ -822,5 +848,8 @@ public abstract class MainActivity extends AppCompatActivity {
 
   public void searchImageVisibility(int visibility) {
     searchImg.setVisibility(visibility);
+    if (visibility == View.VISIBLE) {
+      hideTimer();
+    }
   }
 }

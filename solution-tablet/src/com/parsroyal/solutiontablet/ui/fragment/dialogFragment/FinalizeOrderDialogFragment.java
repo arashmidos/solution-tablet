@@ -291,4 +291,9 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     orderFragment.goToOrderInfoFragment(rejectType);
     getDialog().dismiss();
   }
+
+  public void close() {
+    getDialog().dismiss();
+    mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+  }
 }

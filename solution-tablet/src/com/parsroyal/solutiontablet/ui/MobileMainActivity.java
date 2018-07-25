@@ -75,11 +75,6 @@ public class MobileMainActivity extends MainActivity {
   }
 
   @Override
-  public void changeTitle(String title) {
-    toolbarTitle.setText(title);
-  }
-
-  @Override
   public void customizeToolbar(int fragmentId) {
 
   }

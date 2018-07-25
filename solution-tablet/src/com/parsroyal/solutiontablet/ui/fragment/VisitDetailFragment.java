@@ -64,6 +64,8 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -99,7 +101,8 @@ public class VisitDetailFragment extends BaseFragment {
   private SaleOrderDto orderDto;
   private String saleType;
   private long visitLineBackendId;
-
+  private Timer timer;
+  private int seconds = 0, minutes = 0, hours = 0;
 
   public VisitDetailFragment() {
     // Required empty public constructor
@@ -148,10 +151,45 @@ public class VisitDetailFragment extends BaseFragment {
       if (MultiScreenUtility.isTablet(mainActivity)) {
         mainActivity.changeTitle("");
       }
+      setUpTimer();
       return view;
     } else {
       return inflater.inflate(R.layout.empty_view, container, false);
     }
+  }
+
+  private void setUpTimer() {
+    //Stop previous timer
+    mainActivity.showTimer();
+    if (timer != null) {
+      timer.cancel();
+      timer.purge();
+      timer = null;
+    }
+    timer = new Timer();
+
+    timer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        if (seconds == 60) {
+          seconds = 0;
+          minutes++;
+          if (minutes == 60) {
+            minutes = 0;
+            hours++;
+          }
+        }
+        if (hours > 0) {
+          mainActivity.setTimer(
+              String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":" + String
+                  .format("%02d", seconds));
+        } else {
+          mainActivity
+              .setTimer(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+        }
+        seconds += 1;
+      }
+    }, 0, 1000);
   }
 
   public void finishVisiting() {
@@ -547,5 +585,16 @@ public class VisitDetailFragment extends BaseFragment {
         Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
         "IMG_" + customer.getBackendId() + "_" + postfix); // create a file to save the image
     CameraManager.startCameraActivity(mainActivity, fileUri, this);
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    if (timer != null) {
+      timer.cancel();
+      timer.purge();
+      timer = null;
+      minutes = seconds = hours = 0;
+    }
   }
 }

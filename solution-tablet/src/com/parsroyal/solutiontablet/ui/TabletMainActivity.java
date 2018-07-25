@@ -173,11 +173,6 @@ public class TabletMainActivity extends MainActivity {
     }
   }
 
-  @Override
-  public void changeTitle(String title) {
-    toolbarTitle.setText(title);
-  }
-
  /* @Override
   public void closeDrawer() {
     if (crossFader != null && crossFader.isCrossFaded()) {

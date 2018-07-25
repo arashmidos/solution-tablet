@@ -110,7 +110,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true;
     }
     compile group: 'commons-io', name: 'commons-io', version: '2.5'

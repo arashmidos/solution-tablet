@@ -47,6 +47,8 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -116,7 +118,6 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   private QuestionnaireServiceImpl questionnaireService;
   private Double creditRemained;
   private boolean checkCreditEnabled;
-
 
   public CustomerInfoFragment() {
     // Required empty public constructor
@@ -200,6 +201,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
 
   private void setData() {
     mainActivity.changeTitle(customer.getFullName());
+
     phoneTv.setText(NumberUtil.digitsToPersian(customer.getPhoneNumber()));
     mobileTv.setText(NumberUtil.digitsToPersian(customer.getCellPhone()));
     locationTv.setText(NumberUtil.digitsToPersian(customer.getAddress()));
