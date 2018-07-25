@@ -188,11 +188,12 @@ public class TabletMainActivity extends MainActivity {
 
   @Override
   public void customizeToolbar(int fragmentId) {
-    if (fragmentId == VISIT_DETAIL_FRAGMENT_ID) {
+    /*if (fragmentId == VISIT_DETAIL_FRAGMENT_ID) {
       detailTv.setVisibility(View.VISIBLE);
+
     } else {
       detailTv.setVisibility(View.GONE);
-    }
+    }*/
   }
 
   @Override

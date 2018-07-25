@@ -58,7 +58,6 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
-import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.File;
@@ -148,9 +147,9 @@ public class VisitDetailFragment extends BaseFragment {
       setUpViewPager();
       viewpager.setCurrentItem(viewPagerAdapter.getCount());
       viewpager.setOffscreenPageLimit(viewPagerAdapter.getCount());
-      if (MultiScreenUtility.isTablet(mainActivity)) {
+      /*if (MultiScreenUtility.isTablet(mainActivity)) {
         mainActivity.changeTitle("");
-      }
+      }*/
       setUpTimer();
       return view;
     } else {
@@ -530,6 +529,7 @@ public class VisitDetailFragment extends BaseFragment {
     super.onResume();
     EventBus.getDefault().register(this);
     mainActivity.showNav();
+    mainActivity.showTimer();
   }
 
   @Override
@@ -595,6 +595,7 @@ public class VisitDetailFragment extends BaseFragment {
       timer.purge();
       timer = null;
       minutes = seconds = hours = 0;
+      mainActivity.hideTimer();
     }
   }
 }

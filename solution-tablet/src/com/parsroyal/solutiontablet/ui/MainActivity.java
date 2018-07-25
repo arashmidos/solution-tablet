@@ -686,6 +686,7 @@ public abstract class MainActivity extends AppCompatActivity {
         BaseFragment lastItem = getLastFragment();
         if (Empty.isNotEmpty(lastFragment)) {
           if (lastItem instanceof VisitDetailFragment) {
+            showTimer();
             ((VisitDetailFragment) lastItem).finishVisiting();
             return;
           } else if (lastItem instanceof OrderFragment && !((OrderFragment) lastItem)
@@ -764,7 +765,7 @@ public abstract class MainActivity extends AppCompatActivity {
       hideTimer();
     }
 
-    customizeToolbar(fragmentId);
+//    customizeToolbar(fragmentId);
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
         fragment = FeaturesFragment.newInstance();
@@ -847,9 +848,9 @@ public abstract class MainActivity extends AppCompatActivity {
   }
 
   public void searchImageVisibility(int visibility) {
-    searchImg.setVisibility(visibility);
     if (visibility == View.VISIBLE) {
       hideTimer();
     }
+    searchImg.setVisibility(visibility);
   }
 }
