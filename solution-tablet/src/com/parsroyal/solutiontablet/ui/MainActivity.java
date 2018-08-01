@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -209,6 +210,11 @@ public abstract class MainActivity extends AppCompatActivity {
   };
 
   public void onCreate(Bundle savedInstanceState) {
+    StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+        .detectAll()
+        .penaltyLog()
+        .penaltyDeath()
+        .build());//TODO Disable Later
     super.onCreate(savedInstanceState);
 
     dataTransferService = new DataTransferServiceImpl(this);
@@ -234,6 +240,7 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void onStart() {
     super.onStart();
+    Log.d("SHAKIB", "ON START");
     EventBus.getDefault().register(this);
     // Bind to the service. If the service is in foreground mode, this signals to the service
     // that since this activity is in the foreground, the service can exit foreground mode.
@@ -329,6 +336,7 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
+    Log.d("SHAKIB", "ONRESUME");
     if (!checkPermissions()) {
       requestPermissions();
     }
@@ -366,6 +374,7 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
+    Log.d("SHAKIB", "ON PAUSE");
     try {
       unregisterReceiver(gpsStatusReceiver);
       unregisterReceiver(batteryInfoReceiver);
@@ -377,6 +386,7 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void onStop() {
     super.onStop();
+    Log.d("SHAKIB", "ON STOP");
     if (boundToGpsService) {
       // Unbind from the service. This signals to the service that this activity is no longer
       // in the foreground, and the service can respond by promoting itself to a foreground
@@ -384,7 +394,7 @@ public abstract class MainActivity extends AppCompatActivity {
       unbindService(serviceConnection);
       boundToGpsService = false;
     }
-    super.onStop();
+
     EventBus.getDefault().unregister(this);
   }
 

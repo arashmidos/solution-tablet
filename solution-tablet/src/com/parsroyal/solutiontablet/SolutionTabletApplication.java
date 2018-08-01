@@ -76,15 +76,12 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
     if (!TrueTime.isInitialized()) {
       new Thread(() -> {
-        boolean syncNetworkTime = false;
-        while (!syncNetworkTime) {
-          try {
-            TrueTime.build().withServerResponseDelayMax(500).initialize();
-            syncNetworkTime = true;
+        try {
+          TrueTime.build().withServerResponseDelayMax(1000).withSharedPreferences(this).initialize();
 
-            Log.i("Network Time", "**Synced with network");
-          } catch (IOException ignore) {
-          }
+          Log.i("Network Time", "**Synced with network");
+        } catch (IOException ignore) {
+          Log.i("Network Time", " not initialized");
         }
       }).start();
     }

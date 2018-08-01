@@ -285,7 +285,7 @@ public class OrderInfoFragment extends BaseFragment {
           order = saleOrderService.findOrderDtoById(orderId);
           if (validateOrderForSave()) {
             order.setPaymentTypeBackendId(selectedItem.getValue());
-            order.setDescription(descriptionEdt.getText().toString());
+            order.setDescription(NumberUtil.digitsToEnglish(descriptionEdt.getText().toString()));
             order.setVisitlineBackendId(visitlineBackendId);
             if (!isDelivery()) {
               order.setStatus(SaleOrderStatus.GIFT.getId());
@@ -381,7 +381,7 @@ public class OrderInfoFragment extends BaseFragment {
         order.setDescription(Empty.isNotEmpty(selectedItem) ? selectedItem.getLabel() : "");
       } else {
         order.setPaymentTypeBackendId(selectedItem.getValue());
-        order.setDescription(descriptionEdt.getText().toString());
+        order.setDescription(NumberUtil.digitsToEnglish(descriptionEdt.getText().toString()));
       }
 
       //Distributer should not enter his salesmanId.
@@ -391,7 +391,7 @@ public class OrderInfoFragment extends BaseFragment {
       } else {
 //        if (newOrderId != null) {
 //          order.setId(newOrderId);
-          order.setInvoiceBackendId(orderBackendId);
+        order.setInvoiceBackendId(orderBackendId);
 //        }
         order.setRejectType(rejectType);
       }
