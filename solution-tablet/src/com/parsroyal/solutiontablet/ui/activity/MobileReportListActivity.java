@@ -26,7 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ReportListActivity extends AppCompatActivity {
+public class MobileReportListActivity extends AppCompatActivity {
 
   @BindView(R.id.recycler_view)
   ShimmerRecyclerView recyclerView;

@@ -37,7 +37,8 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.QuestionnaireServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.activity.ReportListActivity;
+import com.parsroyal.solutiontablet.ui.activity.MobileReportListActivity;
+import com.parsroyal.solutiontablet.ui.activity.TabletReportListActivity;
 import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -47,8 +48,6 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -325,7 +324,9 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         toggleMapFullScreen();
         break;
       case R.id.customer_report_lay:
-        Intent intent = new Intent(mainActivity, ReportListActivity.class);
+        Intent intent = new Intent(mainActivity,
+            MultiScreenUtility.isTablet(mainActivity) ? TabletReportListActivity.class
+                : MobileReportListActivity.class);
         intent.putExtra(Constants.REPORT_TYPE, Constants.REPORT_CUSTOMER);
         intent.putExtra(Constants.REPORT_CUSTOMER_ID, customer.getBackendId());
         mainActivity.startActivity(intent);

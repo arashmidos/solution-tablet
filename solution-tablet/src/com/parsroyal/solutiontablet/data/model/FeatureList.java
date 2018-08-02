@@ -43,6 +43,7 @@ public class FeatureList {
         context.getString(R.string.anonymous_questionnaire)));
     featureList.add(
         new FeatureList(0, R.drawable.im_reports_48_dp, context.getString(R.string.my_kpi)));
+
     return featureList;
   }
 

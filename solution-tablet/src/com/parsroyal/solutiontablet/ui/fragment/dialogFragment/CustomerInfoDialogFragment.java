@@ -41,13 +41,15 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.activity.ReportListActivity;
+import com.parsroyal.solutiontablet.ui.activity.MobileReportListActivity;
+import com.parsroyal.solutiontablet.ui.activity.TabletReportListActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.VisitActivityAdapter;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -232,7 +234,9 @@ public class CustomerInfoDialogFragment extends DialogFragment {
         break;
       case R.id.customer_report_tv:
       case R.id.customer_report_layout:
-        Intent intent = new Intent(mainActivity, ReportListActivity.class);
+        Intent intent = new Intent(mainActivity,
+            MultiScreenUtility.isTablet(mainActivity) ? TabletReportListActivity.class
+                : MobileReportListActivity.class);
         intent.putExtra(Constants.REPORT_TYPE, Constants.REPORT_CUSTOMER);
         intent.putExtra(Constants.REPORT_CUSTOMER_ID, model.getBackendId());
         mainActivity.startActivity(intent);

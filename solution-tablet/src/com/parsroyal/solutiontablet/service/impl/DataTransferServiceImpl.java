@@ -148,6 +148,7 @@ public class DataTransferServiceImpl implements DataTransferService {
         .findOrderDocumentByStatus(SaleOrderStatus.READY_TO_SEND.getId());
     List<CustomerDto> allNewCustomers = customerService.getAllNewCustomersForSend();
 //TODO CHECK FOR UNSENT VISIT DATA
+    //TODO CHECK FOR UNSENT MONEY DATA
     return Empty.isNotEmpty(answersForSend) || Empty.isNotEmpty(saleOrders) || Empty
         .isNotEmpty(allNewCustomers);
   }
@@ -526,6 +527,12 @@ public class DataTransferServiceImpl implements DataTransferService {
     questionnaireService.deleteAll();
     saleOrderService.deleteAll();
     positionService.deleteAll();
+  }
+
+  public void clearGoods() {
+    GoodsServiceImpl goodsService = new GoodsServiceImpl(context);
+    goodsService.deleteAll();
+    goodsService.deleteAllGoodsGroup();
   }
 
   @Override

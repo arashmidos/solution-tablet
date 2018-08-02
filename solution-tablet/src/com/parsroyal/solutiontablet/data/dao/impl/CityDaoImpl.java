@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Mahyar on 6/19/2015.
+ * Created by Arash on 6/19/2015.
  */
 public class CityDaoImpl extends AbstractDao<City, Long> implements CityDao {
 
@@ -76,6 +76,7 @@ public class CityDaoImpl extends AbstractDao<City, Long> implements CityDao {
     while (cursor.moveToNext()) {
       labelValueModels.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
     }
+    cursor.close();
     return labelValueModels;
   }
 
@@ -83,13 +84,15 @@ public class CityDaoImpl extends AbstractDao<City, Long> implements CityDao {
   public List<LabelValue> searchCitiesLabelValuesForProvinceId(Long provinceId, String constraint) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String selection = " " + City.COL_PROVINCE_BACKEND_ID + " = ? AND " + City.COL_TITLE + " LIKE ?";
+    String selection =
+        " " + City.COL_PROVINCE_BACKEND_ID + " = ? AND " + City.COL_TITLE + " LIKE ?";
     String[] args = {String.valueOf(provinceId), "%" + constraint + "%"};
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
     List<LabelValue> labelValueModels = new ArrayList<>();
     while (cursor.moveToNext()) {
       labelValueModels.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
     }
+    cursor.close();
     return labelValueModels;
   }
 }

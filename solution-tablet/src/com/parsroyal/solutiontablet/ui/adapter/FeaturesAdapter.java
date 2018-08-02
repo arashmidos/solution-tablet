@@ -19,7 +19,9 @@ import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.activity.ReportListActivity;
+import com.parsroyal.solutiontablet.ui.activity.MobileReportListActivity;
+import com.parsroyal.solutiontablet.ui.activity.TabletReportListActivity;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -96,7 +98,9 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           context.changeFragment(MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID, true);
           break;
         case 6://Report
-          Intent intent = new Intent(context, ReportListActivity.class);
+          Intent intent = new Intent(context,
+              MultiScreenUtility.isTablet(context) ? TabletReportListActivity.class
+                  : MobileReportListActivity.class);
           intent.putExtra(Constants.REPORT_TYPE, Constants.REPORT_SALESMAN);
           context.startActivity(intent);
           break;

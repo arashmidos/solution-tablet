@@ -47,6 +47,8 @@ public class NavigationDrawerFragment extends BaseFragment {
   TextView userRole;
   @BindView(R.id.today_lines_tv)
   TextView todayLinesTv;
+  @BindView(R.id.refresh_icon)
+  ImageView refreshIv;
 
   private boolean isLogOutMode = false;
   private MainActivity mainActivity;
@@ -88,13 +90,14 @@ public class NavigationDrawerFragment extends BaseFragment {
     }
     if (ApplicationKeys.SALE_DISTRIBUTER.equals(role)) {
       todayLinesTv.setText(R.string.today_request_line);
+      refreshIv.setVisibility(View.GONE);
     }
-
   }
 
   @OnClick({R.id.features_list_lay, R.id.today_paths_lay, R.id.reports_lay,
-      R.id.customers_lay, R.id.map_lay, R.id.setting_lay, R.id.about_us, R.id.body_log_out,
-      R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay, R.id.questionnaire_lay, R.id.header})
+      R.id.customers_lay, R.id.map_lay, R.id.about_us, R.id.body_log_out,
+      R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay, R.id.questionnaire_lay, R.id.header,
+      R.id.refresh_icon})
   public void onClick(View view) {
     boolean closeDrawer = true;
     hasData = baseInfoService.getAllProvinces().size() != 0;
@@ -152,8 +155,8 @@ public class NavigationDrawerFragment extends BaseFragment {
       case R.id.map_lay:
         mainActivity.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
         break;
-      case R.id.setting_lay:
-        ToastUtil.toastMessage(mainActivity, R.string.error_message_there_is_no_settings);
+      case R.id.refresh_icon:
+        refreshData();
         break;
       case R.id.about_us:
         mainActivity.changeFragment(MainActivity.ABOUT_US_FRAGMENT_ID, true);
@@ -172,6 +175,20 @@ public class NavigationDrawerFragment extends BaseFragment {
     }
     if (closeDrawer) {
       mainActivity.closeDrawer();
+    }
+  }
+
+  private void refreshData() {
+    DataTransferServiceImpl dataTransferService = new DataTransferServiceImpl(mainActivity);
+    if (dataTransferService.hasUnsentData()) {
+      DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
+          "شما اطلاعات ارسال نشده دارید که قبل از بروز رسانی موجودی می بایست ارسال شوند. آیا میخواهید آنها را ارسال کنید؟",
+          getString(R.string.yes),
+          (dialog, which) -> openDataTransferDialog(Constants.DATA_TRANSFER_SEND_DATA),
+          getString(R.string.no),
+          (dialog, which) -> dialog.dismiss(), Constants.ICON_WARNING);
+    } else {
+      openDataTransferDialog(Constants.DATA_TRANSFER_GET_GOODS);
     }
   }
 

@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -210,11 +209,11 @@ public abstract class MainActivity extends AppCompatActivity {
   };
 
   public void onCreate(Bundle savedInstanceState) {
-    StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+   /* StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
         .detectAll()
         .penaltyLog()
         .penaltyDeath()
-        .build());//TODO Disable Later
+        .build());//TODO Disable Later*/
     super.onCreate(savedInstanceState);
 
     dataTransferService = new DataTransferServiceImpl(this);
@@ -484,6 +483,8 @@ public abstract class MainActivity extends AppCompatActivity {
 
     KeyValue saleType = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
     Crashlytics.setString("Sale Type", saleType == null ? "" : saleType.getValue());
+    Crashlytics
+        .setString("Username", settingService.getSettingValue(ApplicationKeys.SETTING_USERNAME));
   }
 
   private void requestPermissions() {

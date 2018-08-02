@@ -54,6 +54,16 @@ public class DataTransferList {
     return featureList;
   }
 
+  public static List<DataTransferList> dataTransferGoods(Context context) {
+    List<DataTransferList> featureList = new ArrayList<>();
+
+    featureList.add(new DataTransferList(TransferGetOrder.GOODS_GROUP, R.drawable.ic_category_24_dp,
+        context.getString(R.string.goods_category)));
+    featureList.add(new DataTransferList(TransferGetOrder.GOODS, R.drawable.ic_product_info_24_dp,
+        context.getString(R.string.goods)));
+    return featureList;
+  }
+
   public static List<DataTransferList> dataTransferSendList(Context context, String saleType) {
     List<DataTransferList> featureList = new ArrayList<>();
     featureList

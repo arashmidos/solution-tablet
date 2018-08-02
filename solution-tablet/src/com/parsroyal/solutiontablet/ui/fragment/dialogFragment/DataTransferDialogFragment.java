@@ -69,6 +69,7 @@ public class DataTransferDialogFragment extends DialogFragment {
   private int currentPosition = -1;
   private DataTransferServiceImpl dataTransferService;
   private boolean isGet;
+  private boolean isGetGoods;
   private DataTransferAdapter adapter;
   private boolean canceled;
   private SettingServiceImpl settingService;
@@ -116,6 +117,10 @@ public class DataTransferDialogFragment extends DialogFragment {
           isGet = false;
           setData();
           break;
+        case Constants.DATA_TRANSFER_GET_GOODS:
+          isGet = true;
+          isGetGoods = true;
+          setData();
       }
 
       return view;
@@ -129,11 +134,15 @@ public class DataTransferDialogFragment extends DialogFragment {
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
     if (isGet) {
-      if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
-        model = getDistributorReceiveModel();
+      if (isGetGoods) {
+        model = getGoodsReceiveModel();
       } else {
+        if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+          model = getDistributorReceiveModel();
+        } else {
 
-        model = getReceiveModel();
+          model = getReceiveModel();
+        }
       }
       dataTransferBtn.setText(getString(R.string.get_data));
 
@@ -161,6 +170,10 @@ public class DataTransferDialogFragment extends DialogFragment {
     return DataTransferList.dataTransferGetList(mainActivity);
   }
 
+  private List<DataTransferList> getGoodsReceiveModel() {
+    return DataTransferList.dataTransferGoods(mainActivity);
+  }
+
   private List<DataTransferList> getSendModel() {
     return DataTransferList.dataTransferSendList(mainActivity, saleType);
   }
@@ -179,7 +192,11 @@ public class DataTransferDialogFragment extends DialogFragment {
           getDialog().dismiss();
         } else {
           if (isGet) {
-            dataTransferService.clearData(Constants.FULL_UPDATE);
+            if (isGetGoods) {
+              dataTransferService.clearGoods();
+            } else {
+              dataTransferService.clearData(Constants.FULL_UPDATE);
+            }
           }
           startTransfer();
         }

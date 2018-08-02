@@ -80,7 +80,12 @@
       android:screenOrientation="landscape"
       android:theme="@style/NoActionBar" />
     <activity
-      android:name=".ui.activity.ReportListActivity"
+      android:name=".ui.activity.MobileReportListActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/NoActionBar" />
+    <activity
+      android:name=".ui.activity.TabletReportListActivity"
+      android:screenOrientation="landscape"
       android:theme="@style/NoActionBar" />
     <activity
       android:name=".ui.activity.MobileReportDetailActivity"

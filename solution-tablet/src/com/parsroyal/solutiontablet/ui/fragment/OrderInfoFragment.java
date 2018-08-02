@@ -243,7 +243,7 @@ public class OrderInfoFragment extends BaseFragment {
     }
 
     if (Empty.isNotEmpty(order.getDescription())) {
-      descriptionEdt.setText(order.getDescription());
+      descriptionEdt.setText(NumberUtil.digitsToPersian(order.getDescription()));
     }
   }
 

@@ -198,12 +198,9 @@
 
         <RelativeLayout
           android:id="@+id/goods_lay"
-          android:layout_width="match_parent"
-          android:layout_height="48dp"
-          android:layout_marginStart="20dp"
-          android:layout_marginEnd="20dp"
-          android:layout_marginLeft="20dp"
-          android:layout_marginRight="20dp">
+          android:layout_width="wrap_content"
+          android:layout_height="45dp"
+          android:layout_marginEnd="20dp">
 
           <ImageView
             android:id="@+id/goods_icon"
@@ -228,6 +225,18 @@
             android:text="@string/title_goods_list"
             android:textColor="@color/black_de"
             android:textSize="14sp" />
+
+          <ImageView
+            android:id="@+id/refresh_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:src="@drawable/baseline_cached_black_24"
+            android:tint="@color/login_gray" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -310,11 +319,11 @@
             android:id="@+id/questionnaire_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_questionnaires_24_dp"
             android:tint="@color/black" />
 
@@ -345,11 +354,11 @@
             android:id="@+id/setting_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_settings_black_24dp"
             android:tint="@color/login_gray" />
 
@@ -368,9 +377,9 @@
 
         <View
           android:layout_width="match_parent"
+          android:layout_height="1dp"
           android:layout_marginTop="8dp"
           android:layout_marginBottom="8dp"
-          android:layout_height="1dp"
           android:background="@color/navigation_drawer_divider" />
 
         <TextView
@@ -378,10 +387,10 @@
           style="@style/IranSans"
           android:layout_width="match_parent"
           android:layout_height="48dp"
-          android:gravity="center_vertical"
           android:layout_marginEnd="16dp"
-          android:layout_marginRight="16dp"
           android:layout_marginLeft="20dp"
+          android:layout_marginRight="16dp"
+          android:gravity="center_vertical"
           android:text="@string/about_us"
           android:textColor="@color/black_de"
           android:textSize="14sp" />
