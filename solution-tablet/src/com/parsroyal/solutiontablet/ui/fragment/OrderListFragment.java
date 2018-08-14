@@ -24,6 +24,7 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -172,7 +173,18 @@ public class OrderListFragment extends BaseFragment {
   @OnClick(R.id.fab_add_order)
   public void onClick() {
     if (parent != null) {
-      parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+      String checkCredit = settingService
+          .getSettingValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE);
+      boolean checkCreditEnabled = Empty.isEmpty(checkCredit) || "null".equals(checkCredit) ? false
+          : Boolean.valueOf(checkCredit);
+      if (checkCreditEnabled && parent.getCustomer().getRemainedCredit() != null
+          && parent.getCustomer().getRemainedCredit().longValue() <= 0) {
+        DialogUtil.showConfirmDialog(mainActivity, "هشدار",
+            "ثبت سفارش فقط با پرداخت نقدی امکان پذیر است", "ثبت سفارش",(dialogInterface, i) -> parent
+                .openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), true),"انصراف");
+      } else {
+        parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), false);
+      }
     }
   }
 

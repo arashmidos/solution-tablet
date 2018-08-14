@@ -244,7 +244,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
     DeliveryRejectDialogFragment deliveryRejectDialogFragment = DeliveryRejectDialogFragment
         .newInstance(mainActivity, this,isCanceled);
-    deliveryRejectDialogFragment.show(ft, "payment method");
+    deliveryRejectDialogFragment.show(ft, "delivery reject");
   }
 
   public void saveOrder(Long psn) {

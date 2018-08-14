@@ -464,13 +464,8 @@ public class VisitDetailFragment extends BaseFragment {
    * @param statusID Could be DRAFT for both AddInvoice/AddOrder or REJECTED_DRAFT for
    * ReturnedOrder
    */
-  public void openOrderDetailFragment(Long statusID) {
+  public void openOrderDetailFragment(Long statusID, boolean isCashOrder) {
 
-    if (SaleOrderStatus.DRAFT.getId().equals(statusID) && customer.getRemainedCredit() != null
-        && customer.getRemainedCredit().longValue() < 0) {
-      ToastUtil.toastError(mainActivity, R.string.error_order_is_not_available_for_this_customer);
-      return;
-    }
     orderDto = saleOrderService
         .findOrderDtoByCustomerBackendIdAndStatus(customer.getBackendId(), statusID);
     if (Empty.isEmpty(orderDto) || statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
@@ -487,6 +482,7 @@ public class VisitDetailFragment extends BaseFragment {
         args.putLong(Constants.VISIT_ID, visitId);
         args.putBoolean(Constants.READ_ONLY, false);
         args.putString(Constants.PAGE_STATUS, Constants.NEW);
+        args.putBoolean(Constants.CASH_ORDER, isCashOrder);
         mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
       }
 

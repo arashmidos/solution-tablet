@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -90,6 +92,18 @@ public class DataTransferDialogFragment extends DialogFragment {
     super.onCreate(savedInstanceState);
     setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
     setRetainInstance(true);
+  }
+
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new Dialog(getActivity(), getTheme()) {
+      @Override
+      public void onBackPressed() {
+        EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_REFRESH_DATA));
+        getDialog().dismiss();
+      }
+    };
   }
 
   @Override
@@ -184,6 +198,7 @@ public class DataTransferDialogFragment extends DialogFragment {
     switch (view.getId()) {
       case R.id.close:
       case R.id.cancel_btn:
+        EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_REFRESH_DATA));
         getDialog().dismiss();
         break;
       case R.id.data_transfer_btn:

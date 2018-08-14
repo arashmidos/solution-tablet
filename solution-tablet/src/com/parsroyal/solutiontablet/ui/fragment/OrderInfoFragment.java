@@ -130,6 +130,7 @@ public class OrderInfoFragment extends BaseFragment {
   private long visitlineBackendId;
   private Long newOrderId;
   private long rejectType;
+  private boolean isCashOrder;
 
   public OrderInfoFragment() {
     // Required empty public constructor
@@ -166,6 +167,7 @@ public class OrderInfoFragment extends BaseFragment {
       visitId = args.getLong(Constants.VISIT_ID, -1);
       visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
       rejectType = args.getLong(Constants.REJECT_TYPE_ID);
+      isCashOrder = args.getBoolean(Constants.CASH_ORDER, false);
 
       setData();
 
@@ -491,7 +493,7 @@ public class OrderInfoFragment extends BaseFragment {
     }
     FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
     PaymentMethodDialogFragment paymentMethodDialogFragment = PaymentMethodDialogFragment
-        .newInstance(this, selectedItem, isRejected());
+        .newInstance(this, selectedItem, isRejected(), isCashOrder);
     paymentMethodDialogFragment.show(ft, "payment method");
   }
 
@@ -510,8 +512,12 @@ public class OrderInfoFragment extends BaseFragment {
   }
 
   private List<LabelValue> getModel() {
-    return baseInfoService.getAllBaseInfosLabelValuesByTypeId(
-        isRejected() ? BaseInfoTypes.REJECT_TYPE.getId() : BaseInfoTypes.PAYMENT_TYPE.getId());
+    if (isCashOrder) {
+      return baseInfoService.search(BaseInfoTypes.PAYMENT_TYPE.getId(), "نقد");
+    } else {
+      return baseInfoService.getAllBaseInfosLabelValuesByTypeId(
+          isRejected() ? BaseInfoTypes.REJECT_TYPE.getId() : BaseInfoTypes.PAYMENT_TYPE.getId());
+    }
   }
 
   @Override

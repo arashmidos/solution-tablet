@@ -38,17 +38,19 @@ public class PaymentMethodDialogFragment extends DialogFragment {
   private BaseInfoServiceImpl baseInfoService;
   private OrderInfoFragment orderInfoFragment;
   private boolean isReject;
+  private boolean isCashOrder;
 
   public PaymentMethodDialogFragment() {
     // Required empty public constructor
   }
 
   public static PaymentMethodDialogFragment newInstance(OrderInfoFragment orderInfoFragment,
-      LabelValue selectedItem, boolean isReject) {
+      LabelValue selectedItem, boolean isReject, boolean isCashOrder) {
     PaymentMethodDialogFragment fragment = new PaymentMethodDialogFragment();
     fragment.orderInfoFragment = orderInfoFragment;
     fragment.selectedItem = selectedItem;
     fragment.isReject = isReject;
+    fragment.isCashOrder = isCashOrder;
     return fragment;
   }
 
@@ -86,8 +88,12 @@ public class PaymentMethodDialogFragment extends DialogFragment {
   }
 
   private List<LabelValue> getModel() {
-    return baseInfoService.getAllBaseInfosLabelValuesByTypeId(
-        isReject ? BaseInfoTypes.REJECT_TYPE.getId() : BaseInfoTypes.PAYMENT_TYPE.getId());
+    if (isCashOrder) {
+      return baseInfoService.search(BaseInfoTypes.PAYMENT_TYPE.getId(), "نقد");
+    }else {
+      return baseInfoService.getAllBaseInfosLabelValuesByTypeId(
+          isReject ? BaseInfoTypes.REJECT_TYPE.getId() : BaseInfoTypes.PAYMENT_TYPE.getId());
+    }
   }
 
   @OnClick({R.id.close, R.id.submit_btn})

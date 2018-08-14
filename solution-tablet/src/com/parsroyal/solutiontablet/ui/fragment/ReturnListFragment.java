@@ -119,7 +119,7 @@ public class ReturnListFragment extends BaseFragment {
 
   @OnClick(R.id.fab_add_return)
   public void onViewClicked() {
-    parent.openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
+    parent.openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId(), false);
   }
 
   @Override

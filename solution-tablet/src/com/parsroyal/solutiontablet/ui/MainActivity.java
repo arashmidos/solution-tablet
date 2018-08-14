@@ -213,7 +213,7 @@ public abstract class MainActivity extends AppCompatActivity {
         .detectAll()
         .penaltyLog()
         .penaltyDeath()
-        .build());//TODO Disable Later*/
+        .build());*/
     super.onCreate(savedInstanceState);
 
     dataTransferService = new DataTransferServiceImpl(this);
@@ -756,8 +756,10 @@ public abstract class MainActivity extends AppCompatActivity {
     int parent = 0;
     if (fragmentId == FEATURE_FRAGMENT_ID) {
       setNavigationToolbarIcon(R.drawable.ic_menu);
+      setDrawerEnable(true);
     } else {
       setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
+      setDrawerEnable(false);
     }
 
     //show search icon in customer fragment
@@ -839,6 +841,8 @@ public abstract class MainActivity extends AppCompatActivity {
     Analytics.logContentView("Fragment " + String.valueOf(fragmentId));
     return fragment;
   }
+
+  protected abstract void setDrawerEnable(boolean isLock);
 
 
   public abstract void closeDrawer();

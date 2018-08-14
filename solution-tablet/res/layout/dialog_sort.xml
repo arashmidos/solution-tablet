@@ -23,9 +23,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="24dp">
-
     <RadioButton
-      android:id="@+id/customer_code_asc"
+      android:id="@+id/default_order"
       style="@style/IranSans"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -36,6 +35,21 @@
       android:drawableRight="@drawable/custom_radio"
       android:gravity="right|center"
       android:tag="0"
+      android:text="@string/default_order"
+      android:textColor="@color/black_de"
+      android:textSize="14sp"/>
+
+    <RadioButton
+      android:id="@+id/customer_code_asc"
+      style="@style/IranSans"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="31dp"
+      android:button="@null"
+      android:drawablePadding="24dp"
+      android:drawableRight="@drawable/custom_radio"
+      android:gravity="right|center"
+      android:tag="1"
       android:text="@string/customer_code_asc"
       android:textColor="@color/black_de"
       android:textSize="14sp"/>
@@ -50,7 +64,7 @@
       android:drawablePadding="24dp"
       android:drawableRight="@drawable/custom_radio"
       android:gravity="right|center"
-      android:tag="1"
+      android:tag="2"
       android:text="@string/customer_code_desc"
       android:textColor="@color/black_de"
       android:textSize="14sp"/>
@@ -65,7 +79,7 @@
       android:drawablePadding="24dp"
       android:drawableRight="@drawable/custom_radio"
       android:gravity="right|center"
-      android:tag="2"
+      android:tag="3"
       android:text="@string/full_name_asc"
       android:textColor="@color/black_de"
       android:textSize="14sp"/>
@@ -80,7 +94,7 @@
       android:drawablePadding="24dp"
       android:drawableRight="@drawable/custom_radio"
       android:gravity="right|center"
-      android:tag="3"
+      android:tag="4"
       android:text="@string/full_name_desc"
       android:textColor="@color/black_de"
       android:textSize="14sp"/>

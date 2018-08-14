@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.transition.ChangeBounds;
-import android.util.Log;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
@@ -77,6 +76,13 @@ public class MobileMainActivity extends MainActivity {
   @Override
   public void customizeToolbar(int fragmentId) {
 
+  }
+
+  @Override
+  protected void setDrawerEnable(boolean enabled) {
+    int lockMode = enabled ? DrawerLayout.LOCK_MODE_UNLOCKED :
+        DrawerLayout.LOCK_MODE_LOCKED_CLOSED;
+    drawerLayout.setDrawerLockMode(lockMode);
   }
 
   public void onNavigationTapped() {

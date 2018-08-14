@@ -77,6 +77,7 @@ public class Constants {
   public static final String REPORT_ITEM = "REPORT_ITEM";
   public static final String REPORT_CUSTOMER_ID = "REPORT_CUSTOMER_ID";
   public static final String REJECT_TYPE_ID = "REJECT_TYPE_ID";
+  public static final String CASH_ORDER = "CASH_ORDER";
 
   public class TransferStatus {
 

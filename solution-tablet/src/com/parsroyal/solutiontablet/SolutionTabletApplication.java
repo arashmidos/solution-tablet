@@ -11,6 +11,7 @@ import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import co.ronash.pushe.Pushe;
 import com.crashlytics.android.Crashlytics;
 import com.instacart.library.truetime.TrueTime;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -85,6 +86,9 @@ public class SolutionTabletApplication extends MultiDexApplication {
         }
       }).start();
     }
+
+    Pushe.initialize(this,true);
+
 
 //    Log.d("DebugDB", "***>>> DB Address:"+DebugDB.getAddressLog());
   }

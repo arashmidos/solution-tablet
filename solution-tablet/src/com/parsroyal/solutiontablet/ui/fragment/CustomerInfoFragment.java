@@ -272,14 +272,16 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_return_lay:
-        parent.openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId());
+        parent.openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId(), false);
         break;
       case R.id.register_order_lay:
-        if (creditRemained != null && creditRemained < 0 && checkCreditEnabled) {
-          ToastUtil.toastError(mainActivity,
-              getString(R.string.error_order_is_not_available_for_this_customer));
+        if (checkCreditEnabled && creditRemained != null && creditRemained <= 0) {
+          DialogUtil.showConfirmDialog(mainActivity, "هشدار",
+              "ثبت سفارش فقط با پرداخت نقدی امکان پذیر است", "ثبت سفارش",
+              (dialogInterface, i) -> parent
+                  .openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), true), "انصراف");
         } else {
-          parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId());
+          parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), false);
         }
         break;
       case R.id.register_location_btn:

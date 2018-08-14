@@ -608,5 +608,6 @@
   <string name="edit_item">ویرایش آیتم سفارش</string>
   <string name="message_edit_removes_gift">با ویرایش این آیتم کلیه تخفیفات و جوایز حذف می شوند. این عملیات برگشت پذیر نیست</string>
   <string name="error_order_incomplete_not_deliverable">اطلاعات سفارش ناقص است</string>
+  <string name="default_order">پیشفرض</string>
 
 </resources>

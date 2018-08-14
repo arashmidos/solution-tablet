@@ -119,6 +119,7 @@ public class OrderFragment extends BaseFragment {
   private GoodsCategoryAdapter goodsCategoryAdapter;
   private List<GoodsGroup> breadCrumbList = new ArrayList<>();
   private long visitlineBackendId;
+  private boolean isCashOrder;
 
   public OrderFragment() {
     // Required empty public constructor
@@ -139,6 +140,9 @@ public class OrderFragment extends BaseFragment {
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
     try {
       Bundle args = getArguments();
+      if (Empty.isEmpty(args)) {
+        return inflater.inflate(R.layout.view_error_page, container, false);
+      }
       readOnly = args.getBoolean(Constants.READ_ONLY);
       if (readOnly) {
         //It comes from FeatureList->Goods
@@ -156,6 +160,7 @@ public class OrderFragment extends BaseFragment {
         visitId = args.getLong(Constants.VISIT_ID, -1);
         pageStatus = args.getString(Constants.PAGE_STATUS, "");
         visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
+        isCashOrder = args.getBoolean(Constants.CASH_ORDER, false);
         mainActivity.changeTitle(getProperTitle());
       }
 
@@ -455,6 +460,7 @@ public class OrderFragment extends BaseFragment {
     args.putLong(Constants.VISIT_ID, visitId);
     args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
     args.putLong(Constants.VISITLINE_BACKEND_ID, visitlineBackendId);
+    args.putBoolean(Constants.CASH_ORDER, isCashOrder);
     if (rejectType != null) {
       args.putLong(Constants.REJECT_TYPE_ID, rejectType);
     }
@@ -528,6 +534,7 @@ public class OrderFragment extends BaseFragment {
     bundle.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
     bundle.putLong(Constants.VISIT_ID, visitId);
     bundle.putLong(Constants.VISITLINE_BACKEND_ID, visitlineBackendId);
+    bundle.putBoolean(Constants.CASH_ORDER, isCashOrder);
     finalizeOrderDialogFragment.setArguments(bundle);
 
     finalizeOrderDialogFragment.show(ft, "order");

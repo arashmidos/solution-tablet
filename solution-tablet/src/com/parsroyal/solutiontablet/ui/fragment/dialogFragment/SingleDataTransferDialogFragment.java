@@ -394,10 +394,10 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         });
         sendDataThead.start();
       } else {
-        saleOrder.setStockCode(
-            Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE)));
-        saleOrder.setOfficeCode(
-            Integer.valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE)));
+        String stockCode = settingService.getSettingValue(ApplicationKeys.SETTING_STOCK_CODE);
+        saleOrder.setStockCode(Empty.isEmpty(stockCode) ? 0 : Integer.valueOf(stockCode));
+        String branchCode = settingService.getSettingValue(ApplicationKeys.SETTING_BRANCH_CODE);
+        saleOrder.setOfficeCode(Empty.isEmpty(branchCode) ? 0 : Integer.valueOf(branchCode));
         InvoicedOrdersDataTransfer dataTransfer = new InvoicedOrdersDataTransfer(mainActivity);
         dataTransfer.sendSingleInvoice(saleOrder);
       }

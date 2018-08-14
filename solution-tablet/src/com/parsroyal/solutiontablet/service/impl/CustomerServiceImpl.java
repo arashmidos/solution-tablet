@@ -10,7 +10,6 @@ import com.parsroyal.solutiontablet.data.dao.VisitLineDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerPicDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
-import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDetailDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;

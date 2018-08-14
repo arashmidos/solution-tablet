@@ -211,8 +211,9 @@ public class Position extends BaseEntity<Long> {
 
   public Location getLocation() {
     Location location = new Location("Dummy");
-    location.setLatitude(latitude);
-    location.setLongitude(longitude);
+    location.setLatitude(latitude == null ? 0.0 : latitude);
+    location.setLongitude(longitude == null ? 0.0 : longitude);
+
     return location;
   }
 

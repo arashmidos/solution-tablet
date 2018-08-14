@@ -68,7 +68,6 @@ public class PathDetailFragment extends BaseFragment implements
   @Nullable
   @BindView(R.id.customers_number_tv)
   TextView customersNumberTv;
-  @Nullable
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
   @Nullable
@@ -185,9 +184,8 @@ public class PathDetailFragment extends BaseFragment implements
       Logger.sendError("Wrong Orientation", "Device is not tablet");
 
     }
-    mainActivity
-        .changeTitle(NumberUtil.digitsToPersian(
-            String.format(getString(R.string.visitline_code_x), visitline.getCode())));
+    mainActivity.changeTitle(NumberUtil.digitsToPersian(
+        String.format(getString(R.string.visitline_code_x), visitline.getCode())));
   }
 
   private void setTabletData() {
@@ -203,9 +201,8 @@ public class PathDetailFragment extends BaseFragment implements
       //We detected wrong device size!
       Logger.sendError("Wrong Orientation", "Device is not tablet");
     }
-    mainActivity
-        .changeTitle(String.format(getString(R.string.visitline_code_x),
-            NumberUtil.digitsToPersian(visitline.getCode())));
+    mainActivity.changeTitle(String.format(getString(R.string.visitline_code_x),
+        NumberUtil.digitsToPersian(visitline.getCode())));
   }
 
   //set up recycler view
@@ -287,14 +284,14 @@ public class PathDetailFragment extends BaseFragment implements
     View dialogView = inflater.inflate(R.layout.dialog_sort, null);
     dialogBuilder.setView(dialogView);
 
-    RadioGroup sortRadioGroup = (RadioGroup) dialogView.findViewById(R.id.sort_radio_group);
+    RadioGroup sortRadioGroup = dialogView.findViewById(R.id.sort_radio_group);
     AlertDialog alertDialog = dialogBuilder.create();
 
-    RadioButton selectedSortType = (RadioButton) sortRadioGroup.findViewWithTag(sortType);
+    RadioButton selectedSortType = sortRadioGroup.findViewWithTag(sortType);
     selectedSortType.setChecked(true);
     alertDialog.show();
     sortRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-      RadioButton selectedRadio = (RadioButton) dialogView.findViewById(checkedId);
+      RadioButton selectedRadio = dialogView.findViewById(checkedId);
       sortType = (String) selectedRadio.getTag();
 
       new RefreshAsyncTask().execute(searchEdt.getText().toString());
@@ -307,17 +304,21 @@ public class PathDetailFragment extends BaseFragment implements
     switch (sortType) {
       case "0":
         Collections.sort(customerList,
-            (item1, item2) -> item1.getCodeNumber().compareTo(item2.getCodeNumber()));
+            (item1, item2) -> item1.getPrimaryKey().compareTo(item2.getPrimaryKey()));
         break;
       case "1":
         Collections.sort(customerList,
-            (item1, item2) -> item2.getCodeNumber().compareTo(item1.getCodeNumber()));
+            (item1, item2) -> item1.getCodeNumber().compareTo(item2.getCodeNumber()));
         break;
       case "2":
+        Collections.sort(customerList,
+            (item1, item2) -> item2.getCodeNumber().compareTo(item1.getCodeNumber()));
+        break;
+      case "3":
         Collections.sort(customerList, (item1, item2) -> Collator.getInstance(new Locale("fa"))
             .compare(item1.getTitle(), item2.getTitle()));
         break;
-      case "3":
+      case "4":
         Collections.sort(customerList, (item1, item2) -> Collator.getInstance(new Locale("fa"))
             .compare(item2.getTitle(), item1.getTitle()));
         break;
@@ -330,15 +331,15 @@ public class PathDetailFragment extends BaseFragment implements
     View dialogView = inflater.inflate(R.layout.dialog_customer_filter, null);
     dialogBuilder.setView(dialogView);
 
-    Button doFilterBtn = (Button) dialogView.findViewById(R.id.do_filter_btn);
-    TextView closeTv = (TextView) dialogView.findViewById(R.id.close_tv);
-    Button removeFilterBtn = (Button) dialogView.findViewById(R.id.remove_filter_btn);
-    CheckBox filterNoneCb = (CheckBox) dialogView.findViewById(R.id.filter_none_cb);
+    Button doFilterBtn = dialogView.findViewById(R.id.do_filter_btn);
+    TextView closeTv = dialogView.findViewById(R.id.close_tv);
+    Button removeFilterBtn = dialogView.findViewById(R.id.remove_filter_btn);
+    CheckBox filterNoneCb = dialogView.findViewById(R.id.filter_none_cb);
     filterNoneCb.setChecked(filterByNone);
-    CheckBox filterOrderCb = (CheckBox) dialogView.findViewById(R.id.filter_order_cb);
+    CheckBox filterOrderCb = dialogView.findViewById(R.id.filter_order_cb);
     filterOrderCb.setChecked(filterByOrder);
-    EditText distanceEdt = (EditText) dialogView.findViewById(R.id.distance_edt);
-    TextView errorMessageTv = (TextView) dialogView.findViewById(R.id.error_msg);
+    EditText distanceEdt = dialogView.findViewById(R.id.distance_edt);
+    TextView errorMessageTv = dialogView.findViewById(R.id.error_msg);
 
     if (Empty.isNotEmpty(filterDistance)) {
       distanceEdt.setText(filterDistance);

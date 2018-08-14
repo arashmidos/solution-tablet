@@ -26,6 +26,13 @@ public class DialogUtil {
         (dialog, i) -> dialog.dismiss(), Constants.ICON_MESSAGE);
   }
 
+  public static void showConfirmDialog(Context context, String title, String message,
+      String positiveChoice,
+      DialogInterface.OnClickListener positiveBtnOnClickListener, String negativeChoice) {
+    showCustomDialog(context, title, message, positiveChoice, positiveBtnOnClickListener,
+        negativeChoice, (dialog, i) -> dialog.dismiss(), Constants.ICON_MESSAGE);
+  }
+
   public static void showCustomDialog(Context context, String title, String message,
       String positiveChoice, DialogInterface.OnClickListener positiveBtnOnClickListener,
       String negativeChoice, DialogInterface.OnClickListener negativeBtnOnClickListener,

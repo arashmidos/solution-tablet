@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -294,7 +295,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         + VisitInformation.COL_CUSTOMER_BACKEND_ID +
         " LEFT OUTER JOIN COMMER_VISIT_INFORMATION_DETAIL vd on vi._id = vd.VISIT_INFORMATION_ID ";
 
-    String orderBy = "c." + Customer.COL_CODE + " ASC ";
+    String orderBy = "c." + Customer.COL_ID + " ASC ";
 
     String selection = "";
     ArrayList<String> args = new ArrayList<>();
@@ -338,7 +339,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
     Map<Long, CustomerListModel> entitiesMap = new HashMap<>();
 
-    while (cursor.moveToNext()) {
+    while (cursor.moveToNext()) {//TODO: refactor
       CustomerListModel listModel = createListModelFromCursor(cursor);
       Long primaryKey = listModel.getPrimaryKey();
       if (!entitiesMap.containsKey(primaryKey)) {
@@ -380,7 +381,11 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
       }
     }
     cursor.close();
-    return new ArrayList<>(entitiesMap.values());
+    ArrayList<CustomerListModel> customerListModels = new ArrayList<>(entitiesMap.values());
+
+    Collections.sort(customerListModels,
+        (item1, item2) -> item1.getPrimaryKey().compareTo(item2.getPrimaryKey()));
+    return customerListModels;
   }
 
   private CustomerListModel createListModelFromCursor(Cursor cursor) {
