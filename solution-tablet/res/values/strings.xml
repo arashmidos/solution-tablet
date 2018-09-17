@@ -608,5 +608,15 @@
   <string name="edit_item">ویرایش آیتم سفارش</string>
   <string name="message_edit_removes_gift">با ویرایش این آیتم کلیه تخفیفات و جوایز حذف می شوند. این عملیات برگشت پذیر نیست</string>
   <string name="error_order_incomplete_not_deliverable">اطلاعات سفارش ناقص است</string>
+  <string name="sms_toolbar">کد اعتبار سنجی سفارش</string>
+  <string name="enter_sms">لطفا کد اعتبار سنجی را در قسمت زیر وارد نمایید</string>
+  <string name="five_star">*****</string>
+  <string name="resend_code">ارسال مجدد کد</string>
+  <string name="cant_enter_code">امکان وارد کردن کد را ندارم</string>
+  <string name="error_in_sms_sending">مشکل در ارسال پیام</string>
+  <string name="no_sms_permission">دسترسی برای ارسال پیامک داده نشد</string>
+  <string name="invalid_code">کد وارد شده معتبر نیست</string>
+  <string name="reason">دلیل خود برای عدم وارد کردن کد را انتخاب کنید</string>
+  <string name="send">ارسال</string>
 
 </resources>
