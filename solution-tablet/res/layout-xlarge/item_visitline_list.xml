@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:card_view="http://schemas.android.com/apk/res-auto"
+  xmlns:map="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/visitline_lay"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_marginTop="@dimen/fragment_padding"
+  android:layout_marginLeft="@dimen/fragment_padding"
+  android:layout_marginRight="@dimen/fragment_padding"
+  card_view:cardCornerRadius="2dp"
+  card_view:cardElevation="3dp">
+
+  <LinearLayout
+    android:id="@+id/visitline_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="right"
+    android:orientation="vertical">
+
+
+    <!-- MapView in lite mode. Note that it needs to be initialised
+     programmatically before it can be used. -->
+    <com.google.android.gms.maps.MapView
+      android:id="@+id/map_item"
+      android:layout_width="match_parent"
+      android:layout_height="175dp"
+      android:clickable="false"
+      map:liteMode="true"
+      android:visibility="gone"
+      map:mapType="none" />
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="@color/navigation_drawer_divider" />
+
+    <TextView
+      android:id="@+id/visitline_name"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:layout_marginBottom="12dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:lineSpacingExtra="6sp"
+      android:textColor="@color/primary_dark"
+      android:textSize="@dimen/text_x_large"
+      tools:text="مسیر پاسداران - هروی" />
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp">
+
+      <TextView
+        android:id="@+id/visitline_detail"
+        style="@style/IranSans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_toLeftOf="@+id/divider"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/black_55"
+        android:textSize="@dimen/text_small"
+        tools:text="میدان هروی - پاسداران - ساقدوش" />
+
+      <View
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@+id/customer_count"
+        android:background="@color/black_10" />
+
+      <TextView
+        android:id="@+id/customer_count"
+        style="@style/IranSans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentRight="true"
+        android:maxLines="1"
+        android:textColor="@color/black_de"
+        android:textSize="@dimen/text_small"
+        tools:text="9 مشتری" />
+
+    </RelativeLayout>
+  </LinearLayout>
+</android.support.v7.widget.CardView>
