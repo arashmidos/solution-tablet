@@ -1,12 +1,18 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +61,7 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentMethodAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.GiftResultDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PaymentMethodDialogFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SmsDialogFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
@@ -64,6 +71,7 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -73,6 +81,8 @@ import org.greenrobot.eventbus.Subscribe;
 public class OrderInfoFragment extends BaseFragment {
 
   private static final String TAG = OrderInfoFragment.class.getName();
+  private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 56;
+
   @BindView(R.id.customer_name_tv)
   TextView customerNameTv;
   @BindView(R.id.cost_tv)
@@ -131,6 +141,7 @@ public class OrderInfoFragment extends BaseFragment {
   private Long newOrderId;
   private long rejectType;
   private boolean isCashOrder;
+  private int rand;
 
   public OrderInfoFragment() {
     // Required empty public constructor
@@ -327,22 +338,27 @@ public class OrderInfoFragment extends BaseFragment {
         }
         break;
       case R.id.submit_order_btn:
-        order = saleOrderService.findOrderDtoById(orderId);
-        if (validateOrderForSave()) {
-          if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) || orderStatus
-              .equals(SaleOrderStatus.REJECTED.getId())) {
-            showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                SaleOrderStatus.REJECTED.getId());
-          } else if (isDelivery()) {
-            showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                SaleOrderStatus.DELIVERED.getId());
-          } else {
-            if (isCold()) {
+        if (rand > 9999) {
+          calculateRand();
+          checkForSmsPermission();
+        } else {
+          order = saleOrderService.findOrderDtoById(orderId);
+          if (validateOrderForSave()) {
+            if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) || orderStatus
+                .equals(SaleOrderStatus.REJECTED.getId())) {
               showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                  SaleOrderStatus.READY_TO_SEND.getId());
+                  SaleOrderStatus.REJECTED.getId());
+            } else if (isDelivery()) {
+              showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                  SaleOrderStatus.DELIVERED.getId());
             } else {
-              showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                  SaleOrderStatus.INVOICED.getId());
+              if (isCold()) {
+                showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                    SaleOrderStatus.READY_TO_SEND.getId());
+              } else {
+                showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                    SaleOrderStatus.INVOICED.getId());
+              }
             }
           }
         }
@@ -355,10 +371,22 @@ public class OrderInfoFragment extends BaseFragment {
       DialogUtil.showConfirmDialog(mainActivity, title,
           getString(R.string.message_are_you_sure), (dialog, which) -> {
             saveOrder(statusId);
-            mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
           });
+    }
+  }
+
+  private void checkForSmsPermission() {
+    if (checkSelfPermission(mainActivity,
+        Manifest.permission.SEND_SMS) !=
+        PackageManager.PERMISSION_GRANTED) {
+      // Permission not yet granted. Use requestPermissions().
+      // MY_PERMISSIONS_REQUEST_SEND_SMS is an
+      // app-defined int constant. The callback method gets the
+      // result of the request.
+      this.requestPermissions(new String[]{Manifest.permission.SEND_SMS},
+          MY_PERMISSIONS_REQUEST_SEND_SMS);
     } else {
-      mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+      sendSMS();
     }
   }
 
@@ -372,6 +400,19 @@ public class OrderInfoFragment extends BaseFragment {
   public void onPause() {
     super.onPause();
     EventBus.getDefault().unregister(this);
+  }
+
+  public void sendSMS() {
+    try {
+      SmsManager smsManager = SmsManager.getDefault();
+      smsManager.sendTextMessage(customer.getCellPhone(), null, String.valueOf(rand), null, null);
+      android.app.FragmentTransaction ft = mainActivity.getFragmentManager().beginTransaction();
+      SmsDialogFragment smsDialogFragment = SmsDialogFragment
+          .newInstance(mainActivity, this, rand, customer.getCellPhone());
+      smsDialogFragment.show(ft, "sms");
+    } catch (Exception ex) {
+      ToastUtil.toastError(mainActivity, getString(R.string.error_in_sms_sending));
+    }
   }
 
   private void saveOrder(Long statusId) {
@@ -404,6 +445,8 @@ public class OrderInfoFragment extends BaseFragment {
             typeId);
         visitService.saveVisitDetail(visitDetail);
       }
+      calculateRand();
+      checkForSmsPermission();
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, ex);
@@ -413,6 +456,12 @@ public class OrderInfoFragment extends BaseFragment {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
+  }
+
+  public int calculateRand() {
+    Random random = new Random();
+    rand = random.nextInt(89999) + 10000;
+    return rand;
   }
 
   private VisitInformationDetailType getDetailType() {
@@ -442,6 +491,26 @@ public class OrderInfoFragment extends BaseFragment {
       return false;
     }
     return true;
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+      @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    switch (requestCode) {
+      case MY_PERMISSIONS_REQUEST_SEND_SMS: {
+        if (permissions[0].equalsIgnoreCase
+            (Manifest.permission.SEND_SMS)
+            && grantResults[0] ==
+            PackageManager.PERMISSION_GRANTED) {
+          // Permission was granted. Enable sms button.
+          sendSMS();
+        } else {
+          // Permission denied.
+          ToastUtil.toastError(mainActivity, getString(R.string.no_sms_permission));
+        }
+      }
+    }
   }
 
   private boolean isCold() {
@@ -532,7 +601,6 @@ public class OrderInfoFragment extends BaseFragment {
 
   @Subscribe
   public void getMessage(Event event) {
-
     if (event instanceof ErrorEvent) {
       registerGiftTv.setText(R.string.error_connecting_server);
     } else if (event instanceof SendOrderEvent) {

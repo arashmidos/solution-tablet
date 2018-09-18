@@ -3,9 +3,8 @@ apply plugin: 'io.fabric'
 
 buildscript {
     repositories {
-//        mavenCentral()
-        jcenter()
         google()
+        jcenter()
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {

@@ -120,6 +120,8 @@ public abstract class MainActivity extends AppCompatActivity {
 
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
+  private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 56;
+
   private static final String TAG = MainActivity.class.getName();
   public static int batteryLevel = -1;
   public static String batteryStatusTitle;
@@ -415,6 +417,7 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     Log.i(TAG, "onRequestPermissionResult");
     if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
       if (grantResults.length <= 0) {

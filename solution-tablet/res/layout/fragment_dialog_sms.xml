@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main_lay"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/white_fa"
+  android:orientation="vertical">
+  <LinearLayout
+    android:id="@+id/reason_lay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:visibility="gone">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="@color/white"
+      android:orientation="horizontal">
+      <TextView
+        style="@style/IranSans.Bold"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center|right"
+        android:text="@string/reason"
+        android:textColor="@color/black_85"
+        android:textSize="16sp" />
+      <ImageView
+        android:id="@+id/back_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:src="@drawable/ic_back_24_dp"
+        android:tint="@color/black_55" />
+    </LinearLayout>
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:background="@color/gray_ee" />
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/recycler_view"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:background="@color/white_fa" />
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:background="@color/gray_ee" />
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="10dp"
+      android:background="@color/white">
+      <Button
+        android:id="@+id/send_btn"
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_gravity="left"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="@drawable/get_data_background"
+        android:text="@string/send"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+    </LinearLayout>
+  </LinearLayout>
+
+
+  <LinearLayout
+    android:id="@+id/code_lay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:visibility="visible">
+    <LinearLayout
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="@color/white"
+      android:orientation="horizontal">
+      <TextView
+        style="@style/IranSans.Bold"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center|right"
+        android:text="@string/sms_toolbar"
+        android:textColor="@color/black_85"
+        android:textSize="16sp" />
+      <ImageView
+        android:id="@+id/close_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:src="@drawable/ic_close_24dp"
+        android:tint="@color/black_55" />
+    </LinearLayout>
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:background="@color/gray_ee" />
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
+      android:layout_marginBottom="8dp"
+      android:layout_gravity="center"
+      android:src="@drawable/ic_checked_circle_18_dp" />
+    <TextView
+      android:id="@+id/sms_title_tv"
+      style="@style/IranSans"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingLeft="37dp"
+      android:paddingRight="37dp"
+      android:gravity="center"
+      android:textColor="@color/black_85"
+      android:textSize="14sp"
+      tools:text="همکار گرامی! کد اعتبار سنجی ثبت سفارش،‌ به شماره همراه ۴۴۵۹****۰۹۳۶ ارسال گردید!" />
+    <TextView
+      style="@style/IranSans"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="42dp"
+      android:layout_marginBottom="28dp"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:text="@string/enter_sms"
+      android:textColor="@color/gray_75"
+      android:textSize="12sp" />
+    <EditText
+      android:id="@+id/sms_code_edt"
+      style="@style/IranSans"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:gravity="center"
+      android:hint="@string/five_star"
+      android:maxLength="5"
+      android:textSize="36sp" />
+    <TextView
+      android:id="@+id/resend_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:layout_gravity="center"
+      android:paddingTop="8dp"
+      android:paddingBottom="8dp"
+      android:paddingLeft="28dp"
+      android:paddingRight="28dp"
+      android:background="@color/primary"
+      android:drawableEnd="@drawable/ic_refresh_18_dp"
+      android:drawablePadding="6dp"
+      android:gravity="center"
+      android:text="@string/resend_code"
+      android:textColor="@color/white"
+      android:textSize="14sp" />
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:background="@color/white_fa" />
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:background="@color/gray_ee" />
+    <TextView
+      android:id="@+id/no_code_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="16dp"
+      android:paddingBottom="16dp"
+      android:paddingLeft="32dp"
+      android:paddingRight="32dp"
+      android:background="@color/white"
+      android:text="@string/cant_enter_code"
+      android:textColor="@color/red_e5"
+      android:textSize="14sp" />
+  </LinearLayout>
+</LinearLayout>
