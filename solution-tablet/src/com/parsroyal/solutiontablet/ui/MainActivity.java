@@ -29,6 +29,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
@@ -155,6 +156,8 @@ public abstract class MainActivity extends AppCompatActivity {
   ImageView searchImg;
   @BindView(R.id.save_img)
   ImageView saveImg;
+  @BindView(R.id.notif_img)
+  ImageView notifImg;
   @BindView(R.id.container)
   FrameLayout container;
   @BindView(R.id.navigation_img)
@@ -239,7 +242,6 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void onStart() {
     super.onStart();
-    Log.d("SHAKIB", "ON START");
     EventBus.getDefault().register(this);
     // Bind to the service. If the service is in foreground mode, this signals to the service
     // that since this activity is in the foreground, the service can exit foreground mode.
@@ -386,6 +388,11 @@ public abstract class MainActivity extends AppCompatActivity {
   protected void onStop() {
     super.onStop();
     Log.d("SHAKIB", "ON STOP");
+
+
+
+
+
     if (boundToGpsService) {
       // Unbind from the service. This signals to the service that this activity is no longer
       // in the foreground, and the service can respond by promoting itself to a foreground
@@ -393,6 +400,11 @@ public abstract class MainActivity extends AppCompatActivity {
       unbindService(serviceConnection);
       boundToGpsService = false;
     }
+
+
+
+
+
 
     EventBus.getDefault().unregister(this);
   }
@@ -432,6 +444,7 @@ public abstract class MainActivity extends AppCompatActivity {
         // If user interaction was interrupted, the permission request is cancelled and you
         // receive empty arrays.
         Log.i(TAG, "User interaction was cancelled.");
+
       } else if ((grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
           && grantResults[1] == PackageManager.PERMISSION_GRANTED) || (grantResults.length == 1
           && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
@@ -635,7 +648,7 @@ public abstract class MainActivity extends AppCompatActivity {
 
   public abstract void onNavigationTapped();
 
-  @OnClick({R.id.navigation_img, R.id.search_img, R.id.save_img})
+  @OnClick({R.id.navigation_img, R.id.search_img, R.id.save_img, R.id.notif_img})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.navigation_img:
@@ -653,6 +666,8 @@ public abstract class MainActivity extends AppCompatActivity {
       case R.id.save_img:
         onSaveImageClicked(true);
         break;
+      case R.id.notif_img:
+        Toast.makeText(this, "Notifam koo?", Toast.LENGTH_SHORT).show();
     }
   }
 
@@ -757,9 +772,11 @@ public abstract class MainActivity extends AppCompatActivity {
     if (fragmentId == FEATURE_FRAGMENT_ID) {
       setNavigationToolbarIcon(R.drawable.ic_menu);
       setDrawerEnable(true);
+      displayNotifbutton(true);
     } else {
       setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
       setDrawerEnable(false);
+      displayNotifbutton(false);
     }
 
     //show search icon in customer fragment
@@ -840,6 +857,10 @@ public abstract class MainActivity extends AppCompatActivity {
     }
     Analytics.logContentView("Fragment " + String.valueOf(fragmentId));
     return fragment;
+  }
+
+  private void displayNotifbutton(boolean show) {
+    notifImg.setVisibility(show ? View.VISIBLE : View.GONE);
   }
 
   protected abstract void setDrawerEnable(boolean isLock);

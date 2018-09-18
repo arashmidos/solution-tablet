@@ -37,10 +37,11 @@
         <TextView
           android:id="@+id/toolbar_title"
           style="@style/IranSans.Medium"
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_gravity="center"
           android:gravity="center"
+          android:maxLines="1"
           android:text="@string/features_list"
           android:textColor="@color/white"
           android:textSize="16sp" />
@@ -73,6 +74,14 @@
           android:paddingRight="16dp"
           android:src="@drawable/ic_save_24_dp"
           android:visibility="gone" />
+        <ImageView
+          android:id="@+id/notif_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          android:layout_gravity="start|center"
+          android:src="@drawable/ic_message_24_dp"
+          android:visibility="gone" />
         <TextView
           android:id="@+id/chronometer"
           android:layout_width="wrap_content"
@@ -84,8 +93,8 @@
           android:maxLines="1"
           android:textColor="@color/white"
           android:textSize="18sp"
-          tools:text="10:20"
           android:visibility="gone"
+          tools:text="10:20"
           tools:visibility="visible" />
       </FrameLayout>
     </android.support.design.widget.AppBarLayout>
