@@ -619,5 +619,7 @@
   <string name="reason">دلیل خود برای عدم وارد کردن کد را انتخاب کنید</string>
   <string name="send">ارسال</string>
   <string name="default_order">پیشفرض</string>
+  <string name="manual_visit_line">مسیر دستی</string>
+  <string name="no_customer_exist">بدون مشتری</string>
 
 </resources>

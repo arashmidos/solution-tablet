@@ -72,7 +72,7 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
     String sql =
         "select vl.BACKEND_ID, vl.CODE, vl.TITLE,count(cu._id) COUNT from COMMER_VISIT_LINE vl " +
             "LEFT OUTER JOIN COMMER_CUSTOMER cu where cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
-            "GROUP BY vl.BACKEND_ID, vl.CODE, vl.TITLE";
+            "GROUP BY vl.BACKEND_ID, vl.CODE, vl.TITLE ORDER BY vl.BACKEND_ID DESC";
 
     List<VisitLineListModel> entities = new ArrayList<>();
     Cursor cursor = db.rawQuery(sql, null);
