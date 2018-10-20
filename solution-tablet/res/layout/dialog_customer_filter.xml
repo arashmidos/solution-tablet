@@ -23,14 +23,14 @@
     android:layout_alignParentTop="true"
     android:text="@string/filters"
     android:textColor="@color/black_de"
-    android:textSize="18sp"/>
+    android:textSize="18sp" />
 
   <View
     android:id="@+id/devider_top"
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:layout_below="@id/title_tv"
-    android:background="@color/navigation_drawer_divider"/>
+    android:background="@color/navigation_drawer_divider" />
 
   <ImageView
     android:id="@+id/radar_icon"
@@ -43,7 +43,7 @@
     android:layout_alignParentRight="true"
     android:layout_below="@id/devider_top"
     android:src="@drawable/ic_radar_black_24dp"
-    android:tint="@color/login_gray"/>
+    android:tint="@color/login_gray" />
 
   <TextView
     android:id="@+id/pre_tv"
@@ -56,7 +56,7 @@
     android:layout_toLeftOf="@id/radar_icon"
     android:text="@string/distance_less_than"
     android:textColor="@color/black_de"
-    android:textSize="14sp"/>
+    android:textSize="14sp" />
 
   <EditText
     android:id="@+id/distance_edt"
@@ -75,7 +75,7 @@
     android:hint="500"
     android:inputType="number"
     android:textColorHint="@color/black_8a"
-    android:textSize="14sp"/>
+    android:textSize="14sp" />
 
   <TextView
     style="@style/IranSans.Medium"
@@ -87,7 +87,7 @@
     android:layout_toLeftOf="@id/distance_edt"
     android:text="@string/meter"
     android:textColor="@color/black_de"
-    android:textSize="14sp"/>
+    android:textSize="14sp" />
 
   <View
     android:id="@+id/devider_middle"
@@ -96,7 +96,7 @@
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:layout_below="@id/radar_icon"
-    android:background="@color/navigation_drawer_divider"/>
+    android:background="@color/navigation_drawer_divider" />
 
 
   <CheckBox
@@ -113,7 +113,7 @@
     android:gravity="right|center"
     android:text="@string/register_no"
     android:textColor="@color/black_85"
-    android:textSize="14sp"/>
+    android:textSize="14sp" />
 
   <CheckBox
     android:id="@+id/filter_order_cb"
@@ -121,7 +121,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="30dp"
-    android:layout_marginBottom="23dp"
     android:layout_marginRight="22dp"
     android:layout_below="@id/filter_none_cb"
     android:button="@null"
@@ -131,7 +130,25 @@
     android:gravity="right|center"
     android:text="@string/register_order"
     android:textColor="@color/black_85"
-    android:textSize="14sp"/>
+    android:textSize="14sp" />
+
+  <CheckBox
+    android:id="@+id/filter_not_visited_cb"
+    style="@style/IranSans"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="23dp"
+    android:layout_marginBottom="23dp"
+    android:layout_marginRight="22dp"
+    android:layout_below="@id/filter_order_cb"
+    android:button="@null"
+    android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+    android:drawablePadding="24dp"
+    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+    android:gravity="right|center"
+    android:text="@string/not_visited"
+    android:textColor="@color/black_85"
+    android:textSize="14sp" />
 
   <TextView
     android:id="@+id/error_msg"
@@ -140,20 +157,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:layout_alignRight="@+id/filter_order_cb"
-    android:layout_below="@id/filter_order_cb"
+    android:layout_alignRight="@+id/filter_not_visited_cb"
+    android:layout_below="@id/filter_not_visited_cb"
     android:gravity="right"
     android:textColor="@color/red"
     android:textSize="14sp"
     android:visibility="gone"
-    tools:text="فاصله نمی تواند بیش از ۵۰۰ متر باشد"/>
+    tools:text="فاصله نمی تواند بیش از ۵۰۰ متر باشد" />
 
   <View
     android:id="@+id/devider_bottom"
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:layout_below="@id/error_msg"
-    android:background="@color/navigation_drawer_divider"/>
+    android:background="@color/navigation_drawer_divider" />
 
   <TextView
     android:id="@+id/close_tv"
@@ -166,7 +183,7 @@
     android:layout_below="@id/devider_bottom"
     android:text="@string/close"
     android:textColor="@color/primary"
-    android:textSize="14sp"/>
+    android:textSize="14sp" />
 
   <Button
     android:id="@+id/do_filter_btn"
@@ -183,7 +200,7 @@
     android:gravity="center"
     android:text="@string/do_filter"
     android:textColor="@color/white"
-    android:textSize="14sp"/>
+    android:textSize="14sp" />
 
   <Button
     android:id="@+id/remove_filter_btn"
@@ -198,5 +215,5 @@
     android:gravity="center"
     android:text="@string/remove_filter"
     android:textColor="@color/primary"
-    android:textSize="14sp"/>
+    android:textSize="14sp" />
 </RelativeLayout>

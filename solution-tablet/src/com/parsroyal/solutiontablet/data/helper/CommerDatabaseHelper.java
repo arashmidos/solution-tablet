@@ -30,7 +30,7 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
 
   public static final String TAG = CommerDatabaseHelper.class.getSimpleName();
   private static final String DATABASE_NAME = "Commer";
-  private static final Integer DATABASE_VERSION = 15;
+  private static final Integer DATABASE_VERSION = 16;
   private static final String SQL_ADD_COLUMN = "ALTER TABLE %s ADD COLUMN %s %s ";
 
   private static CommerDatabaseHelper sInstance;

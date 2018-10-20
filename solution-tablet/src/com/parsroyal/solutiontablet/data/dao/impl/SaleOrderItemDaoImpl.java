@@ -55,6 +55,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     contentValues.put(SaleOrderItem.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
     contentValues.put(SaleOrderItem.COL_INVOICE_BACKEND_ID, entity.getInvoiceBackendId());
     contentValues.put(SaleOrderItem.COL_GOODS_COUNT_2, entity.getGoodsUnit2Count());
+    contentValues.put(SaleOrderItem.COL_GOODS_DISCOUNT, entity.getDiscount());
     return contentValues;
   }
 
@@ -82,7 +83,8 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
         SaleOrderItem.COL_CREATE_DATE_TIME,
         SaleOrderItem.COL_UPDATE_DATE_TIME,
         SaleOrderItem.COL_INVOICE_BACKEND_ID,//10
-        SaleOrderItem.COL_GOODS_COUNT_2
+        SaleOrderItem.COL_GOODS_COUNT_2,
+        SaleOrderItem.COL_GOODS_DISCOUNT
     };
     return projection;
   }
@@ -102,6 +104,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setUpdateDateTime(cursor.getString(9));
     saleOrderItem.setInvoiceBackendId(cursor.getLong(10));
     saleOrderItem.setGoodsUnit2Count(cursor.getLong(11));
+    saleOrderItem.setDiscount(cursor.getInt(12));
     return saleOrderItem;
   }
 
@@ -184,7 +187,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setUpdateDateTime(cursor.getString(9));
     saleOrderItem.setInvoiceBackendId(cursor.getLong(10));
     saleOrderItem.setGoodsUnit2Count(cursor.getLong(11));
-
+    saleOrderItem.setDiscount(cursor.getInt(12));
     return saleOrderItem;
   }
 
