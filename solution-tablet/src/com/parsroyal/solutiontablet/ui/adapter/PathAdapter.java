@@ -6,28 +6,23 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.NumberUtil;
-import java.util.HashSet;
 import java.util.List;
 
 public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
 
-//  private final HashSet<MapView> mMaps = new HashSet<>();
+  //  private final HashSet<MapView> mMaps = new HashSet<>();
   private List<VisitLineListModel> visitLineList;
   private LayoutInflater inflater;
   private MainActivity mainActivity;
@@ -83,10 +78,14 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
 
     @BindView(R.id.visitline_name)
     TextView visitlineName;
+    @BindView(R.id.list_img)
+    ImageView customerList;
     @BindView(R.id.visitline_detail)
     TextView visitlineDetail;
     @BindView(R.id.customer_count)
     TextView customerCount;
+    @BindView(R.id.divider)
+    View divider;
     @BindView(R.id.map_item)
     MapView mapView;
     GoogleMap map;
@@ -98,20 +97,47 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
       ButterKnife.bind(this, itemView);
     }
 
-    @OnClick({R.id.visitline_lay, R.id.visitline_layout})
+    @OnClick({R.id.list_img, R.id.visitline_lay, R.id.visitline_layout})
     public void onClick(View view) {
-      Bundle bundle = new Bundle();
-      bundle.putLong(Constants.VISITLINE_BACKEND_ID, model.getPrimaryKey());
-      mainActivity.changeFragment(MainActivity.PATH_DETAIL_FRAGMENT_ID, bundle, true);
+      switch (view.getId()) {
+        case R.id.visitline_lay:
+        case R.id.visitline_layout:
+          Bundle bundle = new Bundle();
+          bundle.putLong(Constants.VISITLINE_BACKEND_ID, model.getPrimaryKey());
+          mainActivity.changeFragment(MainActivity.PATH_DETAIL_FRAGMENT_ID, bundle, true);
+          break;
+        case R.id.list_img:
+          Bundle clickBundle = new Bundle();
+          clickBundle.putBoolean(Constants.IS_CLICKABLE, true);
+          mainActivity.changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, clickBundle, true);
+          break;
+      }
     }
 
     public void setData(VisitLineListModel model, int position) {
       this.model = model;
       this.position = position;
+      if (model.getTitle().equals(mainActivity.getString(R.string.manual_visit_line))) {
+        customerList.setVisibility(View.VISIBLE);
+        if (model.getCustomerCount() == 1) {
+          customerCount.setText(mainActivity.getString(R.string.no_customer_exist));
+          divider.setVisibility(View.GONE);
+          visitlineDetail.setVisibility(View.GONE);
+        } else {
+          customerCount.setText(NumberUtil.digitsToPersian(String
+              .format(mainActivity.getString(R.string.x_customers), model.getCustomerCount() - 1)));
+          divider.setVisibility(View.VISIBLE);
+          visitlineDetail.setVisibility(View.VISIBLE);
+        }
+      } else {
+        customerList.setVisibility(View.GONE);
+        customerCount.setText(NumberUtil.digitsToPersian(String
+            .format(mainActivity.getString(R.string.x_customers), model.getCustomerCount())));
+        divider.setVisibility(View.VISIBLE);
+        visitlineDetail.setVisibility(View.VISIBLE);
+      }
       visitlineName.setText(NumberUtil.digitsToPersian(model.getTitle()));
       visitlineDetail.setText(NumberUtil.digitsToPersian(model.getCode()));
-      customerCount.setText(NumberUtil.digitsToPersian(String
-          .format(mainActivity.getString(R.string.x_customers), model.getCustomerCount())));
     }
 
    /* @Override

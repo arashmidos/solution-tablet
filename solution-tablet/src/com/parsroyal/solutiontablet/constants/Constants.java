@@ -31,6 +31,7 @@ public class Constants {
   public static final String VISITLINE_BACKEND_ID = "visitLineBackendId";
   public static final String ANSWERS_GROUP_NO = "answersGroupNo";
   public static final String COUNT = "count";
+  public static final String IS_CLICKABLE = "IS_CLICKABLE";
   public static final String SELECTED_UNIT = "selectedUnit";
   public static final String VISIT_ID = "visitId";
   public static final String ORDER_ID = "orderId";

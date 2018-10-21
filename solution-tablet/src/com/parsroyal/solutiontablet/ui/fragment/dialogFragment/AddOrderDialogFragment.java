@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +60,7 @@ import org.greenrobot.eventbus.Subscribe;
 public class AddOrderDialogFragment extends DialogFragment {
 
   public final String TAG = AddOrderDialogFragment.class.getSimpleName();
+
   @BindView(R.id.pager)
   protected ViewPager viewPager;
   @BindView(R.id.indicator)
@@ -102,6 +105,12 @@ public class AddOrderDialogFragment extends DialogFragment {
   protected ImageView registerButtonImage;
   @BindView(R.id.order_count_tv)
   protected TextView orderCountTv;
+  @BindView(R.id.minus_img)
+  protected ImageView minusImg;
+  @BindView(R.id.discount_tv)
+  protected TextView discountTv;
+  @BindView(R.id.discount_edt)
+  protected EditText discountEdt;
 
   protected GoodsDialogOnClickListener onClickListener;
   protected Long goodsBackendId;
@@ -120,6 +129,7 @@ public class AddOrderDialogFragment extends DialogFragment {
   protected String unit1Title;
   protected String unit2Title;
   protected Long saleRate;
+  private long total;
 
   public AddOrderDialogFragment() {
     // Required empty public constructor
@@ -130,7 +140,7 @@ public class AddOrderDialogFragment extends DialogFragment {
   }
 
   public void setOnClickListener(
-      AddOrderDialogFragment.GoodsDialogOnClickListener onClickListener) {
+      GoodsDialogOnClickListener onClickListener) {
     this.onClickListener = onClickListener;
   }
 
@@ -139,7 +149,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     super.onCreate(savedInstanceState);
 
 //    if (!getTAG().contains("Sheet")) {//Its mobile
-      setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
+    setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
 //    }else{
 //      setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog2);
 //    }*/
@@ -188,7 +198,48 @@ public class AddOrderDialogFragment extends DialogFragment {
     setListeners();
     setUpSpinner();
     fillDetailPanel();
+    onDiscountChange();
     return view;
+  }
+
+  private void onDiscountChange() {
+    discountEdt.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+      }
+
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+        String disc = s.toString();
+        if (!TextUtils.isEmpty(disc)) {
+          int discInt = Integer.parseInt(disc);
+          if (!TextUtils.isEmpty(disc) && discInt > 0 && discInt < 100 && total > 0L) {
+            discountTv.setVisibility(View.VISIBLE);
+            long discountPrice = (total * discInt) / 100;
+            discountTv.setText(NumberUtil
+                .digitsToPersian(
+                    String.format(Locale.getDefault(), "تخفیف : %,d %s", discountPrice, getString(
+                        R.string.common_irr_currency))));
+          } else {
+            errorMsg.setVisibility(View.VISIBLE);
+            discountTv.setVisibility(View.GONE);
+            if (discInt <= 0 || discInt >= 100) {
+              errorMsg.setText(R.string.valid_period_discount);
+            } else if (!(total > 0)) {
+              errorMsg.setText(R.string.no_total);
+            }
+          }
+        } else {
+          discountTv.setVisibility(View.GONE);
+        }
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
+
+      }
+    });
   }
 
   protected int getLayout() {
@@ -216,7 +267,7 @@ public class AddOrderDialogFragment extends DialogFragment {
                 String.format(Locale.getDefault(), "%d", (count1.longValue() / unit1Count))));
             unit1CountTv.setText(NumberUtil.digitsToPersian(input));
           }
-          long total = (long) (count1 * selectedGoods.getPrice() / 1000);
+          total = (long) (count1 * selectedGoods.getPrice() / 1000);
           totalPriceTv.setText(NumberUtil
               .digitsToPersian(String.format(Locale.getDefault(), "%,d %s", total, getString(
                   R.string.common_irr_currency))));
@@ -379,7 +430,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     viewPager.setAdapter(adapter);
     indicator.setViewPager(viewPager);
     viewPager.setPageTransformer(true, new DepthPageTransformer());
-    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    viewPager.addOnPageChangeListener(new OnPageChangeListener() {
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         String pos = NumberUtil.digitsToPersian(
@@ -422,11 +473,35 @@ public class AddOrderDialogFragment extends DialogFragment {
     return true;
   }
 
-  @OnClick({R.id.close, R.id.register_order_btn, R.id.bottom_bar})
+  @OnClick({R.id.close, R.id.minus_img, R.id.add_img, R.id.register_order_btn, R.id.bottom_bar})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.close:
         getDialog().dismiss();
+        break;
+      case R.id.minus_img:
+        if (TextUtils.isEmpty(countTv.getText().toString().trim())) {
+          countTv.setText("0");
+        } else {
+          int enteredNum = Integer.parseInt(countTv.getText().toString().trim());
+          if (enteredNum == 1 || enteredNum == 0) {
+            minusImg.setImageResource(R.drawable.im_minus_grey);
+          } else {
+            minusImg.setImageResource(R.drawable.im_minus);
+          }
+          if (enteredNum > 0) {
+            countTv.setText(String.valueOf(enteredNum - 1));
+          }
+        }
+        break;
+      case R.id.add_img:
+        if (TextUtils.isEmpty(countTv.getText().toString().trim())) {
+          countTv.setText("0");
+        } else {
+          minusImg.setImageResource(R.drawable.im_minus);
+          int enteredNum = Integer.parseInt(countTv.getText().toString().trim());
+          countTv.setText(String.valueOf(enteredNum + 1));
+        }
         break;
       case R.id.bottom_bar:
       case R.id.register_order_btn:

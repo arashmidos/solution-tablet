@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
@@ -40,6 +41,7 @@ public class CustomerSearchFragment extends BaseFragment {
   private MainActivity activity;
   private boolean isClose = false;
   private SystemCustomerAdapter adapter;
+  private boolean isClickable;
 
   public CustomerSearchFragment() {
     // Required empty public constructor
@@ -55,6 +57,8 @@ public class CustomerSearchFragment extends BaseFragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_customer_search, container, false);
     ButterKnife.bind(this, view);
+    Bundle args = getArguments();
+    isClickable = args.getBoolean(Constants.IS_CLICKABLE, false);
     activity = (MainActivity) getActivity();
     activity.changeTitle(getString(R.string.search));
     customerService = new CustomerServiceImpl(activity);
@@ -65,7 +69,7 @@ public class CustomerSearchFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new SystemCustomerAdapter(activity, getCustomersList());
+    adapter = new SystemCustomerAdapter(activity, getCustomersList(),isClickable);
     if (MultiScreenUtility.isTablet(activity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(activity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);

@@ -58,11 +58,11 @@ public class SolutionTabletApplication extends MultiDexApplication {
   public void onCreate() {
     super.onCreate();
     sInstance = this;
-
     if (!BuildConfig.DEBUG) {
       Fabric.with(this, new Crashlytics());
     }
 
+    Pushe.initialize(this, true);
     MultiDex.install(this);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -78,7 +78,8 @@ public class SolutionTabletApplication extends MultiDexApplication {
     if (!TrueTime.isInitialized()) {
       new Thread(() -> {
         try {
-          TrueTime.build().withServerResponseDelayMax(1000).withSharedPreferences(this).initialize();
+          TrueTime.build().withServerResponseDelayMax(1000).withSharedPreferences(this)
+              .initialize();
 
           Log.i("Network Time", "**Synced with network");
         } catch (IOException ignore) {
@@ -87,7 +88,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
       }).start();
     }
 
-    Pushe.initialize(this,true);
+    Pushe.initialize(this, true);
 
     Log.d("Pushe", Pushe.getPusheId(this));
 //    Log.d("DebugDB", "***>>> DB Address:"+DebugDB.getAddressLog());

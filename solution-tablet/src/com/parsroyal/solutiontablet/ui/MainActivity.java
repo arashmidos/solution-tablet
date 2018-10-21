@@ -391,10 +391,6 @@ public abstract class MainActivity extends AppCompatActivity {
     super.onStop();
     Log.d("SHAKIB", "ON STOP");
 
-
-
-
-
     if (boundToGpsService) {
       // Unbind from the service. This signals to the service that this activity is no longer
       // in the foreground, and the service can respond by promoting itself to a foreground
@@ -402,11 +398,6 @@ public abstract class MainActivity extends AppCompatActivity {
       unbindService(serviceConnection);
       boundToGpsService = false;
     }
-
-
-
-
-
 
     EventBus.getDefault().unregister(this);
   }
@@ -663,7 +654,9 @@ public abstract class MainActivity extends AppCompatActivity {
         if (orderFragment != null && orderFragment.isVisible()) {
           ((OrderFragment) orderFragment).onSearchClicked();
         } else {
-          changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, true);
+          Bundle clickBundle = new Bundle();
+          clickBundle.putBoolean(Constants.IS_CLICKABLE, false);
+          changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, clickBundle, true);
         }
         break;
       case R.id.save_img:

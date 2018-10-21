@@ -16,8 +16,12 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.data.dao.CustomerDao;
+import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
+import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
@@ -40,9 +44,12 @@ public class SystemCustomerAdapter extends Adapter<ViewHolder> {
   private Context context;
   private List<CustomerListModel> customers;
   private Activity mainActivity;
+  private boolean isClickable;
 
-  public SystemCustomerAdapter(Context context, List<CustomerListModel> customers) {
+  public SystemCustomerAdapter(Context context, List<CustomerListModel> customers,
+      boolean isClickable) {
     this.context = context;
+    this.isClickable = isClickable;
     this.customers = customers;
     this.mainActivity = (MainActivity) context;
     this.customerService = new CustomerServiceImpl(context);
@@ -123,6 +130,17 @@ public class SystemCustomerAdapter extends Adapter<ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+    }
+
+    @OnClick(R.id.customer_lay)
+    public void onViewClicked() {
+      if (isClickable) {
+        CustomerDao customerDao = new CustomerDaoImpl(context);
+        Customer toCustomer = customerDao.retrieve(customer.getPrimaryKey());
+        toCustomer.setVisitLineBackendId(0L);
+        customerDao.update(toCustomer);
+        mainActivity.onBackPressed();
+      }
     }
 
     public void setData(CustomerListModel customer, int position) {
