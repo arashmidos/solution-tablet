@@ -64,7 +64,13 @@
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/provider_paths" />
     </provider>
-
+    <service
+      android:name=".receiver.MyPushListener"
+      android:exported="false">
+      <intent-filter>
+        <action android:name="co.ronash.pushe.RECEIVE" />
+      </intent-filter>
+    </service>
     <activity
       android:name=".ui.SplashActivity"
       android:theme="@style/NoActionBar"

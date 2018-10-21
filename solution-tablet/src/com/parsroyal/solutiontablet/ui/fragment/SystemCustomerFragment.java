@@ -3,7 +3,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -78,7 +77,7 @@ public class SystemCustomerFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new SystemCustomerAdapter(mainActivity, getCustomersList());
+    adapter = new SystemCustomerAdapter(mainActivity, getCustomersList(), false);
     if (MultiScreenUtility.isTablet(mainActivity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);

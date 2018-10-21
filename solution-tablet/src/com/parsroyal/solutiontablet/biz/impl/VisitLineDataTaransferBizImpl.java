@@ -2,11 +2,13 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.VisitLineDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
+import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
@@ -20,6 +22,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
@@ -64,6 +67,11 @@ public class VisitLineDataTaransferBizImpl {
             visitLineDao.deleteAll();
             customerDao.deleteAllCustomersRelatedToVisitLines();
 
+            //add manual visit line
+            visitLineDao
+                .create(createVisitLineEntity(context.getString(R.string.manual_visit_line), 0L));
+            customerDao.bulkInsert(getSampleCustomerList());
+
             for (VisitLineDto visitLineDto : list) {
               visitLineDto.setTitle(CharacterFixUtil.fixString(visitLineDto.getTitle()));
               VisitLine visitLine = createVisitLineEntity(visitLineDto);
@@ -91,11 +99,28 @@ public class VisitLineDataTaransferBizImpl {
     });
   }
 
+  private List<Customer> getSampleCustomerList() {
+    Customer customer = new Customer();
+    customer.setBackendId(0L);
+    customer.setVisitLineBackendId(0L);
+    List<Customer> customers = new ArrayList<>();
+    customers.add(customer);
+    return customers;
+  }
+
   private VisitLine createVisitLineEntity(VisitLineDto visitLineDto) {
     VisitLine visitLine = new VisitLine();
     visitLine.setBackendId(visitLineDto.getBackendId());
     visitLine.setCode(visitLineDto.getCode());
     visitLine.setTitle(visitLineDto.getTitle());
+    return visitLine;
+  }
+
+  private VisitLine createVisitLineEntity(String title, long id) {
+    VisitLine visitLine = new VisitLine();
+    visitLine.setBackendId(id);
+    visitLine.setCode((int) id);
+    visitLine.setTitle(title);
     return visitLine;
   }
 }

@@ -95,6 +95,7 @@ public class PathDetailFragment extends BaseFragment implements
   private String sortType = "0";
   private boolean filterByNone = false;
   private boolean filterByOrder = false;
+  private boolean filterByVisit = false;
   private String filterDistance = "";
   private int filterDistanceInMeter;
   private boolean filterApplied = false;
@@ -338,6 +339,8 @@ public class PathDetailFragment extends BaseFragment implements
     filterNoneCb.setChecked(filterByNone);
     CheckBox filterOrderCb = dialogView.findViewById(R.id.filter_order_cb);
     filterOrderCb.setChecked(filterByOrder);
+    CheckBox filterVisitedCb = dialogView.findViewById(R.id.filter_not_visited_cb);
+    filterVisitedCb.setChecked(filterByVisit);
     EditText distanceEdt = dialogView.findViewById(R.id.distance_edt);
     TextView errorMessageTv = dialogView.findViewById(R.id.error_msg);
 
@@ -349,12 +352,32 @@ public class PathDetailFragment extends BaseFragment implements
 
     alertDialog.show();
     closeTv.setOnClickListener(v -> alertDialog.cancel());
+    filterNoneCb.setOnClickListener(v -> {
+      filterOrderCb.setChecked(false);
+      filterVisitedCb.setChecked(false);
+      filterByVisit = false;
+      filterByOrder = false;
+    });
+    filterOrderCb.setOnClickListener(v -> {
+      filterNoneCb.setChecked(false);
+      filterVisitedCb.setChecked(false);
+      filterByVisit = false;
+      filterByNone = false;
+    });
+    filterVisitedCb.setOnClickListener(v -> {
+      filterNoneCb.setChecked(false);
+      filterOrderCb.setChecked(false);
+      filterByOrder = false;
+      filterByNone = false;
+    });
     removeFilterBtn.setOnClickListener(v -> {
       distanceEdt.setText("");
       filterNoneCb.setChecked(false);
       filterOrderCb.setChecked(false);
+      filterVisitedCb.setChecked(false);
       filterByNone = false;
       filterByOrder = false;
+      filterByVisit = false;
       filterDistance = "";
       filterApplied = false;
       new RefreshAsyncTask().execute(searchEdt.getText().toString());
@@ -365,6 +388,7 @@ public class PathDetailFragment extends BaseFragment implements
 
       filterByOrder = filterOrderCb.isChecked();
       filterByNone = filterNoneCb.isChecked();
+      filterByVisit = filterVisitedCb.isChecked();
 
       if (Empty.isNotEmpty(filterDistance)) {
         try {
@@ -390,7 +414,7 @@ public class PathDetailFragment extends BaseFragment implements
       }
 
       if (filterDistanceInMeter == 0 && !filterByOrder
-          && !filterByNone) {
+          && !filterByNone && !filterByVisit) {
         errorMessageTv.setText(R.string.error_no_filter_selected);
         errorMessageTv.setVisibility(View.VISIBLE);
         return;
@@ -408,7 +432,9 @@ public class PathDetailFragment extends BaseFragment implements
     }
     for (Iterator<CustomerListModel> it = customerList.iterator(); it.hasNext(); ) {
       CustomerListModel listModel = it.next();
-      if (listModel.hasOrder() != filterByOrder || listModel.hasRejection() != filterByNone) {
+      if ((filterByOrder && filterByOrder != listModel.hasOrder()) || (filterByNone
+          && listModel.hasRejection() != filterByNone) || (filterByVisit
+          && listModel.isVisited() == filterByVisit)) {
         it.remove();
       } else if (filterDistanceInMeter != 0)//If meter filter set
       {

@@ -207,24 +207,39 @@
             android:tint="@color/login_gray" />
 
         </RelativeLayout>
-
+        <ImageView
+          android:id="@+id/minus_img"
+          android:layout_width="28dp"
+          android:layout_height="match_parent"
+          android:layout_marginLeft="16dp"
+          android:layout_gravity="center"
+          android:src="@drawable/im_minus_grey" />
         <EditText
           android:id="@+id/count_tv"
           style="@style/IranSans"
           android:layout_width="0dp"
           android:layout_height="match_parent"
           android:layout_weight=".5"
-          android:layout_marginStart="16dp"
-          android:layout_marginLeft="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginLeft="8dp"
           android:paddingBottom="6dp"
           android:background="@drawable/edit_text_state_background"
           android:digits="1234567890.۰۱۲۳۴۵۶۷۸۹"
           android:gravity="bottom"
           android:hint="@string/enter_count_amount"
           android:inputType="numberDecimal"
+          android:maxLines="1"
           android:textColor="@color/black_85"
           android:textColorHint="@color/gray_9e"
           android:textSize="@dimen/text_normal" />
+
+        <ImageView
+          android:id="@+id/add_img"
+          android:layout_width="28dp"
+          android:layout_height="match_parent"
+          android:layout_marginLeft="16dp"
+          android:layout_gravity="center"
+          android:src="@drawable/im_add_to_cart_18_dp" />
       </LinearLayout>
 
       <LinearLayout
@@ -334,6 +349,45 @@
           android:textSize="12sp"
           tools:text="هرکارتن = 5عدد" />
       </LinearLayout>
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+        <TextView
+          android:id="@+id/discount_tv"
+          style="@style/IranSans"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:layout_marginStart="16dp"
+          android:paddingBottom="6dp"
+          android:gravity="right|center"
+          android:maxLines="1"
+          android:textColor="@color/black_85"
+          android:textSize="@dimen/text_normal"
+          android:visibility="gone" />
+
+        <EditText
+          android:id="@+id/discount_edt"
+          style="@style/IranSans"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:paddingBottom="6dp"
+          android:background="@drawable/edit_text_state_background"
+          android:digits="1234567890.۰۱۲۳۴۵۶۷۸۹"
+          android:gravity="center|right"
+          android:hint="@string/enter_discount"
+          android:inputType="numberDecimal"
+          android:maxLines="1"
+          android:textColor="@color/black_85"
+          android:textColorHint="@color/gray_9e"
+          android:textSize="@dimen/text_normal" />
+      </LinearLayout>
+
       <TextView
         android:id="@+id/error_msg"
         android:textStyle="bold"
