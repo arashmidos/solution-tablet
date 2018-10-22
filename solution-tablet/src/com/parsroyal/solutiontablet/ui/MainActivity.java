@@ -67,6 +67,7 @@ import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment;
 import com.parsroyal.solutiontablet.ui.fragment.ReportFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
+import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
@@ -117,12 +118,13 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int SYSTEM_CUSTOMER_FRAGMENT = 29;
   public static final int NEW_CUSTOMER_FRAGMENT_ID = 30;
   public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
-  public static final int CUSTOMER_INFO_FRAGMENT = 32;
+  public static final int SETTING_FRAGMENT = 33;
 
+  public static final int CUSTOMER_INFO_FRAGMENT = 32;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
-  private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 56;
 
+  private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 56;
   private static final String TAG = MainActivity.class.getName();
   public static int batteryLevel = -1;
   public static String batteryStatusTitle;
@@ -797,6 +799,9 @@ public abstract class MainActivity extends AppCompatActivity {
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
         fragment = FeaturesFragment.newInstance();
+        break;
+      case SETTING_FRAGMENT:
+        fragment = SettingFragment.newInstance();
         break;
       case CUSTOMER_LIST_FRAGMENT_ID:
         fragment = PathDetailFragment.newInstance();

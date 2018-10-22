@@ -2,67 +2,129 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="300dp"
-  android:layout_height="150dp"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
   android:orientation="vertical">
-
-  <TextView
-    android:id="@+id/customer_name"
-    android:textStyle="bold"
-    android:layout_width="match_parent"
+  <android.support.constraint.ConstraintLayout
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textSize="@dimen/text_large"
-    tools:text="آقا آرش" />
-
-  <TextView
-    android:id="@+id/customer_address"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textColor="@color/dark_gray"
-    android:textSize="@dimen/text_normal"
-    tools:text="استان البرز کرج گرمدره کوهک خ ولیعصر" />
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="right"
-    android:orientation="horizontal">
-
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    android:padding="16dp"
+    android:background="@drawable/rec_white">
     <TextView
-      android:id="@+id/customer_last_visit"
-      android:textStyle="bold"
+      android:id="@+id/customer_name"
+      style="@style/IranSans.Medium"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginRight="6dp"
-      android:layout_gravity="center"
-      android:textColor="@color/dark_gray"
-      android:textSize="@dimen/text_normal"
-      tools:text="1396-01-19" />
+      android:layout_marginStart="8dp"
+      android:gravity="right"
+      android:textColor="@color/black_21"
+      android:textSize="14sp"
+      app:layout_constraintHorizontal_bias="1"
+      app:layout_constraintLeft_toRightOf="@id/customer_id"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="آقا آرش" />
+    <TextView
+      android:id="@+id/customer_id"
+      style="@style/IranSans"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/gray_75"
+      android:textSize="11sp"
+      android:layout_marginTop="4dp"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="1234" />
+    <TextView
+      android:id="@+id/customer_address"
+      style="@style/IranSans"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:textColor="@color/gray_75"
+      android:textSize="12sp"
+      app:layout_constraintHorizontal_bias="1"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/customer_name"
+      tools:text="استان البرز کرج گرمدره کوهک خ ولیعصر" />
+    <View
+      android:id="@+id/view"
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_marginTop="12dp"
+      android:background="@color/black_10"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/customer_address" />
 
     <TextView
       android:id="@+id/customer_last_visit_lbl"
+      style="@style/IranSans"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginRight="6dp"
-      android:layout_gravity="center"
+      android:layout_marginTop="8dp"
       android:text="@string/last_visit_label"
-      android:textColor="@color/dark_gray"
-      android:textSize="@dimen/text_normal" />
+      android:textColor="@color/gray_75"
+      android:textSize="12sp"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/view" />
 
-    <ImageView
-      android:layout_width="20dp"
-      android:layout_height="20dp"
-      app:srcCompat="@drawable/ic_history_24dp" />
-  </LinearLayout>
+    <TextView
+      android:id="@+id/customer_last_visit"
+      style="@style/IranSans"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:textColor="@color/gray_75"
+      android:textSize="12sp"
+      app:layout_constraintHorizontal_bias="0"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toLeftOf="@id/customer_last_visit_lbl"
+      app:layout_constraintTop_toBottomOf="@id/view"
+      android:text="1396-01-19" />
 
-  <Button
-    android:id="@+id/enter_btn"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    <!--<Button-->
+      <!--android:id="@+id/enter_btn"-->
+      <!--style="@style/IranSans"-->
+      <!--android:layout_width="0dp"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:layout_marginTop="12dp"-->
+      <!--android:layout_marginLeft="16dp"-->
+      <!--android:background="@drawable/get_data_background"-->
+      <!--android:gravity="center"-->
+      <!--android:text="@string/enter"-->
+      <!--android:textColor="@color/white"-->
+      <!--android:textSize="14sp"-->
+      <!--app:layout_constraintLeft_toRightOf="@id/navigation_tv"-->
+      <!--app:layout_constraintRight_toRightOf="parent"-->
+      <!--app:layout_constraintTop_toBottomOf="@id/customer_last_visit_lbl" />-->
+    <!--<TextView-->
+      <!--android:id="@+id/navigation_tv"-->
+      <!--style="@style/IranSans"-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="0dp"-->
+      <!--android:layout_marginTop="12dp"-->
+      <!--android:padding="8dp"-->
+      <!--android:background="@drawable/send_data_background"-->
+      <!--android:drawableEnd="@drawable/ic_navigation_gray_18"-->
+      <!--android:drawablePadding="8dp"-->
+      <!--android:gravity="center"-->
+      <!--android:text="@string/navigate"-->
+      <!--android:textColor="@color/black_de"-->
+      <!--android:textSize="14sp"-->
+      <!--app:layout_constraintBottom_toBottomOf="@id/enter_btn"-->
+      <!--app:layout_constraintLeft_toLeftOf="parent"-->
+      <!--app:layout_constraintTop_toBottomOf="@id/customer_last_visit_lbl" />-->
+
+  </android.support.constraint.ConstraintLayout>
+  <ImageView
+    android:layout_width="16dp"
+    android:layout_height="16dp"
     android:layout_gravity="center"
-    android:text="@string/enter" />
-
+    android:rotation="180"
+    android:src="@drawable/triangle_white" />
 </LinearLayout>

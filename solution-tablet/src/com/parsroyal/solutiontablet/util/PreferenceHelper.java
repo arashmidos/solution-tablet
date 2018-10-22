@@ -9,6 +9,7 @@ public class PreferenceHelper {
   public static final String FORCE_EXIT = "FORCE_EXIT";
   private static final String LATEST_VERSION = "LATEST_VERSION";
   private static final String UPDATE_URI = "UPDATE_URI";
+  private static final String DEF_NAVIGATOR = "DEF_NAVIGATOR";
 
   public static int getLatestVersion() {
     return SolutionTabletApplication.getPreference().getInt(LATEST_VERSION, 0);
@@ -16,6 +17,14 @@ public class PreferenceHelper {
 
   public static void setLatestVersion(int latestVersion) {
     SolutionTabletApplication.getPreference().edit().putInt(LATEST_VERSION, latestVersion).apply();
+  }
+
+  public static String getDefaultNavigator() {
+    return SolutionTabletApplication.getPreference().getString(DEF_NAVIGATOR, "google");
+  }
+
+  public static void setDefaultNavigator(String defNav) {
+    SolutionTabletApplication.getPreference().edit().putString(DEF_NAVIGATOR, defNav).apply();
   }
 
   public static boolean isForceExit() {
