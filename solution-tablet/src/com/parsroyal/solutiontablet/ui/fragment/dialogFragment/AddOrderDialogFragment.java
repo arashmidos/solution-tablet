@@ -212,7 +212,7 @@ public class AddOrderDialogFragment extends DialogFragment {
         String disc = s.toString();
         if (!TextUtils.isEmpty(disc)) {
           int discInt = Integer.parseInt(disc);
-          if (!TextUtils.isEmpty(disc) && discInt > 0 && discInt < 100 && total > 0L) {
+          if (discInt > 0 && discInt < 100 && total > 0L) {
             discountTv.setVisibility(View.VISIBLE);
             long discountPrice = (total * discInt) / 100;
             discountTv.setText(NumberUtil

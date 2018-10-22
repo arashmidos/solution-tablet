@@ -54,6 +54,7 @@ import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
+import java.util.Locale;
 
 public class CustomerInfoDialogFragment extends DialogFragment {
 
@@ -100,6 +101,10 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   RelativeLayout activityLayout;
   @BindView(R.id.list_layout)
   NestedScrollView listLayout;
+  @BindView(R.id.minus_img)
+  ImageView minusImg;
+  @BindView(R.id.credit_tv)
+  TextView creditTv;
 
   public CustomerInfoDialogFragment() {
     // Required empty public constructor
@@ -185,6 +190,31 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   }
 
   protected void setData() {
+    CustomerDto customer = customerService.getCustomerDtoById(model.getPrimaryKey());
+    Double creditRemained = customer.getRemainedCredit();
+    if (creditRemained != null) {
+      String text2;
+      try {
+        String text = NumberUtil.digitsToPersian(
+            String.format(Locale.getDefault(), "%,10.0f", Math.abs(creditRemained / 1000)));
+        if (text.contains(".")) {
+          text2 = text.substring(0, text.indexOf("."));
+        } else {
+          text2 = text;
+        }
+      } catch (Exception ex) {
+        text2 = "--";
+      }
+      creditTv.setText(String.format("%s %s", text2, getString(R.string.common_irr_currency)));
+      if (creditRemained < 0) {
+        creditTv.setTextColor(getResources().getColor(R.color.remove_red));
+        minusImg.setVisibility(View.VISIBLE);
+      } else {
+        minusImg.setVisibility(View.GONE);
+      }
+    } else {
+      creditTv.setText(R.string.unknown);
+    }
 
     customerShopNameTv.setText(model.getShopName());
     customerNameTv.setText(model.getTitle());
