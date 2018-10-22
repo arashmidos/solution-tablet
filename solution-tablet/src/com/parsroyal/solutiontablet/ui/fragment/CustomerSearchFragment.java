@@ -16,6 +16,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.event.SearchCustomerSuccessEvent;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
@@ -23,7 +28,10 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SystemCustomerAdapter;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * @author Shakib
@@ -69,7 +77,7 @@ public class CustomerSearchFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new SystemCustomerAdapter(activity, getCustomersList(),isClickable);
+    adapter = new SystemCustomerAdapter(activity, getCustomersList(), isClickable);
     if (MultiScreenUtility.isTablet(activity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(activity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);
@@ -95,6 +103,9 @@ public class CustomerSearchFragment extends BaseFragment {
           isClose = true;
           searchImg.setImageResource(R.drawable.ic_close_24dp);
         }
+        if (isClickable){
+
+        }
       }
 
       @Override
@@ -113,6 +124,32 @@ public class CustomerSearchFragment extends BaseFragment {
   @Override
   public int getFragmentId() {
     return MainActivity.CUSTOMER_SEARCH_FRAGMENT;
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(Event event) {
+    if (event instanceof ErrorEvent) {
+      ToastUtil.toastError(getActivity(), R.string.error_connecting_server);
+    } else if (event instanceof SearchCustomerSuccessEvent) {
+      if (event.getStatusCode() == StatusCodes.SUCCESS) {
+        List<Customer> customers = ((SearchCustomerSuccessEvent) event).getCustomers();
+        //TODO update list
+      } else if (event.getStatusCode() == StatusCodes.NO_DATA_ERROR) {
+        ToastUtil.toastError(getActivity(), R.string.retry);
+      }
+    }
   }
 
   @OnClick({R.id.search_img, R.id.back_img})

@@ -10,18 +10,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
 import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsExpandAdapter.ChildViewHolder;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsExpandAdapter.ParentViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,12 +34,14 @@ public class GoodsExpandAdapter extends
   private LayoutInflater inflater;
   private OrderFragment orderFragment;
   private GoodsService goodsService;
+  private HashMap<String, Long> titleIdes;
 
   public GoodsExpandAdapter(Context context, List<? extends ExpandableGroup> groups,
-      OrderFragment orderFragment) {
+      HashMap<String, Long> titleIdes, OrderFragment orderFragment) {
     super(groups);
     this.context = context;
     this.inflater = LayoutInflater.from(context);
+    this.titleIdes = titleIdes;
     this.orderFragment = orderFragment;
     this.goodsService = new GoodsServiceImpl(context);
   }
@@ -132,6 +133,8 @@ public class GoodsExpandAdapter extends
     public void onClick(View v) {
       if (position == 0) {
         orderFragment.setUpGoodsRecyclerView(-1L);
+      } else if (expandableGroup.getItemCount() == 0) {
+        orderFragment.setUpGoodsRecyclerView(titleIdes.get(expandableGroup.getTitle()));
       }
       super.onClick(v);
     }
