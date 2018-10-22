@@ -240,7 +240,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       String text2;
       try {
         String text = NumberUtil.digitsToPersian(
-            String.format(Locale.getDefault(), "%,f", Math.abs(creditRemained / 1000)));
+            String.format(Locale.getDefault(), "%,10.0f", Math.abs(creditRemained / 1000)));
         if (text.contains(".")) {
           text2 = text.substring(0, text.indexOf("."));
         } else {

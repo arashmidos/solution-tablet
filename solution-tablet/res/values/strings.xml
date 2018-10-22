@@ -633,5 +633,6 @@
   <string name="google_map">گوگل مپ</string>
   <string name="waze">ویز</string>
   <string name="error_google_not_installed">گوگل مپ نصب نیست!</string>
+  <string name="credit">اعتبار</string>
 
 </resources>
