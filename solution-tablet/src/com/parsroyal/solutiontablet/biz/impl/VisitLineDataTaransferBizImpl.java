@@ -68,9 +68,10 @@ public class VisitLineDataTaransferBizImpl {
             customerDao.deleteAllCustomersRelatedToVisitLines();
 
             //add manual visit line
-            visitLineDao
-                .create(createVisitLineEntity(context.getString(R.string.manual_visit_line), 0L));
-            customerDao.bulkInsert(getSampleCustomerList());
+            //TODO!!
+//            visitLineDao
+//                .create(createVisitLineEntity(context.getString(R.string.manual_visit_line), 0L));
+//            customerDao.bulkInsert(getSampleCustomerList());
 
             for (VisitLineDto visitLineDto : list) {
               visitLineDto.setTitle(CharacterFixUtil.fixString(visitLineDto.getTitle()));

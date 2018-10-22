@@ -107,9 +107,9 @@ public class PathAdapter extends Adapter<PathAdapter.ViewHolder> {
           mainActivity.changeFragment(MainActivity.PATH_DETAIL_FRAGMENT_ID, bundle, true);
           break;
         case R.id.list_img:
-          Bundle clickBundle = new Bundle();
-          clickBundle.putBoolean(Constants.IS_CLICKABLE, true);
-          mainActivity.changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, clickBundle, true);
+//          Bundle clickBundle = new Bundle();
+//          clickBundle.putBoolean(Constants.IS_CLICKABLE, true);
+//          mainActivity.changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, clickBundle, true);
           break;
       }
     }

@@ -57,8 +57,9 @@ public class CustomerSearchFragment extends BaseFragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_customer_search, container, false);
     ButterKnife.bind(this, view);
-    Bundle args = getArguments();
-    isClickable = args.getBoolean(Constants.IS_CLICKABLE, false);
+    //TODO:!!
+  /*  Bundle args = getArguments();
+    isClickable = args.getBoolean(Constants.IS_CLICKABLE, false);*/
     activity = (MainActivity) getActivity();
     activity.changeTitle(getString(R.string.search));
     customerService = new CustomerServiceImpl(activity);

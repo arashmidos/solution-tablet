@@ -204,7 +204,7 @@ public class OldOrderItemsFragment extends BaseFragment {
         try {
           saleOrderService
               .updateOrderItemCount(item.getId(), count, selectedUnit, saleOrderDto.getStatus(),
-                  item.getGoods());
+                  item.getGoods(), 0L);
           saleOrderService.getOrderItemDtoList(orderId);
           saleOrderService.updateOrderAmount(orderId);
 

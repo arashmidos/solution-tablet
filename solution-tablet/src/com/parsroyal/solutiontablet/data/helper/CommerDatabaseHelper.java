@@ -149,5 +149,9 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
       db.execSQL(String
           .format(SQL_ADD_COLUMN, Payment.TABLE_NAME, Payment.COL_VISITLINE_BACKEND_ID, "INTEGER"));
     }
+    if (oldVersion < 16) {
+      db.execSQL(String.format(SQL_ADD_COLUMN, SaleOrderItem.TABLE_NAME,
+          SaleOrderItem.COL_GOODS_DISCOUNT, "INTEGER"));
+    }
   }
 }

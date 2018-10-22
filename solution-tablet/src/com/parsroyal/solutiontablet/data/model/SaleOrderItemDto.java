@@ -20,7 +20,7 @@ public class SaleOrderItemDto extends BaseModel {
   private String updateDateTime;
   private Long invoiceBackendId;
   private Goods goods;
-  private int discount;
+  private Long discount;
 
   public Long getInvoiceBackendId() {
     return invoiceBackendId;
@@ -30,11 +30,11 @@ public class SaleOrderItemDto extends BaseModel {
     this.invoiceBackendId = invoiceBackendId;
   }
 
-  public int getDiscount() {
+  public Long getDiscount() {
     return discount;
   }
 
-  public void setDiscount(int discount) {
+  public void setDiscount(Long discount) {
     this.discount = discount;
   }
 

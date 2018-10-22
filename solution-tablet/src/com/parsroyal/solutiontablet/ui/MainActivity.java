@@ -75,6 +75,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
@@ -663,7 +664,8 @@ public abstract class MainActivity extends AppCompatActivity {
         onSaveImageClicked(true);
         break;
       case R.id.notif_img:
-        Toast.makeText(this, "Notifam koo?", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Notifam koo?", Toast.LENGTH_SHORT).show();
+        break;
     }
   }
 
@@ -737,7 +739,7 @@ public abstract class MainActivity extends AppCompatActivity {
   }
 
   public void setTimer(String text) {
-    runOnUiThread(() -> chronometer.setText(text));
+    runOnUiThread(() -> chronometer.setText(NumberUtil.digitsToPersian(text)));
   }
 
   public void showTimer() {

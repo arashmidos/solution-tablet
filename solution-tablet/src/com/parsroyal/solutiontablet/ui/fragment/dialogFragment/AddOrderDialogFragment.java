@@ -1,8 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -46,6 +44,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.SaleUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +110,8 @@ public class AddOrderDialogFragment extends DialogFragment {
   protected TextView discountTv;
   @BindView(R.id.discount_edt)
   protected EditText discountEdt;
+  @BindView(R.id.discount_lay)
+  protected LinearLayout discountLayout;
 
   protected GoodsDialogOnClickListener onClickListener;
   protected Long goodsBackendId;
@@ -130,6 +131,7 @@ public class AddOrderDialogFragment extends DialogFragment {
   protected String unit2Title;
   protected Long saleRate;
   private long total;
+  private Long discount;
 
   public AddOrderDialogFragment() {
     // Required empty public constructor
@@ -139,8 +141,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     return new AddOrderDialogFragment();
   }
 
-  public void setOnClickListener(
-      GoodsDialogOnClickListener onClickListener) {
+  public void setOnClickListener(GoodsDialogOnClickListener onClickListener) {
     this.onClickListener = onClickListener;
   }
 
@@ -173,6 +174,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     orderStatus = arguments.getLong(Constants.ORDER_STATUS);
     count = arguments.getDouble(Constants.COUNT);
     selectedUnit = arguments.getLong(Constants.SELECTED_UNIT);
+    discount = arguments.getLong(Constants.DISCOUNT);
 
     goodsService = new GoodsServiceImpl(mainActivity);
     settingService = new SettingServiceImpl(mainActivity);
@@ -194,11 +196,11 @@ public class AddOrderDialogFragment extends DialogFragment {
     unit2Title = selectedGoods.getUnit2Title();
     saleRate = selectedGoods.getSaleRate();
     setUpPager();
+    onDiscountChange();
     setData();
     setListeners();
     setUpSpinner();
     fillDetailPanel();
-    onDiscountChange();
     return view;
   }
 
@@ -214,21 +216,20 @@ public class AddOrderDialogFragment extends DialogFragment {
         String disc = s.toString();
         if (!TextUtils.isEmpty(disc)) {
           int discInt = Integer.parseInt(disc);
-          if (!TextUtils.isEmpty(disc) && discInt > 0 && discInt < 100 && total > 0L) {
+          if (discInt > 0 && discInt <= 100 && total > 0L) {
             discountTv.setVisibility(View.VISIBLE);
             long discountPrice = (total * discInt) / 100;
-            discountTv.setText(NumberUtil
-                .digitsToPersian(
-                    String.format(Locale.getDefault(), "تخفیف : %,d %s", discountPrice, getString(
-                        R.string.common_irr_currency))));
+            discountTv.setText(NumberUtil.digitsToPersian(
+                String.format(Locale.getDefault(), "تخفیف : %,d %s", discountPrice, getString(
+                    R.string.common_irr_currency))));
           } else {
             errorMsg.setVisibility(View.VISIBLE);
             discountTv.setVisibility(View.GONE);
             if (discInt <= 0 || discInt >= 100) {
               errorMsg.setText(R.string.valid_period_discount);
-            } else if (!(total > 0)) {
+            }/* else if (!(total > 0)) {
               errorMsg.setText(R.string.no_total);
-            }
+            }*/
           }
         } else {
           discountTv.setVisibility(View.GONE);
@@ -383,6 +384,12 @@ public class AddOrderDialogFragment extends DialogFragment {
       registerButtonImage.setImageResource(R.drawable.ic_check_white_18_dp);
       orderCountTv.setText(R.string.return_count);
     }
+
+    if (SaleUtil.isDelivery(orderStatus)) {
+      discountLayout.setVisibility(View.GONE);
+    } else {
+      discountEdt.setText(discount != null && discount != 0 ? String.valueOf(discount) : "");
+    }
   }
 
   /*
@@ -470,6 +477,18 @@ public class AddOrderDialogFragment extends DialogFragment {
       hideKeyboard();
       return false;
     }
+
+    try {
+      if (!TextUtils.isEmpty(discountEdt.getText())) {
+        discount = Long.parseLong(discountEdt.getText().toString());
+        if (discount < 0 || discount > 100) {
+          return false;
+        }
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      return false;
+    }
     return true;
   }
 
@@ -496,7 +515,7 @@ public class AddOrderDialogFragment extends DialogFragment {
         break;
       case R.id.add_img:
         if (TextUtils.isEmpty(countTv.getText().toString().trim())) {
-          countTv.setText("0");
+          countTv.setText("1");
         } else {
           minusImg.setImageResource(R.drawable.im_minus);
           int enteredNum = Integer.parseInt(countTv.getText().toString().trim());
@@ -514,7 +533,8 @@ public class AddOrderDialogFragment extends DialogFragment {
           if (selectedUnit1.equals(2L)) {
             count1 *= Double.valueOf(unit1Count);
           }
-          onClickListener.onConfirmBtnClicked(count1, selectedUnit1);
+
+          onClickListener.onConfirmBtnClicked(count1, selectedUnit1, discount);
         }
         break;
     }
@@ -547,7 +567,9 @@ public class AddOrderDialogFragment extends DialogFragment {
   private void hideKeyboard() {
     InputMethodManager imm = (InputMethodManager) mainActivity
         .getSystemService(Context.INPUT_METHOD_SERVICE);
-    imm.hideSoftInputFromWindow(countTv.getWindowToken(), 0);
+    if (imm != null) {
+      imm.hideSoftInputFromWindow(countTv.getWindowToken(), 0);
+    }
   }
 
   @Override
@@ -561,6 +583,6 @@ public class AddOrderDialogFragment extends DialogFragment {
 
   public interface GoodsDialogOnClickListener {
 
-    void onConfirmBtnClicked(Double count, Long selectedUnit);
+    void onConfirmBtnClicked(Double count, Long selectedUnit, Long discount);
   }
 }

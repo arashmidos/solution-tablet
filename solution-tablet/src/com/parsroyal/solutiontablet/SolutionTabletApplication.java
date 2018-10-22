@@ -62,7 +62,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
       Fabric.with(this, new Crashlytics());
     }
 
-    Pushe.initialize(this, true);
+//    Pushe.initialize(this, true);
     MultiDex.install(this);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -88,9 +88,10 @@ public class SolutionTabletApplication extends MultiDexApplication {
       }).start();
     }
 
-    Pushe.initialize(this, true);
+    //TODO:!!
+    //Pushe.initialize(this, true);
 
-    Log.d("Pushe", Pushe.getPusheId(this));
+//    Log.d("Pushe", Pushe.getPusheId(this));
 //    Log.d("DebugDB", "***>>> DB Address:"+DebugDB.getAddressLog());
   }
 

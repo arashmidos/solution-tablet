@@ -234,7 +234,8 @@ public class OldGoodsListFragment extends BaseFragment {
         item = createOrderItem(goods);
       }
 
-      saleOrderService.updateOrderItemCount(item.getId(), count, selectedUnit, orderStatus, goods);
+      saleOrderService.updateOrderItemCount(item.getId(), count, selectedUnit, orderStatus, goods,
+          0L);
       Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);

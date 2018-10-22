@@ -134,13 +134,14 @@ public class SystemCustomerAdapter extends Adapter<ViewHolder> {
 
     @OnClick(R.id.customer_lay)
     public void onViewClicked() {
-      if (isClickable) {
+      //todo:!!
+      /*if (isClickable) {
         CustomerDao customerDao = new CustomerDaoImpl(context);
         Customer toCustomer = customerDao.retrieve(customer.getPrimaryKey());
         toCustomer.setVisitLineBackendId(0L);
         customerDao.update(toCustomer);
         mainActivity.onBackPressed();
-      }
+      }*/
     }
 
     public void setData(CustomerListModel customer, int position) {

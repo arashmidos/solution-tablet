@@ -3,11 +3,8 @@ package com.parsroyal.solutiontablet.data.entity;
 import com.parsroyal.solutiontablet.util.DateUtil;
 
 /**
- * Created with IntelliJ IDEA.
- * User: m.sefidi
- * Date: 4/11/13
- * Time: 11:02 AM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: m.sefidi Date: 4/11/13 Time: 11:02 AM To change this template
+ * use File | Settings | File Templates.
  */
 public class SaleOrderItem extends BaseEntity<Long> {
 
@@ -54,7 +51,7 @@ public class SaleOrderItem extends BaseEntity<Long> {
   private Long invoiceBackendId;
   private Long rejectBackendId;
   private Long rejectItemBackendId;
-  private int discount;
+  private Long discount;
 
   public SaleOrderItem() {
   }
@@ -74,11 +71,11 @@ public class SaleOrderItem extends BaseEntity<Long> {
     this.goodsCount = goodsCount;
   }
 
-  public int getDiscount() {
+  public Long getDiscount() {
     return discount;
   }
 
-  public void setDiscount(int discount) {
+  public void setDiscount(Long discount) {
     this.discount = discount;
   }
 

@@ -338,30 +338,31 @@ public class OrderInfoFragment extends BaseFragment {
         }
         break;
       case R.id.submit_order_btn:
-        if (rand > 9999) {
+        //TODO:!!
+       /* if (rand > 9999) {
           calculateRand();
           checkForSmsPermission();
-        } else {
-          order = saleOrderService.findOrderDtoById(orderId);
-          if (validateOrderForSave()) {
-            if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) || orderStatus
-                .equals(SaleOrderStatus.REJECTED.getId())) {
+        } else {*/
+        order = saleOrderService.findOrderDtoById(orderId);
+        if (validateOrderForSave()) {
+          if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) || orderStatus
+              .equals(SaleOrderStatus.REJECTED.getId())) {
+            showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                SaleOrderStatus.REJECTED.getId());
+          } else if (isDelivery()) {
+            showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                SaleOrderStatus.DELIVERED.getId());
+          } else {
+            if (isCold()) {
               showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                  SaleOrderStatus.REJECTED.getId());
-            } else if (isDelivery()) {
-              showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                  SaleOrderStatus.DELIVERED.getId());
+                  SaleOrderStatus.READY_TO_SEND.getId());
             } else {
-              if (isCold()) {
-                showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                    SaleOrderStatus.READY_TO_SEND.getId());
-              } else {
-                showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                    SaleOrderStatus.INVOICED.getId());
-              }
+              showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                  SaleOrderStatus.INVOICED.getId());
             }
           }
         }
+//        }
         break;
     }
   }
@@ -445,8 +446,10 @@ public class OrderInfoFragment extends BaseFragment {
             typeId);
         visitService.saveVisitDetail(visitDetail);
       }
-      calculateRand();
-      checkForSmsPermission();
+//      getDialog().dismiss();
+      mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+//      calculateRand();TODO:!!
+//      checkForSmsPermission();
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, ex);
@@ -499,10 +502,8 @@ public class OrderInfoFragment extends BaseFragment {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     switch (requestCode) {
       case MY_PERMISSIONS_REQUEST_SEND_SMS: {
-        if (permissions[0].equalsIgnoreCase
-            (Manifest.permission.SEND_SMS)
-            && grantResults[0] ==
-            PackageManager.PERMISSION_GRANTED) {
+        if (permissions[0].equalsIgnoreCase(Manifest.permission.SEND_SMS)
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           // Permission was granted. Enable sms button.
           sendSMS();
         } else {
@@ -621,5 +622,4 @@ public class OrderInfoFragment extends BaseFragment {
       }
     }
   }
-
 }

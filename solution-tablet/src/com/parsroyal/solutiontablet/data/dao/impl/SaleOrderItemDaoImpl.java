@@ -71,7 +71,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {
+    return new String[]{
         SaleOrderItem.COL_ID,
         SaleOrderItem.COL_GOODS_BACKEND_ID,
         SaleOrderItem.COL_GOODS_COUNT,
@@ -86,7 +86,6 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
         SaleOrderItem.COL_GOODS_COUNT_2,
         SaleOrderItem.COL_GOODS_DISCOUNT
     };
-    return projection;
   }
 
   @Override
@@ -104,7 +103,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setUpdateDateTime(cursor.getString(9));
     saleOrderItem.setInvoiceBackendId(cursor.getLong(10));
     saleOrderItem.setGoodsUnit2Count(cursor.getLong(11));
-    saleOrderItem.setDiscount(cursor.getInt(12));
+    saleOrderItem.setDiscount(cursor.getLong(12));
     return saleOrderItem;
   }
 
@@ -187,7 +186,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setUpdateDateTime(cursor.getString(9));
     saleOrderItem.setInvoiceBackendId(cursor.getLong(10));
     saleOrderItem.setGoodsUnit2Count(cursor.getLong(11));
-    saleOrderItem.setDiscount(cursor.getInt(12));
+    saleOrderItem.setDiscount(cursor.getLong(12));
     return saleOrderItem;
   }
 
@@ -209,6 +208,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setCount2(count2);
     saleOrderItem.setCompanyId(
         Integer.valueOf(settingService.getSettingValue(ApplicationKeys.USER_COMPANY_ID)));
+    saleOrderItem.setDiscount(cursor.getLong(12));
 
     return saleOrderItem;
   }

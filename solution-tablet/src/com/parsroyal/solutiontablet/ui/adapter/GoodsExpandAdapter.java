@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -31,17 +32,19 @@ import java.util.List;
 public class GoodsExpandAdapter extends
     ExpandableRecyclerViewAdapter<ParentViewHolder, ChildViewHolder> {
 
+  private final HashMap<String, Long> titleIdes;
   private Context context;
   private LayoutInflater inflater;
   private OrderFragment orderFragment;
   private GoodsService goodsService;
 
   public GoodsExpandAdapter(Context context, List<? extends ExpandableGroup> groups,
-      OrderFragment orderFragment) {
+      HashMap<String, Long> titleIdes, OrderFragment orderFragment) {
     super(groups);
     this.context = context;
     this.inflater = LayoutInflater.from(context);
     this.orderFragment = orderFragment;
+    this.titleIdes=titleIdes;
     this.goodsService = new GoodsServiceImpl(context);
   }
 
@@ -132,8 +135,10 @@ public class GoodsExpandAdapter extends
     public void onClick(View v) {
       if (position == 0) {
         orderFragment.setUpGoodsRecyclerView(-1L);
+      }else if (expandableGroup.getItemCount() == 0) {
+        orderFragment.setUpGoodsRecyclerView(titleIdes.get(expandableGroup.getTitle()));
       }
-      super.onClick(v);
+        super.onClick(v);
     }
 
     @Override

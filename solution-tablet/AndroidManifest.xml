@@ -54,7 +54,8 @@
     android:name=".SolutionTabletApplication"
     android:supportsRtl="false"
     android:theme="@style/AppTheme"
-    tools:replace="android:supportsRtl">
+    tools:replace="android:supportsRtl"
+    tools:ignore="GoogleAppIndexingWarning">
     <provider
       android:authorities="com.parsroyal.solutionmobile"
       android:exported="false"

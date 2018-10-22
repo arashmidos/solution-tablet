@@ -319,8 +319,7 @@ public class VisitDetailFragment extends BaseFragment {
         @Override
         public void timeOut() {
           progressDialog.dismiss();
-          mainActivity.runOnUiThread(() ->
-          {
+          mainActivity.runOnUiThread(() -> {
             ToastUtil
                 .toastError(mainActivity, mainActivity.getString(R.string.visit_found_no_location));
             showDialogForEmptyLocation();

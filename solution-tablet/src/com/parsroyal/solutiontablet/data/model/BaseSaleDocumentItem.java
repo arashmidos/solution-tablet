@@ -10,6 +10,7 @@ public class BaseSaleDocumentItem {
   @JsonIgnore
   private Integer fiscalYear;
   private Integer companyId;
+  private Long discount;
 
   public Long getGoods() {
     return goods;
@@ -49,5 +50,13 @@ public class BaseSaleDocumentItem {
 
   public void setCompanyId(Integer companyId) {
     this.companyId = companyId;
+  }
+
+  public Long getDiscount() {
+    return discount;
+  }
+
+  public void setDiscount(Long discount) {
+    this.discount = discount;
   }
 }

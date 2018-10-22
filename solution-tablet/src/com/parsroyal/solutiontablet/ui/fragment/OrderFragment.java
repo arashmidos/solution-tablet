@@ -58,6 +58,7 @@ import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.greenrobot.eventbus.EventBus;
@@ -120,6 +121,7 @@ public class OrderFragment extends BaseFragment {
   private List<GoodsGroup> breadCrumbList = new ArrayList<>();
   private long visitlineBackendId;
   private boolean isCashOrder;
+  private HashMap<String, Long> titleIdes;
 
   public OrderFragment() {
     // Required empty public constructor
@@ -180,11 +182,13 @@ public class OrderFragment extends BaseFragment {
 
   private List<GoodsGroupExpand> getExpandList() {
     Map<GoodsGroup, List<GoodsGroup>> goodsGroups = goodsService.getCategories();
+    titleIdes = new HashMap<>();
     List<GoodsGroupExpand> goodsGroupExpands = new ArrayList<>();
     goodsGroupExpands
         .add(new GoodsGroupExpand(getString(R.string.show_all_goods), new ArrayList<>()));
     for (Map.Entry<GoodsGroup, List<GoodsGroup>> entry : goodsGroups.entrySet()) {
       goodsGroupExpands.add(new GoodsGroupExpand(entry.getKey().getTitle(), entry.getValue()));
+      titleIdes.put(entry.getKey().getTitle(), entry.getKey().getBackendId());
     }
     return goodsGroupExpands;
   }
@@ -195,7 +199,7 @@ public class OrderFragment extends BaseFragment {
     breadCrumbList.add(new GoodsGroup(getString(R.string.categories), 0));
     mainActivity.changeTitle(mainActivity.getString(R.string.categories));
     if (goodsExpandAdapter == null) {
-      goodsExpandAdapter = new GoodsExpandAdapter(mainActivity, getExpandList(), this);
+      goodsExpandAdapter = new GoodsExpandAdapter(mainActivity, getExpandList(), titleIdes, this);
       LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
       expandableRecyclerView.setAdapter(goodsExpandAdapter);
       expandableRecyclerView.setLayoutManager(layoutManager);
@@ -502,13 +506,14 @@ public class OrderFragment extends BaseFragment {
           }
         }
         bundle.putDouble(Constants.COUNT, count);
+        bundle.putLong(Constants.DISCOUNT, item.getDiscount());
       }
 
       bundle.putLong(Constants.SELECTED_UNIT, defaultUnit);
 
       addOrderDialogFragment.setArguments(bundle);
-      addOrderDialogFragment.setOnClickListener((count, selectedUnit) -> {
-        handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods);
+      addOrderDialogFragment.setOnClickListener((count, selectedUnit, discount) -> {
+        handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods, discount);
         updateGoodsDataTb();
       });
 
@@ -590,7 +595,7 @@ public class OrderFragment extends BaseFragment {
   }
 
   private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItem item,
-      Goods goods) {
+      Goods goods, Long discount) {
     try {
       if (Empty.isEmpty(item)) {
         if (count * 1000L > Double.valueOf(String.valueOf(goods.getExisting()))) {
@@ -602,7 +607,8 @@ public class OrderFragment extends BaseFragment {
         item = createOrderItem(goods);
       }
 
-      saleOrderService.updateOrderItemCount(item.getId(), count, selectedUnit, orderStatus, goods);
+      saleOrderService
+          .updateOrderItemCount(item.getId(), count, selectedUnit, orderStatus, goods, discount);
       Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);

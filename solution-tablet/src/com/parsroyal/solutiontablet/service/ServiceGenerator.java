@@ -37,8 +37,8 @@ public class ServiceGenerator {
   private static OkHttpClient.Builder httpClient =
       new OkHttpClient.Builder()
           //TODO:change to 60
-          .readTimeout(600, TimeUnit.SECONDS)
-          .connectTimeout(600, TimeUnit.SECONDS);
+          .readTimeout(120, TimeUnit.SECONDS)
+          .connectTimeout(120, TimeUnit.SECONDS);
   //Change different level of logging here
   private static HttpLoggingInterceptor logging =
       new HttpLoggingInterceptor()

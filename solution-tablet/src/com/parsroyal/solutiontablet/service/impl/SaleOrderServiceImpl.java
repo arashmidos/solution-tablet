@@ -281,7 +281,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
   @Override
   public void updateOrderItemCount(Long itemId, Double count, Long selectedUnit, Long orderStatus,
-      Goods localGood) {
+      Goods localGood, Long discount) {
     SaleOrderItem orderItem = saleOrderItemDao.retrieve(itemId);
     Goods goods = null;
     if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
@@ -305,6 +305,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     if (Empty.isNotEmpty(goods.getUnit1Count()) && goods.getUnit1Count() != 0) {
       orderItem.setGoodsUnit2Count(count.longValue() / goods.getUnit1Count());
     }
+    orderItem.setDiscount(discount);
     saleOrderItemDao.update(orderItem);
 
     goods.setExisting(goods.getExisting() - count.longValue());

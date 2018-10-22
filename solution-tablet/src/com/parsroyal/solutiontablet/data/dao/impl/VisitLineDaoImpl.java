@@ -83,6 +83,7 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
     return entities;
   }
 
+  @Deprecated
   @Override
   public List<VisitLineListModel> getAllVisitLinesListModelByConstraint(String constraint) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
@@ -92,7 +93,7 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
 
     String sql =
         "select vl.BACKEND_ID, vl.CODE, vl.TITLE,count(cu._id) COUNT from COMMER_VISIT_LINE vl " +
-            "LEFT OUTER JOIN COMMER_CUSTOMER cu where cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
+            "LEFT OUTER JOIN COMMER_CUSTOMER cu on cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
             "WHERE " + VisitLine.COL_TITLE + " LIKE ? OR " + " " + VisitLine.COL_CODE + " LIKE ? " +
             "GROUP BY vl.BACKEND_ID, vl.CODE, vl.TITLE";
 

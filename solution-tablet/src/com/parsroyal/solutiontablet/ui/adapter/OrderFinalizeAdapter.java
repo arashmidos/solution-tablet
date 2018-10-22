@@ -324,24 +324,25 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
           count = count / goods.getUnit1Count();
         }
       }
+      bundle.putLong(Constants.DISCOUNT, item.getDiscount());
 
       bundle.putDouble(Constants.COUNT, count);
 //      bundle.putLong(Constants.GOODS_INVOICE_ID, invoiceBackendId);
 
       addOrderDialogFragment.setArguments(bundle);
-      addOrderDialogFragment.setOnClickListener((goodsCount, selectedUnit) -> {
-        handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, item, goods);
-      });
+      addOrderDialogFragment.setOnClickListener(
+          (goodsCount, selectedUnit, discount) -> handleGoodsDialogConfirmBtn(goodsCount,
+              selectedUnit, item, goods, discount));
 
       addOrderDialogFragment.show(ft, "order");
     }
 
     private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItemDto item,
-        Goods goods) {
+        Goods goods, Long discount) {
       try {
 
-        saleOrderService
-            .updateOrderItemCount(item.getId(), count, selectedUnit, order.getStatus(), goods);
+        saleOrderService.updateOrderItemCount(
+            item.getId(), count, selectedUnit, order.getStatus(), goods, discount);
         Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
         order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
         order.setAmount(orderAmount);

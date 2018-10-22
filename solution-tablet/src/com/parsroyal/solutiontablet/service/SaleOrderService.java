@@ -23,8 +23,8 @@ public interface SaleOrderService extends BaseService {
   void deleteForAllCustomerOrdersByStatus(Long customerBackendId, Long statusId);
   void deleteOrder(Long orderId);
 
-  void updateOrderItemCount(Long id, Double count, Long selectedUnit, Long orderStatus,
-      Goods goods);
+  void updateOrderItemCount(Long itemId, Double count, Long selectedUnit, Long orderStatus,
+      Goods localGood, Long discount);
 
   List<SaleOrderItemDto> getOrderItemDtoList(Long orderId);
   List<BaseSaleDocumentItem> getSaleDocumentItems(Long orderId);
