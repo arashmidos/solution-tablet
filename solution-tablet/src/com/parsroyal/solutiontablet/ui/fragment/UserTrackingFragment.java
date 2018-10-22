@@ -8,11 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -74,6 +74,7 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.MapInfoWindowChooser;
 import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -81,6 +82,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NotificationUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.SunDate;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -445,7 +447,9 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
         ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
         return;
       }
-      doEnter();
+      MapInfoWindowChooser mapInfoWindowChooser = MapInfoWindowChooser.newInstance(this,marker);
+      mapInfoWindowChooser.show(getActivity().getSupportFragmentManager(), "detail bottom sheet");
+
     });
     clusterManager.getMarkerCollection().setOnInfoWindowAdapter(new CustomerMarkerAdapter());
     clusterManager.setOnClusterClickListener(cluster ->
@@ -463,7 +467,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     clusterManager.cluster();
   }
 
-  private void doEnter() {
+  public void doEnter() {
     try {
       final Long visitInformationId = visitService.startVisiting(clickedClusterItem.getBackendId());
 
@@ -642,24 +646,52 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     TextView customerAddress;
     @BindView(R.id.customer_last_visit)
     TextView customerLastVisit;
-    @BindView(R.id.enter_btn)
-    Button enterBtn;
+    @BindView(R.id.customer_id)
+    TextView customerId;
 
     @Override
     public View getInfoWindow(Marker marker) {
-      return null;
-    }
-
-    @Override
-    public View getInfoContents(Marker marker) {
       View v = getActivity().getLayoutInflater().inflate(R.layout.map_popup, null);
       ButterKnife.bind(this, v);
 
       customerName.setText(clickedClusterItem.getTitle());
       customerAddress.setText(clickedClusterItem.getSnippet());
-      customerLastVisit.setText(clickedClusterItem.getLastVisit());
+      if (TextUtils.isEmpty(clickedClusterItem.getLastVisit()) || clickedClusterItem.getLastVisit()
+          .equals("null")) {
+        customerLastVisit.setText("--");
+      } else {
+        customerLastVisit.setText(NumberUtil
+            .digitsToPersian(
+                String.format(Locale.getDefault(), "%s", clickedClusterItem.getLastVisit())));
+      }
+      customerId.setText(NumberUtil
+          .digitsToPersian(
+              String.format(Locale.getDefault(), "%s", clickedClusterItem.getCode())));
       return v;
+
     }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+      return null;
+    }
+
+//    @OnClick({R.id.enter_btn, R.id.navigation_tv})
+//    public void onViewClicked(View view) {
+//      switch (view.getId()) {
+//        case R.id.enter_btn:
+//          Float distance = clickedClusterItem.getDistance();
+//          if (distanceServiceEnabled && distance > distanceAllowed) {
+//            ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
+//            return;
+//          }
+//          doEnter();
+//          break;
+//        case R.id.navigation_tv:
+//          Toast.makeText(context, "navigation", Toast.LENGTH_SHORT).show();
+//          break;
+//      }
+//    }
   }
 
   class CustomRenderer extends DefaultClusterRenderer<CustomerListModel> {
