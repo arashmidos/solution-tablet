@@ -2,9 +2,11 @@ package com.parsroyal.solutiontablet.service;
 
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import java.util.List;
+import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Url;
+import retrofit2.http.Body;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
 
 /**
  * Created by shkbhbb on 10/22/18.
@@ -12,7 +14,6 @@ import retrofit2.http.Url;
 
 public interface SearchGoodService {
 
-  //TODO change address
-  @GET("visit-lines/delivery/{distributor_id}")
-  Call<List<Customer>> search(@Url String keyWord);
+  @POST("customers/search")
+  Call<List<Customer>> search(@Body RequestBody keyWord);
 }
