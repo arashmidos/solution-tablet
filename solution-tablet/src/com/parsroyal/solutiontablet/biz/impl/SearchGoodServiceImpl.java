@@ -13,6 +13,8 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import java.io.IOException;
 import java.util.List;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,8 +40,9 @@ public class SearchGoodServiceImpl {
     }
 
     SearchGoodService restService = ServiceGenerator.createService(SearchGoodService.class);
-
-    Call<List<Customer>> call = restService.search(keyWord);
+    RequestBody body =
+        RequestBody.create(MediaType.parse("text/plain"), keyWord);
+    Call<List<Customer>> call = restService.search(body);
 
     call.enqueue(new Callback<List<Customer>>() {
       @Override
