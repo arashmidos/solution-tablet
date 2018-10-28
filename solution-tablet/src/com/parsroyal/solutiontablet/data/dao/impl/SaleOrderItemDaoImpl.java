@@ -204,6 +204,8 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     } else {
       count2 = cursor.getLong(11);
     }
+    saleOrderItem.setPrice1(goods.getPrice());
+    saleOrderItem.setPrice2(goods.getCustomerPrice());
 
     saleOrderItem.setCount2(count2);
     saleOrderItem.setCompanyId(

@@ -11,6 +11,24 @@ public class BaseSaleDocumentItem {
   private Integer fiscalYear;
   private Integer companyId;
   private Long discount;
+  private Long price1;
+  private Long price2;
+
+  public Long getPrice1() {
+    return price1;
+  }
+
+  public void setPrice1(Long price1) {
+    this.price1 = price1;
+  }
+
+  public Long getPrice2() {
+    return price2;
+  }
+
+  public void setPrice2(Long price2) {
+    this.price2 = price2;
+  }
 
   public Long getGoods() {
     return goods;

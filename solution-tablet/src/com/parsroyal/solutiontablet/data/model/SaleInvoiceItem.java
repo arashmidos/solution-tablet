@@ -1,6 +1,6 @@
 package com.parsroyal.solutiontablet.data.model;
 
-public class SaleInvoiceItem extends BaseSaleDocumentItem{
+public class SaleInvoiceItem extends BaseSaleDocumentItem {
 
   private Long saleInvoiceId;
 

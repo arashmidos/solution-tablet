@@ -221,12 +221,13 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
             notifyDataSetChanged();
           });
     }*/
-
+//TODO: Improvment
     private void setPageStatus(Bundle args) {
       if (SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT
           || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.CANCELED
           || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT_INVOICE
           || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.DELIVERABLE_SENT
+          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.DELIVERED
           || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.REJECTED_SENT) {
         args.putString(Constants.PAGE_STATUS, Constants.VIEW);
       } else {
