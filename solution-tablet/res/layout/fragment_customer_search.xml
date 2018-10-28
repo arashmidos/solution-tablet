@@ -1,5 +1,4 @@
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -21,7 +20,7 @@
       android:layout_marginLeft="19dp"
       android:layout_gravity="left|center"
       android:src="@drawable/ic_search"
-      android:tint="@color/login_gray"/>
+      android:tint="@color/login_gray" />
 
     <EditText
       android:id="@+id/search_edt"
@@ -34,7 +33,7 @@
       android:gravity="center|right"
       android:hint="@string/search_customer_hint"
       android:textColorHint="@color/login_gray"
-      android:textSize="14sp"/>
+      android:textSize="14sp" />
 
     <ImageView
       android:id="@+id/back_img"
@@ -45,14 +44,37 @@
       android:layout_gravity="left|center"
       android:src="@drawable/ic_arrow_forward"
       android:tint="@color/login_gray"
-      android:visibility="gone"/>
+      android:visibility="gone" />
 
   </LinearLayout>
+  <LinearLayout
+    android:id="@+id/no_customer_lay"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:visibility="gone">
 
+    <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="50dp"
+      android:layout_marginBottom="25dp"
+      android:layout_gravity="center_vertical|top"
+      android:gravity="center"
+      android:src="@drawable/im_customer_not_found" />
+
+    <TextView
+      style="@style/IranSans"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:text="@string/no_customer"
+      android:textColor="@color/gray_75"
+      android:textSize="14sp" />
+  </LinearLayout>
   <android.support.v7.widget.RecyclerView
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-  </android.support.v7.widget.RecyclerView>
+    android:layout_height="match_parent" />
 </LinearLayout>

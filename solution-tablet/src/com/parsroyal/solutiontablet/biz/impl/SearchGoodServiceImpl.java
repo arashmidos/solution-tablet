@@ -53,7 +53,8 @@ public class SearchGoodServiceImpl {
             EventBus.getDefault()
                 .post(new SearchCustomerSuccessEvent("", StatusCodes.SUCCESS, data));
           } else {
-            EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
+            EventBus.getDefault()
+                .post(new SearchCustomerSuccessEvent("", StatusCodes.NO_DATA_ERROR));
           }
         } else {
           try {
@@ -67,7 +68,6 @@ public class SearchGoodServiceImpl {
 
       @Override
       public void onFailure(Call<List<Customer>> call, Throwable t) {
-//        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
         EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
       }
     });

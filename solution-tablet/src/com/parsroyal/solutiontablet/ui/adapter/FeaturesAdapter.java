@@ -78,7 +78,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
                 : R.string.error_no_visitline);
             return;
           }
-          context.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
+          context.changeFragment(MainActivity.VISITLINE_FRAGMENT_ID, true);
           break;
         case 1://Customers
           context.changeFragment(MainActivity.CUSTOMER_FRAGMENT, true);

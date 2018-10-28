@@ -313,7 +313,6 @@ public class OrderInfoFragment extends BaseFragment {
             if (isDelivery()) {
               List<SaleOrderItemDto> items = order.getOrderItems();
               for (SaleOrderItemDto item : items) {
-//TODO: MAKE BACKEND INVOICE ID 0
 
                 saleOrderService.saveOrderItem(new SaleOrderItem(item.getGoodsBackendId(),
                     newOrderId, item.getInvoiceBackendId(), item.getGoodsCount()));

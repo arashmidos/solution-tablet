@@ -29,7 +29,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
@@ -59,8 +58,8 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
-import com.parsroyal.solutiontablet.ui.fragment.PathDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.PathFragment;
+import com.parsroyal.solutiontablet.ui.fragment.VisitLineDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.VisitLineFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesCategoryFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
@@ -92,17 +91,13 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public abstract class MainActivity extends AppCompatActivity {
 
   public static final int FEATURE_FRAGMENT_ID = 0;
-  public static final int CUSTOMER_LIST_FRAGMENT_ID = 1;
   public static final int NEW_CUSTOMER_DETAIL_FRAGMENT_ID = 2;
-  public static final int CUSTOMER_ORDER_FRAGMENT_ID = 3;
-  public static final int ORDER_FRAGMENT_ID = 4;
   public static final int VISIT_DETAIL_FRAGMENT_ID = 5;
   public static final int REGISTER_PAYMENT_FRAGMENT = 6;
   public static final int CUSTOMER_FRAGMENT = 7;
   public static final int ORDER_INFO_FRAGMENT = 8;
   public static final int CUSTOMER_SEARCH_FRAGMENT = 9;
   public static final int DELIVERY_FRAGMENT_ID = 10;
-  public static final int DATA_TRANSFER_FRAGMENT_ID = 11;
   public static final int USER_TRACKING_FRAGMENT_ID = 12;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
   public static final int REPORT_FRAGMENT = 14;
@@ -113,8 +108,8 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int QUESTION_LIST_FRAGMENT_ID = 20;
   public static final int ALL_QUESTIONNAIRE_FRAGMENT_ID = 21;
   public static final int ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID = 22;
-  public static final int PATH_FRAGMENT_ID = 27;
-  public static final int PATH_DETAIL_FRAGMENT_ID = 28;
+  public static final int VISITLINE_FRAGMENT_ID = 27;
+  public static final int VISITLINE_DETAIL_FRAGMENT_ID = 28;
   public static final int SYSTEM_CUSTOMER_FRAGMENT = 29;
   public static final int NEW_CUSTOMER_FRAGMENT_ID = 30;
   public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
@@ -579,10 +574,6 @@ public abstract class MainActivity extends AppCompatActivity {
     changeFragment(MainActivity.FEATURE_FRAGMENT_ID, true);
   }
 
-  public void showCustomersListFragment() {
-    changeFragment(MainActivity.CUSTOMER_LIST_FRAGMENT_ID, true);
-  }
-
   protected BaseFragment getLastFragment() {
     FragmentManager supportFragmentManager = getSupportFragmentManager();
     if (supportFragmentManager.getBackStackEntryCount() > 1) {
@@ -803,9 +794,6 @@ public abstract class MainActivity extends AppCompatActivity {
       case SETTING_FRAGMENT:
         fragment = SettingFragment.newInstance();
         break;
-      case CUSTOMER_LIST_FRAGMENT_ID:
-        fragment = PathDetailFragment.newInstance();
-        break;
       case VISIT_DETAIL_FRAGMENT_ID:
         fragment = VisitDetailFragment.newInstance();
         break;
@@ -848,14 +836,14 @@ public abstract class MainActivity extends AppCompatActivity {
       case USER_TRACKING_FRAGMENT_ID://20
         fragment = new UserTrackingFragment();
         break;
-      case PATH_FRAGMENT_ID:
-        fragment = PathFragment.newInstance();
+      case VISITLINE_FRAGMENT_ID:
+        fragment = VisitLineFragment.newInstance();
         break;
       case ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID:
         fragment = AnonymousQuestionnaireFragment.newInstance();
         break;
-      case PATH_DETAIL_FRAGMENT_ID:
-        fragment = PathDetailFragment.newInstance();
+      case VISITLINE_DETAIL_FRAGMENT_ID:
+        fragment = VisitLineDetailFragment.newInstance();
         break;
     }
     Analytics.logContentView("Fragment " + String.valueOf(fragmentId));

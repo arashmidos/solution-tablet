@@ -25,11 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
@@ -45,7 +41,6 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
-import com.parsroyal.solutiontablet.util.OnMapAndViewReadyListener;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.text.Collator;
 import java.util.Collections;
@@ -56,8 +51,7 @@ import java.util.Locale;
 /**
  * @author Shakib
  */
-public class PathDetailFragment extends BaseFragment implements
-    OnMapAndViewReadyListener.OnGlobalLayoutAndMapReadyListener {
+public class VisitLineDetailFragment extends BaseFragment {
 
   @Nullable
   @BindView(R.id.search_img)
@@ -101,11 +95,8 @@ public class PathDetailFragment extends BaseFragment implements
   private boolean filterApplied = false;
   private boolean isClose = false;
 
-  private LatLng loation = new LatLng(35.6892, 51.3890);
-
-
-  public static PathDetailFragment newInstance() {
-    return new PathDetailFragment();
+  public static VisitLineDetailFragment newInstance() {
+    return new VisitLineDetailFragment();
   }
 
   @Override
@@ -120,10 +111,7 @@ public class PathDetailFragment extends BaseFragment implements
     mainActivity = (MainActivity) getActivity();
     customerService = new CustomerServiceImpl(mainActivity);
     visitService = new VisitServiceImpl(mainActivity);
-    //MAP
-    /*SupportMapFragment mapFragment =
-        (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-    new OnMapAndViewReadyListener(mapFragment, this);*/
+
     if (MultiScreenUtility.isTablet(mainActivity)) {
       setTabletData();
     } else {
@@ -135,55 +123,24 @@ public class PathDetailFragment extends BaseFragment implements
   }
 
   @Override
-  public void onMapReady(GoogleMap googleMap) {
-    mMap = googleMap;
-    addMarkers();
-    showBound();
-  }
-
-  private void showBound() {
-// Wait until map is ready
-    if (mMap == null) {
-      return;
-    }
-
-    // Create bounds that include all locations of the map
-    LatLngBounds.Builder boundsBuilder = LatLngBounds.builder()
-        .include(loation)
-        .include(loation)
-        .include(loation)
-        .include(loation)
-        .include(loation)
-        .include(loation);
-
-    // Move camera to show all markers and locations
-    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 20));
-  }
-
-  private void addMarkers() {
-    mMap.addMarker(new MarkerOptions()
-        .position(loation)
-        .title("تهران"));
-  }
-
-  @Override
   public int getFragmentId() {
-    return MainActivity.PATH_DETAIL_FRAGMENT_ID;
+    return MainActivity.VISITLINE_DETAIL_FRAGMENT_ID;
   }
 
   private void setMobileData() {
     visitline = visitService.getVisitLineListModelByBackendId(visitlineBackendId);
 
     if (Empty.isNotEmpty(customersNumberTv)) {
-      customersNumberTv
-          .setText(NumberUtil.digitsToPersian(
-              String.format(getString(R.string.x_customers), visitline.getCustomerCount())));
+
+      Integer customerCount = visitline.getCustomerCount();
+      customersNumberTv.setText(NumberUtil.digitsToPersian(
+          String.format(getString(R.string.x_customers),
+              visitline.getPrimaryKey().equals(0L) ? customerCount - 1 : customerCount)));
       pathCodeTv.setText(NumberUtil.digitsToPersian(
           String.format(getString(R.string.visitline_code_x), visitline.getCode())));
     } else {
       //We detected wrong device size!
       Logger.sendError("Wrong Orientation", "Device is not tablet");
-
     }
     mainActivity.changeTitle(NumberUtil.digitsToPersian(
         String.format(getString(R.string.visitline_code_x), visitline.getCode())));
@@ -191,9 +148,8 @@ public class PathDetailFragment extends BaseFragment implements
 
   private void setTabletData() {
     visitline = visitService.getVisitLineListModelByBackendId(visitlineBackendId);
-    mainActivity.changeDetailContent(
-        String.format(getString(R.string.visitline_code_x),
-            NumberUtil.digitsToPersian(visitline.getCode())));
+    mainActivity.changeDetailContent(String.format(getString(R.string.visitline_code_x),
+        NumberUtil.digitsToPersian(visitline.getCode())));
 
     if (Empty.isNotEmpty(customerCountBtn)) {
       customerCountBtn.setText(NumberUtil.digitsToPersian(
@@ -394,8 +350,7 @@ public class PathDetailFragment extends BaseFragment implements
         try {
           filterDistanceInMeter = Integer.parseInt(filterDistance);
 
-          if (filterDistanceInMeter < 0
-              || filterDistanceInMeter > 500) {
+          if (filterDistanceInMeter < 0 || filterDistanceInMeter > 500) {
             errorMessageTv.setText(R.string.error_filter_max_distance);
             errorMessageTv.setVisibility(View.VISIBLE);
             filterDistance = "";
@@ -413,8 +368,7 @@ public class PathDetailFragment extends BaseFragment implements
         filterDistanceInMeter = 0;
       }
 
-      if (filterDistanceInMeter == 0 && !filterByOrder
-          && !filterByNone && !filterByVisit) {
+      if (filterDistanceInMeter == 0 && !filterByOrder && !filterByNone && !filterByVisit) {
         errorMessageTv.setText(R.string.error_no_filter_selected);
         errorMessageTv.setVisibility(View.VISIBLE);
         return;

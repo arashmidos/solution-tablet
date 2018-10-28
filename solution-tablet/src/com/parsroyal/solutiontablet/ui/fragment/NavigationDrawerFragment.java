@@ -120,7 +120,7 @@ public class NavigationDrawerFragment extends BaseFragment {
           ToastUtil.toastError(mainActivity, R.string.error_message_no_data);
           break;
         }
-        mainActivity.changeFragment(MainActivity.PATH_FRAGMENT_ID, true);
+        mainActivity.changeFragment(MainActivity.VISITLINE_FRAGMENT_ID, true);
         break;
       case R.id.customers_lay:
         if (!hasData) {

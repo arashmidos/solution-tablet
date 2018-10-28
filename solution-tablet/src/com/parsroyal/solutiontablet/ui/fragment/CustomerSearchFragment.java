@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,6 +50,8 @@ public class CustomerSearchFragment extends BaseFragment {
   EditText searchEdt;
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
+  @BindView(R.id.no_customer_lay)
+  LinearLayout noCustomerLayout;
 
   private CustomerService customerService;
   private MainActivity activity;
@@ -73,9 +76,9 @@ public class CustomerSearchFragment extends BaseFragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_customer_search, container, false);
     ButterKnife.bind(this, view);
-    //TODO:!!
-  /*  Bundle args = getArguments();
-    isClickable = args.getBoolean(Constants.IS_CLICKABLE, false);*/
+
+    Bundle args = getArguments();
+    isClickable = args.getBoolean(Constants.IS_CLICKABLE, false);
     activity = (MainActivity) getActivity();
     activity.changeTitle(getString(R.string.search));
     customerService = new CustomerServiceImpl(activity);
@@ -139,6 +142,9 @@ public class CustomerSearchFragment extends BaseFragment {
 
       @Override
       public void afterTextChanged(Editable s) {
+        if (TextUtils.isEmpty(s.toString()) || s.toString().length() < 3) {
+          return;
+        }
         if (!isClickable) {
           List<CustomerListModel> customerList = adapter.getFilteredData(s.toString());
           adapter.update(customerList);
@@ -147,14 +153,13 @@ public class CustomerSearchFragment extends BaseFragment {
           timer.schedule(new TimerTask() {
             @Override
             public void run() {
-              if (!TextUtils.isEmpty(s.toString())) {
-                searchGoodService.search(s.toString());
-              } else {
-                runOnUiThread(() -> onlineAdapter.update(new ArrayList<>()));
-              }
+//              if (!TextUtils.isEmpty(s.toString())) {
+              searchGoodService.search(s.toString());
+//              } else {
+//                runOnUiThread(() -> onlineAdapter.update(new ArrayList<>()));
+//              }
             }
           }, 600); // 600ms delay before the timer executes the „run“ method from TimerTask
-
         }
       }
     });
@@ -184,13 +189,17 @@ public class CustomerSearchFragment extends BaseFragment {
   @Subscribe
   public void getMessage(Event event) {
     if (event instanceof ErrorEvent) {
-      ToastUtil.toastError(getActivity(), R.string.error_connecting_server);
+      ToastUtil.toastError(activity, R.string.error_connecting_server);
     } else if (event instanceof SearchCustomerSuccessEvent) {
       if (event.getStatusCode() == StatusCodes.SUCCESS) {
         List<Customer> customers = ((SearchCustomerSuccessEvent) event).getCustomers();
         onlineAdapter.update(customers);
+        noCustomerLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
       } else if (event.getStatusCode() == StatusCodes.NO_DATA_ERROR) {
-        ToastUtil.toastError(getActivity(), R.string.retry);
+//        ToastUtil.toastError(activity, R.string.retry);
+        noCustomerLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
       }
     }
   }

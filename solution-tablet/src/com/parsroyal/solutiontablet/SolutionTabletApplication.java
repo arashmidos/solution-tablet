@@ -87,9 +87,8 @@ public class SolutionTabletApplication extends MultiDexApplication {
         }
       }).start();
     }
-
-    //TODO:!!
-    //Pushe.initialize(this, true);
+//TODO:!!
+//    Pushe.initialize(this, true);
 
 //    Log.d("Pushe", Pushe.getPusheId(this));
 //    Log.d("DebugDB", "***>>> DB Address:"+DebugDB.getAddressLog());

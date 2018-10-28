@@ -13,7 +13,7 @@ import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.PathAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.VisitLineAdapter;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.util.List;
@@ -21,17 +21,17 @@ import java.util.List;
 /**
  * @author Arash 2017-08-18
  */
-public class PathFragment extends BaseFragment {
+public class VisitLineFragment extends BaseFragment {
 
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
 
-  private PathAdapter adapter;
+  private VisitLineAdapter adapter;
   private MainActivity mainActivity;
   private VisitService visitService;
 
-  public static PathFragment newInstance() {
-    return new PathFragment();
+  public static VisitLineFragment newInstance() {
+    return new VisitLineFragment();
   }
 
   @Override
@@ -50,7 +50,7 @@ public class PathFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new PathAdapter(mainActivity, getVisitLineList());
+    adapter = new VisitLineAdapter(mainActivity, getVisitLineList());
     if (MultiScreenUtility.isTablet(mainActivity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);
@@ -68,6 +68,6 @@ public class PathFragment extends BaseFragment {
 
   @Override
   public int getFragmentId() {
-    return MainActivity.PATH_FRAGMENT_ID;
+    return MainActivity.VISITLINE_FRAGMENT_ID;
   }
 }

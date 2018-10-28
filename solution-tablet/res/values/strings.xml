@@ -329,7 +329,7 @@
   <string name="has_none">ثبت عدم</string>
   <string name="clear">پاک کردن</string>
   <string name="error_no_filter_selected">هیچ فیلتری انتخاب نشده است</string>
-  <string name="error_filter_max_distance">فاصله می تواند بین 1 تا 500 متر باشد</string>
+  <string name="error_filter_max_distance">فاصله می تواند بین ۱ تا ۵۰۰ متر باشد</string>
   <string name="customer_code_label">کد مشتری:</string>
   <string name="customer_name_label">نام مشتری:</string>
   <string name="error_distance_too_far_for_action">فاصله شما بیش از حد مجاز برای انجام عملیات است</string>
@@ -619,16 +619,13 @@
   <string name="reason">دلیل خود برای عدم وارد کردن کد را انتخاب کنید</string>
   <string name="send">ارسال</string>
   <string name="default_order">پیشفرض</string>
-  <string name="manual_visit_line">مسیر دستی</string>
+  <string name="manual_visit_line">ویزیت تلفنی</string>
   <string name="no_customer_exist">بدون مشتری</string>
   <string name="enter_discount">تخفیف (٪)</string>
   <string name="valid_period_discount">درصد باید در بازه ۰ تا ۱۰۰ باشد</string>
   <string name="no_total">ابتدا تعداد را انتخاب کنید</string>
   <string name="visited">ویزیت نشده</string>
   <string name="navigate">مسیریابی</string>
-
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
   <string name="default_navigator">مسیریاب پیش فرض</string>
   <string name="google_map">گوگل مپ</string>
   <string name="waze">ویز</string>

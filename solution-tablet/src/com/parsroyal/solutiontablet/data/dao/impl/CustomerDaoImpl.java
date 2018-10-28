@@ -339,7 +339,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
     Map<Long, CustomerListModel> entitiesMap = new HashMap<>();
 
-    while (cursor.moveToNext()) {//TODO: refactor
+    while (cursor.moveToNext()) {
       CustomerListModel listModel = createListModelFromCursor(cursor);
       Long primaryKey = listModel.getPrimaryKey();
       if (!entitiesMap.containsKey(primaryKey)) {
