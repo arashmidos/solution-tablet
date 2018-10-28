@@ -1,9 +1,11 @@
 package com.parsroyal.solutiontablet.data.listmodel;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by Mahyar on 8/25/2015.
  */
-public class SaleOrderListModel extends BaseListModel {
+public class SaleOrderListModel extends BaseListModel implements Comparable<SaleOrderListModel> {
 
   private Long id;
   private Long backendId;
@@ -160,5 +162,10 @@ public class SaleOrderListModel extends BaseListModel {
 
   public void setOrderCount(int orderCount) {
     this.orderCount = orderCount;
+  }
+
+  @Override
+  public int compareTo(@NonNull SaleOrderListModel o) {
+    return id.compareTo(o.id);
   }
 }

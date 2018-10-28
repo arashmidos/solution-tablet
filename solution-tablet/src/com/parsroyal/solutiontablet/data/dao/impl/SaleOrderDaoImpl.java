@@ -28,6 +28,7 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Created by Mahyar on 8/21/2015.
@@ -235,7 +236,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
-    List<SaleOrderListModel> returnOrders = new ArrayList<>();
+//    List<SaleOrderListModel> returnOrders = new ArrayList<>();
     List<String> argsList = new ArrayList<>();
     String sql = "SELECT DISTINCT " +
         "o." + SaleOrder.COL_ID + "," +
@@ -316,6 +317,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     String[] args = {};
     Cursor cursor = db.rawQuery(sql, argsList.toArray(args));
 
+    TreeSet<SaleOrderListModel> set = new TreeSet<>();
     while (cursor.moveToNext()) {
       SaleOrderListModel order = new SaleOrderListModel();
       order.setId(cursor.getLong(0));
@@ -330,11 +332,11 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       order.setDescription(cursor.getString(9));
       order.setVisitId(cursor.getLong(10));
       order.setNumber(cursor.getLong(11));
-      returnOrders.add(order);
+      set.add(order);
     }
 
     cursor.close();
-    return returnOrders;
+    return new ArrayList<>(set);
   }
 
   @Override

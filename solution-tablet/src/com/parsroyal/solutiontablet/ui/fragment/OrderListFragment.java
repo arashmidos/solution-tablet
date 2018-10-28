@@ -137,6 +137,7 @@ public class OrderListFragment extends BaseFragment {
   }
 
   private List<SaleOrderListModel> getOrderList() {
+    //If not coming from report page
     if (parent != null) {
       saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
     }
