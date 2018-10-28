@@ -104,6 +104,10 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           intent.putExtra(Constants.REPORT_TYPE, Constants.REPORT_SALESMAN);
           context.startActivity(intent);
           break;
+        case 7://Settings
+          context.changeFragment(MainActivity.SETTING_FRAGMENT, true);
+
+          break;
       }
     });
   }
