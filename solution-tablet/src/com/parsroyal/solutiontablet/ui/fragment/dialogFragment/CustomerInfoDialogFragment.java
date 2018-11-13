@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
@@ -19,8 +18,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.crashlytics.android.Crashlytics;
-import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -31,11 +28,10 @@ import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
-import com.parsroyal.solutiontablet.service.LocationService;
+import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
@@ -45,7 +41,6 @@ import com.parsroyal.solutiontablet.ui.activity.MobileReportListActivity;
 import com.parsroyal.solutiontablet.ui.activity.TabletReportListActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.VisitActivityAdapter;
-import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -66,7 +61,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   protected boolean distanceServiceEnabled;
   protected float distanceAllowed;
   protected VisitService visitService;
-  protected LocationService locationService;
+  protected PositionService positionService;
   protected SaleOrderService orderService;
   protected PathDetailAdapter adapter;
   protected int position;
@@ -105,6 +100,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   ImageView minusImg;
   @BindView(R.id.credit_tv)
   TextView creditTv;
+  private CustomerDto customer;
 
   public CustomerInfoDialogFragment() {
     // Required empty public constructor
@@ -142,8 +138,10 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     customerService = new CustomerServiceImpl(mainActivity);
     settingService = new SettingServiceImpl(mainActivity);
     visitService = new VisitServiceImpl(mainActivity);
-    locationService = new LocationServiceImpl(mainActivity);
+    positionService = new PositionServiceImpl(mainActivity);
     orderService = new SaleOrderServiceImpl(mainActivity);
+
+    customer = customerService.getCustomerDtoById(model.getPrimaryKey());
 
     initialize();
     setData();
@@ -190,7 +188,6 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   }
 
   protected void setData() {
-    CustomerDto customer = customerService.getCustomerDtoById(model.getPrimaryKey());
     Double creditRemained = customer.getRemainedCredit();
     if (creditRemained != null) {
       String text2;
@@ -283,10 +280,10 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   }
 
   protected void checkEnter() {
-    CustomerDto customer = customerService.getCustomerDtoById(model.getPrimaryKey());
 
-    if (!distanceServiceEnabled || hasAcceptableDistance(customer) || BuildConfig.DEBUG) {
-      doEnter(customer);
+    if (!distanceServiceEnabled || hasAcceptableDistance()/* || BuildConfig.DEBUG*/) {
+
+      doEnter();
       dismiss();
     } else {
       ToastUtil.toastError(root, R.string.error_distance_too_far_for_action);
@@ -302,7 +299,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   }
 
   protected void addNotVisited() {
-    Long visitId = visitService.startVisiting(model.getBackendId());
+    Long visitId = visitService.startVisiting(model.getBackendId(), getDistance());
     VisitInformationDetail visitInformationDetail = new VisitInformationDetail(
         visitId, VisitInformationDetailType.NONE, 0);
     visitService.saveVisitDetail(visitInformationDetail);
@@ -311,9 +308,9 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     adapter.notifyItemHasRejection(position);
   }
 
-  protected boolean hasAcceptableDistance(CustomerDto customer) {
+  protected boolean hasAcceptableDistance() {
 
-    Position position = new PositionServiceImpl(mainActivity).getLastPosition();
+    Position position = positionService.getLastPosition();
     Float distance;
 
     double lat2 = customer.getxLocation();
@@ -335,28 +332,38 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     return distance <= distanceAllowed;
   }
 
+  private int getDistance() {
 
-  protected void doEnter(CustomerDto customer) {
+    Position position = positionService.getLastPosition();
+    Float distance;
+
+    double lat2 = customer.getxLocation();
+    double long2 = customer.getyLocation();
+
+    if (lat2 == 0.0 || long2 == 0.0) {
+      //Location not set for customer
+      return 0;
+    }
+
+    if (Empty.isNotEmpty(position)) {
+      distance = LocationUtil
+          .distanceBetween(position.getLatitude(), position.getLongitude(), lat2, long2);
+      return distance.intValue();
+    } else {
+      return 0;
+    }
+  }
+
+
+  protected void doEnter() {
     try {
-      final Long visitInformationId = visitService.startVisiting(customer.getBackendId());
+      final Long visitInformationId = visitService.startVisiting(customer.getBackendId(),
+          getDistance());
 
-      locationService.findCurrentLocation(new FindLocationListener() {
-        @Override
-        public void foundLocation(Location location) {
-          try {
-            visitService.updateVisitLocation(visitInformationId, location);
-          } catch (Exception e) {
-            Crashlytics
-                .log(Log.ERROR, "Location Service",
-                    "Error in finding location " + e.getMessage());
-            Log.e(TAG, e.getMessage(), e);
-          }
-        }
-
-        @Override
-        public void timeOut() {
-        }
-      });
+      Position position = positionService.getLastPosition();
+      if (Empty.isNotEmpty(position)) {
+        visitService.updateVisitLocation(visitInformationId, position);
+      }
 
       orderService.deleteForAllCustomerOrdersByStatus(customer.getBackendId(),
           SaleOrderStatus.DRAFT.getId());
@@ -369,12 +376,10 @@ public class CustomerInfoDialogFragment extends DialogFragment {
 
     } catch (BusinessException e) {
       Log.e(TAG, e.getMessage(), e);
-      ToastUtil.toastError(mainActivity, e);
+      ToastUtil.toastError(root, e);
     } catch (Exception e) {
-     /* Crashlytics
-          .log(Log.ERROR, "General Exception", "Error in entering customer " + e.getMessage());*/
       Log.e(TAG, e.getMessage(), e);
-      ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
+      ToastUtil.toastError(root, new UnknownSystemException(e));
     }
   }
 }

@@ -19,6 +19,8 @@ public class VisitInformation extends BaseEntity<Long> {
   public static final String COL_RESULT = "RESULT";
   public static final String COL_CUSTOMER_ID = "CUSTOMER_ID";
   public static final String COL_NETWORK_DATE = "NETWORK_DATE";
+  public static final String COL_END_NETWORK_DATE = "END_NETWORK_DATE";
+  public static final String COL_DISTANCE = "DISTANCE";
 
   public static final String CREATE_TABLE_SQL =
       "CREATE TABLE " + VisitInformation.TABLE_NAME + " (" +
@@ -34,8 +36,11 @@ public class VisitInformation extends BaseEntity<Long> {
           " " + VisitInformation.COL_CREATE_DATE_TIME + " TEXT," +
           " " + VisitInformation.COL_UPDATE_DATE_TIME + " TEXT," +//10
           " " + VisitInformation.COL_CUSTOMER_ID + " INTEGER," +
-          " " + VisitInformation.COL_NETWORK_DATE + " INTEGER" +
+          " " + VisitInformation.COL_NETWORK_DATE + " INTEGER," +
+          " " + VisitInformation.COL_END_NETWORK_DATE + " INTEGER," +
+          " " + VisitInformation.COL_DISTANCE + " INTEGER" +//14
           " );";
+
   private Long id;
   private String visitDate;
   private String startTime;
@@ -47,6 +52,24 @@ public class VisitInformation extends BaseEntity<Long> {
   private Long visitBackendId;
   private Long customerId;
   private Long networkDate;
+  private Long endNetworkDate;
+  private Long distance;
+
+  public Long getEndNetworkDate() {
+    return endNetworkDate;
+  }
+
+  public void setEndNetworkDate(Long endNetworkDate) {
+    this.endNetworkDate = endNetworkDate;
+  }
+
+  public Long getDistance() {
+    return distance;
+  }
+
+  public void setDistance(Long distance) {
+    this.distance = distance;
+  }
 
   public Long getCustomerId() {
     return customerId;

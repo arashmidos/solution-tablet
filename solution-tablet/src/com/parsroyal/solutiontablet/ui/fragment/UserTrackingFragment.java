@@ -55,31 +55,29 @@ import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.exception.BusinessException;
-import com.parsroyal.solutiontablet.exception.GPSIsNotEnabledException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.MapInfoWindowChooser;
-import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
+import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NotificationUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
@@ -134,7 +132,6 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   private PositionService positionService;
   private SettingService settingService;
   private VisitService visitService;
-  private LocationService locationService;
   private SaleOrderServiceImpl orderService;
   private SunDate startDate = new SunDate();
   private SunDate endDate = new SunDate();
@@ -172,8 +169,8 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     salesmanId = keyValueBiz.findByKey(ApplicationKeys.SALESMAN_ID);
     if (Empty.isEmpty(salesmanId)) {
       View view = inflater.inflate((R.layout.view_error_page), null);
-      TextView errorView = (TextView) view.findViewById(R.id.error_msg);
-      errorView.setText(errorView.getText() + "\n\n" + "اطلاعات کاربری یافت نشد!");
+      TextView errorView = view.findViewById(R.id.error_msg);
+      errorView.setText(String.format("%s\n\nاطلاعات کاربری یافت نشد!", errorView.getText()));
       return view;
     }
 
@@ -212,7 +209,6 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     customerService = new CustomerServiceImpl(context);
     settingService = new SettingServiceImpl(context);
     visitService = new VisitServiceImpl(context);
-    locationService = new LocationServiceImpl(context);
     orderService = new SaleOrderServiceImpl(context);
   }
 
@@ -401,20 +397,11 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
     if (currentLocation == null) {
-      try {
-        new LocationServiceImpl(getContext()).findCurrentLocation(new FindLocationListener() {
-          @Override
-          public void foundLocation(Location location) {
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(location.getLatitude(), location.getLongitude()), cameraZoom), 4000,
-                null);
-          }
-
-          @Override
-          public void timeOut() {
-          }
-        });
-      } catch (GPSIsNotEnabledException ignore) {
+      Position position = positionService.getLastPosition();
+      if (position != null) {
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+            new LatLng(position.getLatitude(), position.getLongitude()), cameraZoom), 4000, null);
+      } else {
         NotificationUtil.showGPSDisabled(getActivity());
       }
     } else {
@@ -447,7 +434,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
         ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
         return;
       }
-      MapInfoWindowChooser mapInfoWindowChooser = MapInfoWindowChooser.newInstance(this,marker);
+      MapInfoWindowChooser mapInfoWindowChooser = MapInfoWindowChooser.newInstance(this, marker);
       mapInfoWindowChooser.show(getActivity().getSupportFragmentManager(), "detail bottom sheet");
 
     });
@@ -469,7 +456,8 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
 
   public void doEnter() {
     try {
-      final Long visitInformationId = visitService.startVisiting(clickedClusterItem.getBackendId());
+      final Long visitInformationId = visitService.startVisiting(clickedClusterItem.getBackendId(),
+          getDistance());
 
       Position position = positionService.getLastPosition();
 
@@ -496,6 +484,29 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
       ToastUtil.toastError(context, new UnknownSystemException(e));
     } finally {
       dismissProgressDialog();
+    }
+  }
+
+  private int getDistance() {
+
+    Customer customer = customerService.getCustomerByBackendId(clickedClusterItem.getBackendId());
+    Position position = positionService.getLastPosition();
+    Float distance;
+
+    double lat2 = customer.getxLocation();
+    double long2 = customer.getyLocation();
+
+    if (lat2 == 0.0 || long2 == 0.0) {
+      //Location not set for customer
+      return 0;
+    }
+
+    if (Empty.isNotEmpty(position)) {
+      distance = LocationUtil
+          .distanceBetween(position.getLatitude(), position.getLongitude(), lat2, long2);
+      return distance.intValue();
+    } else {
+      return 0;
     }
   }
 

@@ -3,7 +3,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,19 +37,16 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.DataTransferService;
-import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
-import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
@@ -68,7 +64,7 @@ import java.util.List;
  */
 public class OldVisitDetailFragment extends BaseFragment implements ResultObserver {
 
-  public static final String TAG = OldVisitDetailFragment.class.getSimpleName();
+  public static final String TAG = "OldVisitDetailFragment";
 
   private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
   private static final int RESULT_OK = -1;
@@ -90,7 +86,6 @@ public class OldVisitDetailFragment extends BaseFragment implements ResultObserv
   private GridView mainLayout;
   private CustomerService customerService;
   private SaleOrderService saleOrderService;
-  private LocationService locationService;
   private VisitService visitService;
   private Long visitId;
   private Long customerId;
@@ -110,7 +105,6 @@ public class OldVisitDetailFragment extends BaseFragment implements ResultObserv
       customerService = new CustomerServiceImpl(oldMainActivity);
       saleOrderService = new SaleOrderServiceImpl(oldMainActivity);
       baseInfoService = new BaseInfoServiceImpl(oldMainActivity);
-      locationService = new LocationServiceImpl(oldMainActivity);
       settingService = new SettingServiceImpl(oldMainActivity);
       visitService = new VisitServiceImpl(oldMainActivity);
 
@@ -121,7 +115,7 @@ public class OldVisitDetailFragment extends BaseFragment implements ResultObserv
       saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
       View view = inflater.inflate(R.layout.fragment_visit_detail, null);
-      mainLayout =  view.findViewById(R.id.mainLayout);
+      mainLayout = view.findViewById(R.id.mainLayout);
       mainLayout.setAdapter(new MainLayoutAdapter());
       setItemClickListener();
 
@@ -210,7 +204,7 @@ public class OldVisitDetailFragment extends BaseFragment implements ResultObserv
       Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       // Create a media file name
       String postfix = String.valueOf((new Date().getTime()) % 1000);
-      fileUri = MediaUtil.getOutputMediaFileUri(oldMainActivity,MediaUtil.MEDIA_TYPE_IMAGE,
+      fileUri = MediaUtil.getOutputMediaFileUri(oldMainActivity, MediaUtil.MEDIA_TYPE_IMAGE,
           Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
           "IMG_" + customer.getCode() + "_" + postfix); // create a file to save the image
       intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
@@ -436,32 +430,6 @@ public class OldVisitDetailFragment extends BaseFragment implements ResultObserv
       progressDialog.setTitle(R.string.message_please_wait);
       progressDialog.setMessage(getString(R.string.message_please_wait_finding_your_location));
       progressDialog.show();
-
-      locationService.findCurrentLocation(new FindLocationListener() {
-        @Override
-        public void foundLocation(Location location) {
-          progressDialog.dismiss();
-          try {
-            visitService.updateVisitLocation(visitId, location);
-          } catch (Exception e) {
-            Logger.sendError("Data Storage Exception",
-                "Error in updating visit location " + e.getMessage());
-            Log.e(TAG, e.getMessage(), e);
-          }
-
-          oldMainActivity.runOnUiThread(() -> showFoundLocationDialog());
-        }
-
-        @Override
-        public void timeOut() {
-          progressDialog.dismiss();
-          oldMainActivity.runOnUiThread(() ->
-          {
-            ToastUtil.toastError(getActivity(), getString(R.string.visit_found_no_location));
-            showDialogForEmptyLocation();
-          });
-        }
-      });
 
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);

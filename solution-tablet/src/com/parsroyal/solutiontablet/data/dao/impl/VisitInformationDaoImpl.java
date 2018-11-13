@@ -50,6 +50,8 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     cv.put(VisitInformation.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
     cv.put(VisitInformation.COL_CUSTOMER_ID, entity.getCustomerId());
     cv.put(VisitInformation.COL_NETWORK_DATE, entity.getNetworkDate());
+    cv.put(VisitInformation.COL_END_NETWORK_DATE, entity.getEndNetworkDate());
+    cv.put(VisitInformation.COL_DISTANCE, entity.getDistance());
     return cv;
   }
 
@@ -78,7 +80,9 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
         VisitInformation.COL_CREATE_DATE_TIME,//9
         VisitInformation.COL_UPDATE_DATE_TIME,
         VisitInformation.COL_CUSTOMER_ID,
-        VisitInformation.COL_NETWORK_DATE
+        VisitInformation.COL_NETWORK_DATE,
+        VisitInformation.COL_END_NETWORK_DATE,
+        VisitInformation.COL_DISTANCE//14
     };
   }
 
@@ -98,6 +102,8 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     entity.setUpdateDateTime(cursor.getString(10));
     entity.setCustomerId(cursor.getLong(11));
     entity.setNetworkDate(cursor.getLong(12));
+    entity.setEndNetworkDate(cursor.getLong(13));
+    entity.setDistance(cursor.getLong(14));
     return entity;
   }
 
@@ -182,6 +188,9 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
         Long.valueOf(PreferenceHelper.retrieveByKey(ApplicationKeys.SALESMAN_ID).getValue()));
     entity.setNetworkDate(
         NumberUtil.digitsToEnglish(DateUtil.getZonedDate(new Date(cursor.getLong(12)))));
+    entity.setEndNetworkDate(
+        NumberUtil.digitsToEnglish(DateUtil.getZonedDate(new Date(cursor.getLong(13)))));
+    entity.setDistance(cursor.getLong(14));
 
     return entity;
   }

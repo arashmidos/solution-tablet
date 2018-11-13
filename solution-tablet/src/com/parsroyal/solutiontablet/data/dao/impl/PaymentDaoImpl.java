@@ -15,6 +15,7 @@ import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.data.searchobject.PaymentSO;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Created by Arash on 11/8/2016.
@@ -224,12 +225,12 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
     Cursor cursor = db
         .query(table, projection, selection, argsList.toArray(args), null, null, null);
 
-    List<PaymentListModel> entities = new ArrayList<>();
+    TreeSet<PaymentListModel> set = new TreeSet<>();
     while (cursor.moveToNext()) {
-      entities.add(createListModelFromCursor(cursor));
+      set.add(createListModelFromCursor(cursor));
     }
     cursor.close();
-    return entities;
+    return new ArrayList<>(set);
   }
 
   @Override

@@ -32,6 +32,7 @@ import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Payment;
+import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
@@ -147,10 +148,17 @@ public class DataTransferServiceImpl implements DataTransferService {
     List<BaseSaleDocument> saleOrders = saleOrderService
         .findOrderDocumentByStatus(SaleOrderStatus.READY_TO_SEND.getId());
     List<CustomerDto> allNewCustomers = customerService.getAllNewCustomersForSend();
-//TODO CHECK FOR UNSENT VISIT DATA
-    //TODO CHECK FOR UNSENT MONEY DATA
+    List<VisitInformation> visits = visitService.getAllVisitInformationForSend();
+    List<Payment> payments = paymentService.getAllPaymentsByStatus(SendStatus.NEW.getId());
+    List<BaseSaleDocument> saleDelivered = saleOrderService
+        .findOrderDocumentByStatus(SaleOrderStatus.DELIVERED.getId());
+
+    List<BaseSaleDocument> saleInvoice = saleOrderService
+        .findOrderDocumentByStatus(SaleOrderStatus.INVOICED.getId());
+
     return Empty.isNotEmpty(answersForSend) || Empty.isNotEmpty(saleOrders) || Empty
-        .isNotEmpty(allNewCustomers);
+        .isNotEmpty(allNewCustomers) || Empty.isNotEmpty(visits) || Empty.isNotEmpty(payments)
+        || Empty.isNotEmpty(saleDelivered) || Empty.isNotEmpty(saleInvoice);
   }
 
   public void getAllProvinces() {

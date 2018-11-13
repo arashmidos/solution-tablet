@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.VisitLineDao;
@@ -22,6 +23,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -60,6 +62,9 @@ public class VisitLineForDeliveryDataTaransferBizImpl {
       @Override
       public void onResponse(Call<List<VisitLineDto>> call, Response<List<VisitLineDto>> response) {
         if (response.isSuccessful()) {
+          visitLineDao
+              .create(createVisitLineEntity(context.getString(R.string.manual_visit_line), 0L));
+          customerDao.bulkInsert(getSampleCustomerList());
           List<VisitLineDto> list = response.body();
           if (Empty.isNotEmpty(list)) {
             for (VisitLineDto visitLineDto : list) {
@@ -111,6 +116,23 @@ public class VisitLineForDeliveryDataTaransferBizImpl {
     visitLine.setBackendId(visitLineDto.getBackendId());
     visitLine.setCode(visitLineDto.getCode());
     visitLine.setTitle(visitLineDto.getTitle());
+    return visitLine;
+  }
+
+  private List<Customer> getSampleCustomerList() {
+    Customer customer = new Customer();
+    customer.setBackendId(0L);
+    customer.setVisitLineBackendId(0L);
+    List<Customer> customers = new ArrayList<>();
+    customers.add(customer);
+    return customers;
+  }
+
+  private VisitLine createVisitLineEntity(String title, long id) {
+    VisitLine visitLine = new VisitLine();
+    visitLine.setBackendId(id);
+    visitLine.setCode((int) id);
+    visitLine.setTitle(title);
     return visitLine;
   }
 }

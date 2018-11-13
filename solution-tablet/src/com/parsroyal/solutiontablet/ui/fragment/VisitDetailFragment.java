@@ -1,9 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,6 +29,7 @@ import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.entity.Goods;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
@@ -38,12 +37,10 @@ import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
-import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
-import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
@@ -51,7 +48,6 @@ import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransferDialogFragment;
-import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -87,7 +83,6 @@ public class VisitDetailFragment extends BaseFragment {
   private long visitId;
   private VisitServiceImpl visitService;
   private BaseInfoServiceImpl baseInfoService;
-  private LocationService locationService;
   private CustomerDetailViewPagerAdapter viewPagerAdapter;
   private CustomerInfoFragment customerInfoFragment;
   private OrderListFragment orderListFragment;
@@ -129,7 +124,6 @@ public class VisitDetailFragment extends BaseFragment {
       mainActivity = (MainActivity) getActivity();
       baseInfoService = new BaseInfoServiceImpl(mainActivity);
       customerService = new CustomerServiceImpl(mainActivity);
-      locationService = new LocationServiceImpl(mainActivity);
       visitService = new VisitServiceImpl(mainActivity);
       customer = customerService.getCustomerById(customerId);
       if (customer == null) {
@@ -291,51 +285,47 @@ public class VisitDetailFragment extends BaseFragment {
   }
 
   private void tryFindingLocation() {
-    try {
-      final ProgressDialog progressDialog = new ProgressDialog(mainActivity);
+//    try {
+      /*final ProgressDialog progressDialog = new ProgressDialog(mainActivity);
       progressDialog.setIndeterminate(true);
       progressDialog.setCancelable(Boolean.FALSE);
       progressDialog.setIcon(R.drawable.ic_action_info);
       progressDialog.setTitle(R.string.message_please_wait);
       progressDialog
           .setMessage(mainActivity.getString(R.string.message_please_wait_finding_your_location));
-      progressDialog.show();
+      progressDialog.show();*/
 
-      locationService.findCurrentLocation(new FindLocationListener() {
-        @Override
-        public void foundLocation(Location location) {
-          progressDialog.dismiss();
-          try {
-            visitService.updateVisitLocation(visitId, location);
-          } catch (Exception e) {
-            Logger.sendError("Data Storage Exception",
-                "Error in updating visit location " + e.getMessage());
-            Log.e(TAG, e.getMessage(), e);
-          }
-
-          mainActivity.runOnUiThread(() -> showFoundLocationDialog());
-        }
-
-        @Override
-        public void timeOut() {
-          progressDialog.dismiss();
-          mainActivity.runOnUiThread(() -> {
-            ToastUtil
-                .toastError(mainActivity, mainActivity.getString(R.string.visit_found_no_location));
-            showDialogForEmptyLocation();
-          });
-        }
-      });
-
-    } catch (BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(mainActivity, ex);
-    } catch (Exception ex) {
-      Crashlytics
-          .log(Log.ERROR, "Location Service", "Error in finding location " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
+    Position position = new PositionServiceImpl(mainActivity).getLastPosition();
+//      locationService.findCurrentLocation(new FindLocationListener() {
+//        @Override
+//        public void foundLocation(Location location) {
+//          progressDialog.dismiss();
+//          try {
+    if (Empty.isNotEmpty(position)) {
+      visitService.updateVisitLocation(visitId, position);
+      showFoundLocationDialog();
+    } else {
+      showDialogForEmptyLocation();
     }
+//          } catch (Exception e) {
+//            Logger.sendError("Data Storage Exception",
+//                "Error in updating visit location " + e.getMessage());
+//            Log.e(TAG, e.getMessage(), e);
+//          }
+//
+//          mainActivity.runOnUiThread(() -> showFoundLocationDialog());
+//        }
+
+//        @Override
+//        public void timeOut() {
+//          progressDialog.dismiss();
+//          mainActivity.runOnUiThread(() -> {
+//            ToastUtil
+//                .toastError(mainActivity, mainActivity.getString(R.string.visit_found_no_location));
+//            showDialogForEmptyLocation();
+//          });
+//        }
+//      });
   }
 
   private void showFoundLocationDialog() {

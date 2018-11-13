@@ -1,9 +1,11 @@
 package com.parsroyal.solutiontablet.data.listmodel;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by Arash on 08/19/2016
  */
-public class PaymentListModel extends BaseListModel {
+public class PaymentListModel extends BaseListModel implements Comparable<PaymentListModel> {
 
   protected String date;
   protected String amount;
@@ -92,5 +94,25 @@ public class PaymentListModel extends BaseListModel {
 
   public void setBranch(String branch) {
     this.branch = branch;
+  }
+
+  @Override
+  public int compareTo(@NonNull PaymentListModel paymentListModel) {
+    return this.primaryKey.compareTo(paymentListModel.primaryKey);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    PaymentListModel that = (PaymentListModel) o;
+    return this.primaryKey.equals(that.primaryKey);
   }
 }

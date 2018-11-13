@@ -24,7 +24,7 @@ public interface VisitService extends BaseService {
 
   List<VisitLineListModel> getAllFilteredVisitLinesListModel(String constraint);
 
-  Long startVisiting(Long customerBackendId);
+  Long startVisiting(Long customerBackendId, int distance);
 
   Long startVisitingNewCustomer(Long customerId);
 

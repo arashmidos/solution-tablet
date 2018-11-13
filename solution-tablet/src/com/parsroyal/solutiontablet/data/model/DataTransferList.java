@@ -76,8 +76,6 @@ public class DataTransferList {
             context.getString(R.string.salesman_location)));
     featureList.add(new DataTransferList(TransferSendOrder.QUESTIONNAIRE, R.drawable.ic_list_24_dp,
         context.getString(R.string.questionnaires)));
-    featureList.add(new DataTransferList(TransferSendOrder.PAYMENT, R.drawable.ic_currency_24_dp,
-        context.getString(R.string.payment)));
     featureList.add(new DataTransferList(TransferSendOrder.ORDER, R.drawable.ic_cart_24_dp,
         context.getString(R.string.order)));
     //FACTOR HOT SALE
@@ -91,6 +89,8 @@ public class DataTransferList {
     }
     featureList.add(new DataTransferList(TransferSendOrder.RETURN_ORDER, R.drawable.ic_return_24_dp,
         context.getString(R.string.return_order)));
+    featureList.add(new DataTransferList(TransferSendOrder.PAYMENT, R.drawable.ic_currency_24_dp,
+        context.getString(R.string.payment)));
     featureList.add(new DataTransferList(TransferSendOrder.VISIT_DETAIL, R.drawable.ic_visit_24_dp,
         context.getString(R.string.visit_detail)));
     //////////

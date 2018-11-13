@@ -78,7 +78,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
     if (!TrueTime.isInitialized()) {
       new Thread(() -> {
         try {
-          TrueTime.build().withServerResponseDelayMax(1000).withSharedPreferences(this)
+          TrueTime.build().withServerResponseDelayMax(1000)/*.withSharedPreferences(this)*///TODO:
               .initialize();
 
           Log.i("Network Time", "**Synced with network");
@@ -87,10 +87,13 @@ public class SolutionTabletApplication extends MultiDexApplication {
         }
       }).start();
     }
-//TODO:!!
-//    Pushe.initialize(this, true);
 
-//    Log.d("Pushe", Pushe.getPusheId(this));
+    try {
+    Pushe.initialize(this, true);
+      Log.d("Pushe", Pushe.getPusheId(this));
+    } catch (Exception ignore) {
+
+    }
 //    Log.d("DebugDB", "***>>> DB Address:"+DebugDB.getAddressLog());
   }
 

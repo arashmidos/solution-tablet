@@ -30,8 +30,8 @@ android {
         minSdkVersion 17
         //noinspection ExpiringTargetSdkVersion
         targetSdkVersion 25
-        versionCode 114
-        versionName "2.18.1"
+        versionCode 120
+        versionName "2.18.7"
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled true
@@ -125,6 +125,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.gms:play-services-gcm:16.0.0'
+    implementation 'com.google.android.gms:play-services-ads:16.0.0'
     implementation 'org.springframework.android:spring-android-rest-template:2.0.0.M1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.10'
     implementation 'com.jakewharton:butterknife:8.8.1'
@@ -146,7 +147,7 @@ dependencies {
     implementation 'commons-net:commons-net:3.3'
     implementation 'com.github.sharish:ShimmerRecyclerView:v1.3'
     implementation 'br.com.simplepass:loading-button-android:1.12.1'
-    implementation 'com.github.instacart.truetime-android:library:3.3'
+    implementation 'com.github.instacart.truetime-android:library:3.4'
     implementation 'com.android.support:support-v4:27.1.1'
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'

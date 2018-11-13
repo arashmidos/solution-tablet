@@ -130,6 +130,8 @@ public class ServiceGenerator {
       } else {
         builder = original.newBuilder().header("Authorization", authToken);
       }
+
+      builder.addHeader("User-Agent", "SolutionTablet");
       Request request = builder.url(encodedRequest).build();
       return chain.proceed(request);
     }

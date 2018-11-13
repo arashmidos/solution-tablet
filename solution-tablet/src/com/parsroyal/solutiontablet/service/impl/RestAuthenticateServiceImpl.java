@@ -81,7 +81,8 @@ public class RestAuthenticateServiceImpl {
     SettingDto settingDto = new SettingDto(username, password, role.toString());
     RestSettingService restSettingService = null;
     try {
-      restSettingService = ServiceGenerator.createService(RestSettingService.class,username,password);
+      restSettingService = ServiceGenerator
+          .createService(RestSettingService.class, username, password);
     } catch (Exception ex) {
       Crashlytics
           .log(Log.ERROR, "Service Generator", "can not create update service " + ex.getMessage());

@@ -63,15 +63,15 @@ public class VisitLineDataTaransferBizImpl {
       public void onResponse(Call<List<VisitLineDto>> call, Response<List<VisitLineDto>> response) {
         if (response.isSuccessful()) {
           List<VisitLineDto> list = response.body();
+          visitLineDao.deleteAll();
+          customerDao.deleteAllCustomersRelatedToVisitLines();
+          visitLineDao
+              .create(createVisitLineEntity(context.getString(R.string.manual_visit_line), 0L));
+          customerDao.bulkInsert(getSampleCustomerList());
           if (Empty.isNotEmpty(list)) {
-            visitLineDao.deleteAll();
-            customerDao.deleteAllCustomersRelatedToVisitLines();
 
             //add manual visit line
 
-            visitLineDao
-                .create(createVisitLineEntity(context.getString(R.string.manual_visit_line), 0L));
-            customerDao.bulkInsert(getSampleCustomerList());
 
             for (VisitLineDto visitLineDto : list) {
               visitLineDto.setTitle(CharacterFixUtil.fixString(visitLineDto.getTitle()));

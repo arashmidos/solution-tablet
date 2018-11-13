@@ -5,12 +5,8 @@ import android.database.sqlite.SQLiteException;
 import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.CustomerPicDao;
-import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
-import com.parsroyal.solutiontablet.data.dao.VisitLineDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerPicDaoImpl;
-import com.parsroyal.solutiontablet.data.dao.impl.VisitInformationDaoImpl;
-import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.entity.Position;
@@ -21,7 +17,6 @@ import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionModel;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
 import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.LocationService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -38,17 +33,11 @@ public class CustomerServiceImpl implements CustomerService {
   private Context context;
   private CustomerDao customerDao;
   private CustomerPicDao customerPicDao;
-  private VisitLineDao visitLineDao;
-  private LocationService locationService;
-  private VisitInformationDao visitInformationDao;
 
   public CustomerServiceImpl(Context context) {
     this.context = context;
     this.customerDao = new CustomerDaoImpl(context);
     this.customerPicDao = new CustomerPicDaoImpl(context);
-    this.visitLineDao = new VisitLineDaoImpl(context);
-    this.visitInformationDao = new VisitInformationDaoImpl(context);
-    this.locationService = new LocationServiceImpl(context);
   }
 
   @Override

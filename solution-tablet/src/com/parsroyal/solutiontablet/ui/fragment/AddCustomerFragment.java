@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -19,27 +18,26 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.LocationService;
+import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.LocationServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.adapter.NewCustomerPictureAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CityDialogFragment;
-import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -104,7 +102,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   private MainActivity mainActivity;
   private CustomerService customerService;
   private BaseInfoService baseInfoService;
-  private LocationService locationService;
+  private PositionService positionService;
   private Customer customer;
   private LabelValue selectedCity;
   private LabelValue selectedProvince;
@@ -133,7 +131,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
     customerService = new CustomerServiceImpl(mainActivity);
     baseInfoService = new BaseInfoServiceImpl(mainActivity);
-    locationService = new LocationServiceImpl(mainActivity);
+    positionService = new PositionServiceImpl(mainActivity);
 
     try {
       Bundle arguments = getArguments();
@@ -543,34 +541,18 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   private void getLocation() {
     showProgressDialog(getString(R.string.message_finding_location));
 
-    try {
-      locationService.findCurrentLocation(new FindLocationListener() {
-        @Override
-        public void foundLocation(Location location) {
-          customer.setyLocation(location.getLatitude());
-          customer.setxLocation(location.getLongitude());
-          ToastUtil.toastMessage(getActivity(), R.string.message_found_location_successfully);
-          dismissProgressDialog();
-        }
+    Position position = positionService.getLastPosition();
+    if (Empty.isNotEmpty(position)) {
 
-        @Override
-        public void timeOut() {
-          runOnUiThread(() -> {
-            ToastUtil.toastError(getActivity(), R.string.message_finding_location_timeout);
-            dismissProgressDialog();
-          });
-        }
-      });
-    } catch (BusinessException ex) {
-      ToastUtil.toastError(getActivity(), ex);
-      dismissProgressDialog();
-    } catch (Exception e) {
-      Crashlytics
-          .log(Log.ERROR, "Location Service", "Error in finding location " + e.getMessage());
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
-      Log.e(TAG, e.getMessage(), e);
-      dismissProgressDialog();
+      customer.setyLocation(position.getLatitude());
+
+      customer.setxLocation(position.getLongitude());
+
+      ToastUtil.toastMessage(mainActivity, R.string.message_found_location_successfully);
+    } else {
+      ToastUtil.toastError(mainActivity, R.string.message_finding_location_timeout);
     }
+    dismissProgressDialog();
   }
 
   @Override

@@ -66,8 +66,8 @@ public class LocationUpdatesService extends Service {
       ".started_from_notification";
   private static final float MAX_ACCEPTED_DISTANCE_IN_METER = 1000.0f;
   private static final float MIN_ACCEPTED_DISTANCE_IN_METER = 20.0f;
-  private static final float MAX_ACCEPTED_ACCURACY_IN_METER = 30.0f;
-  private static final float MIN_ACCEPTED_SPEED_IN_MS = 0.9f;
+  private static final float MAX_ACCEPTED_ACCURACY_IN_METER = 60.0f;
+  private static final float MIN_ACCEPTED_SPEED_IN_MS = 0.7f;
   /**
    * The identifier for the notification displayed for the foreground service.
    */
@@ -342,7 +342,6 @@ public class LocationUpdatesService extends Service {
     }
 
     if (Empty.isNotEmpty(lastLocation)) {
-
 
       float distance = LocationUtil.distanceBetween(lastLocation, location);
       if (distance > MAX_ACCEPTED_DISTANCE_IN_METER) {

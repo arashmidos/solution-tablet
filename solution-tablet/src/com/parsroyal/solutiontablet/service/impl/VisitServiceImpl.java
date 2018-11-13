@@ -23,9 +23,8 @@ import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDetailDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.data.searchobject.VisitInformationDetailSO;
-import com.parsroyal.solutiontablet.service.LocationService;
+import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.VisitService;
-import com.parsroyal.solutiontablet.ui.observer.FindLocationListener;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -45,7 +44,7 @@ public class VisitServiceImpl implements VisitService {
   private CustomerDao customerDao;
   private CustomerPicDao customerPicDao;
   private VisitLineDao visitLineDao;
-  private LocationService locationService;
+  private PositionService positionService;
   private VisitInformationDao visitInformationDao;
   private VisitInformationDetailDao visitInformationDetailDao;
 
@@ -56,7 +55,7 @@ public class VisitServiceImpl implements VisitService {
     this.visitLineDao = new VisitLineDaoImpl(context);
     this.visitInformationDao = new VisitInformationDaoImpl(context);
     this.visitInformationDetailDao = new VisitInformationDetailDaoImpl(context);
-    this.locationService = new LocationServiceImpl(context);
+    this.positionService = new PositionServiceImpl(context);
     this.settingService = new SettingServiceImpl(context);
   }
 
@@ -81,16 +80,17 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
-  public Long startVisiting(Long customerBackendId) {
+  public Long startVisiting(Long customerBackendId, int distance) {
     VisitInformation visitInformation = new VisitInformation();
     visitInformation.setCustomerBackendId(customerBackendId);
     visitInformation
         .setVisitDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
     visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
-    visitInformation.setUpdateDateTime(
-        DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+//    visitInformation.setUpdateDateTime(
+//        DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     Date networkDate = SolutionTabletApplication.getTrueTime();
     visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
+    visitInformation.setDistance((long) distance);
     return saveVisit(visitInformation);
   }
 
@@ -117,7 +117,7 @@ public class VisitServiceImpl implements VisitService {
       visitInformation.setxLocation(0.0);
       visitInformation.setyLocation(0.0);
       final Long visitId = saveVisit(visitInformation);
-      locationService.findCurrentLocation(new FindLocationListener() {
+      /*locationService.findCurrentLocation(new FindLocationListener() {
         @Override
         public void foundLocation(Location location) {
           visitInformation.setxLocation(0.0);
@@ -128,7 +128,7 @@ public class VisitServiceImpl implements VisitService {
         @Override
         public void timeOut() {
         }
-      });
+      });*/
       return visitId;
     }
   }
@@ -137,7 +137,9 @@ public class VisitServiceImpl implements VisitService {
   public void finishVisiting(Long visitId) {
     VisitInformation visitInformation = visitInformationDao.retrieve(visitId);
     visitInformation.setEndTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
-    locationService.stopFindingLocation();
+
+    Date networkDate = SolutionTabletApplication.getTrueTime();
+    visitInformation.setEndNetworkDate(networkDate == null ? null : networkDate.getTime());
     saveVisit(visitInformation);
   }
 

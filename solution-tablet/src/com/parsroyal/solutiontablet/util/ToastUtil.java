@@ -2,10 +2,12 @@ package com.parsroyal.solutiontablet.util;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import com.parsroyal.solutiontablet.R;
@@ -39,10 +41,17 @@ public class ToastUtil {
     final Snackbar snack = builder.info();
     if (isTablet) {
       View snackView = snack.getView();
-      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackView.getLayoutParams();
-      params.gravity = Gravity.TOP;
-      params.width = LayoutParams.MATCH_PARENT;
-      snackView.setLayoutParams(params);
+      ViewGroup.LayoutParams params = snackView.getLayoutParams();
+      if (params instanceof CoordinatorLayout.LayoutParams) {
+
+        ((CoordinatorLayout.LayoutParams) params).gravity = Gravity.TOP;
+        params.width = LayoutParams.MATCH_PARENT;
+        snackView.setLayoutParams(params);
+      } else if (params instanceof FrameLayout.LayoutParams) {
+        ((FrameLayout.LayoutParams) params).gravity = Gravity.TOP;
+        params.width = LayoutParams.MATCH_PARENT;
+        snackView.setLayoutParams(params);
+      }
     }
     snack.show();
   }
@@ -85,10 +94,17 @@ public class ToastUtil {
     final Snackbar snack = builder.success();
     if (isTablet) {
       View snackView = snack.getView();
-      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackView.getLayoutParams();
-      params.gravity = Gravity.TOP;
-      params.width = LayoutParams.MATCH_PARENT;
-      snackView.setLayoutParams(params);
+      ViewGroup.LayoutParams params = snackView.getLayoutParams();
+      if (params instanceof CoordinatorLayout.LayoutParams) {
+
+        ((CoordinatorLayout.LayoutParams) params).gravity = Gravity.TOP;
+        params.width = LayoutParams.MATCH_PARENT;
+        snackView.setLayoutParams(params);
+      } else if (params instanceof FrameLayout.LayoutParams) {
+        ((FrameLayout.LayoutParams) params).gravity = Gravity.TOP;
+        params.width = LayoutParams.MATCH_PARENT;
+        snackView.setLayoutParams(params);
+      }
     }
     snack.show();
   }
@@ -138,10 +154,17 @@ public class ToastUtil {
     final Snackbar snack = builder.build();
     if (isTablet) {
       View snackView = snack.getView();
-      FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) snackView.getLayoutParams();
-      params.gravity = Gravity.TOP;
-      params.width = LayoutParams.MATCH_PARENT;
-      snackView.setLayoutParams(params);
+      ViewGroup.LayoutParams params = snackView.getLayoutParams();
+      if (params instanceof CoordinatorLayout.LayoutParams) {
+
+        ((CoordinatorLayout.LayoutParams) params).gravity = Gravity.TOP;
+        params.width = LayoutParams.MATCH_PARENT;
+        snackView.setLayoutParams(params);
+      } else if (params instanceof FrameLayout.LayoutParams) {
+        ((FrameLayout.LayoutParams) params).gravity = Gravity.TOP;
+        params.width = LayoutParams.MATCH_PARENT;
+        snackView.setLayoutParams(params);
+      }
     }
     snack.setAction(okButton, v -> {
       snack.dismiss();

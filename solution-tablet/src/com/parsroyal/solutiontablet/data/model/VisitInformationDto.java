@@ -21,6 +21,24 @@ public class VisitInformationDto extends BaseModel {
   private SaleType saleType;
   private List<VisitInformationDetailDto> details;
   private String networkDate;
+  private String endNetworkDate;
+  private Long distance;
+
+  public String getEndNetworkDate() {
+    return endNetworkDate;
+  }
+
+  public void setEndNetworkDate(String endNetworkDate) {
+    this.endNetworkDate = endNetworkDate;
+  }
+
+  public Long getDistance() {
+    return distance;
+  }
+
+  public void setDistance(Long distance) {
+    this.distance = distance;
+  }
 
   public Long getId() {
     return id;
