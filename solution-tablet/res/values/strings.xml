@@ -353,10 +353,10 @@
   <string name="permission_rationale_camera_storage">مجوز استفاده از دوربین و دسترسی به فایل برای ذخیره عکس باید فعال باشد</string>
   <string name="permission_denied_explanation">دسترسی موقعیت یاب یا فایل داده نشد. برای عملکرد صحیح برنامه این دو دسترسی لازم هستند</string>
   <string name="notification_message_gps_service_active">سرویس موقعیت یاب فعال است</string>
-  <string name="show_waypoints">نمایش نقاط</string>
+  <string name="show_waypoints">نقاط</string>
   <string name="show_optimized_route">بهبود نمایش مسیر</string>
   <string name="show_route">نمایش مسیر</string>
-  <string name="show_customers">نمایش مشتریان</string>
+  <string name="show_customers">مشتریان</string>
   <string name="message_new_gps_location">موقعیت جدید دریافت شد</string>
   <string-array name="sale_type">
     <item>فروش سرد</item>
@@ -631,5 +631,7 @@
   <string name="waze">ویز</string>
   <string name="error_google_not_installed">گوگل مپ نصب نیست!</string>
   <string name="credit">اعتبار</string>
+  <string name="visitline_prompt">خط ویزیت</string>
+  <string name="all_visitlines">همه خطوط</string>
 
 </resources>

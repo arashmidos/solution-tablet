@@ -104,13 +104,14 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public List<CustomerListModel> getAllCustomersListModelByVisitLineBackendId(Long visitLineId) {
-    return getFilteredCustomerList(visitLineId, null);
+    return getFilteredCustomerList(visitLineId, null, false);
   }
 
   @Override
-  public List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint) {
+  public List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint,
+      boolean showOnMap) {
     List<CustomerListModel> listModel = customerDao
-        .getAllCustomersListModelByVisitLineWithConstraint(visitLineId, constraint);
+        .getAllCustomersListModelByVisitLineWithConstraint(visitLineId, constraint, showOnMap);
     Position position = new PositionServiceImpl(context).getLastPosition();
 
     //Set distances from current location

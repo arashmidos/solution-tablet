@@ -36,15 +36,13 @@ public class ServiceGenerator {
   private static Retrofit retrofit;
   private static OkHttpClient.Builder httpClient =
       new OkHttpClient.Builder()
-          .readTimeout(120, TimeUnit.SECONDS)
+          .readTimeout(300, TimeUnit.SECONDS)
           .connectTimeout(120, TimeUnit.SECONDS);
   //Change different level of logging here
   private static HttpLoggingInterceptor logging =
       new HttpLoggingInterceptor()
           .setLevel(Level.BODY);
   private static Retrofit.Builder builder;
-  private static SettingService settingService = new SettingServiceImpl(
-      SolutionTabletApplication.getInstance());
 
   public static <S> S createService(Class<S> serviceClass) {
 

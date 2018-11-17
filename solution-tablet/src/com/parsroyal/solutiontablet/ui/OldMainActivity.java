@@ -281,10 +281,10 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(-1);
         break;
       case DATA_TRANSFER_FRAGMENT_ID:
-        if (isDataTransferPossible()) {
+//        if (/()) {
 //          fragment = new DataTransferFragment();
           changeSidebarItem(-1);
-        }
+//        }
         break;
       case DASHBOARD_FRAGMENT_ID:
         fragment = new UserTrackingFragment();
@@ -346,21 +346,6 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
     }
     Analytics.logContentView("Fragment " + String.valueOf(fragmentId));
     return fragment;
-  }
-
-  private boolean isDataTransferPossible() {
-    boolean dataTransferPossible = dataTransferService.isDataTransferPossible();
-    boolean networkAvailable = NetworkUtil.isNetworkAvailable(this);
-
-    if (!dataTransferPossible) {
-      ToastUtil.toastError(this, R.string.message_required_setting_for_data_transfer_not_found);
-    }
-
-    if (!networkAvailable) {
-      ToastUtil.toastError(this, R.string.message_device_does_not_have_active_internet_connection);
-    }
-
-    return dataTransferPossible && networkAvailable;
   }
 
   @Override

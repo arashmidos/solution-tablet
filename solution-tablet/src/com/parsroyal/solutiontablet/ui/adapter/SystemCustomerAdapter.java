@@ -19,9 +19,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.data.dao.CustomerDao;
-import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
@@ -89,7 +86,7 @@ public class SystemCustomerAdapter extends Adapter<ViewHolder> {
         keyword = CharacterFixUtil.fixString(constraint.toString());
       }
 
-      return customerService.getFilteredCustomerList(null, keyword);
+      return customerService.getFilteredCustomerList(null, keyword, false);
 
     } catch (final Exception ex) {
       Crashlytics

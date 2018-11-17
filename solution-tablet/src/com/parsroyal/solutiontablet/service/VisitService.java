@@ -7,6 +7,7 @@ import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
+import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.data.searchobject.VisitInformationDetailSO;
 import java.util.List;
@@ -19,6 +20,8 @@ public interface VisitService extends BaseService {
   List<VisitLine> getAllVisitLines();
 
   List<VisitLineListModel> getAllVisitLinesListModel();
+
+  List<LabelValue> getAllVisitLinesLabelValue();
 
   VisitLineListModel getVisitLineListModelByBackendId(long visitlineBackendId);
 
@@ -52,6 +55,7 @@ public interface VisitService extends BaseService {
       Long typeId);
 
   List<VisitInformationDetail> searchVisitDetail(Long visitId, VisitInformationDetailType type);
+
   List<VisitInformationDetail> searchVisitDetail(VisitInformationDetailSO visitInformationDetailSo);
 
   List<VisitInformationDto> getAllVisitDetailForSend(Long visitId);

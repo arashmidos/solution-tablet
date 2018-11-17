@@ -8,6 +8,7 @@ import com.parsroyal.solutiontablet.data.dao.VisitLineDao;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
+import com.parsroyal.solutiontablet.data.model.LabelValue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +84,25 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
     return entities;
   }
 
+  @Override
+  public List<LabelValue> getAllVisitLineLabelValue() {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+    String sql =
+        "select vl.BACKEND_ID, vl.CODE, vl.TITLE,count(cu._id) COUNT from COMMER_VISIT_LINE vl " +
+            "LEFT OUTER JOIN COMMER_CUSTOMER cu where cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
+            "GROUP BY vl.BACKEND_ID, vl.CODE, vl.TITLE ORDER BY vl.BACKEND_ID DESC";
+
+    List<LabelValue> entities = new ArrayList<>();
+    Cursor cursor = db.rawQuery(sql, null);
+    while (cursor.moveToNext()) {
+      entities.add(createLabelValueFromCursor(cursor));
+    }
+    cursor.close();
+    return entities;
+  }
+
   @Deprecated
   @Override
   public List<VisitLineListModel> getAllVisitLinesListModelByConstraint(String constraint) {
@@ -148,5 +168,10 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
     listModel.setTitle(cursor.getString(2));
     listModel.setCustomerCount(cursor.getInt(3));
     return listModel;
+  }
+
+  private LabelValue createLabelValueFromCursor(Cursor cursor) {
+
+    return new LabelValue(cursor.getLong(0), cursor.getString(2), cursor.getString(1));
   }
 }

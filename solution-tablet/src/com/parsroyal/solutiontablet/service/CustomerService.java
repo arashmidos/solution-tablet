@@ -36,7 +36,8 @@ public interface CustomerService extends BaseService {
 
   List<CustomerListModel> getAllCustomersListModelByVisitLineBackendId(Long visitLineId);
 
-  List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint);
+  List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint,
+      boolean showOnMap);
 
   CustomerDto getCustomerDtoById(Long customerId);
 

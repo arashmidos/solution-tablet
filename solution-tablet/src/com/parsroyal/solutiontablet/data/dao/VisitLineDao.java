@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.data.dao;
 
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
+import com.parsroyal.solutiontablet.data.model.LabelValue;
 import java.util.List;
 
 /**
@@ -10,6 +11,8 @@ import java.util.List;
 public interface VisitLineDao extends BaseDao<VisitLine, Long> {
 
   List<VisitLineListModel> getAllVisitLineListModel();
+
+  List<LabelValue> getAllVisitLineLabelValue();
 
   List<VisitLineListModel> getAllVisitLinesListModelByConstraint(String constraint);
 

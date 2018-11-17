@@ -20,6 +20,7 @@ import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
+import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDetailDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.data.searchobject.VisitInformationDetailSO;
@@ -67,6 +68,11 @@ public class VisitServiceImpl implements VisitService {
   @Override
   public List<VisitLineListModel> getAllVisitLinesListModel() {
     return visitLineDao.getAllVisitLineListModel();
+  }
+
+  @Override
+  public List<LabelValue> getAllVisitLinesLabelValue() {
+    return visitLineDao.getAllVisitLineLabelValue();
   }
 
   @Override

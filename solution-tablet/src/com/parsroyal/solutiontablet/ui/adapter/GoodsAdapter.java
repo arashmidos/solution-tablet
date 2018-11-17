@@ -174,7 +174,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
           goodsCurrency.setVisibility(View.INVISIBLE);
         }
       } else {
-        recoveryDateTv.setText(String.format(NumberUtil.digitsToPersian(good.getRecoveryDate())));
+        recoveryDateTv.setText(NumberUtil.digitsToPersian(good.getRecoveryDate()));
       }
     }
 

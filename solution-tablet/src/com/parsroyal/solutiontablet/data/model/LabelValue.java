@@ -14,6 +14,12 @@ public class LabelValue extends BaseModel {
     this.value = value;
   }
 
+  public LabelValue(Long value, String label, String code) {
+    this.label = label;
+    this.value = value;
+    this.code = code;
+  }
+
   public String getLabel() {
     return label;
   }

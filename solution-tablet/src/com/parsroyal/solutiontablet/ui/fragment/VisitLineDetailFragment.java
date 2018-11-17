@@ -177,7 +177,7 @@ public class VisitLineDetailFragment extends BaseFragment {
   }
 
   private List<CustomerListModel> getCustomersList() {
-    customerList = customerService.getFilteredCustomerList(visitlineBackendId, "");
+    customerList = customerService.getFilteredCustomerList(visitlineBackendId, "", false);
     return customerList;
   }
 

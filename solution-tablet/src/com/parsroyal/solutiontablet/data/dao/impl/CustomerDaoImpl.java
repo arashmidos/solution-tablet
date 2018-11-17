@@ -271,7 +271,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
   @Override
   public List<CustomerListModel> getAllCustomersListModelByVisitLineWithConstraint(Long visitLineId,
-      String constraint) {
+      String constraint, boolean showOnMap) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String[] projection = {
@@ -303,13 +303,15 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
 
       selection = " c." + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
       args.add(String.valueOf(visitLineId));
-    } else {
+    }
+    if (showOnMap) {
       //Load all customers has location for Map or ALLCustomerList
-      if (constraint == null) {
-        selection =
-            "c." + Customer.COL_X_LOCATION + " is not null AND " + "c." + Customer.COL_X_LOCATION
-                + " != 0";
+      if (!selection.equals("")) {
+        selection = selection.concat(" and ");
       }
+      selection = selection.concat(
+          "c." + Customer.COL_X_LOCATION + " is not null AND " + "c." + Customer.COL_X_LOCATION
+              + " != 0");
     }
 
     Cursor cursor;

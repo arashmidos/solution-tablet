@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.IntentSender.SendIntentException;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,11 +14,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.BindInt;
 import butterknife.BindView;
@@ -60,6 +64,7 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
+import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
@@ -72,6 +77,7 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.MapInfoWindowChooser;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -120,10 +126,10 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   CheckBox showTrack;
   @BindView(R.id.mainLayout)
   RelativeLayout mainLayout;
-  //  @BindView(R.id.show_snapped_track)
-//  CheckBox showSnappedTrack;
   @BindView(R.id.show_waypoints)
   CheckBox showWaypoints;
+  @BindView(R.id.spinner)
+  Spinner visitlineSpinner;
 
   private GoogleApiClient googleApiClient;
   private Location currentLocation;
@@ -158,6 +164,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   private MainActivity context;
   private List<LatLng> lastRoute;
   private float distanceAllowed;
+  private LabelValue selectedVisitlines;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -179,7 +186,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     ButterKnife.bind(this, view);
 
     setListeners();
-
+    setSpinner();
     distanceServiceEnabled = Boolean.valueOf(settingService
         .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE));
     if (BuildConfig.DEBUG) {
@@ -201,6 +208,28 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
         .addApi(LocationServices.API).build();
 
     return view;
+  }
+
+  private void setSpinner() {
+    List<LabelValue> visitlineList = visitService.getAllVisitLinesLabelValue();
+    visitlineList.add(0, new LabelValue(-1L, getString(R.string.all_visitlines)));
+    visitlineSpinner.setAdapter(new LabelValueArrayAdapter(context, visitlineList));
+
+    visitlineSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        selectedVisitlines = (LabelValue) visitlineSpinner.getSelectedItem();
+        if (Empty.isNotEmpty(clusterManager)) {
+          clusterManager.clearItems();
+          clusterManager.cluster();
+        }
+        showCustomers();
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+      }
+    });
   }
 
   private void initServices() {
@@ -227,7 +256,6 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
 
     showTrack.setOnCheckedChangeListener((buttonView, isChecked) ->
     {
-//      showSnappedTrack.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
       showWaypoints.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
       if (isChecked) {
         doFilter();
@@ -235,17 +263,6 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
         clearMapRoute();
       }
     });
-
-//    showSnappedTrack.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//      if (isChecked && Empty.isNotEmpty(lastRoute)) {
-//        new AsyncRouteLoader().execute(lastRoute);
-//      } else {
-//        if (Empty.isNotEmpty(snappedPolyline)) {
-//          snappedPolyline.remove();
-//          polylines.remove(snappedPolyline);
-//        }
-//      }
-//    });
 
     showWaypoints.setOnCheckedChangeListener((buttonView, isChecked) ->
     {
@@ -309,7 +326,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   public void onStart() {
     super.onStart();
     if (Empty.isNotEmpty(salesmanId)) {
-      showProgressDialog(getString(R.string.message_loading_map));
+//      showProgressDialog(getString(R.string.message_loading_map));
       if (googleApiClient != null) {
         googleApiClient.connect();
       }
@@ -388,6 +405,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
         .format(getString(R.string.error_google_play_not_available), errorCode));
   }
 
+  @SuppressLint("MissingPermission")
   @Override
   public void onMapReady(GoogleMap googleMap) {
     dismissProgressDialog();
@@ -512,7 +530,10 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
 
   private void addItems() {
     List<CustomerListModel> customerPositionList = customerService
-        .getFilteredCustomerList(null, null);
+        .getFilteredCustomerList(
+            selectedVisitlines == null || selectedVisitlines.getValue() == -1L ? null
+                : selectedVisitlines.getValue(),
+            null, true);
     clusterManager.addItems(customerPositionList);
   }
 
@@ -562,9 +583,6 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
       lastRoute = positionService.getAllPositionLatLngByDate(from, to);
       drawRoute(lastRoute);
 
-//      if (showSnappedTrack.isChecked() && Empty.isNotEmpty(lastRoute)) {
-//        new AsyncRouteLoader().execute(lastRoute);
-//      }
       Analytics.logContentView("Map Filter");
     }
   }
@@ -574,20 +592,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
       ToastUtil.toastError(getActivity(), getString(R.string.error_tracking_cal1_empty));
       return false;
     }
-    /*if (toDate.getHint().equals("--")) {
-      ToastUtil.toastError(getActivity(), getString(R.string.error_tracking_cal2_empty));
-      return false;
-    }*/
-    /*
-    long days = DateUtil.compareDatesInDays(c1, c2);
 
-    if (days + 1 > 5) {
-      ToastUtil.toastError(getActivity(), getString(R.string.error_report_is_huge));
-      return false;
-    } else if (days < 0) {
-      ToastUtil.toastError(getActivity(), getString(R.string.error_report_date_invalid));
-      return false;
-    } else {*/
     return true;
   }
 

@@ -545,21 +545,6 @@ public abstract class MainActivity extends AppCompatActivity {
     }
   }
 
-  private boolean isDataTransferPossible() {
-    boolean dataTransferPossible = dataTransferService.isDataTransferPossible();
-    boolean networkAvailable = NetworkUtil.isNetworkAvailable(this);
-
-    if (!dataTransferPossible) {
-      ToastUtil.toastError(this, R.string.message_required_setting_for_data_transfer_not_found);
-    }
-
-    if (!networkAvailable) {
-      ToastUtil.toastError(this, R.string.message_device_does_not_have_active_internet_connection);
-    }
-
-    return dataTransferPossible && networkAvailable;
-  }
-
   /**
    * Returns the current state of the permissions needed.
    */

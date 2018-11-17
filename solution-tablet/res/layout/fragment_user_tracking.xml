@@ -45,7 +45,8 @@
     android:layout_height="wrap_content"
     android:background="@color/white30"
     android:orientation="vertical"
-    android:visibility="gone">
+    android:visibility="gone"
+    tools:visibility="visible">
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -71,6 +72,18 @@
         android:text="@string/sinse_date"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
+
+    <Spinner
+      android:id="@+id/spinner"
+      style="@style/IranSans"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:background="@drawable/gray_border"
+      android:gravity="right"
+      android:prompt="@string/visitline_prompt" />
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -107,13 +120,6 @@
       android:layout_marginLeft="16dp"
       android:layout_marginRight="16dp"
       android:gravity="right">
-      <!--<CheckBox-->
-        <!--android:id="@+id/show_snapped_track"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingLeft="5dp"-->
-        <!--android:paddingRight="5dp"-->
-        <!--android:text="@string/show_optimized_route" />-->
       <CheckBox
         android:id="@+id/show_waypoints"
         android:layout_width="wrap_content"

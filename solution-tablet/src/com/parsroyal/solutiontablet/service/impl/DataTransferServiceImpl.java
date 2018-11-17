@@ -52,7 +52,6 @@ import com.parsroyal.solutiontablet.service.PaymentService;
 import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
-import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -67,7 +66,6 @@ import org.greenrobot.eventbus.EventBus;
 public class DataTransferServiceImpl implements DataTransferService {
 
   public static final String TAG = DataTransferServiceImpl.class.getSimpleName();
-  private final SettingService settingService;
   private Context context;
   private KeyValueDao keyValueDao;
   private CustomerService customerService;
@@ -92,7 +90,6 @@ public class DataTransferServiceImpl implements DataTransferService {
     this.paymentService = new PaymentServiceImpl(context);
     this.positionService = new PositionServiceImpl(context);
     this.visitService = new VisitServiceImpl(context);
-    this.settingService = new SettingServiceImpl(context);
   }
 
   public void getAllData() {
@@ -491,7 +488,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     List<VisitInformationDto> visitInformationList = visitService.getAllVisitDetailForSend(null);
     if (Empty.isEmpty(visitInformationList)) {
       EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
-          R.string.message_found_no_new_customer_pic_for_send), StatusCodes.NO_DATA_ERROR));
+          R.string.message_found_no_visit_information_for_send), StatusCodes.NO_DATA_ERROR));
       return;
     }
     VisitInformationDataTransferBizImpl dataTransfer = new VisitInformationDataTransferBizImpl(
@@ -541,16 +538,5 @@ public class DataTransferServiceImpl implements DataTransferService {
     GoodsServiceImpl goodsService = new GoodsServiceImpl(context);
     goodsService.deleteAll();
     goodsService.deleteAllGoodsGroup();
-  }
-
-  @Override
-  public boolean isDataTransferPossible() {
-    backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
-    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
-    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
-    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-
-    return !(Empty.isEmpty(backendUri) || Empty.isEmpty(username) ||
-        Empty.isEmpty(password) || Empty.isEmpty(salesmanId));
   }
 }

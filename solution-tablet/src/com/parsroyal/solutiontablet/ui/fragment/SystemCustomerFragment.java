@@ -100,7 +100,7 @@ public class SystemCustomerFragment extends BaseFragment {
   }
 
   private List<CustomerListModel> getCustomersList() {
-    return customerService.getFilteredCustomerList(null, "");
+    return customerService.getFilteredCustomerList(null, "", false);
   }
 
   @Optional

@@ -9,8 +9,6 @@ public interface DataTransferService {
 
   void sendAllData(ResultObserver resultObserver);
 
-  boolean isDataTransferPossible();
-
   void clearData(int updateType);
 
   boolean hasUnsentData();

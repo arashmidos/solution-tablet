@@ -27,7 +27,7 @@ public interface CustomerDao extends BaseDao<Customer, Long> {
   List<Customer> retrieveAllCustomersByVisitLineBackendId(Long visitLineId);
 
   List<CustomerListModel> getAllCustomersListModelByVisitLineWithConstraint(Long visitLineId,
-      String constraint);
+      String constraint, boolean showOnMap);
 
   CustomerDto getCustomerDtoById(Long customerId);
 

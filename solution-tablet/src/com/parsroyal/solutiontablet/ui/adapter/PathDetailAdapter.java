@@ -105,7 +105,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       if (constraint.length() != 0 && !constraint.toString().equals("")) {
         keyword = CharacterFixUtil.fixString(constraint.toString());
       }
-      return customerService.getFilteredCustomerList(visitlineBackendId, keyword);
+      return customerService.getFilteredCustomerList(visitlineBackendId, keyword, false);
 
     } catch (final Exception ex) {
       Crashlytics
