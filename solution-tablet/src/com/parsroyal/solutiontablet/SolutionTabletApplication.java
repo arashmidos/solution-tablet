@@ -14,6 +14,7 @@ import android.util.Log;
 import co.ronash.pushe.Pushe;
 import com.crashlytics.android.Crashlytics;
 import com.instacart.library.truetime.TrueTime;
+import com.parsroyal.solutiontablet.biz.impl.RestServiceImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import io.fabric.sdk.android.Fabric;
 import java.io.IOException;
@@ -91,6 +92,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
     try {
     Pushe.initialize(this, true);
       Log.d("Pushe", Pushe.getPusheId(this));
+      new RestServiceImpl().updatePusheId(this,Pushe.getPusheId(this),"GCMToken");
     } catch (Exception ignore) {
 
     }

@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.service;
 import com.google.gson.JsonArray;
 import com.parsroyal.solutiontablet.data.model.SaleInvoiceDocument;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
+import com.parsroyal.solutiontablet.data.model.UpdatePusheRequest;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,6 +19,9 @@ public interface RestService {
 
   @POST("saleorders")
   Call<String> sendOrder(@Body SaleOrderDocument saleDocument);
+
+  @POST("users/updatePusheId")
+  Call<String> updatePusheId(@Body UpdatePusheRequest saleDocument);
 
   @POST("saleinvoices")
   Call<String> sendInvoice(@Header("saleType") Long saleType,

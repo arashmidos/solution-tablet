@@ -18,6 +18,7 @@ import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleType;
+import com.parsroyal.solutiontablet.service.LocationUpdatesService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
@@ -55,11 +56,11 @@ public class NavigationDrawerFragment extends BaseFragment {
   private SettingServiceImpl settingService;
   private BaseInfoServiceImpl baseInfoService;
   private boolean hasData = true;
+  private DataTransferServiceImpl dataTransferService;
 
   public NavigationDrawerFragment() {
     // Required empty public constructor
   }
-
 
   public static NavigationDrawerFragment newInstance() {
     return new NavigationDrawerFragment();
@@ -73,6 +74,7 @@ public class NavigationDrawerFragment extends BaseFragment {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     settingService = new SettingServiceImpl(mainActivity);
+    dataTransferService = new DataTransferServiceImpl(mainActivity);
 
     baseInfoService = new BaseInfoServiceImpl(mainActivity);
 
@@ -97,18 +99,14 @@ public class NavigationDrawerFragment extends BaseFragment {
   @OnClick({R.id.features_list_lay, R.id.today_paths_lay, R.id.reports_lay,
       R.id.customers_lay, R.id.map_lay, R.id.about_us, R.id.body_log_out,
       R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay, R.id.questionnaire_lay, R.id.header,
-      R.id.refresh_icon,R.id.setting_lay})
+      R.id.refresh_icon, R.id.setting_lay})
   public void onClick(View view) {
     boolean closeDrawer = true;
     hasData = baseInfoService.getAllProvinces().size() != 0;
 
     switch (view.getId()) {
 
-//      case R.id.user_name_tv:
       case R.id.header:
-//      case R.id.user_role_tv:
-//      case R.id.user_img:
-//      case R.id.drop_img:
         changeMode();
         closeDrawer = false;
         break;
@@ -164,10 +162,8 @@ public class NavigationDrawerFragment extends BaseFragment {
       case R.id.setting_lay:
         mainActivity.changeFragment(MainActivity.SETTING_FRAGMENT, true);
         break;
-      case R.id.body_log_out://TODO Stop Location Srvice
-        settingService.clearAllSettings();
-        startActivity(new Intent(mainActivity, LoginActivity.class));
-        mainActivity.finish();
+      case R.id.body_log_out:
+        doLogout();
         break;
       case R.id.get_data_lay:
         checkForUnsentData();
@@ -181,8 +177,23 @@ public class NavigationDrawerFragment extends BaseFragment {
     }
   }
 
+  private void doLogout() {
+    if (dataTransferService.hasUnsentData()) {
+      DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
+          "شما اطلاعات ارسال نشده دارید که قبل از خروج می بایست ارسال شوند. آیا میخواهید آنها را ارسال کنید؟",
+          getString(R.string.yes),
+          (dialog, which) -> openDataTransferDialog(Constants.DATA_TRANSFER_SEND_DATA),
+          getString(R.string.no),
+          (dialog, which) -> dialog.dismiss(), Constants.ICON_WARNING);
+    } else {
+      settingService.clearAllSettings();
+      dataTransferService.clearData(Constants.FULL_UPDATE);
+      startActivity(new Intent(mainActivity, LoginActivity.class));
+      mainActivity.finish();
+    }
+  }
+
   private void refreshData() {
-    DataTransferServiceImpl dataTransferService = new DataTransferServiceImpl(mainActivity);
     if (dataTransferService.hasUnsentData()) {
       DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
           "شما اطلاعات ارسال نشده دارید که قبل از بروز رسانی موجودی می بایست ارسال شوند. آیا میخواهید آنها را ارسال کنید؟",
@@ -197,14 +208,15 @@ public class NavigationDrawerFragment extends BaseFragment {
 
   private void checkForUnsentData() {
 
-    DataTransferServiceImpl dataTransferService = new DataTransferServiceImpl(mainActivity);
     if (dataTransferService.hasUnsentData()) {
       DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
-          "شما اطلاعات ارسال نشده دارید که با دریافت دیتای جدید حذف می شوند. آیا میخواهید آنها را ارسال کنید؟",
+          "شما اطلاعات ارسال نشده دارید که قبل از دریافت اطلاعات جدید می بایست ارسال شوند. آیا میخواهید آنها را ارسال کنید؟",
           getString(R.string.yes),
           (dialog, which) -> openDataTransferDialog(Constants.DATA_TRANSFER_SEND_DATA),
           getString(R.string.no),
-          (dialog, which) -> openDataTransferDialog(Constants.DATA_TRANSFER_GET),
+          (dialog, which) -> {
+            dialog.dismiss();/* openDataTransferDialog(Constants.DATA_TRANSFER_GET)*/
+          },
           Constants.ICON_WARNING);
     } else {
       openDataTransferDialog(Constants.DATA_TRANSFER_GET);

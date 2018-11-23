@@ -149,11 +149,11 @@ dependencies {
     implementation 'br.com.simplepass:loading-button-android:1.12.1'
     implementation 'com.github.instacart.truetime-android:library:3.4'
     implementation 'com.android.support:support-v4:27.1.1'
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.0.2'
     implementation 'co.ronash.android:pushe-base:1.4.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
 }
 
