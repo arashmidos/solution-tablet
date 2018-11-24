@@ -75,14 +75,15 @@ public class ChatAdapter extends Adapter<ViewHolder> {
         if (DateUtil.isSameDay(message.getPushDate(), messages.get(position - 1).getPushDate())) {
           messageDateTv.setVisibility(View.GONE);
         } else {
-          messageDateTv.setText(DateUtil.getChatDividerDate(message.getPushDate()));
+          messageDateTv.setText(
+              NumberUtil.digitsToPersian(DateUtil.getChatDividerDate(message.getPushDate())));
           messageDateTv.setVisibility(View.VISIBLE);
         }
       } else {
         messageDateTv.setVisibility(View.VISIBLE);
-        messageDateTv.setText(DateUtil.getChatDividerDate(message.getPushDate()));
+        messageDateTv.setText(
+            NumberUtil.digitsToPersian(DateUtil.getChatDividerDate(message.getPushDate())));
       }
-
     }
   }
 }

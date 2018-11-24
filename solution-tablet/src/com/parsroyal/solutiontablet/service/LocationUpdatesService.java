@@ -40,11 +40,11 @@ import org.greenrobot.eventbus.EventBus;
 /**
  * @author Arash
  *
- *         This class is a long-running service for location updates. When an activity is bound to
- *         this service, frequent location updates are permitted. When the activity is removed from
- *         the foreground, the service promotes itself to a foreground service, and location updates
- *         continue. When the activity comes back to the foreground, the foreground service stops,
- *         and the notification assocaited with that service is removed.
+ * This class is a long-running service for location updates. When an activity is bound to this
+ * service, frequent location updates are permitted. When the activity is removed from the
+ * foreground, the service promotes itself to a foreground service, and location updates continue.
+ * When the activity comes back to the foreground, the foreground service stops, and the
+ * notification assocaited with that service is removed.
  */
 public class LocationUpdatesService extends Service {
 
@@ -53,8 +53,8 @@ public class LocationUpdatesService extends Service {
    */
   public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
   /**
-   * The fastest rate for active location updates. Updates will never be more frequent
-   * than this value.
+   * The fastest rate for active location updates. Updates will never be more frequent than this
+   * value.
    */
   public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS;
   private static final String PACKAGE_NAME = "com.parsroyal.solutiontablet.service";
@@ -67,7 +67,7 @@ public class LocationUpdatesService extends Service {
   private static final float MAX_ACCEPTED_DISTANCE_IN_METER = 1000.0f;
   private static final float MIN_ACCEPTED_DISTANCE_IN_METER = 20.0f;
   private static final float MAX_ACCEPTED_ACCURACY_IN_METER = 60.0f;
-  private static final float MIN_ACCEPTED_SPEED_IN_MS = 0.7f;
+  private static final float MIN_ACCEPTED_SPEED_IN_MS = 0.5f;
   /**
    * The identifier for the notification displayed for the foreground service.
    */
@@ -225,8 +225,8 @@ public class LocationUpdatesService extends Service {
   }
 
   /**
-   * Makes a request for location updates. Note that in this sample we merely log the
-   * {@link SecurityException}.
+   * Makes a request for location updates. Note that in this sample we merely log the {@link
+   * SecurityException}.
    */
 
   public void requestLocationUpdates() {
@@ -253,8 +253,8 @@ public class LocationUpdatesService extends Service {
   }
 
   /**
-   * Removes location updates. Note that in this sample we merely log the
-   * {@link SecurityException}.
+   * Removes location updates. Note that in this sample we merely log the {@link
+   * SecurityException}.
    */
   public void removeLocationUpdates() {
     Log.i(TAG, "Removing location updates");
@@ -336,6 +336,15 @@ public class LocationUpdatesService extends Service {
       return true;
     }
 
+    if (Empty.isNotEmpty(lastLocation) && Empty.isNotEmpty(location)) {
+      //If there are in 2 separate days
+      long days = DateUtil.compareDatesInDays(lastLocation.getTime(), location.getTime());
+
+      if (days > 0) {
+        return true;
+      }
+    }
+
     if ((Empty.isEmpty(location) || location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER
         || location.getSpeed() < MIN_ACCEPTED_SPEED_IN_MS)) {
       return false;
@@ -392,8 +401,8 @@ public class LocationUpdatesService extends Service {
   }
 
   /**
-   * Class used for the client Binder.  Since this service runs in the same process as its
-   * clients, we don't need to deal with IPC.
+   * Class used for the client Binder.  Since this service runs in the same process as its clients,
+   * we don't need to deal with IPC.
    */
   public class LocalBinder extends Binder {
 

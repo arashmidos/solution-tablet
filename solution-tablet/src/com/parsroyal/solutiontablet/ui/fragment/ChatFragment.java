@@ -73,7 +73,7 @@ public class ChatFragment extends BaseFragment {
       ToastUtil.toastError(mainActivity, getString(R.string.error_no_network));
     } else if (event instanceof DataTransferSuccessEvent) {
       DialogUtil.dismissProgressDialog();
-      ToastUtil.toastError(mainActivity, getString(R.string.error_message_no_data));
+      ToastUtil.toastError(mainActivity, getString(R.string.message_no_data_received));
     }
   }
 
@@ -94,4 +94,5 @@ public class ChatFragment extends BaseFragment {
     super.onDestroyView();
     unbinder.unbind();
   }
+
 }

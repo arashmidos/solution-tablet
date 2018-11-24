@@ -499,6 +499,11 @@ public class DateUtil {
     return diff / (24 * 60 * 60 * 1000);
   }
 
+  public static long compareDatesInDays(long c1, long c2) {
+    long diff = c2 - c1;
+    return diff / (24 * 60 * 60 * 1000);
+  }
+
   public static Date convertNetworkDateToLocal(Date date) {
     try {
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss");
