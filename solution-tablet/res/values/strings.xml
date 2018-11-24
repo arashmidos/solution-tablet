@@ -633,5 +633,6 @@
   <string name="credit">اعتبار</string>
   <string name="visitline_prompt">خط ویزیت</string>
   <string name="all_visitlines">همه خطوط</string>
+  <string name="messages">پیام ها</string>
 
 </resources>

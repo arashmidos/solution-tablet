@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.util;
 
+import android.content.Context;
 import com.parsroyal.solutiontablet.exception.InvalidDateStringException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -193,6 +194,30 @@ public class DateUtil {
     }
     return split[0] + "/" + split[1] + "/" + dayNum;
   }
+
+  public static String getTime(long milliSeconds, Context context) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTimeInMillis(milliSeconds);
+    int minutes = calendar.get(Calendar.MINUTE);
+    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+    return String.format("%02d:%02d", hour, minutes);
+  }
+
+  public static String getChatDividerDate(long milliSeconds) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTimeInMillis(milliSeconds);
+    return getFullPersianDate(calendar.getTime());
+  }
+
+  public static boolean isSameDay(long milliSecondsCurrent, long milliSecondsPrevious) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTimeInMillis(milliSecondsCurrent);
+    int currentDay = calendar.get(Calendar.DAY_OF_YEAR);
+    calendar.setTimeInMillis(milliSecondsPrevious);
+    int nextDay = calendar.get(Calendar.DAY_OF_YEAR);
+    return nextDay == currentDay;
+  }
+
 
   public static String getCurrentWeekEndDate() {
     final int today = getToday();

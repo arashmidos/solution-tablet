@@ -53,13 +53,12 @@ import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AnonymousQuestionnaireFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
+import com.parsroyal.solutiontablet.ui.fragment.ChatFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
-import com.parsroyal.solutiontablet.ui.fragment.VisitLineDetailFragment;
-import com.parsroyal.solutiontablet.ui.fragment.VisitLineFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesCategoryFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
@@ -69,12 +68,13 @@ import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SettingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.VisitLineDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.VisitLineFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.Logger;
-import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -116,9 +116,9 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int SETTING_FRAGMENT = 33;
 
   public static final int CUSTOMER_INFO_FRAGMENT = 32;
+  public static final int CHAT_FRAGMENT = 37;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
-
   private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 56;
   private static final String TAG = MainActivity.class.getName();
   public static int batteryLevel = -1;
@@ -642,7 +642,7 @@ public abstract class MainActivity extends AppCompatActivity {
         onSaveImageClicked(true);
         break;
       case R.id.notif_img:
-//        Toast.makeText(this, "Notifam koo?", Toast.LENGTH_SHORT).show();
+        changeFragment(MainActivity.CHAT_FRAGMENT, null, true);
         break;
     }
   }
@@ -775,6 +775,8 @@ public abstract class MainActivity extends AppCompatActivity {
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
         fragment = FeaturesFragment.newInstance();
+        break; case CHAT_FRAGMENT:
+        fragment = ChatFragment.newInstance();
         break;
       case SETTING_FRAGMENT:
         fragment = SettingFragment.newInstance();
