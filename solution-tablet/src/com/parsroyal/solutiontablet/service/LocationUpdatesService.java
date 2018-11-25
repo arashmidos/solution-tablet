@@ -25,6 +25,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
@@ -168,8 +169,8 @@ public class LocationUpdatesService extends Service {
       removeLocationUpdates();
       stopSelf();
     }
-    // Tells the system to not try to recreate the service after it has been killed.
     return START_NOT_STICKY;
+    // Tells the system to not try to recreate the service after it has been killed.
   }
 
   @Override
@@ -309,7 +310,7 @@ public class LocationUpdatesService extends Service {
   private void onNewLocation(Location location) {
     Log.i(TAG, "New location in service: " + location);
 
-    if (isAccepted(location)) {
+    if (BuildConfig.DEBUG || isAccepted(location)) {
       Log.i(TAG, "location accepted");
 
       Intent intent = new Intent(this, SaveLocationService.class);
@@ -338,9 +339,7 @@ public class LocationUpdatesService extends Service {
 
     if (Empty.isNotEmpty(lastLocation) && Empty.isNotEmpty(location)) {
       //If there are in 2 separate days
-      long days = DateUtil.compareDatesInDays(lastLocation.getTime(), location.getTime());
-
-      if (days > 0) {
+      if (!DateUtil.isSameDay(lastLocation.getTime(), location.getTime())) {
         return true;
       }
     }

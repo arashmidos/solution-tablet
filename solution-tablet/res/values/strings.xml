@@ -634,5 +634,6 @@
   <string name="visitline_prompt">خط ویزیت</string>
   <string name="all_visitlines">همه خطوط</string>
   <string name="messages">پیام ها</string>
+  <string name="distance_to_customer">( فاصله %s متر )</string>
 
 </resources>

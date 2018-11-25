@@ -198,6 +198,7 @@ public class DateUtil {
   public static String getTime(long milliSeconds, Context context) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(milliSeconds);
+    calendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
     int minutes = calendar.get(Calendar.MINUTE);
     int hour = calendar.get(Calendar.HOUR_OF_DAY);
     return String.format("%02d:%02d", hour, minutes);

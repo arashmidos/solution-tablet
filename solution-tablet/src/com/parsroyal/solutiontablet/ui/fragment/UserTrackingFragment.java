@@ -448,12 +448,19 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     map.setOnInfoWindowClickListener(clusterManager);
     map.setInfoWindowAdapter(clusterManager.getMarkerManager());
     map.setOnInfoWindowClickListener(marker -> {
-      Float distance = clickedClusterItem.getDistance();
+      Position position = positionService.getLastPosition();
+      float distance;
+      if (Empty.isEmpty(position)) {
+        distance = 0.0f;
+      } else {
+        distance = LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
+            clickedClusterItem.getXlocation(), clickedClusterItem.getYlocation());
+      }
       if (distanceServiceEnabled && distance > distanceAllowed) {
         ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
         return;
       }
-      MapInfoWindowChooser mapInfoWindowChooser = MapInfoWindowChooser.newInstance(this, marker);
+      MapInfoWindowChooser mapInfoWindowChooser = MapInfoWindowChooser.newInstance(this, marker,distance);
       mapInfoWindowChooser.show(getActivity().getSupportFragmentManager(), "detail bottom sheet");
 
     });

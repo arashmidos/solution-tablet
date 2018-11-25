@@ -11,12 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.google.android.gms.maps.model.Marker;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.Locale;
@@ -29,15 +31,19 @@ public class MapInfoWindowChooser extends BottomSheetDialogFragment {
 
   @BindView(R.id.main_lay)
   LinearLayout mainLay;
+  @BindView(R.id.distance_tv)
+  TextView distanceTv;
 
   private UserTrackingFragment userTrackingFragment;
   private Marker marker;
+  private float distance;
 
   public static MapInfoWindowChooser newInstance(
-      UserTrackingFragment userTrackingFragment, Marker marker) {
+      UserTrackingFragment userTrackingFragment, Marker marker, float distance) {
     MapInfoWindowChooser mapInfoWindowChooser = new MapInfoWindowChooser();
     mapInfoWindowChooser.userTrackingFragment = userTrackingFragment;
     mapInfoWindowChooser.marker = marker;
+    mapInfoWindowChooser.distance = distance;
     return mapInfoWindowChooser;
   }
 
@@ -47,6 +53,9 @@ public class MapInfoWindowChooser extends BottomSheetDialogFragment {
       @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.bottom_sheet_map_chooser, container, false);
     ButterKnife.bind(this, view);
+    distanceTv.setText(NumberUtil.digitsToPersian(String.format(
+        getString(R.string.distance_to_customer), String.valueOf((int) distance))));
+
     return view;
   }
 

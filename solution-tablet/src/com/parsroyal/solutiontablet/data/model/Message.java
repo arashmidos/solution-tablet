@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.data.model;
 
 import com.google.gson.annotations.Expose;
+import java.util.Date;
 
 /**
  * Created by shkbhbb on 11/24/18.
