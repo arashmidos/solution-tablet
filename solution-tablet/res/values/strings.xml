@@ -44,6 +44,7 @@
   <string name="data_transfer">انتقال اطلاعات</string>
   <string name="message_transferring_provinces_data">در حال انتقال اطلاعات استان ها…</string>
   <string name="message_transferring_goods_images_data">در حال دریافت عکس کالاها…</string>
+  <string name="message_error_transferring_goods_images_data">خطا در دریافت عکس کالا</string>
   <string name="provinces_data_transferred_successfully">اطلاعات استان ها با موفقیت دریافت شد.</string>
   <string name="goods_images_data_transferred_successfully">عکس کالاها با موفقیت دریافت شد.</string>
   <string name="cities_data_transferred_successfully">اطلاعات شهر ها با موفقیت دریافت شد.</string>

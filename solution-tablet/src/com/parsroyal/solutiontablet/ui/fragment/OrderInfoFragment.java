@@ -387,8 +387,7 @@ public class OrderInfoFragment extends BaseFragment {
 
   private void checkForSmsPermission() {
     if (checkSelfPermission(mainActivity,
-        Manifest.permission.SEND_SMS) !=
-        PackageManager.PERMISSION_GRANTED) {
+        Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
       // Permission not yet granted. Use requestPermissions().
       // MY_PERMISSIONS_REQUEST_SEND_SMS is an
       // app-defined int constant. The callback method gets the

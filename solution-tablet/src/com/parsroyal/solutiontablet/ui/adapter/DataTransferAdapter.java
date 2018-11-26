@@ -13,7 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.Constants.TransferGetOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferStatus;
 import com.parsroyal.solutiontablet.data.model.DataTransferList;
 import com.parsroyal.solutiontablet.ui.adapter.DataTransferAdapter.ViewHolder;
@@ -57,7 +59,12 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
     holder.setData(position);
     if (!MultiScreenUtility.isTablet(context)) {
-      lastItem(position == model.size()-1, holder);
+      lastItem(position == model.size() - 1, holder);
+    }
+    if (model.get(position).getId() == TransferGetOrder.GOODS_IMAGES) {
+      holder.extraIcon.setVisibility(View.VISIBLE);
+    } else {
+      holder.extraIcon.setVisibility(View.GONE);
     }
   }
 
@@ -81,8 +88,18 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
   public void setCurrent(int current) {
     this.current = current;
-    model.get(current).setStatus(TransferStatus.IN_PROGRESS);
-    context.runOnUiThread(this::notifyDataSetChanged);
+    if (model.get(current).getStatus() != TransferStatus.DONE) {
+      model.get(current).setStatus(TransferStatus.IN_PROGRESS);
+      context.runOnUiThread(this::notifyDataSetChanged);
+    }
+  }
+
+  public void setDefault(int current) {
+    this.current = current;
+    if (model.get(current).getStatus() != TransferStatus.DONE) {
+      model.get(current).setStatus(TransferStatus.CANCELED);
+      context.runOnUiThread(this::notifyDataSetChanged);
+    }
   }
 
   public void setFinished(int currentPosition) {
@@ -102,6 +119,11 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
     this.current = currentPosition;
     model.get(current).setStatus(TransferStatus.DONE);
     model.get(current).setResult(message);
+    context.runOnUiThread(this::notifyDataSetChanged);
+  }
+
+  public void setImageFinished() {
+    model.get(model.size() - 1).setStatus(TransferStatus.DONE);
     context.runOnUiThread(this::notifyDataSetChanged);
   }
 
@@ -132,6 +154,8 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
     ImageView img;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.extra_icon)
+    ImageView extraIcon;
 
     private int position;
     private DataTransferList transferDetail;
@@ -139,6 +163,11 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+    }
+
+    @OnClick(R.id.extra_icon)
+    public void onClick(View view) {
+      parent.downloadImage();
     }
 
     public void setData(int position) {
@@ -169,6 +198,12 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
           progressBar.setVisibility(View.INVISIBLE);
           img.setVisibility(View.VISIBLE);
           img.setImageResource(R.drawable.ic_check_circle_24_dp);
+          messageTv.setText(NumberUtil.digitsToPersian(transferDetail.getResult()));
+          break;
+        case TransferStatus.CANCELED:
+          progressBar.setVisibility(View.INVISIBLE);
+          img.setVisibility(View.VISIBLE);
+          img.setImageResource(transferDetail.getImageId());
           messageTv.setText(NumberUtil.digitsToPersian(transferDetail.getResult()));
       }
     }

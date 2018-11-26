@@ -15,6 +15,8 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
+import com.parsroyal.solutiontablet.data.event.ImageTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.ImageTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.data.response.UpdateResponse;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
@@ -105,23 +107,23 @@ public class Updater {
               FileOutputStream fileOutputStream = new FileOutputStream(file);
               IOUtils.write(response.body().bytes(), fileOutputStream);
               MediaUtil.unpackZip(file);
-              EventBus.getDefault().post(new DataTransferSuccessEvent(StatusCodes.SUCCESS));
+              EventBus.getDefault().post(new ImageTransferSuccessEvent(StatusCodes.SUCCESS));
 
             } catch (java.io.IOException e) {
               e.printStackTrace();
-              EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.DATA_STORE_ERROR));
+              EventBus.getDefault().post(new ImageTransferErrorEvent(StatusCodes.DATA_STORE_ERROR));
             }
           } else {
-            EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.INVALID_DATA));
+            EventBus.getDefault().post(new ImageTransferErrorEvent(StatusCodes.INVALID_DATA));
           }
         } else {
-          EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
+          EventBus.getDefault().post(new ImageTransferErrorEvent(StatusCodes.SERVER_ERROR));
         }
       }
 
       @Override
       public void onFailure(Call<ResponseBody> call, Throwable t) {
-        EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NETWORK_ERROR));
+        EventBus.getDefault().post(new ImageTransferErrorEvent(StatusCodes.NETWORK_ERROR));
       }
     });
   }

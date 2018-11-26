@@ -54,7 +54,18 @@
     android:textColor="@color/gray_75"
     android:textSize="12sp"
     tools:text="هیچ داده ای یافت نشد" />
-
+  <ImageView
+    android:id="@+id/extra_icon"
+    android:visibility="gone"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    tools:visibility="visible"
+    android:layout_alignParentStart="true"
+    android:layout_centerVertical="true"
+    android:tint="@color/black_55"
+    android:src="@drawable/ic_file_download_white_18dp" />
   <View
     android:id="@+id/bottom_line"
     android:layout_width="match_parent"

@@ -26,6 +26,8 @@ import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
+import com.parsroyal.solutiontablet.data.event.ImageTransferErrorEvent;
+import com.parsroyal.solutiontablet.data.event.ImageTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.DataTransferList;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
@@ -281,7 +283,8 @@ public class DataTransferDialogFragment extends DialogFragment {
         dataTransferService.getAllVisitLines();
         break;
       case TransferGetOrder.GOODS_IMAGES:
-        Updater.downloadGoodsImages(getActivity());
+        adapter.setDefault(currentPosition);
+        sendNextDetail();
         break;
       case TransferSendOrder.NEW_CUSTOMERS:
         Thread t = new Thread(() -> dataTransferService.sendAllNewCustomers());
@@ -345,6 +348,22 @@ public class DataTransferDialogFragment extends DialogFragment {
       default:
 
     }
+  }
+
+  public void downloadImage() {
+    Updater.downloadGoodsImages(getActivity());
+  }
+
+  @Subscribe
+  public void getMessage(ImageTransferSuccessEvent event) {
+    adapter.setImageFinished();
+    ToastUtil.toastMessage(root, R.string.goods_images_data_transferred_successfully);
+  }
+
+  @Subscribe
+  public void getMessage(ImageTransferErrorEvent event) {
+    adapter.setError(adapter.getItemCount() - 1);
+    ToastUtil.toastError(root, R.string.goods_images_data_transferred_successfully);
   }
 
   @Subscribe
