@@ -60,9 +60,10 @@ public class MapInfoWindowChooser extends BottomSheetDialogFragment {
   }
 
 
-  @OnClick({R.id.enter_tv, R.id.navigation_tv})
+  @OnClick({R.id.enter_tv, R.id.navigation_tv, R.id.enter_layout})
   public void onViewClicked(View view) {
     switch (view.getId()) {
+      case R.id.enter_layout:
       case R.id.enter_tv:
         userTrackingFragment.doEnter();
         dismiss();

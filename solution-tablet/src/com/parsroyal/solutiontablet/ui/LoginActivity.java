@@ -305,8 +305,11 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
       logInBtn.revertAnimation();
       if (((ErrorEvent) response).getStatusCode() == StatusCodes.NETWORK_ERROR) {
         ToastUtil.toastError(this, R.string.error_no_network);
-      } else {
+      } else if( ((ErrorEvent) response).getStatusCode() == StatusCodes.INVALID_DATA){
         ToastUtil.toastError(this, R.string.error_invalid_login_info);
+      }else{
+        ToastUtil.toastError(this, R.string.error_connecting_server);
+
       }
     }
   }

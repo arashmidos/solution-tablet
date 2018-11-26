@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -242,7 +243,13 @@ public class OrderInfoFragment extends BaseFragment {
     } else if (selectedItem != null) {
       setPaymentMethod(selectedItem);
     } else {
-      paymentMethodTv.setText(R.string.click_to_select);
+//      paymentMethodTv.setText(R.string.click_to_select);
+      List<LabelValue> values = baseInfoService
+          .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.PAYMENT_TYPE.getId());
+      if (Empty.isNotEmpty(values)) {
+        selectedItem = values.get(0);
+        setPaymentMethod(selectedItem);
+      }
     }
     if (pageStatus.equals(Constants.VIEW)) {
       submitOrderBtn.setText(getString(R.string.close));
@@ -338,31 +345,31 @@ public class OrderInfoFragment extends BaseFragment {
         }
         break;
       case R.id.submit_order_btn:
-        //TODO:!!
-       /* if (rand > 9999) {
+
+        if (rand > 9999) {
           calculateRand();
           checkForSmsPermission();
-        } else {*/
-        order = saleOrderService.findOrderDtoById(orderId);
-        if (validateOrderForSave()) {
-          if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) || orderStatus
-              .equals(SaleOrderStatus.REJECTED.getId())) {
-            showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                SaleOrderStatus.REJECTED.getId());
-          } else if (isDelivery()) {
-            showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                SaleOrderStatus.DELIVERED.getId());
-          } else {
-            if (isCold()) {
+        } else {
+          order = saleOrderService.findOrderDtoById(orderId);
+          if (validateOrderForSave()) {
+            if (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) || orderStatus
+                .equals(SaleOrderStatus.REJECTED.getId())) {
               showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                  SaleOrderStatus.READY_TO_SEND.getId());
+                  SaleOrderStatus.REJECTED.getId());
+            } else if (isDelivery()) {
+              showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                  SaleOrderStatus.DELIVERED.getId());
             } else {
-              showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                  SaleOrderStatus.INVOICED.getId());
+              if (isCold()) {
+                showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                    SaleOrderStatus.READY_TO_SEND.getId());
+              } else {
+                showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                    SaleOrderStatus.INVOICED.getId());
+              }
             }
           }
         }
-//        }
         break;
     }
   }
@@ -373,7 +380,7 @@ public class OrderInfoFragment extends BaseFragment {
           getString(R.string.message_are_you_sure), (dialog, which) -> {
             saveOrder(statusId);
           });
-    }else{
+    } else {
       mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
     }
   }
@@ -448,10 +455,10 @@ public class OrderInfoFragment extends BaseFragment {
             typeId);
         visitService.saveVisitDetail(visitDetail);
       }
-//      getDialog().dismiss();
-      mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
-//      calculateRand();TODO:!!
-//      checkForSmsPermission();
+      //TODO:
+//      mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+      calculateRand();
+      checkForSmsPermission();
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, ex);
@@ -580,6 +587,9 @@ public class OrderInfoFragment extends BaseFragment {
       recyclerView.setLayoutManager(linearLayoutManager);
       recyclerView.setAdapter(adapter);
       recyclerView.scrollToPosition(dataModel.indexOf(selectedItem));
+      if (selectedItem == null) {
+        Toast.makeText(mainActivity, "NULL HY", Toast.LENGTH_SHORT).show();
+      }
     }
   }
 

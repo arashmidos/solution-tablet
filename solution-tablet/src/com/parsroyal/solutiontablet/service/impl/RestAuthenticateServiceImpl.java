@@ -106,7 +106,11 @@ public class RestAuthenticateServiceImpl {
             EventBus.getDefault().post(new ErrorEvent(StatusCodes.INVALID_DATA));
           }
         } else {
-          EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
+          if (response.code() == 401) {
+            EventBus.getDefault().post(new ErrorEvent(StatusCodes.INVALID_DATA));
+          } else {
+            EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
+          }
         }
       }
 
