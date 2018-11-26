@@ -42,6 +42,17 @@ public class SettingDetailsResponse extends Response {
   @SerializedName("check.customer.credit")
   @Expose
   private boolean checkCustomerCredit;
+  @SerializedName("check.sms.confirm")
+  @Expose
+  private boolean checkSmsConfirm;
+
+  public boolean isCheckSmsConfirm() {
+    return checkSmsConfirm;
+  }
+
+  public void setCheckSmsConfirm(boolean checkSmsConfirm) {
+    this.checkSmsConfirm = checkSmsConfirm;
+  }
 
   public String getStockCode() {
     return stockCode;

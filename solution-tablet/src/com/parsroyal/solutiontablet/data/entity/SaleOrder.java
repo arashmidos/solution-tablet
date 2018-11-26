@@ -3,11 +3,8 @@ package com.parsroyal.solutiontablet.data.entity;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: m.sefidi
- * Date: 4/10/13
- * Time: 7:57 PM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: m.sefidi Date: 4/10/13 Time: 7:57 PM To change this template
+ * use File | Settings | File Templates.
  */
 
 public class SaleOrder extends BaseEntity<Long> {
@@ -26,6 +23,7 @@ public class SaleOrder extends BaseEntity<Long> {
   public static final String COL_INVOICE_BACKEND_ID = "INVOICE_BACKEND_ID";
   public static final String COL_REJECT_TYPE_BACKEND_ID = "REJECT_TYPE_BACKEND_ID";
   public static final String COL_VISITLINE_BACKEND_ID = "VISITLINE_BACKEND_ID";
+  public static final String COL_SMS_CONFIRM = "SMS_CONFIRM";
 
   public static final String CREATE_TABLE_SCRIPT = "CREATE TABLE " + SaleOrder.TABLE_NAME + " (" +
       " " + SaleOrder.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -42,7 +40,8 @@ public class SaleOrder extends BaseEntity<Long> {
       " " + SaleOrder.COL_CREATE_DATE_TIME + " TEXT," +
       " " + SaleOrder.COL_UPDATE_DATE_TIME + " TEXT," +
       " " + SaleOrder.COL_REJECT_TYPE_BACKEND_ID + " INTEGER," +
-      " " + SaleOrder.COL_VISITLINE_BACKEND_ID + " INTEGER" +
+      " " + SaleOrder.COL_VISITLINE_BACKEND_ID + " INTEGER," +
+      " " + SaleOrder.COL_SMS_CONFIRM + " INTEGER" +
       " );";
 
   private Long id;
@@ -58,10 +57,18 @@ public class SaleOrder extends BaseEntity<Long> {
   private Long invoiceBackendId;
   private String exportDate;
   private Long rejectBackendId;
-
+  private Long smsConfirm;
   private List<SaleOrderItem> orderItems;
   private Long rejectType;
   private long visitlineBackendId;
+
+  public Long getSmsConfirm() {
+    return smsConfirm;
+  }
+
+  public void setSmsConfirm(Long smsConfirm) {
+    this.smsConfirm = smsConfirm;
+  }
 
   public Long getRejectType() {
     return rejectType;
@@ -188,11 +195,11 @@ public class SaleOrder extends BaseEntity<Long> {
     return id;
   }
 
-  public void setVisitlineBackendId(long visitlineBackendId) {
-    this.visitlineBackendId = visitlineBackendId;
-  }
-
   public long getVisitlineBackendId() {
     return visitlineBackendId;
+  }
+
+  public void setVisitlineBackendId(long visitlineBackendId) {
+    this.visitlineBackendId = visitlineBackendId;
   }
 }

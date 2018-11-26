@@ -16,6 +16,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
+import com.parsroyal.solutiontablet.data.model.LabelValue;
+import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SmsReasonAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
@@ -103,11 +106,9 @@ public class SmsDialogFragment extends DialogFragment {
   }
 
   private void setUpRecyclerView() {
-    List<String> list = new ArrayList<>();
-    list.add("گوشی طرف خاموش بود :(");
-    list.add("آقا هر کاری کردیم کده نیومد که نیومد");
-    list.add("گوشیش خسته بود خودش خسته تر");
-    list.add("صاحب مغازه نبود، دستش بود، تقصیر آستینش بود.");
+    BaseInfoServiceImpl baseInfoService = new BaseInfoServiceImpl(mainActivity);
+    List<LabelValue> list = baseInfoService.getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.SMS_CONFIRM.getId());
+
     SmsReasonAdapter smsReasonAdapter = new SmsReasonAdapter(getActivity(), list);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setAdapter(smsReasonAdapter);

@@ -80,7 +80,7 @@ public class PaymentListFragment extends BaseFragment {
     customerService = new CustomerServiceImpl(mainActivity);
     setData();
     setUpRecyclerView();
-    if (parent==null) {
+    if (parent == null) {
       totalPaymentLayout.setVisibility(View.VISIBLE);
       displayTotalPayment();
     }
@@ -153,7 +153,7 @@ public class PaymentListFragment extends BaseFragment {
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);
-    args.putLong(Constants.VISITLINE_BACKEND_ID,visitlineBackendId);
+    args.putLong(Constants.VISITLINE_BACKEND_ID, visitlineBackendId);
     mainActivity.changeFragment(MainActivity.REGISTER_PAYMENT_FRAGMENT, args, true);
   }
 }

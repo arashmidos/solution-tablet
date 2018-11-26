@@ -310,7 +310,7 @@ public class LocationUpdatesService extends Service {
   private void onNewLocation(Location location) {
     Log.i(TAG, "New location in service: " + location);
 
-    if (BuildConfig.DEBUG || isAccepted(location)) {
+    if (BuildConfig.DEBUG|| isAccepted(location)) {
       Log.i(TAG, "location accepted");
 
       Intent intent = new Intent(this, SaveLocationService.class);

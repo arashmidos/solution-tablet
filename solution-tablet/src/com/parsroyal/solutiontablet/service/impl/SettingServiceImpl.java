@@ -68,6 +68,8 @@ public class SettingServiceImpl implements SettingService {
         String.valueOf(settingDetail.isCheckDistanceFromCustomer())));
     keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE,
         String.valueOf(settingDetail.isCheckCustomerCredit())));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_CHECK_SMS_CONFIRM_ENABLE,
+        String.valueOf(settingDetail.isCheckCustomerCredit())));
     keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_DISTANCE_CUSTOMER_VALUE,
         String.valueOf(settingDetail.getCheckDistanceFromCustomerValue())));
 

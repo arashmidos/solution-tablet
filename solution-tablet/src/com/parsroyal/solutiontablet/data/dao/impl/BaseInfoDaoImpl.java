@@ -78,7 +78,8 @@ public class BaseInfoDaoImpl extends AbstractDao<BaseInfo, Long> implements Base
     }
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
+    String orderBy = BaseInfo.COL_CODE;
+    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, orderBy);
     List<LabelValue> entities = new ArrayList<>();
     while (cursor.moveToNext()) {
       entities.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));

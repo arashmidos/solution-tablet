@@ -66,6 +66,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     contentValues.put(SaleOrder.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
     contentValues.put(SaleOrder.COL_REJECT_TYPE_BACKEND_ID, entity.getRejectType());
     contentValues.put(SaleOrder.COL_VISITLINE_BACKEND_ID, entity.getVisitlineBackendId());
+    contentValues.put(SaleOrder.COL_SMS_CONFIRM, entity.getSmsConfirm());
     return contentValues;
   }
 
@@ -96,7 +97,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         SaleOrder.COL_CREATE_DATE_TIME,
         SaleOrder.COL_UPDATE_DATE_TIME,
         SaleOrder.COL_REJECT_TYPE_BACKEND_ID,//13
-        SaleOrder.COL_VISITLINE_BACKEND_ID
+        SaleOrder.COL_VISITLINE_BACKEND_ID,
+        SaleOrder.COL_SMS_CONFIRM
     };
   }
 
@@ -119,6 +121,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     saleOrder.setUpdateDateTime(cursor.getString(12));
     saleOrder.setRejectType(cursor.getLong(13));
     saleOrder.setVisitlineBackendId(cursor.getLong(14));
+    saleOrder.setSmsConfirm(cursor.getLong(15));
     return saleOrder;
   }
 
@@ -140,6 +143,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
     saleOrder.setUpdateDateTime(cursor.getString(12));
     saleOrder.setRejectType(cursor.getLong(13));
     saleOrder.setVisitlineBackendId(cursor.getLong(14));
+    saleOrder.setSmsConfirm(cursor.getLong(15));
     return saleOrder;
   }
 
@@ -156,6 +160,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       date = DateUtil.addDaysToDate(date, 1, false);
       ((SaleOrderDocument) saleOrder)
           .setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
+      ((SaleOrderDocument) saleOrder).setSmsConfirm(cursor.getLong(15));
     } else if (SaleOrderStatus.INVOICED.getId().equals(statusId) || SaleOrderStatus.DELIVERED
         .getId().equals(statusId) || SaleOrderStatus.CANCELED.getId().equals(statusId)
         || SaleOrderStatus.INVOICE_GIFT.getId().equals(statusId)) {

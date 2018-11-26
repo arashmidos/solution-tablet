@@ -27,6 +27,7 @@ public class SaleOrderDto extends BaseModel {
   private Customer customer;
   private Long rejectType;
   private long visitlineBackendId;
+  private Long smsConfirm;
 
   public SaleOrderDto(Long statusID, Customer customer) {
     this.status = statusID;
@@ -39,6 +40,14 @@ public class SaleOrderDto extends BaseModel {
   }
 
   public SaleOrderDto() {
+  }
+
+  public Long getSmsConfirm() {
+    return smsConfirm;
+  }
+
+  public void setSmsConfirm(Long smsConfirm) {
+    this.smsConfirm = smsConfirm;
   }
 
   public Long getRejectType() {
@@ -169,11 +178,11 @@ public class SaleOrderDto extends BaseModel {
     this.updateDateTime = updateDateTime;
   }
 
-  public void setVisitlineBackendId(long visitlineBackendId) {
-    this.visitlineBackendId = visitlineBackendId;
-  }
-
   public long getVisitlineBackendId() {
     return visitlineBackendId;
+  }
+
+  public void setVisitlineBackendId(long visitlineBackendId) {
+    this.visitlineBackendId = visitlineBackendId;
   }
 }

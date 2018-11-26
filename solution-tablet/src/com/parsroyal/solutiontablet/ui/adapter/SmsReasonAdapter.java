@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.ui.adapter.SmsReasonAdapter.ViewHolder;
 import java.util.List;
 
@@ -24,12 +25,12 @@ import java.util.List;
 
 public class SmsReasonAdapter extends Adapter<ViewHolder> {
 
-  private List<String> list;
+  private List<LabelValue> list;
   private Context context;
   private LayoutInflater inflater;
   private int selectedItem;
 
-  public SmsReasonAdapter(Context context, List<String> list) {
+  public SmsReasonAdapter(Context context, List<LabelValue> list) {
     this.context = context;
     this.list = list;
     selectedItem = 0;
@@ -75,7 +76,7 @@ public class SmsReasonAdapter extends Adapter<ViewHolder> {
 
     public void setData(int position) {
       this.pos = position;
-      reasonTv.setText(list.get(position));
+      reasonTv.setText(list.get(position).getLabel());
       if (position == selectedItem) {
         checkIv.setVisibility(View.VISIBLE);
         mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
@@ -90,6 +91,5 @@ public class SmsReasonAdapter extends Adapter<ViewHolder> {
       selectedItem = pos;
       notifyDataSetChanged();
     }
-
   }
 }
