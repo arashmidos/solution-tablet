@@ -15,11 +15,12 @@
     <ImageView
       android:id="@+id/close_btn"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="16dp"
+      android:layout_height="match_parent"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
       android:src="@drawable/ic_close_24dp"
       android:tint="@color/black_55" />
     <TextView
@@ -71,11 +72,11 @@
           style="@style/IranSans.Medium"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginRight="16dp"
           android:layout_alignTop="@+id/customer_name_tv"
           android:layout_toLeftOf="@+id/customer_name_tv"
           android:layout_toStartOf="@+id/customer_name_tv"
           android:textColor="@color/black_55"
-          android:layout_marginRight="16dp"
           android:textSize="14sp"
           tools:text="فاصله ۱۰۰ متر" />
         <TextView

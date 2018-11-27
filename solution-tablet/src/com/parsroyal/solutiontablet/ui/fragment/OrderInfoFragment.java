@@ -35,7 +35,10 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
+import com.parsroyal.solutiontablet.data.dao.SaleOrderDao;
+import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
@@ -143,7 +146,8 @@ public class OrderInfoFragment extends BaseFragment {
   private long rejectType;
   private boolean isCashOrder;
   private int rand;
-  private String smsConfirmEnabled;
+  private boolean smsConfirmEnabled;
+  private Long typeId;
 
   public OrderInfoFragment() {
     // Required empty public constructor
@@ -167,8 +171,10 @@ public class OrderInfoFragment extends BaseFragment {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     initializeServices();
-    smsConfirmEnabled = settingService
+    String smsEnabled = settingService
         .getSettingValue(ApplicationKeys.SETTING_CHECK_SMS_CONFIRM_ENABLE);
+    smsConfirmEnabled = Empty.isEmpty(smsEnabled) || "null".equals(smsEnabled) ? false
+        : Boolean.valueOf(smsEnabled);
 
     Bundle args = getArguments();
 
@@ -319,6 +325,7 @@ public class OrderInfoFragment extends BaseFragment {
               order.setStatus(SaleOrderStatus.INVOICE_GIFT.getId());
             }
             newOrderId = saleOrderService.saveOrder(order);
+//            order.setId(newOrderId);
             //save order items
             if (isDelivery()) {
               List<SaleOrderItemDto> items = order.getOrderItems();
@@ -348,7 +355,6 @@ public class OrderInfoFragment extends BaseFragment {
         }
         break;
       case R.id.submit_order_btn:
-
         if (rand > 9999) {
           calculateRand();
           checkForSmsPermission();
@@ -380,9 +386,7 @@ public class OrderInfoFragment extends BaseFragment {
   private void showSaveOrderConfirmDialog(String title, final Long statusId) {
     if (!pageStatus.equals(Constants.VIEW)) {
       DialogUtil.showConfirmDialog(mainActivity, title,
-          getString(R.string.message_are_you_sure), (dialog, which) -> {
-            saveOrder(statusId);
-          });
+          getString(R.string.message_are_you_sure), (dialog, which) -> saveOrder(statusId));
     } else {
       mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
     }
@@ -417,14 +421,29 @@ public class OrderInfoFragment extends BaseFragment {
   public void sendSMS() {
     try {
       SmsManager smsManager = SmsManager.getDefault();
-      smsManager.sendTextMessage(customer.getCellPhone(), null, String.valueOf(rand), null, null);
+      smsManager.sendTextMessage(customer.getCellPhone(), null,
+          String.format(
+              "مشتری گرامی"
+                  + "\n"
+                  + "کد تایید سفارش:%s"
+              ,
+              String.valueOf(rand)),
+          null, null);
       android.app.FragmentTransaction ft = mainActivity.getFragmentManager().beginTransaction();
       SmsDialogFragment smsDialogFragment = SmsDialogFragment
-          .newInstance(mainActivity, this, rand, customer.getCellPhone());
+          .newInstance(mainActivity, this, rand, customer.getCellPhone(), false);
       smsDialogFragment.show(ft, "sms");
     } catch (Exception ex) {
       ToastUtil.toastError(mainActivity, getString(R.string.error_in_sms_sending));
+      showSmsFailedDialog();
     }
+  }
+
+  private void showSmsFailedDialog() {
+    android.app.FragmentTransaction ft = mainActivity.getFragmentManager().beginTransaction();
+    SmsDialogFragment smsDialogFragment = SmsDialogFragment
+        .newInstance(mainActivity, this, rand, customer.getCellPhone(), true);
+    smsDialogFragment.show(ft, "sms");
   }
 
   private void saveOrder(Long statusId) {
@@ -451,16 +470,20 @@ public class OrderInfoFragment extends BaseFragment {
         order.setRejectType(rejectType);
       }
       order.setVisitlineBackendId(visitlineBackendId);
-      long typeId = saleOrderService.saveOrder(order);
+      typeId = saleOrderService.saveOrder(order);
+      order.setId(typeId);
       if (visitId != 0L) {
         VisitInformationDetail visitDetail = new VisitInformationDetail(visitId, getDetailType(),
             typeId);
         visitService.saveVisitDetail(visitDetail);
       }
-      //TODO:
-//      mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
-      calculateRand();
-      checkForSmsPermission();
+
+      if (smsConfirmEnabled) {
+        calculateRand();
+        checkForSmsPermission();
+      } else {
+        mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
+      }
     } catch (BusinessException ex) {
       Log.e(TAG, ex.getMessage(), ex);
       ToastUtil.toastError(mainActivity, ex);
@@ -520,6 +543,7 @@ public class OrderInfoFragment extends BaseFragment {
         } else {
           // Permission denied.
           ToastUtil.toastError(mainActivity, getString(R.string.no_sms_permission));
+          showSmsFailedDialog();
         }
       }
     }
@@ -635,5 +659,12 @@ public class OrderInfoFragment extends BaseFragment {
         registerGiftTv.setText(R.string.retry);
       }
     }
+  }
+
+  public void updateOrderSmsConfirmed(long smsConfirm) {
+    SaleOrderDao saleOrderDao = new SaleOrderDaoImpl(mainActivity);
+    SaleOrder targetOrder = saleOrderDao.retrieve(typeId);
+    targetOrder.setSmsConfirm(smsConfirm);
+    ((SaleOrderDaoImpl) saleOrderDao).update(targetOrder);
   }
 }

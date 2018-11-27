@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -24,7 +25,6 @@ import com.parsroyal.solutiontablet.ui.adapter.SmsReasonAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,23 +45,30 @@ public class SmsDialogFragment extends DialogFragment {
   LinearLayout reasonLay;
   @BindView(R.id.code_lay)
   LinearLayout codeLay;
+  @BindView(R.id.back_iv)
+  ImageView backView;
+  @BindView(R.id.spacer)
+  View spacer;
 
   private MainActivity mainActivity;
   private int rand;
-  private OrderInfoFragment orderInfoFragment;
+  private OrderInfoFragment parent;
   private String phoneNum;
+  private boolean smsFailedMode;
+  private SmsReasonAdapter smsReasonAdapter;
 
   public SmsDialogFragment() {
 
   }
 
   public static SmsDialogFragment newInstance(MainActivity mainActivity,
-      OrderInfoFragment orderInfoFragment, int rand, String cellPhone) {
+      OrderInfoFragment orderInfoFragment, int rand, String cellPhone, boolean smsFailedMode) {
     SmsDialogFragment smsDialogFragment = new SmsDialogFragment();
     smsDialogFragment.mainActivity = mainActivity;
-    smsDialogFragment.orderInfoFragment = orderInfoFragment;
+    smsDialogFragment.parent = orderInfoFragment;
     smsDialogFragment.rand = rand;
     smsDialogFragment.phoneNum = cellPhone;
+    smsDialogFragment.smsFailedMode = smsFailedMode;
     return smsDialogFragment;
   }
 
@@ -92,6 +99,7 @@ public class SmsDialogFragment extends DialogFragment {
       @Override
       public void afterTextChanged(Editable s) {
         if (s.length() == 5 && Integer.parseInt(s.toString()) == rand) {
+          parent.updateOrderSmsConfirmed(-1);
           getDialog().dismiss();
           mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
         } else if (s.length() == 5) {
@@ -102,14 +110,26 @@ public class SmsDialogFragment extends DialogFragment {
     smsTitleTv.setText(String
         .format("همکار گرامی! کد اعتبار سنجی ثبت سفارش، به شماره همراه %s ارسال گردید!",
             phoneNum));
+    if (smsFailedMode) {
+      smsFailed();
+    }
     return view;
+  }
+
+  private void smsFailed() {
+    codeLay.setVisibility(View.GONE);
+    reasonLay.setVisibility(View.VISIBLE);
+    setUpRecyclerView();
+    backView.setVisibility(View.GONE);
+    spacer.setVisibility(View.VISIBLE);
   }
 
   private void setUpRecyclerView() {
     BaseInfoServiceImpl baseInfoService = new BaseInfoServiceImpl(mainActivity);
-    List<LabelValue> list = baseInfoService.getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.SMS_CONFIRM.getId());
+    List<LabelValue> list = baseInfoService
+        .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.SMS_CONFIRM.getId());
 
-    SmsReasonAdapter smsReasonAdapter = new SmsReasonAdapter(getActivity(), list);
+    smsReasonAdapter = new SmsReasonAdapter(getActivity(), list);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setAdapter(smsReasonAdapter);
   }
@@ -131,8 +151,8 @@ public class SmsDialogFragment extends DialogFragment {
         mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
         break;
       case R.id.resend_tv:
-        rand = orderInfoFragment.calculateRand();
-        orderInfoFragment.sendSMS();
+        rand = parent.calculateRand();
+        parent.sendSMS();
         break;
       case R.id.no_code_tv:
         codeLay.setVisibility(View.GONE);
@@ -145,9 +165,10 @@ public class SmsDialogFragment extends DialogFragment {
         break;
       case R.id.send_btn:
         getDialog().dismiss();
+        parent.updateOrderSmsConfirmed(
+            smsReasonAdapter != null ? smsReasonAdapter.getSelectedItem() : 0);
         mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
         break;
     }
   }
-
 }

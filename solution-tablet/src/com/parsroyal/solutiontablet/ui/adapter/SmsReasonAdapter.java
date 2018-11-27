@@ -28,7 +28,8 @@ public class SmsReasonAdapter extends Adapter<ViewHolder> {
   private List<LabelValue> list;
   private Context context;
   private LayoutInflater inflater;
-  private int selectedItem;
+  private long selectedItem;
+  private int selectedPosition;
 
   public SmsReasonAdapter(Context context, List<LabelValue> list) {
     this.context = context;
@@ -54,7 +55,7 @@ public class SmsReasonAdapter extends Adapter<ViewHolder> {
     return list.size();
   }
 
-  public int getSelectedItem() {
+  public long getSelectedItem() {
     return selectedItem;
   }
 
@@ -68,6 +69,7 @@ public class SmsReasonAdapter extends Adapter<ViewHolder> {
     RelativeLayout mainLay;
 
     private int pos;
+    private LabelValue item;
 
     public ViewHolder(View itemView) {
       super(itemView);
@@ -76,8 +78,9 @@ public class SmsReasonAdapter extends Adapter<ViewHolder> {
 
     public void setData(int position) {
       this.pos = position;
-      reasonTv.setText(list.get(position).getLabel());
-      if (position == selectedItem) {
+      this.item = list.get(position);
+      reasonTv.setText(item.getLabel());
+      if (position == selectedPosition) {
         checkIv.setVisibility(View.VISIBLE);
         mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
       } else {
@@ -88,7 +91,8 @@ public class SmsReasonAdapter extends Adapter<ViewHolder> {
 
     @OnClick(R.id.main_lay)
     public void onViewClicked() {
-      selectedItem = pos;
+      selectedPosition=pos;
+      selectedItem = item.getValue();
       notifyDataSetChanged();
     }
   }
