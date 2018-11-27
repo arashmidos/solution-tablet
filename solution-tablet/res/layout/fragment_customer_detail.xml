@@ -67,6 +67,18 @@
           android:textSize="14sp"
           tools:text="محمدرضا گلزار" />
         <TextView
+          android:id="@+id/distance_tv"
+          style="@style/IranSans.Medium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignTop="@+id/customer_name_tv"
+          android:layout_toLeftOf="@+id/customer_name_tv"
+          android:layout_toStartOf="@+id/customer_name_tv"
+          android:textColor="@color/black_55"
+          android:layout_marginRight="16dp"
+          android:textSize="14sp"
+          tools:text="فاصله ۱۰۰ متر" />
+        <TextView
           android:id="@+id/customer_shop_name_tv"
           style="@style/IranSans.Medium"
           android:layout_width="wrap_content"

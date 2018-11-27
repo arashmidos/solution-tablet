@@ -143,6 +143,7 @@ public class OrderInfoFragment extends BaseFragment {
   private long rejectType;
   private boolean isCashOrder;
   private int rand;
+  private String smsConfirmEnabled;
 
   public OrderInfoFragment() {
     // Required empty public constructor
@@ -166,6 +167,8 @@ public class OrderInfoFragment extends BaseFragment {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     initializeServices();
+    smsConfirmEnabled = settingService
+        .getSettingValue(ApplicationKeys.SETTING_CHECK_SMS_CONFIRM_ENABLE);
 
     Bundle args = getArguments();
 

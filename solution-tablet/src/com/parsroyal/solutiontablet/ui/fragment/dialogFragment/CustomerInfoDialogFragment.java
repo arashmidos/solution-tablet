@@ -24,6 +24,7 @@ import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
+import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -50,6 +51,8 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
 import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class CustomerInfoDialogFragment extends DialogFragment {
 
@@ -100,6 +103,8 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   ImageView minusImg;
   @BindView(R.id.credit_tv)
   TextView creditTv;
+  @BindView(R.id.distance_tv)
+  TextView distanceTv;
   private CustomerDto customer;
 
   public CustomerInfoDialogFragment() {
@@ -239,6 +244,18 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     customerAddressTv.setText(NumberUtil.digitsToPersian(model.getAddress()));
     customerMobileTv.setText(NumberUtil.digitsToPersian(model.getCellPhone()));
     customerPhoneTv.setText(NumberUtil.digitsToPersian(model.getPhoneNumber()));
+
+    Position position = positionService.getLastPosition();
+    float distance;
+    if (Empty.isEmpty(position)) {
+      distance = 0.0f;
+    } else {
+      distance = LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
+          customer.getxLocation(), customer.getyLocation());
+    }
+
+    distanceTv.setText(NumberUtil.digitsToPersian(String.format(
+        getString(R.string.distance_to_customer), String.valueOf((int) distance))));
   }
 
 
@@ -381,5 +398,30 @@ public class CustomerInfoDialogFragment extends DialogFragment {
       Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(root, new UnknownSystemException(e));
     }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(GPSEvent event) {
+    float distance = LocationUtil
+        .distanceBetween(event.getLocation().getLatitude(), event.getLocation().getLongitude(),
+            customer.getxLocation(), customer.getyLocation());
+
+    mainActivity.runOnUiThread(() -> {
+
+      distanceTv.setText(NumberUtil.digitsToPersian(String.format(
+          getString(R.string.distance_to_customer), String.valueOf((int) distance))));
+    });
   }
 }
