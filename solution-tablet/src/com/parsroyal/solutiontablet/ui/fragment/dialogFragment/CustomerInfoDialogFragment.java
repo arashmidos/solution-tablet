@@ -42,6 +42,8 @@ import com.parsroyal.solutiontablet.ui.activity.MobileReportListActivity;
 import com.parsroyal.solutiontablet.ui.activity.TabletReportListActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.VisitActivityAdapter;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.CustomerContactBottomSheet;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.MapInfoWindowChooser;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -269,7 +271,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   }
 
   @OnClick({R.id.close_btn, R.id.customer_report_tv, R.id.customer_report_layout, R.id.cancel_btn,
-      R.id.enter_btn, R.id.no_visit_btn})
+      R.id.enter_btn, R.id.no_visit_btn, R.id.call_layout, R.id.phone_layout})
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.cancel_btn:
@@ -292,6 +294,13 @@ public class CustomerInfoDialogFragment extends DialogFragment {
       case R.id.no_visit_btn:
         showWantsDialog();
         dismiss();
+      case R.id.call_layout:
+        CustomerContactBottomSheet contactBottomSheet = CustomerContactBottomSheet.newInstance(this,customer.getPhoneNumber());
+        contactBottomSheet.show(getActivity().getSupportFragmentManager(), "contact bottom sheet");
+        break;
+      case R.id.phone_layout:
+        CustomerContactBottomSheet contactBottomSheet2 = CustomerContactBottomSheet.newInstance(this,customer.getCellPhone());
+        contactBottomSheet2.show(getActivity().getSupportFragmentManager(), "contact bottom sheet");
         break;
     }
   }

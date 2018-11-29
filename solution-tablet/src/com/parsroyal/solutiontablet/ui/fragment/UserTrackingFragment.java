@@ -460,18 +460,17 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
         ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
         return;
       }
-      MapInfoWindowChooser mapInfoWindowChooser = MapInfoWindowChooser.newInstance(this, marker,distance);
+      MapInfoWindowChooser mapInfoWindowChooser = MapInfoWindowChooser
+          .newInstance(this, marker, distance);
       mapInfoWindowChooser.show(getActivity().getSupportFragmentManager(), "detail bottom sheet");
 
     });
     clusterManager.getMarkerCollection().setOnInfoWindowAdapter(new CustomerMarkerAdapter());
-    clusterManager.setOnClusterClickListener(cluster ->
-    {
+    clusterManager.setOnClusterClickListener(cluster -> {
       clickedCluster = cluster; // remember for use later in the Adapter
       return false;
     });
-    clusterManager.setOnClusterItemClickListener(item ->
-    {
+    clusterManager.setOnClusterItemClickListener(item -> {
       clickedClusterItem = item;
       return false;
     });
