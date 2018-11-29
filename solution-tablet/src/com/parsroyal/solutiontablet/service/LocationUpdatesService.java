@@ -25,7 +25,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
@@ -52,12 +51,12 @@ public class LocationUpdatesService extends Service {
   /**
    * The desired interval for location updates. Inexact. Updates may be more or less frequent.
    */
-  public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+  public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 30000;
   /**
    * The fastest rate for active location updates. Updates will never be more frequent than this
    * value.
    */
-  public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS;
+  public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 10_000;
   private static final String PACKAGE_NAME = "com.parsroyal.solutiontablet.service";
   public static final String ACTION_BROADCAST = PACKAGE_NAME + ".broadcast";
   public static final String EXTRA_LOCATION = PACKAGE_NAME + ".location";
@@ -310,7 +309,7 @@ public class LocationUpdatesService extends Service {
   private void onNewLocation(Location location) {
     Log.i(TAG, "New location in service: " + location);
 
-    if (BuildConfig.DEBUG || isAccepted(location)) {
+    if (isAccepted(location)) {
       Log.i(TAG, "location accepted");
 
       Intent intent = new Intent(this, SaveLocationService.class);
