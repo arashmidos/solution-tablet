@@ -1,7 +1,5 @@
 package com.parsroyal.solutiontablet.data.entity;
 
-import com.parsroyal.solutiontablet.util.Empty;
-
 /**
  * Created by Arash 2018-01-25
  */
@@ -149,26 +147,6 @@ public class VisitInformation extends BaseEntity<Long> {
 
   public void setVisitBackendId(Long visitBackendId) {
     this.visitBackendId = visitBackendId;
-  }
-
-  public String getString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(id);
-    sb.append("&");
-    sb.append(customerBackendId);
-    sb.append("&");
-    sb.append(Empty.isEmpty(result) ? "NULL" : result);
-    sb.append("&");
-    sb.append(Empty.isEmpty(visitDate) ? "NULL" : visitDate);
-    sb.append("&");
-    sb.append(Empty.isEmpty(startTime) ? "NULL" : startTime);
-    sb.append("&");
-    sb.append(Empty.isEmpty(endTime) ? "NULL" : endTime);
-    sb.append("&");
-    sb.append(Empty.isEmpty(xLocation) ? "NULL" : xLocation);
-    sb.append("&");
-    sb.append(Empty.isEmpty(yLocation) ? "NULL" : yLocation);
-    return sb.toString();
   }
 
   @Override

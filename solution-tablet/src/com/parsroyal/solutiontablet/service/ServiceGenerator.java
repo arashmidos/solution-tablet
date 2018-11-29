@@ -80,13 +80,8 @@ public class ServiceGenerator {
     builder = new Retrofit.Builder().baseUrl(baseUrl + "/");
 
     GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.registerTypeAdapter(BigDecimal.class,  new JsonSerializer<BigDecimal>() {
-      @Override
-      public JsonElement serialize(final BigDecimal src, final Type typeOfSrc, final JsonSerializationContext context) {
-
-        return new JsonPrimitive(src);
-      }
-    });
+    gsonBuilder.registerTypeAdapter(BigDecimal.class,
+        (JsonSerializer<BigDecimal>) (src, typeOfSrc, context) -> new JsonPrimitive(src));
 
     Gson gson = gsonBuilder.setLenient().create();
 

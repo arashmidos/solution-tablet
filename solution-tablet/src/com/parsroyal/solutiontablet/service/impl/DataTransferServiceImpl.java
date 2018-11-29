@@ -21,7 +21,7 @@ import com.parsroyal.solutiontablet.biz.impl.QuestionnaireDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleOrderForDeliveryDataTaransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.VisitLineDataTaransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitLineForDeliveryDataTaransferBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -43,7 +43,6 @@ import com.parsroyal.solutiontablet.data.model.QAnswerDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.exception.InvalidServerAddressException;
 import com.parsroyal.solutiontablet.exception.PasswordNotProvidedForConnectingToServerException;
-import com.parsroyal.solutiontablet.exception.SalesmanIdNotProvidedForConnectingToServerException;
 import com.parsroyal.solutiontablet.exception.UsernameNotProvidedForConnectingToServerException;
 import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
@@ -52,7 +51,6 @@ import com.parsroyal.solutiontablet.service.PaymentService;
 import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.File;
@@ -90,53 +88,6 @@ public class DataTransferServiceImpl implements DataTransferService {
     this.paymentService = new PaymentServiceImpl(context);
     this.positionService = new PositionServiceImpl(context);
     this.visitService = new VisitServiceImpl(context);
-  }
-
-  public void getAllData() {
-    backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
-    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
-    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
-    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-    saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
-
-    if (Empty.isEmpty(backendUri)) {
-      throw new InvalidServerAddressException();
-    }
-
-    if (Empty.isEmpty(username)) {
-      throw new UsernameNotProvidedForConnectingToServerException();
-    }
-
-    if (Empty.isEmpty(password)) {
-      throw new PasswordNotProvidedForConnectingToServerException();
-    }
-
-    if (Empty.isEmpty(salesmanId)) {
-      throw new SalesmanIdNotProvidedForConnectingToServerException();
-    }
-
-    clearData(Constants.FULL_UPDATE);
-
-    if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER)) {
-      new GoodsRequestDataTransferBizImpl(context).exchangeData();
-    }
-
-    getAllProvinces();
-    getAllCities();
-    getAllBaseInfos();
-    getAllGoodsGroups();
-    getAllQuestionnaires();
-
-    if (saleType.getValue().equals(ApplicationKeys.SALE_DISTRIBUTER)) {
-      getAllDeliverableGoods();
-      getAllVisitLinesForDelivery();
-      getAllOrdersForDelivery();
-    } else {
-      getAllGoods();
-      getAllVisitLines();
-    }
-
-//    uiObserver.finished(true);
   }
 
   @Override
@@ -247,7 +198,7 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   @Override
-  public void sendAllData(final ResultObserver uiObserver) {
+  public void sendAllData() {
     backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
     username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
     password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
@@ -491,25 +442,42 @@ public class DataTransferServiceImpl implements DataTransferService {
           R.string.message_found_no_visit_information_for_send), StatusCodes.NO_DATA_ERROR));
       return;
     }
-    VisitInformationDataTransferBizImpl dataTransfer = new VisitInformationDataTransferBizImpl(
-        context);
+    VisitInformationDataTransfer dataTransfer = new VisitInformationDataTransfer(context);
 
-    int emptyVisit = 0;
     for (int i = 0; i < visitInformationList.size(); i++) {
       VisitInformationDto visitInformationDto = visitInformationList.get(i);
       if (visitInformationDto.getDetails() == null
           || visitInformationDto.getDetails().size() == 0) {
-        emptyVisit++;
         visitService.deleteVisitById(visitInformationDto.getId());
         continue;
       }
       dataTransfer.setData(visitInformationDto);
       dataTransfer.exchangeData();
     }
+
+    int success = dataTransfer.getSuccess();
+    int total = dataTransfer.getTotal();
+
+    if (total == success) {
+      sendSuccessResult(success, total);
+    } else {
+      sendCancelResult(success, total);
+    }
+  }
+
+  private void sendSuccessResult(int success, int total) {
     EventBus.getDefault().post(new DataTransferSuccessEvent(String
         .format(Locale.US, context.getString(R.string.data_transfered_result),
-            String.valueOf(dataTransfer.getSuccess()),
-            String.valueOf(visitInformationList.size() - dataTransfer.getSuccess() - emptyVisit)),
+            String.valueOf(success),
+            String.valueOf(total - success)),
+        StatusCodes.SUCCESS));
+  }
+
+  private void sendCancelResult(int success, int total) {
+    EventBus.getDefault().post(new DataTransferErrorEvent(String
+        .format(Locale.US, context.getString(R.string.data_transfered_result),
+            String.valueOf(success),
+            String.valueOf(total - success)),
         StatusCodes.SUCCESS));
   }
 

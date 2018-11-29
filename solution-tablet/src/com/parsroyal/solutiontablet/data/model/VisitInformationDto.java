@@ -1,6 +1,6 @@
 package com.parsroyal.solutiontablet.data.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import com.parsroyal.solutiontablet.constants.SaleType;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class VisitInformationDto extends BaseModel {
   private String endTime;
   private Double xLocation;
   private Double yLocation;
-  @JsonProperty("customerId")
+  @SerializedName("customerd")//TODO:
   private Long customerBackendId;
   private Long salesmanId;
   private SaleType saleType;

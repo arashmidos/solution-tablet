@@ -7,7 +7,7 @@ import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
  */
 public interface DataTransferService {
 
-  void sendAllData(ResultObserver resultObserver);
+  void sendAllData();
 
   void clearData(int updateType);
 

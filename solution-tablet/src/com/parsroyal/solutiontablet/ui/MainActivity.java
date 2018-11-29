@@ -296,7 +296,7 @@ public abstract class MainActivity extends AppCompatActivity {
                 showProgressDialog(getString(R.string.message_sending_data));
                 new Thread(() -> {
                   try {
-                    dataTransferService.sendAllData(null);
+                    dataTransferService.sendAllData();
                   } catch (Exception ex) {
                     Logger.sendError("Install Update",
                         "Error in installing new version" + ex.getMessage());

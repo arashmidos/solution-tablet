@@ -76,7 +76,7 @@
           android:layout_alignTop="@+id/customer_name_tv"
           android:layout_toLeftOf="@+id/customer_name_tv"
           android:layout_toStartOf="@+id/customer_name_tv"
-          android:textColor="@color/black_55"
+          android:textColor="@color/gray_75"
           android:textSize="14sp"
           tools:text="فاصله ۱۰۰ متر" />
         <TextView

@@ -23,7 +23,7 @@ import com.parsroyal.solutiontablet.biz.impl.PaymentsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransfer;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
@@ -437,8 +437,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
       return;
     }
-    VisitInformationDataTransferBizImpl dataTransfer = new VisitInformationDataTransferBizImpl(
-        mainActivity);
+    VisitInformationDataTransfer dataTransfer = new VisitInformationDataTransfer(mainActivity);
     Thread sendDataThead = new Thread(() -> {
 
       for (int i = 0; i < visitInformationList.size(); i++) {
@@ -452,7 +451,11 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         dataTransfer.setData(visitInformationDto);
         dataTransfer.exchangeData();
       }
-      EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_FINISH_TRANSFER));
+      if (dataTransfer.getTotal() == dataTransfer.getSuccess()) {
+        finishTransfer();
+      } else {
+        cancelTransfer();
+      }
     });
     sendDataThead.start();
   }
@@ -484,7 +487,6 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       ToastUtil.toastError(root, getString(R.string.error_in_sending_data));
     });
   }
-
 
   @Override
   public void onResume() {

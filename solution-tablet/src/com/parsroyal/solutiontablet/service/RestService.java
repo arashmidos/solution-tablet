@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.parsroyal.solutiontablet.data.model.SaleInvoiceDocument;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
 import com.parsroyal.solutiontablet.data.model.UpdatePusheRequest;
+import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -26,6 +27,9 @@ public interface RestService {
   @POST("saleinvoices")
   Call<String> sendInvoice(@Header("saleType") Long saleType,
       @Body SaleInvoiceDocument saleDocument);
+
+  @POST("visits")
+  Call<VisitInformationDto> sendVisits(@Body VisitInformationDto visitInformationDto);
 
   @GET("goods/{customerId}/reject")
   Call<JsonArray> getAllRejectedData(@Path("customerId") Long customerBackendId);
