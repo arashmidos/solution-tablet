@@ -15,7 +15,7 @@ public class VisitInformationDto extends BaseModel {
   private String endTime;
   private Double xLocation;
   private Double yLocation;
-  @SerializedName("customerd")//TODO:
+  @SerializedName("customerId")
   private Long customerBackendId;
   private Long salesmanId;
   private SaleType saleType;

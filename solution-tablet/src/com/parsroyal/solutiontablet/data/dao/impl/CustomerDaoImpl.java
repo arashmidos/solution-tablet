@@ -270,6 +270,19 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
   }
 
   @Override
+  public Customer retrieveCustomerByVisitLineBackendId(Long customerBackendId, Long visitLineId) {
+    String selection =
+        " " + Customer.COL_BACKEND_ID + " = ? AND " + Customer.COL_VISIT_LINE_BACKEND_ID + " = ? ";
+    String[] args = {String.valueOf(customerBackendId), String.valueOf(visitLineId)};
+    List<Customer> all = retrieveAll(selection, args, null, null, null);
+    if (all.size() > 0) {
+      return all.get(0);
+    } else {
+      return null;
+    }
+  }
+
+  @Override
   public List<CustomerListModel> getAllCustomersListModelByVisitLineWithConstraint(Long visitLineId,
       String constraint, boolean showOnMap) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());

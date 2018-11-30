@@ -66,4 +66,5 @@ public interface CustomerService extends BaseService {
 
   void updateCustomerPictures();
 
+  boolean addCustomer(Customer customer, Long visitlineBackendId);
 }

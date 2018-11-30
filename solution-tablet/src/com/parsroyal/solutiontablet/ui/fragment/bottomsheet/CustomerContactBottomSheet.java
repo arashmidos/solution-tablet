@@ -50,7 +50,6 @@ public class CustomerContactBottomSheet extends BottomSheetDialogFragment {
     return view;
   }
 
-
   @OnClick({R.id.call_layout, R.id.sms_layout})
   public void onViewClicked(View view) {
     switch (view.getId()) {
@@ -67,5 +66,4 @@ public class CustomerContactBottomSheet extends BottomSheetDialogFragment {
         break;
     }
   }
-
 }

@@ -23,6 +23,7 @@ import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
 /**
@@ -37,12 +38,9 @@ public class CustomerAdapter extends Adapter<CustomerAdapter.ViewHolder> {
   private Context context;
   private List<Customer> customers;
   private Activity mainActivity;
-  private boolean isClickable;
 
-  public CustomerAdapter(Context context, List<Customer> customers,
-      boolean isClickable) {
+  public CustomerAdapter(Context context, List<Customer> customers) {
     this.context = context;
-    this.isClickable = isClickable;
     this.customers = customers;
     this.mainActivity = (MainActivity) context;
     this.customerDao = new CustomerDaoImpl(context);
@@ -111,10 +109,11 @@ public class CustomerAdapter extends Adapter<CustomerAdapter.ViewHolder> {
 
     @OnClick(R.id.customer_lay)
     public void onViewClicked() {
-      //TODO:insert customer
-      customer.setVisitLineBackendId(0L);
-      customerDao.create(customer);
-      mainActivity.onBackPressed();
+      if (customerService.addCustomer(customer, 0L)) {
+        mainActivity.onBackPressed();
+      } else {
+        ToastUtil.toastError(mainActivity, "مشتری ثبت شده است");
+      }
     }
 
     public void setData(Customer customer, int position) {
@@ -126,7 +125,6 @@ public class CustomerAdapter extends Adapter<CustomerAdapter.ViewHolder> {
       String customerCode = "کد : " + NumberUtil.digitsToPersian(customer.getCode());
       customerIdTv.setText(customerCode);
       customerShopNameTv.setText(NumberUtil.digitsToPersian(customer.getShopName()));
-      //TODO:check condition
       if (customer.getxLocation() > 0 && customer.getxLocation() > 0) {
         hasLocationImg.setImageResource(R.drawable.ic_gps_fixed_black_18dp);
         hasLocationImg.setColorFilter(ContextCompat.getColor(context, R.color.primary));

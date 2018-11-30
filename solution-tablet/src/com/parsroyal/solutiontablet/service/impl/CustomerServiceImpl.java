@@ -234,4 +234,21 @@ public class CustomerServiceImpl implements CustomerService {
   public void deleteAll() {
     customerDao.deleteAll();
   }
+
+  @Override
+  public boolean addCustomer(Customer customer, Long visitLineBackendId) {
+    if (customerDao.retrieveCustomerByVisitLineBackendId(
+        customer.getBackendId(), visitLineBackendId) != null) {
+      //We already added this customer
+      return false;
+    } else {
+      customer.setVisitLineBackendId(visitLineBackendId);
+      customer.setCreateDateTime(
+          DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+      customer.setUpdateDateTime(
+          DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+      customerDao.create(customer);
+      return true;
+    }
+  }
 }

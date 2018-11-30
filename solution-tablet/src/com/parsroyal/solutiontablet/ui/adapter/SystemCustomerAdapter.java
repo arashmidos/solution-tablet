@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -41,26 +42,24 @@ public class SystemCustomerAdapter extends Adapter<ViewHolder> {
   private Context context;
   private List<CustomerListModel> customers;
   private Activity mainActivity;
-  private boolean isClickable;
 
-  public SystemCustomerAdapter(Context context, List<CustomerListModel> customers,
-      boolean isClickable) {
+  public SystemCustomerAdapter(Context context, List<CustomerListModel> customers) {
     this.context = context;
-    this.isClickable = isClickable;
     this.customers = customers;
     this.mainActivity = (MainActivity) context;
     this.customerService = new CustomerServiceImpl(context);
     inflater = LayoutInflater.from(context);
   }
 
+  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_system_customer, parent, false);
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     CustomerListModel customer = customers.get(position);
     holder.setData(customer, position);
   }
@@ -131,14 +130,7 @@ public class SystemCustomerAdapter extends Adapter<ViewHolder> {
 
     @OnClick(R.id.customer_lay)
     public void onViewClicked() {
-      //todo:!!
-      /*if (isClickable) {
-        CustomerDao customerDao = new CustomerDaoImpl(context);
-        Customer toCustomer = customerDao.retrieve(customer.getPrimaryKey());
-        toCustomer.setVisitLineBackendId(0L);
-        customerDao.update(toCustomer);
-        mainActivity.onBackPressed();
-      }*/
+
     }
 
     public void setData(CustomerListModel customer, int position) {

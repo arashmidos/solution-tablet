@@ -94,7 +94,7 @@ public class CustomerSearchFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new SystemCustomerAdapter(activity, getCustomersList(), isClickable);
+    adapter = new SystemCustomerAdapter(activity, getCustomersList());
     if (MultiScreenUtility.isTablet(activity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(activity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);
@@ -107,7 +107,7 @@ public class CustomerSearchFragment extends BaseFragment {
 
   //set up recycler view online search
   private void setUpRecyclerViewOnline() {
-    onlineAdapter = new CustomerAdapter(activity, new ArrayList<>(), isClickable);
+    onlineAdapter = new CustomerAdapter(activity, new ArrayList<>());
     if (MultiScreenUtility.isTablet(activity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(activity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);
@@ -197,7 +197,6 @@ public class CustomerSearchFragment extends BaseFragment {
         noCustomerLayout.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
       } else if (event.getStatusCode() == StatusCodes.NO_DATA_ERROR) {
-//        ToastUtil.toastError(activity, R.string.retry);
         noCustomerLayout.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
       }

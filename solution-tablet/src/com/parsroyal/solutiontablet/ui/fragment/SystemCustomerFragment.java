@@ -77,7 +77,7 @@ public class SystemCustomerFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new SystemCustomerAdapter(mainActivity, getCustomersList(), false);
+    adapter = new SystemCustomerAdapter(mainActivity, getCustomersList());
     if (MultiScreenUtility.isTablet(mainActivity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);

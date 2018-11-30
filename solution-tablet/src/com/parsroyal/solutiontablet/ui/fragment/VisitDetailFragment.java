@@ -234,7 +234,7 @@ public class VisitDetailFragment extends BaseFragment {
     Spinner noSpinner = dialogView.findViewById(R.id.no_spinner);
     AlertDialog alertDialog = dialogBuilder.create();
 
-    wants.add(new LabelValue(-1l, mainActivity.getString(R.string.reason_register_no)));
+    wants.add(new LabelValue(-1L, mainActivity.getString(R.string.reason_register_no)));
     LabelValueArrayAdapterWithHint labelValueArrayAdapter = new LabelValueArrayAdapterWithHint(
         mainActivity, wants);
     noSpinner.setAdapter(labelValueArrayAdapter);
@@ -242,7 +242,7 @@ public class VisitDetailFragment extends BaseFragment {
     alertDialog.show();
     registerNoBtn.setOnClickListener(v -> {
       LabelValue selectedItem = (LabelValue) noSpinner.getSelectedItem();
-      if (selectedItem.getValue() != -1l) {
+      if (selectedItem.getValue() != -1L) {
         errorMessage.setVisibility(View.INVISIBLE);
         updateVisitResult(selectedItem, false);
         alertDialog.dismiss();
