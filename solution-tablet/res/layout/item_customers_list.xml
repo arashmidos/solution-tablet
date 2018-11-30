@@ -5,11 +5,7 @@
   android:id="@+id/customer_lay"
   android:layout_width="match_parent"
   android:layout_height="75dp"
-  android:layout_marginTop="8dp"
-  android:layout_marginStart="8dp"
-  android:layout_marginEnd="8dp"
-  android:layout_marginLeft="8dp"
-  android:layout_marginRight="8dp"
+  android:layout_margin="8dp"
   card_view:cardCornerRadius="2dp"
   card_view:cardElevation="3dp">
 
@@ -33,7 +29,7 @@
       android:maxLines="1"
       android:textColor="@color/black_85"
       android:textSize="14sp"
-      tools:text="محمد رضا گلزلر" />
+      tools:text="محمد رضا گلزار" />
 
     <TextView
       android:id="@+id/customer_id_tv"
@@ -49,6 +45,22 @@
       android:maxLines="1"
       android:textColor="@color/login_gray"
       android:textSize="12sp" />
+    <TextView
+      android:id="@+id/visitline_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_alignParentRight="true"
+      android:layout_below="@+id/customer_name_tv"
+      android:ellipsize="end"
+      android:gravity="right"
+      android:maxLines="1"
+      android:textColor="@color/login_gray"
+      android:textSize="12sp"
+      android:visibility="gone"
+      tools:text="خط ویزیت تهران شرق" />
 
     <TextView
       android:id="@+id/customer_shop_name_tv"

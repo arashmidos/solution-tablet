@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,13 +17,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
-import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.ui.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.CityAdapter;
-import com.parsroyal.solutiontablet.ui.adapter.CustomerSearchAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CustomerSearchDialogFragment extends DialogFragment {
 
@@ -35,15 +32,14 @@ public class CustomerSearchDialogFragment extends DialogFragment {
 
 
   private MainActivity mainActivity;
-  private CustomerSearchAdapter customerSearchAdapter;
+  private PathDetailAdapter pathDetailAdapter;
 
   public CustomerSearchDialogFragment() {
     // Required empty public constructor
   }
 
   public static CustomerSearchDialogFragment newInstance() {
-    CustomerSearchDialogFragment fragment = new CustomerSearchDialogFragment();
-    return fragment;
+    return new CustomerSearchDialogFragment();
   }
 
   @Override
@@ -54,7 +50,7 @@ public class CustomerSearchDialogFragment extends DialogFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_dialog_customer_search, container, false);
@@ -78,7 +74,7 @@ public class CustomerSearchDialogFragment extends DialogFragment {
           searchImg.setVisibility(View.VISIBLE);
         } else {
           searchImg.setVisibility(View.GONE);
-          customerSearchAdapter.update(customerSearchAdapter.getFilteredData(s));
+          pathDetailAdapter.update(pathDetailAdapter.getFilteredData(s));
         }
       }
 
@@ -92,11 +88,13 @@ public class CustomerSearchDialogFragment extends DialogFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    customerSearchAdapter = new CustomerSearchAdapter(getActivity(),this,new ArrayList<>(), 0);
+    pathDetailAdapter = new PathDetailAdapter(mainActivity, new ArrayList<>(), null);
+    pathDetailAdapter.setSearchCallback(this);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
-    recyclerView.setAdapter(customerSearchAdapter);
+    recyclerView.setAdapter(pathDetailAdapter);
   }
+
   @OnClick({R.id.close_btn})
   public void onClick(View view) {
     switch (view.getId()) {

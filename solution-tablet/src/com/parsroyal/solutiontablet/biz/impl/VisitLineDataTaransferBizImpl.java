@@ -72,7 +72,6 @@ public class VisitLineDataTaransferBizImpl {
 
             //add manual visit line
 
-
             for (VisitLineDto visitLineDto : list) {
               visitLineDto.setTitle(CharacterFixUtil.fixString(visitLineDto.getTitle()));
               VisitLine visitLine = createVisitLineEntity(visitLineDto);

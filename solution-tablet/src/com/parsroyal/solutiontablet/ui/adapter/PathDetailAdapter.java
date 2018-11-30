@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -23,6 +24,7 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.CustomerInfoBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CustomerInfoDialogFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CustomerSearchDialogFragment;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
@@ -40,29 +42,36 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
   private static final String TAG = PathDetailAdapter.class.getName();
   private final CustomerService customerService;
 
-  private final long visitlineBackendId;
+  private Long visitlineBackendId;
   private LayoutInflater inflater;
   private MainActivity mainActivity;
   private List<CustomerListModel> customers;
+  private CustomerSearchDialogFragment customerSearchDialogFragment;
+
 
   public PathDetailAdapter(Context mainActivity, List<CustomerListModel> customers,
-      long visitlineBackendId) {
+      Long visitLineBackendId) {
     this.mainActivity = (MainActivity) mainActivity;
     this.customers = customers;
     inflater = LayoutInflater.from(mainActivity);
     customerService = new CustomerServiceImpl(mainActivity);
 
-    this.visitlineBackendId = visitlineBackendId;
+    this.visitlineBackendId = visitLineBackendId;
   }
 
+  public void setSearchCallback(CustomerSearchDialogFragment dialogFragment) {
+    this.customerSearchDialogFragment = dialogFragment;
+  }
+
+  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_customers_list, parent, false);
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     CustomerListModel model = customers.get(position);
     setMargin(position == customers.size() - 1, holder.customerLay);
     holder.setData(model, position);
@@ -119,6 +128,11 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
   public void notifyItemHasRejection(int position) {
     customers.get(position).setHasRejection(true);
     notifyItemChanged(position);
+  }
+
+  public void update(List<CustomerListModel> customerListModels) {
+    this.customers = customerListModels;
+    notifyDataSetChanged();
   }
 
   /**
@@ -211,13 +225,15 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
 
       CustomerInfoDialogFragment customerInfoDialogFragment;
-      model.setVisitlineBackendId(visitlineBackendId);
       if (MultiScreenUtility.isTablet(mainActivity)) {
         customerInfoDialogFragment = CustomerInfoBottomSheet
             .newInstance(PathDetailAdapter.this, model, position);
       } else {
         customerInfoDialogFragment = CustomerInfoDialogFragment
             .newInstance(PathDetailAdapter.this, model, position);
+      }
+      if (customerSearchDialogFragment != null) {
+        customerSearchDialogFragment.getDialog().dismiss();
       }
       customerInfoDialogFragment.show(ft, "customer info");
     }

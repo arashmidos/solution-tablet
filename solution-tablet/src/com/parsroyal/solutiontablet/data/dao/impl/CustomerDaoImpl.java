@@ -300,7 +300,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         "vd." + VisitInformationDetail.COL_TYPE,
         "vi." + VisitInformation.COL_VISIT_DATE,//10
         "c." + Customer.COL_BACKEND_ID,//11
-        "c." + Customer.COL_SHOP_NAME//12
+        "c." + Customer.COL_SHOP_NAME,//12
+        "c." + Customer.COL_VISIT_LINE_BACKEND_ID//13
+
     };
 
     String table = getTableName() + " c " +
@@ -452,6 +454,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     customerListModel.setLastVisit(cursor.getString(10));
     customerListModel.setBackendId(cursor.getLong(11));
     customerListModel.setShopName(cursor.getString(12));
+    customerListModel.setVisitlineBackendId(cursor.getLong(13));
 
     return customerListModel;
   }
