@@ -70,6 +70,7 @@ import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLineDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLineFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CustomerSearchDialogFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -630,8 +631,15 @@ public abstract class MainActivity extends AppCompatActivity {
       case R.id.search_img:
         Fragment orderFragment = getSupportFragmentManager()
             .findFragmentByTag(OrderFragment.class.getSimpleName());
+        Fragment visitLine = getSupportFragmentManager()
+            .findFragmentByTag(VisitLineFragment.class.getSimpleName());
         if (orderFragment != null && orderFragment.isVisible()) {
           ((OrderFragment) orderFragment).onSearchClicked();
+        } else if (visitLine != null && visitLine.isVisible()) {
+          FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+          CustomerSearchDialogFragment customerSearchDialogFragment = CustomerSearchDialogFragment
+              .newInstance();
+          customerSearchDialogFragment.show(ft, "customer search");
         } else {
           Bundle clickBundle = new Bundle();
           clickBundle.putBoolean(Constants.IS_CLICKABLE, false);
@@ -756,7 +764,7 @@ public abstract class MainActivity extends AppCompatActivity {
     }
 
     //show search icon in customer fragment
-    if (fragmentId == CUSTOMER_FRAGMENT) {
+    if (fragmentId == CUSTOMER_FRAGMENT || fragmentId == VISITLINE_FRAGMENT_ID) {
       searchImg.setVisibility(View.VISIBLE);
     } else {
       searchImg.setVisibility(View.GONE);
@@ -775,7 +783,8 @@ public abstract class MainActivity extends AppCompatActivity {
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
         fragment = FeaturesFragment.newInstance();
-        break; case CHAT_FRAGMENT:
+        break;
+      case CHAT_FRAGMENT:
         fragment = ChatFragment.newInstance();
         break;
       case SETTING_FRAGMENT:
