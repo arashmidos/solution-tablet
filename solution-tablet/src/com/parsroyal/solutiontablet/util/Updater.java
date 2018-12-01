@@ -13,8 +13,8 @@ import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
-import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.ImageTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.ImageTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
@@ -26,7 +26,6 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import okhttp3.ResponseBody;
 import org.apache.commons.io.IOUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -40,13 +39,19 @@ import retrofit2.Response;
 public class Updater {
 
   private static final String TAG = Updater.class.getName();
-  private static final String API_UPDATE_URL = "http://173.212.199.107:50004/appcenter/app/latest/solution-mobile";
+  private static final String API_UPDATE_URL = "http://173.212.199.107:50004/appcenter/app/latest/solution-mobile/%s";
+  private static final String API_UPDATE_URL2 = "http://79.175.163.195:50004/appcenter/app/latest/solution-mobile/%s";
   private static DownloadManager downloadManager;
   private static long downloadReference;
   private static BroadcastReceiver receiverDownloadComplete;
+  private static int retry = 0;
 
   public static void checkAppUpdate(final Context context) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
+      return;
+    }
+
+    if (retry > 1) {
       return;
     }
 
@@ -66,22 +71,38 @@ public class Updater {
       return;
     }
 
-    Call<UpdateResponse> call = updaterService.getUpdate(API_UPDATE_URL);
+    KeyValue keyValue = PreferenceHelper.retrieveByKey(ApplicationKeys.USER_COMPANY_KEY);
+
+    String url;
+    if (retry == 0) {
+      url = String.format(API_UPDATE_URL, keyValue == null ? "" : keyValue.getValue());
+    } else {
+      url = String.format(API_UPDATE_URL2, keyValue == null ? "" : keyValue.getValue());
+      retry++;
+    }
+
+    Call<UpdateResponse> call = updaterService.getUpdate(url);
     call.enqueue(new Callback<UpdateResponse>() {
       @Override
       public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
         if (response.body() != null) {
+          retry = 0;
           UpdateResponse updateResponse = response.body();
-          if (updateResponse != null && updateResponse.isSuccess()
+          if (updateResponse.isSuccess()
               && updateResponse.getVersion() > BuildConfig.VERSION_CODE) {
             doUpdate(context, updateResponse.getDownloadUrl(), updateResponse.getVersion());
           }
+        }else{
+          retry++;
+          checkAppUpdate(context);
         }
       }
 
       @Override
       public void onFailure(Call<UpdateResponse> call, Throwable t) {
         Log.d("Updater", "Update failed");
+        retry++;
+        checkAppUpdate(context);
       }
     });
   }

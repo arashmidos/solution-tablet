@@ -253,7 +253,8 @@ public abstract class MainActivity extends AppCompatActivity {
       PreferenceHelper.setForceExit(true);
       installNewVersion();
     } else {
-      Updater.checkAppUpdate(this);
+      Thread t = new Thread(() -> Updater.checkAppUpdate(MainActivity.this));
+      t.start();
     }
   }
 
