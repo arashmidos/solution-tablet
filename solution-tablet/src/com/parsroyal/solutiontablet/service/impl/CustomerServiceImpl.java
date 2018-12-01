@@ -125,7 +125,6 @@ public class CustomerServiceImpl implements CustomerService {
             LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
                 item.getXlocation(), item.getYlocation()));
       }
-
     }
 
     return listModel;

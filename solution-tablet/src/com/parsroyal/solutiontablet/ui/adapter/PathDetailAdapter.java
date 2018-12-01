@@ -191,6 +191,9 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
         visitTodayImg
             .setColorFilter(ContextCompat.getColor(mainActivity, R.color.badger_background));
       }
+      if (model.hasNoOrder()) {
+        visitTodayImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.orange));
+      }
 
       ArrayList<VisitInformationDetailType> list = new ArrayList<>();
       list.addAll(model.getDetails());

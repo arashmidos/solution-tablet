@@ -43,7 +43,6 @@ import com.parsroyal.solutiontablet.ui.activity.TabletReportListActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.VisitActivityAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.CustomerContactBottomSheet;
-import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.MapInfoWindowChooser;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -241,6 +240,10 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     if (model.hasRejection()) {
       visitTodayImg
           .setColorFilter(ContextCompat.getColor(mainActivity, R.color.badger_background));
+    }
+    if (model.hasNoOrder()) {
+      visitTodayImg
+          .setColorFilter(ContextCompat.getColor(mainActivity, R.color.orange));
     }
 
     customerAddressTv.setText(NumberUtil.digitsToPersian(model.getAddress()));

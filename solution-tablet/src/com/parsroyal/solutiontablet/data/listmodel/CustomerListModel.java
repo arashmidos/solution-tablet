@@ -32,6 +32,7 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   private boolean hasRejectOrder;
   private boolean hasDelivery;
   private Long visitlineBackendId;
+  private boolean hasNoOrder;
 
   public Long getVisitlineBackendId() {
     return visitlineBackendId;
@@ -218,5 +219,13 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
 
   public void sethasRejectOrder(boolean hasRejectOrder) {
     this.hasRejectOrder = hasRejectOrder;
+  }
+
+  public void setHasNoOrder(boolean hasNoOrder) {
+    this.hasNoOrder = hasNoOrder;
+  }
+
+  public boolean hasNoOrder() {
+    return hasNoOrder;
   }
 }
