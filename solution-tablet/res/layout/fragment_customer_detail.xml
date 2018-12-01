@@ -424,7 +424,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-      android:id="@+id/cancel_btn"
+      android:id="@+id/no_visit_btn"
       style="@style/IranSans.Medium"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -432,8 +432,8 @@
       android:layout_marginLeft="28dp"
       android:layout_alignParentLeft="true"
       android:layout_below="@id/devider_bottom"
-      android:text="@string/button_cancel"
-      android:textColor="@color/primary"
+      android:text="@string/not_visited"
+      android:textColor="@color/red"
       android:textSize="14sp" />
 
     <Button
@@ -454,17 +454,34 @@
       android:textSize="14sp" />
 
     <Button
-      android:id="@+id/no_visit_btn"
+      android:visibility="gone"
+      android:id="@+id/no_visit_btn_old"
       style="@style/IranSans.Medium"
       android:layout_width="80dp"
       android:layout_height="30dp"
       android:layout_marginTop="16dp"
       android:layout_marginBottom="16dp"
       android:layout_below="@id/devider_bottom"
-      android:layout_toLeftOf="@id/enter_btn"
+      android:layout_marginLeft="16dp"
+      android:layout_alignParentLeft="true"
       android:background="@drawable/send_data_background"
       android:gravity="center"
       android:text="@string/not_visited"
+      android:textColor="@color/red"
+      android:textSize="14sp" />
+    <Button
+      android:id="@+id/phone_visit_btn"
+      style="@style/IranSans.Medium"
+      android:layout_width="85dp"
+      android:layout_height="30dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginBottom="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_below="@id/devider_bottom"
+      android:layout_toLeftOf="@id/enter_btn"
+      android:background="@drawable/send_data_background"
+      android:gravity="center"
+      android:text="@string/visit_by_phone"
       android:textColor="@color/primary"
       android:textSize="14sp" />
   </RelativeLayout>

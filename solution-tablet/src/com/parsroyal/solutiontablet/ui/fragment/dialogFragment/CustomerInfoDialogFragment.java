@@ -273,11 +273,15 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     super.onDestroyView();
   }
 
-  @OnClick({R.id.close_btn, R.id.customer_report_tv, R.id.customer_report_layout, R.id.cancel_btn,
+  @OnClick({R.id.close_btn, R.id.customer_report_tv, R.id.customer_report_layout,
+      R.id.phone_visit_btn,
       R.id.enter_btn, R.id.no_visit_btn, R.id.call_layout, R.id.phone_layout})
   public void onViewClicked(View view) {
     switch (view.getId()) {
-      case R.id.cancel_btn:
+      case R.id.phone_visit_btn:
+        doEnter(true);
+        dismiss();
+        break;
       case R.id.close_btn:
         dismiss();
         break;
@@ -297,12 +301,15 @@ public class CustomerInfoDialogFragment extends DialogFragment {
       case R.id.no_visit_btn:
         showWantsDialog();
         dismiss();
+        break;
       case R.id.call_layout:
-        CustomerContactBottomSheet contactBottomSheet = CustomerContactBottomSheet.newInstance(this,customer.getPhoneNumber());
+        CustomerContactBottomSheet contactBottomSheet = CustomerContactBottomSheet
+            .newInstance(this, customer.getPhoneNumber());
         contactBottomSheet.show(getActivity().getSupportFragmentManager(), "contact bottom sheet");
         break;
       case R.id.phone_layout:
-        CustomerContactBottomSheet contactBottomSheet2 = CustomerContactBottomSheet.newInstance(this,customer.getCellPhone());
+        CustomerContactBottomSheet contactBottomSheet2 = CustomerContactBottomSheet
+            .newInstance(this, customer.getCellPhone());
         contactBottomSheet2.show(getActivity().getSupportFragmentManager(), "contact bottom sheet");
         break;
     }
@@ -312,7 +319,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
 
     if (!distanceServiceEnabled || hasAcceptableDistance()/* || BuildConfig.DEBUG*/) {
 
-      doEnter();
+      doEnter(false);
       dismiss();
     } else {
       ToastUtil.toastError(root, R.string.error_distance_too_far_for_action);
@@ -384,10 +391,14 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   }
 
 
-  protected void doEnter() {
+  protected void doEnter(boolean isPhoneVisit) {
     try {
-      final Long visitInformationId = visitService.startVisiting(customer.getBackendId(),
-          getDistance());
+      final Long visitInformationId;
+      if (isPhoneVisit) {
+        visitInformationId = visitService.startPhoneVisiting(customer.getBackendId());
+      } else {
+        visitInformationId = visitService.startVisiting(customer.getBackendId(), getDistance());
+      }
 
       Position position = positionService.getLastPosition();
       if (Empty.isNotEmpty(position)) {
@@ -401,7 +412,13 @@ public class CustomerInfoDialogFragment extends DialogFragment {
       args.putLong(Constants.ORIGIN_VISIT_ID, visitInformationId);
       args.putLong(Constants.CUSTOMER_ID, customer.getId());
       args.putLong(Constants.VISITLINE_BACKEND_ID, model.getVisitlineBackendId());
-      mainActivity.changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, true);
+//      args.putBoolean(Constants.PHONE_VISIT, isPhoneVisit);
+      if (isPhoneVisit) {
+        mainActivity.setPhoneVisit(true);
+        mainActivity.changeFragment(MainActivity.PHONE_VISIT_DETAIL_FRAGMENT_ID, args, true);
+      } else {
+        mainActivity.changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, true);
+      }
 
     } catch (BusinessException e) {
       Log.e(TAG, e.getMessage(), e);
@@ -430,10 +447,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
         .distanceBetween(event.getLocation().getLatitude(), event.getLocation().getLongitude(),
             customer.getxLocation(), customer.getyLocation());
 
-    mainActivity.runOnUiThread(() -> {
-
-      distanceTv.setText(NumberUtil.digitsToPersian(String.format(
-          getString(R.string.distance_to_customer), String.valueOf((int) distance))));
-    });
+    mainActivity.runOnUiThread(() -> distanceTv.setText(NumberUtil.digitsToPersian(String.format(
+        getString(R.string.distance_to_customer), String.valueOf((int) distance)))));
   }
 }

@@ -101,6 +101,21 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
+  public Long startPhoneVisiting(Long customerBackendId) {
+    VisitInformation visitInformation = new VisitInformation();
+    visitInformation.setCustomerBackendId(customerBackendId);
+    visitInformation
+        .setVisitDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
+    visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
+
+    Date networkDate = SolutionTabletApplication.getTrueTime();
+    visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
+    visitInformation.setDistance(0L);
+    visitInformation.setPhoneVisit(true);
+    return saveVisit(visitInformation);
+  }
+
+  @Override
   public Long startVisitingNewCustomer(Long customerId) {
     VisitInformation visitInformation = new VisitInformation();
     visitInformation.setCustomerId(customerId);

@@ -301,7 +301,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         "vi." + VisitInformation.COL_VISIT_DATE,//10
         "c." + Customer.COL_BACKEND_ID,//11
         "c." + Customer.COL_SHOP_NAME,//12
-        "c." + Customer.COL_VISIT_LINE_BACKEND_ID//13
+        "c." + Customer.COL_VISIT_LINE_BACKEND_ID,//13
+        "vi." + VisitInformation.COL_PHONE_VISIT//14
 
     };
 
@@ -400,6 +401,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         entitiesMap.get(primaryKey).setHasDelivery(true);
         entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.DELIVER_ORDER);
       }
+      if (listModel.isPhoneVisit()) {
+        entitiesMap.get(primaryKey).setPhoneVisit(true);
+      }
     }
     cursor.close();
     ArrayList<CustomerListModel> customerListModels = new ArrayList<>(entitiesMap.values());
@@ -460,6 +464,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     customerListModel.setBackendId(cursor.getLong(11));
     customerListModel.setShopName(cursor.getString(12));
     customerListModel.setVisitlineBackendId(cursor.getLong(13));
+    customerListModel.setPhoneVisit(cursor.getInt(14) == 1);
 
     return customerListModel;
   }

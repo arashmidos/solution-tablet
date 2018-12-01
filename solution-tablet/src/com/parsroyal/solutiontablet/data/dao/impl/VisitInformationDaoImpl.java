@@ -52,6 +52,7 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     cv.put(VisitInformation.COL_NETWORK_DATE, entity.getNetworkDate());
     cv.put(VisitInformation.COL_END_NETWORK_DATE, entity.getEndNetworkDate());
     cv.put(VisitInformation.COL_DISTANCE, entity.getDistance());
+    cv.put(VisitInformation.COL_PHONE_VISIT, entity.getPhoneVisit() ? 1 : 0);
     return cv;
   }
 
@@ -82,7 +83,8 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
         VisitInformation.COL_CUSTOMER_ID,
         VisitInformation.COL_NETWORK_DATE,
         VisitInformation.COL_END_NETWORK_DATE,
-        VisitInformation.COL_DISTANCE//14
+        VisitInformation.COL_DISTANCE,//14
+        VisitInformation.COL_PHONE_VISIT
     };
   }
 
@@ -104,6 +106,7 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     entity.setNetworkDate(cursor.getLong(12));
     entity.setEndNetworkDate(cursor.getLong(13));
     entity.setDistance(cursor.getLong(14));
+    entity.setPhoneVisit(cursor.getInt(15) == 1);
     return entity;
   }
 

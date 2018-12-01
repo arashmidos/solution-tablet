@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +44,7 @@ import com.parsroyal.solutiontablet.data.event.UpdateEvent;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationUpdatesService;
+import com.parsroyal.solutiontablet.service.LocationUpdatesService.LocalBinder;
 import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
@@ -59,6 +61,7 @@ import com.parsroyal.solutiontablet.ui.fragment.CustomerSearchFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.PhoneVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnaireListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesCategoryFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
@@ -92,6 +95,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public abstract class MainActivity extends AppCompatActivity {
 
   public static final int FEATURE_FRAGMENT_ID = 0;
+  public static final int PHONE_VISIT_DETAIL_FRAGMENT_ID = 1;
   public static final int NEW_CUSTOMER_DETAIL_FRAGMENT_ID = 2;
   public static final int VISIT_DETAIL_FRAGMENT_ID = 5;
   public static final int REGISTER_PAYMENT_FRAGMENT = 6;
@@ -133,7 +137,7 @@ public abstract class MainActivity extends AppCompatActivity {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-      LocationUpdatesService.LocalBinder binder = (LocationUpdatesService.LocalBinder) service;
+      LocalBinder binder = (LocalBinder) service;
       gpsRecieverService = binder.getService();
       boundToGpsService = true;
       if (!checkPermissions()) {
@@ -211,6 +215,7 @@ public abstract class MainActivity extends AppCompatActivity {
       }
     }
   };
+  private boolean phoneVisit;
 
   public void onCreate(Bundle savedInstanceState) {
    /* StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
@@ -497,7 +502,7 @@ public abstract class MainActivity extends AppCompatActivity {
   private void requestPermissions() {
     boolean shouldProvideRationale =
         ActivityCompat.shouldShowRequestPermissionRationale(this,
-            Manifest.permission.ACCESS_FINE_LOCATION);
+            permission.ACCESS_FINE_LOCATION);
     boolean storageShouldProvideRationale =
         ActivityCompat.shouldShowRequestPermissionRationale(this,
             permission.WRITE_EXTERNAL_STORAGE);
@@ -552,7 +557,7 @@ public abstract class MainActivity extends AppCompatActivity {
    */
   private boolean checkPermissions() {
     return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-        Manifest.permission.ACCESS_FINE_LOCATION) &&
+        permission.ACCESS_FINE_LOCATION) &&
         PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
             permission.WRITE_EXTERNAL_STORAGE);
   }
@@ -564,7 +569,7 @@ public abstract class MainActivity extends AppCompatActivity {
   protected BaseFragment getLastFragment() {
     FragmentManager supportFragmentManager = getSupportFragmentManager();
     if (supportFragmentManager.getBackStackEntryCount() > 1) {
-      FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager
+      BackStackEntry backStackEntryAt = supportFragmentManager
           .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 1);
       String tag = backStackEntryAt.getName();
       BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
@@ -687,7 +692,7 @@ public abstract class MainActivity extends AppCompatActivity {
     try {
       FragmentManager supportFragmentManager = getSupportFragmentManager();
       if (supportFragmentManager.getBackStackEntryCount() > 1) {
-        FragmentManager.BackStackEntry backStackEntryAt = supportFragmentManager
+        BackStackEntry backStackEntryAt = supportFragmentManager
             .getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 2);
         String tag = backStackEntryAt.getName();
         BaseFragment lastFragment = (BaseFragment) supportFragmentManager.findFragmentByTag(tag);
@@ -699,6 +704,9 @@ public abstract class MainActivity extends AppCompatActivity {
           if (lastItem instanceof VisitDetailFragment) {
             showTimer();
             ((VisitDetailFragment) lastItem).finishVisiting();
+            return;
+          } else if (lastItem instanceof PhoneVisitDetailFragment) {
+            ((PhoneVisitDetailFragment) lastItem).finishVisiting();
             return;
           } else if (lastItem instanceof OrderFragment && !((OrderFragment) lastItem)
               .isExpandableVisible()) {
@@ -794,6 +802,9 @@ public abstract class MainActivity extends AppCompatActivity {
       case VISIT_DETAIL_FRAGMENT_ID:
         fragment = VisitDetailFragment.newInstance();
         break;
+      case PHONE_VISIT_DETAIL_FRAGMENT_ID:
+        fragment = PhoneVisitDetailFragment.newInstance();
+        break;
       case ORDER_INFO_FRAGMENT:
         fragment = OrderInfoFragment.newInstance();
         break;
@@ -876,5 +887,13 @@ public abstract class MainActivity extends AppCompatActivity {
       hideTimer();
     }
     searchImg.setVisibility(visibility);
+  }
+
+  public void setPhoneVisit(boolean phoneVisit) {
+    this.phoneVisit = phoneVisit;
+  }
+
+  public boolean isPhoneVisit() {
+    return phoneVisit;
   }
 }

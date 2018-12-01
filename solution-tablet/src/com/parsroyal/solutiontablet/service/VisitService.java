@@ -29,6 +29,8 @@ public interface VisitService extends BaseService {
 
   Long startVisiting(Long customerBackendId, int distance);
 
+  Long startPhoneVisiting(Long customerBackendId);
+
   Long startVisitingNewCustomer(Long customerId);
 
   void finishVisiting(Long visitId);

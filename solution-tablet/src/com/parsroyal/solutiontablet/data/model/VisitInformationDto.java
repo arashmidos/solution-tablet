@@ -23,6 +23,15 @@ public class VisitInformationDto extends BaseModel {
   private String networkDate;
   private String endNetworkDate;
   private Long distance;
+  private boolean phoneVisit;
+
+  public boolean isPhoneVisit() {
+    return phoneVisit;
+  }
+
+  public void setPhoneVisit(boolean phoneVisit) {
+    this.phoneVisit = phoneVisit;
+  }
 
   public String getEndNetworkDate() {
     return endNetworkDate;

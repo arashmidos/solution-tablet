@@ -80,6 +80,7 @@ public class Constants {
   public static final String REJECT_TYPE_ID = "REJECT_TYPE_ID";
   public static final String CASH_ORDER = "CASH_ORDER";
   public static final String DISCOUNT = "DISCOUNT";
+  public static final String PHONE_VISIT = "PHONE_VISIT";
 
   public class TransferStatus {
 

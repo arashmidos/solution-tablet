@@ -638,5 +638,6 @@
   <string name="distance_to_customer">( فاصله %s متر )</string>
   <string name="call">تماس</string>
   <string name="send_sms">ارسال پیامک</string>
+  <string name="visit_by_phone">سفارش تلفنی</string>
 
 </resources>

@@ -183,7 +183,14 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
       }
       //set visit icon
       if (model.isVisited()) {
-        visitTodayImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
+        if (model.isPhoneVisit()) {
+          visitTodayImg.setImageResource(R.drawable.ic_call);
+          visitTodayImg
+              .setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
+        }else {
+          visitTodayImg
+              .setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
+        }
       } else {
         visitTodayImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.login_gray));
       }

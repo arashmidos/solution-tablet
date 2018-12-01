@@ -132,6 +132,7 @@ public class VisitDetailFragment extends BaseFragment {
       saleOrderService = new SaleOrderServiceImpl(mainActivity);
 
       visitId = args.getLong(Constants.ORIGIN_VISIT_ID);
+
       visitLineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
       saleType = new SettingServiceImpl(mainActivity)
           .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
@@ -141,9 +142,7 @@ public class VisitDetailFragment extends BaseFragment {
       setUpViewPager();
       viewpager.setCurrentItem(viewPagerAdapter.getCount());
       viewpager.setOffscreenPageLimit(viewPagerAdapter.getCount());
-      /*if (MultiScreenUtility.isTablet(mainActivity)) {
-        mainActivity.changeTitle("");
-      }*/
+
       setUpTimer();
       return view;
     } else {
