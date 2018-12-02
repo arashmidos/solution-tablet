@@ -27,7 +27,7 @@
     <LinearLayout
       android:id="@+id/visitline_layout"
       android:layout_width="0dp"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:layout_weight="1"
       android:background="@color/white"
       android:gravity="right"
@@ -36,19 +36,19 @@
 
       <!-- MapView in lite mode. Note that it needs to be initialised
        programmatically before it can be used. -->
-      <com.google.android.gms.maps.MapView
+      <!--<com.google.android.gms.maps.MapView
         android:id="@+id/map_item"
         android:layout_width="match_parent"
         android:layout_height="175dp"
         android:clickable="false"
         android:visibility="gone"
         map:liteMode="true"
-        map:mapType="none" />
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/navigation_drawer_divider" />
+        map:mapType="none" />-->
+      <!--
+            <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/navigation_drawer_divider" />-->
 
       <TextView
         android:id="@+id/visitline_name"

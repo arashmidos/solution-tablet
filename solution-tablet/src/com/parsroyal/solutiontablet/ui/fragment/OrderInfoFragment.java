@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -253,8 +252,15 @@ public class OrderInfoFragment extends BaseFragment {
       setPaymentMethod(selectedItem);
     } else {
 //      paymentMethodTv.setText(R.string.click_to_select);
-      List<LabelValue> values = baseInfoService
-          .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.PAYMENT_TYPE.getId());
+      List<LabelValue> values;
+      if (isCashOrder) {
+
+        values = baseInfoService.search(BaseInfoTypes.PAYMENT_TYPE.getId(), "نقد");
+      } else {
+        values = baseInfoService
+            .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.PAYMENT_TYPE.getId());
+      }
+
       if (Empty.isNotEmpty(values)) {
         selectedItem = values.get(0);
         setPaymentMethod(selectedItem);
@@ -613,9 +619,6 @@ public class OrderInfoFragment extends BaseFragment {
       recyclerView.setLayoutManager(linearLayoutManager);
       recyclerView.setAdapter(adapter);
       recyclerView.scrollToPosition(dataModel.indexOf(selectedItem));
-      if (selectedItem == null) {
-        Toast.makeText(mainActivity, "NULL HY", Toast.LENGTH_SHORT).show();
-      }
     }
   }
 
@@ -665,6 +668,6 @@ public class OrderInfoFragment extends BaseFragment {
     SaleOrderDao saleOrderDao = new SaleOrderDaoImpl(mainActivity);
     SaleOrder targetOrder = saleOrderDao.retrieve(typeId);
     targetOrder.setSmsConfirm(smsConfirm);
-    ((SaleOrderDaoImpl) saleOrderDao).update(targetOrder);
+    saleOrderDao.update(targetOrder);
   }
 }

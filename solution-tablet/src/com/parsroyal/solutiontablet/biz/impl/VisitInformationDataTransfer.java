@@ -54,6 +54,7 @@ public class VisitInformationDataTransfer {
     Call<VisitInformationDto> call = restService.sendVisits(data);
 
     try {
+
       Response<VisitInformationDto> response = call.execute();
       if (response.isSuccessful()) {
         VisitInformationDto visitResponse = response.body();

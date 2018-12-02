@@ -30,8 +30,8 @@ android {
         minSdkVersion 17
         //noinspection ExpiringTargetSdkVersion
         targetSdkVersion 25
-        versionCode 121
-        versionName "2.18.8"
+        versionCode 122
+        versionName "2.18.9"
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled true

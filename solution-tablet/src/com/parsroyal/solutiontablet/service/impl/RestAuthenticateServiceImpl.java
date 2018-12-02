@@ -26,11 +26,15 @@ public class RestAuthenticateServiceImpl {
   private static final String TAG = RestAuthenticateServiceImpl.class.getName();
   private static final String API_AUTHENTICATE_URI = "%s/users?action=authenticate";
   private static final String API_SETTING_URI = "http://173.212.199.107:50004/appcenter/app/%s/%s";
-
+  private static final String API_SETTING_URI2 = "http://79.175.163.195:50004/appcenter/app/%s/%s";
+  private static int retry = 0;
 
   public static void getCompanyInfo(final Context context, String companyKey) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+      return;
+    }
+    if (retry > 1) {
       return;
     }
 
@@ -45,29 +49,47 @@ public class RestAuthenticateServiceImpl {
       return;
     }
 
-    Call<CompanyInfoResponse> call = restSettingService
-        .getCompanyInfo(String.format(API_SETTING_URI, Constants.ApplicationKey, companyKey));
+    String url;
+    if (retry == 0) {
+      url = String.format(API_SETTING_URI, Constants.ApplicationKey, companyKey);
+    } else {
+      url = String.format(API_SETTING_URI2, Constants.ApplicationKey, companyKey);
+      retry++;
+    }
+
+    Call<CompanyInfoResponse> call = restSettingService.getCompanyInfo(url);
     call.enqueue(new Callback<CompanyInfoResponse>() {
       @Override
       public void onResponse(Call<CompanyInfoResponse> call,
           Response<CompanyInfoResponse> response) {
         if (response.isSuccessful()) {
-
           if (response.body() != null) {
+            retry = 0;
             CompanyInfoResponse updateResponse = response.body();
             EventBus.getDefault().post(updateResponse);
-
           } else {
             EventBus.getDefault().post(new ErrorEvent(StatusCodes.INVALID_DATA));
           }
         } else {
-          EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
+          if (retry == 0) {
+            retry++;
+            getCompanyInfo(context, companyKey);
+          } else {
+            EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
+            retry = 0;
+          }
         }
       }
 
       @Override
       public void onFailure(Call<CompanyInfoResponse> call, Throwable t) {
-        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+        if (retry == 0) {
+          retry++;
+          getCompanyInfo(context, companyKey);
+        } else {
+          EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+          retry = 0;
+        }
       }
     });
   }

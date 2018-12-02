@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -40,6 +41,8 @@ public class DateUtil {
   public static final SimpleDateFormat FULL_FORMATTER_WITH_TIME = new SimpleDateFormat(
       "yyyy/MM/dd - HH:mm:ss");
   public static final SimpleDateFormat GLOBAL_FORMATTER = new SimpleDateFormat("yy/MM/dd");
+  public static final SimpleDateFormat GLOBAL_FORMATTER2 = new SimpleDateFormat("yy/MM/dd",
+      Locale.US);
   public static final SimpleDateFormat FISCAL_YEAR_FORMAT = new SimpleDateFormat("yyyy");
   public static final SimpleDateFormat GLOBAL_FORMATTER_GREGORIAN = new SimpleDateFormat(
       "yy-MM-dd");
@@ -433,11 +436,20 @@ public class DateUtil {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
     int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-    String dateString = DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA");
-    String[] splitDate = dateString.split("/");
-    String monthName = monthNames[Integer.parseInt(splitDate[1]) - 1];
+    try {
+      String dateString = DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA");
+      String[] splitDate = dateString.split("/");
+      String monthName = monthNames[Integer.parseInt(splitDate[1]) - 1];
+      return String.format("%s %s %s %s", getPersianDayOfWeek(dayOfWeek), splitDate[2], monthName,
+          splitDate[0]);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      String dateString = DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER2, "FA");
+      String[] splitDate = dateString.split("/");
+      String monthName = monthNames[Integer.parseInt(splitDate[1]) - 1];
     return String.format("%s %s %s %s", getPersianDayOfWeek(dayOfWeek), splitDate[2], monthName,
-        splitDate[0], monthName);
+        splitDate[0]);
+    }
   }
 
   public static String moveDate(String date1, Integer count) {

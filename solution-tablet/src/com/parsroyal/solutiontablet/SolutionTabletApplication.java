@@ -18,6 +18,8 @@ import com.parsroyal.solutiontablet.biz.impl.RestServiceImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import io.fabric.sdk.android.Fabric;
 import java.io.IOException;
+import java.text.DateFormatSymbols;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;

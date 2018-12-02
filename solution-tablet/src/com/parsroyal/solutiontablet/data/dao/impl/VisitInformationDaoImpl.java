@@ -194,6 +194,7 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     entity.setEndNetworkDate(
         NumberUtil.digitsToEnglish(DateUtil.getZonedDate(new Date(cursor.getLong(13)))));
     entity.setDistance(cursor.getLong(14));
+    entity.setPhoneVisit(cursor.getInt(15) == 1);
 
     return entity;
   }
