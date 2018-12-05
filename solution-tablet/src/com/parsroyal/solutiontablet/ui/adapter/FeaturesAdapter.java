@@ -18,7 +18,7 @@ import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.activity.MobileReportListActivity;
 import com.parsroyal.solutiontablet.ui.activity.TabletReportListActivity;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;

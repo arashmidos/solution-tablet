@@ -3,7 +3,6 @@ package com.parsroyal.solutiontablet;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 import android.support.multidex.MultiDex;
@@ -14,15 +13,16 @@ import android.util.Log;
 import co.ronash.pushe.Pushe;
 import com.crashlytics.android.Crashlytics;
 import com.instacart.library.truetime.TrueTime;
+import com.instacart.library.truetime.TrueTimeRx;
 import com.parsroyal.solutiontablet.biz.impl.RestServiceImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import io.fabric.sdk.android.Fabric;
-import java.io.IOException;
-import java.text.DateFormatSymbols;
-import java.util.Arrays;
+import io.github.inflationx.calligraphy3.CalligraphyConfig;
+import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
+import io.github.inflationx.viewpump.ViewPump;
+import io.reactivex.schedulers.Schedulers;
 import java.util.Date;
 import java.util.Locale;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by Arash on 2018-01-25
@@ -46,10 +46,12 @@ public class SolutionTabletApplication extends MultiDexApplication {
     return sPreference;
   }
 
-  public static Date getTrueTime() {
+  public Date getTrueTime() {
     try {
-      if (TrueTime.isInitialized()) {
-        return TrueTime.now();
+      if (TrueTimeRx.isInitialized()) {
+        return TrueTimeRx.now();
+      }else{
+        reSyncTrueTime();
       }
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -67,38 +69,48 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
 //    Pushe.initialize(this, true);
     MultiDex.install(this);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-          .setDefaultFontPath("fonts/IRANSansMobile.ttf")
-          .setFontAttrId(R.attr.fontPath)
-          .build());
-    }
+
+    ViewPump.init(ViewPump.builder()
+        .addInterceptor(new CalligraphyInterceptor(new
+            CalligraphyConfig.Builder()
+            .setDefaultFontPath("fonts/IRANSansMobile.ttf")
+            .setFontAttrId(R.attr.fontPath)
+            .build()))
+        .build());
 
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
     setLanguage();
 
-    if (!TrueTime.isInitialized()) {
-      new Thread(() -> {
-        try {
-          TrueTime.build().withServerResponseDelayMax(1000)/*.withSharedPreferences(this)*///TODO:
-              .initialize();
-
-          Log.i("Network Time", "**Synced with network");
-        } catch (IOException ignore) {
-          Log.i("Network Time", " not initialized");
-        }
-      }).start();
-    }
+    reSyncTrueTime();
 
     try {
-    Pushe.initialize(this, true);
+      Pushe.initialize(this, true);
       Log.d("Pushe", Pushe.getPusheId(this));
-      new RestServiceImpl().updatePusheId(this,Pushe.getPusheId(this),"GCMToken");
+      new RestServiceImpl().updatePusheId(this, Pushe.getPusheId(this), "GCMToken");
     } catch (Exception ignore) {
 
     }
 //    Log.d("DebugDB", "***>>> DB Address:"+DebugDB.getAddressLog());
+  }
+
+  private void reSyncTrueTime() {
+
+//    new Thread(() -> {
+      try {
+
+        TrueTimeRx.build().withSharedPreferencesCache(this)
+            .initializeRx("time.google.com")
+            .subscribeOn(Schedulers.io())
+            .subscribe(date -> {
+                  Log.d("Network Time", "TrueTime was initialized and we have a time: " + date);
+                },
+                Throwable::printStackTrace);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        Log.d("Network Time", " not initialized");
+      }
+//    }).start();
   }
 
   public void setLanguage() {

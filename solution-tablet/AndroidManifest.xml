@@ -72,7 +72,7 @@
       </intent-filter>
     </service>
     <activity
-      android:name=".ui.SplashActivity"
+      android:name=".ui.activity.SplashActivity"
       android:theme="@style/NoActionBar"
       android:windowSoftInputMode="adjustPan">
       <intent-filter>
@@ -82,21 +82,21 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".ui.OldMainActivity"
+      android:name=".ui.activity.OldMainActivity"
       android:screenOrientation="landscape"
       android:windowSoftInputMode="adjustPan" />
     <activity
-      android:name=".ui.LoginActivity"
+      android:name=".ui.activity.LoginActivity"
       android:theme="@style/NoActionBar"
       android:windowSoftInputMode="adjustNothing" />
     <activity
       android:label=""
-      android:name=".ui.MobileMainActivity"
+      android:name=".ui.activity.MobileMainActivity"
       android:screenOrientation="portrait"
       android:theme="@style/NoActionBar" />
     <activity
       android:label=""
-      android:name=".ui.TabletMainActivity"
+      android:name=".ui.activity.TabletMainActivity"
       android:screenOrientation="landscape"
       android:theme="@style/NoActionBar" />
     <activity

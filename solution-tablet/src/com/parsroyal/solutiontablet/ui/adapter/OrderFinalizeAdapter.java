@@ -29,7 +29,7 @@ import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderFinalizeAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.AddOrderBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;

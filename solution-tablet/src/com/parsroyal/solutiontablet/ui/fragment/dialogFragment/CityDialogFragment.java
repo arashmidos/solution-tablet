@@ -21,7 +21,7 @@ import com.parsroyal.solutiontablet.data.dao.impl.CityDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.ProvinceDaoImpl;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CityAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
 import java.util.List;

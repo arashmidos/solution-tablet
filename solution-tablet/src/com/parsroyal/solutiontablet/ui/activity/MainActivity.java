@@ -1,6 +1,5 @@
-package com.parsroyal.solutiontablet.ui;
+package com.parsroyal.solutiontablet.ui.activity;
 
-import android.Manifest;
 import android.Manifest.permission;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -84,10 +83,10 @@ import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by Arash 2017-09-16
@@ -287,6 +286,8 @@ public abstract class MainActivity extends AppCompatActivity {
         (dialog, which) ->
         {
           dialog.dismiss();
+          Intent intent = new Intent(this,LocationUpdatesService.class);
+          stopService(intent);
           finish();
         });
   }
@@ -869,7 +870,7 @@ public abstract class MainActivity extends AppCompatActivity {
 
   @Override
   protected void attachBaseContext(Context newBase) {
-    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
   }
 
   public void showMenu() {
@@ -889,11 +890,11 @@ public abstract class MainActivity extends AppCompatActivity {
     searchImg.setVisibility(visibility);
   }
 
-  public void setPhoneVisit(boolean phoneVisit) {
-    this.phoneVisit = phoneVisit;
-  }
-
   public boolean isPhoneVisit() {
     return phoneVisit;
+  }
+
+  public void setPhoneVisit(boolean phoneVisit) {
+    this.phoneVisit = phoneVisit;
   }
 }

@@ -21,10 +21,10 @@ import com.parsroyal.solutiontablet.data.model.KPIDetail;
 import com.parsroyal.solutiontablet.service.impl.KPIServiceImpl;
 import com.parsroyal.solutiontablet.ui.adapter.ReportListAdapter;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MobileReportListActivity extends AppCompatActivity {
 
@@ -112,6 +112,6 @@ public class MobileReportListActivity extends AppCompatActivity {
 
   @Override
   protected void attachBaseContext(Context newBase) {
-    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
   }
 }

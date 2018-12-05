@@ -1,20 +1,11 @@
-package com.parsroyal.solutiontablet.ui;
+package com.parsroyal.solutiontablet.ui.activity;
 
-import android.Manifest;
-import android.app.Dialog;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,13 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
-import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationUpdatesService;
 import com.parsroyal.solutiontablet.service.SettingService;
@@ -40,26 +28,19 @@ import com.parsroyal.solutiontablet.ui.fragment.GeneralQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsListForQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.GoodsQuestionnairesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OldGoodsListFragment;
-import com.parsroyal.solutiontablet.ui.fragment.OldVisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionnairesListFragment;
 import com.parsroyal.solutiontablet.ui.fragment.SaveLocationFragment;
 import com.parsroyal.solutiontablet.ui.fragment.UserTrackingFragment;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Analytics;
-import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
-import com.parsroyal.solutiontablet.util.NetworkUtil;
-import com.parsroyal.solutiontablet.util.PreferenceHelper;
-import com.parsroyal.solutiontablet.util.ToastUtil;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by Mahyar on 6/2/2015.
  */
-public class OldMainActivity extends BaseFragmentActivity implements ResultObserver {
+public class OldMainActivity extends AppCompatActivity {
 
   public static final int CUSTOMER_LIST_FRAGMENT_ID = 0;
   public static final int NEW_CUSTOMER_FRAGMENT_ID = 1;
@@ -116,24 +97,8 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
     ButterKnife.bind(this);
 
     setupSidebar();
-    setupActionbar();
     initialize();
 
-    if (!checkPermissions()) {
-      requestPermissions();
-    }
-  }
-
-  public void startGpsService() {
-    gpsRecieverService.requestLocationUpdates();
-  }
-
-  private void logUser() {
-    Crashlytics.setUserName(userFullNameTxt.getText().toString());
-    Crashlytics.setString("Company", companyNameTxt.getText().toString());
-
-    KeyValue saleType = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
-    Crashlytics.setString("Sale Type", saleType == null ? "" : saleType.getValue());
   }
 
   private void initialize() {
@@ -255,7 +220,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         changeSidebarItem(OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID);
         break;
       case VISIT_DETAIL_FRAGMENT_ID:
-        fragment = new OldVisitDetailFragment();
+//        fragment = new OldVisitDetailFragment();
         changeSidebarItem(OldMainActivity.CUSTOMER_LIST_FRAGMENT_ID);
         setMenuEnabled(false);
         break;
@@ -283,7 +248,7 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
       case DATA_TRANSFER_FRAGMENT_ID:
 //        if (/()) {
 //          fragment = new DataTransferFragment();
-          changeSidebarItem(-1);
+        changeSidebarItem(-1);
 //        }
         break;
       case DASHBOARD_FRAGMENT_ID:
@@ -363,22 +328,11 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
         }
         super.onBackPressed();
       } else {
-        showDialogForExit();
+//        showDialogForExit();
       }
     } catch (Exception e) {
       Logger.sendError("UI Exception", "Error in backPressed " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
     }
-  }
-
-  protected void showDialogForExit() {
-    DialogUtil.showConfirmDialog(this, getString(R.string.message_exit),
-        getString(R.string.message_do_you_want_to_exit),
-        (dialog, which) ->
-        {
-          dialog.dismiss();
-          finish();
-        });
   }
 
   public void openDrawer() {
@@ -411,119 +365,6 @@ public class OldMainActivity extends BaseFragmentActivity implements ResultObser
   }
 
   private void installNewVersion() {
-  }
-
-  private void showGpsOffDialog() {
-    Dialog dialog = new AlertDialog.Builder(this)
-        .setTitle(getString(R.string.error_gps_is_disabled))
-
-        .setNegativeButton(getString(R.string.no), (dialog1, which) -> finish())
-        .setPositiveButton(getString(R.string.yes), (dialog12, which) ->
-        {
-          Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-          startActivity(intent);
-        })
-        .create();
-    dialog.show();
-  }
-
-  @Override
-  public void publishResult(BusinessException ex) {
-  }
-
-  @Override
-  public void publishResult(String message) {
-    changeMessageDialog(message);
-  }
-
-  @Override
-  public void finished(boolean success) {
-    dismissProgressDialog();
-    if (success) {
-      doInstall();
-    }
-  }
-
-  private void doInstall() {
-    Intent installIntent = new Intent(Intent.ACTION_VIEW);
-    installIntent.setDataAndType(Uri.parse(PreferenceHelper.getUpdateUri()),
-        "application/vnd.android.package-archive");
-    installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    try {
-      startActivity(installIntent);
-      if (PreferenceHelper.isForceExit()) {
-        finish();
-      }
-    } catch (Exception ex) {
-      Logger.sendError("Install Update", "Error in installing update" + ex.getMessage());
-      ToastUtil.toastError(OldMainActivity.this, R.string.err_update_failed);
-    }
-  }
-
-  private void requestPermissions() {
-    boolean shouldProvideRationale =
-        ActivityCompat.shouldShowRequestPermissionRationale(this,
-            Manifest.permission.ACCESS_FINE_LOCATION);
-
-    // Provide an additional rationale to the user. This would happen if the user denied the
-    // request previously, but didn't check the "Don't ask again" checkbox.
-    if (shouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(this, getString(R.string.permission_rationale),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(OldMainActivity.this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                REQUEST_PERMISSIONS_REQUEST_CODE);
-          });
-    } else {
-      Log.i(TAG, "Requesting permission");
-      // Request permission. It's possible this can be auto answered if device policy
-      // sets the permission in a given state or the user denied the permission
-      // previously and checked "Never ask again".
-      ActivityCompat.requestPermissions(OldMainActivity.this,
-          new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-          REQUEST_PERMISSIONS_REQUEST_CODE);
-    }
-  }
-
-  /**
-   * Returns the current state of the permissions needed.
-   */
-  private boolean checkPermissions() {
-    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-        Manifest.permission.ACCESS_FINE_LOCATION);
-  }
-
-  /**
-   * Callback received when a permissions request has been completed.
-   */
-  @Override
-  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-      @NonNull int[] grantResults) {
-    Log.i(TAG, "onRequestPermissionResult");
-    if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
-      if (grantResults.length <= 0) {
-        // If user interaction was interrupted, the permission request is cancelled and you
-        // receive empty arrays.
-        Log.i(TAG, "User interaction was cancelled.");
-      } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        // Permission was granted.
-        gpsRecieverService.requestLocationUpdates();
-      } else {
-        ToastUtil.toastError(this, getString(R.string.permission_denied_explanation),
-            view -> {
-              // Build intent that displays the App settings screen.
-              Intent intent = new Intent();
-              intent.setAction(
-                  Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-              Uri uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null);
-              intent.setData(uri);
-              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-              startActivity(intent);
-            });
-      }
-    }
   }
 }
 

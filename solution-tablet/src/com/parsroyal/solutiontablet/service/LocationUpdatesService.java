@@ -31,7 +31,7 @@ import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -215,6 +215,7 @@ public class LocationUpdatesService extends Service {
 
   @Override
   public void onDestroy() {
+    Log.i(TAG, "Service Destroyed");
     try {
       if (serviceHandler != null) {
         serviceHandler.removeCallbacksAndMessages(null);
@@ -222,6 +223,7 @@ public class LocationUpdatesService extends Service {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    removeLocationUpdates();
   }
 
   /**
@@ -396,6 +398,22 @@ public class LocationUpdatesService extends Service {
       }
     }
     return false;
+  }
+
+  @Override
+  public void onTaskRemoved(Intent rootIntent) {
+    super.onTaskRemoved(rootIntent);
+    Log.d(TAG, "On task removed");
+    try {
+      if (serviceHandler != null) {
+        serviceHandler.removeCallbacksAndMessages(null);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    removeLocationUpdates();
+    stopSelf();
+
   }
 
   /**

@@ -1,4 +1,4 @@
-package com.parsroyal.solutiontablet.ui;
+package com.parsroyal.solutiontablet.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,9 +35,9 @@ import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
@@ -305,9 +305,9 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
       logInBtn.revertAnimation();
       if (((ErrorEvent) response).getStatusCode() == StatusCodes.NETWORK_ERROR) {
         ToastUtil.toastError(this, R.string.error_no_network);
-      } else if( ((ErrorEvent) response).getStatusCode() == StatusCodes.INVALID_DATA){
+      } else if (((ErrorEvent) response).getStatusCode() == StatusCodes.INVALID_DATA) {
         ToastUtil.toastError(this, R.string.error_invalid_login_info);
-      }else{
+      } else {
         ToastUtil.toastError(this, R.string.error_connecting_server);
 
       }
@@ -328,7 +328,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
   @Override
   protected void attachBaseContext(Context newBase) {
-    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
   }
 
   @Override

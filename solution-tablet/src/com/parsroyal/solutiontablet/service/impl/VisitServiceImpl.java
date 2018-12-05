@@ -94,7 +94,7 @@ public class VisitServiceImpl implements VisitService {
     visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
 //    visitInformation.setUpdateDateTime(
 //        DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-    Date networkDate = SolutionTabletApplication.getTrueTime();
+    Date networkDate = SolutionTabletApplication.getInstance().getTrueTime();
     visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
     visitInformation.setDistance((long) distance);
     return saveVisit(visitInformation);
@@ -108,7 +108,7 @@ public class VisitServiceImpl implements VisitService {
         .setVisitDate(DateUtil.convertDate(new Date(), DateUtil.GLOBAL_FORMATTER, "FA"));
     visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
 
-    Date networkDate = SolutionTabletApplication.getTrueTime();
+    Date networkDate = SolutionTabletApplication.getInstance().getTrueTime();
     visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
     visitInformation.setDistance(0L);
     visitInformation.setPhoneVisit(true);
@@ -124,7 +124,7 @@ public class VisitServiceImpl implements VisitService {
     visitInformation.setStartTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
     visitInformation.setUpdateDateTime(
         DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-    Date networkDate = SolutionTabletApplication.getTrueTime();
+    Date networkDate = SolutionTabletApplication.getInstance().getTrueTime();
     visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
     // -1 Means new customer without backendId
     visitInformation.setResult(-1L);
@@ -159,7 +159,7 @@ public class VisitServiceImpl implements VisitService {
     VisitInformation visitInformation = visitInformationDao.retrieve(visitId);
     visitInformation.setEndTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
 
-    Date networkDate = SolutionTabletApplication.getTrueTime();
+    Date networkDate = SolutionTabletApplication.getInstance().getTrueTime();
     visitInformation.setEndNetworkDate(networkDate == null ? null : networkDate.getTime());
     saveVisit(visitInformation);
   }
@@ -295,7 +295,7 @@ public class VisitServiceImpl implements VisitService {
         DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     // -2 Means visit without customer
     visitInformation.setResult(-2L);
-    Date networkDate = SolutionTabletApplication.getTrueTime();
+    Date networkDate = SolutionTabletApplication.getInstance().getTrueTime();
     visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
     Position position = new PositionServiceImpl(context).getLastPosition();
 

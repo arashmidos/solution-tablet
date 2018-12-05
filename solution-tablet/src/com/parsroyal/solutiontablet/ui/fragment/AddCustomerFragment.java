@@ -34,7 +34,7 @@ import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.adapter.NewCustomerPictureAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CityDialogFragment;

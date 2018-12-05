@@ -26,7 +26,7 @@ import com.parsroyal.solutiontablet.data.event.SearchCustomerSuccessEvent;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.SystemCustomerAdapter;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;

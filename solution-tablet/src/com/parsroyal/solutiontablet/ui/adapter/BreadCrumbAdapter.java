@@ -14,7 +14,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
-import com.parsroyal.solutiontablet.ui.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.BreadCrumbAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import java.util.ArrayList;

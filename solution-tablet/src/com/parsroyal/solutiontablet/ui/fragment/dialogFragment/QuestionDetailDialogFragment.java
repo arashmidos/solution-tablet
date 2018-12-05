@@ -24,7 +24,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.QuestionType;
 import com.parsroyal.solutiontablet.data.model.QuestionDto;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionDetailAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionsAdapter;
 import com.parsroyal.solutiontablet.util.NumberUtil;

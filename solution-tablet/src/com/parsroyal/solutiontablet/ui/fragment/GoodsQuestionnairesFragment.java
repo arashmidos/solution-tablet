@@ -5,7 +5,7 @@ import android.widget.AdapterView;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.searchobject.QuestionnaireSo;
-import com.parsroyal.solutiontablet.ui.OldMainActivity;
+import com.parsroyal.solutiontablet.ui.activity.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.QuestionnaireListAdapter;
 
 /**

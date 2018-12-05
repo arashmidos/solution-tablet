@@ -40,7 +40,7 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.BreadCrumbAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsCategoryAdapter;

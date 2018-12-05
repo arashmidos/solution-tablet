@@ -14,7 +14,7 @@ import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.service.GoodsService;
 import com.parsroyal.solutiontablet.service.impl.GoodsServiceImpl;
-import com.parsroyal.solutiontablet.ui.OldMainActivity;
+import com.parsroyal.solutiontablet.ui.activity.OldMainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsListForQuestionnairesAdapter;
 import java.util.List;
 

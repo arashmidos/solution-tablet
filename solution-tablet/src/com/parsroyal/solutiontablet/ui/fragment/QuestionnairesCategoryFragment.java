@@ -9,7 +9,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 
 public class QuestionnairesCategoryFragment extends BaseFragment {
 

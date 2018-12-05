@@ -88,7 +88,7 @@ public class PositionServiceImpl implements PositionService {
     }
     position.setId(null);
     position.setStatus(SendStatus.NEW.getId().intValue());
-    Date trueTime = SolutionTabletApplication.getTrueTime();
+    Date trueTime = SolutionTabletApplication.getInstance().getTrueTime();
     position.setNetworkDate(trueTime == null ? new Date().getTime() : trueTime.getTime());
     position.setCreateDateTime(
         DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));

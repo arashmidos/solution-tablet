@@ -9,7 +9,5 @@ public interface ResultObserver {
 
   void publishResult(BusinessException ex);
 
-  void publishResult(String message);
-
   void finished(boolean result);
 }

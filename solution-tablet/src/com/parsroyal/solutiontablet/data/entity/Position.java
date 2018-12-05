@@ -4,7 +4,7 @@ import android.location.Location;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.SendStatus;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.GPSUtil;
 import java.util.Date;
@@ -101,7 +101,7 @@ public class Position extends BaseEntity<Long> {
     this.batteryLevel = MainActivity.batteryLevel;
     this.batteryStatus = MainActivity.batteryStatusTitle;
     this.rooted = GPSUtil.isDeviceRooted();
-    Date trueTime = SolutionTabletApplication.getTrueTime();
+    Date trueTime = SolutionTabletApplication.getInstance().getTrueTime();
 
     this.networkDate = trueTime == null ? new Date().getTime() : trueTime.getTime();
     this.imei = SolutionTabletApplication.getInstance().getInstanceId();

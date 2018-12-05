@@ -1,4 +1,4 @@
-package com.parsroyal.solutiontablet.ui;
+package com.parsroyal.solutiontablet.ui.activity;
 
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;

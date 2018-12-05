@@ -16,7 +16,7 @@ import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.MessageEvent;
 import com.parsroyal.solutiontablet.data.model.Message;
 import com.parsroyal.solutiontablet.service.impl.MessageServiceImpl;
-import com.parsroyal.solutiontablet.ui.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.ChatAdapter;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
