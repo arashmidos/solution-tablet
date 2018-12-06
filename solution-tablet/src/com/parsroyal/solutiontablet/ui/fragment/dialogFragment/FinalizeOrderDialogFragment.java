@@ -26,6 +26,7 @@ import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
+import com.parsroyal.solutiontablet.data.model.SaleOrderItemDto;
 import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
@@ -40,6 +41,7 @@ import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 
 public class FinalizeOrderDialogFragment extends DialogFragment {
@@ -61,6 +63,12 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   Button cancelButton;
   @BindView(R.id.root)
   LinearLayout root;
+  @BindView(R.id.total_sale)
+  LinearLayout totalSaleLayout;
+  @BindView(R.id.total_count1_tv)
+  TextView totalCount1;
+  @BindView(R.id.total_count2_tv)
+  TextView totalCount2;
 
   private OrderFinalizeAdapter adapter;
   private MainActivity mainActivity;
@@ -115,7 +123,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_finalize_order_dialog, container, false);
@@ -133,7 +141,21 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
 
     setData();
     setUpRecyclerView();
+    updateCountLayout();
     return view;
+  }
+
+  public void updateCountLayout() {
+    List<SaleOrderItemDto> items = order.getOrderItems();
+    double count1 = 0.0, count2 = 0.0;
+
+    for (SaleOrderItemDto item : items) {
+      count1 += (item.getGoodsCount() / 1000);
+      count2 += (item.getGoodsUnit2Count() / 1000);
+    }
+
+    totalCount1.setText(NumberUtil.digitsToPersian(String.valueOf(count1)));
+    totalCount2.setText(NumberUtil.digitsToPersian(String.valueOf(count2)));
   }
 
 
@@ -167,6 +189,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   public void updateList() {
     order = saleOrderService.findOrderDtoById(orderId);
     setData();
+    updateCountLayout();
     EventBus.getDefault().post(new UpdateListEvent());
   }
 
@@ -202,9 +225,9 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
       case R.id.submit_btn:
         if (SaleOrderStatus.DELIVERABLE.getId().equals(orderStatus)) {
           if (validateOrderForDeliver()) {
-            if( orderChanged) {
+            if (orderChanged) {
               showRejectTypeDialog(false);
-            }else {
+            } else {
               orderFragment.goToOrderInfoFragment(rejectType);
               getDialog().dismiss();
             }
@@ -243,7 +266,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   private void showRejectTypeDialog(boolean isCanceled) {
     FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
     DeliveryRejectDialogFragment deliveryRejectDialogFragment = DeliveryRejectDialogFragment
-        .newInstance(mainActivity, this,isCanceled);
+        .newInstance(mainActivity, this, isCanceled);
     deliveryRejectDialogFragment.show(ft, "delivery reject");
   }
 

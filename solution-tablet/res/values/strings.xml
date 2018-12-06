@@ -545,6 +545,8 @@
   <string name="total_reject_tv">مجموع مبلغ مرجوعی ها</string>
   <string name="total_order_sale_count_tv">مجموع تعداد سفارشات</string>
   <string name="total_visit_count_tv">مجموع تعداد بازدیدها</string>
+  <string name="total_count1_item_tv">مجموع واحد۱</string>
+  <string name="total_count2_item_tv">مجموع واحد۲</string>
   <string name="total_invoice_sale_count_tv">مجموع تعداد فاکتورها</string>
   <string name="total_payment_count_tv">مجموع تعداد دریافتی ها</string>
   <string name="total_reject_count_tv">مجموع تعداد مرجوعی ها</string>
