@@ -1,13 +1,11 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -62,12 +60,8 @@ public class VisitListAdapter extends Adapter<ViewHolder> {
     TextView timeTv;
     @BindView(R.id.customer_tv)
     TextView customerTv;
-    @Nullable
     @BindView(R.id.main_lay_rel)
     RelativeLayout mainLayRel;
-    @Nullable
-    @BindView(R.id.main_lay_lin)
-    LinearLayout mainLayLin;
     @BindView(R.id.status_tv)
     TextView statusTv;
 
@@ -90,12 +84,9 @@ public class VisitListAdapter extends Adapter<ViewHolder> {
 
       dateTv.setText(NumberUtil.digitsToPersian(dateString));
 
-      timeTv.setText(NumberUtil.digitsToPersian(String.format("%s الی %s (%s)",
-          listModel.getStartTime(), listModel.getEndTime(), listModel.getPeriod())));
+      timeTv.setText(listModel.getFormattedTime());
 
-      statusTv.setText(listModel.isSent() ? "ارسال شده" : "جدید");
-
+      statusTv.setText(listModel.isSent() ? R.string.sent : R.string.status_new);
     }
-
   }
 }

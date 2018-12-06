@@ -247,9 +247,9 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     entity.setDistance(cursor.getLong(6));
     entity.setPhoneVisit(cursor.getInt(7) == 1);
     entity.setCustomer(cursor.getString(8));
-    Long status = cursor.getLong(9);
+    long status = cursor.getLong(9);
 
-    entity.setSent(Empty.isEmpty(status) || status == 0L);
+    entity.setSent( status != 0L);
     return entity;
   }
 }

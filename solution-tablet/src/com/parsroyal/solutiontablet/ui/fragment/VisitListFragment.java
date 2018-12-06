@@ -70,11 +70,11 @@ public class VisitListFragment extends BaseFragment {
     }
 
     if (count < 60) {
-      totalVisitHour
-          .setText(NumberUtil.digitsToPersian(String.format("%s دقیقه", String.valueOf(count))));
+      totalVisitHour.setText(NumberUtil.digitsToPersian(
+          String.format(getString(R.string.x_minute), String.valueOf((int) count))));
     } else {
       totalVisitHour.setText(NumberUtil.digitsToPersian(
-          String.format("%s ساعت", String.valueOf(count / 60.0))));
+          String.format(getString(R.string.x_hour), String.valueOf(count / 60.0))));
     }
 
     VisitListAdapter visitListAdapter = new VisitListAdapter(mainActivity, visitListModel);

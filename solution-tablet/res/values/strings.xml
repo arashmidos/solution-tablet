@@ -642,5 +642,8 @@
   <string name="visit_by_phone">سفارش تلفنی</string>
   <string name="visit">بازدید</string>
   <string name="visits">بازدید ها</string>
+  <string name="x_minute">%s دقیقه</string>
+  <string name="x_hour">%s ساعت</string>
+  <string name="status_new">جدید</string>
 
 </resources>
