@@ -147,6 +147,8 @@ public class OrderInfoFragment extends BaseFragment {
   private int rand;
   private boolean smsConfirmEnabled;
   private Long typeId;
+  private boolean checkCreditEnabled;
+  private Double creditRemained;
 
   public OrderInfoFragment() {
     // Required empty public constructor
@@ -175,6 +177,11 @@ public class OrderInfoFragment extends BaseFragment {
     smsConfirmEnabled = Empty.isEmpty(smsEnabled) || "null".equals(smsEnabled) ? false
         : Boolean.valueOf(smsEnabled);
 
+    String checkCredit = settingService
+        .getSettingValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE);
+    checkCreditEnabled = Empty.isEmpty(checkCredit) || "null".equals(checkCredit) ? false
+        : Boolean.valueOf(checkCredit);
+
     Bundle args = getArguments();
 
     if (Empty.isNotEmpty(args)) {
@@ -182,6 +189,7 @@ public class OrderInfoFragment extends BaseFragment {
       pageStatus = args.getString(Constants.PAGE_STATUS);
       order = saleOrderService.findOrderDtoById(orderId);
       customer = customerService.getCustomerByBackendId(order.getCustomerBackendId());
+      creditRemained = customer.getRemainedCredit();
       orderStatus = order.getStatus();
       saleType = args.getString(Constants.SALE_TYPE, "");
       visitId = args.getLong(Constants.VISIT_ID, -1);
@@ -531,6 +539,17 @@ public class OrderInfoFragment extends BaseFragment {
     if (order.getOrderItems().size() == 0) {
       ToastUtil.toastError(mainActivity,
           getProperTitle() + getString(R.string.message_x_has_no_item_for_save));
+      return false;
+    }
+
+    Double total = Double.valueOf(order.getAmount());
+
+    if (checkCreditEnabled && creditRemained != null && creditRemained.compareTo(total) < 0
+        && !selectedItem.getLabel().contains("نقد")) {
+      DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
+          "اعتبار کافی نیست. ثبت این سفارش فقط با پرداخت نقدی امکان پذیر است", "تایید",
+          (dialogInterface, i) -> dialogInterface.dismiss(),
+         "",null,Constants.ICON_WARNING);
       return false;
     }
     return true;

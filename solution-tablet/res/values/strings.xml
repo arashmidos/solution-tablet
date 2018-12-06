@@ -647,5 +647,7 @@
   <string name="x_minute">%s دقیقه</string>
   <string name="x_hour">%s ساعت</string>
   <string name="status_new">جدید</string>
+  <string name="cancel">انصراف</string>
+  <string name="message_only_cash_order">ثبت سفارش فقط با پرداخت نقدی امکان پذیر است</string>
 
 </resources>

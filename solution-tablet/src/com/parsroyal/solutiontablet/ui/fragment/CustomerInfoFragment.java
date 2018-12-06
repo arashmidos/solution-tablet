@@ -276,10 +276,11 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         break;
       case R.id.register_order_lay:
         if (checkCreditEnabled && creditRemained != null && creditRemained <= 0) {
-          DialogUtil.showConfirmDialog(mainActivity, "هشدار",
-              "ثبت سفارش فقط با پرداخت نقدی امکان پذیر است", "ثبت سفارش",
-              (dialogInterface, i) -> parent
-                  .openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), true), "انصراف");
+          DialogUtil.showConfirmDialog(mainActivity, getString(R.string.warning),
+              getString(R.string.message_only_cash_order), getString(R.string.has_order),
+              (dialogInterface, i) ->
+                  parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), true),
+              getString(R.string.cancel));
         } else {
           parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), false);
         }
