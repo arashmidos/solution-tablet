@@ -177,8 +177,10 @@
         android:background="@color/black_10" />
 
       <RelativeLayout
+        android:id="@+id/location_layout"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="48dp"
+        android:background="?selectableItemBackground">
         <ImageView
           android:id="@+id/imageView4"
           android:layout_width="wrap_content"
@@ -454,21 +456,21 @@
       android:textSize="14sp" />
 
     <Button
-      android:visibility="gone"
       android:id="@+id/no_visit_btn_old"
       style="@style/IranSans.Medium"
       android:layout_width="80dp"
       android:layout_height="30dp"
       android:layout_marginTop="16dp"
       android:layout_marginBottom="16dp"
-      android:layout_below="@id/devider_bottom"
       android:layout_marginLeft="16dp"
       android:layout_alignParentLeft="true"
+      android:layout_below="@id/devider_bottom"
       android:background="@drawable/send_data_background"
       android:gravity="center"
       android:text="@string/not_visited"
       android:textColor="@color/red"
-      android:textSize="14sp" />
+      android:textSize="14sp"
+      android:visibility="gone" />
     <Button
       android:id="@+id/phone_visit_btn"
       style="@style/IranSans.Medium"

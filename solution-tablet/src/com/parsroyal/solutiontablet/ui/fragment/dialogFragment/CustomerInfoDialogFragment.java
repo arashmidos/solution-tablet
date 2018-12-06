@@ -1,7 +1,10 @@
 package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -48,6 +51,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
@@ -135,7 +139,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(getLayout(), container, false);
@@ -236,7 +240,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
       if (model.isPhoneVisit()) {
         visitTodayImg.setImageResource(R.drawable.ic_call);
         visitTodayImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
-      }else {
+      } else {
         visitTodayImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
       }
     } else {
@@ -278,9 +282,9 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     super.onDestroyView();
   }
 
-  @OnClick({R.id.close_btn, R.id.customer_report_tv, R.id.customer_report_layout,
-      R.id.phone_visit_btn,
-      R.id.enter_btn, R.id.no_visit_btn, R.id.call_layout, R.id.phone_layout})
+  @OnClick({R.id.close_btn, R.id.customer_report_tv, R.id.customer_report_layout, R.id.no_visit_btn,
+      R.id.enter_btn, R.id.phone_visit_btn, R.id.call_layout, R.id.phone_layout,
+      R.id.location_layout})
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.phone_visit_btn:
@@ -305,7 +309,6 @@ public class CustomerInfoDialogFragment extends DialogFragment {
         break;
       case R.id.no_visit_btn:
         showWantsDialog();
-        dismiss();
         break;
       case R.id.call_layout:
         CustomerContactBottomSheet contactBottomSheet = CustomerContactBottomSheet
@@ -317,6 +320,32 @@ public class CustomerInfoDialogFragment extends DialogFragment {
             .newInstance(this, customer.getCellPhone());
         contactBottomSheet2.show(getActivity().getSupportFragmentManager(), "contact bottom sheet");
         break;
+      case R.id.location_layout:
+        if (Empty.isNotEmpty(customer.getxLocation()) && Empty.isNotEmpty(customer.getyLocation())
+            && customer.getxLocation() != 0.0) {
+          if ("google".equals(PreferenceHelper.getDefaultNavigator())) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(
+                "google.navigation:q=" + customer.getxLocation() + "," + customer.getyLocation()));
+            i.setPackage("com.google.android.apps.maps");
+            if (i.resolveActivity(getActivity().getPackageManager()) != null) {
+              startActivity(i);
+            } else {
+              ToastUtil.toastError(root, getString(R.string.error_google_not_installed));
+            }
+          } else {
+            try {
+              Intent i = new Intent(Intent.ACTION_VIEW,
+                  Uri.parse(String.format(Locale.UK, "waze://?ll=%s,%s&navigate=yes",
+                      customer.getxLocation(), customer.getyLocation())));
+              startActivity(i);
+            } catch (ActivityNotFoundException ex) {
+              // If Waze is not installed, open it in Google Play:
+              Intent intent2 = new Intent(Intent.ACTION_VIEW,
+                  Uri.parse("market://details?id=com.waze"));
+              startActivity(intent2);
+            }
+          }
+        }
     }
   }
 
@@ -347,6 +376,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     visitService.finishVisiting(visitId);
     ToastUtil.toastMessage(mainActivity, R.string.none_added_successfully);
     adapter.notifyItemHasRejection(position);
+    dismiss();
   }
 
   protected boolean hasAcceptableDistance() {

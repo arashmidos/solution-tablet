@@ -24,12 +24,6 @@ public class CustomerInfoBottomSheet extends CustomerInfoDialogFragment {
     return new CustomerInfoBottomSheet();
   }
 
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(getContext(), getTheme());
-  }
-
   public static CustomerInfoBottomSheet newInstance(PathDetailAdapter adapter,
       CustomerListModel model, int position) {
     CustomerInfoBottomSheet fragment = new CustomerInfoBottomSheet();
@@ -38,13 +32,20 @@ public class CustomerInfoBottomSheet extends CustomerInfoDialogFragment {
     fragment.position = position;
     return fragment;
   }
+
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(getContext(), getTheme());
+  }
+
   protected String getTAG() {
     return TAG;
   }
 
   @Nullable
   @Override
-  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     getDialog().setOnShowListener(dialog -> {
       BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog;
