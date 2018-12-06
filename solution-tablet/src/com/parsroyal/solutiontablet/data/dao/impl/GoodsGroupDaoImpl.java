@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Mahyar on 7/24/2015.
+ * Created by Arash on 7/24/2015.
  */
 public class GoodsGroupDaoImpl extends AbstractDao<GoodsGroup, Long> implements GoodsGroupDao {
 

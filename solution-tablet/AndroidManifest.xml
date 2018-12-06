@@ -82,10 +82,6 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".ui.activity.OldMainActivity"
-      android:screenOrientation="landscape"
-      android:windowSoftInputMode="adjustPan" />
-    <activity
       android:name=".ui.activity.LoginActivity"
       android:theme="@style/NoActionBar"
       android:windowSoftInputMode="adjustNothing" />

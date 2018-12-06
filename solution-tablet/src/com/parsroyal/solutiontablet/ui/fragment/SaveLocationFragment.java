@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -148,6 +149,7 @@ public class SaveLocationFragment extends BaseFragment implements
         connectionResult.getErrorCode()));
   }
 
+  @SuppressLint("MissingPermission")
   @Override
   public void onMapReady(GoogleMap googleMap) {
     map = googleMap;

@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 /**
- * Created by Mahyar on 8/4/2015.
+ * Created by Arash on 8/4/2015.
  */
 public class ChatFragment extends BaseFragment {
 

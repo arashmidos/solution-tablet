@@ -8,7 +8,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.util.ResourceUtil;
 
 /**
- * Created by Mahyar on 6/3/2015.
+ * Created by Arash on 6/3/2015.
  */
 public abstract class BaseFragment extends Fragment {
 
