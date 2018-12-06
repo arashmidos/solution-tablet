@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.solutiontablet.data.dao.VisitInformationDao;
+import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
+import com.parsroyal.solutiontablet.data.model.VisitListModel;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
@@ -168,6 +170,39 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
   }
 
   @Override
+  public List<VisitListModel> getAllVisitList() {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+    String[] projection = new String[]{
+        "vi." + VisitInformation.COL_ID,
+        VisitInformation.COL_VISIT_DATE,
+        VisitInformation.COL_START_TIME,
+        VisitInformation.COL_END_TIME,
+        VisitInformation.COL_NETWORK_DATE,
+        VisitInformation.COL_END_NETWORK_DATE,//5
+        VisitInformation.COL_DISTANCE,
+        VisitInformation.COL_PHONE_VISIT,
+        Customer.COL_FULL_NAME,
+        VisitInformation.COL_VISIT_BACKEND_ID
+    };
+
+    String table = getTableName() + " vi " +
+        "JOIN " + Customer.TABLE_NAME + " c on c." + Customer.COL_BACKEND_ID + " = vi."
+        + VisitInformation.COL_CUSTOMER_BACKEND_ID;
+
+    String orderBy = "vi." + VisitInformation.COL_ID + " DESC ";
+
+    Cursor cursor = db.query(table, projection, null, null, null, null, orderBy);
+    List<VisitListModel> visitInformationList = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      visitInformationList.add(createModelFromCursor(cursor));
+    }
+    cursor.close();
+    return visitInformationList;
+  }
+
+  @Override
   public void clearAllSent() {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
@@ -196,6 +231,25 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     entity.setDistance(cursor.getLong(14));
     entity.setPhoneVisit(cursor.getInt(15) == 1);
 
+    return entity;
+  }
+
+  private VisitListModel createModelFromCursor(Cursor cursor) {
+    VisitListModel entity = new VisitListModel();
+    entity.setId(cursor.getLong(0));
+    entity.setVisitDate(cursor.getString(1));
+    entity.setStartTime(cursor.getString(2));
+    entity.setEndTime(cursor.getString(3));
+    entity.setNetworkDate(
+        NumberUtil.digitsToEnglish(DateUtil.getZonedDate(new Date(cursor.getLong(4)))));
+    entity.setEndNetworkDate(
+        NumberUtil.digitsToEnglish(DateUtil.getZonedDate(new Date(cursor.getLong(5)))));
+    entity.setDistance(cursor.getLong(6));
+    entity.setPhoneVisit(cursor.getInt(7) == 1);
+    entity.setCustomer(cursor.getString(8));
+    Long status = cursor.getLong(9);
+
+    entity.setSent(Empty.isEmpty(status) || status == 0L);
     return entity;
   }
 }

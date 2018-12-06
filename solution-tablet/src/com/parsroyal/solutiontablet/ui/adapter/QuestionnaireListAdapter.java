@@ -52,9 +52,9 @@ public class QuestionnaireListAdapter extends BaseListAdapter<QuestionnaireListM
       if (convertView == null) {
         convertView = mLayoutInflater.inflate(R.layout.row_layout_questionnaire, null);
         holder = new QuestionnaireViewHolder();
-        holder.rowLayout = (RelativeLayout) convertView.findViewById(R.id.rowLayout);
-        holder.descriptionTv = (TextView) convertView.findViewById(R.id.descriptionTv);
-        holder.qCountTv = (TextView) convertView.findViewById(R.id.qCountTv);
+        holder.rowLayout = convertView.findViewById(R.id.rowLayout);
+        holder.descriptionTv = convertView.findViewById(R.id.descriptionTv);
+        holder.qCountTv = convertView.findViewById(R.id.qCountTv);
         convertView.setTag(holder);
       } else {
         holder = (QuestionnaireViewHolder) convertView.getTag();

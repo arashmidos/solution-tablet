@@ -29,6 +29,7 @@ public class ReportFragment extends BaseFragment {
   private AllQuestionnaireListFragment allQuestionnaireListFragment;
   private String saleType;
   private DeliveryListFragment deliveryListFragment;
+  private VisitListFragment visitListFragment;
 
   public ReportFragment() {
     // Required empty public constructor
@@ -51,12 +52,13 @@ public class ReportFragment extends BaseFragment {
         .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
     initFragments();
     setUpViewPager();
-    viewpager.setCurrentItem(3);
+    viewpager.setCurrentItem(viewPagerAdapter.getCount());
     return view;
   }
 
   private void setUpViewPager() {
     viewPagerAdapter = new CustomerDetailViewPagerAdapter(mainActivity.getSupportFragmentManager());
+    viewPagerAdapter.add(visitListFragment, getString(R.string.visits));
     viewPagerAdapter.add(allQuestionnaireListFragment, getString(R.string.questionnaire));
     viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
     viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
@@ -77,6 +79,7 @@ public class ReportFragment extends BaseFragment {
     }
     returnListFragment = ReturnListFragment.newInstance(null, null);
     allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(null);
+    visitListFragment = VisitListFragment.newInstance(null);
   }
 
   @Override

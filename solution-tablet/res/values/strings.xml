@@ -83,7 +83,6 @@
   <string name="error_page_txt">در حال حاظر امکان مشاهده این صفحه وجود ندارد</string>
   <string name="no_result">هیچ نتیجه ای یافت نشد</string>
   <string name="send_status_label">وضعیت ارسال:</string>
-  <string name="status">ارسال شده</string>
   <string name="not_sent">ارسال نشده</string>
   <string name="delete_customer">حذف مشتری</string>
   <string name="message_customer_delete_confirm">آیا از حذف مشتری مطمئن هستید؟</string>
@@ -540,10 +539,12 @@
   <string name="show_question_x">نمایش سوال شماره %d</string>
   <string name="question_has_prerequisite_x">جهت پاسخ به این سوال، ابتدا باید به سوال شماره %d پاسخ داده شود!</string>
   <string name="total_order_sale_tv">مجموع مبلغ سفارشات</string>
+  <string name="total_visit_time_tv">مجموع ساعات بازدید</string>
   <string name="total_invoice_sale_tv">مجموع مبلغ فاکتورها</string>
   <string name="total_payment_tv">مجموع مبلغ دریافتی ها</string>
   <string name="total_reject_tv">مجموع مبلغ مرجوعی ها</string>
   <string name="total_order_sale_count_tv">مجموع تعداد سفارشات</string>
+  <string name="total_visit_count_tv">مجموع تعداد بازدیدها</string>
   <string name="total_invoice_sale_count_tv">مجموع تعداد فاکتورها</string>
   <string name="total_payment_count_tv">مجموع تعداد دریافتی ها</string>
   <string name="total_reject_count_tv">مجموع تعداد مرجوعی ها</string>
@@ -639,5 +640,7 @@
   <string name="call">تماس</string>
   <string name="send_sms">ارسال پیامک</string>
   <string name="visit_by_phone">سفارش تلفنی</string>
+  <string name="visit">بازدید</string>
+  <string name="visits">بازدید ها</string>
 
 </resources>

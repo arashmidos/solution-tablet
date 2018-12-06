@@ -18,9 +18,9 @@
       android:paddingTop="16dp"
       android:paddingBottom="16dp"
       android:gravity="right"
-      tools:text="@string/enter"
       android:textColor="@color/black_55"
-      android:textSize="16sp" />
+      android:textSize="16sp"
+      tools:text="@string/enter" />
     <TextView
       android:id="@+id/enter_tv"
       android:layout_width="wrap_content"

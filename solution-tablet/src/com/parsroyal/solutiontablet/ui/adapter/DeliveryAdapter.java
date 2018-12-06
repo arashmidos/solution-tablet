@@ -186,7 +186,7 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
       switch (v.getId()) {
         case R.id.delete_img_layout:
         case R.id.delete_img:
-//          if (order.getStatus().equals(SaleOrderStatus.DELIVERABLE.getId())) {
+//          if (order.isSent().equals(SaleOrderStatus.DELIVERABLE.getId())) {
 //            deleteOrder();
 //          }
           break;
@@ -213,7 +213,7 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
     }
 
 /*    private void deleteOrder() {
-      boolean isRejected = order.getStatus().equals(SaleOrderStatus.REJECTED.getId());
+      boolean isRejected = order.isSent().equals(SaleOrderStatus.REJECTED.getId());
       DialogUtil.showConfirmDialog(mainActivity, mainActivity.getString(R.string.title_attention),
           mainActivity.getString(R.string.message_order_delete_confirm), (dialog, which) -> {
             saleOrderService.deleteOrder(order.getId());

@@ -182,7 +182,7 @@
       android:layout_marginStart="16dp"
       android:layout_marginLeft="16dp"
       android:layout_below="@+id/order_total_price"
-      android:text="@string/status"
+      android:text="@string/sent"
       android:textColor="@color/primary_dark"
       android:textSize="12sp"
       android:visibility="gone" />

@@ -96,6 +96,7 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int FEATURE_FRAGMENT_ID = 0;
   public static final int PHONE_VISIT_DETAIL_FRAGMENT_ID = 1;
   public static final int NEW_CUSTOMER_DETAIL_FRAGMENT_ID = 2;
+  public static final int VISIT_LIST_FRAGMENT_ID = 3;
   public static final int VISIT_DETAIL_FRAGMENT_ID = 5;
   public static final int REGISTER_PAYMENT_FRAGMENT = 6;
   public static final int CUSTOMER_FRAGMENT = 7;

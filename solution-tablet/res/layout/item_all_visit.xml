@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main_lay_rel"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+  <TextView
+    android:id="@+id/customer_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:layout_marginEnd="16dp"
+    android:layout_alignParentEnd="true"
+    android:textColor="@color/black_21"
+    android:textSize="12sp"
+    tools:text="علی آقا قصاب" />
+
+  <TextView
+    android:id="@+id/date_tv"
+    style="@style/IranSans"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:layout_marginEnd="16dp"
+    android:layout_alignParentEnd="true"
+    android:layout_below="@id/customer_tv"
+    android:textColor="@color/gray_75"
+    android:textSize="12sp"
+    tools:text="چهارشنبه ۱۷ شهریور" />
+  <TextView
+    android:id="@+id/time_tv"
+    style="@style/IranSans"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:layout_marginStart="16dp"
+    android:layout_alignParentStart="true"
+    android:layout_below="@id/customer_tv"
+    android:textColor="@color/gray_75"
+    android:textSize="12sp"
+    tools:text="چهارشنبه ۱۷ شهریور" />
+
+  <TextView
+    android:id="@+id/status_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:layout_marginEnd="16dp"
+    android:layout_alignParentEnd="true"
+    android:layout_below="@+id/date_tv"
+    android:textColor="@color/green_question"
+    android:textSize="12sp"
+    tools:text="ارسال شده" />
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginTop="18dp"
+    android:layout_below="@id/status_tv"
+    android:background="@color/navigation_drawer_divider" />
+</RelativeLayout>

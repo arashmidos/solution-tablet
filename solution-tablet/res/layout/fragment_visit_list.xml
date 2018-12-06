@@ -1,0 +1,87 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/white"
+  android:orientation="vertical"
+  tools:context="com.parsroyal.solutiontablet.ui.fragment.VisitListFragment">
+  <LinearLayout
+    android:id="@+id/total_sale"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:layout_alignParentTop="true"
+    android:background="@color/gray_f5"
+    android:orientation="horizontal">
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="0.5"
+      android:orientation="vertical">
+      <TextView
+        android:id="@+id/total_visit_hour"
+        style="@style/IranSans.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_gravity="center"
+        android:textColor="@color/green_return"
+        android:textSize="16sp"
+        tools:text="123ساعت" />
+      <TextView
+        android:id="@+id/total_order_sale_amount_tv"
+        style="@style/IranSans.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_gravity="center"
+        android:text="@string/total_visit_time_tv"
+        android:textColor="@color/gray_75"
+        android:textSize="12sp" />
+
+    </LinearLayout>
+    <View
+      android:id="@+id/vertical_divider"
+      android:layout_width="1dp"
+      android:layout_height="45dp"
+      android:layout_gravity="center"
+      android:background="@color/navigation_drawer_divider" />
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="0.5"
+      android:orientation="vertical">
+      <TextView
+        android:id="@+id/total_visit_count"
+        style="@style/IranSans.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"
+        android:textColor="@color/blue_19"
+        android:textSize="16sp"
+        tools:text="12345" />
+      <TextView
+        android:id="@+id/total_order_sale_tv"
+        style="@style/IranSans.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_gravity="center"
+        android:text="@string/total_visit_count_tv"
+        android:textColor="@color/gray_75"
+        android:textSize="12sp" />
+
+    </LinearLayout>
+
+  </LinearLayout>
+  <View
+    android:id="@+id/divider"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_below="@id/total_sale"
+    android:background="@color/navigation_drawer_divider" />
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+</LinearLayout>

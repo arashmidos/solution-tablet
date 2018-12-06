@@ -371,6 +371,24 @@ public class DateUtil {
     }
   }
 
+  public static Date convertStringToDateTime(String date, SimpleDateFormat formatter,
+      String locale) {
+    if (Empty.isEmpty(date)) {
+      return null;
+    }
+
+    if (locale.equalsIgnoreCase("EN")) {
+      GregorianCalendar gregorianCalendar = new GregorianCalendar();
+      gregorianCalendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
+      formatter.setCalendar(gregorianCalendar);
+    }
+    try {
+      return formatter.parse(date);
+    } catch (Exception e) {
+      throw new InvalidDateStringException(date);
+    }
+  }
+
   public static int compareDates(String date1, String date2) {
     if (date1.equals(date2)) {
       return 0;
@@ -447,8 +465,8 @@ public class DateUtil {
       String dateString = DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER2, "FA");
       String[] splitDate = dateString.split("/");
       String monthName = monthNames[Integer.parseInt(splitDate[1]) - 1];
-    return String.format("%s %s %s %s", getPersianDayOfWeek(dayOfWeek), splitDate[2], monthName,
-        splitDate[0]);
+      return String.format("%s %s %s %s", getPersianDayOfWeek(dayOfWeek), splitDate[2], monthName,
+          splitDate[0]);
     }
   }
 
@@ -529,10 +547,23 @@ public class DateUtil {
     }
   }
 
+  public static int compareTimeInMinutes(String time1, String time2) {
+//    String[] time1Array = time1.
+    return 0;
+  }
+
   public static String getZonedDate(Date date) {
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss");
     sdf.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
     return sdf.format(date);
+  }
+
+  public static int compareDatesInMinutes(Date date2, Date date1) {
+    if (Empty.isEmpty(date1) || Empty.isEmpty(date2)) {
+      return 0;
+    }
+    long diff = date2.getTime() - date1.getTime();
+    return (int) (diff / (60 * 1000));
   }
 }

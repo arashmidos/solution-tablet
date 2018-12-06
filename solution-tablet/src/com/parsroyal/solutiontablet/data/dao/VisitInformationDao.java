@@ -1,7 +1,9 @@
 package com.parsroyal.solutiontablet.data.dao;
 
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
+import com.parsroyal.solutiontablet.data.listmodel.QuestionnaireListModel;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
+import com.parsroyal.solutiontablet.data.model.VisitListModel;
 import java.util.List;
 
 /**
@@ -19,4 +21,5 @@ public interface VisitInformationDao extends BaseDao<VisitInformation, Long> {
 
   void clearAllSent();
 
+  List<VisitListModel> getAllVisitList();
 }
