@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -25,7 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
-import com.google.android.gms.maps.GoogleMap;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
@@ -77,7 +77,6 @@ public class VisitLineDetailFragment extends BaseFragment {
   @BindView(R.id.no_customer_lay)
   LinearLayout noCustomerLay;
 
-  private GoogleMap mMap;
   private boolean isSearchBarVisible = false;
   private PathDetailAdapter adapter;
   private MainActivity mainActivity;
@@ -100,7 +99,7 @@ public class VisitLineDetailFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_path_detail, container, false);
@@ -152,8 +151,10 @@ public class VisitLineDetailFragment extends BaseFragment {
         NumberUtil.digitsToPersian(visitline.getCode())));
 
     if (Empty.isNotEmpty(customerCountBtn)) {
+      Integer customerCount = visitline.getCustomerCount();
       customerCountBtn.setText(NumberUtil.digitsToPersian(
-          String.format(getString(R.string.x_customers), visitline.getCustomerCount())));
+          String.format(getString(R.string.x_customers),
+              visitline.getPrimaryKey().equals(0L) ? customerCount - 1 : customerCount)));
     } else {
       //We detected wrong device size!
       Logger.sendError("Wrong Orientation", "Device is not tablet");
