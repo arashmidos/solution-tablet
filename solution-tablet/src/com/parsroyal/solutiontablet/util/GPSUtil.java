@@ -73,7 +73,7 @@ public class GPSUtil {
     if (packageInfo.requestedPermissions != null) {
       for (String requestedPermission : packageInfo.requestedPermissions) {
         if (requestedPermission.equals("android.permission.ACCESS_MOCK_LOCATION")) {
-          return false;//TODO
+          return false;//TODO LATER
         }
       }
     }

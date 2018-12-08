@@ -502,7 +502,7 @@ public class AddOrderDialogFragment extends DialogFragment {
         if (TextUtils.isEmpty(countTv.getText().toString().trim())) {
           countTv.setText("0");
         } else {
-          int enteredNum = Integer.parseInt(countTv.getText().toString().trim());
+          double enteredNum = Double.parseDouble(countTv.getText().toString().trim());
           if (enteredNum == 1 || enteredNum == 0) {
             minusImg.setImageResource(R.drawable.im_minus_grey);
           } else {
@@ -518,7 +518,7 @@ public class AddOrderDialogFragment extends DialogFragment {
           countTv.setText("1");
         } else {
           minusImg.setImageResource(R.drawable.im_minus);
-          int enteredNum = Integer.parseInt(countTv.getText().toString().trim());
+          double enteredNum = Double.parseDouble(countTv.getText().toString().trim());
           countTv.setText(String.valueOf(enteredNum + 1));
         }
         break;
