@@ -71,6 +71,11 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
+  public List<VisitLineListModel> getAllVisitLinesListModel(Date from, Date to) {
+    return visitLineDao.getAllVisitLineListModel(from, to);
+  }
+
+  @Override
   public List<LabelValue> getAllVisitLinesLabelValue() {
     return visitLineDao.getAllVisitLineLabelValue();
   }

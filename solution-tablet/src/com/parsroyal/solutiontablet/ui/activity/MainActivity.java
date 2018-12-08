@@ -159,6 +159,8 @@ public abstract class MainActivity extends AppCompatActivity {
   TextView toolbarTitle;
   @BindView(R.id.search_img)
   ImageView searchImg;
+  @BindView(R.id.filter_img)
+  ImageView filterImg;
   @BindView(R.id.save_img)
   ImageView saveImg;
   @BindView(R.id.notif_img)
@@ -287,7 +289,7 @@ public abstract class MainActivity extends AppCompatActivity {
         (dialog, which) ->
         {
           dialog.dismiss();
-          Intent intent = new Intent(this,LocationUpdatesService.class);
+          Intent intent = new Intent(this, LocationUpdatesService.class);
           stopService(intent);
           finish();
         });
@@ -346,7 +348,6 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    Log.d("SHAKIB", "ONRESUME");
     if (!checkPermissions()) {
       requestPermissions();
     }
@@ -630,7 +631,7 @@ public abstract class MainActivity extends AppCompatActivity {
 
   public abstract void onNavigationTapped();
 
-  @OnClick({R.id.navigation_img, R.id.search_img, R.id.save_img, R.id.notif_img})
+  @OnClick({R.id.navigation_img, R.id.search_img, R.id.save_img, R.id.notif_img, R.id.filter_img})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.navigation_img:
@@ -660,6 +661,12 @@ public abstract class MainActivity extends AppCompatActivity {
       case R.id.notif_img:
         changeFragment(MainActivity.CHAT_FRAGMENT, null, true);
         break;
+      case R.id.filter_img:
+        Fragment visitLine2 = getSupportFragmentManager()
+            .findFragmentByTag(VisitLineFragment.class.getSimpleName());
+        if (visitLine2 != null && visitLine2.isVisible()) {
+          ((VisitLineFragment) visitLine2).showFilter();
+        }
     }
   }
 
@@ -779,6 +786,11 @@ public abstract class MainActivity extends AppCompatActivity {
       searchImg.setVisibility(View.VISIBLE);
     } else {
       searchImg.setVisibility(View.GONE);
+    }
+    if (fragmentId == VISITLINE_FRAGMENT_ID) {
+      filterImg.setVisibility(View.VISIBLE);
+    } else {
+      filterImg.setVisibility(View.GONE);
     }
     //hide save icon in question list fragment
     if (fragmentId != QUESTION_LIST_FRAGMENT_ID) {

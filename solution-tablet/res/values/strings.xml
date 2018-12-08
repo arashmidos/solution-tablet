@@ -300,6 +300,8 @@
   <string name="error_gps_is_off">GPS دستگاه را فعال کنید</string>
   <string name="error_tracking_cal1_empty">زمان شروع گزارش گیری را وارد نمایید</string>
   <string name="error_tracking_cal2_empty">زمان انتهای گزارش گیری را وارد نمایید</string>
+  <string name="error_cal1_empty">زمان شروع را وارد نمایید</string>
+  <string name="error_cal2_empty">زمان انتها را وارد نمایید</string>
   <string name="tracking_report">گزارش گیری</string>
   <string name="tracking_customers">مشتریان</string>
   <string name="shop_name">نام فروشگاه</string>

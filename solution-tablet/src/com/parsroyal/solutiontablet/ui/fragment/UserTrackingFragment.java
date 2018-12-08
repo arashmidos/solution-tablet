@@ -168,7 +168,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   private LabelValue selectedVisitlines;
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     context = (MainActivity) getActivity();
     context.changeTitle(getString(R.string.map));

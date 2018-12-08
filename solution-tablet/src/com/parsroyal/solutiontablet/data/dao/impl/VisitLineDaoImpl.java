@@ -9,8 +9,11 @@ import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Mahyar on 7/6/2015.
@@ -77,6 +80,32 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
 
     List<VisitLineListModel> entities = new ArrayList<>();
     Cursor cursor = db.rawQuery(sql, null);
+    while (cursor.moveToNext()) {
+      entities.add(createListModelFromCursor(cursor));
+    }
+    cursor.close();
+    return entities;
+  }
+
+  @Override
+  public List<VisitLineListModel> getAllVisitLineListModel(Date from, Date to) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+    String sql = "select vl.BACKEND_ID, vl.CODE, vl.TITLE," +
+        "(select count(*) from COMMER_CUSTOMER cu where vl.BACKEND_ID = cu.VISIT_LINE_BACKEND_ID)" +
+        " from COMMER_VISIT_LINE vl LEFT JOIN COMMER_VISITLINE_DATE vd on vl.BACKEND_ID = vd.BACKEND_ID"
+        + " where " + "BACKEND_DATE_GREGORIAN BETWEEN ? AND ? OR vl.BACKEND_ID = 0 " +
+        "group by vl.CODE, vl.TITLE, vl.BACKEND_ID " +
+        "ORDER BY vl.BACKEND_ID DESC";
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
+    String[] args = {sdf.format(from), sdf.format(to)};
+
+    List<VisitLineListModel> entities = new ArrayList<>();
+    Cursor cursor = db.rawQuery(sql, args);
+
     while (cursor.moveToNext()) {
       entities.add(createListModelFromCursor(cursor));
     }

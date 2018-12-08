@@ -45,6 +45,11 @@ public class VisitLineAdapter extends Adapter<VisitLineAdapter.ViewHolder> {
     holder.setData(model, position);
   }
 
+  public void update(List<VisitLineListModel> visitLineList) {
+    this.visitLineList = visitLineList;
+    notifyDataSetChanged();
+  }
+
   @Override
   public int getItemCount() {
     return visitLineList.size();
@@ -62,7 +67,7 @@ public class VisitLineAdapter extends Adapter<VisitLineAdapter.ViewHolder> {
     TextView customerCount;
     @BindView(R.id.divider)
     View divider;
-//    @BindView(R.id.map_item)
+    //    @BindView(R.id.map_item)
 //    MapView mapView;
     GoogleMap map;
     private VisitLineListModel model;

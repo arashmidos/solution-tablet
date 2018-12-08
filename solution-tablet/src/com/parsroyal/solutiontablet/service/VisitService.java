@@ -10,6 +10,7 @@ import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.data.searchobject.VisitInformationDetailSO;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ public interface VisitService extends BaseService {
   List<VisitLine> getAllVisitLines();
 
   List<VisitLineListModel> getAllVisitLinesListModel();
+
+  List<VisitLineListModel> getAllVisitLinesListModel(Date from, Date to);
 
   List<LabelValue> getAllVisitLinesLabelValue();
 
