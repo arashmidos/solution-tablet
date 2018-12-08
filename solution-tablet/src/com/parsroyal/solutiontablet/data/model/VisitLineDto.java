@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.data.model;
 
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.entity.VisitLineDate;
 import java.util.List;
 
 /**
@@ -11,8 +12,16 @@ public class VisitLineDto extends BaseModel {
   private Long backendId;
   private Integer code;
   private String title;
-
   private List<Customer> customerList;
+  private List<VisitLineDate> dates;
+
+  public List<VisitLineDate> getDates() {
+    return dates;
+  }
+
+  public void setDates(List<VisitLineDate> dates) {
+    this.dates = dates;
+  }
 
   public Long getBackendId() {
     return backendId;

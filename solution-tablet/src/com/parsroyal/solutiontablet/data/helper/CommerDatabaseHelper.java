@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
+import com.parsroyal.solutiontablet.data.entity.VisitLineDate;
 
 /**
  * Created by Arash on 1/16/2018.
@@ -30,7 +31,7 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
 
   public static final String TAG = CommerDatabaseHelper.class.getSimpleName();
   private static final String DATABASE_NAME = "Commer";
-  private static final Integer DATABASE_VERSION = 19;
+  private static final Integer DATABASE_VERSION = 21;
   private static final String SQL_ADD_COLUMN = "ALTER TABLE %s ADD COLUMN %s %s ";
 
   private static CommerDatabaseHelper sInstance;
@@ -166,6 +167,9 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
     if (oldVersion < 19) {
       db.execSQL(String.format(SQL_ADD_COLUMN, VisitInformation.TABLE_NAME,
           VisitInformation.COL_PHONE_VISIT, "INTEGER"));
+    }
+    if (oldVersion < 21) {
+      db.execSQL(VisitLineDate.CREATE_TABLE_SQL);
     }
   }
 }

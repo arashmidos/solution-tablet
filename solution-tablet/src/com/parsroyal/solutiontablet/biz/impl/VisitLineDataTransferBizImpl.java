@@ -1,15 +1,19 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.VisitLineDao;
+import com.parsroyal.solutiontablet.data.dao.VisitLineDateDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDaoImpl;
+import com.parsroyal.solutiontablet.data.dao.impl.VisitLineDateDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
+import com.parsroyal.solutiontablet.data.entity.VisitLineDate;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.VisitLineDto;
@@ -18,6 +22,7 @@ import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
+import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -32,16 +37,18 @@ import retrofit2.Response;
 /**
  * Created by Arash on 28/12/2017
  */
-public class VisitLineDataTaransferBizImpl {
+public class VisitLineDataTransferBizImpl {
 
+  private final VisitLineDateDao visitLineDateDao;
   private Context context;
   private VisitLineDao visitLineDao;
   private CustomerDao customerDao;
   private SettingService settingService;
 
-  public VisitLineDataTaransferBizImpl(Context context) {
+  public VisitLineDataTransferBizImpl(Context context) {
     this.context = context;
     this.visitLineDao = new VisitLineDaoImpl(context);
+    this.visitLineDateDao = new VisitLineDateDaoImpl(context);
     this.customerDao = new CustomerDaoImpl(context);
     this.settingService = new SettingServiceImpl(context);
   }
@@ -49,6 +56,7 @@ public class VisitLineDataTaransferBizImpl {
   public void exchangeData() {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
+      return;
     }
 
     GetDataRestService restService = ServiceGenerator.createService(GetDataRestService.class);
@@ -64,6 +72,7 @@ public class VisitLineDataTaransferBizImpl {
         if (response.isSuccessful()) {
           List<VisitLineDto> list = response.body();
           visitLineDao.deleteAll();
+          visitLineDateDao.deleteAll();
           customerDao.deleteAllCustomersRelatedToVisitLines();
           visitLineDao
               .create(createVisitLineEntity(context.getString(R.string.manual_visit_line), 0L));
@@ -77,7 +86,12 @@ public class VisitLineDataTaransferBizImpl {
               VisitLine visitLine = createVisitLineEntity(visitLineDto);
               visitLineDao.create(visitLine);
               customerDao.bulkInsert(visitLineDto.getCustomerList());
+
+              List<VisitLineDate> dates = visitLineDto.getDates();
+              addGregorianDate(dates);
+              visitLineDateDao.bulkInsert(dates);
             }
+
             EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.SUCCESS));
           } else {
             EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.NO_DATA_ERROR));
@@ -97,6 +111,12 @@ public class VisitLineDataTaransferBizImpl {
         EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NETWORK_ERROR));
       }
     });
+  }
+
+  private void addGregorianDate(List<VisitLineDate> dates) {
+    for (VisitLineDate date : dates) {
+      date.setBackendDateGregorian(DateUtil.convertShamsiToGregorianDate(date.getBackendDate(),DateUtil.GLOBAL_FORMATTER2));
+    }
   }
 
   private List<Customer> getSampleCustomerList() {

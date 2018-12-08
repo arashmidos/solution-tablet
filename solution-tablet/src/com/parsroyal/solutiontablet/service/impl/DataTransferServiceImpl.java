@@ -22,7 +22,7 @@ import com.parsroyal.solutiontablet.biz.impl.SaleOrderForDeliveryDataTaransferBi
 import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransfer;
-import com.parsroyal.solutiontablet.biz.impl.VisitLineDataTaransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.VisitLineDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitLineForDeliveryDataTaransferBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -191,7 +191,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   public void getAllVisitLines() {
     try {
-      new VisitLineDataTaransferBizImpl(context).exchangeData();
+      new VisitLineDataTransferBizImpl(context).exchangeData();
     } catch (Exception ex) {
       EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
     }

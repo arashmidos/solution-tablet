@@ -38,6 +38,7 @@ public class DateUtil {
   public static final String DATE_DEFINER_END_YEAR = "endYear";
 
   public static final SimpleDateFormat FULL_FORMATTER = new SimpleDateFormat("yyyy/MM/dd");
+  public static final SimpleDateFormat FULL_FORMATTER_SQLITE = new SimpleDateFormat("yyyy-MM-dd");
   public static final SimpleDateFormat FULL_FORMATTER_WITH_TIME = new SimpleDateFormat(
       "yyyy/MM/dd - HH:mm:ss");
   public static final SimpleDateFormat GLOBAL_FORMATTER = new SimpleDateFormat("yy/MM/dd");
@@ -67,7 +68,9 @@ public class DateUtil {
 
   static {
     FULL_FORMATTER.setCalendar(new HijriShamsiCalendar());
+    FULL_FORMATTER_SQLITE.setCalendar(new HijriShamsiCalendar());
     GLOBAL_FORMATTER.setCalendar(new HijriShamsiCalendar());
+    GLOBAL_FORMATTER2.setCalendar(new HijriShamsiCalendar());
     FISCAL_YEAR_FORMAT.setCalendar(new HijriShamsiCalendar());
     FULL_FORMATTER_WITH_TIME.setCalendar(new HijriShamsiCalendar());
     TIME_24.setCalendar(new HijriShamsiCalendar());
@@ -565,5 +568,17 @@ public class DateUtil {
     }
     long diff = date2.getTime() - date1.getTime();
     return (int) (diff / (60 * 1000));
+  }
+
+  public static String convertShamsiToGregorianDate(String backendDate,
+      SimpleDateFormat globalFormatter2) {
+    try {
+      Date persianDate = convertStringToDate(backendDate, globalFormatter2, "FA");
+      String en = convertDate(persianDate, FULL_FORMATTER_SQLITE, "EN");
+      return en;
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      return "";
+    }
   }
 }
