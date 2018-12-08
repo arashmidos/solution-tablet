@@ -37,21 +37,24 @@ public class DateUtil {
   public static final String DATE_DEFINER_START_YEAR = "startYear";
   public static final String DATE_DEFINER_END_YEAR = "endYear";
 
-  public static final SimpleDateFormat FULL_FORMATTER = new SimpleDateFormat("yyyy/MM/dd");
-  public static final SimpleDateFormat FULL_FORMATTER_SQLITE = new SimpleDateFormat("yyyy-MM-dd");
+  public static final SimpleDateFormat FULL_FORMATTER = new SimpleDateFormat("yyyy/MM/dd",
+      Locale.US);
+  public static final SimpleDateFormat FULL_FORMATTER_SQLITE = new SimpleDateFormat("yyyy-MM-dd",
+      Locale.US);
   public static final SimpleDateFormat FULL_FORMATTER_WITH_TIME = new SimpleDateFormat(
-      "yyyy/MM/dd - HH:mm:ss");
-  public static final SimpleDateFormat GLOBAL_FORMATTER = new SimpleDateFormat("yy/MM/dd");
+      "yyyy/MM/dd - HH:mm:ss", Locale.US);
+  public static final SimpleDateFormat GLOBAL_FORMATTER = new SimpleDateFormat("yy/MM/dd",
+      Locale.US);
   public static final SimpleDateFormat GLOBAL_FORMATTER2 = new SimpleDateFormat("yy/MM/dd",
       Locale.US);
-  public static final SimpleDateFormat FISCAL_YEAR_FORMAT = new SimpleDateFormat("yyyy");
+  public static final SimpleDateFormat FISCAL_YEAR_FORMAT = new SimpleDateFormat("yyyy", Locale.US);
   public static final SimpleDateFormat GLOBAL_FORMATTER_GREGORIAN = new SimpleDateFormat(
-      "yy-MM-dd");
+      "yy-MM-dd", Locale.US);
   public static final SimpleDateFormat FULL_FORMATTER_GREGORIAN = new SimpleDateFormat(
-      "yyyy-MM-dd");
+      "yyyy-MM-dd", Locale.US);
   public static final SimpleDateFormat FULL_FORMATTER_GREGORIAN_WITH_TIME = new SimpleDateFormat(
-      "yyyy-MM-dd - HH:mm:ss");
-  public static final SimpleDateFormat TIME_24 = new SimpleDateFormat("HH:mm:ss");
+      "yyyy-MM-dd - HH:mm:ss", Locale.US);
+  public static final SimpleDateFormat TIME_24 = new SimpleDateFormat("HH:mm:ss", Locale.US);
   static String[] monthNames = {"فروردین",
       "اردیبهشت",
       "خرداد",
@@ -99,13 +102,13 @@ public class DateUtil {
     if (date == null) {
       return null;
     }
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.US);
     return sdf.format(date);
   }
 
   public static Date convertZFormattedDate(String timeZone) {
     try {
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.US);
       return sdf.parse(timeZone);
     } catch (ParseException e) {
       e.printStackTrace();
@@ -540,7 +543,7 @@ public class DateUtil {
 
   public static Date convertNetworkDateToLocal(Date date) {
     try {
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss");
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss",Locale.US);
       sdf.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
       String iranTime = sdf.format(date);
       return sdf.parse(iranTime);
@@ -557,7 +560,7 @@ public class DateUtil {
 
   public static String getZonedDate(Date date) {
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss",Locale.US);
     sdf.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
     return sdf.format(date);
   }
