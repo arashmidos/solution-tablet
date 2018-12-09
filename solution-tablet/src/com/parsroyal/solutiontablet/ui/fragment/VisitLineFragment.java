@@ -30,6 +30,7 @@ import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.SunDate;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -94,7 +95,7 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new VisitLineAdapter(mainActivity, getVisitLineList());
+    adapter = new VisitLineAdapter(mainActivity, new ArrayList<>());
     if (MultiScreenUtility.isTablet(mainActivity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);

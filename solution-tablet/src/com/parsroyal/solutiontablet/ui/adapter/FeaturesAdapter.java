@@ -3,6 +3,8 @@ package com.parsroyal.solutiontablet.ui.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
@@ -47,14 +51,15 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     saleType = new SettingServiceImpl().getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
   }
 
+  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_features_list, parent, false);
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     FeatureList feature = features.get(position);
     if (feature.getBadger() != 0) {
       holder.badgerBtn.setText(NumberUtil.digitsToPersian(String.valueOf(feature.getBadger())));
@@ -64,6 +69,10 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     }
     holder.featureImg.setImageResource(feature.getImageId());
     holder.featureTitleTv.setText(feature.getTitle());
+    if (feature.getTitle().contains("پرسش") && !SolutionTabletApplication.getInstance()
+        .hasAccess(Authority.ADD_SUB_QUESTIONNAIRE)) {
+      holder.featureTitleTv.setTextColor(ContextCompat.getColor(context, R.color.gray));
+    }
     holder.featureLay.setOnClickListener(v -> {
       if (baseInfoService.getAllProvinces().size() == 0) {
 
@@ -95,7 +104,9 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
           context.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
           break;
         case 5://Questionnaire
-          context.changeFragment(MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID, true);
+          if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_SUB_QUESTIONNAIRE)) {
+            context.changeFragment(MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID, true);
+          }
           break;
         case 6://Report
           Intent intent = new Intent(context,

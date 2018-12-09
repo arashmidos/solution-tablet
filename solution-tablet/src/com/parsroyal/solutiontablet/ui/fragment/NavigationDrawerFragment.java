@@ -179,6 +179,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         if (clickCount >= 7) {
           clickCount = 0;
           openAdminLogin();
+          mainActivity.closeDrawer();
         }
     }
     if (closeDrawer) {
@@ -192,7 +193,7 @@ public class NavigationDrawerFragment extends BaseFragment {
           if (Constants.debugUsername.equals(username) && Constants.debugPassword
               .equals(password)) {
             Toast.makeText(mainActivity, "Login OK", Toast.LENGTH_SHORT).show();
-          }else{
+          } else {
             Toast.makeText(mainActivity, "Login Failed", Toast.LENGTH_SHORT).show();
           }
         });

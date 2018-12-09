@@ -53,9 +53,8 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
 
   @Override
   protected String[] getProjection() {
-    String[] projection = {VisitLine.COL_ID, VisitLine.COL_BACKEND_ID, VisitLine.COL_CODE,
+    return new String[]{VisitLine.COL_ID, VisitLine.COL_BACKEND_ID, VisitLine.COL_CODE,
         VisitLine.COL_TITLE};
-    return projection;
   }
 
   @Override
@@ -75,7 +74,7 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
 
     String sql =
         "select vl.BACKEND_ID, vl.CODE, vl.TITLE,count(cu._id) COUNT from COMMER_VISIT_LINE vl " +
-            "LEFT OUTER JOIN COMMER_CUSTOMER cu where cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
+            "LEFT OUTER JOIN COMMER_CUSTOMER cu on cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
             "GROUP BY vl.BACKEND_ID, vl.CODE, vl.TITLE ORDER BY vl.BACKEND_ID DESC";
 
     List<VisitLineListModel> entities = new ArrayList<>();
@@ -120,36 +119,13 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
 
     String sql =
         "select vl.BACKEND_ID, vl.CODE, vl.TITLE,count(cu._id) COUNT from COMMER_VISIT_LINE vl " +
-            "LEFT OUTER JOIN COMMER_CUSTOMER cu where cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
+            "LEFT OUTER JOIN COMMER_CUSTOMER cu on cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
             "GROUP BY vl.BACKEND_ID, vl.CODE, vl.TITLE ORDER BY vl.BACKEND_ID DESC";
 
     List<LabelValue> entities = new ArrayList<>();
     Cursor cursor = db.rawQuery(sql, null);
     while (cursor.moveToNext()) {
       entities.add(createLabelValueFromCursor(cursor));
-    }
-    cursor.close();
-    return entities;
-  }
-
-  @Deprecated
-  @Override
-  public List<VisitLineListModel> getAllVisitLinesListModelByConstraint(String constraint) {
-    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
-    SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    constraint = "%" + constraint + "%";
-    String[] args = {constraint, constraint};
-
-    String sql =
-        "select vl.BACKEND_ID, vl.CODE, vl.TITLE,count(cu._id) COUNT from COMMER_VISIT_LINE vl " +
-            "LEFT OUTER JOIN COMMER_CUSTOMER cu on cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
-            "WHERE " + VisitLine.COL_TITLE + " LIKE ? OR " + " " + VisitLine.COL_CODE + " LIKE ? " +
-            "GROUP BY vl.BACKEND_ID, vl.CODE, vl.TITLE";
-
-    List<VisitLineListModel> entities = new ArrayList<>();
-    Cursor cursor = db.rawQuery(sql, args);
-    while (cursor.moveToNext()) {
-      entities.add(createListModelFromCursor(cursor));
     }
     cursor.close();
     return entities;
@@ -162,8 +138,8 @@ public class VisitLineDaoImpl extends AbstractDao<VisitLine, Long> implements Vi
 
     String sql =
         "select vl.BACKEND_ID, vl.CODE, vl.TITLE,count(cu._id) COUNT from COMMER_VISIT_LINE vl " +
-            "LEFT OUTER JOIN COMMER_CUSTOMER cu where cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
-            "AND vl.BACKEND_ID = " + visitlineBackendId +
+            "LEFT OUTER JOIN COMMER_CUSTOMER cu on cu.VISIT_LINE_BACKEND_ID = vl.BACKEND_ID " +
+            "where vl.BACKEND_ID = " + visitlineBackendId +
             " GROUP BY vl.BACKEND_ID, vl.CODE, vl.TITLE";
 
     VisitLineListModel entity = null;

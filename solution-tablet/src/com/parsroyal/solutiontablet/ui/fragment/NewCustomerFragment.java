@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
@@ -47,7 +51,7 @@ public class NewCustomerFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_customer_send, container, false);
@@ -61,7 +65,16 @@ public class NewCustomerFragment extends BaseFragment {
       nCustomerSO.setSent(0);
     }
     setUpRecyclerView();
+    checkPermissions();
     return view;
+  }
+
+  private void checkPermissions() {
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_NEW_CUSTOMER)) {
+      fabAddCustomer.setEnabled(false);
+      fabAddCustomer
+          .setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+    }
   }
 
   //set up recycler view
@@ -96,7 +109,7 @@ public class NewCustomerFragment extends BaseFragment {
   public void onClick() {
     Bundle args = new Bundle();
     args.putSerializable(Constants.PAGE_STATUS, PageStatus.EDIT);
-    activity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID,args, true);
+    activity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, args, true);
   }
 
   @Override

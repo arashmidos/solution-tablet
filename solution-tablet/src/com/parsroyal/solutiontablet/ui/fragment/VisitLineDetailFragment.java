@@ -132,9 +132,12 @@ public class VisitLineDetailFragment extends BaseFragment {
     if (Empty.isNotEmpty(customersNumberTv)) {
 
       Integer customerCount = visitline.getCustomerCount();
-      customersNumberTv.setText(NumberUtil.digitsToPersian(
-          String.format(getString(R.string.x_customers),
-              visitline.getPrimaryKey().equals(0L) ? customerCount - 1 : customerCount)));
+      if (customerCount == 0) {
+        customersNumberTv.setText(R.string.no_customer_exist);
+      } else {
+        customersNumberTv.setText(NumberUtil.digitsToPersian(
+            String.format(getString(R.string.x_customers), customerCount)));
+      }
       pathCodeTv.setText(NumberUtil.digitsToPersian(
           String.format(getString(R.string.visitline_code_x), visitline.getCode())));
     } else {
@@ -152,9 +155,11 @@ public class VisitLineDetailFragment extends BaseFragment {
 
     if (Empty.isNotEmpty(customerCountBtn)) {
       Integer customerCount = visitline.getCustomerCount();
-      customerCountBtn.setText(NumberUtil.digitsToPersian(
-          String.format(getString(R.string.x_customers),
-              visitline.getPrimaryKey().equals(0L) ? customerCount - 1 : customerCount)));
+//      if (customerCount == 0) {
+//        customerCountBtn.setText(R.string.no_customer_exist);
+//      } else {
+      customerCountBtn.setText(NumberUtil.digitsToPersian(customerCount));
+//      }
     } else {
       //We detected wrong device size!
       Logger.sendError("Wrong Orientation", "Device is not tablet");

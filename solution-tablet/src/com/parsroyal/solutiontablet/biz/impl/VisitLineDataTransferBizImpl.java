@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 import android.content.Context;
 import android.util.Log;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.VisitLineDao;
@@ -26,7 +27,6 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
@@ -75,7 +75,7 @@ public class VisitLineDataTransferBizImpl {
           customerDao.deleteAllCustomersRelatedToVisitLines();
           visitLineDao
               .create(createVisitLineEntity(context.getString(R.string.manual_visit_line), 0L));
-          customerDao.bulkInsert(getSampleCustomerList());
+//          customerDao.create(getSampleCustomer());
           if (Empty.isNotEmpty(list)) {
 
             //add manual visit line
@@ -114,17 +114,20 @@ public class VisitLineDataTransferBizImpl {
 
   private void addGregorianDate(List<VisitLineDate> dates) {
     for (VisitLineDate date : dates) {
-      date.setBackendDateGregorian(DateUtil.convertShamsiToGregorianDate(date.getBackendDate(),DateUtil.GLOBAL_FORMATTER2));
+      date.setBackendDateGregorian(
+          DateUtil.convertShamsiToGregorianDate(date.getBackendDate(), DateUtil.GLOBAL_FORMATTER2));
     }
   }
 
-  private List<Customer> getSampleCustomerList() {
+  private Customer getSampleCustomer() {
     Customer customer = new Customer();
     customer.setBackendId(0L);
     customer.setVisitLineBackendId(0L);
-    List<Customer> customers = new ArrayList<>();
-    customers.add(customer);
-    return customers;
+    customer.setStatus(CustomerStatus.SYSTEM.getId());
+    customer.setFullName("");
+    customer.setAddress("");
+
+    return customer;
   }
 
   private VisitLine createVisitLineEntity(VisitLineDto visitLineDto) {

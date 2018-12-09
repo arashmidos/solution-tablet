@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 
 public class CustomerDetailViewPagerAdapter extends FragmentStatePagerAdapter{
-  ArrayList<String> titles = new ArrayList<>();
-  ArrayList<Fragment> fragments = new ArrayList<>();
+  private ArrayList<String> titles = new ArrayList<>();
+  private ArrayList<Fragment> fragments = new ArrayList<>();
 
   public CustomerDetailViewPagerAdapter(FragmentManager fm) {
     super(fm);

@@ -2,7 +2,9 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikepenz.crossfader.util.UIUtils;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
@@ -103,6 +107,22 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   TextView creditTv;
   @BindView(R.id.alert_img)
   ImageView alertImg;
+  @BindView(R.id.add_reject_tv)
+  TextView addRejectTv;
+  @BindView(R.id.register_return_lay)
+  RelativeLayout registerReturnLay;
+  @BindView(R.id.add_payment_tv)
+  TextView addPaymentTv;
+  @BindView(R.id.register_payment_lay)
+  RelativeLayout registerPaymentLay;
+  @BindView(R.id.add_questionnaire_tv)
+  TextView addQuestionnaireTv;
+  @BindView(R.id.register_questionnaire_lay)
+  RelativeLayout registerQuestionnaireLay;
+  @BindView(R.id.add_picture_tv)
+  TextView addPictureTv;
+  @BindView(R.id.register_image_lay)
+  RelativeLayout registerImageLay;
 
   private boolean isShowMore = true;
   private long customerId;
@@ -140,7 +160,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_customer_info, container, false);
@@ -166,8 +186,31 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         : Boolean.valueOf(checkCredit);
 
     setData();
-
+    setPermissions();
     return view;
+  }
+
+  private void setPermissions() {
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_ORDER)) {
+      addOrderTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
+      registerOrderLay.setEnabled(false);
+    }
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_REJECT)) {
+      addRejectTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
+      registerReturnLay.setEnabled(false);
+    }
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_PAYMENT)) {
+      addPaymentTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
+      registerPaymentLay.setEnabled(false);
+    }
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_QUESTIONNAIRE)) {
+      addQuestionnaireTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
+      registerQuestionnaireLay.setEnabled(false);
+    }
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_PICTURE)) {
+      addPictureTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
+      registerImageLay.setEnabled(false);
+    }
   }
 
   @Override

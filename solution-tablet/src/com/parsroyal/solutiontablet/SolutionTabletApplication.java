@@ -16,7 +16,9 @@ import com.instacart.library.truetime.TrueTimeRx;
 import com.parsroyal.solutiontablet.biz.impl.RestServiceImpl;
 import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
+import com.parsroyal.solutiontablet.util.ToastUtil;
 import io.fabric.sdk.android.Fabric;
 import io.github.inflationx.calligraphy3.CalligraphyConfig.Builder;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
@@ -55,8 +57,10 @@ public class SolutionTabletApplication extends MultiDexApplication {
   }
 
   private void setAuthorities(Set<String> authorities) {
-    this.authorities.clear();
-    this.authorities.addAll(authorities);
+    if(Empty.isNotEmpty(authorities)) {
+      this.authorities.clear();
+      this.authorities.addAll(authorities);
+    }
   }
 
   public boolean hasAccess(Authority authority) {

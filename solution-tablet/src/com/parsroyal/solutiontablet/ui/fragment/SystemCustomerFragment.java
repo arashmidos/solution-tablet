@@ -1,8 +1,12 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +24,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.PageStatus;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
@@ -64,7 +70,7 @@ public class SystemCustomerFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_system_customer, container, false);
@@ -72,7 +78,15 @@ public class SystemCustomerFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     customerService = new CustomerServiceImpl(mainActivity);
     setUpRecyclerView();
+    checkPermissions();
     return view;
+  }
+
+  private void checkPermissions() {
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_NEW_CUSTOMER)) {
+      fabAddCustomer.setEnabled(false);
+      fabAddCustomer.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+    }
   }
 
   //set up recycler view

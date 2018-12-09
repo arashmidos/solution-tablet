@@ -20,7 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.biz.impl.RejectedGoodsDataTransferBizImpl;
+import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -284,47 +286,15 @@ public class VisitDetailFragment extends BaseFragment {
   }
 
   private void tryFindingLocation() {
-//    try {
-      /*final ProgressDialog progressDialog = new ProgressDialog(mainActivity);
-      progressDialog.setIndeterminate(true);
-      progressDialog.setCancelable(Boolean.FALSE);
-      progressDialog.setIcon(R.drawable.ic_action_info);
-      progressDialog.setTitle(R.string.message_please_wait);
-      progressDialog
-          .setMessage(mainActivity.getString(R.string.message_please_wait_finding_your_location));
-      progressDialog.show();*/
 
     Position position = new PositionServiceImpl(mainActivity).getLastPosition();
-//      locationService.findCurrentLocation(new FindLocationListener() {
-//        @Override
-//        public void foundLocation(Location location) {
-//          progressDialog.dismiss();
-//          try {
+
     if (Empty.isNotEmpty(position)) {
       visitService.updateVisitLocation(visitId, position);
       showFoundLocationDialog();
     } else {
       showDialogForEmptyLocation();
     }
-//          } catch (Exception e) {
-//            Logger.sendError("Data Storage Exception",
-//                "Error in updating visit location " + e.getMessage());
-//            Log.e(TAG, e.getMessage(), e);
-//          }
-//
-//          mainActivity.runOnUiThread(() -> showFoundLocationDialog());
-//        }
-
-//        @Override
-//        public void timeOut() {
-//          progressDialog.dismiss();
-//          mainActivity.runOnUiThread(() -> {
-//            ToastUtil
-//                .toastError(mainActivity, mainActivity.getString(R.string.visit_found_no_location));
-//            showDialogForEmptyLocation();
-//          });
-//        }
-//      });
   }
 
   private void showFoundLocationDialog() {
@@ -392,14 +362,24 @@ public class VisitDetailFragment extends BaseFragment {
 
   private void setUpViewPager() {
     viewPagerAdapter = new CustomerDetailViewPagerAdapter(getChildFragmentManager());
-    viewPagerAdapter.add(pictureFragment, getString(R.string.images));
-    viewPagerAdapter.add(allQuestionnaireListFragment, getString(R.string.questionnaire));
-    viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
-    viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
+    if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_PICTURE)) {
+      viewPagerAdapter.add(pictureFragment, getString(R.string.images));
+    }
+    if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_QUESTIONNAIRE)) {
+      viewPagerAdapter.add(allQuestionnaireListFragment, getString(R.string.questionnaire));
+    }
+    if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_PAYMENT)) {
+      viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
+    }
+    if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_REJECT)) {
+      viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
+    }
     if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
       viewPagerAdapter.add(deliveryListFragment, getString(R.string.orders_for_delivery));
     } else {
-      viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
+      if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_ORDER)) {
+        viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
+      }
     }
     viewPagerAdapter.add(customerInfoFragment, getString(R.string.customer_information));
     viewpager.setAdapter(viewPagerAdapter);

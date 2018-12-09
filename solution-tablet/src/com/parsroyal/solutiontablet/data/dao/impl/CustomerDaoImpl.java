@@ -501,7 +501,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         Customer.COL_BACKEND_ID,
         Customer.COL_SHOP_NAME
     };
-    String selection = " 1 = 1";
+    String selection = " 1=1 ";
     List<String> argList = new ArrayList<>();
 
     selection = selection.concat(" AND " + Customer.COL_STATUS + " = ?");

@@ -69,7 +69,6 @@ public class VisitLineAdapter extends Adapter<VisitLineAdapter.ViewHolder> {
     View divider;
     //    @BindView(R.id.map_item)
 //    MapView mapView;
-    GoogleMap map;
     private VisitLineListModel model;
     private int position;
 
@@ -101,13 +100,13 @@ public class VisitLineAdapter extends Adapter<VisitLineAdapter.ViewHolder> {
       //Manual VisitLine
       if (model.getPrimaryKey().equals(0L)) {
         customerList.setVisibility(View.VISIBLE);
-        if (model.getCustomerCount() == 1) {
+        if (model.getCustomerCount() == 0) {
           customerCount.setText(mainActivity.getString(R.string.no_customer_exist));
           divider.setVisibility(View.INVISIBLE);
           visitlineDetail.setVisibility(View.INVISIBLE);
         } else {
           customerCount.setText(NumberUtil.digitsToPersian(String
-              .format(mainActivity.getString(R.string.x_customers), model.getCustomerCount() - 1)));
+              .format(mainActivity.getString(R.string.x_customers), model.getCustomerCount())));
           divider.setVisibility(View.VISIBLE);
           visitlineDetail.setVisibility(View.VISIBLE);
         }

@@ -6,7 +6,8 @@ package com.parsroyal.solutiontablet.constants;
 public enum CustomerStatus {
   NEW(9999L, "NEW_CUSTOMER"),
   UPDATED(9998L, "UPDATED_CUSTOMER"),
-  SENT(9997L, "SENT_CUSTOMER");
+  SENT(9997L, "SENT_CUSTOMER"),
+  SYSTEM(9996L, "SYSTEM");
 
   private Long id;
   private String title;

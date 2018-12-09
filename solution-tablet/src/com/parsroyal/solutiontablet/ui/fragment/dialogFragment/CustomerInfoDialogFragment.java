@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,6 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
@@ -110,6 +113,9 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   TextView creditTv;
   @BindView(R.id.distance_tv)
   TextView distanceTv;
+  @BindView(R.id.phone_visit_btn)
+  Button phoneVisitButton;
+
   private CustomerDto customer;
 
   public CustomerInfoDialogFragment() {
@@ -145,18 +151,30 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     View view = inflater.inflate(getLayout(), container, false);
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
-    customerService = new CustomerServiceImpl(mainActivity);
-    settingService = new SettingServiceImpl();
-    visitService = new VisitServiceImpl(mainActivity);
-    positionService = new PositionServiceImpl(mainActivity);
-    orderService = new SaleOrderServiceImpl(mainActivity);
+    initServices();
 
     customer = customerService.getCustomerDtoById(model.getPrimaryKey());
 
     initialize();
     setData();
     setupRecycler();
+    setPermissions();
     return view;
+  }
+
+  private void setPermissions() {
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_ORDER)) {
+      phoneVisitButton.setEnabled(false);
+      phoneVisitButton.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
+    }
+  }
+
+  private void initServices() {
+    customerService = new CustomerServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl();
+    visitService = new VisitServiceImpl(mainActivity);
+    positionService = new PositionServiceImpl(mainActivity);
+    orderService = new SaleOrderServiceImpl(mainActivity);
   }
 
   protected int getLayout() {

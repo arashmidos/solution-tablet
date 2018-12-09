@@ -86,11 +86,6 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
-  public List<VisitLineListModel> getAllFilteredVisitLinesListModel(String constraint) {
-    return visitLineDao.getAllVisitLinesListModelByConstraint(constraint);
-  }
-
-  @Override
   public Long startVisiting(Long customerBackendId, int distance) {
     VisitInformation visitInformation = new VisitInformation();
     visitInformation.setCustomerBackendId(customerBackendId);
