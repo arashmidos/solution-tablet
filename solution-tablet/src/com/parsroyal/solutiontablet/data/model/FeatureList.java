@@ -24,7 +24,7 @@ public class FeatureList {
   }
 
   public static List<FeatureList> getFeatureList(Context context) {
-    String saleType = new SettingServiceImpl(context)
+    String saleType = new SettingServiceImpl()
         .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
     List<FeatureList> featureList = new ArrayList<>();

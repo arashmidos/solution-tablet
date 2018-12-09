@@ -6,7 +6,6 @@ import android.net.NetworkInfo;
 import android.util.Base64;
 import android.util.Log;
 import com.google.gson.Gson;
-import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.response.UserInfoResponse;
@@ -32,7 +31,7 @@ public class NetworkUtil {
     ConnectivityManager cm = (ConnectivityManager) context
         .getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo netInfo = cm.getActiveNetworkInfo();
-    KeyValueDao keyValueDao = new KeyValueDaoImpl(context);
+    KeyValueDao keyValueDao = new KeyValueDaoImpl();
 
     String username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME).getValue();
     String password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD).getValue();
@@ -111,7 +110,7 @@ public class NetworkUtil {
   }
 
   public static boolean isTokenExpired() {
-    SettingService settingService = new SettingServiceImpl(SolutionTabletApplication.getInstance());
+    SettingService settingService = new SettingServiceImpl();
     String expire = settingService.getSettingValue(ApplicationKeys.TOKEN_EXPIRE_DATE);
     if (Empty.isEmpty(expire)) {
       return true;

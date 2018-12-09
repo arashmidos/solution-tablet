@@ -16,7 +16,6 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.exception.UserNotAuthorizedException;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.LoggingRequestInterceptor;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.Serializable;
@@ -58,7 +57,7 @@ public abstract class AbstractDataTransferBizImpl<T extends Serializable> {
 
   public AbstractDataTransferBizImpl(Context context) {
     this.context = context;
-    this.keyValueDao = new KeyValueDaoImpl(context);
+    this.keyValueDao = new KeyValueDaoImpl();
   }
 
   public void prepare() {

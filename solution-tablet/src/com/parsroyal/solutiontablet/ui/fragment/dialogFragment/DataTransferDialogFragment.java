@@ -116,7 +116,7 @@ public class DataTransferDialogFragment extends DialogFragment {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     dataTransferService = new DataTransferServiceImpl(mainActivity);
-    settingService = new SettingServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl();
 
     Bundle args = getArguments();
     if (Empty.isNotEmpty(args)) {

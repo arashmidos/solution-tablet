@@ -31,7 +31,7 @@ public class GoodsRequestDataTransferBizImpl {
 
   public GoodsRequestDataTransferBizImpl(Context context) {
     this.context = context;
-    this.keyValueBiz = new KeyValueBizImpl(context);
+    this.keyValueBiz = new KeyValueBizImpl();
     userCode = keyValueBiz.findByKey(ApplicationKeys.SETTING_USER_CODE).getValue();
   }
 

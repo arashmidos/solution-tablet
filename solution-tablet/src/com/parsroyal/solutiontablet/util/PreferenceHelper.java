@@ -3,12 +3,15 @@ package com.parsroyal.solutiontablet.util;
 import android.content.SharedPreferences;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import java.util.Set;
+import java.util.SortedSet;
 
 public class PreferenceHelper {
 
   public static final String FORCE_EXIT = "FORCE_EXIT";
   private static final String LATEST_VERSION = "LATEST_VERSION";
   private static final String UPDATE_URI = "UPDATE_URI";
+  private static final String AUTHORITIES = "setting.authorities";
   private static final String DEF_NAVIGATOR = "DEF_NAVIGATOR";
 
   public static int getLatestVersion() {
@@ -61,5 +64,14 @@ public class PreferenceHelper {
     SharedPreferences.Editor editor = SolutionTabletApplication.getPreference().edit();
     editor.clear();
     editor.apply();
+  }
+
+  public static Set<String> getAuthorities() {
+    return SolutionTabletApplication.getPreference().getStringSet(AUTHORITIES, null);
+  }
+
+  public static void setAuthorities(SortedSet<String> authorities) {
+    SolutionTabletApplication.getPreference().edit().putStringSet(AUTHORITIES, authorities)
+        .apply();
   }
 }

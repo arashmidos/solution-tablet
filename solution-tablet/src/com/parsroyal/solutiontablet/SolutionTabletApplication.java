@@ -12,17 +12,20 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import co.ronash.pushe.Pushe;
 import com.crashlytics.android.Crashlytics;
-import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 import com.parsroyal.solutiontablet.biz.impl.RestServiceImpl;
+import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import io.fabric.sdk.android.Fabric;
-import io.github.inflationx.calligraphy3.CalligraphyConfig;
+import io.github.inflationx.calligraphy3.CalligraphyConfig.Builder;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
 import io.github.inflationx.viewpump.ViewPump;
 import io.reactivex.schedulers.Schedulers;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by Arash on 2018-01-25
@@ -32,6 +35,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
   public static SolutionTabletApplication sInstance;
 
   public static SharedPreferences sPreference;
+  private ArrayList<String> authorities = new ArrayList<>();
 
   public static SolutionTabletApplication getInstance() {
     return sInstance;
@@ -46,11 +50,24 @@ public class SolutionTabletApplication extends MultiDexApplication {
     return sPreference;
   }
 
+  public ArrayList<String> getAuthorities() {
+    return authorities;
+  }
+
+  private void setAuthorities(Set<String> authorities) {
+    this.authorities.clear();
+    this.authorities.addAll(authorities);
+  }
+
+  public boolean hasAccess(Authority authority) {
+    return authorities.contains(String.valueOf(authority.getId()));
+  }
+
   public Date getTrueTime() {
     try {
       if (TrueTimeRx.isInitialized()) {
         return TrueTimeRx.now();
-      }else{
+      } else {
         reSyncTrueTime();
       }
     } catch (Exception ex) {
@@ -72,7 +89,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
     ViewPump.init(ViewPump.builder()
         .addInterceptor(new CalligraphyInterceptor(new
-            CalligraphyConfig.Builder()
+            Builder()
             .setDefaultFontPath("fonts/IRANSansMobile.ttf")
             .setFontAttrId(R.attr.fontPath)
             .build()))
@@ -97,19 +114,19 @@ public class SolutionTabletApplication extends MultiDexApplication {
   private void reSyncTrueTime() {
 
 //    new Thread(() -> {
-      try {
+    try {
 
-        TrueTimeRx.build().withSharedPreferencesCache(this)
-            .initializeRx("time.google.com")
-            .subscribeOn(Schedulers.io())
-            .subscribe(date -> {
-                  Log.d("Network Time", "TrueTime was initialized and we have a time: " + date);
-                },
-                Throwable::printStackTrace);
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        Log.d("Network Time", " not initialized");
-      }
+      TrueTimeRx.build().withSharedPreferencesCache(this)
+          .initializeRx("time.google.com")
+          .subscribeOn(Schedulers.io())
+          .subscribe(date -> {
+                Log.d("Network Time", "TrueTime was initialized and we have a time: " + date);
+              },
+              Throwable::printStackTrace);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Log.d("Network Time", " not initialized");
+    }
 //    }).start();
   }
 
@@ -125,5 +142,9 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
   public String getInstanceId() {
     return Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+  }
+
+  public void loadAuthorities() {
+    setAuthorities(PreferenceHelper.getAuthorities());
   }
 }

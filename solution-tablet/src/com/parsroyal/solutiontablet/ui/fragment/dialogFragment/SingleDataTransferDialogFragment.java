@@ -132,7 +132,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       }
 
       visitService = new VisitServiceImpl(mainActivity);
-      settingService = new SettingServiceImpl(mainActivity);
+      settingService = new SettingServiceImpl();
       visit = visitService.getVisitInformationById(visitId);
       if (Empty.isEmpty(visit)) {
         return inflater.inflate(R.layout.empty_view, container, false);

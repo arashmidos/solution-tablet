@@ -32,8 +32,8 @@ android {
         minSdkVersion 17
         //noinspection ExpiringTargetSdkVersion
         targetSdkVersion 25
-        versionCode 122
-        versionName "2.18.9"
+        versionCode 123
+        versionName "2.19.0"
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled true
@@ -115,10 +115,9 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true
     }
+    //Usage: save good images
     implementation group: 'commons-io', name: 'commons-io', version: '2.5'
-    implementation('com.mikepenz:materialdrawer:5.9.2@aar') {
-        transitive = true
-    }
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation 'com.android.support:appcompat-v7:27.1.1'

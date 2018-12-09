@@ -38,7 +38,7 @@ public class GoodsGroupDataTransferBizImpl {
   public GoodsGroupDataTransferBizImpl(Context context) {
     this.context = context;
     this.goodsGroupDao = new GoodsGroupDaoImpl(context);
-    this.settingService = new SettingServiceImpl(context);
+    this.settingService = new SettingServiceImpl();
   }
 
   public void exchangeData() {

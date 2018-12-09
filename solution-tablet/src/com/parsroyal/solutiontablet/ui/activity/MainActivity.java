@@ -34,6 +34,7 @@ import butterknife.OnClick;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
@@ -233,6 +234,11 @@ public abstract class MainActivity extends AppCompatActivity {
     if (!BuildConfig.DEBUG) {
       logUser();
     }
+    loadPermission();
+  }
+
+  private void loadPermission() {
+    SolutionTabletApplication.getInstance().loadAuthorities();
   }
 
 
@@ -491,7 +497,7 @@ public abstract class MainActivity extends AppCompatActivity {
   }
 
   private void logUser() {
-    SettingService settingService = new SettingServiceImpl(this);
+    SettingService settingService = new SettingServiceImpl();
     Crashlytics.setUserName(settingService.getSettingValue(ApplicationKeys.USER_FULL_NAME));
     Crashlytics
         .setString("Company", settingService.getSettingValue(ApplicationKeys.USER_COMPANY_NAME));

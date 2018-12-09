@@ -57,7 +57,7 @@ public class InvoicedOrdersDataTransfer extends AbstractDataTransferBizImpl<Stri
     super(context);
     this.saleOrderDao = new SaleOrderDaoImpl(context);
     this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
-    this.keyValueBiz = new KeyValueBizImpl(context);
+    this.keyValueBiz = new KeyValueBizImpl();
     visitService = new VisitServiceImpl(context);
     saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
 

@@ -2,42 +2,28 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import android.util.Log;
-import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderDao;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderItemDao;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderItemDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
-import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.model.SaleOrderList;
-import com.parsroyal.solutiontablet.data.model.VisitLineDto;
 import com.parsroyal.solutiontablet.service.GetDataRestService;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
-import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,7 +42,7 @@ public class SaleOrderForDeliveryDataTaransferBizImpl {
     this.context = context;
     this.saleOrderDao = new SaleOrderDaoImpl(context);
     this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
-    this.settingService = new SettingServiceImpl(context);
+    this.settingService = new SettingServiceImpl();
   }
 
   public void exchangeData() {

@@ -81,6 +81,8 @@ public class Constants {
   public static final String CASH_ORDER = "CASH_ORDER";
   public static final String DISCOUNT = "DISCOUNT";
   public static final String PHONE_VISIT = "PHONE_VISIT";
+  public static final String debugUsername = "royal";
+  public static final String debugPassword = "royal2018";
 
   public class TransferStatus {
 

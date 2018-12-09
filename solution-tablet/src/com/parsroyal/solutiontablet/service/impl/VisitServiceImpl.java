@@ -57,7 +57,7 @@ public class VisitServiceImpl implements VisitService {
     this.visitInformationDao = new VisitInformationDaoImpl(context);
     this.visitInformationDetailDao = new VisitInformationDetailDaoImpl(context);
     this.positionService = new PositionServiceImpl(context);
-    this.settingService = new SettingServiceImpl(context);
+    this.settingService = new SettingServiceImpl();
   }
 
   @Override

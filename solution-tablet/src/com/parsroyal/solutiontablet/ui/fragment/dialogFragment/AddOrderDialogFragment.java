@@ -177,7 +177,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     discount = arguments.getLong(Constants.DISCOUNT);
 
     goodsService = new GoodsServiceImpl(mainActivity);
-    settingService = new SettingServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl();
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
     saleRateEnabled = Boolean

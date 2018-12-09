@@ -47,7 +47,7 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
     super(context);
     this.context = context;
     this.positionService = new PositionServiceImpl(context);
-    this.settingService = new SettingServiceImpl(context);
+    this.settingService = new SettingServiceImpl();
   }
 
   @Override

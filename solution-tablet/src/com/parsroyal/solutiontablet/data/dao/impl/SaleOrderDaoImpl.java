@@ -40,7 +40,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
 
   public SaleOrderDaoImpl(Context context) {
     this.context = context;
-    settingService = new SettingServiceImpl(context);
+    settingService = new SettingServiceImpl();
   }
 
   @Override

@@ -30,7 +30,7 @@ public class TrackerAlarmReceiver extends WakefulBroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     Log.i(TAG, "Received");
-    settingService = new SettingServiceImpl(context);
+    settingService = new SettingServiceImpl();
 
     if (Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID))) {
       Log.i(TAG, "required information is available. trying to set alarm and run service");
@@ -43,7 +43,7 @@ public class TrackerAlarmReceiver extends WakefulBroadcastReceiver {
   }
 
   public void setAlarm(Context context) {
-    settingService = new SettingServiceImpl(context);
+    settingService = new SettingServiceImpl();
 
     Log.i(TAG, "check for required information");
 

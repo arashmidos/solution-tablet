@@ -130,6 +130,8 @@ public class RestAuthenticateServiceImpl {
         } else {
           if (response.code() == 401) {
             EventBus.getDefault().post(new ErrorEvent(StatusCodes.INVALID_DATA));
+          } else if (response.code() == 403) {
+            EventBus.getDefault().post(new ErrorEvent(StatusCodes.FORBIDDEN));
           } else {
             EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
           }

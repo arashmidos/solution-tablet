@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.service;
 
+import com.parsroyal.solutiontablet.data.response.CompanyInfoResponse;
 import com.parsroyal.solutiontablet.data.response.SettingResponse;
 import com.parsroyal.solutiontablet.data.response.UserInfoResponse;
 import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
@@ -18,4 +19,6 @@ public interface SettingService {
   void saveUserInfo(UserInfoResponse userInfo);
 
   void clearAllSettings();
+
+  void saveSetting(CompanyInfoResponse companyInfo);
 }

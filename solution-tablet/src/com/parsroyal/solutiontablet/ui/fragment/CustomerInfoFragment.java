@@ -150,7 +150,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     visitId = args.getLong(Constants.VISIT_ID);
     mainActivity = (MainActivity) getActivity();
     customerService = new CustomerServiceImpl(mainActivity);
-    settingService = new SettingServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl();
     questionnaireService = new QuestionnaireServiceImpl(mainActivity);
 
     customer = customerService.getCustomerById(customerId);

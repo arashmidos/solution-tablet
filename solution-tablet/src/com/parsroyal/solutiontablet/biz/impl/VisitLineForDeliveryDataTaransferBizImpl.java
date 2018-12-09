@@ -45,7 +45,7 @@ public class VisitLineForDeliveryDataTaransferBizImpl {
     this.context = context;
     this.visitLineDao = new VisitLineDaoImpl(context);
     this.customerDao = new CustomerDaoImpl(context);
-    this.settingService = new SettingServiceImpl(context);
+    this.settingService = new SettingServiceImpl();
   }
 
   public void exchangeData() {

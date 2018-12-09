@@ -55,7 +55,7 @@ public class Updater {
       return;
     }
 
-    SettingService settingService = new SettingServiceImpl(context);
+    SettingService settingService = new SettingServiceImpl();
     if (Empty.isEmpty(settingService.getSettingValue(ApplicationKeys.BACKEND_URI))) {
       return;
     }

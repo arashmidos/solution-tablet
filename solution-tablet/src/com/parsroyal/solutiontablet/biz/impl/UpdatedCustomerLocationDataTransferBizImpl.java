@@ -95,7 +95,7 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
   @Override
   public String getMethod() {
     return String.format("customers/%s/updateLocation",
-        new SettingServiceImpl(context).getSettingValue(ApplicationKeys.SALESMAN_ID));
+        new SettingServiceImpl().getSettingValue(ApplicationKeys.SALESMAN_ID));
   }
 
   @Override

@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.data.dao.impl;
 
-import android.content.Context;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
@@ -11,10 +10,7 @@ import java.util.List;
  */
 public class KeyValueDaoImpl implements KeyValueDao {
 
-  private final Context context;
-
-  public KeyValueDaoImpl(Context context) {
-    this.context = context;
+  public KeyValueDaoImpl() {
   }
 
   @Override

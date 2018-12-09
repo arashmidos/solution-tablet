@@ -32,7 +32,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
 
   public BaseInfoServiceImpl(Context context) {
     this.context = context;
-    this.keyValueDao = new KeyValueDaoImpl(context);
+    this.keyValueDao = new KeyValueDaoImpl();
     this.provinceDao = new ProvinceDaoImpl(context);
     this.cityDao = new CityDaoImpl(context);
     this.baseInfoDao = new BaseInfoDaoImpl(context);

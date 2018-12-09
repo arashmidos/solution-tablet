@@ -80,7 +80,7 @@ public class OrderListFragment extends BaseFragment {
     ButterKnife.bind(this, view);
     Bundle args = getArguments();
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
-    settingService = new SettingServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl();
 
     saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 

@@ -85,7 +85,7 @@ public class PhoneVisitDetailFragment extends BaseFragment {
       customerId = args.getLong(Constants.CUSTOMER_ID);
       mainActivity = (MainActivity) getActivity();
       customerService = new CustomerServiceImpl(mainActivity);
-      settingService = new SettingServiceImpl(mainActivity);
+      settingService = new SettingServiceImpl();
       visitService = new VisitServiceImpl(mainActivity);
       customer = customerService.getCustomerById(customerId);
       if (customer == null) {
@@ -95,7 +95,7 @@ public class PhoneVisitDetailFragment extends BaseFragment {
 
       visitId = args.getLong(Constants.ORIGIN_VISIT_ID);
       visitLineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
-      saleType = new SettingServiceImpl(mainActivity)
+      saleType = new SettingServiceImpl()
           .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
       msg.setText("");

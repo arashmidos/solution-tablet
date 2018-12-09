@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,6 +58,7 @@ public class NavigationDrawerFragment extends BaseFragment {
   private BaseInfoServiceImpl baseInfoService;
   private boolean hasData = true;
   private DataTransferServiceImpl dataTransferService;
+  private int clickCount = 0;
 
   public NavigationDrawerFragment() {
     // Required empty public constructor
@@ -66,13 +69,13 @@ public class NavigationDrawerFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
-    settingService = new SettingServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl();
     dataTransferService = new DataTransferServiceImpl(mainActivity);
 
     baseInfoService = new BaseInfoServiceImpl(mainActivity);
@@ -98,7 +101,7 @@ public class NavigationDrawerFragment extends BaseFragment {
   @OnClick({R.id.features_list_lay, R.id.today_paths_lay, R.id.reports_lay,
       R.id.customers_lay, R.id.map_lay, R.id.about_us, R.id.body_log_out,
       R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay, R.id.questionnaire_lay, R.id.header,
-      R.id.refresh_icon, R.id.setting_lay})
+      R.id.refresh_icon, R.id.setting_lay, R.id.footer_log_out})
   public void onClick(View view) {
     boolean closeDrawer = true;
     hasData = baseInfoService.getAllProvinces().size() != 0;
@@ -170,10 +173,29 @@ public class NavigationDrawerFragment extends BaseFragment {
       case R.id.send_data_lay:
         openDataTransferDialog(Constants.DATA_TRANSFER_SEND_DATA);
         break;
+      case R.id.footer_log_out:
+        closeDrawer = false;
+        clickCount++;
+        if (clickCount >= 7) {
+          clickCount = 0;
+          openAdminLogin();
+        }
     }
     if (closeDrawer) {
       mainActivity.closeDrawer();
     }
+  }
+
+  private void openAdminLogin() {
+    DialogUtil.showLoginDialog(mainActivity,
+        (username, password) -> {
+          if (Constants.debugUsername.equals(username) && Constants.debugPassword
+              .equals(password)) {
+            Toast.makeText(mainActivity, "Login OK", Toast.LENGTH_SHORT).show();
+          }else{
+            Toast.makeText(mainActivity, "Login Failed", Toast.LENGTH_SHORT).show();
+          }
+        });
   }
 
   private void doLogout() {
@@ -258,5 +280,10 @@ public class NavigationDrawerFragment extends BaseFragment {
   @Override
   public int getFragmentId() {
     return MainActivity.NAVIGATION_DRAWER_FRAGMENT;
+  }
+
+  public interface OnLoginListener {
+
+    void onLogin(String username, String password);
   }
 }

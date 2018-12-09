@@ -146,7 +146,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     customerService = new CustomerServiceImpl(mainActivity);
-    settingService = new SettingServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl();
     visitService = new VisitServiceImpl(mainActivity);
     positionService = new PositionServiceImpl(mainActivity);
     orderService = new SaleOrderServiceImpl(mainActivity);

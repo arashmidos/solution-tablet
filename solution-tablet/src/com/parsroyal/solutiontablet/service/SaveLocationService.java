@@ -34,7 +34,7 @@ public class SaveLocationService extends IntentService {
   public SaveLocationService() {
     super("Save Location Service");
     positionService = new PositionServiceImpl(this);
-    keyValueDao = new KeyValueDaoImpl(this);
+    keyValueDao = new KeyValueDaoImpl();
   }
 
   @Override

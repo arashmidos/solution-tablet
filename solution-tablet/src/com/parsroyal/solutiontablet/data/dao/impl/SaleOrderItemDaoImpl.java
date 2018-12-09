@@ -31,7 +31,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
 
   public SaleOrderItemDaoImpl(Context context) {
     this.context = context;
-    settingService = new SettingServiceImpl(context);
+    settingService = new SettingServiceImpl();
     goodsService = new GoodsServiceImpl(context);
   }
 

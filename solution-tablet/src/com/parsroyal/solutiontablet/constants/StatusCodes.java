@@ -10,6 +10,7 @@ import com.parsroyal.solutiontablet.util.Empty;
  */
 public enum StatusCodes {
   SUCCESS(200, R.string.data_transfered_successfully),
+  FORBIDDEN(403, R.string.error_forbidden),
   NO_NETWORK(1001, R.string.error_no_network),
   INVALID_DATA(1002, R.string.error_connecting_server),
   NETWORK_ERROR(1003,

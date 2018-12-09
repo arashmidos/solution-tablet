@@ -21,7 +21,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SaleType;
-import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.response.CompanyInfoResponse;
 import com.parsroyal.solutiontablet.data.response.SettingResponse;
@@ -137,7 +136,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     onEditTextFocus();
     onSalesManTapped();
 
-    settingService = new SettingServiceImpl(this);
+    settingService = new SettingServiceImpl();
 
     companyCodeEdt.addTextChangedListener(this);
     userNameEdt.addTextChangedListener(this);
@@ -269,10 +268,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     if (response instanceof CompanyInfoResponse) {
 
       CompanyInfoResponse companyInfo = (CompanyInfoResponse) response;
-      settingService.saveSetting(ApplicationKeys.USER_COMPANY_KEY, companyInfo.getCompanyKey());
-      settingService.saveSetting(ApplicationKeys.USER_COMPANY_NAME, companyInfo.getCompanyName());
-      settingService.saveSetting(ApplicationKeys.BACKEND_URI, companyInfo.getBackendUri());
-
+      settingService.saveSetting(companyInfo);
       RestAuthenticateServiceImpl.getCompanySetting(this, companyInfo.getBackendUri(),
           userNameEdt.getText().toString(), passwordEdt.getText().toString(), selectedRole);
     } else if (response instanceof SettingResponse) {
@@ -280,12 +276,10 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
       logInBtn.doneLoadingAnimation(ContextCompat.getColor(this, R.color.log_in_enter_bg),
           BitmapFactory.decodeResource(getResources(), R.drawable.ic_check_white_18_dp));
 
-      String token = ((SettingResponse) response).getToken();
 
-      UserInfoResponse userInfo = NetworkUtil.extractUserInfo(token);
 
       settingService.saveSetting((SettingResponse) response);
-      settingService.saveUserInfo(userInfo);
+
       settingService
           .saveSetting(ApplicationKeys.SETTING_SALE_TYPE, String.valueOf(selectedRole.getValue()));
       settingService
@@ -303,14 +297,21 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
       finish();
     } else if (response instanceof ErrorEvent) {
       logInBtn.revertAnimation();
-      if (((ErrorEvent) response).getStatusCode() == StatusCodes.NETWORK_ERROR) {
-        ToastUtil.toastError(this, R.string.error_no_network);
-      } else if (((ErrorEvent) response).getStatusCode() == StatusCodes.INVALID_DATA) {
-        ToastUtil.toastError(this, R.string.error_invalid_login_info);
-      } else {
-        ToastUtil.toastError(this, R.string.error_connecting_server);
 
+      ErrorEvent errorEvent = (ErrorEvent) response;
+      int message = R.string.error_connecting_server;
+      switch (errorEvent.getStatusCode()) {
+        case NETWORK_ERROR:
+          message = R.string.error_no_network;
+          break;
+        case INVALID_DATA:
+          message = R.string.error_invalid_login_info;
+          break;
+        case FORBIDDEN:
+          message = errorEvent.getStatusCode().getMessage();
+          break;
       }
+      ToastUtil.toastError(this, message);
     }
   }
 

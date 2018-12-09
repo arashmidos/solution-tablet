@@ -1,17 +1,19 @@
 package com.parsroyal.solutiontablet.service.impl;
 
-import android.content.Context;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.data.response.CompanyInfoResponse;
 import com.parsroyal.solutiontablet.data.response.SettingDetailsResponse;
 import com.parsroyal.solutiontablet.data.response.SettingResponse;
 import com.parsroyal.solutiontablet.data.response.UserInfoDetailsResponse;
 import com.parsroyal.solutiontablet.data.response.UserInfoResponse;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NetworkUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 
 /**
@@ -19,14 +21,12 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
  */
 public class SettingServiceImpl implements SettingService {
 
-  private Context context;
   private KeyValueBiz keyValueBiz;
   private KeyValueDao keyValueDao;
 
-  public SettingServiceImpl(Context context) {
-    this.context = context;
-    this.keyValueBiz = new KeyValueBizImpl(context);
-    this.keyValueDao = new KeyValueDaoImpl(context);
+  public SettingServiceImpl() {
+    this.keyValueBiz = new KeyValueBizImpl();
+    this.keyValueDao = new KeyValueDaoImpl();
   }
 
   @Override
@@ -49,9 +49,14 @@ public class SettingServiceImpl implements SettingService {
 
   @Override
   public void saveSetting(SettingResponse response) {
-    keyValueBiz.save(new KeyValue(ApplicationKeys.TOKEN, response.getToken()));
+    String token = response.getToken();
+
+    saveUserInfo(NetworkUtil.extractUserInfo(token));
+
+    keyValueBiz.save(new KeyValue(ApplicationKeys.TOKEN, token));
     SettingDetailsResponse settingDetail = response.getSettings();
 
+    PreferenceHelper.setAuthorities(response.getAuthorities());
     keyValueBiz
         .save(new KeyValue(ApplicationKeys.SETTING_STOCK_ID, settingDetail.getStockId()));
     keyValueBiz
@@ -103,5 +108,13 @@ public class SettingServiceImpl implements SettingService {
   @Override
   public void clearAllSettings() {
     keyValueDao.clearAllKeys();
+  }
+
+  @Override
+  public void saveSetting(CompanyInfoResponse companyInfo) {
+    saveSetting(ApplicationKeys.USER_COMPANY_KEY, companyInfo.getCompanyKey());
+    saveSetting(ApplicationKeys.USER_COMPANY_NAME, companyInfo.getCompanyName());
+    saveSetting(ApplicationKeys.BACKEND_URI, companyInfo.getBackendUri());
+
   }
 }

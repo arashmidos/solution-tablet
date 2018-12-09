@@ -47,7 +47,7 @@ public class PaymentsDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
     this.context = context;
     paymentService = new PaymentServiceImpl(context);
     visitService = new VisitServiceImpl(context);
-    settingService = new SettingServiceImpl(context);
+    settingService = new SettingServiceImpl();
   }
 
   @Override

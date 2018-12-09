@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
-import android.content.Context;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
@@ -12,12 +11,10 @@ import com.parsroyal.solutiontablet.util.Empty;
  */
 public class KeyValueBizImpl implements KeyValueBiz {
 
-  private Context context;
   private KeyValueDao keyValueDao;
 
-  public KeyValueBizImpl(Context context) {
-    this.context = context;
-    this.keyValueDao = new KeyValueDaoImpl(context);
+  public KeyValueBizImpl() {
+    this.keyValueDao = new KeyValueDaoImpl();
   }
 
   @Override

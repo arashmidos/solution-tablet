@@ -134,7 +134,7 @@ public class VisitDetailFragment extends BaseFragment {
       visitId = args.getLong(Constants.ORIGIN_VISIT_ID);
 
       visitLineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
-      saleType = new SettingServiceImpl(mainActivity)
+      saleType = new SettingServiceImpl()
           .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
       tabs.setupWithViewPager(viewpager);

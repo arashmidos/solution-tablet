@@ -3,17 +3,13 @@ package com.parsroyal.solutiontablet.service;
 import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.parsroyal.solutiontablet.BuildConfig;
-import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 import okhttp3.Credentials;
@@ -72,7 +68,7 @@ public class ServiceGenerator {
       httpClient.addInterceptor(logging);
     }
 
-    String baseUrl = new SettingServiceImpl(SolutionTabletApplication.getInstance())
+    String baseUrl = new SettingServiceImpl()
         .getSettingValue(ApplicationKeys.BACKEND_URI);
     if (Empty.isEmpty(baseUrl)) {
       baseUrl = "http://www.google.com";
@@ -118,7 +114,7 @@ public class ServiceGenerator {
       Request.Builder builder;
       if (Empty.isEmpty(authToken)) {
         String token = new SettingServiceImpl(
-            SolutionTabletApplication.getInstance()).getSettingValue(ApplicationKeys.TOKEN);
+        ).getSettingValue(ApplicationKeys.TOKEN);
         builder = original.newBuilder().addHeader("Authorization", "Bearer " + token);
       } else {
         builder = original.newBuilder().header("Authorization", authToken);

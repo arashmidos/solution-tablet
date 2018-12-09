@@ -48,7 +48,7 @@ public class ReportFragment extends BaseFragment {
     mainActivity = (MainActivity) getActivity();
     mainActivity.changeTitle(getString(R.string.reports));
     tabs.setupWithViewPager(viewpager);
-    saleType = new SettingServiceImpl(mainActivity)
+    saleType = new SettingServiceImpl()
         .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
     initFragments();
     setUpViewPager();

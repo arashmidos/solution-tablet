@@ -96,7 +96,7 @@ public class TabletReportDetailActivity extends AppCompatActivity {
     super.onResume();
     EventBus.getDefault().register(this);
     KPIServiceImpl kpiService = new KPIServiceImpl();
-    SettingServiceImpl settingService = new SettingServiceImpl(this);
+    SettingServiceImpl settingService = new SettingServiceImpl();
     if (reportType != null && reportType.equals(Constants.REPORT_SALESMAN)) {
       kpiService.getReport(kpiDetail.getId(),
           Long.parseLong(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID)));

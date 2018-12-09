@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
-import android.text.format.DateUtils;
 import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
@@ -50,7 +49,7 @@ public class VisitLineDataTransferBizImpl {
     this.visitLineDao = new VisitLineDaoImpl(context);
     this.visitLineDateDao = new VisitLineDateDaoImpl(context);
     this.customerDao = new CustomerDaoImpl(context);
-    this.settingService = new SettingServiceImpl(context);
+    this.settingService = new SettingServiceImpl();
   }
 
   public void exchangeData() {

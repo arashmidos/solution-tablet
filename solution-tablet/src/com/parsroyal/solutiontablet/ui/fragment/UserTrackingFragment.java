@@ -234,10 +234,10 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   }
 
   private void initServices() {
-    keyValueBiz = new KeyValueBizImpl(context);
+    keyValueBiz = new KeyValueBizImpl();
     positionService = new PositionServiceImpl(context);
     customerService = new CustomerServiceImpl(context);
-    settingService = new SettingServiceImpl(context);
+    settingService = new SettingServiceImpl();
     visitService = new VisitServiceImpl(context);
     orderService = new SaleOrderServiceImpl(context);
   }

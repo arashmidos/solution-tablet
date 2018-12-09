@@ -209,7 +209,7 @@ public class OrderInfoFragment extends BaseFragment {
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
     customerService = new CustomerServiceImpl(mainActivity);
     baseInfoService = new BaseInfoServiceImpl(mainActivity);
-    settingService = new SettingServiceImpl(mainActivity);
+    settingService = new SettingServiceImpl();
     visitService = new VisitServiceImpl(mainActivity);
   }
 

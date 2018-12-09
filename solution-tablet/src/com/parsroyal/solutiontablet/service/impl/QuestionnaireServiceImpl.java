@@ -37,7 +37,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     this.questionnaireDao = new QuestionnaireDaoImpl(context);
     this.questionDao = new QuestionDaoImpl(context);
     this.qAnswerDao = new QAnswerDaoImpl(context);
-    this.settingService = new SettingServiceImpl(context);
+    this.settingService = new SettingServiceImpl();
   }
 
   @Override

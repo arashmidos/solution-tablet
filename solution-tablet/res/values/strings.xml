@@ -343,6 +343,7 @@
   <string name="error_sale_rate_not_correct">ضریب فروش این کالا باید %1$s %2$s‌ باشد</string>
   <string name="get_catalog">دریافت عکس کالاها</string>
   <string name="data_transfered_successfully">انتقال اطلاعات با موفقیت انجام شد</string>
+  <string name="error_forbidden">دسترسی غیرمجاز</string>
   <string name="error_no_network">خطا در اتصال به اینترنت</string>
   <string name="message_exception_in_data_store">خطا در ذخیره سازی اطلاعات</string>
   <string name="return_btn">بازگشت</string>
@@ -651,5 +652,6 @@
   <string name="status_new">جدید</string>
   <string name="cancel">انصراف</string>
   <string name="message_only_cash_order">ثبت سفارش فقط با پرداخت نقدی امکان پذیر است</string>
+  <string name="login_info">ورود اطلاعات</string>
 
 </resources>

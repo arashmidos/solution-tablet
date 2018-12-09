@@ -81,7 +81,7 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   public DataTransferServiceImpl(Context context) {
     this.context = context;
-    this.keyValueDao = new KeyValueDaoImpl(context);
+    this.keyValueDao = new KeyValueDaoImpl();
     this.customerService = new CustomerServiceImpl(context);
     this.questionnaireService = new QuestionnaireServiceImpl(context);
     this.saleOrderService = new SaleOrderServiceImpl(context);

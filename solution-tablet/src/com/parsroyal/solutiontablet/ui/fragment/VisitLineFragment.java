@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -23,6 +24,7 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.VisitLineAdapter;
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
@@ -40,8 +42,12 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
 
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
+  @Nullable
   @BindView(R.id.filter_layout)
   LinearLayout filterLayout;
+  @Nullable
+  @BindView(R.id.filter_layout2)
+  RelativeLayout filterLayout2;
   @BindView(R.id.fromDate)
   EditText fromDateEt;
   @BindView(R.id.toDate)
@@ -105,7 +111,11 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
   }
 
   public void showFilter() {
-    filterLayout.setVisibility(View.VISIBLE);
+    if (Empty.isNotEmpty(filterLayout)) {
+      filterLayout.setVisibility(View.VISIBLE);
+    } else if (Empty.isNotEmpty(filterLayout2)) {
+      filterLayout2.setVisibility(View.VISIBLE);
+    }
   }
 
   @OnClick({R.id.cancel_btn, R.id.filter_btn, R.id.toDate, R.id.fromDate})
@@ -115,7 +125,11 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
         doFilter();
         break;
       case R.id.cancel_btn:
-        filterLayout.setVisibility(View.GONE);
+        if (Empty.isNotEmpty(filterLayout)) {
+          filterLayout.setVisibility(View.GONE);
+        } else if (Empty.isNotEmpty(filterLayout2)) {
+          filterLayout2.setVisibility(View.GONE);
+        }
         break;
       case R.id.toDate:
         DatePicker.Builder builder = new DatePicker.Builder().id(2);
@@ -159,7 +173,11 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
       List<VisitLineListModel> filteredList = visitService.getAllVisitLinesListModel(from, to);
       adapter.update(filteredList);
 //      drawRoute(lastRoute);
-      filterLayout.setVisibility(View.GONE);
+      if (Empty.isNotEmpty(filterLayout)) {
+        filterLayout.setVisibility(View.GONE);
+      } else if (Empty.isNotEmpty(filterLayout2)) {
+        filterLayout2.setVisibility(View.GONE);
+      }
     }
   }
 

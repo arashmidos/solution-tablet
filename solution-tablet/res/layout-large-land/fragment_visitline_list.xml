@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -11,11 +11,89 @@
   <android.support.v7.widget.RecyclerView
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
+    android:layout_height="match_parent"
     android:layout_marginStart="82dp"
     android:layout_marginEnd="82dp"
     android:layout_marginLeft="82dp"
     android:layout_marginRight="82dp" />
+  <RelativeLayout
+    android:id="@+id/filter_layout2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white30"
+    android:visibility="gone"
+    tools:visibility="visible">
 
-</LinearLayout>
+    <Button
+      android:id="@+id/cancel_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="20dp"
+      android:layout_marginEnd="20dp"
+      android:layout_alignParentStart="true"
+      android:layout_centerVertical="true"
+      android:paddingLeft="35dp"
+      android:paddingRight="35dp"
+      android:text="@string/cancel_btn" />
+
+    <Button
+      android:id="@+id/filter_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:layout_toEndOf="@+id/cancel_btn"
+      android:paddingLeft="35dp"
+      android:paddingRight="35dp"
+      android:text="@string/filter" />
+
+
+    <EditText
+      android:id="@+id/fromDate"
+      android:layout_width="110dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="7dp"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      android:layout_gravity="center"
+      android:layout_toLeftOf="@+id/textView42"
+      android:focusable="false"
+      android:gravity="center"
+      android:hint="--" />
+
+    <TextView
+      android:id="@+id/textView42"
+      style="@style/TextView.Caption"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignBaseline="@+id/fromDate"
+      android:layout_alignBottom="@+id/fromDate"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:paddingRight="10dp"
+      android:text="@string/sinse_date"
+      android:textAppearance="?android:attr/textAppearanceMedium" />
+    <TextView
+      android:id="@+id/textView49"
+      style="@style/TextView.Caption"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignBaseline="@+id/fromDate"
+      android:layout_alignBottom="@+id/fromDate"
+      android:layout_toLeftOf="@id/fromDate"
+      android:paddingRight="10dp"
+      android:text="تا:"
+      android:textAppearance="?android:attr/textAppearanceMedium" />
+    <EditText
+      android:id="@+id/toDate"
+      android:layout_width="110dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="7dp"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      android:layout_gravity="center"
+      android:layout_toLeftOf="@+id/textView49"
+      android:focusable="false"
+      android:gravity="center"
+      android:hint="--" />
+  </RelativeLayout>
+</FrameLayout>

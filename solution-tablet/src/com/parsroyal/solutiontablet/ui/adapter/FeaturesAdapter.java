@@ -44,7 +44,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     this.features = features;
     inflater = LayoutInflater.from(context);
     baseInfoService = new BaseInfoServiceImpl(context);
-    saleType = new SettingServiceImpl(context).getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+    saleType = new SettingServiceImpl().getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
   }
 
   @Override

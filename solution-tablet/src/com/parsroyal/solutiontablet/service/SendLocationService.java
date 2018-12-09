@@ -30,7 +30,7 @@ public class SendLocationService extends IntentService {
   public SendLocationService() {
     super("Send Location Service");
     positionService = new PositionServiceImpl(this);
-    settingService = new SettingServiceImpl(this);
+    settingService = new SettingServiceImpl();
   }
 
   @Override

@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.ui.fragment.NavigationDrawerFragment.OnLoginListener;
 
 /**
  * Created by Arash on 6/23/2015.
@@ -71,6 +73,30 @@ public class DialogUtil {
     });
     positiveBtn.setOnClickListener(v -> {
       positiveBtnOnClickListener.onClick(alertDialog, 0);
+      alertDialog.dismiss();
+    });
+  }
+
+  public static void showLoginDialog(Context context, OnLoginListener positiveBtnOnClickListener) {
+    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+    LayoutInflater inflater = ((AppCompatActivity) context).getLayoutInflater();
+    View dialogView = inflater.inflate(R.layout.dialog_login_admin, null);
+    dialogBuilder.setView(dialogView);
+
+    dialogBuilder.setCancelable(false);
+    EditText username = dialogView.findViewById(R.id.user_name_edt);
+    EditText password = dialogView.findViewById(R.id.password_edt);
+    TextView negativeTv = dialogView.findViewById(R.id.negative_tv);
+    Button positiveBtn = dialogView.findViewById(R.id.positive_btn);
+
+    AlertDialog alertDialog = dialogBuilder.create();
+    alertDialog.setCancelable(false);
+    alertDialog.show();
+
+    negativeTv.setOnClickListener(v -> alertDialog.dismiss());
+    positiveBtn.setOnClickListener(v -> {
+      positiveBtnOnClickListener
+          .onLogin(username.getText().toString(), password.getText().toString());
       alertDialog.dismiss();
     });
   }
