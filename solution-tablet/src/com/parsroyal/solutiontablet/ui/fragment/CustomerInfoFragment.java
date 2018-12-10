@@ -91,6 +91,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   GoogleMap map;
   @BindView(R.id.edit_map)
   ImageView editMapButton;
+  @BindView(R.id.edit_map_layout)
+  LinearLayout editMapLayout;
   @BindView(R.id.fullscreen_map)
   ImageView fullscreenMapButton;
   @BindView(R.id.item_bar_lay)
@@ -210,6 +212,12 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_PICTURE)) {
       addPictureTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
       registerImageLay.setEnabled(false);
+    }
+
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_LOCATION)) {
+      editMapButton.setEnabled(false);
+      editMapButton.setColorFilter(ContextCompat.getColor(mainActivity, R.color.gray));
+      editMapLayout.setEnabled(false);
     }
   }
 
@@ -359,11 +367,11 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         break;
       case R.id.edit_map:
       case R.id.edit_map_layout:
-        if (Empty.isNotEmpty(customer.getxLocation()) && customer.getxLocation() != 0.0) {
-          ToastUtil.toastError(getActivity(), getString(R.string.edit_location_permission_denied));
-        } else {
+//        if (Empty.isNotEmpty(customer.getxLocation()) && customer.getxLocation() != 0.0) {
+//          ToastUtil.toastError(getActivity(), getString(R.string.edit_location_permission_denied));
+//        } else {
           mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, getArguments(), true);
-        }
+//        }
         break;
       case R.id.fullscreen_map_layout:
       case R.id.fullscreen_map:

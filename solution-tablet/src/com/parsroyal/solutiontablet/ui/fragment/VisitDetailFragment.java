@@ -375,7 +375,9 @@ public class VisitDetailFragment extends BaseFragment {
       viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
     }
     if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
-      viewPagerAdapter.add(deliveryListFragment, getString(R.string.orders_for_delivery));
+      if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_DELIVERY)) {
+        viewPagerAdapter.add(deliveryListFragment, getString(R.string.orders_for_delivery));
+      }
     } else {
       if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_ORDER)) {
         viewPagerAdapter.add(orderListFragment, getString(R.string.orders));

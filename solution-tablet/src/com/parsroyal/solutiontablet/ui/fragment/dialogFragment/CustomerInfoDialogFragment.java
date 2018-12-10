@@ -163,7 +163,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
   }
 
   private void setPermissions() {
-    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_ORDER)) {
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_PHONE_ORDER)) {
       phoneVisitButton.setEnabled(false);
       phoneVisitButton.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
     }

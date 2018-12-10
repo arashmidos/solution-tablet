@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
@@ -12,8 +13,9 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.google.android.gms.maps.GoogleMap;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
@@ -87,9 +89,11 @@ public class VisitLineAdapter extends Adapter<VisitLineAdapter.ViewHolder> {
           mainActivity.changeFragment(MainActivity.VISITLINE_DETAIL_FRAGMENT_ID, bundle, true);
           break;
         case R.id.list_img:
-          Bundle clickBundle = new Bundle();
-          clickBundle.putBoolean(Constants.IS_CLICKABLE, true);
-          mainActivity.changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, clickBundle, true);
+          if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_PHONE_CUSTOMER)) {
+            Bundle clickBundle = new Bundle();
+            clickBundle.putBoolean(Constants.IS_CLICKABLE, true);
+            mainActivity.changeFragment(MainActivity.CUSTOMER_SEARCH_FRAGMENT, clickBundle, true);
+          }
           break;
       }
     }
@@ -100,6 +104,9 @@ public class VisitLineAdapter extends Adapter<VisitLineAdapter.ViewHolder> {
       //Manual VisitLine
       if (model.getPrimaryKey().equals(0L)) {
         customerList.setVisibility(View.VISIBLE);
+        if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_PHONE_CUSTOMER)) {
+          customerList.setEnabled(false);
+        }
         if (model.getCustomerCount() == 0) {
           customerCount.setText(mainActivity.getString(R.string.no_customer_exist));
           divider.setVisibility(View.INVISIBLE);
