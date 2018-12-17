@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <string name="app_name">Solution-Mobile</string>
 
@@ -16,26 +16,26 @@
   <string name="message_setting_saved_successfully">اطلاعات تنظیمات با موفقیت ذخیره شد</string>
   <string name="message_please_wait">لطفا صبر کنید</string>
 
-  <string name="com.parsroyal.solutiontablet.exception.InvalidServerAddressException">مقدار آدرس سرور معتبر نمی باشد</string>
-  <string name="com.parsroyal.solutiontablet.exception.UsernameNotProvidedForConnectingToServerException">نام کاربری برای اتصال به سرور یافت نشد.</string>
-  <string name="com.parsroyal.solutiontablet.exception.PasswordNotProvidedForConnectingToServerException">رمز عبور برای اتصال به سرور یافت نشد.</string>
-  <string name="com.parsroyal.solutiontablet.exception.InvalidUserCodeException">کد کاربر معتبر نمی باشد.</string>
-  <string name="com.parsroyal.solutiontablet.exception.UnknownSystemException">خطای سیستمی ناشناس</string>
-  <string name="com.parsroyal.solutiontablet.exception.GotNoResponseFromBackendException">هیچ پاسخی از سرور دریافت نشد</string>
-  <string name="com.parsroyal.solutiontablet.exception.InvalidResponseFromBackendException">پاسخ دریافتی از سرور معتبر نمی باشد.</string>
-  <string name="com.parsroyal.solutiontablet.exception.BackendIsNotReachableException">سرور با آدرس های وارد شده، قابل دسترسی نیست.</string>
-  <string name="com.parsroyal.solutiontablet.exception.TimeOutException">عدم دریافت پاسخ از سرور در زمان مناسب</string>
-  <string name="com.parsroyal.solutiontablet.exception.UserNotFoundException">کاربر مورد نظر یافت نشد.</string>
-  <string name="com.parsroyal.solutiontablet.exception.BackendInternalException">خطا در سرور</string>
-  <string name="com.parsroyal.solutiontablet.exception.InternalServerError">خطا در سرور</string>
-  <string name="com.parsroyal.solutiontablet.exception.URLNotFoundException">آدرس مورد نظر یافت نشد.</string>
-  <string name="com.parsroyal.solutiontablet.exception.GPSIsNotEnabledException">GPS فعال نیست.</string>
-  <string name="com.parsroyal.solutiontablet.exception.DataNotAvailableException">دیتا موجود نیست</string>
-  <string name="com.parsroyal.solutiontablet.exception.SalesmanIdNotProvidedForConnectingToServerException">سریال بازاریاب برای ارسال به سرور یافت نشد.</string>
-  <string name="com.parsroyal.solutiontablet.exception.SaleOrderNotFoundException">سفارش مورد نظر یافت نشد.</string>
-  <string name="com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingException">تعداد یا مقدار وارد شده بیش از موجودی می باشد</string>
+  <string name="com.parsroyal.solutiontablet.exception.InvalidServerAddressException" tools:ignore="ExtraTranslation">مقدار آدرس سرور معتبر نمی باشد</string>
+  <string name="com.parsroyal.solutiontablet.exception.UsernameNotProvidedForConnectingToServerException" tools:ignore="ExtraTranslation">نام کاربری برای اتصال به سرور یافت نشد.</string>
+  <string name="com.parsroyal.solutiontablet.exception.PasswordNotProvidedForConnectingToServerException" tools:ignore="ExtraTranslation">رمز عبور برای اتصال به سرور یافت نشد.</string>
+  <string name="com.parsroyal.solutiontablet.exception.InvalidUserCodeException" tools:ignore="ExtraTranslation">کد کاربر معتبر نمی باشد.</string>
+  <string name="com.parsroyal.solutiontablet.exception.UnknownSystemException" tools:ignore="ExtraTranslation">خطای سیستمی ناشناس</string>
+  <string name="com.parsroyal.solutiontablet.exception.GotNoResponseFromBackendException" tools:ignore="ExtraTranslation">هیچ پاسخی از سرور دریافت نشد</string>
+  <string name="com.parsroyal.solutiontablet.exception.InvalidResponseFromBackendException" tools:ignore="ExtraTranslation">پاسخ دریافتی از سرور معتبر نمی باشد.</string>
+  <string name="com.parsroyal.solutiontablet.exception.BackendIsNotReachableException" tools:ignore="ExtraTranslation">سرور با آدرس های وارد شده، قابل دسترسی نیست.</string>
+  <string name="com.parsroyal.solutiontablet.exception.TimeOutException" tools:ignore="ExtraTranslation">عدم دریافت پاسخ از سرور در زمان مناسب</string>
+  <string name="com.parsroyal.solutiontablet.exception.UserNotFoundException" tools:ignore="ExtraTranslation">کاربر مورد نظر یافت نشد.</string>
+  <string name="com.parsroyal.solutiontablet.exception.BackendInternalException" tools:ignore="ExtraTranslation">خطا در سرور</string>
+  <string name="com.parsroyal.solutiontablet.exception.InternalServerError" tools:ignore="ExtraTranslation">خطا در سرور</string>
+  <string name="com.parsroyal.solutiontablet.exception.URLNotFoundException" tools:ignore="ExtraTranslation">آدرس مورد نظر یافت نشد.</string>
+  <string name="com.parsroyal.solutiontablet.exception.GPSIsNotEnabledException" tools:ignore="ExtraTranslation">GPS فعال نیست.</string>
+  <string name="com.parsroyal.solutiontablet.exception.DataNotAvailableException" tools:ignore="ExtraTranslation">دیتا موجود نیست</string>
+  <string name="com.parsroyal.solutiontablet.exception.SalesmanIdNotProvidedForConnectingToServerException" tools:ignore="ExtraTranslation">سریال بازاریاب برای ارسال به سرور یافت نشد.</string>
+  <string name="com.parsroyal.solutiontablet.exception.SaleOrderNotFoundException" tools:ignore="ExtraTranslation">سفارش مورد نظر یافت نشد.</string>
+  <string name="com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingException" tools:ignore="ExtraTranslation">تعداد یا مقدار وارد شده بیش از موجودی می باشد</string>
   <string name="exceed_count_exception">تعداد یا مقدار وارد شده بیش از موجودی می باشد</string>
-  <string name="com.parsroyal.solutiontablet.exception.UserNotAuthorizedException">نام کاربری یا رمز عبور اشتباه است</string>
+  <string name="com.parsroyal.solutiontablet.exception.UserNotAuthorizedException" tools:ignore="ExtraTranslation">نام کاربری یا رمز عبور اشتباه است</string>
 
   <string name="send_data">ارسال اطلاعات</string>
   <string name="send_visit_data">ارسال اطلاعات بازدید</string>

@@ -64,7 +64,7 @@ public class VisitLineForDeliveryDataTaransferBizImpl {
         if (response.isSuccessful()) {
           visitLineDao
               .create(createVisitLineEntity(context.getString(R.string.manual_visit_line), 0L));
-          customerDao.bulkInsert(getSampleCustomerList());
+//          customerDao.bulkInsert(getSampleCustomerList());
           List<VisitLineDto> list = response.body();
           if (Empty.isNotEmpty(list)) {
             for (VisitLineDto visitLineDto : list) {
