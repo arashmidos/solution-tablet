@@ -3,6 +3,7 @@ package com.parsroyal.solutiontablet;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.location.Location;
 import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 import android.support.multidex.MultiDex;
@@ -10,15 +11,12 @@ import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import co.ronash.pushe.Pushe;
 import com.crashlytics.android.Crashlytics;
 import com.instacart.library.truetime.TrueTimeRx;
-import com.parsroyal.solutiontablet.biz.impl.RestServiceImpl;
 import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
-import com.parsroyal.solutiontablet.util.ToastUtil;
 import io.fabric.sdk.android.Fabric;
 import io.github.inflationx.calligraphy3.CalligraphyConfig.Builder;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
@@ -26,6 +24,7 @@ import io.github.inflationx.viewpump.ViewPump;
 import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -38,6 +37,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
   public static SharedPreferences sPreference;
   private ArrayList<String> authorities = new ArrayList<>();
+  private Location lastKnownLocation;
 
   public static SolutionTabletApplication getInstance() {
     return sInstance;
@@ -57,14 +57,15 @@ public class SolutionTabletApplication extends MultiDexApplication {
   }
 
   private void setAuthorities(Set<String> authorities) {
-    if(Empty.isNotEmpty(authorities)) {
+    if (Empty.isNotEmpty(authorities)) {
       this.authorities.clear();
       this.authorities.addAll(authorities);
     }
   }
 
   public boolean hasAccess(Authority authority) {
-    return authorities.contains(String.valueOf(authority.getId()));
+
+    return BuildConfig.DEBUG || authorities.contains(String.valueOf(authority.getId()));
   }
 
   public Date getTrueTime() {
@@ -105,17 +106,21 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
     reSyncTrueTime();
 
-    try {
+  /*  try {
       Pushe.initialize(this, true);
       Log.d("Pushe", Pushe.getPusheId(this));
-      new RestServiceImpl().updatePusheId(this, Pushe.getPusheId(this), "GCMToken");
+      KeyValue username = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
+      if (Empty.isNotEmpty(username)) {
+        new RestServiceImpl().updatePusheId(this, Pushe.getPusheId(this), "GCMToken");
+      }
+
     } catch (Exception ignore) {
 
-    }
+    }*/
 //    Log.d("DebugDB", "***>>> DB Address:"+DebugDB.getAddressLog());
   }
 
-  private void reSyncTrueTime() {
+  public void reSyncTrueTime() {
 
 //    new Thread(() -> {
     try {
@@ -150,5 +155,17 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
   public void loadAuthorities() {
     setAuthorities(PreferenceHelper.getAuthorities());
+  }
+
+  public void clearAuthorities() {
+    setAuthorities(new HashSet<>());
+  }
+
+  public Location getLastKnownLocation() {
+    return lastKnownLocation;
+  }
+
+  public void setLastKnownLocation(Location lastKnownLocation) {
+    this.lastKnownLocation = lastKnownLocation;
   }
 }

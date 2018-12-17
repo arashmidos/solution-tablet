@@ -1,8 +1,10 @@
 package com.parsroyal.solutiontablet.service;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -19,6 +21,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -26,16 +29,16 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
-import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.MobileMainActivity;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
 import org.greenrobot.eventbus.EventBus;
+import timber.log.Timber;
 
 /**
  * @author Arash
@@ -46,6 +49,7 @@ import org.greenrobot.eventbus.EventBus;
  * When the activity comes back to the foreground, the foreground service stops, and the
  * notification assocaited with that service is removed.
  */
+@SuppressLint("LogNotTimber")
 public class LocationUpdatesService extends Service {
 
   /**
@@ -62,12 +66,15 @@ public class LocationUpdatesService extends Service {
   public static final String EXTRA_LOCATION = PACKAGE_NAME + ".location";
   public static final String EXTRA_POSITION = PACKAGE_NAME + ".position";
   private static final String TAG = LocationUpdatesService.class.getSimpleName();
-  private static final String EXTRA_STARTED_FROM_NOTIFICATION = PACKAGE_NAME +
-      ".started_from_notification";
+
   private static final float MAX_ACCEPTED_DISTANCE_IN_METER = 1000.0f;
   private static final float MIN_ACCEPTED_DISTANCE_IN_METER = 20.0f;
-  private static final float MAX_ACCEPTED_ACCURACY_IN_METER = 60.0f;
+  private static final float MAX_ACCEPTED_ACCURACY_IN_METER = 100.0f;
   private static final float MIN_ACCEPTED_SPEED_IN_MS = 0.5f;
+
+  private static final String CLOSE_FROM_NOTIFICATION = PACKAGE_NAME +
+      ".started_from_notification";
+  private static final String DELETE_NOTIFICATION = PACKAGE_NAME + ".delete_notification";
   /**
    * The identifier for the notification displayed for the foreground service.
    */
@@ -99,11 +106,6 @@ public class LocationUpdatesService extends Service {
 
   private Handler serviceHandler;
 
-  /**
-   * The current location.
-   */
-  private Location lastLocation;
-
   public LocationUpdatesService() {
   }
 
@@ -131,7 +133,7 @@ public class LocationUpdatesService extends Service {
       };
 
       createLocationRequest();
-      getLastLocation();
+//      getLastLocation();
 
       HandlerThread handlerThread = new HandlerThread(TAG);
       handlerThread.start();
@@ -159,8 +161,7 @@ public class LocationUpdatesService extends Service {
     boolean startedFromNotification = false;
     if (Empty.isNotEmpty(intent)) {
 
-      startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
-          false);
+      startedFromNotification = CLOSE_FROM_NOTIFICATION.equals(intent.getAction());
     }
 
     // We got here because the user decided to remove location updates from the notification.
@@ -183,7 +184,7 @@ public class LocationUpdatesService extends Service {
     // Called when a client (MainActivity in case of this sample) comes to the foreground
     // and binds with this service. The service should cease to be a foreground service
     // when that happens.
-    Log.i(TAG, "in onBind()");
+    Timber.i("in onBind()");
     stopForeground(true);
     changingConfiguration = false;
     return mBinder;
@@ -271,40 +272,55 @@ public class LocationUpdatesService extends Service {
     }
   }
 
-  /**
-   * Returns the {@link NotificationCompat} used as part of the foreground service.
-   */
-  private Notification getNotification() {
-    CharSequence text = getString(
-        R.string.notification_message_gps_service_active);
-
-    // The PendingIntent to launch activity.
+  public Notification getNotification() {
+// The PendingIntent to launch activity.
     PendingIntent activityPendingIntent = PendingIntent.getActivity(this, 0,
-        new Intent(this, MainActivity.class), 0);
+        new Intent(this, MobileMainActivity.class), 0);
 
-    return new NotificationCompat.Builder(this)
-        .addAction(R.drawable.ic_launch, getString(R.string.launch_activity), activityPendingIntent)
-        .setContentText(text)
-        .setOngoing(true)
-        .setPriority(Notification.PRIORITY_HIGH)
-        .setSmallIcon(R.drawable.ic_launcher)
-        .setTicker(text)
-        .setWhen(System.currentTimeMillis()).build();
-  }
+    Intent closeIntent = new Intent(this, LocationUpdatesService.class);
+    // Extra to help us figure out if we arrived in onStartCommand via the notification or not.
+    closeIntent.setAction(CLOSE_FROM_NOTIFICATION);
+    PendingIntent closePendingIntent = PendingIntent.getService(this, 0, closeIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT);
 
-  private void getLastLocation() {
+    NotificationManager notificationManager = (NotificationManager) getSystemService(
+        Context.NOTIFICATION_SERVICE);
+    CharSequence text = getString(R.string.notification_message_gps_service_active);
+    String CHANNEL_ID = "ParsRoyal_Channel";
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
-    Position lastPosition = new PositionServiceImpl(getApplicationContext()).getLastPosition();
-    if (Empty.isNotEmpty(lastPosition)) {
-      lastLocation = new Location("dummyprovider");
-      lastLocation.setLatitude(lastPosition.getLatitude());
-      lastLocation.setLongitude(lastPosition.getLongitude());
-      lastLocation.setSpeed(lastPosition.getSpeed());
-      lastLocation.setAccuracy(lastPosition.getAccuracy());
-
-      lastLocation.setTime(DateUtil.convertStringToDate(lastPosition.getDate(),
-          DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN").getTime());
+      CharSequence name = "ParsRoyal";
+      String Description = "ParsRoyal is running";
+      int importance = NotificationManager.IMPORTANCE_HIGH;
+      NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+      mChannel.setDescription(Description);
+//      mChannel.enableLights(true);
+//      mChannel.setLightColor(Color.RED);
+//      mChannel.enableVibration(true);
+//      mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+      mChannel.setShowBadge(false);
+      notificationManager.createNotificationChannel(mChannel);
     }
+
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        .setSmallIcon(R.drawable.ic_launcher)
+        .addAction(R.drawable.ic_launch, getString(R.string.launch_activity), activityPendingIntent)
+        .addAction(R.drawable.ic_close_circle_24_dp, "بستن", closePendingIntent)
+        .setOngoing(true)
+        .setContentTitle(getString(R.string.app_name))
+        .setTicker(text)
+        .setContentText(text);
+
+    Intent resultIntent = new Intent(this, MobileMainActivity.class);
+    TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+    stackBuilder.addParentStack(MobileMainActivity.class);
+    stackBuilder.addNextIntent(resultIntent);
+    PendingIntent resultPendingIntent = stackBuilder
+        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+    builder.setContentIntent(resultPendingIntent);
+
+    return builder.build();
   }
 
 
@@ -317,11 +333,6 @@ public class LocationUpdatesService extends Service {
       Intent intent = new Intent(this, SaveLocationService.class);
       intent.putExtra(EXTRA_LOCATION, location);
 
-      if (Empty.isEmpty(lastLocation)) {
-        intent.putExtra(Constants.FIRST_POSITION, true);
-      }
-      this.lastLocation = location;
-
       startService(intent);
     }
 
@@ -332,26 +343,32 @@ public class LocationUpdatesService extends Service {
   }
 
   private boolean isAccepted(Location location) {
-    //Accept first position what ever it is
-    if (Empty.isEmpty(lastLocation) && Empty.isNotEmpty(location)
-        && location.getLongitude() != 0.0) {
-      return true;
+    if (Empty.isEmpty(location) || location.getLatitude() == 0.0
+        || location.getLongitude() == 0.0) {
+      return false;
     }
 
-    if (Empty.isNotEmpty(lastLocation) && Empty.isNotEmpty(location)) {
+    //Accept first position what ever it is
+    Location lastLocation = SolutionTabletApplication.getInstance().getLastKnownLocation();
+
+    if (Empty.isEmpty(lastLocation)) {
+      SolutionTabletApplication.getInstance().setLastKnownLocation(location);
+      return true;
+    } else {
+      //It's not the first location and meet initial validation
+
       //If there are in 2 separate days
       if (!DateUtil.isSameDay(lastLocation.getTime(), location.getTime())) {
         return true;
       }
-    }
 
-    if ((Empty.isEmpty(location) || location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER
-        || location.getSpeed() < MIN_ACCEPTED_SPEED_IN_MS)) {
-      return false;
-    }
+      //if it has low speed or low accuracy
+      if (location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER
+          || location.getSpeed() < MIN_ACCEPTED_SPEED_IN_MS) {
+        return false;
+      }
 
-    if (Empty.isNotEmpty(lastLocation)) {
-
+      //Prevent wierd jump
       float distance = LocationUtil.distanceBetween(lastLocation, location);
       if (distance > MAX_ACCEPTED_DISTANCE_IN_METER) {
         long lastTime = lastLocation.getTime();
@@ -366,9 +383,8 @@ public class LocationUpdatesService extends Service {
         //Its probabely in the circle of past location
         return false;
       }
+      return true;
     }
-
-    return true;
   }
 
   /**
@@ -414,6 +430,19 @@ public class LocationUpdatesService extends Service {
     removeLocationUpdates();
     stopSelf();
 
+  }
+
+  public void shutdown() {
+    Timber.i("LocationUpdateService shutting down...");
+    try {
+      if (serviceHandler != null) {
+        serviceHandler.removeCallbacksAndMessages(null);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    removeLocationUpdates();
+    stopSelf();
   }
 
   /**
