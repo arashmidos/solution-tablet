@@ -20,6 +20,8 @@ public class SaleOrderItem extends BaseEntity<Long> {
   public static final String COL_INVOICE_BACKEND_ID = "INVOICE_BACKEND_ID";
   public static final String COL_GOODS_COUNT_2 = "GOODS_COUNT_2";
   public static final String COL_GOODS_DISCOUNT = "GOODS_DISCOUNT";
+  public static final String COL_INC = "INC";
+  public static final String COL_DEC = "DEC";
 
   public static final String CREATE_TABLE_SCRIPT =
       "CREATE TABLE " + SaleOrderItem.TABLE_NAME + " (" +
@@ -35,7 +37,9 @@ public class SaleOrderItem extends BaseEntity<Long> {
           " " + SaleOrderItem.COL_UPDATE_DATE_TIME + " TEXT," +
           " " + SaleOrderItem.COL_INVOICE_BACKEND_ID + " INTEGER," +
           " " + SaleOrderItem.COL_GOODS_COUNT_2 + " INTEGER," +
-          " " + SaleOrderItem.COL_GOODS_DISCOUNT + " INTEGER" +
+          " " + SaleOrderItem.COL_GOODS_DISCOUNT + " INTEGER," +
+          " " + SaleOrderItem.COL_INC + " INTEGER," +
+          " " + SaleOrderItem.COL_DEC + " INTEGER" +
           " );";
 
   private Long id;
@@ -52,6 +56,8 @@ public class SaleOrderItem extends BaseEntity<Long> {
   private Long rejectBackendId;
   private Long rejectItemBackendId;
   private Long discount;
+  private Long ordDec;
+  private Long ordInc;
 
   public SaleOrderItem() {
   }
@@ -69,6 +75,22 @@ public class SaleOrderItem extends BaseEntity<Long> {
       Long goodsCount) {
     this(goodsBackendId, saleOrderId, invoiceBackendId);
     this.goodsCount = goodsCount;
+  }
+
+  public Long getOrdDec() {
+    return ordDec;
+  }
+
+  public void setOrdDec(Long ordDec) {
+    this.ordDec = ordDec;
+  }
+
+  public Long getOrdInc() {
+    return ordInc;
+  }
+
+  public void setOrdInc(Long ordInc) {
+    this.ordInc = ordInc;
   }
 
   public Long getDiscount() {
