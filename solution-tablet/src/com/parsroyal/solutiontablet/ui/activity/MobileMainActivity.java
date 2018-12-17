@@ -11,6 +11,7 @@ import android.transition.ChangeBounds;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.ui.fragment.AdminFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
@@ -92,6 +93,8 @@ public class MobileMainActivity extends MainActivity {
         .findFragmentByTag(OrderFragment.class.getSimpleName());
     Fragment questionsListFragment = getSupportFragmentManager()
         .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
+    Fragment adminFragment = getSupportFragmentManager()
+        .findFragmentByTag(AdminFragment.class.getSimpleName());
     if (questionsListFragment != null && questionsListFragment.isVisible()) {
       ((QuestionsListFragment) questionsListFragment).exit();
     } else if (orderFragment != null && orderFragment.isVisible()) {
@@ -102,6 +105,8 @@ public class MobileMainActivity extends MainActivity {
       } else {
         drawerLayout.openDrawer(GravityCompat.END);
       }
+    } else if (adminFragment != null && adminFragment.isVisible()) {
+      ((AdminFragment) adminFragment).onBackPressed();
     } else {
       onBackPressed();
     }

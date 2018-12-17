@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
@@ -32,7 +33,6 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.activity.MobileMainActivity;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -55,7 +55,7 @@ public class LocationUpdatesService extends Service {
   /**
    * The desired interval for location updates. Inexact. Updates may be more or less frequent.
    */
-  public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 30000;
+  public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
   /**
    * The fastest rate for active location updates. Updates will never be more frequent than this
    * value.
@@ -133,7 +133,7 @@ public class LocationUpdatesService extends Service {
       };
 
       createLocationRequest();
-//      getLastLocation();
+      getLastLocation();
 
       HandlerThread handlerThread = new HandlerThread(TAG);
       handlerThread.start();
@@ -144,6 +144,19 @@ public class LocationUpdatesService extends Service {
       ex.printStackTrace();
       EventBus.getDefault().post(new ErrorEvent(StatusCodes.PERMISSION_DENIED));
     }
+  }
+
+  private void getLastLocation() {//TODO:
+    LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+    Criteria locationCritera = new Criteria();
+    String providerName = locationManager.getBestProvider(locationCritera, true);
+    if (providerName != null) {
+      @SuppressLint("MissingPermission") Location location = locationManager
+          .getLastKnownLocation(providerName);
+      Log.d(TAG, "" + location);
+    }
+
   }
 
   /**
@@ -394,7 +407,7 @@ public class LocationUpdatesService extends Service {
     locationRequest = new LocationRequest();
     locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
     locationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
   }
 
   /**

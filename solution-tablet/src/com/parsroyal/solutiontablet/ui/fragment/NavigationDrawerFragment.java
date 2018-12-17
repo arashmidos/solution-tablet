@@ -194,7 +194,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         (username, password) -> {
           if (Constants.debugUsername.equals(username) && Constants.debugPassword
               .equals(password)) {
-            Toast.makeText(mainActivity, "Login OK", Toast.LENGTH_SHORT).show();
+            mainActivity.changeFragment(MainActivity.ADMIN_FRAGMENT_ID, true);
           } else {
             Toast.makeText(mainActivity, "Login Failed", Toast.LENGTH_SHORT).show();
           }

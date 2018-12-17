@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.ui.fragment.AdminFragment;
 import com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment;
@@ -62,6 +63,8 @@ public class TabletMainActivity extends MainActivity {
         .findFragmentByTag(QuestionsListFragment.class.getSimpleName());
     Fragment orderFragment = getSupportFragmentManager()
         .findFragmentByTag(OrderFragment.class.getSimpleName());
+    Fragment adminFragment = getSupportFragmentManager()
+        .findFragmentByTag(AdminFragment.class.getSimpleName());
     if (questionsListFragment != null && questionsListFragment.isVisible()) {
       ((QuestionsListFragment) questionsListFragment).exit();
     } else if (orderFragment != null && orderFragment.isVisible()) {
@@ -72,17 +75,12 @@ public class TabletMainActivity extends MainActivity {
       } else {
         drawerLayout.openDrawer(GravityCompat.END);
       }
+    } else if (adminFragment != null && adminFragment.isVisible()) {
+      ((AdminFragment) adminFragment).onBackPressed();
     } else {
       onBackPressed();
     }
   }
-
- /* @Override
-  public void closeDrawer() {
-    if (crossFader != null && crossFader.isCrossFaded()) {
-      crossFader.crossFade();
-    }
-  }*/
 
   public void closeDrawer() {
     if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
@@ -111,14 +109,6 @@ public class TabletMainActivity extends MainActivity {
     super.onSaveInstanceState(outState);
   }
 
-  /*  @Override
-    public void onBackPressed() {
-      if (crossFader != null && crossFader.isCrossFaded()) {
-        crossFader.crossFade();
-        return;
-      }
-      super.onBackPressed();
-    }*/
   @Override
   public void onBackPressed() {
     if (drawerLayout.isDrawerOpen(GravityCompat.END)) {

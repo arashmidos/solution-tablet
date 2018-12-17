@@ -3,7 +3,9 @@ package com.parsroyal.solutiontablet.data.helper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.City;
 import com.parsroyal.solutiontablet.data.entity.Customer;
@@ -23,6 +25,11 @@ import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
 import com.parsroyal.solutiontablet.data.entity.VisitLine;
 import com.parsroyal.solutiontablet.data.entity.VisitLineDate;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Created by Arash on 1/16/2018.
@@ -30,14 +37,18 @@ import com.parsroyal.solutiontablet.data.entity.VisitLineDate;
 public class CommerDatabaseHelper extends SQLiteOpenHelper {
 
   public static final String TAG = CommerDatabaseHelper.class.getSimpleName();
+  public static final String OUTPUT_PATH = Environment.getExternalStoragePublicDirectory(
+      Environment.DIRECTORY_DOWNLOADS) + "/" + Constants.APPLICATION_NAME + "/Backup/";
   private static final String DATABASE_NAME = "Commer";
   private static final Integer DATABASE_VERSION = 23;
   private static final String SQL_ADD_COLUMN = "ALTER TABLE %s ADD COLUMN %s %s ";
-
+  private static String DATABASE_PATH = "/data/data/com.parsroyal.solutionmobile/databases/";
   private static CommerDatabaseHelper sInstance;
+  private final Context context;
 
   public CommerDatabaseHelper(Context context) {
     super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    this.context = context;
   }
 
   public static synchronized CommerDatabaseHelper getInstance(Context context) {
@@ -45,6 +56,38 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
       sInstance = new CommerDatabaseHelper(context.getApplicationContext());
     }
     return sInstance;
+  }
+
+  public boolean copyDataBase() {
+    try {
+      File root = new File(OUTPUT_PATH);
+      if (!root.exists()) {
+        root.mkdirs();
+      }
+      //Open your local db as the input stream
+      InputStream myInput = new FileInputStream(DATABASE_PATH + DATABASE_NAME);
+
+      // Path to the just created empty db
+
+      //Open the empty db as the output stream
+//   DateUtil.getCurrentGregorianFullWithDate()
+      OutputStream myOutput = new FileOutputStream(OUTPUT_PATH + "/" + DATABASE_NAME);
+
+      //transfer bytes from the inputfile to the outputfile
+      byte[] buffer = new byte[1024];
+      int length;
+      while ((length = myInput.read(buffer)) > 0) {
+        myOutput.write(buffer, 0, length);
+      }
+
+      //Close the streams
+      myOutput.flush();
+      myOutput.close();
+      myInput.close();
+      return true;
+    } catch (Exception ex) {
+      return false;
+    }
   }
 
   @Override

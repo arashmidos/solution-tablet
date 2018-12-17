@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -277,17 +278,16 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     customerMobileTv.setText(NumberUtil.digitsToPersian(model.getCellPhone()));
     customerPhoneTv.setText(NumberUtil.digitsToPersian(model.getPhoneNumber()));
 
-    Position position = positionService.getLastPosition();
+    Location position = SolutionTabletApplication.getInstance().getLastKnownLocation();
     float distance;
     if (Empty.isEmpty(position)) {
-      distance = 0.0f;
+      distanceTv.setText(getString(R.string.unknown_distance));
     } else {
       distance = LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
           customer.getxLocation(), customer.getyLocation());
+      distanceTv.setText(NumberUtil.digitsToPersian(String.format(
+          getString(R.string.distance_to_customer), String.valueOf((int) distance))));
     }
-
-    distanceTv.setText(NumberUtil.digitsToPersian(String.format(
-        getString(R.string.distance_to_customer), String.valueOf((int) distance))));
   }
 
 

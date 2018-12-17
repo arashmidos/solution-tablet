@@ -653,5 +653,6 @@
   <string name="cancel">انصراف</string>
   <string name="message_only_cash_order">ثبت سفارش فقط با پرداخت نقدی امکان پذیر است</string>
   <string name="login_info">ورود اطلاعات</string>
+  <string name="unknown_distance">فاصله نامعلوم</string>
 
 </resources>

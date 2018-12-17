@@ -55,6 +55,7 @@ import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl.GpsStatus;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
+import com.parsroyal.solutiontablet.ui.fragment.AdminFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AnonymousQuestionnaireFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 import com.parsroyal.solutiontablet.ui.fragment.ChatFragment;
@@ -100,6 +101,7 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int PHONE_VISIT_DETAIL_FRAGMENT_ID = 1;
   public static final int NEW_CUSTOMER_DETAIL_FRAGMENT_ID = 2;
   public static final int VISIT_LIST_FRAGMENT_ID = 3;
+  public static final int ADMIN_FRAGMENT_ID = 4;
   public static final int VISIT_DETAIL_FRAGMENT_ID = 5;
   public static final int REGISTER_PAYMENT_FRAGMENT = 6;
   public static final int CUSTOMER_FRAGMENT = 7;
@@ -746,7 +748,10 @@ public abstract class MainActivity extends AppCompatActivity {
             ((OrderFragment) lastItem).onBackPressed();
             showNav();
             return;
-          }
+          }/* else if (lastItem instanceof AdminFragment) {
+            ((AdminFragment) lastItem).onBackPressed();
+            return;
+          }*/
         }
         super.onBackPressed();
       } else {
@@ -852,6 +857,10 @@ public abstract class MainActivity extends AppCompatActivity {
       case REGISTER_PAYMENT_FRAGMENT:
         fragment = RegisterPaymentFragment.newInstance();
         break;
+      case ADMIN_FRAGMENT_ID:
+        fragment = AdminFragment.newInstance();
+        break;
+
       case CUSTOMER_FRAGMENT:
         fragment = CustomerFragment.newInstance();
         break;

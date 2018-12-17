@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/root"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="16dp"
+  android:background="@color/white">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="20dp"
+    android:orientation="vertical">
+    <LinearLayout
+      android:id="@+id/menu_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_horizontal"
+      android:orientation="vertical"
+      tools:visibility="gone">
+      <Button
+        android:id="@+id/setting_btn"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Settings" />
+      <Button
+        android:id="@+id/database_metadata"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Database Metadata" />
+      <Button
+        android:id="@+id/button_2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="2" />
+      <Button
+        android:id="@+id/button_3"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="3" />
+      <Button
+        android:id="@+id/button_4"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="4" />
+      <Button
+        android:id="@+id/copy_database"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Export Database" />
+    </LinearLayout>
+    <LinearLayout
+      android:id="@+id/result_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:visibility="gone">
+      <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    </LinearLayout>
+  </LinearLayout>
+</ScrollView>
