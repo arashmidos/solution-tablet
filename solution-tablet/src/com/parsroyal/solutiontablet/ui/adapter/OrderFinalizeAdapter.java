@@ -189,9 +189,9 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       totalAmountTv.setText(String.format("%s %s",
           NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(totalAmount)),
           mainActivity.getString(R.string.common_irr_currency)));
-      countTv.setText(NumberUtil.digitsToPersian(String.valueOf(item.getGoodsCount() / 1000)));
+      countTv.setText(NumberUtil.formatPersian3DecimalPlaces(item.getGoodsCount() / 1000.0));
       unit2CountTv
-          .setText(NumberUtil.digitsToPersian(String.valueOf(item.getGoodsUnit2Count() / 1000)));
+          .setText(NumberUtil.formatPersian3DecimalPlaces(item.getGoodsUnit2Count() / 1000.0));
       String unit1Title = item.getGoods().getUnit1Title();
       unit1TitleTv
           .setText(Empty.isEmpty(unit1Title) ? "--" : NumberUtil.digitsToPersian(unit1Title));

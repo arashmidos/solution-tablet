@@ -18,8 +18,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleType;
+import com.parsroyal.solutiontablet.service.LocationUpdatesService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
@@ -210,7 +212,10 @@ public class NavigationDrawerFragment extends BaseFragment {
     } else {
       settingService.clearAllSettings();
       dataTransferService.clearData(Constants.FULL_UPDATE);
+      SolutionTabletApplication.getInstance().clearAuthorities();
       startActivity(new Intent(mainActivity, LoginActivity.class));
+      Intent intent = new Intent(mainActivity, LocationUpdatesService.class);
+      mainActivity.stopService(intent);
       mainActivity.finish();
     }
   }

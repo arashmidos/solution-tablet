@@ -499,28 +499,10 @@ public class AddOrderDialogFragment extends DialogFragment {
         getDialog().dismiss();
         break;
       case R.id.minus_img:
-        if (TextUtils.isEmpty(countTv.getText().toString().trim())) {
-          countTv.setText("0");
-        } else {
-          double enteredNum = Double.parseDouble(countTv.getText().toString().trim());
-          if (enteredNum == 1 || enteredNum == 0) {
-            minusImg.setImageResource(R.drawable.im_minus_grey);
-          } else {
-            minusImg.setImageResource(R.drawable.im_minus);
-          }
-          if (enteredNum > 0) {
-            countTv.setText(String.valueOf(enteredNum - 1));
-          }
-        }
+        decreaseCount();
         break;
       case R.id.add_img:
-        if (TextUtils.isEmpty(countTv.getText().toString().trim())) {
-          countTv.setText("1");
-        } else {
-          minusImg.setImageResource(R.drawable.im_minus);
-          double enteredNum = Double.parseDouble(countTv.getText().toString().trim());
-          countTv.setText(String.valueOf(enteredNum + 1));
-        }
+        increaseCount();
         break;
       case R.id.bottom_bar:
       case R.id.register_order_btn:
@@ -537,6 +519,42 @@ public class AddOrderDialogFragment extends DialogFragment {
           onClickListener.onConfirmBtnClicked(count1, selectedUnit1, discount);
         }
         break;
+    }
+  }
+
+  private void increaseCount() {
+    try {
+      if (TextUtils.isEmpty(countTv.getText().toString().trim())) {
+        countTv.setText("1");
+      } else {
+        minusImg.setImageResource(R.drawable.im_minus);
+        double enteredNum = Double
+            .parseDouble(NumberUtil.digitsToEnglish(countTv.getText().toString().trim()));
+        countTv.setText(String.valueOf(enteredNum + 1));
+      }
+    } catch (NumberFormatException ignore) {
+
+    }
+  }
+
+  private void decreaseCount() {
+    try {
+      if (TextUtils.isEmpty(countTv.getText().toString().trim())) {
+        countTv.setText("0");
+      } else {
+        double enteredNum = Double
+            .parseDouble(NumberUtil.digitsToEnglish(countTv.getText().toString().trim()));
+        if (enteredNum == 1 || enteredNum == 0) {
+          minusImg.setImageResource(R.drawable.im_minus_grey);
+        } else {
+          minusImg.setImageResource(R.drawable.im_minus);
+        }
+        if (enteredNum > 0) {
+          countTv.setText(String.valueOf(enteredNum - 1));
+        }
+      }
+    } catch (NumberFormatException ignore) {
+
     }
   }
 

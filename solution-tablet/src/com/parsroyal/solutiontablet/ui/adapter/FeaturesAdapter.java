@@ -72,6 +72,8 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     if (feature.getTitle().contains("پرسش") && !SolutionTabletApplication.getInstance()
         .hasAccess(Authority.ADD_SUB_QUESTIONNAIRE)) {
       holder.featureTitleTv.setTextColor(ContextCompat.getColor(context, R.color.gray));
+    } else {
+      holder.featureTitleTv.setTextColor(ContextCompat.getColor(context, R.color.primary_dark));
     }
     holder.featureLay.setOnClickListener(v -> {
       if (baseInfoService.getAllProvinces().size() == 0) {

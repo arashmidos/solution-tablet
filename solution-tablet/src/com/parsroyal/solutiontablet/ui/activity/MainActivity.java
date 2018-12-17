@@ -31,10 +31,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
+import co.ronash.pushe.Pushe;
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.biz.impl.RestServiceImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
@@ -235,6 +237,21 @@ public abstract class MainActivity extends AppCompatActivity {
       logUser();
     }
     loadPermission();
+    updatePushe();
+  }
+
+  private void updatePushe() {
+    try {
+      Pushe.initialize(this, true);
+      Log.d("Pushe", Pushe.getPusheId(this));
+      KeyValue username = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
+      if (Empty.isNotEmpty(username)) {
+        new RestServiceImpl().updatePusheId(this, Pushe.getPusheId(this), "GCMToken");
+      }
+
+    } catch (Exception ignore) {
+
+    }
   }
 
   private void loadPermission() {
@@ -374,6 +391,7 @@ public abstract class MainActivity extends AppCompatActivity {
     if (fakeApps.size() > 0 && !BuildConfig.DEBUG) {
       showFakeGpsDetected(fakeApps);
     }*///TODO: Time consuming, do it in async
+    SolutionTabletApplication.getInstance().reSyncTrueTime();
   }
 
   private void showFakeGpsDetected(List<String> fakeApps) {
@@ -794,7 +812,10 @@ public abstract class MainActivity extends AppCompatActivity {
       searchImg.setVisibility(View.GONE);
     }
     if (fragmentId == VISITLINE_FRAGMENT_ID) {
-      filterImg.setVisibility(View.VISIBLE);
+      String saleType = new SettingServiceImpl().getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+      if (!ApplicationKeys.SALE_DISTRIBUTER.equals(saleType)) {
+        filterImg.setVisibility(View.VISIBLE);
+      }
     } else {
       filterImg.setVisibility(View.GONE);
     }

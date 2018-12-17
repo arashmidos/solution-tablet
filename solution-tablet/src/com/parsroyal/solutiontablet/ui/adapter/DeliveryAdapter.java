@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -58,15 +59,16 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
     inflater = LayoutInflater.from(context);
   }
 
+  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_order_list, parent, false);
 
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     SaleOrderListModel order = orders.get(position);
     holder.setOrderData(position, order);
   }

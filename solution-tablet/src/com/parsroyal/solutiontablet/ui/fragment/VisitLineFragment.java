@@ -20,6 +20,7 @@ import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.VisitLineListModel;
 import com.parsroyal.solutiontablet.service.VisitService;
+import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.VisitLineAdapter;
@@ -30,6 +31,7 @@ import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.SunDate;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -60,6 +62,7 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
   private VisitLineAdapter adapter;
   private MainActivity mainActivity;
   private VisitService visitService;
+  private String saleType;
 
   public static VisitLineFragment newInstance() {
     return new VisitLineFragment();
@@ -73,10 +76,13 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     visitService = new VisitServiceImpl(mainActivity);
-    setUpRecyclerView();
     mainActivity.changeTitle(getString(R.string.today_path_list));
 
-    setCurrentDate();
+    saleType = new SettingServiceImpl().getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+    setUpRecyclerView();
+    if (!ApplicationKeys.SALE_DISTRIBUTER.equals(saleType)) {
+      setCurrentDate();
+    }
     return view;
   }
 
@@ -95,7 +101,8 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new VisitLineAdapter(mainActivity, new ArrayList<>());
+    adapter = new VisitLineAdapter(mainActivity,
+        ApplicationKeys.SALE_DISTRIBUTER.equals(saleType) ? getVisitLineList() : new ArrayList<>());
     if (MultiScreenUtility.isTablet(mainActivity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);
