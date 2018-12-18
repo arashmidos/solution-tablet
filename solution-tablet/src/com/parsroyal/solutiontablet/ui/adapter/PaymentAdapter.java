@@ -1,12 +1,15 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,15 +53,16 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
     paymentService = new PaymentServiceImpl(mainActivity);
   }
 
+  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_payment_list, parent, false);
 
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     try {
       holder.setData(position);
     } catch (Exception ex) {
@@ -108,12 +112,17 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
     TextView paymentTv;
     @BindView(R.id.customer_name_tv)
     TextView customerNameTv;
+    @BindView(R.id.customer_code_tv)
+    TextView customerCodeTv;
     @BindView(R.id.bank_detail_tv)
     TextView bankDetailTv;
     @BindView(R.id.delete_img)
     ImageView deleteImg;
     @BindView(R.id.edit_img)
     ImageView editImg;
+    @Nullable
+    @BindView(R.id.customer_layout)
+    LinearLayout customerLayout;
 
     private PaymentListModel payment;
     private int position;
@@ -187,8 +196,18 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
       if (isFromReport) {
         customerNameTv.setVisibility(View.VISIBLE);
         customerNameTv.setText(payment.getCustomerFullName());
+        customerCodeTv.setVisibility(View.VISIBLE);
+        customerCodeTv
+            .setText(NumberUtil.digitsToPersian(String.format("(%s)", payment.getCustomerCode())));
+        if (customerLayout != null) {
+          customerLayout.setVisibility(View.VISIBLE);
+        }
       } else {
         customerNameTv.setVisibility(View.INVISIBLE);
+        customerCodeTv.setVisibility(View.INVISIBLE);
+        if (customerLayout != null) {
+          customerLayout.setVisibility(View.INVISIBLE);
+        }
       }
     }
   }

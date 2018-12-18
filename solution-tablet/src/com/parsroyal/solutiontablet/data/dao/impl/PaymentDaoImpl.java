@@ -139,7 +139,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
     return new PaymentListModel(cursor.getLong(0),
         String.valueOf(cursor.getLong(1)), cursor.getString(2), cursor.getString(3),
         cursor.getLong(4), cursor.getString(5), cursor.getLong(6), cursor.getString(7),
-        cursor.getString(8));
+        cursor.getString(8), cursor.getString(9));
   }
 
   @Override
@@ -191,7 +191,8 @@ public class PaymentDaoImpl extends AbstractDao<Payment, Long> implements Paymen
         "cu." + Customer.COL_FULL_NAME,//5
         "p." + Payment.COL_STATUS,
         "bi." + BaseInfo.COL_TITLE,
-        "p." + Payment.COL_CHEQUE_BRANCH
+        "p." + Payment.COL_CHEQUE_BRANCH,
+        "cu." + Customer.COL_CODE
     };
 
     List<String> argsList = new ArrayList<>();

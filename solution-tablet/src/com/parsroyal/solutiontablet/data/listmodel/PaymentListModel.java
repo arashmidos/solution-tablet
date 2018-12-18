@@ -13,11 +13,13 @@ public class PaymentListModel extends BaseListModel implements Comparable<Paymen
   protected long customerBackendId;
   private Long status;
   private String customerFullName;
+  private String customerCode;
   private String bank;
   private String branch;
 
   public PaymentListModel(Long primaryKey, String amount, String date, String type,
-      long customerBackendId, String customerFullName, Long status, String bank, String branch) {
+      long customerBackendId, String customerFullName, Long status, String bank, String branch,
+      String customerCode) {
     this.primaryKey = primaryKey;
     this.date = date;
     this.amount = amount;
@@ -27,9 +29,18 @@ public class PaymentListModel extends BaseListModel implements Comparable<Paymen
     this.status = status;
     this.bank = bank;
     this.branch = branch;
+    this.customerCode = customerCode;
   }
 
   public PaymentListModel() {
+  }
+
+  public String getCustomerCode() {
+    return customerCode;
+  }
+
+  public void setCustomerCode(String customerCode) {
+    this.customerCode = customerCode;
   }
 
   public long getCustomerBackendId() {
