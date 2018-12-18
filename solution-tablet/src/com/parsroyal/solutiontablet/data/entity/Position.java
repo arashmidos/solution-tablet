@@ -7,6 +7,7 @@ import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.GPSUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
 
 /**
@@ -271,5 +272,30 @@ public class Position extends BaseEntity<Long> {
 
   public void setImei(String imei) {
     this.imei = imei;
+  }
+
+  @Override
+  public String toString() {
+    return "Position{" +
+        "id=" + id +
+        ", latitude=" + latitude +
+        ", longitude=" + longitude +
+        ", speed=" + speed +
+        ", status=" + status +
+        ", date='" + date + '\'' +
+        ", gpsOff=" + gpsOff +
+        ", mode=" + mode +
+        ", salesmanId=" + salesmanId +
+        ", backendId=" + backendId +
+        ", accuracy=" + accuracy +
+        ", mockLocation=" + mockLocation +
+        ", rooted=" + rooted +
+        ", batteryLevel=" + batteryLevel +
+        ", batteryStatus='" + batteryStatus + '\'' +
+        ", distanceInMeter=" + distanceInMeter +
+        ", networkDate=" + NumberUtil.digitsToEnglish(DateUtil.getZonedDate(new Date(networkDate)))
+        +
+        ", imei='" + imei + '\'' +
+        '}';
   }
 }

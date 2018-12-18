@@ -122,6 +122,18 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long> {
     db.endTransaction();
   }
 
+  public int count() {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    Cursor cursor = db.rawQuery("SELECT count(*) FROM " + getTableName(), null);
+    int count = 0;
+    if (cursor.moveToNext()) {
+      count = cursor.getInt(0);
+    }
+    cursor.close();
+    return count;
+  }
+
   public void deleteAll(String column, String condition) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getWritableDatabase();

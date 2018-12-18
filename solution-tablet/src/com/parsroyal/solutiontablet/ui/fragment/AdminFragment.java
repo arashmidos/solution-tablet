@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,9 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.SendStatus;
+import com.parsroyal.solutiontablet.data.dao.impl.PositionDaoImpl;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import java.util.Map;
@@ -30,8 +34,8 @@ public class AdminFragment extends BaseFragment {
   Button settingBtn;
   @BindView(R.id.database_metadata)
   Button databaseMetadata;
-  @BindView(R.id.button_2)
-  Button button2;
+  @BindView(R.id.map_data)
+  Button mapData;
   @BindView(R.id.button_3)
   Button button3;
   @BindView(R.id.button_4)
@@ -79,7 +83,7 @@ public class AdminFragment extends BaseFragment {
     unbinder.unbind();
   }
 
-  @OnClick({R.id.setting_btn, R.id.database_metadata, R.id.button_2, R.id.button_3, R.id.button_4,
+  @OnClick({R.id.setting_btn, R.id.database_metadata, R.id.map_data, R.id.button_3, R.id.button_4,
       R.id.copy_database})
   public void onViewClicked(View view) {
     switch (view.getId()) {
@@ -89,7 +93,8 @@ public class AdminFragment extends BaseFragment {
       case R.id.database_metadata:
         showDatabaseData();
         break;
-      case R.id.button_2:
+      case R.id.map_data:
+        showMapData();
         break;
       case R.id.button_3:
         break;
@@ -101,9 +106,35 @@ public class AdminFragment extends BaseFragment {
     }
   }
 
+  private void showMapData() {
+    showResultLayout();
+    StringBuilder res = new StringBuilder();
+
+    PositionDaoImpl positionDao = new PositionDaoImpl(mainActivity);
+    String selection = " " + Position.COL_STATUS + " = ? ";
+    String[] args = {String.valueOf(SendStatus.NEW.getId())};
+    String[] args2 = {String.valueOf(SendStatus.SENT.getId())};
+    int unsent = positionDao.retrieveAll(selection, args, null, null, null).size();
+    int sent = positionDao.retrieveAll(selection, args2, null, null, null).size();
+
+    Position p = SolutionTabletApplication.getInstance().getLastSavedPosition();
+
+    res.append(String.format("<p><font color='blue'><b>Last position:</b></font> : %s</br></p>",
+        p != null ? p.toString() : "null"));
+    Location l = SolutionTabletApplication.getInstance().getLastKnownLocation();
+    res.append(String.format("<p><font color='blue'><b>Raw location:</b></font> : %s</br></p>",
+        l != null ? l.toString() : "null"));
+    res.append(String.format("<p><font color='blue'><b>Total position:</b></font> : %s</br></p>",
+        positionDao.count()));
+    res.append(String
+        .format("<p><font color='blue'><b>Sent/Unsent position:</b></font> : %s / %s</br></p>",
+            sent, unsent));
+
+    showResult(res.toString());
+  }
+
   private void copyDatabase() {
-    menuLayout.setVisibility(View.GONE);
-    resultLayout.setVisibility(View.VISIBLE);
+    showResultLayout();
 
     result.setText("در حال انتقال داده ها...");
     Thread t = new Thread(() -> {
@@ -122,9 +153,13 @@ public class AdminFragment extends BaseFragment {
     t.start();
   }
 
-  private void showDatabaseData() {
+  private void showResultLayout() {
     menuLayout.setVisibility(View.GONE);
     resultLayout.setVisibility(View.VISIBLE);
+  }
+
+  private void showDatabaseData() {
+    showResultLayout();
 
     StringBuilder res = new StringBuilder();
 
@@ -157,8 +192,7 @@ public class AdminFragment extends BaseFragment {
   }
 
   private void openSetting() {
-    menuLayout.setVisibility(View.GONE);
-    resultLayout.setVisibility(View.VISIBLE);
+    showResultLayout();
 
     Map<String, ?> map = SolutionTabletApplication.getPreference().getAll();
     result.setText(Html.fromHtml("<h2>Settings:</h2>"));

@@ -71,29 +71,26 @@ public class SendLocationService extends IntentService {
   }
 
   /**
-   * Called by the system every time a client explicitly starts the service by calling
-   * {@link Context#startService}, providing the arguments it supplied and a
-   * unique integer token representing the start request.  Do not call this method directly.
+   * Called by the system every time a client explicitly starts the service by calling {@link
+   * Context#startService}, providing the arguments it supplied and a unique integer token
+   * representing the start request.  Do not call this method directly.
    * <p>
    * <p>For backwards compatibility, the default implementation calls
-   * {@link #onStart} and returns either {@link #START_STICKY}
-   * or {@link #START_STICKY_COMPATIBILITY}.
+   * {@link #onStart} and returns either {@link #START_STICKY} or {@link
+   * #START_STICKY_COMPATIBILITY}.
    * <p>
    * <p>If you need your application to run on platform versions prior to API
-   * level 5, you can use the following model to handle the older {@link #onStart}
-   * callback in that case.  The <code>handleCommand</code> method is implemented by
-   * you as appropriate:
+   * level 5, you can use the following model to handle the older {@link #onStart} callback in that
+   * case.  The <code>handleCommand</code> method is implemented by you as appropriate:
    * <p>
    * {@sample development/samples/ApiDemos/src/com/example/android/apis/app/ForegroundService.java
    * start_compatibility}
    * <p>
    * <p class="caution">Note that the system calls this on your
-   * service's main thread.  A service's main thread is the same
-   * thread where UI operations take place for Activities running in the
-   * same process.  You should always avoid stalling the main
-   * thread's event loop.  When doing long-running operations,
-   * network calls, or heavy disk I/O, you should kick off a new
-   * thread, or use {@link AsyncTask}.</p>
+   * service's main thread.  A service's main thread is the same thread where UI operations take
+   * place for Activities running in the same process.  You should always avoid stalling the main
+   * thread's event loop.  When doing long-running operations, network calls, or heavy disk I/O, you
+   * should kick off a new thread, or use {@link AsyncTask}.</p>
    *
    * @param intent The Intent supplied to {@link Context#startService}, as given.  This may be null
    * if the service is being restarted after its process has gone away, and it had previously

@@ -15,6 +15,7 @@ import com.crashlytics.android.Crashlytics;
 import com.instacart.library.truetime.TrueTimeRx;
 import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import io.fabric.sdk.android.Fabric;
@@ -38,6 +39,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
   public static SharedPreferences sPreference;
   private ArrayList<String> authorities = new ArrayList<>();
   private Location lastKnownLocation;
+  private Position lastSavedPosition;
 
   public static SolutionTabletApplication getInstance() {
     return sInstance;
@@ -167,5 +169,13 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
   public void setLastKnownLocation(Location lastKnownLocation) {
     this.lastKnownLocation = lastKnownLocation;
+  }
+
+  public void setLastSavedPosition(Position lastSavedPosition) {
+    this.lastSavedPosition = lastSavedPosition;
+  }
+
+  public Position getLastSavedPosition() {
+    return lastSavedPosition;
   }
 }
