@@ -60,6 +60,8 @@ public class VisitListAdapter extends Adapter<ViewHolder> {
     TextView timeTv;
     @BindView(R.id.customer_tv)
     TextView customerTv;
+    @BindView(R.id.customer_code_tv)
+    TextView customerCodeTv;
     @BindView(R.id.main_lay_rel)
     RelativeLayout mainLayRel;
     @BindView(R.id.status_tv)
@@ -78,6 +80,8 @@ public class VisitListAdapter extends Adapter<ViewHolder> {
       listModel = visitListModels.get(position);
 
       customerTv.setText(listModel.getCustomer());
+      customerCodeTv
+          .setText(NumberUtil.digitsToPersian(String.format("(%s)", listModel.getCustomerCode())));
       Date createdDate = DateUtil
           .convertStringToDate(listModel.getVisitDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);

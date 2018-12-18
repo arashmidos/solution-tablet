@@ -184,7 +184,8 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
         VisitInformation.COL_DISTANCE,
         VisitInformation.COL_PHONE_VISIT,
         Customer.COL_FULL_NAME,
-        VisitInformation.COL_VISIT_BACKEND_ID
+        VisitInformation.COL_VISIT_BACKEND_ID,
+        Customer.COL_CODE//10
     };
 
     String table = getTableName() + " vi " +
@@ -249,7 +250,8 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     entity.setCustomer(cursor.getString(8));
     long status = cursor.getLong(9);
 
-    entity.setSent( status != 0L);
+    entity.setSent(status != 0L);
+    entity.setCustomerCode(cursor.getString(10));
     return entity;
   }
 }

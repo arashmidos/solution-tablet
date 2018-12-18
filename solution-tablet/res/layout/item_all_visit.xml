@@ -29,6 +29,17 @@
     android:textSize="12sp"
     tools:text="چهارشنبه ۱۷ شهریور" />
   <TextView
+    android:id="@+id/customer_code_tv"
+    style="@style/IranSans.Light"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:layout_alignBaseline="@id/customer_tv"
+    android:layout_toStartOf="@id/customer_tv"
+    android:textColor="@color/gray_75"
+    android:textSize="12sp"
+    tools:text="(12345)" />
+  <TextView
     android:id="@+id/time_tv"
     style="@style/IranSans"
     android:layout_width="wrap_content"

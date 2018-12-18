@@ -14,11 +14,20 @@ public class VisitListModel extends BaseModel {
   private String startTime;
   private String endTime;
   private String customer;
+  private String customerCode;
   private String networkDate;
   private String endNetworkDate;
   private Long distance;
   private boolean phoneVisit;
   private boolean sent;
+
+  public String getCustomerCode() {
+    return customerCode;
+  }
+
+  public void setCustomerCode(String customerCode) {
+    this.customerCode = customerCode;
+  }
 
   public String getCustomer() {
     return customer;

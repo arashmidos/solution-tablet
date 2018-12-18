@@ -15,6 +15,7 @@
     android:layout_marginStart="16dp"
     android:layout_alignParentStart="true"
     android:layout_centerVertical="true"
+    android:text="@string/sent"
     android:textColor="@color/green_question"
     android:textSize="12sp" />
   <LinearLayout
@@ -29,13 +30,14 @@
     android:layout_toRightOf="@id/upload_img_layout"
     android:gravity="end|center_vertical"
     android:orientation="horizontal"
-    android:weightSum="9">
+    android:weightSum="10">
     <TextView
       android:id="@+id/time_tv"
       style="@style/IranSans"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="3"
+      android:gravity="right|center"
       android:textColor="@color/gray_75"
       android:textSize="12sp"
       tools:text="چهارشنبه ۱۷ شهریور" />
@@ -63,17 +65,31 @@
       android:textSize="12sp"
       android:visibility="gone"
       tools:text="آرش نوری" />
-    <TextView
-      android:id="@+id/customer_tv"
-      style="@style/IranSans.Medium"
+    <LinearLayout
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="2"
-      android:layout_marginEnd="16dp"
+      android:layout_weight="3"
       android:gravity="right|center"
-      android:textColor="@color/black_de"
-      android:textSize="12sp"
-      tools:text="علی آقا قصاب" />
+      android:orientation="horizontal">
+      <TextView
+        android:id="@+id/customer_code_tv"
+        style="@style/IranSans.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/gray_75"
+        android:textSize="12sp"
+        tools:text="(12345)" />
+      <TextView
+        android:id="@+id/customer_tv"
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/black_de"
+        android:textSize="12sp"
+        tools:text="علی آقا قصاب" />
+    </LinearLayout>
   </LinearLayout>
   <View
     android:layout_width="match_parent"

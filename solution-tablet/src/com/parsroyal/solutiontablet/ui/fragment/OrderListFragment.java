@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -72,7 +73,7 @@ public class OrderListFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_new_order_list, container, false);
@@ -180,9 +181,11 @@ public class OrderListFragment extends BaseFragment {
           : Boolean.valueOf(checkCredit);
       if (checkCreditEnabled && parent.getCustomer().getRemainedCredit() != null
           && parent.getCustomer().getRemainedCredit().longValue() <= 0) {
-        DialogUtil.showConfirmDialog(mainActivity, "هشدار",
-            "ثبت سفارش فقط با پرداخت نقدی امکان پذیر است", "ثبت سفارش",(dialogInterface, i) -> parent
-                .openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), true),"انصراف");
+        DialogUtil.showConfirmDialog(mainActivity, getString(R.string.warning),
+            "ثبت سفارش فقط با پرداخت نقدی امکان پذیر است", getString(R.string.register_order),
+            (dialogInterface, i) -> parent
+                .openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), true),
+            getString(R.string.cancel));
       } else {
         parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), false);
       }

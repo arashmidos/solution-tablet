@@ -263,7 +263,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         "o." + SaleOrder.COL_CREATE_DATE_TIME + "," +
         "o." + SaleOrder.COL_DESCRIPTION + "," +
         "vd." + VisitInformationDetail.COL_VISIT_INFORMATION_ID + "," +
-        "o." + SaleOrder.COL_NUMBER +//11
+        "o." + SaleOrder.COL_NUMBER + "," +//11
+        "c." + Customer.COL_CODE +
         " FROM " + SaleOrder.TABLE_NAME + " o " +
         " INNER JOIN " + Customer.TABLE_NAME + " c on c." + Customer.COL_BACKEND_ID + " = o."
         + SaleOrder.COL_CUSTOMER_BACKEND_ID +
@@ -345,6 +346,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       order.setDescription(cursor.getString(9));
       order.setVisitId(cursor.getLong(10));
       order.setNumber(cursor.getLong(11));
+      order.setCustomerCode(cursor.getString(12));
       set.add(order);
     }
 

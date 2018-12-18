@@ -20,6 +20,7 @@ public class SaleOrderListModel extends BaseListModel implements Comparable<Sale
   private Long visitId;
   private int orderCount;
   private Long number;
+  private String customerCode;
 
   public SaleOrderListModel(Long id, Long backendId, String date, Long amount,
       String paymentTypeTitle, String customerName, Long status, Long customerBackendId) {
@@ -34,6 +35,14 @@ public class SaleOrderListModel extends BaseListModel implements Comparable<Sale
   }
 
   public SaleOrderListModel() {
+  }
+
+  public String getCustomerCode() {
+    return customerCode;
+  }
+
+  public void setCustomerCode(String customerCode) {
+    this.customerCode = customerCode;
   }
 
   public Long getNumber() {

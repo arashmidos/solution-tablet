@@ -119,6 +119,11 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     LinearLayout uploadImageLayout;
     @BindView(R.id.customer_name_tv)
     TextView customerNameTv;
+    @BindView(R.id.customer_code_tv)
+    TextView customerCodeTv;
+    @Nullable
+    @BindView(R.id.customer_layout)
+    LinearLayout customerLayout;
 
     private int position;
     private SaleOrderListModel order;
@@ -128,14 +133,15 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       ButterKnife.bind(this, itemView);
     }
 
-    public void setOrderData(int position, SaleOrderListModel order) {
+    void setOrderData(int position, SaleOrderListModel order) {
       this.position = position;
       this.order = order;
 
       String orderCode = "کد سفارش : " + NumberUtil.digitsToPersian(String.valueOf(order.getId()));
       orderCodeTv.setText(orderCode);
       customerNameTv.setText(order.getCustomerName());
-
+      customerCodeTv
+          .setText(NumberUtil.digitsToPersian(String.format("(%s)", order.getCustomerCode())));
       orderCountTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderCount())));
 
       Date createdDate = DateUtil
@@ -170,26 +176,32 @@ public class OrderAdapter extends Adapter<ViewHolder> {
       if (isFromReport) {
 
         customerNameTv.setVisibility(View.VISIBLE);
+        customerCodeTv.setVisibility(View.VISIBLE);
+        if (customerLayout != null) {
+          customerLayout.setVisibility(View.VISIBLE);
+        }
       } else {
         uploadImageLayout.setVisibility(View.GONE);
         customerNameTv.setVisibility(View.GONE);
+        customerCodeTv.setVisibility(View.GONE);
+        if (customerLayout != null) {
+          customerLayout.setVisibility(View.GONE);
+        }
       }
     }
 
-    @OnClick({R.id.delete_img, R.id.delete_img_layout, R.id.edit_img, R.id.edit_img_layout,
-        R.id.main_lay, R.id.main_lay_rel, R.id.upload_img, R.id.upload_img_layout})
+    @OnClick({R.id.delete_img_layout, R.id.edit_img_layout,
+        R.id.main_lay, R.id.main_lay_rel, R.id.upload_img_layout})
     @Optional
     public void onClick(View v) {
 
       switch (v.getId()) {
         case R.id.delete_img_layout:
-        case R.id.delete_img:
           if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
             deleteOrder();
           }
           break;
         case R.id.edit_img_layout:
-        case R.id.edit_img:
         case R.id.main_lay_rel:
         case R.id.main_lay:
           Bundle args = new Bundle();
@@ -200,7 +212,6 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           setPageStatus(args);
           mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
           break;
-        case R.id.upload_img:
         case R.id.upload_img_layout:
           if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
             openSendDataDialog();
