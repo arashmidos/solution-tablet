@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -55,14 +56,15 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
     this.inflater = LayoutInflater.from(context);
   }
 
+  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_all_questionnaire, parent, false);
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     holder.setData(position);
   }
 
@@ -81,6 +83,8 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
     TextView titleTv;
     @BindView(R.id.customer_name_tv)
     TextView customerNameTv;
+    @BindView(R.id.customer_code_tv)
+    TextView customerCodeTv;
     @Nullable
     @BindView(R.id.main_lay_rel)
     RelativeLayout mainLayRel;
@@ -93,6 +97,9 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
     LinearLayout editImageLayout;
     @BindView(R.id.delete_img_layout)
     LinearLayout deleteImageLayout;
+    @Nullable
+    @BindView(R.id.customer_layout)
+    LinearLayout customerLayout;
 
     private QuestionnaireListModel questionnaire;
     private int position;
@@ -103,11 +110,9 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
     }
 
     @Optional
-    @OnClick({R.id.main_lay_lin, R.id.main_lay_rel, R.id.delete_img, R.id.delete_img_layout,
-        R.id.edit_img, R.id.edit_img_layout})
+    @OnClick({R.id.main_lay_lin, R.id.main_lay_rel, R.id.delete_img_layout, R.id.edit_img_layout})
     public void onClick(View v) {
       switch (v.getId()) {
-        case R.id.edit_img:
         case R.id.edit_img_layout:
         case R.id.main_lay_lin:
         case R.id.main_lay_rel:
@@ -126,7 +131,6 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
           }
           mainActivity.changeFragment(MainActivity.QUESTION_LIST_FRAGMENT_ID, args, false);
           break;
-        case R.id.delete_img:
         case R.id.delete_img_layout:
           deleteQuestionnaire();
           break;
@@ -160,15 +164,24 @@ public class AllQuestionnaireAdapter extends Adapter<ViewHolder> {
           .convertStringToDate(questionnaire.getDate(), DateUtil.GLOBAL_FORMATTER, "FA");
       String dateString = DateUtil.getFullPersianDate(createdDate);
       dateTv.setText(NumberUtil.digitsToPersian(dateString));
-
     }
 
     private void changeVisibility() {
       if (args.getInt(Constants.PARENT) == MainActivity.REPORT_FRAGMENT) {
         customerNameTv.setVisibility(View.VISIBLE);
         customerNameTv.setText(questionnaire.getCustomerFullName());
+        customerCodeTv.setVisibility(View.VISIBLE);
+        customerCodeTv.setText(
+            NumberUtil.digitsToPersian(String.format("(%s)", questionnaire.getCustomerCode())));
+        if (customerLayout != null) {
+          customerLayout.setVisibility(View.VISIBLE);
+        }
       } else {
         customerNameTv.setVisibility(View.INVISIBLE);
+        customerCodeTv.setVisibility(View.INVISIBLE);
+        if (customerLayout != null) {
+          customerLayout.setVisibility(View.INVISIBLE);
+        }
       }
 
       if (questionnaire.getStatus().equals(SendStatus.SENT.getId())) {

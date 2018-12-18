@@ -15,6 +15,7 @@ public class QuestionnaireListModel extends BaseListModel {
   private Long answersGroupNo;
   private Long status;
   private String customerFullName;
+  private String customerCode;
 
   public Long getVisitId() {
     return visitId;
@@ -94,5 +95,13 @@ public class QuestionnaireListModel extends BaseListModel {
 
   public void setCustomerFullName(String customerFullName) {
     this.customerFullName = customerFullName;
+  }
+
+  public String getCustomerCode() {
+    return customerCode;
+  }
+
+  public void setCustomerCode(String customerCode) {
+    this.customerCode = customerCode;
   }
 }

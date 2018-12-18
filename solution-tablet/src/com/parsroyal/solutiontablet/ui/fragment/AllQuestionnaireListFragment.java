@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,10 +35,7 @@ public class AllQuestionnaireListFragment extends BaseFragment {
   Unbinder unbinder;
 
   private MainActivity mainActivity;
-  private VisitDetailFragment parent;
   private long customerBackendId;
-  private long customerId;
-  private long visitId;
 
   public AllQuestionnaireListFragment() {
     // Required empty public constructor
@@ -50,22 +48,13 @@ public class AllQuestionnaireListFragment extends BaseFragment {
   }
 
   @Override
-  public void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_all_questionnaire_list, container, false);
     unbinder = ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
-    /*Bundle bundle = getArguments();
-    if (Empty.isNotEmpty(bundle)) {
-      customerId = bundle.getLong(Constants.CUSTOMER_ID);
-      visitId = bundle.getLong(Constants.VISIT_ID);
-    }*/
+
     setUpRecyclerView();
     return view;
   }
@@ -74,8 +63,6 @@ public class AllQuestionnaireListFragment extends BaseFragment {
     Bundle bundle = getArguments();
     if (Empty.isEmpty(bundle)) {
       bundle = new Bundle();
-//      bundle.putLong(Constants.VISIT_ID, visitId);
-//      bundle.putLong(Constants.CUSTOMER_ID, customerId);
     }
 
     customerBackendId = bundle.getLong(Constants.CUSTOMER_BACKEND_ID, -1);

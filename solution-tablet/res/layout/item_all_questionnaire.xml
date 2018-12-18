@@ -11,9 +11,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="18dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
     android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
     android:textColor="@color/black_de"
     android:textSize="12sp"
     tools:text="پنجشنبه 2 مرداد 96" />
@@ -24,8 +22,6 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="18dp"
     android:layout_marginStart="16dp"
-    android:layout_marginLeft="16dp"
-    android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:textColor="@color/black_de"
     android:textSize="12sp"
@@ -37,9 +33,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="12dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
     android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
     android:layout_below="@id/date_tv"
     android:textColor="@color/primary"
     android:textSize="12sp"
@@ -52,8 +46,6 @@
     android:layout_marginTop="14dp"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="8dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="8dp"
     android:layout_below="@+id/title_tv"
     android:gravity="center">
     <ImageView
@@ -70,7 +62,6 @@
     android:layout_marginTop="14dp"
     android:layout_below="@id/title_tv"
     android:layout_toEndOf="@id/delete_img_layout"
-    android:layout_toRightOf="@id/delete_img_layout"
     android:gravity="center">
     <ImageView
       android:id="@+id/edit_img"
@@ -86,8 +77,6 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="18dp"
     android:layout_marginStart="16dp"
-    android:layout_marginLeft="16dp"
-    android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_below="@+id/title_tv"
     android:text="@string/sent"
@@ -101,14 +90,25 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="18dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
     android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
     android:layout_below="@id/title_tv"
     android:textColor="@color/black_de"
     android:textSize="12sp"
     android:visibility="invisible"
+    tools:visibility="visible"
     tools:text="آرش نوری" />
+
+  <TextView
+    android:id="@+id/customer_code_tv"
+    style="@style/IranSans.Light"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:layout_alignBaseline="@id/customer_name_tv"
+    android:layout_toStartOf="@id/customer_name_tv"
+    android:textColor="@color/gray_75"
+    android:textSize="12sp"
+    tools:text="(12345)" />
 
   <View
     android:layout_width="match_parent"

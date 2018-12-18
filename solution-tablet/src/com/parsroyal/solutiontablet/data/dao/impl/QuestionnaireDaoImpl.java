@@ -155,6 +155,7 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
         " a.ANSWERS_GROUP_NO," +//4
         " a.STATUS," +
         " cu." + Customer.COL_FULL_NAME +//6
+        ",cu." + Customer.COL_CODE +
         " FROM COMMER_Q_ANSWER a " +
         " LEFT OUTER JOIN COMMER_QUESTION q ON a.QUESTION_BACKEND_ID = q.BACKEND_ID  " +
         " LEFT OUTER JOIN COMMER_VISIT_INFORMATION v on v._id = a.VISIT_ID " +
@@ -197,6 +198,7 @@ public class QuestionnaireDaoImpl extends AbstractDao<Questionnaire, Long> imple
       listModel.setAnswersGroupNo(cursor.getLong(4));
       listModel.setStatus(cursor.getLong(5));
       listModel.setCustomerFullName(cursor.getString(6));
+      listModel.setCustomerCode(cursor.getString(7));
       questions.add(listModel);
     }
 
