@@ -37,10 +37,12 @@
         android:id="@+id/button_3"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:text="3" />
       <Button
         android:id="@+id/button_4"
         android:layout_width="300dp"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:text="4" />
       <Button

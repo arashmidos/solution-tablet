@@ -88,9 +88,8 @@ public class DialogUtil {
     EditText password = dialogView.findViewById(R.id.password_edt);
     TextView negativeTv = dialogView.findViewById(R.id.negative_tv);
     Button positiveBtn = dialogView.findViewById(R.id.positive_btn);
-//TODO:
-    username.setText("royal");
-    password.setText("royal2018");
+//    username.setText("royal");
+//    password.setText("royal2018");
     AlertDialog alertDialog = dialogBuilder.create();
     alertDialog.setCancelable(false);
     alertDialog.show();

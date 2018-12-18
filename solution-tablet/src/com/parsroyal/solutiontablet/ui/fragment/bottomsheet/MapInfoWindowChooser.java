@@ -53,8 +53,14 @@ public class MapInfoWindowChooser extends BottomSheetDialogFragment {
       @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.bottom_sheet_map_chooser, container, false);
     ButterKnife.bind(this, view);
-    distanceTv.setText(NumberUtil.digitsToPersian(String.format(
-        getString(R.string.distance_to_customer), String.valueOf((int) distance))));
+
+    int iDistance = (int) this.distance;
+    if (iDistance <= 0) {
+      distanceTv.setText(R.string.unknown_distance);
+    } else {
+      distanceTv.setText(NumberUtil.digitsToPersian(String.format(
+          getString(R.string.distance_to_customer), String.valueOf(iDistance))));
+    }
 
     return view;
   }

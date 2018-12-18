@@ -125,7 +125,7 @@ public class InvoicedOrdersDataTransfer extends AbstractDataTransferBizImpl<Stri
     this.order = baseSaleDocument;
 
     RestService restService = ServiceGenerator.createService(RestService.class);
-//TODO:LAter change for hot sale
+//:LAter change for hot sale
     Call<String> call = restService.sendInvoice(3L, (SaleInvoiceDocument) baseSaleDocument);
 
     call.enqueue(new Callback<String>() {

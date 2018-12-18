@@ -146,8 +146,8 @@ public class LocationUpdatesService extends Service {
     }
   }
 
-  private void getLastLocation() {//TODO:
-    LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+  private void getLastLocation() {
+  /*  LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
     Criteria locationCritera = new Criteria();
     String providerName = locationManager.getBestProvider(locationCritera, true);
@@ -155,7 +155,7 @@ public class LocationUpdatesService extends Service {
       @SuppressLint("MissingPermission") Location location = locationManager
           .getLastKnownLocation(providerName);
       Log.d(TAG, "" + location);
-    }
+    }*/
 
   }
 
