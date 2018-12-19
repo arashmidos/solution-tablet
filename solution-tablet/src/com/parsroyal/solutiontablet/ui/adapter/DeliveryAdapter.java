@@ -55,7 +55,7 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
     this.saleType = saleType;
     this.mainActivity = (MainActivity) context;
     this.isFromReport = isFromReport;
-    this.visitlineBackendId=visitlineBackendId;
+    this.visitlineBackendId = visitlineBackendId;
     inflater = LayoutInflater.from(context);
   }
 
@@ -103,10 +103,6 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
     LinearLayout mainLayLin;
     @BindView(R.id.order_status_tv)
     TextView orderStatusTv;
-    @BindView(R.id.delete_img)
-    ImageView deleteImg;
-    @BindView(R.id.edit_img)
-    ImageView editImg;
     @BindView(R.id.upload_img)
     ImageView uploadImg;
     @BindView(R.id.delete_img_layout)
@@ -117,6 +113,11 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
     LinearLayout uploadImageLayout;
     @BindView(R.id.customer_name_tv)
     TextView customerNameTv;
+    @BindView(R.id.customer_code_tv)
+    TextView customerCodeTv;
+    @Nullable
+    @BindView(R.id.customer_layout)
+    LinearLayout customerLayout;
 
     private int position;
     private SaleOrderListModel order;
@@ -126,11 +127,12 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
       ButterKnife.bind(this, itemView);
     }
 
-    public void setOrderData(int position, SaleOrderListModel order) {
+    void setOrderData(int position, SaleOrderListModel order) {
       this.position = position;
       this.order = order;
 
-      String orderCode = "کد سفارش : " + NumberUtil.digitsToPersian(String.valueOf(order.getNumber()));
+      String orderCode =
+          "کد سفارش : " + NumberUtil.digitsToPersian(String.valueOf(order.getNumber()));
       orderCodeTv.setText(orderCode);
       customerNameTv.setText(order.getCustomerName());
 
@@ -175,32 +177,38 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
 
       if (isFromReport) {
         customerNameTv.setVisibility(View.VISIBLE);
+        customerCodeTv.setVisibility(View.VISIBLE);
+        customerCodeTv
+            .setText(NumberUtil.digitsToPersian(String.format("(%s)", order.getCustomerCode())));
+        if (customerLayout != null) {
+          customerLayout.setVisibility(View.VISIBLE);
+        }
       } else {
         customerNameTv.setVisibility(View.GONE);
+        customerCodeTv.setVisibility(View.GONE);
+        if (customerLayout != null) {
+          customerLayout.setVisibility(View.GONE);
+        }
       }
     }
 
-    @OnClick({R.id.delete_img, R.id.delete_img_layout, R.id.edit_img, R.id.edit_img_layout,
-        R.id.main_lay, R.id.main_lay_rel, R.id.upload_img, R.id.upload_img_layout})
+    @OnClick({R.id.delete_img_layout, R.id.edit_img_layout, R.id.main_lay, R.id.main_lay_rel,
+        R.id.upload_img, R.id.upload_img_layout})
     @Optional
     public void onClick(View v) {
 
       switch (v.getId()) {
         case R.id.delete_img_layout:
-        case R.id.delete_img:
-//          if (order.isSent().equals(SaleOrderStatus.DELIVERABLE.getId())) {
-//            deleteOrder();
-//          }
+
           break;
         case R.id.edit_img_layout:
-        case R.id.edit_img:
         case R.id.main_lay_rel:
         case R.id.main_lay:
           Bundle args = new Bundle();
           args.putLong(Constants.ORDER_ID, order.getId());
           args.putString(Constants.SALE_TYPE, saleType);
           args.putLong(Constants.VISIT_ID, visitId);
-          args.putLong(Constants.VISITLINE_BACKEND_ID,visitlineBackendId);
+          args.putLong(Constants.VISITLINE_BACKEND_ID, visitlineBackendId);
           args.putBoolean(Constants.READ_ONLY, false);
           setPageStatus(args);
           mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
@@ -214,16 +222,7 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
       }
     }
 
-/*    private void deleteOrder() {
-      boolean isRejected = order.isSent().equals(SaleOrderStatus.REJECTED.getId());
-      DialogUtil.showConfirmDialog(mainActivity, mainActivity.getString(R.string.title_attention),
-          mainActivity.getString(R.string.message_order_delete_confirm), (dialog, which) -> {
-            saleOrderService.deleteOrder(order.getId());
-            orders.remove(position);
-            notifyDataSetChanged();
-          });
-    }*/
-//TODO: Improvment
+    //TODO: Improvment
     private void setPageStatus(Bundle args) {
       if (SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT
           || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.CANCELED

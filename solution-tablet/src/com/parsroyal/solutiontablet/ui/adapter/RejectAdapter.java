@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -66,15 +67,16 @@ public class RejectAdapter extends Adapter<ViewHolder> {
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
   }
 
+  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_return_list, parent, false);
 
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     SaleOrderListModel order = orders.get(position);
 
     holder.setReturnData(position, order);
@@ -152,7 +154,7 @@ public class RejectAdapter extends Adapter<ViewHolder> {
       ButterKnife.bind(this, itemView);
     }
 
-    public void setReturnData(int position, SaleOrderListModel order) {
+    void setReturnData(int position, SaleOrderListModel order) {
       this.position = position;
       this.order = order;
 
@@ -226,9 +228,8 @@ public class RejectAdapter extends Adapter<ViewHolder> {
     }
 
     private void invokeGetRejectedData() {
-
-      DialogUtil.showProgressDialog(mainActivity,
-          mainActivity.getString(R.string.message_transferring_rejected_goods_data));
+      DialogUtil
+          .showProgressDialog(mainActivity, R.string.message_transferring_rejected_goods_data);
 
       new RejectedGoodsDataTransferBizImpl(mainActivity)
           .getAllRejectedData(order.getCustomerBackendId());
@@ -238,8 +239,7 @@ public class RejectAdapter extends Adapter<ViewHolder> {
       boolean isRejected = order.getStatus().equals(SaleOrderStatus.REJECTED.getId());
       DialogUtil.showConfirmDialog(mainActivity, mainActivity.getString(R.string.title_attention),
           mainActivity.getString(isRejected ? R.string.message_return_delete_confirm
-              : R.string.message_order_delete_confirm), (dialog, which) ->
-          {
+              : R.string.message_order_delete_confirm), (dialog, which) -> {
             saleOrderService.deleteOrder(order.getId());
             orders.remove(position);
             notifyDataSetChanged();

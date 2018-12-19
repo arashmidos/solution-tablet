@@ -154,8 +154,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         });
   }
 
-  @OnClick({R.id.distributor_lay, R.id.hot_lay, R.id.sales_man_lay, R.id.log_in_btn, R.id.agent_lay,
-      R.id.merchandiser_lay, R.id.collector_lay})
+  @OnClick({R.id.distributor_lay/*, R.id.hot_lay*/, R.id.sales_man_lay, R.id.log_in_btn/*, R.id.agent_lay,*/
+      /*R.id.merchandiser_lay, R.id.collector_lay*/})
   public void onClick(View view) {
     deselectRole(selectedRole.getOrder());
     switch (view.getId()) {
@@ -275,8 +275,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
       logInBtn.doneLoadingAnimation(ContextCompat.getColor(this, R.color.log_in_enter_bg),
           BitmapFactory.decodeResource(getResources(), R.drawable.ic_check_white_18_dp));
-
-
 
       settingService.saveSetting((SettingResponse) response);
 
