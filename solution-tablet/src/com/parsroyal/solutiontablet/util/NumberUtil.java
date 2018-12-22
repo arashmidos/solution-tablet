@@ -35,6 +35,11 @@ public class NumberUtil {
     return digitsToPersian(df.format(number));
   }
 
+  public static String formatPersian1DecimalPlaces(Double number) {
+    DecimalFormat df = new DecimalFormat("#.#");
+    return digitsToPersian(df.format(number));
+  }
+
   public static String digitsToEnglish(String input) {
     if (Empty.isEmpty(input)) {
       return input;

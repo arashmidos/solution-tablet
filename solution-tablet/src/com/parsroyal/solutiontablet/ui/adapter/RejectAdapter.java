@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -145,6 +146,11 @@ public class RejectAdapter extends Adapter<ViewHolder> {
     TextView customerNameTv;
     @BindView(R.id.return_status_tv)
     TextView returnStatusTv;
+    @BindView(R.id.customer_code_tv)
+    TextView customerCodeTv;
+    @Nullable
+    @BindView(R.id.customer_layout)
+    LinearLayout customerLayout;
 
     private int position;
     private SaleOrderListModel order;
@@ -188,7 +194,10 @@ public class RejectAdapter extends Adapter<ViewHolder> {
           .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
               R.string.common_irr_currency));
       totalAmountTv.setText(NumberUtil.digitsToPersian(number));
-
+      if (customerCodeTv != null) {
+        customerCodeTv
+            .setText(NumberUtil.digitsToPersian(String.format("(%s)", order.getCustomerCode())));
+      }
       changeVisibility();
     }
 
@@ -205,6 +214,12 @@ public class RejectAdapter extends Adapter<ViewHolder> {
         returnStatusTv.setVisibility(View.VISIBLE);
       } else {
         returnStatusTv.setVisibility(View.GONE);
+      }
+
+      customerCodeTv.setVisibility(isFromReport ? View.VISIBLE : View.INVISIBLE);
+
+      if (customerLayout != null) {
+        customerLayout.setVisibility(isFromReport ? View.VISIBLE : View.INVISIBLE);
       }
     }
 

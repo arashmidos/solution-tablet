@@ -74,8 +74,8 @@ public class VisitListFragment extends BaseFragment {
       totalVisitHour.setText(NumberUtil.digitsToPersian(
           String.format(getString(R.string.x_minute), String.valueOf((int) count))));
     } else {
-      totalVisitHour.setText(NumberUtil.digitsToPersian(
-          String.format(getString(R.string.x_hour), String.valueOf(count / 60.0))));
+      totalVisitHour.setText(String.format(getString(R.string.x_hour),
+          NumberUtil.formatPersian1DecimalPlaces(count / 60.0)));
     }
 
     VisitListAdapter visitListAdapter = new VisitListAdapter(mainActivity, visitListModel);

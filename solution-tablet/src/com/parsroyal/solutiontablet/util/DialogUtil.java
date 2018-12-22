@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.ui.fragment.NavigationDrawerFragment.OnLoginListener;
@@ -88,8 +89,10 @@ public class DialogUtil {
     EditText password = dialogView.findViewById(R.id.password_edt);
     TextView negativeTv = dialogView.findViewById(R.id.negative_tv);
     Button positiveBtn = dialogView.findViewById(R.id.positive_btn);
-//    username.setText("royal");
-//    password.setText("royal2018");
+    if (BuildConfig.DEBUG) {
+      username.setText("royal");
+      password.setText("royal2018");
+    }
     AlertDialog alertDialog = dialogBuilder.create();
     alertDialog.setCancelable(false);
     alertDialog.show();

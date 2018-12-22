@@ -411,7 +411,6 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    Log.d("SHAKIB", "ON PAUSE");
     try {
       unregisterReceiver(gpsStatusReceiver);
       unregisterReceiver(batteryInfoReceiver);
@@ -423,7 +422,6 @@ public abstract class MainActivity extends AppCompatActivity {
   @Override
   protected void onStop() {
     super.onStop();
-    Log.d("SHAKIB", "ON STOP");
 
     if (boundToGpsService) {
       // Unbind from the service. This signals to the service that this activity is no longer

@@ -100,7 +100,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
 
   private Goods findGoods(SaleOrderItemDto item) {
     Long goodsBackendId = item.getGoodsBackendId();
-    for (int i = 0; i < rejectedGoodsList.size(); i++) {
+    for (int i = 0; i < rejectedGoodsList.size(); i++) {//TODO:
       Goods goods = rejectedGoodsList.get(i);
       if (goods.getBackendId().equals(goodsBackendId)) {
         return goods;
