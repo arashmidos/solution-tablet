@@ -533,18 +533,21 @@ public abstract class MainActivity extends AppCompatActivity {
     boolean storageShouldProvideRationale =
         ActivityCompat.shouldShowRequestPermissionRationale(this,
             permission.WRITE_EXTERNAL_STORAGE);
+    boolean stateShouldProvideRationale =
+        ActivityCompat.shouldShowRequestPermissionRationale(this,
+            permission.READ_PHONE_STATE);
 
     // Provide an additional rationale to the user. This would happen if the user denied the
     // request previously, but didn't check the "Don't ask again" checkbox.
-    if (shouldProvideRationale && storageShouldProvideRationale) {
+    if (shouldProvideRationale && storageShouldProvideRationale && stateShouldProvideRationale) {
       Log.i(TAG, "Displaying permission rationale to provide additional context.");
       try {
         ToastUtil.toastError(this, getString(R.string.permission_rationale_storage_location),
             view -> {
               // Request permission
               ActivityCompat.requestPermissions(MainActivity.this,
-                  new String[]{permission.ACCESS_FINE_LOCATION, permission.WRITE_EXTERNAL_STORAGE},
-                  REQUEST_PERMISSIONS_REQUEST_CODE);
+                  new String[]{permission.ACCESS_FINE_LOCATION, permission.WRITE_EXTERNAL_STORAGE,
+                      permission.READ_PHONE_STATE}, REQUEST_PERMISSIONS_REQUEST_CODE);
 
             });
       } catch (Exception e) {
@@ -574,8 +577,8 @@ public abstract class MainActivity extends AppCompatActivity {
       // sets the permission in a given state or the user denied the permission
       // previously and checked "Never ask again".
       ActivityCompat.requestPermissions(MainActivity.this,
-          new String[]{permission.ACCESS_FINE_LOCATION, permission.WRITE_EXTERNAL_STORAGE},
-          REQUEST_PERMISSIONS_REQUEST_CODE);
+          new String[]{permission.ACCESS_FINE_LOCATION, permission.WRITE_EXTERNAL_STORAGE,
+              permission.READ_PHONE_STATE}, REQUEST_PERMISSIONS_REQUEST_CODE);
     }
   }
 
@@ -586,7 +589,9 @@ public abstract class MainActivity extends AppCompatActivity {
     return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
         permission.ACCESS_FINE_LOCATION) &&
         PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-            permission.WRITE_EXTERNAL_STORAGE);
+            permission.WRITE_EXTERNAL_STORAGE) &&
+        PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+            permission.READ_PHONE_STATE);
   }
 
   public void showFeaturesFragment() {

@@ -1,14 +1,18 @@
 package com.parsroyal.solutiontablet;
 
+import android.Manifest.permission;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.location.Location;
 import android.preference.PreferenceManager;
-import android.provider.Settings.Secure;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatDelegate;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import com.crashlytics.android.Crashlytics;
@@ -108,6 +112,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
     reSyncTrueTime();
 
+    Log.d("InstanceId", getInstanceId());
   /*  try {
       Pushe.initialize(this, true);
       Log.d("Pushe", Pushe.getPusheId(this));
@@ -152,7 +157,23 @@ public class SolutionTabletApplication extends MultiDexApplication {
   }
 
   public String getInstanceId() {
-    return Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+    TelephonyManager telephonyManager = (TelephonyManager) getSystemService(
+        Context.TELEPHONY_SERVICE);
+    if (ActivityCompat.checkSelfPermission(this, permission.READ_PHONE_STATE)
+        != PackageManager.PERMISSION_GRANTED) {
+      return "";
+    }
+    try {
+      return telephonyManager.getDeviceId();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      return "";
+    }
+//    return Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+  }
+
+  private void requestPermissions() {
+
   }
 
   public void loadAuthorities() {
@@ -171,11 +192,11 @@ public class SolutionTabletApplication extends MultiDexApplication {
     this.lastKnownLocation = lastKnownLocation;
   }
 
-  public void setLastSavedPosition(Position lastSavedPosition) {
-    this.lastSavedPosition = lastSavedPosition;
-  }
-
   public Position getLastSavedPosition() {
     return lastSavedPosition;
+  }
+
+  public void setLastSavedPosition(Position lastSavedPosition) {
+    this.lastSavedPosition = lastSavedPosition;
   }
 }
