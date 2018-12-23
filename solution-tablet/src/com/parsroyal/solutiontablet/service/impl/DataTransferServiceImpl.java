@@ -446,11 +446,11 @@ public class DataTransferServiceImpl implements DataTransferService {
 
     for (int i = 0; i < visitInformationList.size(); i++) {
       VisitInformationDto visitInformationDto = visitInformationList.get(i);
-      if (visitInformationDto.getDetails() == null
+     /* if (visitInformationDto.getDetails() == null//TODO:
           || visitInformationDto.getDetails().size() == 0) {
         visitService.deleteVisitById(visitInformationDto.getId());
         continue;
-      }
+      }*/
       dataTransfer.setData(visitInformationDto);
       dataTransfer.exchangeData();
     }
