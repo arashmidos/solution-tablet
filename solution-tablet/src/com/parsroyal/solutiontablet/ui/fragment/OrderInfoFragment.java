@@ -165,7 +165,7 @@ public class OrderInfoFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_new_order_info, container, false);
@@ -466,7 +466,8 @@ public class OrderInfoFragment extends BaseFragment {
 
       if (isRejected()) {
         //Add reason or reject to orders
-        order.setDescription(Empty.isNotEmpty(selectedItem) ? selectedItem.getLabel() : "");
+        order.setRejectType(Empty.isNotEmpty(selectedItem) ? selectedItem.getValue() : 0);
+        order.setDescription(NumberUtil.digitsToEnglish(descriptionEdt.getText().toString()));
       } else {
         order.setPaymentTypeBackendId(selectedItem.getValue());
         order.setDescription(NumberUtil.digitsToEnglish(descriptionEdt.getText().toString()));

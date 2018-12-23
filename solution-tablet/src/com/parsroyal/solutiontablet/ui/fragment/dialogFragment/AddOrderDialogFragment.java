@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
@@ -162,7 +163,7 @@ public class AddOrderDialogFragment extends DialogFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
     // Inflate the layout for this fragment

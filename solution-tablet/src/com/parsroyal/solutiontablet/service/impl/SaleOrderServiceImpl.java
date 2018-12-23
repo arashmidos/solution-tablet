@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
@@ -28,6 +30,7 @@ import com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingEx
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 
 /**
@@ -35,6 +38,7 @@ import java.util.List;
  */
 public class SaleOrderServiceImpl implements SaleOrderService {
 
+  private final SettingServiceImpl settingService;
   private Context context;
   private SaleOrderDao saleOrderDao;
   private SaleOrderItemDao saleOrderItemDao;
@@ -47,6 +51,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
     this.goodsDao = new GoodsDaoImpl(context);
     this.customerDao = new CustomerDaoImpl(context);
+    this.settingService = new SettingServiceImpl();
   }
 
   @Override
@@ -242,7 +247,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
       if (Empty.isNotEmpty(saleOrderItemDto.getGoodsCount()) && !isReject) {
         //If its not rejected, return goods item back to inventory
         Goods goods = goodsDao.retrieveByBackendId(saleOrderItemDto.getGoodsBackendId());
-        if( goods!=null) {
+        if (goods != null) {
           goods.setExisting(goods.getExisting() + saleOrderItemDto.getGoodsCount());
           goodsDao.update(goods);
         }
@@ -295,7 +300,11 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     itemAmount /= 1000L;
 
     if (count.longValue() > goods.getExisting() + orderItem.getGoodsCount()) {
-      throw new SaleOrderItemCountExceedExistingException();
+      if (!ApplicationKeys.SALE_DISTRIBUTER
+          .equals(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE))
+          || !SolutionTabletApplication.getInstance().hasAccess(Authority.UNLIMITED_DISTRIBUTE)) {
+        throw new SaleOrderItemCountExceedExistingException();
+      }
     }
     goods.setExisting(goods.getExisting() + orderItem.getGoodsCount());
 

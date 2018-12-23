@@ -150,12 +150,12 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     double count1 = 0.0, count2 = 0.0;
 
     for (SaleOrderItemDto item : items) {
-      count1 += (item.getGoodsCount() / 1000);
-      count2 += (item.getGoodsUnit2Count() / 1000);
+      count1 += (item.getGoodsCount() / 1000.0);
+      count2 += (item.getGoodsUnit2Count() / 1000.0);
     }
 
-    totalCount1.setText(NumberUtil.digitsToPersian(String.valueOf(count1)));
-    totalCount2.setText(NumberUtil.digitsToPersian(String.valueOf(count2)));
+    totalCount1.setText(NumberUtil.formatPersian3DecimalPlaces(count1));
+    totalCount2.setText(NumberUtil.formatPersian3DecimalPlaces(count2));
   }
 
 
