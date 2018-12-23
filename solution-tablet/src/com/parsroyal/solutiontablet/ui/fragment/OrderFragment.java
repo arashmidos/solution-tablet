@@ -408,7 +408,7 @@ public class OrderFragment extends BaseFragment {
 
         if (Empty.isNotEmpty(constraint)) {
           goodsSo.setConstraint(CharacterFixUtil.fixString("%" + constraint + "%"));
-          Analytics.logSearch(constraint, "Type", "Goods");
+//          Analytics.logSearch(constraint, "Type", "Goods");
           updateGoodsDataTb();
         } else {
           goodsSo.setConstraint(null);

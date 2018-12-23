@@ -128,7 +128,7 @@ public class VisitServiceImpl implements VisitService {
     visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
     // -1 Means new customer without backendId
     visitInformation.setResult(-1L);
-    Position position = new PositionServiceImpl(context).getLastPosition();
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
 
     if (Empty.isNotEmpty(position)) {
       visitInformation.setxLocation(position.getLatitude());

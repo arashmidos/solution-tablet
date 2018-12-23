@@ -42,7 +42,6 @@ import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
@@ -287,7 +286,7 @@ public class VisitDetailFragment extends BaseFragment {
 
   private void tryFindingLocation() {
 
-    Position position = new PositionServiceImpl(mainActivity).getLastPosition();
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
 
     if (Empty.isNotEmpty(position)) {
       visitService.updateVisitLocation(visitId, position);

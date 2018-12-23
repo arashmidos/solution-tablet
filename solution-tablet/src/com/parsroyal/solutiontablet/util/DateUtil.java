@@ -102,13 +102,13 @@ public class DateUtil {
     if (date == null) {
       return null;
     }
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.US);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
     return sdf.format(date);
   }
 
   public static Date convertZFormattedDate(String timeZone) {
     try {
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.US);
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
       return sdf.parse(timeZone);
     } catch (ParseException e) {
       e.printStackTrace();
@@ -460,20 +460,30 @@ public class DateUtil {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
     int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+    String dateString = DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA");
+    String[] splitDate = dateString.split("/");
+    String monthName = "";
     try {
-      String dateString = DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA");
-      String[] splitDate = dateString.split("/");
-      String monthName = monthNames[Integer.parseInt(splitDate[1]) - 1];
-      return String.format("%s %s %s %s", getPersianDayOfWeek(dayOfWeek), splitDate[2], monthName,
-          splitDate[0]);
+      monthName = monthNames[Integer.parseInt(splitDate[1]) - 1];
     } catch (Exception ex) {
-      ex.printStackTrace();
-      String dateString = DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER2, "FA");
-      String[] splitDate = dateString.split("/");
-      String monthName = monthNames[Integer.parseInt(splitDate[1]) - 1];
-      return String.format("%s %s %s %s", getPersianDayOfWeek(dayOfWeek), splitDate[2], monthName,
-          splitDate[0]);
+      monthName = getMonthNameForAndroid8(splitDate[1], DateUtil.GLOBAL_FORMATTER);
     }
+    return String.format("%s %s %s %s", getPersianDayOfWeek(dayOfWeek), splitDate[2], monthName,
+        splitDate[0]);
+  }
+
+  public static String getMonthNameForAndroid8(String date, SimpleDateFormat globalFormatter) {
+    String[] months = globalFormatter.getDateFormatSymbols().getShortMonths();
+    String m = "0";
+
+    for (int i = 0; i < months.length; i++) {
+      if (date.equals(months[i])) {
+        m = String.valueOf(i);
+      }
+    }
+    return monthNames[Integer.parseInt(m)];
+
   }
 
   public static String moveDate(String date1, Integer count) {
@@ -543,7 +553,7 @@ public class DateUtil {
 
   public static Date convertNetworkDateToLocal(Date date) {
     try {
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss",Locale.US);
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss", Locale.US);
       sdf.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
       String iranTime = sdf.format(date);
       return sdf.parse(iranTime);
@@ -560,7 +570,7 @@ public class DateUtil {
 
   public static String getZonedDate(Date date) {
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss",Locale.US);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss", Locale.US);
     sdf.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
     return sdf.format(date);
   }

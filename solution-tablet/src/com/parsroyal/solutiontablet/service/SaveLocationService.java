@@ -95,7 +95,8 @@ public class SaveLocationService extends IntentService {
     } else {
       position.setDistanceInMeter(0);
     }
-    positionService.savePosition(position);
+    long id = positionService.savePosition(position);
+    position.setId(id);
     SolutionTabletApplication.getInstance().setLastSavedPosition(position);
     EventBus.getDefault().post(new GPSEvent(location));
 
