@@ -179,11 +179,11 @@ public class RejectAdapter extends Adapter<ViewHolder> {
           customerNameTv.setText(order.getCustomerName());
           customerNameTv.setVisibility(View.VISIBLE);
         }
-        if (TextUtils.isEmpty(order.getDescription())) {
+        /*if (TextUtils.isEmpty(order.getDescription())) {//TODO: Join with reject type
           returnReasonTv.setVisibility(View.GONE);
         } else {
           returnReasonTv.setText(order.getDescription());
-        }
+        }*/
         returnCountTv
             .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_return_grey_18_dp, 0);
         returnCountTv.setCompoundDrawablePadding((int) UIUtils.convertDpToPixel(8, context));

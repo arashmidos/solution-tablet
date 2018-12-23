@@ -56,7 +56,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
   @Override
   public List<LabelValue> getAllBaseInfosLabelValuesByTypeId(Long typeId) {
     if (typeId.equals(BaseInfoTypes.REJECT_TYPE.getId())) {
-      baseInfoDao
+      return baseInfoDao
           .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.DELIVERY_RETURN_TYPE.getId(), null);
     }
     return baseInfoDao.getAllBaseInfosLabelValuesByTypeId(typeId, null);
