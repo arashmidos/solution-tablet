@@ -795,18 +795,41 @@ public abstract class MainActivity extends AppCompatActivity {
 
   public abstract void customizeToolbar(int fragmentId);
 
+  private boolean canOpenDrawer(int fragmentId) {
+    switch (fragmentId) {
+      case FEATURE_FRAGMENT_ID:
+      case VISIT_LIST_FRAGMENT_ID:
+      case CUSTOMER_FRAGMENT:
+      case CUSTOMER_SEARCH_FRAGMENT:
+      case USER_TRACKING_FRAGMENT_ID:
+      case REPORT_FRAGMENT:
+      case GOODS_LIST_FRAGMENT_ID:
+      case ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID:
+      case VISITLINE_FRAGMENT_ID:
+      case VISITLINE_DETAIL_FRAGMENT_ID:
+      case SYSTEM_CUSTOMER_FRAGMENT:
+      case SETTING_FRAGMENT:
+      case CHAT_FRAGMENT:
+
+        return true;
+    }
+    return false;
+  }
+
   protected BaseFragment findFragment(int fragmentId, Bundle args) {
     BaseFragment fragment = null;
     int parent = 0;
     if (fragmentId == FEATURE_FRAGMENT_ID) {
       setNavigationToolbarIcon(R.drawable.ic_menu);
-      setDrawerEnable(true);
+//      setDrawerEnable(true);
       displayNotifbutton(true);
     } else {
       setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
-      setDrawerEnable(false);
+//      setDrawerEnable(false);
       displayNotifbutton(false);
     }
+
+    setDrawerEnable(canOpenDrawer(fragmentId));
 
     //show search icon in customer fragment
     if (fragmentId == CUSTOMER_FRAGMENT || fragmentId == VISITLINE_FRAGMENT_ID) {
