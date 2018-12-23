@@ -369,12 +369,30 @@ public class CustomerInfoDialogFragment extends DialogFragment {
 
   protected void checkEnter() {
 
-    if (!distanceServiceEnabled || hasAcceptableDistance()/* || BuildConfig.DEBUG*/) {
-
-      doEnter(false);
-      dismiss();
+    if (distanceServiceEnabled) {
+      if (hasAcceptableDistance()) {
+        doEnter(false);
+        dismiss();
+      } else {
+        ToastUtil.toastError(root, R.string.error_distance_too_far_for_action);
+      }
     } else {
-      ToastUtil.toastError(root, R.string.error_distance_too_far_for_action);
+      if (SolutionTabletApplication.getInstance().getLastSavedPosition() == null) {
+        DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
+            getString(R.string.visit_empty_location_message),
+            getString(R.string.enter), (dialog, which) -> {
+              doEnter(false);
+              dialog.dismiss();
+              dismiss();
+            }, getString(R.string.retry), (dialog, which) -> {
+
+              //TODO:
+              dialog.dismiss();
+            }, Constants.ICON_WARNING);
+      } else {
+        doEnter(false);
+        dismiss();
+      }
     }
   }
 
@@ -399,7 +417,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
 
   protected boolean hasAcceptableDistance() {
 
-    Position position = positionService.getLastPosition();
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
     Float distance;
 
     double lat2 = customer.getxLocation();
@@ -423,7 +441,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
 
   private int getDistance() {
 
-    Position position = positionService.getLastPosition();
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
     Float distance;
 
     double lat2 = customer.getxLocation();
@@ -453,7 +471,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
         visitInformationId = visitService.startVisiting(customer.getBackendId(), getDistance());
       }
 
-      Position position = positionService.getLastPosition();
+      Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
       if (Empty.isNotEmpty(position)) {
         visitService.updateVisitLocation(visitInformationId, position);
       }

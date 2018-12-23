@@ -82,7 +82,7 @@ public class PositionServiceImpl implements PositionService {
 
   @Override
   public void sendGpsChangedPosition(GpsStatus gpsStatus) {
-    Position position = positionDao.getLastPosition();
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
     if (position == null) {
       position = new Position();
     }

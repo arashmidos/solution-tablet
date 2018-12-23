@@ -297,7 +297,8 @@ public class VisitServiceImpl implements VisitService {
     visitInformation.setResult(-2L);
     Date networkDate = SolutionTabletApplication.getInstance().getTrueTime();
     visitInformation.setNetworkDate(networkDate == null ? null : networkDate.getTime());
-    Position position = new PositionServiceImpl(context).getLastPosition();
+
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
 
     if (Empty.isNotEmpty(position)) {
       visitInformation.setxLocation(position.getLatitude());

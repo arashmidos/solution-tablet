@@ -55,6 +55,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.biz.impl.KeyValueBizImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -416,7 +417,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
     if (currentLocation == null) {
-      Position position = positionService.getLastPosition();
+      Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
       if (position != null) {
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(
             new LatLng(position.getLatitude(), position.getLongitude()), cameraZoom), 4000, null);
@@ -448,7 +449,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     map.setOnInfoWindowClickListener(clusterManager);
     map.setInfoWindowAdapter(clusterManager.getMarkerManager());
     map.setOnInfoWindowClickListener(marker -> {
-      Position position = positionService.getLastPosition();
+      Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
       float distance;
       if (Empty.isEmpty(position)) {
         distance = 0.0f;
@@ -484,7 +485,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
       final Long visitInformationId = visitService.startVisiting(clickedClusterItem.getBackendId(),
           getDistance());
 
-      Position position = positionService.getLastPosition();
+      Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
 
       if (Empty.isNotEmpty(position)) {
         visitService.updateVisitLocation(visitInformationId, position);
@@ -515,7 +516,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   private int getDistance() {
 
     Customer customer = customerService.getCustomerByBackendId(clickedClusterItem.getBackendId());
-    Position position = positionService.getLastPosition();
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
     Float distance;
 
     double lat2 = customer.getxLocation();

@@ -451,6 +451,7 @@
   <string name="sale_type_distributor">توزیع کننده</string>
 
   <string name="error_no_payment_method_selected">روش پرداخت انتخاب نشده است</string>
+  <string name="error_no_reject_reason_selected">دلیل مرجوعی انتخاب نشده است</string>
   <string name="error_company_code_is_required">وارد کردن کد شرکت الزامی است</string>
   <string name="error_username_is_required">وارد کردن نام کاربری الزامی است</string>
   <string name="error_password_is_required">وارد کردن کلمه عبور الزامی است</string>

@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.PageStatus;
@@ -542,11 +543,10 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   private void getLocation() {
     showProgressDialog(getString(R.string.message_finding_location));
 
-    Position position = positionService.getLastPosition();
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
     if (Empty.isNotEmpty(position)) {
 
       customer.setyLocation(position.getLatitude());
-
       customer.setxLocation(position.getLongitude());
 
       ToastUtil.toastMessage(mainActivity, R.string.message_found_location_successfully);

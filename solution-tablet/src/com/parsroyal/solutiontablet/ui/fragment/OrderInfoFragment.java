@@ -533,8 +533,12 @@ public class OrderInfoFragment extends BaseFragment {
   }
 
   private boolean validateOrderForSave() {
-    if (Empty.isEmpty(selectedItem) && !isRejected()) {
-      ToastUtil.toastError(mainActivity, getString(R.string.error_no_payment_method_selected));
+    if (Empty.isEmpty(selectedItem)) {
+      if (isRejected()) {
+        ToastUtil.toastError(mainActivity, getString(R.string.error_no_reject_reason_selected));
+      } else {
+        ToastUtil.toastError(mainActivity, getString(R.string.error_no_payment_method_selected));
+      }
       return false;
     }
     if (order.getOrderItems().size() == 0) {
@@ -550,7 +554,7 @@ public class OrderInfoFragment extends BaseFragment {
       DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
           "اعتبار کافی نیست. ثبت این سفارش فقط با پرداخت نقدی امکان پذیر است", "تایید",
           (dialogInterface, i) -> dialogInterface.dismiss(),
-         "",null,Constants.ICON_WARNING);
+          "", null, Constants.ICON_WARNING);
       return false;
     }
     return true;

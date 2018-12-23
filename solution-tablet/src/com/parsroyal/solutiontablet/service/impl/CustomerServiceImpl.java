@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteException;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.CustomerPicDao;
@@ -112,7 +113,8 @@ public class CustomerServiceImpl implements CustomerService {
       boolean showOnMap) {
     List<CustomerListModel> listModel = customerDao
         .getAllCustomersListModelByVisitLineWithConstraint(visitLineId, constraint, showOnMap);
-    Position position = new PositionServiceImpl(context).getLastPosition();
+
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
 
     //Set distances from current location
     for (int i = 0; i < listModel.size(); i++) {
