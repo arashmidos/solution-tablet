@@ -30,6 +30,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import timber.log.Timber;
 
 /**
  * Created by Arash on 1/16/2018.
@@ -92,8 +93,7 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
 
   @Override
   public void onCreate(SQLiteDatabase db) {
-    Log.i(TAG, "start creating tables");
-    db.execSQL(KeyValue.CREATE_TABLE_SQL);
+    Timber.i("start creating tables");
     db.execSQL(Province.CREATE_TABLE_SQL);
     db.execSQL(City.CREATE_TABLE_SQL);
     db.execSQL(Customer.CREATE_TABLE_SQL);
@@ -112,12 +112,12 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
     db.execSQL(Position.CREATE_TABLE_SCRIPT);
     db.execSQL(VisitInformationDetail.CREATE_TABLE_SQL);
     db.execSQL(VisitLineDate.CREATE_TABLE_SQL);
-    Log.i(TAG, "end of creating tables");
+    Timber.i("end of creating tables");
   }
 
   @Override
   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-    Log.i(TAG, "on Database Upgrade");
+    Timber.i("on Database Upgrade");
     if (oldVersion < 3) {
       db.execSQL(VisitInformationDetail.CREATE_TABLE_SQL);
     }

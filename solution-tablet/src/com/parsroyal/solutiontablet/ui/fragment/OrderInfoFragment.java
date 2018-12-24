@@ -70,6 +70,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
@@ -129,7 +130,6 @@ public class OrderInfoFragment extends BaseFragment {
   private SaleOrderService saleOrderService;
   private SaleOrderDto order;
   private Long orderStatus;
-  private String saleType;
   private Long visitId;
   private CustomerService customerService;
   private Customer customer;
@@ -191,7 +191,6 @@ public class OrderInfoFragment extends BaseFragment {
       customer = customerService.getCustomerByBackendId(order.getCustomerBackendId());
       creditRemained = customer.getRemainedCredit();
       orderStatus = order.getStatus();
-      saleType = args.getString(Constants.SALE_TYPE, "");
       visitId = args.getLong(Constants.VISIT_ID, -1);
       visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
       rejectType = args.getLong(Constants.REJECT_TYPE_ID);
@@ -322,8 +321,8 @@ public class OrderInfoFragment extends BaseFragment {
       case R.id.register_gift_tv:
         if (giftRequestSent) {
           registerGiftTv.setText(R.string.getting_info);
-          new GiftDataTransferBizImpl(mainActivity).exchangeData(orderBackendId, saleType.equals(
-              ApplicationKeys.SALE_COLD) ? "0" : "1");
+          new GiftDataTransferBizImpl(mainActivity).exchangeData(orderBackendId,
+              PreferenceHelper.isVisitor() ? "0" : "1");
         } else {
           order = saleOrderService.findOrderDtoById(orderId);
           if (validateOrderForSave()) {
@@ -383,7 +382,7 @@ public class OrderInfoFragment extends BaseFragment {
               showSaveOrderConfirmDialog(getString(R.string.title_save_order),
                   SaleOrderStatus.DELIVERED.getId());
             } else {
-              if (isCold()) {
+              if (PreferenceHelper.isVisitor()) {
                 showSaveOrderConfirmDialog(getString(R.string.title_save_order),
                     SaleOrderStatus.READY_TO_SEND.getId());
               } else {
@@ -520,7 +519,7 @@ public class OrderInfoFragment extends BaseFragment {
     if (isRejected()) {
       return VisitInformationDetailType.CREATE_REJECT;
     }
-    switch (saleType) {
+    switch (PreferenceHelper.getSaleType()) {
       case ApplicationKeys.SALE_COLD:
         return VisitInformationDetailType.CREATE_ORDER;
       case ApplicationKeys.SALE_HOT:
@@ -579,11 +578,6 @@ public class OrderInfoFragment extends BaseFragment {
     }
   }
 
-  private boolean isCold() {
-    return saleType.equals(ApplicationKeys.SALE_COLD);
-  }
-
-
   /*
    @return Proper title for which could be "Rejected", "Order" or "Invoice"
    */
@@ -592,7 +586,7 @@ public class OrderInfoFragment extends BaseFragment {
         orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
         orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId())) {
       return getString(R.string.title_reject);
-    } else if (saleType.equals(ApplicationKeys.SALE_COLD)) {
+    } else if (PreferenceHelper.isVisitor()) {
       return getString(R.string.title_order);
     } else {
       return getString(R.string.title_factor);

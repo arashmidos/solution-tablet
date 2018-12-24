@@ -3,12 +3,13 @@ package com.parsroyal.solutiontablet.util;
 import android.content.SharedPreferences;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.Set;
 import java.util.SortedSet;
 
 public class PreferenceHelper {
 
-  public static final String FORCE_EXIT = "FORCE_EXIT";
+  private static final String FORCE_EXIT = "FORCE_EXIT";
   private static final String LATEST_VERSION = "LATEST_VERSION";
   private static final String UPDATE_URI = "UPDATE_URI";
   private static final String AUTHORITIES = "setting.authorities";
@@ -59,6 +60,24 @@ public class PreferenceHelper {
     }
     return new KeyValue(0L, settingKey, value);
   }
+
+  public static boolean isDistributor() {
+    String type = SolutionTabletApplication.getPreference()
+        .getString(ApplicationKeys.SETTING_SALE_TYPE, "");
+    return type.equals(ApplicationKeys.SALE_DISTRIBUTER);
+  }
+
+  public static boolean isVisitor() {
+    String type = SolutionTabletApplication.getPreference()
+        .getString(ApplicationKeys.SETTING_SALE_TYPE, "");
+    return type.equals(ApplicationKeys.SALE_COLD);
+  }
+
+  public static String getSaleType() {
+    return SolutionTabletApplication.getPreference()
+        .getString(ApplicationKeys.SETTING_SALE_TYPE, "");
+  }
+
 
   public static void clearAllKeys() {
     SharedPreferences.Editor editor = SolutionTabletApplication.getPreference().edit();

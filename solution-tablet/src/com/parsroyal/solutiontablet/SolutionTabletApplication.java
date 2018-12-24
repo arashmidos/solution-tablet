@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet;
 
 import android.Manifest.permission;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,7 +15,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.instacart.library.truetime.TrueTimeRx;
 import com.parsroyal.solutiontablet.constants.Authority;
@@ -32,6 +32,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import timber.log.Timber;
+import timber.log.Timber.DebugTree;
 
 /**
  * Created by Arash on 2018-01-25
@@ -93,6 +95,8 @@ public class SolutionTabletApplication extends MultiDexApplication {
     sInstance = this;
     if (!BuildConfig.DEBUG) {
       Fabric.with(this, new Crashlytics());
+    } else {
+      Timber.plant(new DebugTree());
     }
 
 //    Pushe.initialize(this, true);
@@ -112,21 +116,10 @@ public class SolutionTabletApplication extends MultiDexApplication {
 
     reSyncTrueTime();
 
-    Log.d("InstanceId", getInstanceId());
-  /*  try {
-      Pushe.initialize(this, true);
-      Log.d("Pushe", Pushe.getPusheId(this));
-      KeyValue username = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
-      if (Empty.isNotEmpty(username)) {
-        new RestServiceImpl().updatePusheId(this, Pushe.getPusheId(this), "GCMToken");
-      }
-
-    } catch (Exception ignore) {
-
-    }*/
-//    Log.d("DebugDB", "***>>> DB Address:"+DebugDB.getAddressLog());
+    Timber.d(getInstanceId());
   }
 
+  @SuppressLint("CheckResult")
   public void reSyncTrueTime() {
 
 //    new Thread(() -> {
@@ -136,12 +129,11 @@ public class SolutionTabletApplication extends MultiDexApplication {
           .initializeRx("time.google.com")
           .subscribeOn(Schedulers.io())
           .subscribe(date -> {
-                Log.d("Network Time", "TrueTime was initialized and we have a time: " + date);
-              },
-              Throwable::printStackTrace);
+            Timber.d("TrueTime was initialized and we have a time:%s ", date);
+          }, Throwable::printStackTrace);
     } catch (Exception ex) {
       ex.printStackTrace();
-      Log.d("Network Time", " not initialized");
+      Timber.e("Network time not initialized");
     }
 //    }).start();
   }
@@ -156,6 +148,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
     res.updateConfiguration(conf, dm);
   }
 
+  @SuppressLint("HardwareIds")
   public String getInstanceId() {
     TelephonyManager telephonyManager = (TelephonyManager) getSystemService(
         Context.TELEPHONY_SERVICE);
@@ -163,17 +156,10 @@ public class SolutionTabletApplication extends MultiDexApplication {
         != PackageManager.PERMISSION_GRANTED) {
       return "";
     }
-    try {
-      return telephonyManager.getDeviceId();
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      return "";
-    }
+
+    return telephonyManager != null ? telephonyManager.getDeviceId() : "";
+
 //    return Secure.getString(getContentResolver(), Secure.ANDROID_ID);
-  }
-
-  private void requestPermissions() {
-
   }
 
   public void loadAuthorities() {

@@ -55,6 +55,7 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -107,7 +108,6 @@ public class OrderFragment extends BaseFragment {
   private MainActivity mainActivity;
   private boolean readOnly;
   private long orderId;
-  private String saleType;
   private long visitId;
   private SaleOrderServiceImpl saleOrderService;
   private SaleOrderDto order;
@@ -159,7 +159,6 @@ public class OrderFragment extends BaseFragment {
           return inflater.inflate(R.layout.empty_view, container, false);
         }
         orderStatus = order.getStatus();
-        saleType = args.getString(Constants.SALE_TYPE, "");
         visitId = args.getLong(Constants.VISIT_ID, -1);
         pageStatus = args.getString(Constants.PAGE_STATUS, "");
         visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
@@ -367,15 +366,11 @@ public class OrderFragment extends BaseFragment {
   private String getProperTitle() {
     if (isRejected()) {
       return getString(R.string.title_reject_list);
-    } else if (isCold()) {
+    } else if (PreferenceHelper.isVisitor()) {
       return getString(R.string.title_goods_list);
     } else {
       return getString(R.string.title_factor);
     }
-  }
-
-  private boolean isCold() {
-    return saleType.equals(ApplicationKeys.SALE_COLD);
   }
 
   /*
@@ -460,7 +455,6 @@ public class OrderFragment extends BaseFragment {
   public void goToOrderInfoFragment(Long rejectType) {
     Bundle args = new Bundle();
     args.putLong(Constants.ORDER_ID, orderId);
-    args.putString(Constants.SALE_TYPE, saleType);
     args.putString(Constants.PAGE_STATUS, pageStatus);
     args.putLong(Constants.VISIT_ID, visitId);
     args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -23,8 +24,12 @@ import com.parsroyal.solutiontablet.data.searchobject.SaleOrderSO;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
-import com.parsroyal.solutiontablet.ui.adapter.DeliveryAdapter;
+import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
+import com.parsroyal.solutiontablet.util.DialogUtil;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
+import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
@@ -33,8 +38,16 @@ import org.greenrobot.eventbus.Subscribe;
 /**
  * @author arash
  */
-public class DeliveryListFragment extends BaseFragment {
+public class FreeOrderListFragment extends BaseFragment {
 
+  protected Long visitId;
+  protected OrderAdapter adapter;
+  protected MainActivity mainActivity;
+  protected SaleOrderServiceImpl saleOrderService;
+  protected SaleOrderSO saleOrderSO = new SaleOrderSO();
+  protected VisitDetailFragment parent;
+  protected SettingServiceImpl settingService;
+  protected List<SaleOrderListModel> model;
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
   @BindView(R.id.fab_add_order)
@@ -45,31 +58,16 @@ public class DeliveryListFragment extends BaseFragment {
   TextView totalOrderSale;
   @BindView(R.id.total_sale)
   LinearLayout totalSale;
-  @BindView(R.id.total_order_sale_amount_tv)
-  TextView totalOrderSaleAmountTv;
-  @BindView(R.id.total_order_sale_tv)
-  TextView totalOrderSaleTv;
 
-  private Long visitId;
-  private DeliveryAdapter adapter;
-  private MainActivity mainActivity;
-  private SaleOrderServiceImpl saleOrderService;
-  private SaleOrderSO saleOrderSO = new SaleOrderSO();
-  private VisitDetailFragment parent;
-  private SettingServiceImpl settingService;
-  private List<SaleOrderListModel> model;
-  private Unbinder unbinder;
-  private long visitlineBackendId;
-
-  public DeliveryListFragment() {
+  public FreeOrderListFragment() {
     // Required empty public constructor
   }
 
-  public static DeliveryListFragment newInstance(Bundle arguments, VisitDetailFragment parent) {
-    DeliveryListFragment orderListFragment = new DeliveryListFragment();
-    orderListFragment.parent = parent;
-    orderListFragment.setArguments(arguments);
-    return orderListFragment;
+  public static FreeOrderListFragment newInstance(Bundle arguments, VisitDetailFragment parent) {
+    FreeOrderListFragment freeOrderListFragment = new FreeOrderListFragment();
+    freeOrderListFragment.parent = parent;
+    freeOrderListFragment.setArguments(arguments);
+    return freeOrderListFragment;
   }
 
   @Override
@@ -78,21 +76,23 @@ public class DeliveryListFragment extends BaseFragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_new_order_list, container, false);
     mainActivity = (MainActivity) getActivity();
-    unbinder = ButterKnife.bind(this, view);
+    ButterKnife.bind(this, view);
     Bundle args = getArguments();
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
     settingService = new SettingServiceImpl();
 
     if (args != null) {
       visitId = args.getLong(Constants.VISIT_ID, -1);
-      visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
     }
     setUpRecyclerView();
-    fabAddOrder.setVisibility(View.GONE);
     if (parent == null) {
       //Report
+      fabAddOrder.setVisibility(View.GONE);
       totalSale.setVisibility(View.VISIBLE);
       displayTotalSale();
+    }
+    if (PreferenceHelper.isDistributor()) {
+      fabAddOrder.setVisibility(View.GONE);
     }
 
     return view;
@@ -109,34 +109,43 @@ public class DeliveryListFragment extends BaseFragment {
     String number = String
         .format(Locale.US, "%,d %s", total / 1000, getString(R.string.common_irr_currency));
     totalOrderSaleAmount.setText(NumberUtil.digitsToPersian(number));
-    totalOrderSaleAmountTv.setText(R.string.total_invoice_sale_tv);
-    totalOrderSaleTv.setText(R.string.total_invoice_sale_count_tv);
   }
 
   //set up recycler view
   private void setUpRecyclerView() {
     model = getOrderList();
-    adapter = new DeliveryAdapter(mainActivity, model, parent == null, visitId,
-        visitlineBackendId);
+    adapter = new OrderAdapter(mainActivity, model, parent == null, visitId);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
+    if (!Empty.isEmpty(getArguments())) {
+      recyclerView.addOnScrollListener(new OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+          super.onScrolled(recyclerView, dx, dy);
+          if (dy > 0) {
+            fabAddOrder.setVisibility(View.GONE);
+          } else {
+            fabAddOrder.setVisibility(View.VISIBLE);
+          }
+        }
+      });
+    }
   }
 
   private List<SaleOrderListModel> getOrderList() {
+    //If not coming from report page
     if (parent != null) {
       saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
-      saleOrderSO.setStatusId(SaleOrderStatus.DELIVERABLE.getId());
-    } else {
-      saleOrderSO.setStatusId(SaleOrderStatus.DELIVERED.getId());
     }
     saleOrderSO.setIgnoreDraft(true);
+    saleOrderSO.setStatusId(SaleOrderStatus.READY_TO_SEND.getId());
     return saleOrderService.findOrders(saleOrderSO);
   }
 
   @Override
   public int getFragmentId() {
-    return MainActivity.DELIVERY_FRAGMENT_ID;
+    return 0;
   }
 
   @Override
@@ -159,9 +168,28 @@ public class DeliveryListFragment extends BaseFragment {
     }
   }
 
+  @OnClick(R.id.fab_add_order)
+  public void onClick() {
+    if (parent != null) {
+      String checkCredit = settingService
+          .getSettingValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE);
+      boolean checkCreditEnabled = Empty.isEmpty(checkCredit) || "null".equals(checkCredit) ? false
+          : Boolean.valueOf(checkCredit);
+      if (checkCreditEnabled && parent.getCustomer().getRemainedCredit() != null
+          && parent.getCustomer().getRemainedCredit().longValue() <= 0) {
+        DialogUtil.showConfirmDialog(mainActivity, getString(R.string.warning),
+            "ثبت سفارش فقط با پرداخت نقدی امکان پذیر است", getString(R.string.register_order),
+            (dialogInterface, i) -> parent
+                .openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), true),
+            getString(R.string.cancel));
+      } else {
+        parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), false);
+      }
+    }
+  }
+
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    unbinder.unbind();
   }
 }

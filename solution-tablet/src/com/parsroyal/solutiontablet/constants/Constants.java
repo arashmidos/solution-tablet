@@ -35,21 +35,15 @@ public class Constants {
   public static final String SELECTED_UNIT = "selectedUnit";
   public static final String VISIT_ID = "visitId";
   public static final String ORDER_ID = "orderId";
-  public static final String SALE_TYPE = "saleType";
-  public static final String DISABLED = "disabled";
   public static final String ORDER_STATUS = "orderStatus";
   public static final String REJECTED_LIST = "rejectedList";
-  public static final String STATUS_ID = "statusId";
   public static final String UPDATE_USER = "center";
   public static final String UPDATE_PASS = "center1234";
   public static final int ICON_MESSAGE = R.drawable.ic_info_outline_black_24dp;
   public static final int ICON_WARNING = R.drawable.ic_warning_24dp;
   public static final Float MAX_DISTANCE = 800.0f;
   public static final int FULL_UPDATE = 1024;
-  public static final int PARTIAL_UPDATE = 512;
-  public static final int NO_UPDATE = 0;
   public static final int GPS_SEND_INTERVAL_IN_SECOND = 60;
-  public static final String FIRST_POSITION = "firstPosition";
 
   //new version
   //login

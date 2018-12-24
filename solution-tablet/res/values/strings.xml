@@ -398,6 +398,9 @@
   <string name="today_path_list">مسیر های امروز</string>
   <string name="customer_information">اطلاعات مشتری</string>
   <string name="orders">سفارشات</string>
+  <string name="free_orders">اشانتیون ها</string>
+  <string name="free_order">اشانتیون</string>
+  <string name="add_free_order">ثبت اشانتیون</string>
   <string name="payments">دریافتی ها</string>
   <string name="visit_payment">دریافتی</string>
   <string name="payments_x">دریافتی های</string>

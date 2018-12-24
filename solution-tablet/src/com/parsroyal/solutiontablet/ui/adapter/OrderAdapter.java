@@ -47,14 +47,12 @@ public class OrderAdapter extends Adapter<ViewHolder> {
   private MainActivity mainActivity;
   private List<SaleOrderListModel> orders;
   private Long visitId;
-  private String saleType;
 
   public OrderAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromReport,
-      Long visitId, String saleType) {
+      Long visitId) {
     this.context = context;
     this.visitId = visitId == null ? 0 : visitId;
     this.orders = orders;
-    this.saleType = saleType;
     this.mainActivity = (MainActivity) context;
     this.isFromReport = isFromReport;
     inflater = LayoutInflater.from(context);
@@ -206,7 +204,6 @@ public class OrderAdapter extends Adapter<ViewHolder> {
         case R.id.main_lay:
           Bundle args = new Bundle();
           args.putLong(Constants.ORDER_ID, order.getId());
-          args.putString(Constants.SALE_TYPE, saleType);
           args.putLong(Constants.VISIT_ID, order.getVisitId());
           args.putBoolean(Constants.READ_ONLY, false);
           setPageStatus(args);

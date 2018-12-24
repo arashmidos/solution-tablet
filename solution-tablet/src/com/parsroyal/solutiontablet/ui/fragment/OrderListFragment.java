@@ -28,6 +28,7 @@ import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +40,14 @@ import org.greenrobot.eventbus.Subscribe;
  */
 public class OrderListFragment extends BaseFragment {
 
+  protected Long visitId;
+  protected OrderAdapter adapter;
+  protected MainActivity mainActivity;
+  protected SaleOrderServiceImpl saleOrderService;
+  protected SaleOrderSO saleOrderSO = new SaleOrderSO();
+  protected VisitDetailFragment parent;
+  protected SettingServiceImpl settingService;
+  protected List<SaleOrderListModel> model;
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
   @BindView(R.id.fab_add_order)
@@ -49,17 +58,6 @@ public class OrderListFragment extends BaseFragment {
   TextView totalOrderSale;
   @BindView(R.id.total_sale)
   LinearLayout totalSale;
-
-
-  private Long visitId;
-  private OrderAdapter adapter;
-  private MainActivity mainActivity;
-  private SaleOrderServiceImpl saleOrderService;
-  private SaleOrderSO saleOrderSO = new SaleOrderSO();
-  private VisitDetailFragment parent;
-  private SettingServiceImpl settingService;
-  private String saleType;
-  private List<SaleOrderListModel> model;
 
   public OrderListFragment() {
     // Required empty public constructor
@@ -83,8 +81,6 @@ public class OrderListFragment extends BaseFragment {
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
     settingService = new SettingServiceImpl();
 
-    saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
-
     if (args != null) {
       visitId = args.getLong(Constants.VISIT_ID, -1);
     }
@@ -95,7 +91,7 @@ public class OrderListFragment extends BaseFragment {
       totalSale.setVisibility(View.VISIBLE);
       displayTotalSale();
     }
-    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+    if (PreferenceHelper.isDistributor()) {
       fabAddOrder.setVisibility(View.GONE);
     }
 
@@ -118,7 +114,7 @@ public class OrderListFragment extends BaseFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     model = getOrderList();
-    adapter = new OrderAdapter(mainActivity, model, parent == null, visitId, saleType);
+    adapter = new OrderAdapter(mainActivity, model, parent == null, visitId);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);

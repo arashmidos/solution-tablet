@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,15 +52,13 @@ public class RejectAdapter extends Adapter<ViewHolder> {
   private MainActivity mainActivity;
   private List<SaleOrderListModel> orders;
   private Long visitId;
-  private String saleType;
   private int currentReject = -1;
 
   public RejectAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromReport,
-      Long visitId, String saleType) {
+      Long visitId) {
     this.context = context;
     this.visitId = visitId == null ? 0 : visitId;
     this.orders = orders;
-    this.saleType = saleType;
     this.mainActivity = (MainActivity) context;
     this.isFromReport = isFromReport;
     inflater = LayoutInflater.from(context);
@@ -101,7 +98,6 @@ public class RejectAdapter extends Adapter<ViewHolder> {
         SaleOrderListModel tempOrder = orders.get(currentReject);
         Bundle args = new Bundle();
         args.putLong(Constants.ORDER_ID, tempOrder.getId());
-        args.putString(Constants.SALE_TYPE, saleType);
         args.putSerializable(Constants.REJECTED_LIST, goodsDtoList);
         args.putLong(Constants.VISIT_ID, visitId);
         args.putBoolean(Constants.READ_ONLY, false);

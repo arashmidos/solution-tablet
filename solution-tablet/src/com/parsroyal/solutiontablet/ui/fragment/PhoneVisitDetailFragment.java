@@ -34,11 +34,13 @@ import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SingleDataTransfe
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import timber.log.Timber;
 
 public class PhoneVisitDetailFragment extends BaseFragment {
 
@@ -56,7 +58,6 @@ public class PhoneVisitDetailFragment extends BaseFragment {
   private VisitServiceImpl visitService;
   private Customer customer;
   private SaleOrderDto orderDto;
-  private String saleType;
   private long visitLineBackendId;
   private SettingService settingService;
 
@@ -95,8 +96,6 @@ public class PhoneVisitDetailFragment extends BaseFragment {
 
       visitId = args.getLong(Constants.ORIGIN_VISIT_ID);
       visitLineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
-      saleType = new SettingServiceImpl()
-          .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
       msg.setText("");
       subMsg.setText("");
@@ -204,7 +203,6 @@ public class PhoneVisitDetailFragment extends BaseFragment {
 
       Bundle args = new Bundle();
       args.putLong(Constants.ORDER_ID, orderDto.getId());
-      args.putString(Constants.SALE_TYPE, saleType);
       args.putLong(Constants.VISIT_ID, visitId);
       args.putBoolean(Constants.READ_ONLY, false);
       args.putString(Constants.PAGE_STATUS, Constants.NEW);
@@ -214,8 +212,7 @@ public class PhoneVisitDetailFragment extends BaseFragment {
     } else {
       if (statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_rejected_right_now);
-      } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && saleType
-          .equals(ApplicationKeys.SALE_COLD)) {
+      } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && PreferenceHelper.isVisitor()) {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_order_right_now);
       } else {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_factor_right_now);
@@ -231,7 +228,7 @@ public class PhoneVisitDetailFragment extends BaseFragment {
       return orderDto;
     } catch (Exception e) {
       Logger.sendError("Data Storage Exception", "Error in creating draft order " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
+      Timber.e(e);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
     }
     return null;

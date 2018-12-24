@@ -84,7 +84,7 @@ public class ReturnListFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new RejectAdapter(mainActivity, getReturnList(), parent == null, visitId, saleType);
+    adapter = new RejectAdapter(mainActivity, getReturnList(), parent == null, visitId);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -43,7 +44,6 @@ import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
@@ -55,15 +55,17 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import timber.log.Timber;
 
 public class VisitDetailFragment extends BaseFragment {
 
@@ -91,11 +93,10 @@ public class VisitDetailFragment extends BaseFragment {
   private PaymentListFragment paymentListFragment;
   private ReturnListFragment returnListFragment;
   private PictureFragment pictureFragment;
+  private FreeOrderListFragment freeOrderListFragment;
   private AllQuestionnaireListFragment allQuestionnaireListFragment;
   private Customer customer;
   private SaleOrderDto orderDto;
-  private String saleType;
-  private long visitLineBackendId;
   private Timer timer;
   private int seconds = 0, minutes = 0, hours = 0;
 
@@ -113,7 +114,7 @@ public class VisitDetailFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
     // Inflate the layout for this fragment
@@ -133,11 +134,7 @@ public class VisitDetailFragment extends BaseFragment {
       saleOrderService = new SaleOrderServiceImpl(mainActivity);
 
       visitId = args.getLong(Constants.ORIGIN_VISIT_ID);
-
-      visitLineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
-      saleType = new SettingServiceImpl()
-          .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
-
+      
       tabs.setupWithViewPager(viewpager);
       initFragments();
       setUpViewPager();
@@ -173,12 +170,10 @@ public class VisitDetailFragment extends BaseFragment {
           }
         }
         if (hours > 0) {
-          mainActivity.setTimer(
-              String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":" + String
-                  .format("%02d", seconds));
-        } else {
           mainActivity
-              .setTimer(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+              .setTimer(String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds));
+        } else {
+          mainActivity.setTimer(String.format(Locale.US, "%02d:%02d", minutes, seconds));
         }
         seconds += 1;
       }
@@ -204,7 +199,7 @@ public class VisitDetailFragment extends BaseFragment {
     } catch (Exception ex) {
       Crashlytics
           .log(Log.ERROR, "General Exception", "Error in finishing visit " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
   }
@@ -244,7 +239,7 @@ public class VisitDetailFragment extends BaseFragment {
       LabelValue selectedItem = (LabelValue) noSpinner.getSelectedItem();
       if (selectedItem.getValue() != -1L) {
         errorMessage.setVisibility(View.INVISIBLE);
-        updateVisitResult(selectedItem, false);
+        updateVisitResult(selectedItem);
         alertDialog.dismiss();
       } else {
         errorMessage.setVisibility(View.VISIBLE);
@@ -253,12 +248,10 @@ public class VisitDetailFragment extends BaseFragment {
     cancelTv.setOnClickListener(v -> alertDialog.cancel());
   }
 
-  private void updateVisitResult(LabelValue selectedItem, boolean notVisited) {
+  private void updateVisitResult(LabelValue selectedItem) {
     try {
-      VisitInformationDetail visitInformationDetail = new VisitInformationDetail(
-          visitId,
-          notVisited ? VisitInformationDetailType.NONE : VisitInformationDetailType.NO_ORDER,
-          selectedItem.getValue());
+      VisitInformationDetail visitInformationDetail = new VisitInformationDetail(visitId,
+          VisitInformationDetailType.NO_ORDER, selectedItem.getValue());
       visitService.saveVisitDetail(visitInformationDetail);
       doFinishVisiting();
 
@@ -266,7 +259,7 @@ public class VisitDetailFragment extends BaseFragment {
       Logger.sendError("Data Storage Exception",
           "Error in updating visit result " + ex.getMessage());
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
     }
   }
 
@@ -279,7 +272,7 @@ public class VisitDetailFragment extends BaseFragment {
       mainActivity.removeFragment(this);
     } catch (Exception ex) {
 
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
   }
@@ -349,10 +342,11 @@ public class VisitDetailFragment extends BaseFragment {
     arguments.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     paymentListFragment = PaymentListFragment.newInstance(arguments, this);
     pictureFragment = PictureFragment.newInstance(arguments);
-    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+    if (PreferenceHelper.isDistributor()) {
       deliveryListFragment = DeliveryListFragment.newInstance(arguments, this);
     } else {
       orderListFragment = OrderListFragment.newInstance(arguments, this);
+      freeOrderListFragment = FreeOrderListFragment.newInstance(arguments, this);
     }
     returnListFragment = ReturnListFragment.newInstance(arguments, this);
     customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
@@ -373,11 +367,14 @@ public class VisitDetailFragment extends BaseFragment {
     if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_REJECT)) {
       viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
     }
-    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+    if (PreferenceHelper.isDistributor()) {
       if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_DELIVERY)) {
         viewPagerAdapter.add(deliveryListFragment, getString(R.string.orders_for_delivery));
       }
     } else {
+      if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_FREE_ORDER)) {
+        viewPagerAdapter.add(freeOrderListFragment, getString(R.string.add_free_order));
+      }
       if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_ORDER)) {
         viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
       }
@@ -395,7 +392,7 @@ public class VisitDetailFragment extends BaseFragment {
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
       if (resultCode == RESULT_OK) {
-        Bitmap bitmap = ImageUtil.decodeSampledBitmapFromUri(getActivity(), fileUri);
+        Bitmap bitmap = ImageUtil.decodeSampledBitmapFromUri(mainActivity, fileUri);
         bitmap = ImageUtil.getScaledBitmap(getActivity(), bitmap);
 
         String s = ImageUtil.saveTempImage(bitmap, MediaUtil
@@ -421,10 +418,6 @@ public class VisitDetailFragment extends BaseFragment {
         ToastUtil.toastSuccess(mainActivity, R.string.message_picutre_saved_successfully);
         pictureFragment.update();
 
-      } else if (resultCode == RESULT_CANCELED) {
-        // User cancelled the image capture
-      } else {
-        // Image capture failed, advise user
       }
     }
   }
@@ -447,7 +440,6 @@ public class VisitDetailFragment extends BaseFragment {
       } else {
         Bundle args = new Bundle();
         args.putLong(Constants.ORDER_ID, orderDto.getId());
-        args.putString(Constants.SALE_TYPE, saleType);
         args.putLong(Constants.VISIT_ID, visitId);
         args.putBoolean(Constants.READ_ONLY, false);
         args.putString(Constants.PAGE_STATUS, Constants.NEW);
@@ -458,8 +450,7 @@ public class VisitDetailFragment extends BaseFragment {
     } else {
       if (statusID.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_rejected_right_now);
-      } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && saleType
-          .equals(ApplicationKeys.SALE_COLD)) {
+      } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && PreferenceHelper.isVisitor()) {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_order_right_now);
       } else {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_factor_right_now);
@@ -475,7 +466,7 @@ public class VisitDetailFragment extends BaseFragment {
       return orderDto;
     } catch (Exception e) {
       Logger.sendError("Data Storage Exception", "Error in creating draft order " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
+      Timber.e(e);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
     }
     return null;
@@ -532,7 +523,6 @@ public class VisitDetailFragment extends BaseFragment {
     if (goodsList != null) {
       final Bundle args = new Bundle();
       args.putLong(Constants.ORDER_ID, orderDto.getId());
-      args.putString(Constants.SALE_TYPE, saleType);
       args.putSerializable(Constants.REJECTED_LIST, goodsDtoList);
       args.putLong(Constants.VISIT_ID, visitId);
       args.putBoolean(Constants.READ_ONLY, false);
