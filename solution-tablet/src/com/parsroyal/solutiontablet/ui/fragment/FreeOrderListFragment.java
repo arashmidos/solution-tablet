@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -25,11 +26,8 @@ import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderAdapter;
-import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
-import com.parsroyal.solutiontablet.util.PreferenceHelper;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
@@ -91,9 +89,8 @@ public class FreeOrderListFragment extends BaseFragment {
       totalSale.setVisibility(View.VISIBLE);
       displayTotalSale();
     }
-    if (PreferenceHelper.isDistributor()) {
-      fabAddOrder.setVisibility(View.GONE);
-    }
+    fabAddOrder
+        .setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.free_order)));
 
     return view;
   }
@@ -101,9 +98,9 @@ public class FreeOrderListFragment extends BaseFragment {
   private void displayTotalSale() {
 
     long total = 0;
-    for (int i = 0; i < model.size(); i++) {
+  /*  for (int i = 0; i < model.size(); i++) {
       total += model.get(i).getAmount();
-    }
+    }*/
 
     totalOrderSale.setText(NumberUtil.digitsToPersian(model.size()));
     String number = String
@@ -114,7 +111,7 @@ public class FreeOrderListFragment extends BaseFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     model = getOrderList();
-    adapter = new OrderAdapter(mainActivity, model, parent == null, visitId);
+    adapter = new OrderAdapter(mainActivity, model, parent == null, visitId, true);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);
@@ -139,7 +136,7 @@ public class FreeOrderListFragment extends BaseFragment {
       saleOrderSO.setCustomerBackendId(parent.getCustomer().getBackendId());
     }
     saleOrderSO.setIgnoreDraft(true);
-    saleOrderSO.setStatusId(SaleOrderStatus.READY_TO_SEND.getId());
+    saleOrderSO.setStatusId(SaleOrderStatus.FREE_ORDER_DELIVERED.getId());
     return saleOrderService.findOrders(saleOrderSO);
   }
 
@@ -171,25 +168,7 @@ public class FreeOrderListFragment extends BaseFragment {
   @OnClick(R.id.fab_add_order)
   public void onClick() {
     if (parent != null) {
-      String checkCredit = settingService
-          .getSettingValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE);
-      boolean checkCreditEnabled = Empty.isEmpty(checkCredit) || "null".equals(checkCredit) ? false
-          : Boolean.valueOf(checkCredit);
-      if (checkCreditEnabled && parent.getCustomer().getRemainedCredit() != null
-          && parent.getCustomer().getRemainedCredit().longValue() <= 0) {
-        DialogUtil.showConfirmDialog(mainActivity, getString(R.string.warning),
-            "ثبت سفارش فقط با پرداخت نقدی امکان پذیر است", getString(R.string.register_order),
-            (dialogInterface, i) -> parent
-                .openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), true),
-            getString(R.string.cancel));
-      } else {
-        parent.openOrderDetailFragment(SaleOrderStatus.DRAFT.getId(), false);
-      }
+      parent.openFreeOrderDetailFragment();
     }
-  }
-
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
   }
 }

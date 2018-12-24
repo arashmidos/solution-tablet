@@ -34,6 +34,7 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   private Long visitlineBackendId;
   private boolean hasNoOrder;
   private boolean phoneVisit;
+  private boolean hasFreeDelivery;
 
   public Long getVisitlineBackendId() {
     return visitlineBackendId;
@@ -230,11 +231,19 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
     return hasNoOrder;
   }
 
+  public boolean isPhoneVisit() {
+    return phoneVisit;
+  }
+
   public void setPhoneVisit(boolean phoneVisit) {
     this.phoneVisit = phoneVisit;
   }
 
-  public boolean isPhoneVisit() {
-    return phoneVisit;
+  public boolean hasFreeDelivery() {
+    return hasFreeDelivery;
+  }
+
+  public void setHasFreeDelivery(boolean hasFreeDelivery) {
+    this.hasFreeDelivery = hasFreeDelivery;
   }
 }

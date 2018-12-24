@@ -94,7 +94,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     android:layout_alignParentBottom="true"
-    android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:src="@drawable/ic_add_24_dp_white"
     app:backgroundTint="@color/register_order"

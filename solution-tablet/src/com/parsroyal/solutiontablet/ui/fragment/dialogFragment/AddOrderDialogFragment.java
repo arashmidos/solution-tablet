@@ -42,9 +42,9 @@ import com.parsroyal.solutiontablet.ui.adapter.GoodImagePagerAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.DepthPageTransformer;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.SaleUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
@@ -53,6 +53,7 @@ import java.util.Locale;
 import me.relex.circleindicator.CircleIndicator;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import timber.log.Timber;
 
 /**
  * @author Shakib
@@ -122,7 +123,6 @@ public class AddOrderDialogFragment extends DialogFragment {
   protected MainActivity mainActivity;
   protected GoodsServiceImpl goodsService;
   protected SettingServiceImpl settingService;
-  protected String saleType;
   protected Double count;
   protected Long selectedUnit;
   protected boolean saleRateEnabled;
@@ -133,6 +133,7 @@ public class AddOrderDialogFragment extends DialogFragment {
   protected Long saleRate;
   private long total;
   private Long discount;
+  private boolean isComplementary;
 
   public AddOrderDialogFragment() {
     // Required empty public constructor
@@ -150,11 +151,8 @@ public class AddOrderDialogFragment extends DialogFragment {
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-//    if (!getTAG().contains("Sheet")) {//Its mobile
     setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
-//    }else{
-//      setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog2);
-//    }*/
+
     setRetainInstance(true);
   }
 
@@ -176,10 +174,10 @@ public class AddOrderDialogFragment extends DialogFragment {
     count = arguments.getDouble(Constants.COUNT);
     selectedUnit = arguments.getLong(Constants.SELECTED_UNIT);
     discount = arguments.getLong(Constants.DISCOUNT);
+    isComplementary = arguments.getBoolean(Constants.COMPLIMENTARY);
 
     goodsService = new GoodsServiceImpl(mainActivity);
     settingService = new SettingServiceImpl();
-    saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
 
     saleRateEnabled = Boolean
         .valueOf(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE));
@@ -209,12 +207,11 @@ public class AddOrderDialogFragment extends DialogFragment {
     discountEdt.addTextChangedListener(new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
       }
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
-        String disc = s.toString();
+        String disc = NumberUtil.digitsToEnglish(s.toString());
         if (!TextUtils.isEmpty(disc)) {
           int discInt = Integer.parseInt(disc);
           if (discInt > 0 && discInt <= 100 && total > 0L) {
@@ -228,9 +225,7 @@ public class AddOrderDialogFragment extends DialogFragment {
             discountTv.setVisibility(View.GONE);
             if (discInt <= 0 || discInt >= 100) {
               errorMsg.setText(R.string.valid_period_discount);
-            }/* else if (!(total > 0)) {
-              errorMsg.setText(R.string.no_total);
-            }*/
+            }
           }
         } else {
           discountTv.setVisibility(View.GONE);
@@ -239,7 +234,6 @@ public class AddOrderDialogFragment extends DialogFragment {
 
       @Override
       public void afterTextChanged(Editable s) {
-
       }
     });
   }
@@ -263,7 +257,7 @@ public class AddOrderDialogFragment extends DialogFragment {
             unit2CountTv.setText(NumberUtil
                 .digitsToPersian(String.format(Locale.getDefault(), "%d", count1.intValue())));
             count1 *= Double.valueOf(unit1Count);
-            unit1CountTv.setText(NumberUtil.digitsToPersian(String.valueOf(count1)));
+            unit1CountTv.setText(NumberUtil.digitsToPersian(count1));
           } else {
             unit2CountTv.setText(NumberUtil.digitsToPersian(
                 String.format(Locale.getDefault(), "%d", (count1.longValue() / unit1Count))));
@@ -278,7 +272,7 @@ public class AddOrderDialogFragment extends DialogFragment {
         }
       } catch (Exception ex) {
         ex.printStackTrace();
-        Logger.sendError("GoodDetails Detail Panel", ex.getMessage());
+        Timber.e(ex);
         clearDetailPanel();
       }
     } else {
@@ -287,16 +281,14 @@ public class AddOrderDialogFragment extends DialogFragment {
   }
 
   protected boolean shouldApplySaleRate(String countValue, int currentUnit) {
-    return hasSaleRate(currentUnit)
-        && Double.valueOf(countValue) % saleRate != 0.0;
+    return hasSaleRate(currentUnit) && Double.valueOf(countValue) % saleRate != 0.0;
   }
 
   protected boolean hasSaleRate(int currentUnit) {
     if (!saleRateEnabled || currentUnit != 0) {
       return false;
     }
-    if (saleType.equals(ApplicationKeys.SALE_COLD)) {
-
+    if (PreferenceHelper.isVisitor()) {
       if (orderStatus.equals(SaleOrderStatus.DRAFT.getId())
           || orderStatus.equals(SaleOrderStatus.READY_TO_SEND.getId())) {
         return true;

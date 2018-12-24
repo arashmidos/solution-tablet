@@ -48,7 +48,6 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
   private List<CustomerListModel> customers;
   private CustomerSearchDialogFragment customerSearchDialogFragment;
 
-
   public PathDetailAdapter(Context mainActivity, List<CustomerListModel> customers,
       Long visitLineBackendId) {
     this.mainActivity = (MainActivity) mainActivity;

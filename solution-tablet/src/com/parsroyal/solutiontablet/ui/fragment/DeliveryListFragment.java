@@ -56,7 +56,6 @@ public class DeliveryListFragment extends BaseFragment {
   private SaleOrderServiceImpl saleOrderService;
   private SaleOrderSO saleOrderSO = new SaleOrderSO();
   private VisitDetailFragment parent;
-  private SettingServiceImpl settingService;
   private List<SaleOrderListModel> model;
   private Unbinder unbinder;
   private long visitlineBackendId;
@@ -81,7 +80,6 @@ public class DeliveryListFragment extends BaseFragment {
     unbinder = ButterKnife.bind(this, view);
     Bundle args = getArguments();
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
-    settingService = new SettingServiceImpl();
 
     if (args != null) {
       visitId = args.getLong(Constants.VISIT_ID, -1);

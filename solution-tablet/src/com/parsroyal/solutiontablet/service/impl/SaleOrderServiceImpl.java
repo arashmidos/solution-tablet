@@ -30,6 +30,7 @@ import com.parsroyal.solutiontablet.exception.SaleOrderItemCountExceedExistingEx
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 
@@ -300,8 +301,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     itemAmount /= 1000L;
 
     if (count.longValue() > goods.getExisting() + orderItem.getGoodsCount()) {
-      if (!ApplicationKeys.SALE_DISTRIBUTER
-          .equals(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE))
+      if (!PreferenceHelper.isDistributor()
           || !SolutionTabletApplication.getInstance().hasAccess(Authority.UNLIMITED_DISTRIBUTE)) {
         throw new SaleOrderItemCountExceedExistingException();
       }

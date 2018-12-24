@@ -41,7 +41,7 @@ public class AddOrderBottomSheet extends AddOrderDialogFragment {
 
   @Nullable
   @Override
-  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     getDialog().setOnShowListener(dialog -> {
       BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog;

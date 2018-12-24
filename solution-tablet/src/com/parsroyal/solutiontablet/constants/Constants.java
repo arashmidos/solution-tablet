@@ -77,6 +77,7 @@ public class Constants {
   public static final String PHONE_VISIT = "PHONE_VISIT";
   public static final String debugUsername = "royal";
   public static final String debugPassword = "royal2018";
+  public static final String COMPLIMENTARY = "COMPLIMENTARY";
 
   public class TransferStatus {
 

@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +66,6 @@ import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PaymentMethodDial
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.SmsDialogFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
@@ -78,6 +76,7 @@ import java.util.Locale;
 import java.util.Random;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import timber.log.Timber;
 
 /**
  * @author Shakib
@@ -149,6 +148,7 @@ public class OrderInfoFragment extends BaseFragment {
   private Long typeId;
   private boolean checkCreditEnabled;
   private Double creditRemained;
+  private boolean isComplimentary;
 
   public OrderInfoFragment() {
     // Required empty public constructor
@@ -195,6 +195,7 @@ public class OrderInfoFragment extends BaseFragment {
       visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
       rejectType = args.getLong(Constants.REJECT_TYPE_ID);
       isCashOrder = args.getBoolean(Constants.CASH_ORDER, false);
+      isComplimentary = args.getBoolean(Constants.COMPLIMENTARY, false);
 
       setData();
 
@@ -229,19 +230,13 @@ public class OrderInfoFragment extends BaseFragment {
     dateTv.setText(Empty.isNotEmpty(orderDate) ? NumberUtil.digitsToPersian(orderDate) : "--");
     Long number = order.getNumber();
     orderCodeTv.setText(Empty.isNotEmpty(number) && order.getNumber() != 0 ? NumberUtil
-        .digitsToPersian(String.valueOf(number)) : "--");
+        .digitsToPersian(number) : "--");
 
     String title = getProperTitle();
 
-    if (isDelivery()) {
-      dateTitleTv.setText(
-          String.format(Locale.US, getString(R.string.date_x), getString(R.string.title_order)));
-      orderCodeTitleTv.setText(
-          String.format(Locale.US, getString(R.string.number_x), getString(R.string.title_order)));
-    } else {
-      dateTitleTv.setText(String.format(Locale.US, getString(R.string.date_x), title));
-      orderCodeTitleTv.setText(String.format(Locale.US, getString(R.string.number_x), title));
-    }
+    dateTitleTv.setText(String.format(Locale.US, getString(R.string.date_x), title));
+    orderCodeTitleTv.setText(String.format(Locale.US, getString(R.string.number_x), title));
+
     submitOrderBtn.setText(String.format(Locale.US, getString(R.string.x_order_submit), title));
     descriptionLayout.setHint(String.format(Locale.US, getString(R.string.description_x), title));
 
@@ -258,10 +253,8 @@ public class OrderInfoFragment extends BaseFragment {
     } else if (selectedItem != null) {
       setPaymentMethod(selectedItem);
     } else {
-//      paymentMethodTv.setText(R.string.click_to_select);
       List<LabelValue> values;
       if (isCashOrder) {
-
         values = baseInfoService.search(BaseInfoTypes.PAYMENT_TYPE.getId(), "نقد");
       } else {
         values = baseInfoService
@@ -286,6 +279,11 @@ public class OrderInfoFragment extends BaseFragment {
 
     if (Empty.isNotEmpty(order.getDescription())) {
       descriptionEdt.setText(NumberUtil.digitsToPersian(order.getDescription()));
+    }
+
+    if (isComplimentary) {
+      orderGiftLayout.setEnabled(false);
+      //TODO: Disable payment and so on
     }
   }
 
@@ -383,8 +381,13 @@ public class OrderInfoFragment extends BaseFragment {
                   SaleOrderStatus.DELIVERED.getId());
             } else {
               if (PreferenceHelper.isVisitor()) {
-                showSaveOrderConfirmDialog(getString(R.string.title_save_order),
-                    SaleOrderStatus.READY_TO_SEND.getId());
+                if (isComplimentary) {
+                  showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                      SaleOrderStatus.FREE_ORDER_DELIVERED.getId());
+                } else {
+                  showSaveOrderConfirmDialog(getString(R.string.title_save_order),
+                      SaleOrderStatus.READY_TO_SEND.getId());
+                }
               } else {
                 showSaveOrderConfirmDialog(getString(R.string.title_save_order),
                     SaleOrderStatus.INVOICED.getId());
@@ -461,6 +464,7 @@ public class OrderInfoFragment extends BaseFragment {
 
   private void saveOrder(Long statusId) {
     try {
+
       order.setStatus(statusId);
 
       if (isRejected()) {
@@ -468,7 +472,8 @@ public class OrderInfoFragment extends BaseFragment {
         order.setRejectType(Empty.isNotEmpty(selectedItem) ? selectedItem.getValue() : 0);
         order.setDescription(NumberUtil.digitsToEnglish(descriptionEdt.getText().toString()));
       } else {
-        order.setPaymentTypeBackendId(selectedItem.getValue());
+
+        order.setPaymentTypeBackendId(isComplimentary ? 0 : selectedItem.getValue());
         order.setDescription(NumberUtil.digitsToEnglish(descriptionEdt.getText().toString()));
       }
 
@@ -499,12 +504,10 @@ public class OrderInfoFragment extends BaseFragment {
         mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
       }
     } catch (BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
       ToastUtil.toastError(mainActivity, ex);
     } catch (Exception ex) {
-      Logger.sendError("Data Storage Exception",
-          "Error in saving new order detail " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
       ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
   }
@@ -521,7 +524,11 @@ public class OrderInfoFragment extends BaseFragment {
     }
     switch (PreferenceHelper.getSaleType()) {
       case ApplicationKeys.SALE_COLD:
-        return VisitInformationDetailType.CREATE_ORDER;
+        if (isComplimentary) {
+          return VisitInformationDetailType.DELIVER_FREE_ORDER;
+        } else {
+          return VisitInformationDetailType.CREATE_ORDER;
+        }
       case ApplicationKeys.SALE_HOT:
         return VisitInformationDetailType.CREATE_INVOICE;
       case ApplicationKeys.SALE_DISTRIBUTER:
@@ -586,7 +593,7 @@ public class OrderInfoFragment extends BaseFragment {
         orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
         orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId())) {
       return getString(R.string.title_reject);
-    } else if (PreferenceHelper.isVisitor()) {
+    } else if (PreferenceHelper.isVisitor() || isDelivery()) {
       return getString(R.string.title_order);
     } else {
       return getString(R.string.title_factor);
@@ -613,7 +620,8 @@ public class OrderInfoFragment extends BaseFragment {
         || orderStatus.equals(SaleOrderStatus.INVOICED.getId())
         || orderStatus.equals(SaleOrderStatus.SENT.getId())
         || orderStatus.equals(SaleOrderStatus.SENT_INVOICE.getId())
-        || orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId());
+        || orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId())
+        || orderStatus.equals(SaleOrderStatus.FREE_ORDER_SENT.getId());
   }
 
   private void showPaymentMethodDialog() {

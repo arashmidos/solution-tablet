@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +48,6 @@ import com.parsroyal.solutiontablet.ui.adapter.GoodsExpandAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.AddOrderBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
-import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
@@ -58,13 +56,13 @@ import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.ToastUtil;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import timber.log.Timber;
 
 /**
  * @author Shakib
@@ -123,6 +121,7 @@ public class OrderFragment extends BaseFragment {
   private long visitlineBackendId;
   private boolean isCashOrder;
   private HashMap<String, Long> titleIdes;
+  private boolean isComplimentary;
 
   public OrderFragment() {
     // Required empty public constructor
@@ -163,6 +162,7 @@ public class OrderFragment extends BaseFragment {
         pageStatus = args.getString(Constants.PAGE_STATUS, "");
         visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
         isCashOrder = args.getBoolean(Constants.CASH_ORDER, false);
+        isComplimentary = args.getBoolean(Constants.COMPLIMENTARY, false);
         mainActivity.changeTitle(getProperTitle());
       }
 
@@ -331,7 +331,7 @@ public class OrderFragment extends BaseFragment {
         closeSearchImg.setVisibility(View.VISIBLE);
       }
     } else {
-      ToastUtil.toastMessage(getActivity(), R.string.no_goods);
+      ToastUtil.toastMessage(mainActivity, R.string.no_goods);
     }
   }
 
@@ -354,10 +354,8 @@ public class OrderFragment extends BaseFragment {
 //    }
 
     if (!readOnly) {
-      orderCountTv
-          .setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
+      orderCountTv.setText(NumberUtil.digitsToPersian(order.getOrderItems().size()));
     }
-
   }
 
   /*
@@ -428,7 +426,7 @@ public class OrderFragment extends BaseFragment {
   @Subscribe
   public void getMessage(UpdateListEvent event) {
     order = saleOrderService.findOrderDtoById(orderId);
-    orderCountTv.setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
+    orderCountTv.setText(NumberUtil.digitsToPersian(order.getOrderItems().size()));
   }
 
   @OnClick({R.id.search_img, R.id.bottom_bar, R.id.cancel_bread_crumb_btn, R.id.close_search_img})
@@ -460,6 +458,7 @@ public class OrderFragment extends BaseFragment {
     args.putSerializable(Constants.REJECTED_LIST, rejectedGoodsList);
     args.putLong(Constants.VISITLINE_BACKEND_ID, visitlineBackendId);
     args.putBoolean(Constants.CASH_ORDER, isCashOrder);
+    args.putBoolean(Constants.COMPLIMENTARY, isComplimentary);
     if (rejectType != null) {
       args.putLong(Constants.REJECT_TYPE_ID, rejectType);
     }
@@ -505,6 +504,7 @@ public class OrderFragment extends BaseFragment {
       }
 
       bundle.putLong(Constants.SELECTED_UNIT, defaultUnit);
+      bundle.putBoolean(Constants.COMPLIMENTARY, isComplimentary);
 
       addOrderDialogFragment.setArguments(bundle);
       addOrderDialogFragment.setOnClickListener((count, selectedUnit, discount) -> {
@@ -515,17 +515,14 @@ public class OrderFragment extends BaseFragment {
       addOrderDialogFragment.show(ft, "order");
 
     } catch (Exception e) {
-      Logger.sendError("Data Storage Exception",
-          "Error in confirming handling GoodsList " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
+      Timber.e(e);
     }
   }
 
   public void showFinalizeOrderDialog() {
     FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
-    FinalizeOrderDialogFragment finalizeOrderDialogFragment = FinalizeOrderDialogFragment
-        .newInstance(this);
+    FinalizeOrderDialogFragment dialogFragment = FinalizeOrderDialogFragment.newInstance(this);
 
     Bundle bundle = new Bundle();
     bundle.putLong(Constants.ORDER_ID, orderId);
@@ -535,9 +532,10 @@ public class OrderFragment extends BaseFragment {
     bundle.putLong(Constants.VISIT_ID, visitId);
     bundle.putLong(Constants.VISITLINE_BACKEND_ID, visitlineBackendId);
     bundle.putBoolean(Constants.CASH_ORDER, isCashOrder);
-    finalizeOrderDialogFragment.setArguments(bundle);
+    bundle.putBoolean(Constants.COMPLIMENTARY, isComplimentary);
+    dialogFragment.setArguments(bundle);
 
-    finalizeOrderDialogFragment.show(ft, "order");
+    dialogFragment.show(ft, "order");
   }
 
   private void updateGoodsDataTb() {
@@ -607,18 +605,14 @@ public class OrderFragment extends BaseFragment {
       Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);
-      orderCountTv
-          .setText(NumberUtil.digitsToPersian(String.valueOf(order.getOrderItems().size())));
+      orderCountTv.setText(NumberUtil.digitsToPersian(order.getOrderItems().size()));
       EventBus.getDefault().post(new SuccessEvent(StatusCodes.SUCCESS));
     } catch (BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-//      ToastUtil.toastError(getActivity(), ex);
+      Timber.e(ex);
       EventBus.getDefault().post(new ErrorEvent(getString(R.string.exceed_count_exception),
           StatusCodes.DATA_STORE_ERROR));
     } catch (Exception ex) {
-      Logger.sendError("Data storage Exception",
-          "Error in confirming GoodsList " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
     }
   }

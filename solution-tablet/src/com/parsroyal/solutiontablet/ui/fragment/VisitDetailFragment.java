@@ -134,7 +134,7 @@ public class VisitDetailFragment extends BaseFragment {
       saleOrderService = new SaleOrderServiceImpl(mainActivity);
 
       visitId = args.getLong(Constants.ORIGIN_VISIT_ID);
-      
+
       tabs.setupWithViewPager(viewpager);
       initFragments();
       setUpViewPager();
@@ -373,7 +373,7 @@ public class VisitDetailFragment extends BaseFragment {
       }
     } else {
       if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_FREE_ORDER)) {
-        viewPagerAdapter.add(freeOrderListFragment, getString(R.string.add_free_order));
+        viewPagerAdapter.add(freeOrderListFragment, getString(R.string.free_orders));
       }
       if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_ORDER)) {
         viewPagerAdapter.add(orderListFragment, getString(R.string.orders));
@@ -455,6 +455,28 @@ public class VisitDetailFragment extends BaseFragment {
       } else {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_factor_right_now);
       }
+    }
+  }
+
+  public void openFreeOrderDetailFragment() {
+
+    orderDto = saleOrderService.findOrderDtoByCustomerBackendIdAndStatus(customer.getBackendId(),
+        SaleOrderStatus.FREE_ORDER_DRAFT.getId());
+    if (Empty.isEmpty(orderDto)) {
+      orderDto = createDraftOrder(customer, SaleOrderStatus.FREE_ORDER_DRAFT.getId());
+    }
+
+    if (Empty.isNotEmpty(orderDto) && Empty.isNotEmpty(orderDto.getId())) {
+      Bundle args = new Bundle();
+      args.putLong(Constants.ORDER_ID, orderDto.getId());
+      args.putLong(Constants.VISIT_ID, visitId);
+      args.putBoolean(Constants.READ_ONLY, false);
+      args.putString(Constants.PAGE_STATUS, Constants.NEW);
+      args.putBoolean(Constants.COMPLIMENTARY, true);
+      mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
+
+    } else {
+      ToastUtil.toastError(mainActivity, R.string.message_cannot_create_rejected_right_now);
     }
   }
 

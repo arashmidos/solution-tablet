@@ -41,6 +41,7 @@ import java.util.Locale;
 public class OrderAdapter extends Adapter<ViewHolder> {
 
   private final SaleOrderServiceImpl saleOrderService;
+  private final boolean isComplimentary;
   private LayoutInflater inflater;
   private Context context;
   private boolean isFromReport;
@@ -49,12 +50,13 @@ public class OrderAdapter extends Adapter<ViewHolder> {
   private Long visitId;
 
   public OrderAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromReport,
-      Long visitId) {
+      Long visitId, boolean isComplimentary) {
     this.context = context;
     this.visitId = visitId == null ? 0 : visitId;
     this.orders = orders;
     this.mainActivity = (MainActivity) context;
     this.isFromReport = isFromReport;
+    this.isComplimentary = isComplimentary;
     inflater = LayoutInflater.from(context);
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
   }
@@ -151,13 +153,15 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           .format(Locale.US, "%,d %s", order.getAmount() / 1000, context.getString(
               R.string.common_irr_currency));
       orderTotalPrice.setText(NumberUtil.digitsToPersian(number));
-      orderPaymentMethodTv.setText(NumberUtil.digitsToPersian(order.getPaymentTypeTitle()));
+      orderPaymentMethodTv.setText(
+          isComplimentary ? "--" : NumberUtil.digitsToPersian(order.getPaymentTypeTitle()));
 
       changeVisibility();
     }
 
     private void changeVisibility() {
-      if (order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
+      if (order.getStatus().equals(SaleOrderStatus.SENT.getId()) ||
+          order.getStatus().equals(SaleOrderStatus.FREE_ORDER_SENT.getId())) {
         if (!MultiScreenUtility.isTablet(context)) {
           editImageLayout.setVisibility(View.GONE);
           deleteImageLayout.setVisibility(View.GONE);
@@ -195,7 +199,8 @@ public class OrderAdapter extends Adapter<ViewHolder> {
 
       switch (v.getId()) {
         case R.id.delete_img_layout:
-          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
+          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId()) && !order.getStatus()
+              .equals(SaleOrderStatus.FREE_ORDER_SENT.getId())) {
             deleteOrder();
           }
           break;
@@ -206,11 +211,13 @@ public class OrderAdapter extends Adapter<ViewHolder> {
           args.putLong(Constants.ORDER_ID, order.getId());
           args.putLong(Constants.VISIT_ID, order.getVisitId());
           args.putBoolean(Constants.READ_ONLY, false);
+          args.putBoolean(Constants.COMPLIMENTARY, isComplimentary);
           setPageStatus(args);
           mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
           break;
         case R.id.upload_img_layout:
-          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId())) {
+          if (!order.getStatus().equals(SaleOrderStatus.SENT.getId()) && !order.getStatus()
+              .equals(SaleOrderStatus.FREE_ORDER_SENT.getId())) {
             openSendDataDialog();
           }
           break;
@@ -230,6 +237,7 @@ public class OrderAdapter extends Adapter<ViewHolder> {
 
     private void setPageStatus(Bundle args) {
       if (SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT
+          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.FREE_ORDER_SENT
           || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.CANCELED
           || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT_INVOICE
           || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.REJECTED_SENT) {

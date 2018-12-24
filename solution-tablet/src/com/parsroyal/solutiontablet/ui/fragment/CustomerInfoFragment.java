@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -48,6 +49,7 @@ import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.HashSet;
@@ -78,6 +80,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   LinearLayout customerDetailLay;
   @BindView(R.id.add_order_tv)
   TextView addOrderTv;
+  @BindView(R.id.add_free_order_tv)
+  TextView addFreeOrderTv;
   @BindView(R.id.register_order_lay)
   RelativeLayout registerOrderLay;
   @BindView(R.id.register_location_btn)
@@ -113,6 +117,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   TextView addRejectTv;
   @BindView(R.id.register_return_lay)
   RelativeLayout registerReturnLay;
+  @BindView(R.id.register_free_order_lay)
+  RelativeLayout registerFreeOrderLay;
   @BindView(R.id.add_payment_tv)
   TextView addPaymentTv;
   @BindView(R.id.register_payment_lay)
@@ -197,6 +203,10 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       addOrderTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
       registerOrderLay.setEnabled(false);
     }
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_FREE_ORDER)) {
+      addFreeOrderTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
+      registerFreeOrderLay.setEnabled(false);
+    }
     if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_REJECT)) {
       addRejectTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
       registerReturnLay.setEnabled(false);
@@ -261,8 +271,9 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       addOrderTv.setText(String.format("ثبت %s", getString(R.string.title_factor)));
     }
 
-    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+    if (PreferenceHelper.isDistributor()) {
       registerOrderLay.setVisibility(View.GONE);
+      registerFreeOrderLay.setVisibility(View.GONE);
     }
 
     if (customer.getxLocation() != null && customer.getxLocation() != 0.0) {
@@ -319,7 +330,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       R.id.register_questionnaire_lay, R.id.register_image_lay, R.id.end_and_exit_visit_lay,
       R.id.no_activity_lay, R.id.register_location_btn, R.id.edit_map, R.id.fullscreen_map,
       R.id.register_return_lay, R.id.edit_map_layout, R.id.fullscreen_map_layout,
-      R.id.customer_report_lay})
+      R.id.customer_report_lay, R.id.register_free_order_lay})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_return_lay:
@@ -370,7 +381,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
 //        if (Empty.isNotEmpty(customer.getxLocation()) && customer.getxLocation() != 0.0) {
 //          ToastUtil.toastError(getActivity(), getString(R.string.edit_location_permission_denied));
 //        } else {
-          mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, getArguments(), true);
+        mainActivity.changeFragment(MainActivity.SAVE_LOCATION_FRAGMENT_ID, getArguments(), true);
 //        }
         break;
       case R.id.fullscreen_map_layout:
@@ -385,6 +396,8 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
         intent.putExtra(Constants.REPORT_CUSTOMER_ID, customer.getBackendId());
         mainActivity.startActivity(intent);
         break;
+      case R.id.register_free_order_lay:
+        parent.openFreeOrderDetailFragment();
     }
   }
 

@@ -150,7 +150,8 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
   protected BaseSaleDocument createSaleDocumentFromCursor(Cursor cursor) {
     BaseSaleDocument saleOrder = null;
     Long statusId = cursor.getLong(8);
-    if (SaleOrderStatus.READY_TO_SEND.getId().equals(statusId)) {
+    if (SaleOrderStatus.READY_TO_SEND.getId().equals(statusId)
+        || SaleOrderStatus.FREE_ORDER_DELIVERED.getId().equals(statusId)) {
       saleOrder = new SaleOrderDocument();
       String orderType = settingService.getSettingValue(ApplicationKeys.SETTING_ORDER_TYPE);
       saleOrder.setType(Empty.isEmpty(orderType) ? 0 : Integer.valueOf(orderType));
@@ -288,6 +289,12 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
               " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
           argsList.add(String.valueOf(statusId));
           argsList.add(String.valueOf(SaleOrderStatus.SENT.getId()));
+        } else if (statusId.equals(SaleOrderStatus.FREE_ORDER_DELIVERED.getId())) {
+          argsList.add(String.valueOf(VisitInformationDetailType.DELIVER_FREE_ORDER.getValue()));
+          sql = sql.concat(" ").concat(
+              " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
+          argsList.add(String.valueOf(statusId));
+          argsList.add(String.valueOf(SaleOrderStatus.FREE_ORDER_SENT.getId()));
         } else if (statusId.equals(SaleOrderStatus.DELIVERED.getId())) {
           argsList.add(String.valueOf(VisitInformationDetailType.DELIVER_ORDER.getValue()));
           sql = sql.concat(" AND ( o." + SaleOrder.COL_STATUS + " = ? OR o."
@@ -417,9 +424,11 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? OR "
+        + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? )";
     String[] args = {String.valueOf(orderId),
         String.valueOf(SaleOrderStatus.READY_TO_SEND.getId()),
+        String.valueOf(SaleOrderStatus.FREE_ORDER_DELIVERED.getId()),
         String.valueOf(SaleOrderStatus.REJECTED.getId()),
         String.valueOf(SaleOrderStatus.INVOICED.getId()),
         String.valueOf(SaleOrderStatus.DELIVERED.getId()),

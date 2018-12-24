@@ -88,7 +88,6 @@
         android:layout_marginTop="30dp"
         android:drawableEnd="@drawable/ic_gps_off_black_24_px"
         android:drawablePadding="8dp"
-        android:drawableRight="@drawable/ic_gps_off_black_24_px"
         android:text="@string/no_location"
         android:textColor="@color/gray_75"
         android:textSize="14sp" />
@@ -117,7 +116,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:paddingStart="10dp"
-        android:paddingLeft="10dp"
         android:background="@color/white">
 
         <ImageView
@@ -125,8 +123,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="10sp"
-          android:layout_marginLeft="10dp"
-          android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_minus_box_18_dp"
@@ -137,10 +133,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="10dp"
-          android:layout_marginLeft="10dp"
           android:layout_alignTop="@+id/credit_title_tv"
           android:layout_toEndOf="@+id/minus_img"
-          android:layout_toRightOf="@+id/minus_img"
           android:gravity="left"
           android:maxLines="1"
           android:singleLine="true"
@@ -156,12 +150,8 @@
           android:layout_marginBottom="16dp"
           android:layout_marginStart="8dp"
           android:layout_marginEnd="18dp"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="18dp"
           android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
           android:layout_toEndOf="@id/credit_tv"
-          android:layout_toRightOf="@id/credit_tv"
           android:ellipsize="end"
           android:gravity="start"
           android:maxLines="1"
@@ -182,9 +172,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginEnd="18dp"
-          android:layout_marginRight="18dp"
           android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_store"
           android:tint="@color/login_gray" />
@@ -194,8 +182,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="20sp"
-          android:layout_marginLeft="20dp"
-          android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_arrow_drop_down"
@@ -207,7 +193,6 @@
           android:layout_height="wrap_content"
           android:layout_alignTop="@+id/store_tv"
           android:layout_toEndOf="@+id/drop_img"
-          android:layout_toRightOf="@+id/drop_img"
           android:ellipsize="end"
           android:maxLines="1"
           android:singleLine="true"
@@ -223,11 +208,7 @@
           android:layout_marginBottom="16dp"
           android:layout_marginStart="8dp"
           android:layout_marginEnd="19dp"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="19dp"
           android:layout_toEndOf="@id/show_more_tv"
-          android:layout_toLeftOf="@id/store_img"
-          android:layout_toRightOf="@id/show_more_tv"
           android:layout_toStartOf="@id/store_img"
           android:ellipsize="end"
           android:gravity="start"
@@ -262,9 +243,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="18dp"
-            android:layout_marginRight="18dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_location_on_24_dp"
             android:tint="@color/login_gray" />
@@ -318,9 +297,6 @@
             android:layout_marginBottom="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="19dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="19dp"
-            android:layout_toLeftOf="@id/mobile_img"
             android:layout_toStartOf="@id/mobile_img"
             android:ellipsize="end"
             android:gravity="end"
@@ -348,9 +324,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="18dp"
-            android:layout_marginRight="18dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:rotation="270"
             android:src="@drawable/ic_phone_24dp"
@@ -365,9 +339,6 @@
             android:layout_marginBottom="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="19dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="19dp"
-            android:layout_toLeftOf="@id/phone_img"
             android:layout_toStartOf="@id/phone_img"
             android:ellipsize="end"
             android:gravity="end"
@@ -390,8 +361,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="20sp"
-          android:layout_marginLeft="20dp"
-          android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_alert_24_dp"
@@ -401,9 +370,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginEnd="18dp"
-          android:layout_marginRight="18dp"
           android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_add_24dp"
           android:tint="@color/register_order" />
@@ -433,7 +400,45 @@
         android:layout_height="1dp"
         android:layout_gravity="end"
         android:background="@color/white" />
+      <RelativeLayout
+        android:id="@+id/register_free_order_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
+        <ImageView
+          android:id="@+id/register_free_order_img"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="18dp"
+          android:layout_alignParentEnd="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_add_layer_24dp" />
+
+        <TextView
+          android:id="@+id/add_free_order_tv"
+          style="@style/IranSans.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="19dp"
+          android:layout_toStartOf="@id/register_free_order_img"
+          android:ellipsize="end"
+          android:gravity="start"
+          android:maxLines="1"
+          android:singleLine="true"
+          android:text="@string/add_free_order"
+          android:textColor="@color/black_85"
+          android:textSize="14sp" />
+      </RelativeLayout>
+
+      <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_gravity="end"
+        android:background="@color/white" />
       <RelativeLayout
         android:id="@+id/register_return_lay"
         android:layout_width="match_parent"
@@ -602,9 +607,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginEnd="18dp"
-          android:layout_marginRight="18dp"
           android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_report_paper_green_24_dp" />
 
@@ -638,9 +641,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginEnd="18dp"
-          android:layout_marginRight="18dp"
           android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_non_action_24_dp" />
 
@@ -652,9 +653,6 @@
           android:layout_marginBottom="16dp"
           android:layout_marginStart="8dp"
           android:layout_marginEnd="19dp"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="19dp"
-          android:layout_toLeftOf="@id/no_activity_img"
           android:layout_toStartOf="@id/no_activity_img"
           android:ellipsize="end"
           android:gravity="start"
@@ -683,9 +681,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginEnd="18dp"
-          android:layout_marginRight="18dp"
           android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_run_24_dp" />
 
@@ -697,9 +693,6 @@
           android:layout_marginBottom="16dp"
           android:layout_marginStart="8dp"
           android:layout_marginEnd="19dp"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="19dp"
-          android:layout_toLeftOf="@id/end_and_exit_visit_img"
           android:layout_toStartOf="@id/end_and_exit_visit_img"
           android:ellipsize="end"
           android:gravity="start"

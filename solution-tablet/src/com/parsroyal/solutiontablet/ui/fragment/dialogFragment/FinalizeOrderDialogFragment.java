@@ -43,6 +43,7 @@ import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
+import timber.log.Timber;
 
 public class FinalizeOrderDialogFragment extends DialogFragment {
 
@@ -80,7 +81,6 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
   private String pageStatus;
   private GoodsDtoList rejectedGoodsList;
   private long visitId;
-  private long visitlineBackendId;
   private boolean orderChanged = false;
   private Long rejectType;
 
@@ -134,7 +134,6 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
     orderId = arguments.getLong(Constants.ORDER_ID);
     orderStatus = arguments.getLong(Constants.ORDER_STATUS);
     pageStatus = arguments.getString(Constants.PAGE_STATUS);
-    visitlineBackendId = arguments.getLong(Constants.VISITLINE_BACKEND_ID);
     order = saleOrderService.findOrderDtoById(orderId);
     visitId = arguments.getLong(Constants.VISIT_ID, -1);
     rejectedGoodsList = (GoodsDtoList) arguments.getSerializable(Constants.REJECTED_LIST);
@@ -166,7 +165,7 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
       submitTv.setText(R.string.payment_detail);
     } else if (orderStatus.equals(SaleOrderStatus.DELIVERABLE.getId())) {
       cancelButton.setVisibility(View.VISIBLE);
-      submitTv.setText("تحویل سفارش");
+      submitTv.setText(R.string.title_deliver_sale_order);
     }
 
     if (isRejected()) {
@@ -286,12 +285,10 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
       getDialog().dismiss();
       mainActivity.navigateToFragment(OrderFragment.class.getSimpleName());
     } catch (BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
       ToastUtil.toastError(root, ex);
     } catch (Exception ex) {
-      Logger.sendError("Data Storage Exception",
-          "Error in saving new order detail " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
       ToastUtil.toastError(root, new UnknownSystemException(ex));
     }
   }
