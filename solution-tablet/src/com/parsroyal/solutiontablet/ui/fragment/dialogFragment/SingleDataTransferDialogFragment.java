@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -117,7 +118,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_single_data_transfer_dialog, container, false);
@@ -247,6 +248,9 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         break;
       case DELIVER_ORDER:
         sendInvoice(visitDetail.getTypeId());
+        break;
+      case DELIVER_FREE_ORDER:
+        sendFreeOrder(visitDetail.getTypeId());
       default:
     }
   }
@@ -364,7 +368,19 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
     BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
     if (Empty.isNotEmpty(saleOrder)) {
-      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity);
+      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity, false);
+      dataTransfer.sendSingleOrder(saleOrder);
+    } else {
+      //We have sent them before
+      sendNextDetail();
+    }
+  }//Async call
+
+  private void sendFreeOrder(Long orderId) {
+    SaleOrderService saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(orderId);
+    if (Empty.isNotEmpty(saleOrder)) {
+      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(mainActivity, true);
       dataTransfer.sendSingleOrder(saleOrder);
     } else {
       //We have sent them before

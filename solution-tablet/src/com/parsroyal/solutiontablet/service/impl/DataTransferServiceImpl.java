@@ -334,7 +334,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     List<BaseSaleDocument> saleOrders = saleOrderService
         .findOrderDocumentByStatus(SaleOrderStatus.READY_TO_SEND.getId());
     if (Empty.isNotEmpty(saleOrders)) {
-      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(context);
+      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(context, false);
 
       for (int i = 0; i < saleOrders.size(); i++) {
         BaseSaleDocument baseSaleDocument = saleOrders.get(i);

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.KeyValueBiz;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
@@ -51,13 +50,11 @@ public class InvoicedOrdersDataTransfer extends AbstractDataTransferBizImpl<Stri
   protected VisitService visitService;
   protected int success = 0;
   protected int total = 0;
-  private KeyValueBiz keyValueBiz;
 
   public InvoicedOrdersDataTransfer(Context context) {
     super(context);
     this.saleOrderDao = new SaleOrderDaoImpl(context);
     this.saleOrderItemDao = new SaleOrderItemDaoImpl(context);
-    this.keyValueBiz = new KeyValueBizImpl();
     visitService = new VisitServiceImpl(context);
     saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
 
@@ -106,7 +103,8 @@ public class InvoicedOrdersDataTransfer extends AbstractDataTransferBizImpl<Stri
   protected void updateOrderStatus(Long invoiceBackendId, SaleOrder saleOrder) {
     saleOrder.setInvoiceBackendId(invoiceBackendId);
     if (ApplicationKeys.SALE_DISTRIBUTER.equals(saleType.getValue())) {
-      if (order.getStatusCode() == null || !order.getStatusCode().equals(SaleOrderStatus.GIFT.getId())) {
+      if (order.getStatusCode() == null || !order.getStatusCode()
+          .equals(SaleOrderStatus.GIFT.getId())) {
         saleOrder.setStatus(SaleOrderStatus.DELIVERABLE_SENT.getId());
       }
     } else {

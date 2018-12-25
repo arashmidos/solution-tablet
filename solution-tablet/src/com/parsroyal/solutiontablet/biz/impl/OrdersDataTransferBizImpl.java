@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
-import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
@@ -20,20 +19,25 @@ import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * Created by Arash on 29/12/2017
  */
 public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransfer {
 
-  public OrdersDataTransferBizImpl(Context context) {
+  private final boolean isComplimentary;
+
+  public OrdersDataTransferBizImpl(Context context, boolean isComplimentary) {
     super(context);
+    this.isComplimentary = isComplimentary;
   }
 
   @Override
   protected void updateOrderStatus(Long backendId, SaleOrder saleOrder) {
     saleOrder.setBackendId(backendId);
-    saleOrder.setStatus(SaleOrderStatus.SENT.getId());
+    saleOrder.setStatus(
+        isComplimentary ? SaleOrderStatus.FREE_ORDER_SENT.getId() : SaleOrderStatus.SENT.getId());
     saleOrder.setUpdateDateTime(DateUtil.getCurrentGregorianFullWithTimeDate());
     saleOrderDao.update(saleOrder);
     visitService.updateVisitDetailId(getVisitDetailType(), saleOrder.getId(), backendId);
@@ -50,12 +54,13 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransfer {
 
   @Override
   public String getMethod() {
-    return "saleorders";
+    return isComplimentary ? "saleorders/free" : "saleorders";
   }
 
   @Override
   protected VisitInformationDetailType getVisitDetailType() {
-    return VisitInformationDetailType.CREATE_ORDER;
+    return isComplimentary ? VisitInformationDetailType.DELIVER_FREE_ORDER
+        : VisitInformationDetailType.CREATE_ORDER;
   }
 
   public void sendSingleOrder(BaseSaleDocument baseSaleDocument) {
@@ -90,7 +95,7 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransfer {
           }
         } else {
           try {
-            Log.d("TAG", response.errorBody().string());
+            Timber.d(response.errorBody().string());
           } catch (IOException e) {
             e.printStackTrace();
           }

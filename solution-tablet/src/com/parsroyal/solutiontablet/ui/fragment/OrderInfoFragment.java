@@ -358,7 +358,7 @@ public class OrderInfoFragment extends BaseFragment {
                 dataTransfer.sendSingleInvoice(saleOrder);
               } else {
                 OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(
-                    mainActivity);
+                    mainActivity, false);
                 dataTransfer.sendSingleOrder(saleOrder);
               }
             }
