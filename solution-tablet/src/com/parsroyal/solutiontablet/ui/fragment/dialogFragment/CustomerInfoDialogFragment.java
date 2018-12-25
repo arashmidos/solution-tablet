@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -49,7 +51,6 @@ import com.parsroyal.solutiontablet.ui.activity.MobileReportListActivity;
 import com.parsroyal.solutiontablet.ui.activity.TabletReportListActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.VisitActivityAdapter;
-import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.CustomerContactBottomSheet;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -329,14 +330,10 @@ public class CustomerInfoDialogFragment extends DialogFragment {
         showWantsDialog();
         break;
       case R.id.call_layout:
-        CustomerContactBottomSheet contactBottomSheet = CustomerContactBottomSheet
-            .newInstance(this, customer.getPhoneNumber());
-        contactBottomSheet.show(getActivity().getSupportFragmentManager(), "contact bottom sheet");
+        showDialog(customer.getPhoneNumber());
         break;
       case R.id.phone_layout:
-        CustomerContactBottomSheet contactBottomSheet2 = CustomerContactBottomSheet
-            .newInstance(this, customer.getCellPhone());
-        contactBottomSheet2.show(getActivity().getSupportFragmentManager(), "contact bottom sheet");
+        showDialog(customer.getCellPhone());
         break;
       case R.id.location_layout:
         if (Empty.isNotEmpty(customer.getxLocation()) && Empty.isNotEmpty(customer.getyLocation())
@@ -365,6 +362,29 @@ public class CustomerInfoDialogFragment extends DialogFragment {
           }
         }
     }
+  }
+
+  private void showDialog(String phoneNumber) {
+    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mainActivity);
+    LayoutInflater inflater1 = ((AppCompatActivity) mainActivity).getLayoutInflater();
+    View dialogView = inflater1.inflate(R.layout.bottom_sheet_customer_contact, null);
+    LinearLayout callLay = dialogView.findViewById(R.id.call_layout);
+    LinearLayout smsLay = dialogView.findViewById(R.id.sms_layout);
+    dialogBuilder.setView(dialogView);
+    AlertDialog alertDialog = dialogBuilder.create();
+    alertDialog.show();
+    callLay.setOnClickListener(v -> {
+      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + phoneNumber));
+      startActivity(intent);
+      alertDialog.dismiss();
+    });
+    smsLay.setOnClickListener(v -> {
+      Intent intent2 = new Intent(Intent.ACTION_VIEW,
+          Uri.parse("sms:" + phoneNumber));
+      startActivity(intent2);
+      alertDialog.dismiss();
+    });
+
   }
 
   protected void checkEnter() {

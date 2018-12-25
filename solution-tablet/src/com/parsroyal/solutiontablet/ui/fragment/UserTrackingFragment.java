@@ -1,14 +1,19 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -79,7 +85,6 @@ import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
-import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.MapInfoWindowChooser;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -88,6 +93,7 @@ import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NotificationUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.SunDate;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -112,6 +118,8 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   int cameraZoom;
   @BindView(R.id.error_msg)
   TextView errorMsg;
+  @BindView(R.id.mainLayout)
+  RelativeLayout mainLay;
   @BindView(R.id.layout_container)
   FrameLayout layoutContainer;
   @BindView(R.id.filter)
@@ -126,8 +134,6 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   CheckBox showCustomers;
   @BindView(R.id.show_track)
   CheckBox showTrack;
-  @BindView(R.id.mainLayout)
-  RelativeLayout mainLayout;
   @BindView(R.id.show_waypoints)
   CheckBox showWaypoints;
   @BindView(R.id.spinner)
@@ -173,7 +179,6 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
       Bundle savedInstanceState) {
     context = (MainActivity) getActivity();
     context.changeTitle(getString(R.string.map));
-
     initServices();
     salesmanId = keyValueBiz.findByKey(ApplicationKeys.SALESMAN_ID);
     if (Empty.isEmpty(salesmanId)) {
@@ -461,9 +466,52 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
         ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
         return;
       }
-      MapInfoWindowChooser mapInfoWindowChooser = MapInfoWindowChooser
-          .newInstance(this, marker, distance);
-      mapInfoWindowChooser.show(getActivity().getSupportFragmentManager(), "detail bottom sheet");
+
+      AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+      LayoutInflater inflater1 = ((AppCompatActivity) context).getLayoutInflater();
+      View dialogView = inflater1.inflate(R.layout.bottom_sheet_map_chooser, null);
+      TextView navTv = dialogView.findViewById(R.id.navigation_tv);
+      LinearLayout enterLay = dialogView.findViewById(R.id.enter_layout);
+      TextView distanceTv = dialogView.findViewById(R.id.distance_tv);
+      if (distance <= 0) {
+        distanceTv.setText(R.string.unknown_distance);
+      } else {
+        distanceTv.setText(NumberUtil.digitsToPersian(String.format(
+            getString(R.string.distance_to_customer), String.valueOf(distance))));
+      }
+      dialogBuilder.setView(dialogView);
+      AlertDialog alertDialog = dialogBuilder.create();
+      alertDialog.show();
+      enterLay.setOnClickListener(v -> {
+        doEnter();
+        alertDialog.dismiss();
+      });
+      navTv.setOnClickListener(v -> {
+        if ("google".equals(PreferenceHelper.getDefaultNavigator())) {
+          Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(
+              "google.navigation:q=" + marker.getPosition().latitude + "," + marker
+                  .getPosition().longitude));
+          i.setPackage("com.google.android.apps.maps");
+          if (i.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(i);
+          } else {
+            ToastUtil.toastError(mainLay, getString(R.string.error_google_not_installed));
+          }
+        } else {
+          try {
+            Intent i = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(String.format(Locale.UK, "waze://?ll=%s,%s&navigate=yes",
+                    marker.getPosition().latitude, marker.getPosition().longitude)));
+            startActivity(i);
+          } catch (ActivityNotFoundException ex) {
+            // If Waze is not installed, open it in Google Play:
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("market://details?id=com.waze"));
+            startActivity(intent);
+          }
+        }
+        alertDialog.dismiss();
+      });
 
     });
     clusterManager.getMarkerCollection().setOnInfoWindowAdapter(new CustomerMarkerAdapter());
