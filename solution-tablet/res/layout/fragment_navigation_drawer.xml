@@ -30,10 +30,7 @@
           android:layout_height="wrap_content"
           android:layout_marginStart="18dp"
           android:layout_marginEnd="34dp"
-          android:layout_marginLeft="34dp"
-          android:layout_marginRight="18dp"
           android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_account_circle_black_24dp"
           android:tint="@color/primary_dark" />
@@ -45,7 +42,6 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="21dp"
           android:layout_alignParentTop="true"
-          android:layout_toLeftOf="@id/user_img"
           android:layout_toStartOf="@id/user_img"
           android:ellipsize="end"
           android:maxLines="1"
@@ -59,8 +55,6 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="23dp"
           android:layout_marginStart="8dp"
-          android:layout_marginLeft="8dp"
-          android:layout_toLeftOf="@id/user_name_tv"
           android:layout_toStartOf="@id/user_name_tv"
           android:src="@drawable/ic_arrow_drop_down"
           android:tint="@color/login_gray" />
@@ -73,11 +67,10 @@
           android:layout_marginTop="8dp"
           android:layout_marginBottom="17dp"
           android:layout_below="@id/user_name_tv"
-          android:layout_toLeftOf="@id/user_img"
           android:layout_toStartOf="@id/user_img"
-          android:text="ویزیتور"
           android:textColor="@color/primary_dark"
-          android:textSize="12sp" />
+          android:textSize="12sp"
+          tools:text="ویزیتور" />
       </RelativeLayout>
 
       <View
@@ -107,9 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_apps_black_24dp"
             android:tint="@color/login_gray" />
@@ -119,7 +110,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/feature_icon"
             android:layout_toStartOf="@id/feature_icon"
             android:gravity="center"
             android:text="@string/features_list"
@@ -141,9 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_near_me_black_24dp"
             android:tint="@color/login_gray" />
@@ -154,7 +142,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/path_icon"
             android:layout_toStartOf="@id/path_icon"
             android:gravity="center"
             android:text="@string/today_paths"
@@ -176,9 +163,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_group_black_24dp"
             android:tint="@color/login_gray" />
@@ -188,7 +173,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/customer_icon"
             android:layout_toStartOf="@id/customer_icon"
             android:gravity="center"
             android:text="@string/customers"
@@ -207,9 +191,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_products_24_dp"
             android:tint="@color/black_21" />
@@ -219,7 +201,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/goods_icon"
             android:layout_toStartOf="@id/goods_icon"
             android:gravity="center"
             android:text="@string/title_goods_list"
@@ -253,9 +234,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_assignment_black_24dp"
             android:tint="@color/login_gray" />
@@ -265,7 +244,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/report_icon"
             android:layout_toStartOf="@id/report_icon"
             android:gravity="center"
             android:text="@string/reports"
@@ -287,9 +265,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_map_black_24dp"
             android:tint="@color/login_gray" />
@@ -299,7 +275,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/map_icon"
             android:layout_toStartOf="@id/map_icon"
             android:gravity="center"
             android:text="@string/map"
@@ -320,9 +295,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_questionnaires_24_dp"
             android:tint="@color/black" />
@@ -332,7 +305,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/questionnaire_icon"
             android:layout_toStartOf="@id/questionnaire_icon"
             android:gravity="center"
             android:text="@string/anonymous_questionnaire"
@@ -355,9 +327,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_settings_black_24dp"
             android:tint="@color/login_gray" />
@@ -367,7 +337,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/setting_icon"
             android:layout_toStartOf="@id/setting_icon"
             android:gravity="center"
             android:text="@string/setting"
@@ -389,7 +358,6 @@
           android:layout_height="48dp"
           android:layout_marginEnd="16dp"
           android:layout_marginLeft="20dp"
-          android:layout_marginRight="16dp"
           android:gravity="center_vertical"
           android:text="@string/about_us"
           android:textColor="@color/black_de"
@@ -435,73 +403,65 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="end"
+    android:weightSum="2"
     android:orientation="horizontal">
 
-
-    <RelativeLayout
+    <LinearLayout
       android:id="@+id/send_data_lay"
-      android:layout_width="128dp"
+      android:layout_width="0dp"
+      android:layout_weight="1"
       android:layout_height="32dp"
       android:layout_gravity="center"
-      android:background="@drawable/send_data_background">
-
-      <ImageView
-        android:id="@+id/upload_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_cloud_upload_black_18dp"
-        android:tint="@color/login_gray" />
+      android:layout_marginLeft="16dp"
+      android:background="@drawable/send_data_background"
+      android:gravity="center"
+      android:orientation="horizontal">
 
       <TextView
         style="@style/IranSans.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/upload_icon"
-        android:layout_toStartOf="@+id/upload_icon"
         android:text="@string/send_data"
         android:textColor="@color/black_de"
         android:textSize="@dimen/text_small" />
-    </RelativeLayout>
+      <ImageView
+        android:id="@+id/upload_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_cloud_upload_black_18dp"
+        android:tint="@color/login_gray" />
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
       android:id="@+id/get_data_lay"
-      android:layout_width="128dp"
+      android:layout_width="0dp"
+      android:layout_weight="1"
       android:layout_height="32dp"
       android:layout_margin="16dp"
-      android:background="@drawable/get_data_background">
+      android:background="@drawable/get_data_background"
+      android:gravity="center"
+      android:orientation="horizontal">
+
+      <TextView
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/get_data"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_small" />
 
       <ImageView
         android:id="@+id/download_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:src="@drawable/ic_file_download_white_18dp" />
-
-      <TextView
-        style="@style/IranSans.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/download_icon"
-        android:layout_toStartOf="@+id/download_icon"
-        android:text="@string/get_data"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_small" />
-    </RelativeLayout>
+    </LinearLayout>
   </LinearLayout>
 
   <TextView
