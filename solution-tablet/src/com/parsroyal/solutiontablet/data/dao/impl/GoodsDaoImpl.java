@@ -53,6 +53,8 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     contentValues.put(Goods.COL_SALE_RATE, entity.getSaleRate());//15
     contentValues.put(Goods.COL_CREATE_DATE_TIME, entity.getCreateDateTime());
     contentValues.put(Goods.COL_UPDATE_DATE_TIME, entity.getUpdateDateTime());
+    contentValues.put(Goods.COL_SUPPLIER, entity.getSupplier());
+    contentValues.put(Goods.COL_ASSORTMENT, entity.getAssortment());//19
 
     return contentValues;
   }
@@ -87,7 +89,9 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
         Goods.COL_RECOVERY_DATE,
         Goods.COL_SALE_RATE,//15
         Goods.COL_CREATE_DATE_TIME,
-        Goods.COL_UPDATE_DATE_TIME
+        Goods.COL_UPDATE_DATE_TIME,
+        Goods.COL_SUPPLIER,
+        Goods.COL_SUPPLIER
     };
   }
 
@@ -112,6 +116,8 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     goods.setSaleRate(cursor.getLong(15));
     goods.setCreateDateTime(cursor.getString(16));
     goods.setUpdateDateTime(cursor.getString(17));
+    goods.setSupplier(cursor.getString(18));
+    goods.setAssortment(cursor.getString(19));
     return goods;
   }
 
@@ -133,7 +139,8 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
             + ", " + Goods.COL_RECOVERY_DATE
             + ", " + Goods.COL_CUSTOMER_PRICE //10
             + ", " + Goods.COL_DEFAULT_UNIT
-            + ", " + Goods.COL_SALE_RATE
+            + ", " + Goods.COL_SUPPLIER
+            + ", " + Goods.COL_ASSORTMENT
             + " FROM COMMER_GOODS WHERE 1=1";
 
     if (Empty.isNotEmpty(goodsSo.getGoodsGroupBackendId())) {
@@ -144,6 +151,14 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     if (Empty.isNotEmpty(goodsSo.getConstraint())) {
       sql = sql.concat(" AND TITLE like ? ");
       argsList.add(goodsSo.getConstraint());
+    }
+    if (Empty.isNotEmpty(goodsSo.getSupplier())) {
+      sql = sql.concat(" AND SUPPLIER like ? ");
+      argsList.add(goodsSo.getSupplier());
+    }
+    if (Empty.isNotEmpty(goodsSo.getAssortment())) {
+      sql = sql.concat(" AND ASSORTMENT like ? ");
+      argsList.add(goodsSo.getAssortment());
     }
 
     String[] args = new String[argsList.size()];
@@ -194,6 +209,8 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
             + ", " + Goods.COL_DEFAULT_UNIT
             + ", " + Goods.COL_SALE_RATE
             + ", " + Goods.COL_GROUP_BACKEND_ID
+            + ", " + Goods.COL_SUPPLIER
+            + ", " + Goods.COL_ASSORTMENT//15
             + " FROM COMMER_GOODS WHERE 1=1";
     if (Empty.isNotEmpty(goodsSo.getGoodsGroupBackendId())) {
       sql = sql.concat(" AND GROUP_BACKEND_ID = ? ");
@@ -233,6 +250,8 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     goodsListModel.setRecoveryDate(cursor.getLong(9));
     goodsListModel.setCustomerPrice(cursor.getLong(10));
     goodsListModel.setDefaultUnit(cursor.getInt(11));
+    goodsListModel.setSupplier(cursor.getString(12));
+    goodsListModel.setAssortment(cursor.getString(13));
     return goodsListModel;
   }
 
@@ -252,6 +271,8 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
     goods.setDefaultUnit(cursor.getInt(11));
     goods.setSaleRate(cursor.getLong(12));
     goods.setGroupBackendId(cursor.getLong(13));
+    goods.setSupplier(cursor.getString(14));
+    goods.setAssortment(cursor.getString(15));
     return goods;
   }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import android.util.Log;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.City;
@@ -12,7 +11,6 @@ import com.parsroyal.solutiontablet.data.entity.Customer;
 import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
-import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.entity.Province;
@@ -41,7 +39,7 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
   public static final String OUTPUT_PATH = Environment.getExternalStoragePublicDirectory(
       Environment.DIRECTORY_DOWNLOADS) + "/" + Constants.APPLICATION_NAME + "/Backup/";
   private static final String DATABASE_NAME = "Commer";
-  private static final Integer DATABASE_VERSION = 23;
+  private static final Integer DATABASE_VERSION = 24;
   private static final String SQL_ADD_COLUMN = "ALTER TABLE %s ADD COLUMN %s %s ";
   private static String DATABASE_PATH = "/data/data/com.parsroyal.solutionmobile/databases/";
   private static CommerDatabaseHelper sInstance;
@@ -220,6 +218,12 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
           SaleOrderItem.COL_INC, "INTEGER"));
       db.execSQL(String.format(SQL_ADD_COLUMN, SaleOrderItem.TABLE_NAME,
           SaleOrderItem.COL_DEC, "INTEGER"));
+    }
+    if (oldVersion < 24) {
+      db.execSQL(String.format(SQL_ADD_COLUMN, Goods.TABLE_NAME,
+          Goods.COL_SUPPLIER, "TEXT"));
+      db.execSQL(String.format(SQL_ADD_COLUMN, Goods.TABLE_NAME,
+          Goods.COL_ASSORTMENT, "TEXT"));
     }
   }
 }

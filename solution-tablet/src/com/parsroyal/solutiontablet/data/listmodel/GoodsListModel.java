@@ -15,6 +15,8 @@ public class GoodsListModel extends BaseListModel {
   private Long recoveryDate;
   private long customerPrice;
   private long defaultUnit;
+  private String supplier;
+  private String assortment;
 
   public long getDefaultUnit() {
     return defaultUnit;
@@ -86,5 +88,21 @@ public class GoodsListModel extends BaseListModel {
 
   public void setCustomerPrice(long customerPrice) {
     this.customerPrice = customerPrice;
+  }
+
+  public String getSupplier() {
+    return supplier;
+  }
+
+  public void setSupplier(String supplier) {
+    this.supplier = supplier;
+  }
+
+  public String getAssortment() {
+    return assortment;
+  }
+
+  public void setAssortment(String assortment) {
+    this.assortment = assortment;
   }
 }

@@ -23,6 +23,8 @@ public class Goods extends BaseEntity<Long> {
   public static final String COL_DEFAULT_UNIT = "DEFAULT_UNIT";
   public static final String COL_RECOVERY_DATE = "RECOVERY_DATE";
   public static final String COL_SALE_RATE = "SALE_RATE";
+  public static final String COL_SUPPLIER = "SUPPLIER";
+  public static final String COL_ASSORTMENT = "ASSORTMENT";
 
   public static final String CREATE_TABLE_SQL = "CREATE TABLE " + Goods.TABLE_NAME + " ( "
       + Goods.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -42,7 +44,9 @@ public class Goods extends BaseEntity<Long> {
       + Goods.COL_RECOVERY_DATE + " INTEGER, "
       + Goods.COL_SALE_RATE + " INTEGER, "
       + Goods.COL_CREATE_DATE_TIME + " TEXT, "
-      + Goods.COL_UPDATE_DATE_TIME + " TEXT"
+      + Goods.COL_UPDATE_DATE_TIME + " TEXT,"
+      + Goods.COL_SUPPLIER + " TEXT,"
+      + Goods.COL_ASSORTMENT + " TEXT"
       + " );";
 
   private Long id;
@@ -62,6 +66,24 @@ public class Goods extends BaseEntity<Long> {
   private String recoveryDate;
   private Long saleRate;
   private Long invoiceBackendId;
+  private String supplier;
+  private String assortment;
+
+  public String getSupplier() {
+    return supplier;
+  }
+
+  public void setSupplier(String supplier) {
+    this.supplier = supplier;
+  }
+
+  public String getAssortment() {
+    return assortment;
+  }
+
+  public void setAssortment(String assortment) {
+    this.assortment = assortment;
+  }
 
   public Long getSaleRate() {
     return saleRate;
