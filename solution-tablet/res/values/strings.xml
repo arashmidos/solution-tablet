@@ -658,5 +658,7 @@
   <string name="message_only_cash_order">ثبت سفارش فقط با پرداخت نقدی امکان پذیر است</string>
   <string name="login_info">ورود اطلاعات</string>
   <string name="unknown_distance">فاصله نامعلوم</string>
+  <string name="inc">بدهکار:</string>
+  <string name="dec">بستانکار:</string>
 
 </resources>

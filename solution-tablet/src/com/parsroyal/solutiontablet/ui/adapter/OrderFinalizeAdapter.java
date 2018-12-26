@@ -2,11 +2,11 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,9 +41,11 @@ import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.SaleUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
+import timber.log.Timber;
 
 /**
  * Created by ShakibIsTheBest on 8/4/2017.
@@ -51,7 +53,6 @@ import org.greenrobot.eventbus.EventBus;
 
 public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
 
-  private static final String TAG = OrderFinalizeAdapter.class.getName();
   private final SaleOrderDto order;
   private final List<Goods> rejectedGoodsList;
   private final SaleOrderServiceImpl saleOrderService;
@@ -79,7 +80,10 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = inflater.inflate(R.layout.item_order_list_finilize, parent, false);
+
+    View view = inflater.inflate(SaleUtil.isDelivery(order.getStatus()) ?
+        R.layout.item_deliver_list_finalize :
+        R.layout.item_order_list_finilize, parent, false);
     return new ViewHolder(view);
   }
 
@@ -120,9 +124,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
   }
 
   private boolean isDelivery() {
-    return order.getStatus().equals(SaleOrderStatus.DELIVERABLE.getId()) ||
-        order.getStatus().equals(SaleOrderStatus.DELIVERED.getId()) ||
-        order.getStatus().equals(SaleOrderStatus.DELIVERABLE_SENT.getId());
+    return SaleUtil.isDelivery(order.getStatus());
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
@@ -149,6 +151,12 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
     TextView unit2TitleTv;
     @BindView(R.id.root_layout)
     RelativeLayout rootLayout;
+    @Nullable
+    @BindView(R.id.inc_amount_tv)
+    TextView incAmountTv;
+    @Nullable
+    @BindView(R.id.dec_amount_tv)
+    TextView decAmountTv;
 
     private SaleOrderItemDto item;
     private int position;
@@ -161,8 +169,7 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
 
     public void setData(SaleOrderItemDto item, int position) {
       if (item.getGoods() == null) {
-        ToastUtil.toastError(mainActivity,
-            mainActivity.getString(R.string.error_order_incomplete_not_deliverable));
+        ToastUtil.toastError(mainActivity, R.string.error_order_incomplete_not_deliverable);
         parent.close();
         return;
       }
@@ -204,6 +211,14 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       if (pageStatus.equals(Constants.VIEW)) {
         editImg.setVisibility(View.GONE);
         deleteImg.setVisibility(View.GONE);
+      }
+      if (isDelivery() && incAmountTv != null && decAmountTv != null) {
+        incAmountTv.setText(String.format("%s %s",
+            NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(item.getOrdInc())),
+            mainActivity.getString(R.string.common_irr_currency)));
+        decAmountTv.setText(String.format("%s %s",
+            NumberUtil.digitsToPersian(NumberUtil.getCommaSeparated(item.getOrdDec())),
+            mainActivity.getString(R.string.common_irr_currency)));
       }
     }
 
@@ -250,10 +265,10 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         parent.updateList();
 
       } catch (BusinessException ex) {
-        Log.e(TAG, ex.getMessage(), ex);
+        Timber.e(ex);
         ToastUtil.toastError(mainActivity, ex);
       } catch (Exception ex) {
-        Log.e(TAG, ex.getMessage(), ex);
+        Timber.e(ex);
         ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
       }
     }
@@ -288,10 +303,10 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         parent.updateList();
 
       } catch (BusinessException ex) {
-        Log.e(TAG, ex.getMessage(), ex);
+        Timber.e(ex);
         ToastUtil.toastError(mainActivity, ex);
       } catch (Exception ex) {
-        Log.e(TAG, ex.getMessage(), ex);
+        Timber.e(ex);
         ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
       }
     }
@@ -364,12 +379,12 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         EventBus.getDefault()
             .post(new ErrorEvent(mainActivity.getString(R.string.exceed_count_exception),
                 StatusCodes.DATA_STORE_ERROR));
-        Log.e(TAG, ex.getMessage(), ex);
+        Timber.e(ex);
         ToastUtil.toastError(mainActivity, ex);
       } catch (Exception ex) {
         Logger.sendError("Data storage Exception",
             "Error in confirming GoodsList " + ex.getMessage());
-        Log.e(TAG, ex.getMessage(), ex);
+        Timber.e(ex);
         ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
       }
     }

@@ -56,6 +56,8 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     contentValues.put(SaleOrderItem.COL_INVOICE_BACKEND_ID, entity.getInvoiceBackendId());
     contentValues.put(SaleOrderItem.COL_GOODS_COUNT_2, entity.getGoodsUnit2Count());
     contentValues.put(SaleOrderItem.COL_GOODS_DISCOUNT, entity.getDiscount());
+    contentValues.put(SaleOrderItem.COL_INC, entity.getOrdInc());
+    contentValues.put(SaleOrderItem.COL_DEC, entity.getOrdDec());
     return contentValues;
   }
 
@@ -84,7 +86,9 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
         SaleOrderItem.COL_UPDATE_DATE_TIME,
         SaleOrderItem.COL_INVOICE_BACKEND_ID,//10
         SaleOrderItem.COL_GOODS_COUNT_2,
-        SaleOrderItem.COL_GOODS_DISCOUNT
+        SaleOrderItem.COL_GOODS_DISCOUNT,
+        SaleOrderItem.COL_INC,
+        SaleOrderItem.COL_DEC//14
     };
   }
 
@@ -104,6 +108,8 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setInvoiceBackendId(cursor.getLong(10));
     saleOrderItem.setGoodsUnit2Count(cursor.getLong(11));
     saleOrderItem.setDiscount(cursor.getLong(12));
+    saleOrderItem.setOrdInc(cursor.getLong(13));
+    saleOrderItem.setOrdDec(cursor.getLong(14));
     return saleOrderItem;
   }
 
@@ -187,6 +193,8 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setInvoiceBackendId(cursor.getLong(10));
     saleOrderItem.setGoodsUnit2Count(cursor.getLong(11));
     saleOrderItem.setDiscount(cursor.getLong(12));
+    saleOrderItem.setOrdInc(cursor.getLong(13));
+    saleOrderItem.setOrdDec(cursor.getLong(14));
     return saleOrderItem;
   }
 
@@ -196,7 +204,6 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setGoods(cursor.getLong(1));
     long count1 = cursor.getLong(2);
     saleOrderItem.setCount1(count1);
-    int selectedUnit = cursor.getInt(6);
     Goods goods = goodsService.getGoodsByBackendId(cursor.getLong(1));
     long count2;
     if (Empty.isNotEmpty(goods) && goods.getUnit1Count() != 0L) {
@@ -204,7 +211,7 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     } else {
       count2 = cursor.getLong(11);
     }
-    if( Empty.isNotEmpty(goods)) {
+    if (Empty.isNotEmpty(goods)) {
       saleOrderItem.setPrice1(goods.getPrice());
       saleOrderItem.setPrice2(goods.getCustomerPrice());
     }
@@ -212,6 +219,8 @@ public class SaleOrderItemDaoImpl extends AbstractDao<SaleOrderItem, Long> imple
     saleOrderItem.setCompanyId(
         Integer.valueOf(settingService.getSettingValue(ApplicationKeys.USER_COMPANY_ID)));
     saleOrderItem.setDiscount(cursor.getLong(12));
+    saleOrderItem.setOrderInc(cursor.getLong(13));
+    saleOrderItem.setOrderDec(cursor.getLong(14));
 
     return saleOrderItem;
   }

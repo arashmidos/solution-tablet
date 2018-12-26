@@ -13,6 +13,24 @@ public class BaseSaleDocumentItem {
   private Long discount;
   private Long price1;
   private Long price2;
+  private Long orderInc;
+  private Long orderDec;
+
+  public Long getOrderInc() {
+    return orderInc;
+  }
+
+  public void setOrderInc(Long orderInc) {
+    this.orderInc = orderInc;
+  }
+
+  public Long getOrderDec() {
+    return orderDec;
+  }
+
+  public void setOrderDec(Long orderDec) {
+    this.orderDec = orderDec;
+  }
 
   public Long getPrice1() {
     return price1;

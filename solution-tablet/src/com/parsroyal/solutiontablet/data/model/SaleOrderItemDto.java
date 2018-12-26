@@ -21,6 +21,24 @@ public class SaleOrderItemDto extends BaseModel {
   private Long invoiceBackendId;
   private Goods goods;
   private Long discount;
+  private Long ordInc;
+  private Long ordDec;
+
+  public Long getOrdInc() {
+    return ordInc;
+  }
+
+  public void setOrdInc(Long ordInc) {
+    this.ordInc = ordInc;
+  }
+
+  public Long getOrdDec() {
+    return ordDec;
+  }
+
+  public void setOrdDec(Long ordDec) {
+    this.ordDec = ordDec;
+  }
 
   public Long getInvoiceBackendId() {
     return invoiceBackendId;

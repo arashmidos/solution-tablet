@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
-import android.util.Log;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.SaleOrderDao;
@@ -27,6 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * Created by Arash on 8/21/2015.
@@ -60,7 +60,7 @@ public class SaleOrderForDeliveryDataTaransferBizImpl {
       public void onResponse(Call<SaleOrderList> call, Response<SaleOrderList> response) {
         if (response.isSuccessful()) {
           SaleOrderList saleOrderList = response.body();
-          if (Empty.isNotEmpty(saleOrderList)&& Empty.isNotEmpty(saleOrderList.getOrderList())) {
+          if (Empty.isNotEmpty(saleOrderList) && Empty.isNotEmpty(saleOrderList.getOrderList())) {
             List<SaleOrder> deliverableOrders = saleOrderDao
                 .retrieveSaleOrderByStatus(SaleOrderStatus.DELIVERABLE.getId());
             for (SaleOrder deliverableOrder : deliverableOrders) {
@@ -87,7 +87,7 @@ public class SaleOrderForDeliveryDataTaransferBizImpl {
           }
         } else {
           try {
-            Log.d("TAG", response.errorBody().string());
+            Timber.d(response.errorBody().string());
           } catch (IOException e) {
             e.printStackTrace();
           }
