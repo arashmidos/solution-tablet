@@ -72,7 +72,12 @@ public class OrdersDataTransferBizImpl extends InvoicedOrdersDataTransfer {
 
     RestService restService = ServiceGenerator.createService(RestService.class);
 
-    Call<String> call = restService.sendOrder((SaleOrderDocument) baseSaleDocument);
+    Call<String> call;
+    if (isComplimentary) {
+      call = restService.sendFreeOrder((SaleOrderDocument) baseSaleDocument);
+    } else {
+      call = restService.sendOrder((SaleOrderDocument) baseSaleDocument);
+    }
 
     call.enqueue(new Callback<String>() {
       @Override

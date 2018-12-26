@@ -219,14 +219,14 @@ public class DeliveryAdapter extends Adapter<ViewHolder> {
       }
     }
 
-    //TODO: Improvment
     private void setPageStatus(Bundle args) {
-      if (SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.CANCELED
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT_INVOICE
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.DELIVERABLE_SENT
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.DELIVERED
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.REJECTED_SENT) {
+      if (order.getStatus().equals(SaleOrderStatus.SENT.getId())
+          || order.getStatus().equals(SaleOrderStatus.CANCELED.getId())
+          || order.getStatus().equals(SaleOrderStatus.SENT_INVOICE.getId())
+          || order.getStatus().equals(SaleOrderStatus.DELIVERABLE_SENT.getId())
+          || order.getStatus().equals(SaleOrderStatus.DELIVERED.getId())
+          || order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId())) {
+
         args.putString(Constants.PAGE_STATUS, Constants.VIEW);
       } else {
         args.putString(Constants.PAGE_STATUS, Constants.EDIT);

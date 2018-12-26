@@ -21,6 +21,9 @@ public interface RestService {
   @POST("saleorders")
   Call<String> sendOrder(@Body SaleOrderDocument saleDocument);
 
+  @POST("saleorders/free")
+  Call<String> sendFreeOrder(@Body SaleOrderDocument saleDocument);
+
   @POST("users/updatePusheId")
   Call<String> updatePusheId(@Body UpdatePusheRequest saleDocument);
 

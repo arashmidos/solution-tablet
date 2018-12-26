@@ -122,6 +122,9 @@ public class OrderInfoFragment extends BaseFragment {
   TextView registerGiftTv;
   @BindView(R.id.order_gift_layout)
   LinearLayout orderGiftLayout;
+  @Nullable
+  @BindView(R.id.payment_layout)
+  LinearLayout paymentLayout;
 
   private LabelValue selectedItem = null;
   private MainActivity mainActivity;
@@ -215,7 +218,9 @@ public class OrderInfoFragment extends BaseFragment {
 
   private void setData() {
     //Set Payment type
-    setPaymentType();
+    if (!isComplimentary) {
+      setPaymentType();
+    }
 
     mainActivity.changeTitle(
         isRejected() ? getString(R.string.return_info) : getString(R.string.payment_info));
@@ -253,17 +258,19 @@ public class OrderInfoFragment extends BaseFragment {
     } else if (selectedItem != null) {
       setPaymentMethod(selectedItem);
     } else {
-      List<LabelValue> values;
-      if (isCashOrder) {
-        values = baseInfoService.search(BaseInfoTypes.PAYMENT_TYPE.getId(), "نقد");
-      } else {
-        values = baseInfoService
-            .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.PAYMENT_TYPE.getId());
-      }
+      if (!isComplimentary) {
+        List<LabelValue> values;
+        if (isCashOrder) {
+          values = baseInfoService.search(BaseInfoTypes.PAYMENT_TYPE.getId(), "نقد");
+        } else {
+          values = baseInfoService
+              .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.PAYMENT_TYPE.getId());
+        }
 
-      if (Empty.isNotEmpty(values)) {
-        selectedItem = values.get(0);
-        setPaymentMethod(selectedItem);
+        if (Empty.isNotEmpty(values)) {
+          selectedItem = values.get(0);
+          setPaymentMethod(selectedItem);
+        }
       }
     }
     if (pageStatus.equals(Constants.VIEW)) {
@@ -272,7 +279,14 @@ public class OrderInfoFragment extends BaseFragment {
       orderGiftLayout.setVisibility(View.GONE);
     }
     if (MultiScreenUtility.isTablet(mainActivity)) {
-      setUpRecyclerView();
+      if (!isComplimentary) {
+        setUpRecyclerView();
+      } else {
+        if (paymentLayout != null) {
+          paymentLayout.setVisibility(View.INVISIBLE);
+        }
+      }
+
       paymentTypeTv.setVisibility(View.GONE);
       paymentTypeLayout.setVisibility(View.GONE);
     }
@@ -282,8 +296,10 @@ public class OrderInfoFragment extends BaseFragment {
     }
 
     if (isComplimentary) {
-      orderGiftLayout.setEnabled(false);
-      //TODO: Disable payment and so on
+      orderGiftLayout.setVisibility(View.GONE);
+      paymentTypeLayout.setVisibility(View.GONE);
+      paymentTypeTv.setVisibility(View.GONE);
+
     }
   }
 
@@ -539,17 +555,20 @@ public class OrderInfoFragment extends BaseFragment {
   }
 
   private boolean validateOrderForSave() {
+    if (order.getOrderItems().size() == 0) {
+      ToastUtil.toastError(mainActivity,
+          getProperTitle() + getString(R.string.message_x_has_no_item_for_save));
+      return false;
+    }
+    if (isComplimentary) {
+      return true;
+    }
     if (Empty.isEmpty(selectedItem)) {
       if (isRejected()) {
         ToastUtil.toastError(mainActivity, getString(R.string.error_no_reject_reason_selected));
       } else {
         ToastUtil.toastError(mainActivity, getString(R.string.error_no_payment_method_selected));
       }
-      return false;
-    }
-    if (order.getOrderItems().size() == 0) {
-      ToastUtil.toastError(mainActivity,
-          getProperTitle() + getString(R.string.message_x_has_no_item_for_save));
       return false;
     }
 
