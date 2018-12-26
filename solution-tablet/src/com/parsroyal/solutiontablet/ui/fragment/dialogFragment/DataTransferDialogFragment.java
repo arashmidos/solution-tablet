@@ -307,8 +307,12 @@ public class DataTransferDialogFragment extends DialogFragment {
         t5.start();
         break;
       case TransferSendOrder.ORDER:
-        Thread t6 = new Thread(() -> dataTransferService.sendAllOrders());
+        Thread t6 = new Thread(() -> dataTransferService.sendAllOrders(false));
         t6.start();
+        break;
+      case TransferSendOrder.FREE_ORDER:
+        Thread t16 = new Thread(() -> dataTransferService.sendAllOrders(true));
+        t16.start();
         break;
       case TransferSendOrder.RETURN_ORDER:
         Thread t7 = new Thread(() -> dataTransferService.sendAllSaleRejects());

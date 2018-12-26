@@ -9,12 +9,10 @@ public class Constants {
 
   public static final String APPLICATION_NAME = "SolutionMobile";
   public static final String CUSTOMER_PICTURE_DIRECTORY_NAME = "Customer-Pics";
-  public static final String GPS_TRACKER_ACTION = "com.parsroyal.solutiontablet.TrackerAlarmReceiver";
   public static final String CUSTOMER_BACKEND_ID = "CUSTOMER_BACKEND_ID";
   public static final String PAYMENT_ID = "paymentId";
   public static final String PARENT = "PARENT";
   public static final String CUSTOMER_ID = "customerId";
-  public static final String QUESTIONAIRE_ID = "qnId";
   public static final String PAGE_STATUS = "pageStatus";
   public static final String NEW = "new";
   public static final String EDIT = "edit";
@@ -59,8 +57,6 @@ public class Constants {
   public static final String ApplicationKey = "solution-mobile";
   public static final String DEFAULT_LANGUAGE = "fa";
 
-  public static final String TITLE = "TITLE";
-  public static final String QUESTION_COUNT = "QUESTION_COUNT";
   public static final String QUESTION_POSITION = "QUESTION_POSITION";
   public static final String QUESTION_DTO = "QUESTION_DTO";
   public static final String ORIGIN_VISIT_ID = "ORIGIN_VISIT_ID";
@@ -116,10 +112,11 @@ public class Constants {
     public static final int QUESTIONNAIRE = 23;
     public static final int PAYMENT = 24;
     public static final int ORDER = 25;
-    public static final int RETURN_ORDER = 26;
-    public static final int VISIT_DETAIL = 27;
-    public static final int INVOICES = 28;
-    public static final int CUSTOMER_PICS = 29;
-    public static final int CANCELED_INVOICES = 30;
+    public static final int FREE_ORDER = 26;
+    public static final int RETURN_ORDER = 27;
+    public static final int VISIT_DETAIL = 28;
+    public static final int INVOICES = 29;
+    public static final int CUSTOMER_PICS = 30;
+    public static final int CANCELED_INVOICES = 31;
   }
 }

@@ -221,7 +221,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     sendAllPositions();
     sendAllAnswers();
     sendAllPayments();
-    sendAllOrders();
+    sendAllOrders(false);
     sendAllInvoicedOrders();
     sendAllSaleRejects();
     //Visit detail always should be the last one
@@ -330,11 +330,13 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
   }
 
-  public void sendAllOrders() {
-    List<BaseSaleDocument> saleOrders = saleOrderService
-        .findOrderDocumentByStatus(SaleOrderStatus.READY_TO_SEND.getId());
+  public void sendAllOrders(boolean isComplimentary) {
+    List<BaseSaleDocument> saleOrders = saleOrderService.findOrderDocumentByStatus(
+        isComplimentary ? SaleOrderStatus.FREE_ORDER_DELIVERED.getId()
+            : SaleOrderStatus.READY_TO_SEND.getId());
     if (Empty.isNotEmpty(saleOrders)) {
-      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(context, false);
+      OrdersDataTransferBizImpl dataTransfer = new OrdersDataTransferBizImpl(context,
+          isComplimentary);
 
       for (int i = 0; i < saleOrders.size(); i++) {
         BaseSaleDocument baseSaleDocument = saleOrders.get(i);

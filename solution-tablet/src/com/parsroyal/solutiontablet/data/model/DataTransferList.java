@@ -6,7 +6,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetDistributorOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetOrder;
 import com.parsroyal.solutiontablet.constants.Constants.TransferSendOrder;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,11 +81,15 @@ public class DataTransferList {
     //FACTOR HOT SALE
 //    featureList.add(new DataTransferList(TransferSendOrder.ORDER, R.drawable.ic_cart_24_dp,
 //        context.getString(R.string.order)));
-    if (saleType.equals(ApplicationKeys.SALE_DISTRIBUTER)) {
+    if (PreferenceHelper.isDistributor()) {
       featureList.add(new DataTransferList(TransferSendOrder.INVOICES, R.drawable.ic_truck_24dp,
-        context.getString(R.string.invoices)));
-      featureList.add(new DataTransferList(TransferSendOrder.CANCELED_INVOICES, R.drawable.ic_no_order_24dp,
-          context.getString(R.string.canceled_invoices)));
+          context.getString(R.string.invoices)));
+      featureList.add(
+          new DataTransferList(TransferSendOrder.CANCELED_INVOICES, R.drawable.ic_no_order_24dp,
+              context.getString(R.string.canceled_invoices)));
+    } else if (PreferenceHelper.isVisitor()) {
+      featureList.add(new DataTransferList(TransferSendOrder.FREE_ORDER,
+          R.drawable.ic_add_layer_24dp, context.getString(R.string.free_orders)));
     }
     featureList.add(new DataTransferList(TransferSendOrder.RETURN_ORDER, R.drawable.ic_return_24_dp,
         context.getString(R.string.return_order)));
