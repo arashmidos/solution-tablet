@@ -25,6 +25,7 @@
         android:layout_gravity="center|start"
         android:text="@string/title_cancel_sale_order"
         android:textColor="@color/red"
+        android:backgroundTint="@color/light_red"
         android:visibility="gone"
         tools:visibility="visible" />
 

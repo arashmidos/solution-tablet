@@ -26,6 +26,7 @@
         android:layout_gravity="center|start"
         android:text="@string/title_cancel_sale_order"
         android:textColor="@color/red"
+        android:backgroundTint="@color/light_red"
         android:visibility="gone"
         tools:visibility="visible" />
 
@@ -54,7 +55,6 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_gravity="center|end"
         android:background="@drawable/ic_close_24dp"
         android:backgroundTint="@color/login_gray" />
@@ -211,7 +211,6 @@
           android:layout_width="18dp"
           android:layout_height="18dp"
           android:layout_marginStart="6dp"
-          android:layout_marginLeft="6dp"
           android:src="@drawable/ic_done" />
       </LinearLayout>
       <View
@@ -220,7 +219,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_toLeftOf="@id/submit_btn"
         android:layout_toStartOf="@id/submit_btn"
         android:background="@color/black_10" />
       <TextView
@@ -230,7 +228,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:text="@string/orders_total_amount"
         android:textColor="@color/white"
         android:textSize="10sp" />
@@ -241,9 +238,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
-        android:layout_marginLeft="17dp"
         android:layout_below="@id/total_amount_title"
-        android:layout_toLeftOf="@id/divider"
         android:layout_toStartOf="@id/divider"
         android:gravity="left"
         android:textColor="@color/white"

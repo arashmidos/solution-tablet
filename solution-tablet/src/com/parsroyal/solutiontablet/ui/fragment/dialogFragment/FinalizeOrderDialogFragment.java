@@ -47,7 +47,6 @@ import timber.log.Timber;
 
 public class FinalizeOrderDialogFragment extends DialogFragment {
 
-  private static final String TAG = FinalizeOrderDialogFragment.class.getSimpleName();
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
   @BindView(R.id.total_amount_title)
