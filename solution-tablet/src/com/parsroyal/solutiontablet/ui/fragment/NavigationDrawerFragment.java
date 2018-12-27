@@ -211,7 +211,7 @@ public class NavigationDrawerFragment extends BaseFragment {
           (dialog, which) -> dialog.dismiss(), Constants.ICON_WARNING);
     } else {
       settingService.clearAllSettings();
-      dataTransferService.clearData(Constants.FULL_UPDATE);
+      dataTransferService.clearData();
       SolutionTabletApplication.getInstance().clearAuthorities();
       startActivity(new Intent(mainActivity, LoginActivity.class));
       Intent intent = new Intent(mainActivity, LocationUpdatesService.class);

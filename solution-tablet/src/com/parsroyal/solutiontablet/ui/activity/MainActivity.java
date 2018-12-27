@@ -23,7 +23,6 @@ import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
@@ -77,6 +76,7 @@ import com.parsroyal.solutiontablet.ui.fragment.VisitDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLineDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.VisitLineFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CustomerSearchDialogFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.DataTransferDialogFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -91,6 +91,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import timber.log.Timber;
 
 /**
  * Created by Arash 2017-09-16
@@ -245,7 +246,7 @@ public abstract class MainActivity extends AppCompatActivity {
   private void updatePushe() {
     try {
       Pushe.initialize(this, true);
-      Log.d("Pushe", Pushe.getPusheId(this));
+      Timber.tag("Pushe").d(Pushe.getPusheId(this));
       KeyValue username = PreferenceHelper.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
       if (Empty.isNotEmpty(username)) {
         new RestServiceImpl().updatePusheId(this, Pushe.getPusheId(this), "GCMToken");
@@ -290,18 +291,6 @@ public abstract class MainActivity extends AppCompatActivity {
     }
   }
 
-  public void showProgressDialog(CharSequence message) {
-    if (this.progressDialog == null) {
-      this.progressDialog = new ProgressDialog(this);
-      this.progressDialog.setIndeterminate(true);
-      this.progressDialog.setCancelable(Boolean.FALSE);
-    }
-    this.progressDialog.setIcon(R.drawable.ic_action_info);
-    this.progressDialog.setTitle(R.string.message_please_wait);
-    this.progressDialog.setMessage(message);
-    this.progressDialog.show();
-  }
-
   public void dismissProgressDialog() {
     if (this.progressDialog != null) {
       this.progressDialog.dismiss();
@@ -324,30 +313,35 @@ public abstract class MainActivity extends AppCompatActivity {
     DialogUtil.showCustomDialog(this, getString(R.string.message_update_title),
         getString(R.string.message_update_alert), "", (dialogInterface, i) -> {
           dialogInterface.dismiss();
-          DialogUtil.showCustomDialog(MainActivity.this, getString(R.string.warning),
-              getString(R.string.message_alert_send_data),
-              "",
-              (dialog, i1) -> {
-                dialog.dismiss();
-                showProgressDialog(getString(R.string.message_sending_data));
-                new Thread(() -> {
-                  try {
-                    dataTransferService.sendAllData();
-                  } catch (Exception ex) {
-                    Logger.sendError("Install Update",
-                        "Error in installing new version" + ex.getMessage());
-                    ex.printStackTrace();
-                    ToastUtil
-                        .toastError(MainActivity.this, R.string.error_unknown_system_exception);
-                  }
-                }).start();
-              }, "", (dialogInterface1, i12) -> doInstall(), Constants.ICON_WARNING);
+          if (dataTransferService.hasUnsentData()) {
+            DialogUtil.showCustomDialog(this, getString(R.string.warning),
+                "شما اطلاعات ارسال نشده دارید که قبل از نصب نسخه جدید می بایست ارسال شوند. آیا میخواهید آنها را ارسال کنید؟",
+                getString(R.string.yes),
+                (dialog, which) -> openDataTransferDialog(),
+                getString(R.string.no),
+                (dialog, which) -> {
+                  dialog.dismiss();/* openDataTransferDialog(Constants.DATA_TRANSFER_GET)*/
+                },
+                Constants.ICON_WARNING);
+          } else {
+            doInstall();
+          }
+
         }, "", (dialogInterface, i) -> {
           dialogInterface.dismiss();
           if (PreferenceHelper.isForceExit()) {
             finish();
           }
         }, Constants.ICON_MESSAGE);
+  }
+
+  private void openDataTransferDialog() {
+    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+    Bundle args = new Bundle();
+    args.putString(Constants.DATA_TRANSFER_ACTION, Constants.DATA_TRANSFER_SEND_DATA);
+    DataTransferDialogFragment dialogFragment = DataTransferDialogFragment.newInstance(args);
+
+    dialogFragment.show(ft, "data_transfer");
   }
 
   private void doInstall() {
@@ -441,12 +435,12 @@ public abstract class MainActivity extends AppCompatActivity {
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    Log.i(TAG, "onRequestPermissionResult");
+    Timber.i("onRequestPermissionResult");
     if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
       if (grantResults.length <= 0) {
         // If user interaction was interrupted, the permission request is cancelled and you
         // receive empty arrays.
-        Log.i(TAG, "User interaction was cancelled.");
+        Timber.i("User interaction was cancelled.");
       } else if ((grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
           && grantResults[1] == PackageManager.PERMISSION_GRANTED) || (grantResults.length == 1
           && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
@@ -469,7 +463,7 @@ public abstract class MainActivity extends AppCompatActivity {
       if (grantResults.length <= 0) {
         // If user interaction was interrupted, the permission request is cancelled and you
         // receive empty arrays.
-        Log.i(TAG, "User interaction was cancelled.");
+        Timber.i("User interaction was cancelled.");
 
       } else if ((grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
           && grantResults[1] == PackageManager.PERMISSION_GRANTED) || (grantResults.length == 1
@@ -503,7 +497,9 @@ public abstract class MainActivity extends AppCompatActivity {
   public void hideKeyboard() {
     InputMethodManager imm = (InputMethodManager) this
         .getSystemService(Context.INPUT_METHOD_SERVICE);
-    imm.hideSoftInputFromWindow(container.getWindowToken(), 0);
+    if (imm != null) {
+      imm.hideSoftInputFromWindow(container.getWindowToken(), 0);
+    }
   }
 
   private void showGpsOffDialog() {
@@ -540,7 +536,7 @@ public abstract class MainActivity extends AppCompatActivity {
     // Provide an additional rationale to the user. This would happen if the user denied the
     // request previously, but didn't check the "Don't ask again" checkbox.
     if (shouldProvideRationale && storageShouldProvideRationale && stateShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      Timber.i("Displaying permission rationale to provide additional context.");
       try {
         ToastUtil.toastError(this, getString(R.string.permission_rationale_storage_location),
             view -> {
@@ -554,7 +550,7 @@ public abstract class MainActivity extends AppCompatActivity {
         e.printStackTrace();
       }
     } else if (shouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      Timber.i("Displaying permission rationale to provide additional context.");
       ToastUtil.toastError(this, getString(R.string.permission_rationale_location),
           view -> {
             // Request permission
@@ -563,7 +559,7 @@ public abstract class MainActivity extends AppCompatActivity {
                 REQUEST_PERMISSIONS_REQUEST_CODE);
           });
     } else if (storageShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
+      Timber.i("Displaying permission rationale to provide additional context.");
       ToastUtil.toastError(this, getString(R.string.permission_rationale_storage),
           view -> {
             // Request permission
@@ -572,7 +568,7 @@ public abstract class MainActivity extends AppCompatActivity {
                 REQUEST_PERMISSIONS_REQUEST_CODE);
           });
     } else {
-      Log.i(TAG, "Requesting permission");
+      Timber.i("Requesting permission");
       // Request permission. It's possible this can be auto answered if device policy
       // sets the permission in a given state or the user denied the permission
       // previously and checked "Never ask again".
@@ -762,7 +758,7 @@ public abstract class MainActivity extends AppCompatActivity {
       }
     } catch (Exception e) {
       Logger.sendError("UI Exception", "Error in backPressed " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
+      Timber.e(e);
     }
   }
 

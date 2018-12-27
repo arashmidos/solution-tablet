@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
-import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.impl.CanceledOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.CityDataTransferBizImpl;
@@ -24,13 +23,9 @@ import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransfer
 import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.VisitLineDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitLineForDeliveryDataTaransferBizImpl;
-import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
-import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
-import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
-import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
@@ -41,10 +36,6 @@ import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.data.model.QAnswerDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
-import com.parsroyal.solutiontablet.exception.InvalidServerAddressException;
-import com.parsroyal.solutiontablet.exception.PasswordNotProvidedForConnectingToServerException;
-import com.parsroyal.solutiontablet.exception.UsernameNotProvidedForConnectingToServerException;
-import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.PaymentService;
@@ -52,20 +43,21 @@ import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
+import timber.log.Timber;
 
 /**
  * Created by Arash 29/12/2017
  */
 public class DataTransferServiceImpl implements DataTransferService {
 
-  public static final String TAG = DataTransferServiceImpl.class.getSimpleName();
+  private final GoodsServiceImpl goodsService;
+  private final BaseInfoServiceImpl infoService;
   private Context context;
-  private KeyValueDao keyValueDao;
   private CustomerService customerService;
   private QuestionnaireService questionnaireService;
   private SaleOrderService saleOrderService;
@@ -73,21 +65,16 @@ public class DataTransferServiceImpl implements DataTransferService {
   private PositionService positionService;
   private VisitServiceImpl visitService;
 
-  private KeyValue backendUri;
-  private KeyValue username;
-  private KeyValue password;
-  private KeyValue salesmanId;
-  private KeyValue saleType;
-
   public DataTransferServiceImpl(Context context) {
     this.context = context;
-    this.keyValueDao = new KeyValueDaoImpl();
     this.customerService = new CustomerServiceImpl(context);
     this.questionnaireService = new QuestionnaireServiceImpl(context);
     this.saleOrderService = new SaleOrderServiceImpl(context);
     this.paymentService = new PaymentServiceImpl(context);
     this.positionService = new PositionServiceImpl(context);
     this.visitService = new VisitServiceImpl(context);
+    this.goodsService = new GoodsServiceImpl(context);
+    this.infoService = new BaseInfoServiceImpl(context);
   }
 
   @Override
@@ -197,38 +184,6 @@ public class DataTransferServiceImpl implements DataTransferService {
     }
   }
 
-  @Override
-  public void sendAllData() {
-    backendUri = keyValueDao.retrieveByKey(ApplicationKeys.BACKEND_URI);
-    username = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_USERNAME);
-    password = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_PASSWORD);
-    salesmanId = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
-
-    if (Empty.isEmpty(backendUri)) {
-      throw new InvalidServerAddressException();
-    }
-
-    if (Empty.isEmpty(username)) {
-      throw new UsernameNotProvidedForConnectingToServerException();
-    }
-
-    if (Empty.isEmpty(password)) {
-      throw new PasswordNotProvidedForConnectingToServerException();
-    }
-
-    sendAllNewCustomers();
-    sendAllUpdatedCustomers();
-    sendAllPositions();
-    sendAllAnswers();
-    sendAllPayments();
-    sendAllOrders(false);
-    sendAllInvoicedOrders();
-    sendAllSaleRejects();
-    //Visit detail always should be the last one
-    sendAllCustomerPics();
-    sendAllVisitInformation();
-  }
-
   public void sendAllNewCustomers() {
     List<CustomerDto> allNewCustomers = customerService.getAllNewCustomersForSend();
     if (Empty.isEmpty(allNewCustomers)) {
@@ -251,7 +206,7 @@ public class DataTransferServiceImpl implements DataTransferService {
           continue;
         }
 
-        Log.d(TAG, "Send Pic" + pics.length());
+        Timber.tag("Send Pic").d("Number of pics %s", pics.length());
         new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId())
             .exchangeData();
       }
@@ -353,10 +308,9 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   public void sendAllInvoicedOrders() {
-    saleType = keyValueDao.retrieveByKey(ApplicationKeys.SETTING_SALE_TYPE);
 
     List<BaseSaleDocument> saleOrders;
-    if (ApplicationKeys.SALE_DISTRIBUTER.equals(saleType.getValue())) {
+    if (PreferenceHelper.isDistributor()) {
       saleOrders = saleOrderService.findOrderDocumentByStatus(SaleOrderStatus.DELIVERED.getId());
     } else {
       saleOrders = saleOrderService.findOrderDocumentByStatus(SaleOrderStatus.INVOICED.getId());
@@ -430,7 +384,7 @@ public class DataTransferServiceImpl implements DataTransferService {
           R.string.message_found_no_new_customer_pic_for_send), StatusCodes.NO_DATA_ERROR));
       return;
     } else {
-      Log.d(TAG, "Send Pic" + pics.length());
+      Timber.d("Send Pic lenght %s", pics.length());
     }
 
     new NewCustomerPicDataTransferBizImpl(context, pics, null, null).exchangeData();
@@ -483,17 +437,14 @@ public class DataTransferServiceImpl implements DataTransferService {
         StatusCodes.SUCCESS));
   }
 
-  public void clearData(int updateType) {
-    if (updateType == Constants.FULL_UPDATE) {
-      BaseInfoService infoService = new BaseInfoServiceImpl(context);
-      infoService.deleteAll();
-      infoService.deleteAllCities();
-      infoService.deleteAllProvinces();
-    }
+  public void clearData() {
+    infoService.deleteAll();
+    infoService.deleteAllCities();
+    infoService.deleteAllProvinces();
+
     customerService.deleteAll();
     customerService.deleteAllPics();
 
-    GoodsServiceImpl goodsService = new GoodsServiceImpl(context);
     goodsService.deleteAll();
     goodsService.deleteAllGoodsGroup();
 

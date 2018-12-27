@@ -212,7 +212,7 @@ public class DataTransferDialogFragment extends DialogFragment {
             if (isGetGoods) {
               dataTransferService.clearGoods();
             } else {
-              dataTransferService.clearData(Constants.FULL_UPDATE);
+              dataTransferService.clearData();
             }
           }
           startTransfer();
