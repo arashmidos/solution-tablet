@@ -417,7 +417,6 @@ public class VisitDetailFragment extends BaseFragment {
             new VisitInformationDetail(visitId, VisitInformationDetailType.TAKE_PICTURE, typeId));
         ToastUtil.toastSuccess(mainActivity, R.string.message_picutre_saved_successfully);
         pictureFragment.update();
-
       }
     }
   }

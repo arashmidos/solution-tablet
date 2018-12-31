@@ -10,7 +10,7 @@ import com.parsroyal.solutiontablet.biz.impl.GoodsGroupDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.NewCustomerDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.NewCustomerPicDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.PictureDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PaymentsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PositionDataTransferBizImpl;
@@ -207,7 +207,7 @@ public class DataTransferServiceImpl implements DataTransferService {
         }
 
         Timber.tag("Send Pic").d("Number of pics %s", pics.length());
-        new NewCustomerPicDataTransferBizImpl(context, pics, null, customerDto.getId())
+        new PictureDataTransferBizImpl(context, pics, null, customerDto.getId())
             .exchangeData();
       }
     }
@@ -387,7 +387,7 @@ public class DataTransferServiceImpl implements DataTransferService {
       Timber.d("Send Pic lenght %s", pics.length());
     }
 
-    new NewCustomerPicDataTransferBizImpl(context, pics, null, null).exchangeData();
+    new PictureDataTransferBizImpl(context, pics, null, null).exchangeData();
   }
 
   public void sendAllVisitInformation() {

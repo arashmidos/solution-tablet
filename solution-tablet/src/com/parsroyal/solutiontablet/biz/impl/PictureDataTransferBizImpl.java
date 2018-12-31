@@ -3,7 +3,6 @@ package com.parsroyal.solutiontablet.biz.impl;
 import android.content.Context;
 import android.util.Log;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerPicDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerPicDaoImpl;
@@ -12,42 +11,27 @@ import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
-import com.parsroyal.solutiontablet.exception.BusinessException;
-import com.parsroyal.solutiontablet.exception.InternalServerError;
-import com.parsroyal.solutiontablet.exception.TimeOutException;
-import com.parsroyal.solutiontablet.exception.URLNotFoundException;
-import com.parsroyal.solutiontablet.exception.UnknownSystemException;
+import com.parsroyal.solutiontablet.service.RestService;
+import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.Logger;
+import com.parsroyal.solutiontablet.util.NetworkUtil;
 import java.io.File;
-import java.nio.charset.Charset;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import org.greenrobot.eventbus.EventBus;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Arash on 6/13/2016.
  */
-public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
+public class PictureDataTransferBizImpl {
 
-  public static final String TAG = NewCustomerPicDataTransferBizImpl.class.getSimpleName();
+  public static final String TAG = PictureDataTransferBizImpl.class.getSimpleName();
   private final File pics;
   private final Long visitId;
   private final CustomerServiceImpl customerService;
@@ -56,29 +40,19 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
   private Context context;
   private CustomerPicDao customerPicDao;
 
-  public NewCustomerPicDataTransferBizImpl(Context context, File pics, Long visitId,
-      Long customerId) {
-    super(context);
+  public PictureDataTransferBizImpl(Context context, File pics, Long visitId, Long customerId) {
     this.context = context;
     this.customerPicDao = new CustomerPicDaoImpl(context);
     this.customerService = new CustomerServiceImpl(context);
     this.pics = pics;
     this.visitId = visitId;
     this.customer = customerService.getCustomerDtoById(customerId);
-
   }
+/*
 
-  @Override
   public boolean exchangeData() {
     boolean result = false;
     try {
-      prepare();
-
-      beforeTransfer();
-
-      HttpHeaders httpHeaders = new HttpHeaders();
-
-      httpHeaders.add("Authorization", "Bearer " + token.getValue());
 
       if (Empty.isNotEmpty(customer)) {
         httpHeaders.add("backendId", String.valueOf(customer.getBackendId()));
@@ -145,8 +119,43 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
 
     return result;
   }
+*/
 
-  @Override
+  public boolean exchangeData() {
+    if (!NetworkUtil.isNetworkAvailable(context)) {
+      EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
+    }
+
+    RestService restService = ServiceGenerator.createService(RestService.class);
+
+    // create RequestBody instance from file
+    RequestBody requestFile = RequestBody.create(MediaType.parse("application/zip"), pics);
+
+    // MultipartBody.Part is used to send also the actual file name
+    MultipartBody.Part body =
+        MultipartBody.Part.createFormData("picture", pics.getName(), requestFile);
+
+    // add another part within the multipart request
+    String descriptionString = "hello, this is description speaking";
+    RequestBody description = RequestBody.create(okhttp3.MultipartBody.FORM, descriptionString);
+
+    // finally, execute the request
+    Call<ResponseBody> call = restService.upload(description, body);
+    call.enqueue(new Callback<ResponseBody>() {
+      @Override
+      public void onResponse(Call<ResponseBody> call,
+          Response<ResponseBody> response) {
+        Log.v("Upload", "success");
+      }
+
+      @Override
+      public void onFailure(Call<ResponseBody> call, Throwable t) {
+        Log.e("Upload error:", t.getMessage());
+      }
+    });
+    return true;
+  }
+
   public void receiveData(String data) {
     if (data.equals("1")) {
       if (Empty.isNotEmpty(visitId)) {
@@ -170,42 +179,10 @@ public class NewCustomerPicDataTransferBizImpl extends AbstractDataTransferBizIm
         EventBus.getDefault().post(new DataTransferErrorEvent(context.getString(
             R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
       }
-
     }
   }
 
-  @Override
-  public void beforeTransfer() {
-  }
-
-  @Override
-  public ResultObserver getObserver() {
-    return null;
-  }
-
-  @Override
   public String getMethod() {
     return Empty.isNotEmpty(customer) ? "customers/saveCustomerPics" : "customers/images";
   }
-
-  @Override
-  public Class getType() {
-    return String.class;
-  }
-
-  @Override
-  public HttpMethod getHttpMethod() {
-    return HttpMethod.POST;
-  }
-
-  @Override
-  protected MediaType getContentType() {
-    return new MediaType("TEXT", "PLAIN", Charset.forName("UTF-8"));
-  }
-
-  @Override
-  protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    return null;
-  }
-
 }

@@ -18,7 +18,7 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.impl.CanceledOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransfer;
-import com.parsroyal.solutiontablet.biz.impl.NewCustomerPicDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.PictureDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PaymentsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
@@ -353,12 +353,11 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     }
     Thread sendDataThead = new Thread(() -> {
       try {
-        new NewCustomerPicDataTransferBizImpl(mainActivity, pics, visitId, null)
+        new PictureDataTransferBizImpl(mainActivity, pics, visitId, null)
             .exchangeData();
       } catch (Exception ex) {
         EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
       }
-
     });
     sendDataThead.start();
   }

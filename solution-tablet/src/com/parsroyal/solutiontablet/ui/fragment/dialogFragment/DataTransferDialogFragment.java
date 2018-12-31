@@ -397,8 +397,8 @@ public class DataTransferDialogFragment extends DialogFragment {
   private void finishTransfer() {
     mainActivity.runOnUiThread(() -> {
 
-      ToastUtil.toastMessage(root, isGet ? getString(R.string.get_data_completed_successfully)
-          : getString(R.string.send_data_completed_successfully));
+/*      ToastUtil.toastMessage(root, isGet ? getString(R.string.get_data_completed_successfully)
+          : getString(R.string.send_data_completed_successfully));*/
       transferFinished = true;
       cancelBtn.setVisibility(View.GONE);
       switchButtonState();
