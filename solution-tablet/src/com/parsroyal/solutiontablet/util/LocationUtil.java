@@ -25,6 +25,9 @@ public class LocationUtil {
    * @return distance in meter, 0.0 if location not set
    */
   public static Float distanceBetween(Double lat1, Double long1, double lat2, double long2) {
+    if (lat1 == null || long1 == null) {
+      return 0f;
+    }
     //If it unknown location
     if (lat1 == 0.0f || long1 == 0.0f || lat2 == 0.0f || long2 == 0.0f) {
       //Set it to infinity

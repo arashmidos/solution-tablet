@@ -69,7 +69,6 @@ import timber.log.Timber;
  */
 public class OrderFragment extends BaseFragment {
 
-  private static final String TAG = OrderFragment.class.getName();
   @BindView(R.id.search_img)
   ImageView searchImg;
   @BindView(R.id.search_edt)
@@ -613,7 +612,7 @@ public class OrderFragment extends BaseFragment {
           StatusCodes.DATA_STORE_ERROR));
     } catch (Exception ex) {
       Timber.e(ex);
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
   }
 

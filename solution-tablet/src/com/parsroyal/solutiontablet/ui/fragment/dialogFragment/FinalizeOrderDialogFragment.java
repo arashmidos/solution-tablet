@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,6 @@ import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.OrderFinalizeAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
-import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
@@ -231,8 +229,10 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
             }
           }
         } else {
-          orderFragment.goToOrderInfoFragment(null);
-          getDialog().dismiss();
+          if (orderFragment != null) {
+            orderFragment.goToOrderInfoFragment(null);
+            getDialog().dismiss();
+          }
         }
         break;
       case R.id.cancel_order:

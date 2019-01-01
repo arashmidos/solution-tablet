@@ -132,7 +132,7 @@ public class PositionDaoImpl extends AbstractDao<Position, Long> implements Posi
     position.setSpeed(cursor.getFloat(3));
     String date = cursor.getString(5);
     Date toDate = DateUtil.convertStringToDate(date,
-        DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");//TODO: WHY? FIX it
+        DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");//TODOO: WHY? FIX it
     position.setDate(
         toDate == null || DateUtil.isTooOld(toDate) ? new Date().getTime() : toDate.getTime());
     position.setGpsOff(cursor.getInt(6));

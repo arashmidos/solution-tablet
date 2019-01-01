@@ -73,8 +73,7 @@ public class VisitLineDataTransferBizImpl {
           visitLineDao.deleteAll();
           visitLineDateDao.deleteAll();
           customerDao.deleteAllCustomersRelatedToVisitLines();
-          visitLineDao
-              .create(createVisitLineEntity(context.getString(R.string.manual_visit_line), 0L));
+          visitLineDao.create(createVisitLineEntity(context.getString(R.string.manual_visit_line)));
 //          customerDao.create(getSampleCustomer());
           if (Empty.isNotEmpty(list)) {
 
@@ -87,8 +86,10 @@ public class VisitLineDataTransferBizImpl {
               customerDao.bulkInsert(visitLineDto.getCustomerList());
 
               List<VisitLineDate> dates = visitLineDto.getDates();
-              addGregorianDate(dates);
-              visitLineDateDao.bulkInsert(dates);
+              if (Empty.isNotEmpty(dates)) {
+                addGregorianDate(dates);
+                visitLineDateDao.bulkInsert(dates);
+              }
             }
 
             EventBus.getDefault().post(new DataTransferSuccessEvent("", StatusCodes.SUCCESS));
@@ -138,10 +139,10 @@ public class VisitLineDataTransferBizImpl {
     return visitLine;
   }
 
-  private VisitLine createVisitLineEntity(String title, long id) {
+  private VisitLine createVisitLineEntity(String title) {
     VisitLine visitLine = new VisitLine();
-    visitLine.setBackendId(id);
-    visitLine.setCode((int) id);
+    visitLine.setBackendId(0L);
+    visitLine.setCode(0);
     visitLine.setTitle(title);
     return visitLine;
   }

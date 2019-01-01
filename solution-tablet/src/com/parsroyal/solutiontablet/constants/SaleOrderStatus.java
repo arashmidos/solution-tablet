@@ -47,6 +47,10 @@ public enum SaleOrderStatus {
     this.id = id;
   }
 
+  public String getStringId() {
+    return String.valueOf(id);
+  }
+
   public String getTitle() {
     return title;
   }

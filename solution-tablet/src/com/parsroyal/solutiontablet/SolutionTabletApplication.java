@@ -60,10 +60,6 @@ public class SolutionTabletApplication extends MultiDexApplication {
     return sPreference;
   }
 
-  public ArrayList<String> getAuthorities() {
-    return authorities;
-  }
-
   private void setAuthorities(Set<String> authorities) {
     if (Empty.isNotEmpty(authorities)) {
       this.authorities.clear();
@@ -130,7 +126,8 @@ public class SolutionTabletApplication extends MultiDexApplication {
           .subscribeOn(Schedulers.io())
           .subscribe(date -> {
             Timber.d("TrueTime was initialized and we have a time:%s ", date);
-          }, Throwable::printStackTrace);
+          }, throwable -> {
+          });
     } catch (Exception ex) {
       ex.printStackTrace();
       Timber.e("Network time not initialized");

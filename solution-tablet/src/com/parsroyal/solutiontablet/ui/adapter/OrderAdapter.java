@@ -47,12 +47,10 @@ public class OrderAdapter extends Adapter<ViewHolder> {
   private boolean isFromReport;
   private MainActivity mainActivity;
   private List<SaleOrderListModel> orders;
-  private Long visitId;
 
   public OrderAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromReport,
-      Long visitId, boolean isComplimentary) {
+      boolean isComplimentary) {
     this.context = context;
-    this.visitId = visitId == null ? 0 : visitId;
     this.orders = orders;
     this.mainActivity = (MainActivity) context;
     this.isFromReport = isFromReport;

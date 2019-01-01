@@ -41,4 +41,7 @@ public enum SendStatus {
     this.title = title;
   }
 
+  public String getStringId() {
+    return String.valueOf(id);
+  }
 }

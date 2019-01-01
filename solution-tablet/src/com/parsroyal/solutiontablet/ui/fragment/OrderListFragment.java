@@ -114,7 +114,7 @@ public class OrderListFragment extends BaseFragment {
   //set up recycler view
   private void setUpRecyclerView() {
     model = getOrderList();
-    adapter = new OrderAdapter(mainActivity, model, parent == null, visitId, false);
+    adapter = new OrderAdapter(mainActivity, model, parent == null, false);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);
     recyclerView.setAdapter(adapter);

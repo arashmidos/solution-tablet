@@ -1,5 +1,6 @@
 package com.parsroyal.solutiontablet.util;
 
+import com.parsroyal.solutiontablet.data.entity.Position;
 import java.util.Collection;
 import java.util.Map;
 
@@ -18,6 +19,10 @@ public class Empty {
 
   public static boolean isNotEmpty(Object o) {
     return o != null;
+  }
+
+  public static boolean isNotEmpty(Position p) {
+    return p!=null && p.getLatitude()!=null && p.getLongitude()!=null;
   }
 
   public static boolean isEmpty(String s) {

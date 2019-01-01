@@ -423,7 +423,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
 
     if (currentLocation == null) {
       Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
-      if (position != null) {
+      if (position != null && position.getLatitude() != null && position.getLongitude() != null) {
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(
             new LatLng(position.getLatitude(), position.getLongitude()), cameraZoom), 4000, null);
       } else {

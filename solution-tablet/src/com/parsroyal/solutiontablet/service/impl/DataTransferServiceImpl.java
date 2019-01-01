@@ -10,9 +10,9 @@ import com.parsroyal.solutiontablet.biz.impl.GoodsGroupDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.GoodsRequestDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.NewCustomerDataTransferBizImpl;
-import com.parsroyal.solutiontablet.biz.impl.PictureDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PaymentsDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.PictureDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PositionDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.ProvinceDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
@@ -26,7 +26,10 @@ import com.parsroyal.solutiontablet.biz.impl.VisitLineForDeliveryDataTaransferBi
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.dao.impl.PaymentDaoImpl;
+import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Payment;
+import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
@@ -57,6 +60,8 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   private final GoodsServiceImpl goodsService;
   private final BaseInfoServiceImpl infoService;
+  private final SaleOrderDaoImpl saleOrderDaoImpl;
+  private final PaymentDaoImpl paymentDaoImpl;
   private Context context;
   private CustomerService customerService;
   private QuestionnaireService questionnaireService;
@@ -70,7 +75,9 @@ public class DataTransferServiceImpl implements DataTransferService {
     this.customerService = new CustomerServiceImpl(context);
     this.questionnaireService = new QuestionnaireServiceImpl(context);
     this.saleOrderService = new SaleOrderServiceImpl(context);
+    this.saleOrderDaoImpl = new SaleOrderDaoImpl(context);
     this.paymentService = new PaymentServiceImpl(context);
+    this.paymentDaoImpl = new PaymentDaoImpl(context);
     this.positionService = new PositionServiceImpl(context);
     this.visitService = new VisitServiceImpl(context);
     this.goodsService = new GoodsServiceImpl(context);
@@ -80,20 +87,29 @@ public class DataTransferServiceImpl implements DataTransferService {
   @Override
   public boolean hasUnsentData() {
     List<QAnswerDto> answersForSend = questionnaireService.getAllAnswersDtoForSend();
-    List<BaseSaleDocument> saleOrders = saleOrderService
-        .findOrderDocumentByStatus(SaleOrderStatus.READY_TO_SEND.getId());
+    if (saleOrderDaoImpl.count(SaleOrder.COL_STATUS,
+        SaleOrderStatus.READY_TO_SEND.getStringId()) > 0) {
+      return true;
+    }
+    if (saleOrderDaoImpl.count(SaleOrder.COL_STATUS, SaleOrderStatus.DELIVERED.getStringId()) > 0) {
+      return true;
+    }
+    if (saleOrderDaoImpl.count(SaleOrder.COL_STATUS, SaleOrderStatus.INVOICED.getStringId()) > 0) {
+      return true;
+    }
+    if (saleOrderDaoImpl.count(SaleOrder.COL_STATUS,
+        SaleOrderStatus.FREE_ORDER_DELIVERED.getStringId()) > 0) {
+      return true;
+    }
+
     List<CustomerDto> allNewCustomers = customerService.getAllNewCustomersForSend();
     List<VisitInformation> visits = visitService.getAllVisitInformationForSend();
-    List<Payment> payments = paymentService.getAllPaymentsByStatus(SendStatus.NEW.getId());
-    List<BaseSaleDocument> saleDelivered = saleOrderService
-        .findOrderDocumentByStatus(SaleOrderStatus.DELIVERED.getId());
 
-    List<BaseSaleDocument> saleInvoice = saleOrderService
-        .findOrderDocumentByStatus(SaleOrderStatus.INVOICED.getId());
-
-    return Empty.isNotEmpty(answersForSend) || Empty.isNotEmpty(saleOrders) || Empty
-        .isNotEmpty(allNewCustomers) || Empty.isNotEmpty(visits) || Empty.isNotEmpty(payments)
-        || Empty.isNotEmpty(saleDelivered) || Empty.isNotEmpty(saleInvoice);
+    if (paymentDaoImpl.count(Payment.COL_STATUS, SendStatus.NEW.getStringId()) > 0) {
+      return true;
+    }
+    return Empty.isNotEmpty(answersForSend) || Empty.isNotEmpty(allNewCustomers) || Empty
+        .isNotEmpty(visits);
   }
 
   public void getAllProvinces() {

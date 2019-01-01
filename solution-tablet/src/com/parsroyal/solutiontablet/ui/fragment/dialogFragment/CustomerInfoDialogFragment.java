@@ -406,7 +406,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
               dismiss();
             }, getString(R.string.retry), (dialog, which) -> {
 
-              //TODO:
+              //TODOO:
               dialog.dismiss();
             }, Constants.ICON_WARNING);
       } else {

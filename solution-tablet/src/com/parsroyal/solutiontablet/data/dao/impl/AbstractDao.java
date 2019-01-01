@@ -9,6 +9,7 @@ import com.parsroyal.solutiontablet.data.entity.BaseEntity;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Mahyar on 6/4/2015.
@@ -126,6 +127,20 @@ public abstract class AbstractDao<T extends BaseEntity, PK extends Long> {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     Cursor cursor = db.rawQuery("SELECT count(*) FROM " + getTableName(), null);
+    int count = 0;
+    if (cursor.moveToNext()) {
+      count = cursor.getInt(0);
+    }
+    cursor.close();
+    return count;
+  }
+
+  public int count(String column, String condition) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    String sql = String.format(Locale.US,
+        "SELECT count(*) FROM %s WHERE %s = %s", getTableName(), column, condition);
+    Cursor cursor = db.rawQuery(sql, null);
     int count = 0;
     if (cursor.moveToNext()) {
       count = cursor.getInt(0);

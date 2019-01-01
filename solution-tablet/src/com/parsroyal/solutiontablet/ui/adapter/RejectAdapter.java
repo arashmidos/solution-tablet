@@ -175,7 +175,7 @@ public class RejectAdapter extends Adapter<ViewHolder> {
           customerNameTv.setText(order.getCustomerName());
           customerNameTv.setVisibility(View.VISIBLE);
         }
-        /*if (TextUtils.isEmpty(order.getDescription())) {//TODO: Join with reject type
+        /*if (TextUtils.isEmpty(order.getDescription())) {//TODOO: Join with reject type
           returnReasonTv.setVisibility(View.GONE);
         } else {
           returnReasonTv.setText(order.getDescription());

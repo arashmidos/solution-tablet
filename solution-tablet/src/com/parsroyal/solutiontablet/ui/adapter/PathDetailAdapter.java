@@ -39,7 +39,6 @@ import java.util.Locale;
  */
 public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.ViewHolder> {
 
-  private static final String TAG = PathDetailAdapter.class.getName();
   private final CustomerService customerService;
 
   private Long visitlineBackendId;

@@ -386,7 +386,7 @@ public abstract class MainActivity extends AppCompatActivity {
     /*List<String> fakeApps = GPSUtil.getListOfFakeLocationApps(this);
     if (fakeApps.size() > 0 && !BuildConfig.DEBUG) {
       showFakeGpsDetected(fakeApps);
-    }*///TODO: Time consuming, do it in async
+    }*///TODOO: Time consuming, do it in async
     SolutionTabletApplication.getInstance().reSyncTrueTime();
   }
 
@@ -783,7 +783,9 @@ public abstract class MainActivity extends AppCompatActivity {
   }
 
   public void changeDetailContent(String content) {
-    detailTv.setText(content);
+    if (detailTv != null) {
+      detailTv.setText(content);
+    }
   }
 
   public void setToolbarIconVisibility(int id, int visibility) {
