@@ -155,18 +155,7 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       saleOrder = new SaleOrderDocument();
       String orderType = settingService.getSettingValue(ApplicationKeys.SETTING_ORDER_TYPE);
       saleOrder.setType(Empty.isEmpty(orderType) ? 0 : Integer.valueOf(orderType));
-      //Set export date to tomorrow
-      String saleDate = cursor.getString(3);
 
-      Date date;
-      try {
-        date = DateUtil.convertStringToDate(saleDate, DateUtil.GLOBAL_FORMATTER, "FA");
-      } catch (Exception ex) {
-        date = DateUtil.convertStringToDate(saleDate, DateUtil.GLOBAL_FORMATTER2, "FA");
-      }
-      date = DateUtil.addDaysToDate(date, 1, false);
-      ((SaleOrderDocument) saleOrder)
-          .setExportDate(DateUtil.convertDate(date, DateUtil.GLOBAL_FORMATTER, "FA"));
       ((SaleOrderDocument) saleOrder).setSmsConfirm(cursor.getLong(15));
     } else if (SaleOrderStatus.INVOICED.getId().equals(statusId) || SaleOrderStatus.DELIVERED
         .getId().equals(statusId) || SaleOrderStatus.CANCELED.getId().equals(statusId)

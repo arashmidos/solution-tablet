@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.util;
 
 import android.content.Context;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import com.parsroyal.solutiontablet.exception.InvalidDateStringException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -12,6 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import timber.log.Timber;
 
 /**
  * Created by h.arbaboon on 6/2/2014.
@@ -93,6 +96,9 @@ public class DateUtil {
       formatter.setCalendar(gregorianCalendar);
     }
     String englishDate = formatter.format(date);
+    if (VERSION.SDK_INT >= VERSION_CODES.N && formatter.equals(GLOBAL_FORMATTER)) {
+      englishDate = getMonthNumberForAndroid8(englishDate, formatter);
+    }
     englishDate = NumberUtil.digitsToEnglish(englishDate);
     return englishDate;
   }
@@ -362,18 +368,22 @@ public class DateUtil {
     if (Empty.isEmpty(date)) {
       return null;
     }
-    if (date.length() == 8 && !date.startsWith("13")) {
-      date = "13" + date;
-    }
     if (locale.equalsIgnoreCase("EN")) {
       GregorianCalendar gregorianCalendar = new GregorianCalendar();
       gregorianCalendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
       formatter.setCalendar(gregorianCalendar);
     }
     try {
+      if (VERSION.SDK_INT >= VERSION_CODES.N && formatter.equals(GLOBAL_FORMATTER)) {
+        date = getMonthNumberForAndroid8(date, formatter);
+      }
+      if (date.length() == 8 && !date.startsWith("13")) {
+        date = "13" + date;
+      }
       return formatter.parse(date);
     } catch (Exception e) {
-      throw new InvalidDateStringException(date);
+      e.printStackTrace();
+      return null;//TODO:
     }
   }
 
@@ -483,7 +493,32 @@ public class DateUtil {
       }
     }
     return monthNames[Integer.parseInt(m)];
+  }
 
+  public static String getMonthNumberForAndroid8(String date, SimpleDateFormat formatter) {
+    Timber.tag("Datee").i("Input %s", date);
+    try {
+      String[] month = formatter.getDateFormatSymbols().getShortMonths();
+      String m = date.split("/")[1];
+      String realM = null;
+      for (int i = 0; i < month.length; i++) {
+        if (m.equals(month[i])) {
+          int result = i + 1;
+          if (result < 10) {
+            realM = "0" + result;
+          } else {
+            realM = String.valueOf(result);
+          }
+        }
+      }
+      if (realM != null) {
+        date = date.replace(m, realM);
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    Timber.tag("Datee").i("Output %s", date);
+    return date;
   }
 
   public static String moveDate(String date1, Integer count) {

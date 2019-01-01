@@ -6,6 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -34,8 +36,10 @@ public class TrackerAlarmReceiver extends WakefulBroadcastReceiver {
 
     if (Empty.isNotEmpty(settingService.getSettingValue(ApplicationKeys.SALESMAN_ID))) {
       Log.i(TAG, "required information is available. trying to set alarm and run service");
-      Intent service = new Intent(context, SendLocationService.class);
-      startWakefulService(context, service);
+      if (VERSION.SDK_INT < VERSION_CODES.O) {
+        Intent service = new Intent(context, SendLocationService.class);
+        startWakefulService(context, service);
+      }
 
     } else {
       Log.i(TAG, "required information is not available");
