@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
-import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerPicDao;
@@ -20,7 +19,6 @@ import java.io.File;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,78 +46,6 @@ public class PictureDataTransferBizImpl {
     this.visitId = visitId;
     this.customer = customerService.getCustomerDtoById(customerId);
   }
-/*
-
-  public boolean exchangeData() {
-    boolean result = false;
-    try {
-
-      if (Empty.isNotEmpty(customer)) {
-        httpHeaders.add("backendId", String.valueOf(customer.getBackendId()));
-      }
-
-      //
-      RestTemplate restTemplate = new RestTemplate();
-      restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-      FormHttpMessageConverter formConverter = new FormHttpMessageConverter();
-      formConverter.setCharset(Charset.forName("UTF8"));
-      restTemplate.getMessageConverters().add(formConverter);
-      restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-      restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-
-      MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
-      if (Empty.isNotEmpty(customer)) {
-        parts.add("customerPics.zip", new FileSystemResource(pics));
-      } else {
-        parts.add("zipfile.zip", new FileSystemResource(pics));
-      }
-      HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts,
-          httpHeaders);
-
-      String url = makeUrl(serverAddress1.getValue(), getMethod());
-
-      ResponseEntity<String> response = restTemplate
-          .exchange(url, getHttpMethod(), requestEntity, getType());
-
-      receiveData(response.getBody());
-
-      result = true;
-
-    } catch (ResourceAccessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      if (Empty.isNotEmpty(getObserver())) {
-        getObserver().publishResult(new TimeOutException());
-      }
-    } catch (HttpServerErrorException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      if (ex.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR) && Empty
-          .isNotEmpty(getObserver())) {
-        getObserver().publishResult(new InternalServerError());
-      } else {
-        if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND) && Empty.isNotEmpty(getObserver())) {
-          getObserver().publishResult(new URLNotFoundException());
-        }
-      }
-    } catch (HttpClientErrorException ex) {
-      if (Empty.isNotEmpty(getObserver())) {
-        getObserver().publishResult(new URLNotFoundException());
-      }
-    } catch (final BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      if (Empty.isNotEmpty(getObserver())) {
-        getObserver().publishResult(ex);
-      }
-    } catch (Exception e) {
-      Logger.sendError("Data transfer", "Error in exchanging NewCustomerPicData " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
-      if (Empty.isNotEmpty(getObserver())) {
-        getObserver().publishResult(new UnknownSystemException(e));
-      }
-    }
-
-    return result;
-  }
-*/
 
   public boolean exchangeData() {
     if (!NetworkUtil.isNetworkAvailable(context)) {
@@ -132,25 +58,32 @@ public class PictureDataTransferBizImpl {
     RequestBody requestFile = RequestBody.create(MediaType.parse("application/zip"), pics);
 
     // MultipartBody.Part is used to send also the actual file name
-    MultipartBody.Part body =
-        MultipartBody.Part.createFormData("picture", pics.getName(), requestFile);
 
     // add another part within the multipart request
-    String descriptionString = "hello, this is description speaking";
-    RequestBody description = RequestBody.create(okhttp3.MultipartBody.FORM, descriptionString);
+    RequestBody backendId = null;
+    String customerBackend;
+
+    customerBackend = customer != null ? String.valueOf(customer.getBackendId()) : "";
+
+    backendId = RequestBody.create(MultipartBody.FORM, customerBackend);
+    MultipartBody.Part body = MultipartBody.Part
+        .createFormData("picture", pics.getName(), requestFile);
 
     // finally, execute the request
-    Call<ResponseBody> call = restService.upload(description, body);
-    call.enqueue(new Callback<ResponseBody>() {
+    Call<String> call = restService.upload(backendId, body);
+    call.enqueue(new Callback<String>() {
       @Override
-      public void onResponse(Call<ResponseBody> call,
-          Response<ResponseBody> response) {
-        Log.v("Upload", "success");
+      public void onResponse(Call<String> call, Response<String> response) {
+        if (response.isSuccessful() && "1".equals(response.body())) {
+          receiveData("1");
+        } else {
+          receiveData("0");
+        }
       }
 
       @Override
-      public void onFailure(Call<ResponseBody> call, Throwable t) {
-        Log.e("Upload error:", t.getMessage());
+      public void onFailure(Call<String> call, Throwable t) {
+        receiveData("0");
       }
     });
     return true;
@@ -180,9 +113,5 @@ public class PictureDataTransferBizImpl {
             R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
       }
     }
-  }
-
-  public String getMethod() {
-    return Empty.isNotEmpty(customer) ? "customers/saveCustomerPics" : "customers/images";
   }
 }

@@ -43,9 +43,9 @@ public interface RestService {
   Call<JsonArray> getAllRejectedData(@Path("customerId") Long customerBackendId);
 
   @Multipart
-  @POST("customers/saveCustomerPics")
-  Call<ResponseBody> upload(
-      @Part("description") RequestBody description,
+  @POST("customers/images")
+  Call<String> upload(
+      @Part("backendId") RequestBody backendId,
       @Part MultipartBody.Part file
   );
 }
