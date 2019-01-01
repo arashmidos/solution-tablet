@@ -97,8 +97,12 @@ public class SaveLocationService extends IntentService {
     }
     long id = positionService.savePosition(position);
     position.setId(id);
-    SolutionTabletApplication.getInstance().setLastSavedPosition(position);
-    EventBus.getDefault().post(new GPSEvent(location));
+    if (Empty.isNotEmpty(position)) {
+      SolutionTabletApplication.getInstance().setLastSavedPosition(position);
+    }
+    if (location != null) {
+      EventBus.getDefault().post(new GPSEvent(location));
+    }
 
     Intent service = new Intent(this, SendLocationService.class);
     startService(service);

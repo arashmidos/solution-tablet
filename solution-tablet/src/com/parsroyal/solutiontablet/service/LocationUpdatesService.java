@@ -70,7 +70,7 @@ public class LocationUpdatesService extends Service {
   private static final float MAX_ACCEPTED_DISTANCE_IN_METER = 1000.0f;
   private static final float MIN_ACCEPTED_DISTANCE_IN_METER = 20.0f;
   private static final float MAX_ACCEPTED_ACCURACY_IN_METER = 100.0f;
-  private static final float MIN_ACCEPTED_SPEED_IN_MS = 0.5f;
+  private static final float MIN_ACCEPTED_SPEED_IN_MS = 0.3f;
 
   private static final String CLOSE_FROM_NOTIFICATION = PACKAGE_NAME +
       ".started_from_notification";
@@ -392,10 +392,10 @@ public class LocationUpdatesService extends Service {
         }
       }
 
-      if (distance < lastLocation.getAccuracy() + location.getAccuracy()) {
+      /*if (distance < lastLocation.getAccuracy() + location.getAccuracy()) {
         //Its probabely in the circle of past location
         return false;
-      }
+      }*/
       return true;
     }
   }
