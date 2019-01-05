@@ -299,12 +299,12 @@ public class LocationUpdatesService extends Service {
     NotificationManager notificationManager = (NotificationManager) getSystemService(
         Context.NOTIFICATION_SERVICE);
     CharSequence text = getString(R.string.notification_message_gps_service_active);
-    String CHANNEL_ID = "ParsRoyal_Channel";
+    String CHANNEL_ID = "ParsRoyal_Channel1";
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
       CharSequence name = "ParsRoyal";
       String Description = "ParsRoyal is running";
-      int importance = NotificationManager.IMPORTANCE_HIGH;
+      int importance = NotificationManager.IMPORTANCE_LOW;
       NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
       mChannel.setDescription(Description);
 //      mChannel.enableLights(true);
