@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.data.model;
 
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.Date;
 
@@ -119,15 +120,17 @@ public class VisitListModel extends BaseModel {
   public String getFormattedTime() {
     try {
       String start = startTime.substring(0, startTime.lastIndexOf(":"));
-      String end = endTime.substring(0, endTime.lastIndexOf(":"));
-
       if (start.startsWith("0")) {
         start = start.substring(1);
       }
+
+      String end = Empty.isEmpty(endTime) ? "--" : endTime.substring(0, endTime.lastIndexOf(":"));
+
       if (end.startsWith("0")) {
         end = end.substring(1);
       }
-      return NumberUtil.digitsToPersian(String.format("%s الی %s (%s)", start, end, getPeriod()));
+      return NumberUtil.digitsToPersian(
+          String.format("%s الی %s (%s)", start, end, Empty.isEmpty(endTime) ? "--" : getPeriod()));
     } catch (Exception ex) {
       ex.printStackTrace();
     }
