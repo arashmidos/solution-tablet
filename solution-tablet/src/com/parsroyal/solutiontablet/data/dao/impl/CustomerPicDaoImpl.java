@@ -14,6 +14,7 @@ import com.parsroyal.solutiontablet.data.searchobject.CustomerPictureSO;
 import com.parsroyal.solutiontablet.util.Empty;
 import java.util.ArrayList;
 import java.util.List;
+import timber.log.Timber;
 
 /**
  * Created by Arash on 6/6/2016.
@@ -25,7 +26,7 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
   public CustomerPicDaoImpl(Context context) {
     this.context = context;
   }
-  
+
   @Override
   protected Context getContext() {
     return context;
@@ -75,7 +76,7 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
     customerPic.setId(cursor.getLong(0));
     customerPic.setBackendId(cursor.getLong(1));
     customerPic.setCustomerBackendId(cursor.getLong(2));
-    customerPic.setCustomerBackendId(cursor.getLong(3));
+    customerPic.setCustomerId(cursor.getLong(3));
     customerPic.setTitle(cursor.getString(4));
     customerPic.setCreateDateTime(cursor.getString(5));
     customerPic.setStatus(cursor.getLong(6));
@@ -84,20 +85,11 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
   }
 
   @Override
-  public List<String> getAllCustomerPicForSend() {
-    String selection =
-        " " + CustomerPic.COL_STATUS + " = ? " + " AND (" + CustomerPic.COL_BACKEND_ID
-            + " is null or " + CustomerPic.COL_BACKEND_ID + " = 0)";
+  public List<CustomerPic> getAllCustomerPicForSend() {
+    String selection = " " + CustomerPic.COL_STATUS + " = ? " + " AND ("
+        + CustomerPic.COL_BACKEND_ID + " is null or " + CustomerPic.COL_BACKEND_ID + " = 0)";
     String[] args = {String.valueOf(CustomerStatus.NEW.getId())};
-    List<CustomerPic> result = retrieveAll(selection, args, null, null, null);
-    List<String> retVal = new ArrayList<>();
-
-    for (int i = 0; i < result.size(); i++) {
-      CustomerPic o = result.get(i);
-      retVal.add(o.getTitle());
-    }
-
-    return retVal;
+    return retrieveAll(selection, args, null, null, null);
   }
 
   @Override
@@ -117,19 +109,11 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
   }
 
   @Override
-  public List<String> getAllCustomerPicForSendByCustomerId(Long customerId) {
+  public List<CustomerPic> getAllCustomerPicForSendByCustomerId(Long customerId) {
     String selection =
         " " + CustomerPic.COL_STATUS + " = ? " + " AND " + CustomerPic.COL_CUSTOMER_ID + " = ? ";
     String[] args = {String.valueOf(CustomerStatus.NEW.getId()), String.valueOf(customerId)};
-    List<CustomerPic> result = retrieveAll(selection, args, null, null, null);
-    List<String> retVal = new ArrayList<>();
-
-    for (int i = 0; i < result.size(); i++) {
-      CustomerPic o = result.get(i);
-      retVal.add(o.getTitle());
-    }
-
-    return retVal;
+    return retrieveAll(selection, args, null, null, null);
   }
 
   @Override
@@ -165,13 +149,23 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
 
   @Override
   public List<CustomerPic> findCustomerPictures(CustomerPictureSO customerPictureSO) {
-    String selection = " ";
+    String selection = "";
+    ArrayList<String> args = new ArrayList<>();
     if (Empty.isNotEmpty(customerPictureSO.getVisitId())) {
       selection = " " + CustomerPic.COL_VISIT_ID + " = ? ";
+      args.add(String.valueOf(customerPictureSO.getVisitId()));
     }
-    String[] args = {String.valueOf(customerPictureSO.getVisitId())};
+    if (Empty.isNotEmpty(customerPictureSO.getStatus()) && customerPictureSO.getStatus() != 0) {
+      if (Empty.isNotEmpty(selection)) {
+        selection = selection + " AND ";
+      }
+      selection = selection + " " + CustomerPic.COL_STATUS + " = ? ";
+      args.add(String.valueOf(customerPictureSO.getStatus()));
+    }
+    String[] argArray = new String[args.size()];
+    argArray = args.toArray(argArray);
 
-    return retrieveAll(selection, args, null, null, null);
+    return retrieveAll(selection, argArray, null, null, null);
   }
 
   @Override
@@ -218,6 +212,21 @@ public class CustomerPicDaoImpl extends AbstractDao<CustomerPic, Long> implement
     contentValues.put(VisitInformationDetail.COL_STATUS, CustomerStatus.SENT.getId());
     int rows = db.update(getTableName(), contentValues, whereClause, args);
     Log.d("VisitDetailUpdate", "row updated " + rows);
+    db.setTransactionSuccessful();
+    db.endTransaction();
+  }
+
+  @Override
+  public void updateCustomerPicForNewCustomers(Long id, Long backendId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(context);
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    db.beginTransaction();
+    String whereClause = CustomerPic.COL_CUSTOMER_ID + " = ?";
+    String[] args = {String.valueOf(id)};
+    ContentValues contentValues = new ContentValues();
+    contentValues.put(CustomerPic.COL_CUSTOMER_BACKEND_ID, backendId);
+    int rows = db.update(getTableName(), contentValues, whereClause, args);
+    Timber.d("row updated: %s", rows);
     db.setTransactionSuccessful();
     db.endTransaction();
   }

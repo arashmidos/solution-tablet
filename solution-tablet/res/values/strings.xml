@@ -529,7 +529,7 @@
   <string name="message_save_questionnaire">پرسشنامه ذخیره شود؟</string>
   <string name="customer_price_title">(مصرف کننده)</string>
   <string name="add_picture">ثبت تصویر</string>
-  <string name="send_x_registered">ارسال %s ثبت شده</string>
+  <string name="send_x_registered">%s ثبت شده</string>
   <string name="order_description">توضیحات سفارش</string>
   <string name="customer_description">توضیحات مشتری</string>
   <string name="search_in_cities">جستجو در شهر ها</string>
@@ -608,7 +608,7 @@
   <string name="goods_request">درخواست کالا</string>
   <string name="invoices">فاکتورها</string>
   <string name="canceled_invoices">فاکتورهای بایگانی شده</string>
-  <string name="send_visit_detail_info">ارسال اطلاعات بازدید</string>
+  <string name="send_visit_detail_info">جزییات بازدید</string>
   <string name="deliverable">قابل تحویل</string>
   <string name="sent">ارسال شده</string>
   <string name="delivered">تحویل داده شده</string>

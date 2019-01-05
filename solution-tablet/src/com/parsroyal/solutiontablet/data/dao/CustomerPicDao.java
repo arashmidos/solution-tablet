@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface CustomerPicDao extends BaseDao<CustomerPic, Long> {
 
-  List<String> getAllCustomerPicForSend();
+  List<CustomerPic> getAllCustomerPicForSend();
 
   List<String> getAllCustomerPicForSendByVisitId(Long visitId);
 
-  List<String> getAllCustomerPicForSendByCustomerId(Long customerId);
+  List<CustomerPic> getAllCustomerPicForSendByCustomerId(Long customerId);
 
   List<String> getAllCustomerPicTitleByCustomerId(Long customerId);
 
@@ -28,6 +28,7 @@ public interface CustomerPicDao extends BaseDao<CustomerPic, Long> {
   void updatePicturesByVisitId(Long visitId);
 
   void updateAllPicturesByCustomerId(Long customerId);
+  void updateCustomerPicForNewCustomers(Long id, Long backendId);
 
   void delete(String title, long customerId);
 

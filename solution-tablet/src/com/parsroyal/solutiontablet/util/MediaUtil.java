@@ -28,7 +28,7 @@ public class MediaUtil {
   public static final int MEDIA_TYPE_VIDEO = 2;
   public static final int MEDIA_TYPE_ZIP = 3;
   public static final String GOODS_IMAGES_FOLDER = Environment.getExternalStoragePublicDirectory(
-      Environment.DIRECTORY_PICTURES) + "/" + Constants.APPLICATION_NAME+"/Goods/";
+      Environment.DIRECTORY_PICTURES) + "/" + Constants.APPLICATION_NAME + "/Goods/";
   private static final int BUFFER_SIZE = 512;
 
   public static Uri getOutputMediaFileUri(Context context, int type, String directoryName,
@@ -190,7 +190,7 @@ public class MediaUtil {
   }
 
   public static String getGoodImage(String goodsCode) {
-    File image = new File(GOODS_IMAGES_FOLDER+goodsCode + ".png");
+    File image = new File(GOODS_IMAGES_FOLDER + goodsCode + ".png");
     if (image.exists()) {
       return image.getAbsolutePath();
     } else {

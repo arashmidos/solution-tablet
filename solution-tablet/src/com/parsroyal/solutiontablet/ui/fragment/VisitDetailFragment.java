@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import timber.log.Timber;
@@ -395,12 +396,12 @@ public class VisitDetailFragment extends BaseFragment {
         Bitmap bitmap = ImageUtil.decodeSampledBitmapFromUri(mainActivity, fileUri);
         bitmap = ImageUtil.getScaledBitmap(getActivity(), bitmap);
 
+        String fileName = UUID.randomUUID().toString();
         String s = ImageUtil.saveTempImage(bitmap, MediaUtil
             .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
-                Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-                "IMG_" + customer.getBackendId() + "_" + (new Date().getTime()) % 1000));
+                Constants.CUSTOMER_PICTURE_DIRECTORY_NAME, fileName));
 
-        if (!s.equals("")) {
+        if (!s.equals("")) {//TODO:NOT working
           File fdelete = new File(fileUri.getPath());
           if (fdelete.exists()) {
             fdelete.delete();

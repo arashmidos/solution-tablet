@@ -7,8 +7,8 @@ import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionModel;
+import com.parsroyal.solutiontablet.data.searchobject.CustomerPictureSO;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
-import java.io.File;
 import java.util.List;
 
 /**
@@ -46,6 +46,7 @@ public interface CustomerService extends BaseService {
   List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
 
   long savePicture(CustomerPic customerPic);
+
   void savePicture(List<CustomerPic> customerPics, Long customerId);
 
   List<CustomerPic> getAllPicturesByCustomerBackendId(long customerBackendId);
@@ -54,17 +55,20 @@ public interface CustomerService extends BaseService {
 
   List<String> getAllPicturesTitleByCustomerId(long customerId);
 
-  File getAllCustomerPicForSend();
+  List<CustomerPic> getAllCustomerPicForSend();
 
-  File getAllCustomerPicForSendByVisitId(Long visitId);
-  File getAllCustomerPicForSendByCustomerId(Long customerId);
+  List<CustomerPic> findCustomerPic(CustomerPictureSO pictureSO);
+
+  List<CustomerPic> getAllCustomerPicForSendByCustomerId(Long customerId);
 
   void deleteCustomerPic(String title, long customerId);
-
 
   void deleteAllPics();
 
   void updateCustomerPictures();
 
+  void updateCustomerPicForNewCustomers(Long id, Long backendId);
+
   boolean addCustomer(Customer customer, Long visitlineBackendId);
+
 }

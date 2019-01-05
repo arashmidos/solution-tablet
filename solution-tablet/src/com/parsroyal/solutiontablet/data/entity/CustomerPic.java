@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.data.entity;
 
 import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.Empty;
 import java.util.Date;
 
 /**
@@ -108,5 +109,9 @@ public class CustomerPic extends BaseEntity<Long> {
 
   public void setCustomerId(Long customerId) {
     this.customerId = customerId;
+  }
+
+  public String getName() {
+    return Empty.isNotEmpty(title) ? title.substring(title.lastIndexOf("/")+1) : "";
   }
 }

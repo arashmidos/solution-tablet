@@ -72,6 +72,8 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
           tempCustomer.setUpdateDateTime(DateUtil
               .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
           customerDao.update(tempCustomer);
+          customerService
+              .updateCustomerPicForNewCustomers(tempCustomer.getId(), tempCustomer.getBackendId());
 
 //           Update Visits
           VisitInformation visitList = visitInformationDao.retrieveForNewCustomer(customerId);

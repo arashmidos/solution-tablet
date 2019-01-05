@@ -28,6 +28,7 @@ import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.impl.PaymentDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.SaleOrderDaoImpl;
+import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.entity.SaleOrder;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
@@ -47,7 +48,6 @@ import com.parsroyal.solutiontablet.service.QuestionnaireService;
 import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
-import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
@@ -208,28 +208,35 @@ public class DataTransferServiceImpl implements DataTransferService {
       return;
     }
 
-    NewCustomerDataTransferBizImpl newCustomerDataTransferBiz = new NewCustomerDataTransferBizImpl(
-        context);
+    NewCustomerDataTransferBizImpl dataTransferBiz = new NewCustomerDataTransferBizImpl(context);
 
     for (int i = 0; i < allNewCustomers.size(); i++) {
       CustomerDto customerDto = allNewCustomers.get(i);
-      newCustomerDataTransferBiz.setCustomer(customerDto);
-      boolean isSuccess = newCustomerDataTransferBiz.exchangeData();
+      dataTransferBiz.setCustomer(customerDto);
+      boolean isSuccess = dataTransferBiz.exchangeData();
 
       if (isSuccess) {
-        File pics = customerService.getAllCustomerPicForSendByCustomerId(customerDto.getId());
+
+        List<CustomerPic> pics = customerService
+            .getAllCustomerPicForSendByCustomerId(customerDto.getId());
         if (Empty.isEmpty(pics)) {
           continue;
         }
 
-        Timber.tag("Send Pic").d("Number of pics %s", pics.length());
-        new PictureDataTransferBizImpl(context, pics, null, customerDto.getId())
-            .exchangeData();
+        Timber.tag("Send Pic").d("Number of pics %s", pics.size());
+        PictureDataTransferBizImpl dataTransfer = new PictureDataTransferBizImpl(context);
+        for (int j = 0; j < pics.size(); j++) {
+          dataTransfer.setData(pics.get(j));
+          dataTransfer.exchangeData();
+        }
+        if (dataTransfer.getSuccess() != dataTransfer.getTotal()) {
+          EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.SERVER_ERROR));
+        }
       }
     }
 
     EventBus.getDefault().post(new DataTransferSuccessEvent(
-        newCustomerDataTransferBiz.getSuccessfulMessage(), StatusCodes.SUCCESS));
+        dataTransferBiz.getSuccessfulMessage(), StatusCodes.SUCCESS));
   }
 
   public void sendAllUpdatedCustomers() {
@@ -394,16 +401,27 @@ public class DataTransferServiceImpl implements DataTransferService {
 
   public void sendAllCustomerPics() {
 
-    File pics = customerService.getAllCustomerPicForSend();
+    List<CustomerPic> pics = customerService.getAllCustomerPicForSend();
     if (Empty.isEmpty(pics)) {
       EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
           R.string.message_found_no_new_customer_pic_for_send), StatusCodes.NO_DATA_ERROR));
       return;
     } else {
-      Timber.d("Send Pic lenght %s", pics.length());
+      Timber.d("Send Pic lenght %s", pics.size());
     }
 
-    new PictureDataTransferBizImpl(context, pics, null, null).exchangeData();
+    PictureDataTransferBizImpl dataTransferBiz = new PictureDataTransferBizImpl(context);
+    for (int i = 0; i < pics.size(); i++) {
+      dataTransferBiz.setData(pics.get(i));
+      dataTransferBiz.exchangeData();
+    }
+    if (dataTransferBiz.getTotal() == dataTransferBiz.getSuccess()) {
+      EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
+          R.string.new_customers_pic_transferred_successfully), StatusCodes.SUCCESS));
+    } else {
+      EventBus.getDefault().post(new DataTransferErrorEvent(context.getString(
+          R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
+    }
   }
 
   public void sendAllVisitInformation() {

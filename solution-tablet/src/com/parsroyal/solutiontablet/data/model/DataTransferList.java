@@ -95,22 +95,19 @@ public class DataTransferList {
         context.getString(R.string.return_order)));
     featureList.add(new DataTransferList(TransferSendOrder.PAYMENT, R.drawable.ic_currency_24_dp,
         context.getString(R.string.payment)));
+    //////////
+    featureList.add(new DataTransferList(TransferSendOrder.CUSTOMER_PICS,
+        R.drawable.ic_camera_24_dp, context.getString(R.string.image)));
+
     featureList.add(new DataTransferList(TransferSendOrder.VISIT_DETAIL, R.drawable.ic_visit_24_dp,
         context.getString(R.string.visit_detail)));
-    //////////
-    featureList
-        .add(new DataTransferList(TransferSendOrder.CUSTOMER_PICS, R.drawable.ic_camera_24_dp,
-            context.getString(R.string.image)));
 
     return featureList;
   }
 
   public static List<DataTransferList> dataTransferDistributorGetList(Context context) {
     List<DataTransferList> featureList = new ArrayList<>();
-    /*
-    featureList.add(new DataTransferList(TransferGetDistributorOrder.GOODS_REQUEST,
-        R.drawable.ic_truck_24dp,
-        context.getString(R.string.goods_request)));*/
+
     featureList.add(
         new DataTransferList(TransferGetOrder.PROVINCE, R.drawable.ic_state_24_dp,
             context.getString(R.string.provinces)));

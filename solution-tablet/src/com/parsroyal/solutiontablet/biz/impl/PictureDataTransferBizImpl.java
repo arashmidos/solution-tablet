@@ -2,26 +2,31 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
 import com.parsroyal.solutiontablet.data.dao.CustomerPicDao;
 import com.parsroyal.solutiontablet.data.dao.impl.CustomerPicDaoImpl;
+import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
-import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
-import com.parsroyal.solutiontablet.data.event.ErrorEvent;
-import com.parsroyal.solutiontablet.data.event.SuccessEvent;
-import com.parsroyal.solutiontablet.data.model.CustomerDto;
+import com.parsroyal.solutiontablet.data.event.DataTransferEvent;
 import com.parsroyal.solutiontablet.service.RestService;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.MultipartBody.Part;
 import okhttp3.RequestBody;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -29,89 +34,87 @@ import retrofit2.Response;
  */
 public class PictureDataTransferBizImpl {
 
-  public static final String TAG = PictureDataTransferBizImpl.class.getSimpleName();
-  private final File pics;
-  private final Long visitId;
   private final CustomerServiceImpl customerService;
-  private final CustomerDto customer;
+  private final VisitService visitService;
 
   private Context context;
   private CustomerPicDao customerPicDao;
+  private CustomerPic data;
+  private int success = 0;
+  private int total = 0;
 
-  public PictureDataTransferBizImpl(Context context, File pics, Long visitId, Long customerId) {
+  public PictureDataTransferBizImpl(Context context) {
     this.context = context;
     this.customerPicDao = new CustomerPicDaoImpl(context);
     this.customerService = new CustomerServiceImpl(context);
-    this.pics = pics;
-    this.visitId = visitId;
-    this.customer = customerService.getCustomerDtoById(customerId);
+    this.visitService = new VisitServiceImpl(context);
   }
 
-  public boolean exchangeData() {
+  public int getSuccess() {
+    return success;
+  }
+
+  public int getTotal() {
+    return total;
+  }
+
+  public void exchangeData() {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
+      return;
     }
 
     RestService restService = ServiceGenerator.createService(RestService.class);
 
     // create RequestBody instance from file
-    RequestBody requestFile = RequestBody.create(MediaType.parse("application/zip"), pics);
+    RequestBody requestFile = RequestBody
+        .create(MediaType.parse("image/jpeg"), new File(data.getTitle()));
 
     // MultipartBody.Part is used to send also the actual file name
 
     // add another part within the multipart request
-    RequestBody backendId = null;
-    String customerBackend;
+    String customerBackend = String.valueOf(data.getCustomerBackendId());
 
-    customerBackend = customer != null ? String.valueOf(customer.getBackendId()) : "";
-
-    backendId = RequestBody.create(MultipartBody.FORM, customerBackend);
-    MultipartBody.Part body = MultipartBody.Part
-        .createFormData("picture", pics.getName(), requestFile);
+    RequestBody backendId = RequestBody.create(MultipartBody.FORM, customerBackend);
+    Part body = Part.createFormData("picture", data.getName(), requestFile);
 
     // finally, execute the request
     Call<String> call = restService.upload(backendId, body);
-    call.enqueue(new Callback<String>() {
-      @Override
-      public void onResponse(Call<String> call, Response<String> response) {
-        if (response.isSuccessful() && "1".equals(response.body())) {
-          receiveData("1");
-        } else {
-          receiveData("0");
+    try {
+      Response<String> response = call.execute();
+      if (response.isSuccessful()) {
+        String picBackendId = response.body();
+        if (Empty.isNotEmpty(picBackendId)) {
+          data.setBackendId(Long.valueOf(picBackendId));
+          data.setStatus(CustomerStatus.SENT.getId());
+          customerPicDao.update(data);
+          visitService.updateVisitDetailId(VisitInformationDetailType.TAKE_PICTURE, data.getId(),
+              data.getBackendId());
+          success++;
         }
       }
-
-      @Override
-      public void onFailure(Call<String> call, Throwable t) {
-        receiveData("0");
-      }
-    });
-    return true;
+      EventBus.getDefault()
+          .post(new DataTransferEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
+    } catch (IOException e) {
+      e.printStackTrace();
+      EventBus.getDefault()
+          .post(new DataTransferEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
+    }
   }
 
-  public void receiveData(String data) {
-    if (data.equals("1")) {
-      if (Empty.isNotEmpty(visitId)) {
-        //Sent single visit images
-        customerPicDao.updatePicturesByVisitId(visitId);
-        EventBus.getDefault().post(new SuccessEvent("", StatusCodes.SUCCESS));
-      } else if (Empty.isNotEmpty(customer)) {
-        customerPicDao.updateAllPicturesByCustomerId(customer.getId());
-      } else {
-        //Sent all images
-        customerPicDao.updateAllPictures();
-        EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
-            R.string.new_customers_pic_transferred_successfully), StatusCodes.SUCCESS));
-      }
-    } else {
-      if (Empty.isNotEmpty(visitId)) {
-        EventBus.getDefault().post(new ErrorEvent(context.getString(
-            R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
-      } else if (Empty.isNotEmpty(customer)) {
-      } else {
-        EventBus.getDefault().post(new DataTransferErrorEvent(context.getString(
-            R.string.error_new_customers_pic_transfer), StatusCodes.SERVER_ERROR));
-      }
-    }
+  public CustomerPic getData() {
+    return data;
+  }
+
+  public void setData(CustomerPic data) {
+    this.data = data;
+    total++;
+  }
+
+  public String getSuccessfulMessage() {
+    return NumberUtil.digitsToPersian(String
+        .format(Locale.getDefault(), context.getString(R.string.data_transfered_result),
+            String.valueOf(success),
+            String.valueOf(total - success)));
   }
 }

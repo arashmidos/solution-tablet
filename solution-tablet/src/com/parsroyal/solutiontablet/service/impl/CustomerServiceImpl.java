@@ -16,6 +16,7 @@ import com.parsroyal.solutiontablet.data.listmodel.NCustomerListModel;
 import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionModel;
+import com.parsroyal.solutiontablet.data.searchobject.CustomerPictureSO;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.util.DateUtil;
@@ -179,36 +180,18 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
-  public File getAllCustomerPicForSend() {
-    List<String> pics = customerPicDao.getAllCustomerPicForSend();
-    if (pics.size() == 0) {
-      return null;
-    }
-    String[] picArray = new String[pics.size()];
-    picArray = pics.toArray(picArray);
-    return MediaUtil.zipFiles(picArray);
+  public List<CustomerPic> getAllCustomerPicForSend() {
+    return customerPicDao.getAllCustomerPicForSend();
   }
 
   @Override
-  public File getAllCustomerPicForSendByVisitId(Long visitId) {
-    List<String> pics = customerPicDao.getAllCustomerPicForSendByVisitId(visitId);
-    if (pics.size() == 0) {
-      return null;
-    }
-    String[] picArray = new String[pics.size()];
-    picArray = pics.toArray(picArray);
-    return MediaUtil.zipFiles(picArray);
+  public List<CustomerPic> findCustomerPic(CustomerPictureSO pictureSO) {
+    return customerPicDao.findCustomerPictures(pictureSO);
   }
 
   @Override
-  public File getAllCustomerPicForSendByCustomerId(Long customerId) {
-    List<String> pics = customerPicDao.getAllCustomerPicForSendByCustomerId(customerId);
-    if (pics.size() == 0) {
-      return null;
-    }
-    String[] picArray = new String[pics.size()];
-    picArray = pics.toArray(picArray);
-    return MediaUtil.zipFiles(picArray);
+  public List<CustomerPic> getAllCustomerPicForSendByCustomerId(Long customerId) {
+    return customerPicDao.getAllCustomerPicForSendByCustomerId(customerId);
   }
 
   @Override
@@ -229,6 +212,11 @@ public class CustomerServiceImpl implements CustomerService {
   @Override
   public void updateCustomerPictures() {
     customerPicDao.updateAllPictures();
+  }
+
+  @Override
+  public void updateCustomerPicForNewCustomers(Long id, Long backendId) {
+    customerPicDao.updateCustomerPicForNewCustomers(id, backendId);
   }
 
   @Override

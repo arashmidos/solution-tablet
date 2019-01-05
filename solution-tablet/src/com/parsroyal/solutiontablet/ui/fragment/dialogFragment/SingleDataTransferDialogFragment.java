@@ -18,17 +18,19 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.impl.CanceledOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransfer;
-import com.parsroyal.solutiontablet.biz.impl.PictureDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PaymentsDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.PictureDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransfer;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.constants.VisitInformationDetailType;
+import com.parsroyal.solutiontablet.data.entity.CustomerPic;
 import com.parsroyal.solutiontablet.data.entity.Payment;
 import com.parsroyal.solutiontablet.data.entity.VisitInformation;
 import com.parsroyal.solutiontablet.data.entity.VisitInformationDetail;
@@ -43,6 +45,7 @@ import com.parsroyal.solutiontablet.data.model.BaseSaleDocument;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.QAnswerDto;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
+import com.parsroyal.solutiontablet.data.searchobject.CustomerPictureSO;
 import com.parsroyal.solutiontablet.data.searchobject.VisitInformationDetailSO;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.PaymentService;
@@ -235,7 +238,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       case CREATE_INVOICE:
         break;
       case TAKE_PICTURE:
-        sendPicture(visitDetail.getVisitInformationId());
+        sendSinglePicture(visitDetail.getVisitInformationId());
         break;
       case FILL_QUESTIONNAIRE:
         sendAnswers(visitDetail.getVisitInformationId());
@@ -345,16 +348,27 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     sendDataThead.start();
   }
 
-  private void sendPicture(long visitId) {
+  private void sendSinglePicture(long visitId) {
     CustomerService customerService = new CustomerServiceImpl(mainActivity);
-    File pics = customerService.getAllCustomerPicForSendByVisitId(visitId);
+    List<CustomerPic> pics = customerService
+        .findCustomerPic(new CustomerPictureSO(visitId, CustomerStatus.NEW.getId()));
     if (Empty.isEmpty(pics)) {
       sendNextDetail();
     }
+    PictureDataTransferBizImpl dataTransfer = new PictureDataTransferBizImpl(mainActivity);
+
     Thread sendDataThead = new Thread(() -> {
       try {
-        new PictureDataTransferBizImpl(mainActivity, pics, visitId, null)
-            .exchangeData();
+        for (int i = 0; i < pics.size(); i++) {
+          CustomerPic pic = pics.get(i);
+          dataTransfer.setData(pic);
+          dataTransfer.exchangeData();
+        }
+        if (dataTransfer.getSuccess() == dataTransfer.getTotal()) {
+          sendNextDetail();
+        } else {
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
+        }
       } catch (Exception ex) {
         EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
       }
