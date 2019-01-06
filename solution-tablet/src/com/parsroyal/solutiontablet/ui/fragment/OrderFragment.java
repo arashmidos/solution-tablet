@@ -50,7 +50,6 @@ import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFra
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
@@ -121,6 +120,8 @@ public class OrderFragment extends BaseFragment {
   private boolean isCashOrder;
   private HashMap<String, Long> titleIdes;
   private boolean isComplimentary;
+  private SaleOrderItem selectedItem;
+  private Goods selectedGoods;
 
   public OrderFragment() {
     // Required empty public constructor
@@ -505,9 +506,11 @@ public class OrderFragment extends BaseFragment {
       bundle.putLong(Constants.SELECTED_UNIT, defaultUnit);
       bundle.putBoolean(Constants.COMPLIMENTARY, isComplimentary);
 
+      selectedItem = item;
+      selectedGoods = goods;
       addOrderDialogFragment.setArguments(bundle);
       addOrderDialogFragment.setOnClickListener((count, selectedUnit, discount) -> {
-        handleGoodsDialogConfirmBtn(count, selectedUnit, item, goods, discount);
+        handleGoodsDialogConfirmBtn(count, selectedUnit, discount);
         updateGoodsDataTb();
       });
 
@@ -586,21 +589,20 @@ public class OrderFragment extends BaseFragment {
     noGoodLay.setVisibility(View.VISIBLE);
   }
 
-  private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItem item,
-      Goods goods, Long discount) {
+  private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, Long discount) {
     try {
-      if (Empty.isEmpty(item)) {
-        if (count * 1000L > Double.valueOf(String.valueOf(goods.getExisting()))) {
+      if (Empty.isEmpty(selectedItem)) {
+        if (count * 1000L > Double.valueOf(String.valueOf(selectedGoods.getExisting()))) {
 //          ToastUtil.toastError(getActivity(), new SaleOrderItemCountExceedExistingException());
           EventBus.getDefault().post(new ErrorEvent(getString(R.string.exceed_count_exception),
               StatusCodes.DATA_STORE_ERROR));
           return;
         }
-        item = createOrderItem(goods);
+        selectedItem = createOrderItem(selectedGoods);
       }
 
       saleOrderService
-          .updateOrderItemCount(item.getId(), count, selectedUnit, orderStatus, goods, discount);
+          .updateOrderItemCount(selectedItem.getId(), count, selectedUnit, orderStatus, selectedGoods, discount);
       Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);

@@ -63,6 +63,8 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
   private String pageStatus;
   private List<SaleOrderItemDto> orderItems;
   private AddOrderDialogFragment addOrderDialogFragment;
+  private SaleOrderItemDto selectedItem;
+  private Goods selectedGoods;
 
   public OrderFinalizeAdapter(FinalizeOrderDialogFragment finalizeOrderDialogFragment,
       MainActivity mainActivity, SaleOrderDto order, GoodsDtoList goodsDtoList, String pageStatus) {
@@ -346,20 +348,21 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       bundle.putDouble(Constants.COUNT, count);
 //      bundle.putLong(Constants.GOODS_INVOICE_ID, invoiceBackendId);
 
+      selectedItem = item;
+      selectedGoods = goods;
       addOrderDialogFragment.setArguments(bundle);
       addOrderDialogFragment.setOnClickListener(
-          (goodsCount, selectedUnit, discount) -> handleGoodsDialogConfirmBtn(goodsCount,
-              selectedUnit, item, goods, discount));
+          (goodsCount, selectedUnit, discount) ->
+              handleGoodsDialogConfirmBtn(goodsCount, selectedUnit, discount));
 
       addOrderDialogFragment.show(ft, "order");
     }
 
-    private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, SaleOrderItemDto item,
-        Goods goods, Long discount) {
+    private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, Long discount) {
       try {
 
         saleOrderService.updateOrderItemCount(
-            item.getId(), count, selectedUnit, order.getStatus(), goods, discount);
+            selectedItem.getId(), count, selectedUnit, order.getStatus(), selectedGoods, discount);
         Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
         order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
         order.setAmount(orderAmount);
@@ -371,14 +374,14 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
         }
 
         item = orderItems.get(position);
-        setData(item, position);
-        notifyItemChanged(position);
+//        setData(item, position);
+//        notifyItemChanged(position);
+        notifyDataSetChanged();
         parent.updateList();
         EventBus.getDefault().post(new SuccessEvent(StatusCodes.SUCCESS));
       } catch (BusinessException ex) {
-        EventBus.getDefault()
-            .post(new ErrorEvent(mainActivity.getString(R.string.exceed_count_exception),
-                StatusCodes.DATA_STORE_ERROR));
+        EventBus.getDefault().post(new ErrorEvent(
+            mainActivity.getString(R.string.exceed_count_exception), StatusCodes.DATA_STORE_ERROR));
         Timber.e(ex);
         ToastUtil.toastError(mainActivity, ex);
       } catch (Exception ex) {
