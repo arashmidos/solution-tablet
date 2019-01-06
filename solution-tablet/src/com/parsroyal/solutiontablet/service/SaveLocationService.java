@@ -7,7 +7,6 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
@@ -20,6 +19,7 @@ import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import org.greenrobot.eventbus.EventBus;
+import timber.log.Timber;
 
 public class SaveLocationService extends IntentService {
 
@@ -55,9 +55,7 @@ public class SaveLocationService extends IntentService {
       return;
     }
 
-//    boolean firstPosition = intent.getBooleanExtra(Constants.FIRST_POSITION, false);
-    long salesmanId = 0;
-//    if (!firstPosition) {
+    long salesmanId;
     //If users clears data, new user, or not entered correct information
     KeyValue salesmanIdKeyValue = keyValueDao.retrieveByKey(ApplicationKeys.SALESMAN_ID);
     if (Empty.isEmpty(salesmanIdKeyValue)) {
@@ -65,11 +63,11 @@ public class SaveLocationService extends IntentService {
     }
 
     salesmanId = Long.parseLong(salesmanIdKeyValue.getValue());
-//    }
+
 
     Position position;
     Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
-    Log.i(TAG, "Saving location " + location);
+    Timber.i("Saving location %s", location);
     if (location == null) {
       position = (Position) intent.getSerializableExtra(LocationUpdatesService.EXTRA_POSITION);
       if (position == null) {
@@ -96,11 +94,13 @@ public class SaveLocationService extends IntentService {
       position.setDistanceInMeter(0);
     }
     long id = positionService.savePosition(position);
+
     position.setId(id);
     if (Empty.isNotEmpty(position)) {
       SolutionTabletApplication.getInstance().setLastSavedPosition(position);
     }
-    if (location != null) {
+    if (Empty.isNotEmpty(location)) {
+      SolutionTabletApplication.getInstance().setLastKnownLocation(location);
       EventBus.getDefault().post(new GPSEvent(location));
     }
 

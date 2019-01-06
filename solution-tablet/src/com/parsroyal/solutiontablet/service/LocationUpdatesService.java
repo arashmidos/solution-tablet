@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
@@ -29,6 +28,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
@@ -375,6 +375,9 @@ public class LocationUpdatesService extends Service {
         return true;
       }
 
+      if (BuildConfig.DEBUG) {
+        return true;
+      }
       //if it has low speed or low accuracy
       if (location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER
           || location.getSpeed() < MIN_ACCEPTED_SPEED_IN_MS) {
@@ -387,7 +390,7 @@ public class LocationUpdatesService extends Service {
         long lastTime = lastLocation.getTime();
         long currentTime = location.getTime();
 
-        if (currentTime - lastTime < 30 * 1000) {
+        if (currentTime - lastTime < 20 * 1000) {
           return false;
         }
       }
