@@ -225,8 +225,8 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     entity.setyLocation(cursor.isNull(8) ? null : cursor.getDouble(8));
     entity.setSalesmanId(
         Long.valueOf(PreferenceHelper.retrieveByKey(ApplicationKeys.SALESMAN_ID).getValue()));
-    entity.setNetworkDate(
-        NumberUtil.digitsToEnglish(DateUtil.getZonedDate(new Date(cursor.getLong(12)))));
+    Long networkDate = cursor.getLong(12);
+    entity.setNetworkDate(NumberUtil.digitsToEnglish(DateUtil.getZonedDate(new Date(networkDate))));
     entity.setEndNetworkDate(
         NumberUtil.digitsToEnglish(DateUtil.getZonedDate(new Date(cursor.getLong(13)))));
     entity.setDistance(cursor.getLong(14));

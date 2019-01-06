@@ -367,7 +367,7 @@ public class DataTransferDialogFragment extends DialogFragment {
   @Subscribe
   public void getMessage(ImageTransferErrorEvent event) {
     adapter.setError(adapter.getItemCount() - 1);
-    ToastUtil.toastError(root, R.string.goods_images_data_transferred_successfully);
+    ToastUtil.toastError(root, R.string.message_error_transferring_goods_images_data);
   }
 
   @Subscribe

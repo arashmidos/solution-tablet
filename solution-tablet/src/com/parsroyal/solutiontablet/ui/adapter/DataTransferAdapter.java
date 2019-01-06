@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
@@ -48,14 +49,15 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
     inflater = LayoutInflater.from(context);
   }
 
+  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_data_transfer, parent, false);
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
     holder.setData(position);
     if (!MultiScreenUtility.isTablet(context)) {
@@ -124,6 +126,7 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
   public void setImageFinished() {
     model.get(model.size() - 1).setStatus(TransferStatus.DONE);
+
     context.runOnUiThread(this::notifyDataSetChanged);
   }
 
@@ -154,6 +157,8 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
     ImageView img;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.image_progress_bar)
+    ProgressBar imageProgressBar;
     @BindView(R.id.extra_icon)
     ImageView extraIcon;
 
@@ -167,6 +172,10 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
 
     @OnClick(R.id.extra_icon)
     public void onClick(View view) {
+//      extraIcon.setVisibility(View.GONE);
+//      imageProgressBar.setVisibility(View.VISIBLE);
+      model.get(model.size() - 1).setStatus(TransferStatus.IN_PROGRESS);
+      notifyDataSetChanged();
       parent.downloadImage();
     }
 
