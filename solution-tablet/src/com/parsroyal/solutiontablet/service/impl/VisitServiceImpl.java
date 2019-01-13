@@ -276,6 +276,9 @@ public class VisitServiceImpl implements VisitService {
           }
           map.put(detailToUpdate.getType(), detailToUpdate);
         } else {
+          if (detailToAdd.getType() == VisitInformationDetailType.TAKE_PICTURE) {
+            detailToAdd.setData(String.valueOf(detailToAdd.getTypeId()));
+          }
           map.put(detailToAdd.getType(), detailToAdd);
         }
       }
