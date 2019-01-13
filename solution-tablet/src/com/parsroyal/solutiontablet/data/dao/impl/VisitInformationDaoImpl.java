@@ -194,7 +194,8 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
 
     String orderBy = "vi." + VisitInformation.COL_ID + " DESC ";
 
-    Cursor cursor = db.query(table, projection, null, null, null, null, orderBy);
+    String groupBy = "vi." + VisitInformation.COL_ID;
+    Cursor cursor = db.query(table, projection, null, null, groupBy, null, orderBy);
     List<VisitListModel> visitInformationList = new ArrayList<>();
     while (cursor.moveToNext()) {
       visitInformationList.add(createModelFromCursor(cursor));
