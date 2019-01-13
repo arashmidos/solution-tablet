@@ -19,4 +19,11 @@ public class GPSEvent extends Event {
   public void setLocation(Location location) {
     this.location = location;
   }
+
+  @Override
+  public String toString() {
+    return String
+        .format("%s,%s - Speed:%s - Acc:%s", location.getLatitude(), location.getLongitude(),
+            location.getSpeed(), location.getAccuracy());
+  }
 }

@@ -34,17 +34,17 @@
         android:layout_height="wrap_content"
         android:text="Location Data" />
       <Button
-        android:id="@+id/button_3"
+        android:id="@+id/live_map_data"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="3" />
+        android:text="Live Map Data"
+        android:visibility="gone" />
       <Button
         android:id="@+id/button_4"
         android:layout_width="300dp"
-        android:visibility="gone"
         android:layout_height="wrap_content"
-        android:text="4" />
+        android:text="4"
+        android:visibility="gone" />
       <Button
         android:id="@+id/copy_database"
         android:layout_width="300dp"
@@ -56,11 +56,28 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:visibility="gone">
+      android:visibility="gone"
+      tools:visibility="visible">
       <TextView
         android:id="@+id/result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:text="Hello" />
+
+    </LinearLayout>
+    <LinearLayout
+      android:id="@+id/live_result_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:visibility="gone"
+      tools:visibility="visible">
+      <TextView
+        android:id="@+id/live_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="16sp"
+        tools:text="Hello" />
 
     </LinearLayout>
   </LinearLayout>

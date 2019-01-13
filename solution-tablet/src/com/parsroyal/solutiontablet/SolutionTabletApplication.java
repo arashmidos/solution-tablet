@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import com.crashlytics.android.Crashlytics;
+import com.github.anrwatchdog.ANRWatchDog;
 import com.instacart.library.truetime.TrueTimeRx;
 import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -60,41 +61,21 @@ public class SolutionTabletApplication extends MultiDexApplication {
     return sPreference;
   }
 
-  private void setAuthorities(Set<String> authorities) {
-    if (Empty.isNotEmpty(authorities)) {
-      this.authorities.clear();
-      this.authorities.addAll(authorities);
-    }
-  }
-
-  public boolean hasAccess(Authority authority) {
-
-    return BuildConfig.DEBUG || authorities.contains(String.valueOf(authority.getId()));
-  }
-
-  public Date getTrueTime() {
-    try {
-      if (TrueTimeRx.isInitialized()) {
-        return TrueTimeRx.now();
-      } else {
-        reSyncTrueTime();
-      }
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
-    return null;
-  }
-
   @Override
   public void onCreate() {
     super.onCreate();
     sInstance = this;
+    Fabric.with(this, new Crashlytics());
     if (!BuildConfig.DEBUG) {
-      Fabric.with(this, new Crashlytics());
     } else {
       Timber.plant(new DebugTree());
     }
 
+    new ANRWatchDog(10_000).setReportMainThreadOnly().setANRListener(error -> {
+      Timber.e(error);
+      Crashlytics.log(error.toString());
+      Crashlytics.logException(error);
+    }).setIgnoreDebugger(true).start();
 //    Pushe.initialize(this, true);
     MultiDex.install(this);
 
@@ -182,4 +163,30 @@ public class SolutionTabletApplication extends MultiDexApplication {
   public void setLastSavedPosition(Position lastSavedPosition) {
     this.lastSavedPosition = lastSavedPosition;
   }
+
+  private void setAuthorities(Set<String> authorities) {
+    if (Empty.isNotEmpty(authorities)) {
+      this.authorities.clear();
+      this.authorities.addAll(authorities);
+    }
+  }
+
+  public boolean hasAccess(Authority authority) {
+
+    return BuildConfig.DEBUG || authorities.contains(String.valueOf(authority.getId()));
+  }
+
+  public Date getTrueTime() {
+    try {
+      if (TrueTimeRx.isInitialized()) {
+        return TrueTimeRx.now();
+      } else {
+        reSyncTrueTime();
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    return null;
+  }
+
 }

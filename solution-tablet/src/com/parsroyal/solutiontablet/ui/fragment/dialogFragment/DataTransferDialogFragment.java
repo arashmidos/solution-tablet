@@ -16,6 +16,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.Constants.TransferGetDistributorOrder;
@@ -78,6 +80,7 @@ public class DataTransferDialogFragment extends DialogFragment {
   private boolean canceled;
   private SettingServiceImpl settingService;
   private String saleType;
+  private Trace myTrace;
 
   public DataTransferDialogFragment() {
     // Required empty public constructor
@@ -222,6 +225,9 @@ public class DataTransferDialogFragment extends DialogFragment {
   }
 
   private void startTransfer() {
+    myTrace = FirebasePerformance.getInstance().newTrace("data_transfer_trace");
+    myTrace.start();
+
     transferStarted = true;
     transferFinished = false;
     canceled = false;
@@ -395,6 +401,9 @@ public class DataTransferDialogFragment extends DialogFragment {
   }
 
   private void finishTransfer() {
+    if (myTrace != null) {
+      myTrace.stop();
+    }
     mainActivity.runOnUiThread(() -> {
 
 /*      ToastUtil.toastMessage(root, isGet ? getString(R.string.get_data_completed_successfully)

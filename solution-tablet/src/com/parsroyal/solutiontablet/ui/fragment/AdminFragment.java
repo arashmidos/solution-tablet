@@ -23,9 +23,12 @@ import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.dao.impl.PositionDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.Position;
+import com.parsroyal.solutiontablet.data.event.GPSEvent;
 import com.parsroyal.solutiontablet.data.helper.CommerDatabaseHelper;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import java.util.Map;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class AdminFragment extends BaseFragment {
 
@@ -36,8 +39,9 @@ public class AdminFragment extends BaseFragment {
   Button databaseMetadata;
   @BindView(R.id.map_data)
   Button mapData;
-  @BindView(R.id.button_3)
-  Button button3;
+  @BindView(R.id.live_map_data)
+  Button liveMapData;
+
   @BindView(R.id.button_4)
   Button button4;
   @BindView(R.id.copy_database)
@@ -48,6 +52,10 @@ public class AdminFragment extends BaseFragment {
   TextView result;
   @BindView(R.id.result_layout)
   LinearLayout resultLayout;
+  @BindView(R.id.live_result)
+  TextView liveResult;
+  @BindView(R.id.live_result_layout)
+  LinearLayout liveResultLayout;
   @BindView(R.id.root)
   ScrollView root;
   private MainActivity mainActivity;
@@ -83,7 +91,8 @@ public class AdminFragment extends BaseFragment {
     unbinder.unbind();
   }
 
-  @OnClick({R.id.setting_btn, R.id.database_metadata, R.id.map_data, R.id.button_3, R.id.button_4,
+  @OnClick({R.id.setting_btn, R.id.database_metadata, R.id.map_data, R.id.live_map_data,
+      R.id.button_4,
       R.id.copy_database})
   public void onViewClicked(View view) {
     switch (view.getId()) {
@@ -96,7 +105,8 @@ public class AdminFragment extends BaseFragment {
       case R.id.map_data:
         showMapData();
         break;
-      case R.id.button_3:
+      case R.id.live_map_data:
+        showLiveMapData();
         break;
       case R.id.button_4:
         break;
@@ -131,6 +141,30 @@ public class AdminFragment extends BaseFragment {
             sent, unsent));
 
     showResult(res.toString());
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe
+  public void getMessage(GPSEvent event) {
+    liveResult.setText(liveResult.getText() + "\n" + event.toString());
+  }
+
+
+  private void showLiveMapData() {
+    menuLayout.setVisibility(View.GONE);
+    resultLayout.setVisibility(View.GONE);
+    liveResultLayout.setVisibility(View.VISIBLE);
   }
 
   private void copyDatabase() {
