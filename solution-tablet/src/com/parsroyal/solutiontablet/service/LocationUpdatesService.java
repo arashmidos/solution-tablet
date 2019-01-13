@@ -410,7 +410,7 @@ public class LocationUpdatesService extends Service {
     locationRequest = new LocationRequest();
     locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
     locationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-    locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
   }
 
   /**
