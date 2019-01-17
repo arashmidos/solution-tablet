@@ -34,7 +34,6 @@
           android:layout_height="match_parent"
           android:layout_weight="1"
           android:layout_marginStart="16dp"
-          android:layout_marginLeft="16dp"
           android:gravity="end"
           android:hint="@string/full_name"
           android:textColorHint="@color/gray_9e"
@@ -62,8 +61,6 @@
           android:layout_height="match_parent"
           android:layout_marginStart="19dp"
           android:layout_marginEnd="20dp"
-          android:layout_marginLeft="19dp"
-          android:layout_marginRight="20dp"
           android:layout_gravity="right|center"
           android:src="@drawable/ic_perm_identity"
           android:tint="@color/gray_75" />
@@ -77,8 +74,6 @@
         android:layout_marginTop="35dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="62dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="62dp"
         android:gravity="end"
         android:hint="@string/national_code"
         android:textColorHint="@color/gray_9e"
@@ -100,13 +95,21 @@
           tools:text="1234567890" />
 
       </android.support.design.widget.TextInputLayout>
-
+      <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/scanner"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="-20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:zxing_preview_scaling_strategy="centerCrop"
+        app:zxing_use_texture_view="false" />
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="35dp"
         android:orientation="horizontal">
-
 
         <android.support.design.widget.TextInputLayout
           android:id="@+id/shop_name_lay"
@@ -114,7 +117,6 @@
           android:layout_height="match_parent"
           android:layout_weight="1"
           android:layout_marginStart="16dp"
-          android:layout_marginLeft="16dp"
           android:gravity="end"
           android:hint="@string/shop_name"
           android:textColorHint="@color/gray_9e"
@@ -142,8 +144,6 @@
           android:layout_height="match_parent"
           android:layout_marginStart="19dp"
           android:layout_marginEnd="20dp"
-          android:layout_marginLeft="19dp"
-          android:layout_marginRight="20dp"
           android:layout_gravity="right|center"
           android:src="@drawable/ic_store"
           android:tint="@color/gray_75" />
@@ -162,7 +162,6 @@
           android:layout_height="match_parent"
           android:layout_weight="1"
           android:layout_marginStart="16dp"
-          android:layout_marginLeft="16dp"
           android:gravity="end"
           android:hint="@string/phone_number"
           android:textColorHint="@color/gray_9e"
@@ -191,8 +190,6 @@
           android:layout_height="match_parent"
           android:layout_marginStart="19dp"
           android:layout_marginEnd="20dp"
-          android:layout_marginLeft="19dp"
-          android:layout_marginRight="20dp"
           android:layout_gravity="right|center"
           android:rotation="270"
           android:src="@drawable/ic_phone_24dp"
@@ -212,7 +209,6 @@
           android:layout_height="match_parent"
           android:layout_weight="1"
           android:layout_marginStart="16dp"
-          android:layout_marginLeft="16dp"
           android:gravity="end"
           android:hint="@string/cell_phone"
           android:textColorHint="@color/gray_9e"
@@ -241,8 +237,6 @@
           android:layout_height="match_parent"
           android:layout_marginStart="19dp"
           android:layout_marginEnd="20dp"
-          android:layout_marginLeft="19dp"
-          android:layout_marginRight="20dp"
           android:layout_gravity="right|center"
           android:src="@drawable/ic_phone_android_24dp"
           android:tint="@color/gray_75" />
@@ -284,7 +278,6 @@
           <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_drop_down"
@@ -292,13 +285,11 @@
 
         </RelativeLayout>
 
-
         <RelativeLayout
           android:layout_width="0dp"
           android:layout_height="40dp"
           android:layout_weight=".5"
-          android:layout_marginEnd="16dp"
-          android:layout_marginRight="16dp">
+          android:layout_marginEnd="16dp">
 
           <TextView
             android:id="@+id/state_tv"
@@ -320,7 +311,6 @@
           <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_drop_down"
@@ -342,7 +332,6 @@
           android:layout_height="match_parent"
           android:layout_weight="1"
           android:layout_marginStart="16dp"
-          android:layout_marginLeft="16dp"
           android:gravity="end"
           android:hint="@string/address"
           android:textColorHint="@color/gray_9e"
@@ -370,8 +359,6 @@
           android:layout_height="match_parent"
           android:layout_marginStart="19dp"
           android:layout_marginEnd="20dp"
-          android:layout_marginLeft="19dp"
-          android:layout_marginRight="20dp"
           android:layout_gravity="right|center"
           android:src="@drawable/ic_location_on_24_dp"
           android:tint="@color/gray_75" />
@@ -422,7 +409,6 @@
           android:layout_height="40dp"
           android:layout_weight=".5"
           android:layout_marginEnd="16dp"
-          android:layout_marginRight="16dp"
           android:gravity="end"
           android:hint="@string/regional_municipality"
           android:textColorHint="@color/gray_9e"
@@ -524,7 +510,6 @@
           <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_drop_down"
@@ -561,14 +546,12 @@
           <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_drop_down"
             android:tint="@color/gray_9e" />
 
         </RelativeLayout>
-
       </LinearLayout>
 
       <LinearLayout
@@ -613,8 +596,7 @@
           android:layout_width="0dp"
           android:layout_height="match_parent"
           android:layout_weight=".5"
-          android:layout_marginEnd="16dp"
-          android:layout_marginRight="16dp">
+          android:layout_marginEnd="16dp">
 
           <Spinner
             android:id="@+id/customer_class_spinner"
@@ -636,14 +618,12 @@
           <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_drop_down"
             android:tint="@color/gray_9e" />
 
         </RelativeLayout>
-
       </LinearLayout>
       <android.support.design.widget.TextInputLayout
         android:id="@+id/description_lay"
@@ -683,7 +663,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
           android:text="@string/customer_pics"
           android:textColor="@color/black_21"
           android:textSize="14sp" />
@@ -692,7 +671,6 @@
           style="@style/IranSans"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
           android:text="@string/customer_pics"
           android:textColor="@color/gray_bd"
@@ -723,7 +701,5 @@
         android:textColor="@color/white"
         android:textSize="14sp" />
     </LinearLayout>
-
-
   </ScrollView>
 </LinearLayout>

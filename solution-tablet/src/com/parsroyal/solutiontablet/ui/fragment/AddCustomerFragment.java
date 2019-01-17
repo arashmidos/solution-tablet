@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,13 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.BeepManager;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
@@ -32,10 +38,8 @@ import com.parsroyal.solutiontablet.exception.BusinessException;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.BaseInfoService;
 import com.parsroyal.solutiontablet.service.CustomerService;
-import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapterWithHint;
 import com.parsroyal.solutiontablet.ui.adapter.NewCustomerPictureAdapter;
@@ -52,16 +56,17 @@ import com.parsroyal.solutiontablet.util.ValidationUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import timber.log.Timber;
 
 /**
  * @author Shakib
  */
 public class AddCustomerFragment extends BaseFragment implements View.OnFocusChangeListener {
 
-  private static final String TAG = AddCustomerFragment.class.getName();
   private static final int RESULT_OK = -1;
   private static final int RESULT_CANCELED = 0;
 
@@ -101,11 +106,12 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   RecyclerView photoList;
   @BindView(R.id.image_counter)
   TextView imageCounter;
+  @BindView(R.id.scanner)
+  DecoratedBarcodeView scanner;
 
   private MainActivity mainActivity;
   private CustomerService customerService;
   private BaseInfoService baseInfoService;
-  private PositionService positionService;
   private Customer customer;
   private LabelValue selectedCity;
   private LabelValue selectedProvince;
@@ -114,6 +120,29 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   private NewCustomerPictureAdapter adapter;
   private Uri fileUri;
   private List<String> picList;
+  private BeepManager beepManager;
+  private String lastText;
+
+  private BarcodeCallback callback = new BarcodeCallback() {
+    @Override
+    public void barcodeResult(BarcodeResult result) {
+      if (result.getText() == null || result.getText().equals(lastText)) {
+        // Prevent duplicate scans
+        return;
+      }
+
+      lastText = result.getText();
+
+      scanner.setStatusText(result.getText());
+
+      fillNationalCodeData(lastText);
+      beepManager.playBeepSoundAndVibrate();
+    }
+
+    @Override
+    public void possibleResultPoints(List<ResultPoint> resultPoints) {
+    }
+  };
 
   public AddCustomerFragment() {
     // Required empty public constructor
@@ -121,6 +150,32 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
   public static AddCustomerFragment newInstance() {
     return new AddCustomerFragment();
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    scanner.resume();
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    scanner.pause();
+  }
+
+  private void initScanner() {
+    Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
+    scanner.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
+    scanner.initializeFromIntent(mainActivity.getIntent());
+    scanner.decodeContinuous(callback);
+    scanner.setStatusText(getString(R.string.scan_melli_card_barcode));
+
+    beepManager = new BeepManager(mainActivity);
+  }
+
+  private void fillNationalCodeData(String extractedData) {
+    nationalCodeEdt.setText(NumberUtil.digitsToPersian(extractedData));
   }
 
   @Override
@@ -134,7 +189,6 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
 
     customerService = new CustomerServiceImpl(mainActivity);
     baseInfoService = new BaseInfoServiceImpl(mainActivity);
-    positionService = new PositionServiceImpl(mainActivity);
 
     try {
       Bundle arguments = getArguments();
@@ -147,23 +201,24 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
         }
       }
     } catch (BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), ex);
+      Timber.e(ex);
+      ToastUtil.toastError(mainActivity, ex);
     } catch (Exception ex) {
       Logger.sendError("UI Exception",
           "Error in creating NCustomerDetailFragment " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
+      Timber.e(ex);
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(ex));
     }
 
     if (Empty.isEmpty(customer)) {
-      ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_or_creating_customer);
+      ToastUtil.toastError(mainActivity, R.string.message_error_in_loading_or_creating_customer);
       mainActivity.changeFragment(MainActivity.FEATURE_FRAGMENT_ID, true);
     }
 
     setData();
     setUpSpinners();
     setupRecycler();
+    initScanner();
     if (pageStatus != null && pageStatus == PageStatus.VIEW) {
       disableItems();
     }
@@ -180,11 +235,11 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     } else {
       picList = new ArrayList<>();
     }
-    LinearLayoutManager layout = new LinearLayoutManager(getActivity(),
+    LinearLayoutManager layout = new LinearLayoutManager(mainActivity,
         LinearLayoutManager.HORIZONTAL, true);
     layout.setReverseLayout(true);
     photoList.setLayoutManager(layout);
-    adapter = new NewCustomerPictureAdapter(getActivity(), picList, this);
+    adapter = new NewCustomerPictureAdapter(mainActivity, picList, this);
     photoList.setAdapter(adapter);
     updateImageCounter();
   }
@@ -356,20 +411,20 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
           }
           customerService.savePicture(customerPics, customerId);
 
-          ToastUtil.toastSuccess(getActivity(), R.string.message_customer_save_successfully);
+          ToastUtil.toastSuccess(mainActivity, R.string.message_customer_save_successfully);
           mainActivity.removeFragment(AddCustomerFragment.this);
         } else {
-          ToastUtil.toastError(getActivity(), getString(R.string.error_in_saving_new_customer));
+          ToastUtil.toastError(mainActivity, getString(R.string.error_in_saving_new_customer));
         }
       }
     } catch (BusinessException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), ex);
+      Timber.e(ex);
+      ToastUtil.toastError(mainActivity, ex);
     } catch (Exception e) {
       Logger.sendError("Data Storage Exception",
           "Error in saving new customer data " + e.getMessage());
-      Log.e(TAG, e.getMessage(), e);
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
+      Timber.e(e);
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
     }
   }
 
@@ -378,61 +433,61 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       return false;
     }
     if (Empty.isEmpty(customer.getFullName())) {
-      ToastUtil.toastError(getActivity(), R.string.message_customer_name_is_required);
+      ToastUtil.toastError(mainActivity, R.string.message_customer_name_is_required);
       fullNameEdt.requestFocus();
       return false;
     }
 
     if (Empty.isEmpty(customer.getPhoneNumber())) {
-      ToastUtil.toastError(getActivity(), R.string.message_phone_is_required);
+      ToastUtil.toastError(mainActivity, R.string.message_phone_is_required);
       phoneNumberEdt.requestFocus();
       return false;
     }
 
     if (Empty.isEmpty(customer.getCellPhone())) {
-      ToastUtil.toastError(getActivity(), R.string.message_cell_phone_is_required);
+      ToastUtil.toastError(mainActivity, R.string.message_cell_phone_is_required);
       mobileEdt.requestFocus();
       return false;
     }
 
     if (Empty.isEmpty(customer.getShopName())) {
-      ToastUtil.toastError(getActivity(), R.string.message_shop_name_is_required);
+      ToastUtil.toastError(mainActivity, R.string.message_shop_name_is_required);
       shopNameEdt.requestFocus();
       return false;
     }
 
     String nationalCode = NumberUtil.digitsToEnglish(customer.getNationalCode());
     if (!Empty.isEmpty(nationalCode) && (!ValidationUtil.isValidNationalCode(nationalCode))) {
-      ToastUtil.toastError(getActivity(), R.string.message_national_code_is_not_valid);
+      ToastUtil.toastError(mainActivity, R.string.message_national_code_is_not_valid);
       nationalCodeEdt.requestFocus();
       return false;
     }
 
     String postalCode = customer.getPostalCode().trim();
     if (!Empty.isEmpty(postalCode) && postalCode.length() != 10) {
-      ToastUtil.toastError(getActivity(), R.string.message_postal_code_is_not_valid);
+      ToastUtil.toastError(mainActivity, R.string.message_postal_code_is_not_valid);
       postalCodeEdt.requestFocus();
       return false;
     }
 
     if (Empty.isEmpty(customer.getAddress())) {
-      ToastUtil.toastError(getActivity(), R.string.message_address_is_required);
+      ToastUtil.toastError(mainActivity, R.string.message_address_is_required);
       addressEdt.requestFocus();
       return false;
     }
 
     if (selectedProvince == null) {
-      ToastUtil.toastError(getActivity(), R.string.message_province_is_required);
+      ToastUtil.toastError(mainActivity, R.string.message_province_is_required);
       return false;
     }
 
     if (selectedCity == null) {
-      ToastUtil.toastError(getActivity(), R.string.message_city_is_required);
+      ToastUtil.toastError(mainActivity, R.string.message_city_is_required);
       return false;
     }
 
     if (Empty.isEmpty(customer.getxLocation()) || Empty.isEmpty(customer.getyLocation())) {
-      ToastUtil.toastError(getActivity(), "وارد کردن مختصات مکان مشتری اجباری است");
+      ToastUtil.toastError(mainActivity, "وارد کردن مختصات مکان مشتری اجباری است");
       return false;
     }
 
@@ -469,7 +524,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   private void initSpinner(Spinner spinner, List<LabelValue> items, String hint) {
 
     items.add(new LabelValue(-1L, hint));
-    LabelValueArrayAdapterWithHint adapter = new LabelValueArrayAdapterWithHint(getActivity(),
+    LabelValueArrayAdapterWithHint adapter = new LabelValueArrayAdapterWithHint(mainActivity,
         items);
     spinner.setAdapter(adapter);
     spinner.setSelection(adapter.getCount());
@@ -484,7 +539,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   @Override
   public void onFocusChange(View v, boolean hasFocus) {
     try {
-      if (getActivity() != null && !getActivity().isFinishing() && hasFocus) {
+      if (mainActivity != null && !mainActivity.isFinishing() && hasFocus) {
         v.performClick();
       }
     } catch (Exception e) {
@@ -536,8 +591,8 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
       if (resultCode == RESULT_OK) {
-        Bitmap bitmap = ImageUtil.decodeSampledBitmapFromUri(getActivity(), fileUri);
-        bitmap = ImageUtil.getScaledBitmap(getActivity(), bitmap);
+        Bitmap bitmap = ImageUtil.decodeSampledBitmapFromUri(mainActivity, fileUri);
+        bitmap = ImageUtil.getScaledBitmap(mainActivity, bitmap);
 
         String s = ImageUtil.saveTempImage(bitmap, MediaUtil
             .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,

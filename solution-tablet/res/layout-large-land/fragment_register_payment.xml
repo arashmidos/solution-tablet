@@ -344,7 +344,6 @@
               android:background="@drawable/edit_text_state_background"
               android:gravity="center_vertical"
               android:imeOptions="actionNext"
-              android:inputType="number"
               android:maxLines="1"
               android:textColor="@android:color/black"
               android:textSize="@dimen/text_normal"
