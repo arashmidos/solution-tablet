@@ -71,7 +71,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
       Timber.plant(new DebugTree());
     }
 
-    new ANRWatchDog(10_000).setReportMainThreadOnly().setANRListener(error -> {
+    new ANRWatchDog(10_000).setANRListener(error -> {
       Timber.e(error);
       Crashlytics.log(error.toString());
       Crashlytics.logException(error);
@@ -102,8 +102,8 @@ public class SolutionTabletApplication extends MultiDexApplication {
 //    new Thread(() -> {
     try {
 
-      TrueTimeRx.build().withSharedPreferencesCache(this)
-          .initializeRx("time.google.com")
+      TrueTimeRx.build().withSharedPreferencesCache(this).withServerResponseDelayMax(2000).withConnectionTimeout(60_000)
+          .initializeRx("time.apple.com")
           .subscribeOn(Schedulers.io())
           .subscribe(date -> {
             Timber.d("TrueTime was initialized and we have a time:%s ", date);
@@ -186,7 +186,7 @@ public class SolutionTabletApplication extends MultiDexApplication {
     } catch (Exception ex) {
       ex.printStackTrace();
     }
-    return null;
+    return new Date();
   }
 
 }

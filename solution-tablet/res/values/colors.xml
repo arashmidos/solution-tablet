@@ -92,4 +92,5 @@
   <color name="gift">#FFF9C4</color>
   <color name="free_order">#00897b</color>
   <color name="light_red">#FFEBEE</color>
+  <color name="item_text_color">#000000</color>
 </resources>

@@ -479,11 +479,11 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
       return false;
     } else {
       //Check for equal numbers
-      String[] allDigitEqual = {"0000000000", "1111111111", "2222222222", "3333333333",
-          "4444444444", "5555555555", "6666666666", "7777777777", "8888888888", "9999999999"};
-      if (Arrays.asList(allDigitEqual).contains(nationalCode)) {
-        return false;
-      } else {
+//      String[] allDigitEqual = {"0000000000", "1111111111", "2222222222", "3333333333",
+//          "4444444444", "5555555555", "6666666666", "7777777777", "8888888888", "9999999999"};
+//      if (Arrays.asList(allDigitEqual).contains(nationalCode)) {
+//        return false;
+//      } else {
         int sum = 0;
         int lenght = 10;
         for (int i = 0; i < lenght - 1; i++) {
@@ -495,7 +495,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
         int c = sum % 11;
 
         return (((c < 2) && (r == c)) || ((c >= 2) && ((11 - c) == r)));
-      }
+//      }
     }
   }
 

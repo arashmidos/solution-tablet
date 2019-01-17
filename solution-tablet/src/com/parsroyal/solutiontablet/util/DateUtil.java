@@ -509,10 +509,23 @@ public class DateUtil {
           } else {
             realM = String.valueOf(result);
           }
+          break;
         }
       }
       if (realM != null) {
         date = date.replace(m, realM);
+      }
+      if (date.contains("Sep")) {
+        date = date.replace("Sep", "09");
+      }
+      if (date.contains("Oct")) {
+        date = date.replace("Oct", "10");
+      }
+      if (date.contains("Nov")) {
+        date = date.replace("Nov", "11");
+      }
+      if (date.contains("Dec")) {
+        date = date.replace("Dec", "11");
       }
     } catch (Exception ex) {
       ex.printStackTrace();

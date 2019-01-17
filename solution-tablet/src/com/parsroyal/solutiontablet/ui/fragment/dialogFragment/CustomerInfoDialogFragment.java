@@ -154,7 +154,9 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     initServices();
-
+    if (model == null) {
+      return inflater.inflate(R.layout.empty_view, container, false);
+    }
     customer = customerService.getCustomerDtoById(model.getPrimaryKey());
 
     initialize();

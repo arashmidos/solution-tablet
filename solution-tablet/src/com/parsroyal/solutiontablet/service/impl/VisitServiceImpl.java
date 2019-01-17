@@ -160,7 +160,7 @@ public class VisitServiceImpl implements VisitService {
     visitInformation.setEndTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
 
     Date networkDate = SolutionTabletApplication.getInstance().getTrueTime();
-    visitInformation.setEndNetworkDate(networkDate == null ? null : networkDate.getTime());
+    visitInformation.setEndNetworkDate(networkDate == null ? new Date().getTime() : networkDate.getTime());
     saveVisit(visitInformation);
   }
 
