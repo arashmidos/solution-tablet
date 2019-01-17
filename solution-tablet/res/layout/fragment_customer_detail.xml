@@ -5,19 +5,20 @@
   android:id="@+id/root"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical">
+  android:orientation="vertical"
+  tools:ignore="RtlHardcoded">
   <RelativeLayout
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:background="@color/white"
-    android:elevation="3dp">
+    android:elevation="3dp"
+    tools:ignore="RtlSymmetry">
     <ImageView
       android:id="@+id/close_btn"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
       android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:paddingLeft="16dp"
       android:paddingRight="16dp"
@@ -62,7 +63,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_alignTop="@+id/imageView3"
-          android:layout_toLeftOf="@+id/imageView3"
           android:layout_toStartOf="@+id/imageView3"
           android:textColor="#dd000000"
           android:textSize="14sp"
@@ -74,7 +74,6 @@
           android:layout_height="wrap_content"
           android:layout_marginRight="16dp"
           android:layout_alignTop="@+id/customer_name_tv"
-          android:layout_toLeftOf="@+id/customer_name_tv"
           android:layout_toStartOf="@+id/customer_name_tv"
           android:textColor="@color/gray_75"
           android:textSize="14sp"
@@ -109,22 +108,18 @@
         android:layout_height="1dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
         android:background="@color/black_10" />
       <RelativeLayout
         android:id="@+id/credit_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingLeft="10dp">
+        android:paddingStart="10dp">
 
         <ImageView
           android:id="@+id/minus_img"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="10sp"
-          android:layout_marginLeft="10dp"
-          android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
           android:layout_centerVertical="true"
           android:src="@drawable/ic_minus_box_18_dp"
@@ -135,10 +130,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="10dp"
-          android:layout_marginLeft="10dp"
           android:layout_alignTop="@+id/credit_title_tv"
           android:layout_toEndOf="@+id/minus_img"
-          android:layout_toRightOf="@+id/minus_img"
           android:ellipsize="end"
           android:gravity="left"
           android:maxLines="1"
@@ -155,12 +148,8 @@
           android:layout_marginBottom="16dp"
           android:layout_marginStart="8dp"
           android:layout_marginEnd="56dp"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="56dp"
           android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
           android:layout_toEndOf="@id/credit_tv"
-          android:layout_toRightOf="@id/credit_tv"
           android:ellipsize="end"
           android:gravity="start"
           android:maxLines="1"
@@ -173,7 +162,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
         android:background="@color/black_10" />
 
       <RelativeLayout
@@ -196,18 +184,17 @@
           style="@style/IranSans"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
           android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/imageView4"
           android:layout_toStartOf="@+id/imageView4"
           android:textColor="#dd000000"
           android:textSize="14sp"
-          tools:text="تهران میدان هروی/گلستان پنجم پ127" />
+          tools:text="تهران میدان هروی/گلستان پنجم پسیبکمن سیبکمن سیکمبن سیبکمن سیبکمن سیبکمن سیبکمن سیبکمن سی127" />
       </RelativeLayout>
       <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
         android:background="@color/black_10" />
       <RelativeLayout
         android:id="@+id/phone_layout"
@@ -230,7 +217,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/imageView5"
           android:layout_toStartOf="@+id/imageView5"
           android:textColor="#dd000000"
           android:textSize="14sp"
@@ -240,7 +226,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
         android:background="@color/black_10" />
       <RelativeLayout
         android:id="@+id/call_layout"
@@ -263,7 +248,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/imageView6"
           android:layout_toStartOf="@+id/imageView6"
           android:textColor="#dd000000"
           android:textSize="14sp"
@@ -297,7 +281,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/imageView7"
           android:layout_toStartOf="@+id/imageView7"
           android:text="@string/customer_report"
           android:textColor="@color/primary_dark"
@@ -341,7 +324,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/location_img"
           android:layout_toStartOf="@+id/location_img"
           android:text="@string/salesman_location"
           android:textColor="@color/gray_75"
@@ -351,7 +333,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
         android:background="@color/black_10" />
       <RelativeLayout
         android:layout_width="match_parent"

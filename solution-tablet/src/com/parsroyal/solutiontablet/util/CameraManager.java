@@ -8,11 +8,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
+import timber.log.Timber;
 
 /**
  * Created by arash on 1/2/18.
@@ -20,9 +19,7 @@ import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
 
 public class CameraManager {
 
-  private static final String TAG = CameraManager.class.getSimpleName();
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
-
 
   public static boolean checkPermissions(Context context) {
     return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(context,
@@ -40,8 +37,9 @@ public class CameraManager {
     // Provide an additional rationale to the user. This would happen if the user denied the
     // request previously, but didn't check the "Don't ask again" checkbox.
     if (cameraShouldProvideRationale && storageShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(mainActivity, mainActivity.getString(R.string.permission_rationale_camera_storage),
+      Timber.i("Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(mainActivity,
+          mainActivity.getString(R.string.permission_rationale_camera_storage),
           view -> {
             // Request permission
             ActivityCompat.requestPermissions(mainActivity,
@@ -49,8 +47,9 @@ public class CameraManager {
                 REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
           });
     } else if (cameraShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(mainActivity, mainActivity.getString(R.string.permission_rationale_camera_storage),
+      Timber.i("Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(mainActivity,
+          mainActivity.getString(R.string.permission_rationale_camera_storage),
           view -> {
             // Request permission
             ActivityCompat.requestPermissions(mainActivity,
@@ -58,8 +57,9 @@ public class CameraManager {
                 REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
           });
     } else if (storageShouldProvideRationale) {
-      Log.i(TAG, "Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(mainActivity, mainActivity.getString(R.string.permission_rationale_camera_storage),
+      Timber.i("Displaying permission rationale to provide additional context.");
+      ToastUtil.toastError(mainActivity,
+          mainActivity.getString(R.string.permission_rationale_camera_storage),
           view -> {
             // Request permission
             ActivityCompat.requestPermissions(mainActivity,
@@ -67,7 +67,7 @@ public class CameraManager {
                 REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE);
           });
     } else {
-      Log.i(TAG, "Requesting permission");
+      Timber.i("Requesting permission");
       // Request permission. It's possible this can be auto answered if device policy
       // sets the permission in a given state or the user denied the permission
       // previously and checked "Never ask again".

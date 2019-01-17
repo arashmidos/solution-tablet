@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.data.listmodel.PaymentListModel;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentAdapter.ViewHolder;
+import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -93,6 +94,9 @@ public class PaymentAdapter extends Adapter<ViewHolder> {
   }
 
   private void goToRegisterPaymentFragment(PaymentListModel payment) {
+    if (!CameraManager.checkPermissions(mainActivity)) {
+      CameraManager.requestPermissions(mainActivity);
+    }
     Bundle args = new Bundle();
     args.putLong(Constants.VISIT_ID, visitId);
     args.putLong(Constants.CUSTOMER_BACKEND_ID, payment.getCustomerBackendId());

@@ -35,7 +35,6 @@
           android:layout_marginTop="19dp"
           android:layout_marginBottom="20dp"
           android:layout_marginEnd="16dp"
-          android:layout_marginRight="16dp"
           android:text="@string/choose_payment_methods"
           android:textColor="@color/black_21"
           android:textSize="12sp" />
@@ -45,8 +44,6 @@
           android:layout_height="48dp"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
           android:orientation="horizontal"
           android:weightSum="29">
 
@@ -150,6 +147,16 @@
           android:layout_marginBottom="24dp"
           android:background="@color/gray_e0" />
 
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+          android:id="@+id/scanner"
+          android:layout_width="match_parent"
+          android:layout_height="120dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginLeft="16dp"
+          android:layout_marginRight="16dp"
+          app:zxing_preview_scaling_strategy="centerCrop"
+          app:zxing_use_texture_view="false" />
+
         <android.support.design.widget.TextInputLayout
           android:id="@+id/payment_price_lay"
           style="@style/IranSans"
@@ -157,8 +164,6 @@
           android:layout_height="wrap_content"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
           android:gravity="right"
           android:hint="@string/payment_price"
           android:textColorHint="@color/login_gray"
@@ -190,8 +195,6 @@
           android:layout_marginTop="42dp"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
           android:gravity="right"
           android:hint="@string/tracking_num"
           android:textColorHint="@color/login_gray"
@@ -236,7 +239,6 @@
               android:layout_height="wrap_content"
               android:layout_weight=".5"
               android:layout_marginStart="16dp"
-              android:layout_marginLeft="16dp"
               android:gravity="right"
               android:hint="@string/cheque_number_payment"
               android:textColorHint="@color/login_gray"
@@ -267,8 +269,6 @@
               android:layout_weight=".5"
               android:layout_marginStart="16dp"
               android:layout_marginEnd="16dp"
-              android:layout_marginLeft="16dp"
-              android:layout_marginRight="16dp"
               android:gravity="right"
               android:hint="@string/cheque_date_payment"
               android:textColorHint="@color/login_gray"
@@ -299,8 +299,6 @@
             android:layout_marginTop="42dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:gravity="right"
             android:hint="@string/cheque_owner"
             android:textColorHint="@color/login_gray"
@@ -331,8 +329,6 @@
             android:layout_marginTop="42dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:gravity="right"
             android:hint="@string/account_number"
             android:textColorHint="@color/login_gray"
@@ -370,8 +366,6 @@
               android:layout_weight=".5"
               android:layout_marginStart="16dp"
               android:layout_marginEnd="16dp"
-              android:layout_marginLeft="16dp"
-              android:layout_marginRight="16dp"
               android:gravity="right"
               android:hint="@string/branch"
               android:textColorHint="@color/login_gray"
@@ -397,8 +391,7 @@
               android:layout_width="0dp"
               android:layout_height="match_parent"
               android:layout_weight=".5"
-              android:layout_marginEnd="16dp"
-              android:layout_marginRight="16dp">
+              android:layout_marginEnd="16dp">
 
               <Spinner
                 android:id="@+id/spinner"
@@ -417,17 +410,14 @@
               <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_arrow_drop_down"
                 android:tint="@color/login_gray" />
 
             </RelativeLayout>
-
           </LinearLayout>
         </LinearLayout>
-
       </LinearLayout>
     </ScrollView>
 
@@ -436,12 +426,7 @@
       style="@style/IranSans.Medium"
       android:layout_width="match_parent"
       android:layout_height="36dp"
-      android:layout_marginTop="16dp"
-      android:layout_marginBottom="16dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:layout_marginLeft="16dp"
-      android:layout_marginRight="16dp"
+      android:layout_margin="16dp"
       android:background="@color/payment_bottom_line"
       android:gravity="center"
       android:text="@string/submit"

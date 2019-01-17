@@ -74,6 +74,12 @@ public class Constants {
   public static final String debugUsername = "royal";
   public static final String debugPassword = "royal2018";
   public static final String COMPLIMENTARY = "COMPLIMENTARY";
+  public static final String NATIONAL_CODE = "scanner.national.code";
+  public static final String SHABA = "scanner.bank.shaba";
+  public static final String CHECK_SERIAL = "scanner.check.serial";
+  public static final String BANK_CODE = "scanner.bank.code";
+  public static final String BANK_BRANCH_CODE = "scanner.bank.branch.code";
+  public static final String BANK_NAME = "scanner.bank.name";
 
   public class TransferStatus {
 

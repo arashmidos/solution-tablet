@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -20,6 +21,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.crashlytics.android.Crashlytics;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.BeepManager;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
@@ -42,13 +50,18 @@ import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
+import com.parsroyal.solutiontablet.util.BarcodeUtil;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import timber.log.Timber;
 
 /**
  * @author Shakib
@@ -107,6 +120,8 @@ public class RegisterPaymentFragment extends BaseFragment {
   TextInputLayout branchLay;
   @BindView(R.id.register_btn)
   Button registerBtn;
+  @BindView(R.id.scanner)
+  DecoratedBarcodeView scanner;
 
   private MainActivity mainActivity;
   private CustomerService customerService;
@@ -122,18 +137,44 @@ public class RegisterPaymentFragment extends BaseFragment {
   private int paymentTypePos = 0;
   private long visitId;
   private long visitlineBackendId;
+  private BeepManager beepManager;
+  private String lastText;
+
+  private BarcodeCallback callback = new BarcodeCallback() {
+    @Override
+    public void barcodeResult(BarcodeResult result) {
+      if (result.getText() == null || result.getText().equals(lastText)) {
+        // Prevent duplicate scans
+        return;
+      }
+
+      lastText = result.getText();
+
+      scanner.setStatusText(result.getText());
+
+      Map<String, String> extractedData = BarcodeUtil.extractCheckQR(lastText);
+      if (Empty.isNotEmpty(extractedData)) {
+        fillCheckData(extractedData);
+      }
+      beepManager.playBeepSoundAndVibrate();
+    }
+
+    @Override
+    public void possibleResultPoints(List<ResultPoint> resultPoints) {
+    }
+  };
 
   public RegisterPaymentFragment() {
     // Required empty public constructor
   }
 
-
   public static RegisterPaymentFragment newInstance() {
     return new RegisterPaymentFragment();
   }
 
+
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_register_payment, container, false);
@@ -152,7 +193,58 @@ public class RegisterPaymentFragment extends BaseFragment {
     loadPaymentData();
     addListener();
     setUpDatePicker();
+    initScanner();
     return view;
+  }
+
+
+  private void fillCheckData(Map<String, String> extractedData) {
+
+    chequeOwnerEdt.setText(NumberUtil.digitsToPersian(extractedData.get(Constants.NATIONAL_CODE)));
+
+    accountNumEdt.setText(extractedData.get(Constants.SHABA));
+    chequeNumEdt.setText(NumberUtil.digitsToPersian(extractedData.get(Constants.CHECK_SERIAL)));
+    branchEdt.setText(NumberUtil.digitsToPersian(extractedData.get(Constants.BANK_BRANCH_CODE)));
+//    data.put(Constants.BANK_CODE, bankDetails[0]);
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    scanner.resume();
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    scanner.pause();
+  }
+
+  public void pause(View view) {
+    scanner.pause();
+  }
+
+  public void resume(View view) {
+    scanner.resume();
+  }
+/*
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+  }*/
+
+  public void triggerScan(View view) {
+    scanner.decodeSingle(callback);
+  }
+
+  private void initScanner() {
+    Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
+    scanner.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
+    scanner.initializeFromIntent(mainActivity.getIntent());
+    scanner.decodeContinuous(callback);
+    scanner.setStatusText("بارکد چک را اسکن کنید");
+
+    beepManager = new BeepManager(mainActivity);
   }
 
   private void setUpDatePicker() {
@@ -185,21 +277,21 @@ public class RegisterPaymentFragment extends BaseFragment {
         visitId = arguments.getLong(Constants.VISIT_ID);
         visitlineBackendId = arguments.getLong(Constants.VISITLINE_BACKEND_ID);
       } else {
-        ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_data);
+        ToastUtil.toastError(mainActivity, R.string.message_error_in_loading_data);
         mainActivity.removeFragment(RegisterPaymentFragment.this);
       }
     } catch (BusinessException ex) {
-      Log.e(getFragmentTag(), ex.getMessage(), ex);
+      Timber.e(ex);
       ToastUtil.toastError(getActivity(), ex);
     } catch (Exception ex) {
-      Log.e(getFragmentTag(), ex.getMessage(), ex);
+      Timber.e(ex);
       ToastUtil.toastError(getActivity(), new UnknownSystemException(ex));
       Logger
           .sendError("UI Exception", "Error in creating PaymentDetailFragment " + ex.getMessage());
     }
 
     if (Empty.isEmpty(customer)) {
-      ToastUtil.toastError(getActivity(), R.string.message_error_in_loading_data);
+      ToastUtil.toastError(mainActivity, R.string.message_error_in_loading_data);
       mainActivity.removeFragment(RegisterPaymentFragment.this);
     }
     if (Empty.isNotEmpty(payment)) {
@@ -221,6 +313,7 @@ public class RegisterPaymentFragment extends BaseFragment {
     bankSpinner.setEnabled(false);
     branchEdt.setEnabled(false);
     registerBtn.setEnabled(false);
+    scanner.setVisibility(View.GONE);
   }
 
   private void loadSpinnersData() {
@@ -313,14 +406,14 @@ public class RegisterPaymentFragment extends BaseFragment {
       View selectedView) {
     selectedLay.setBackgroundResource(R.drawable.role_selected);
     selectedTextView
-        .setTextColor(ContextCompat.getColor(getActivity(), R.color.payment_bottom_line));
+        .setTextColor(ContextCompat.getColor(mainActivity, R.color.payment_bottom_line));
     selectedView.setVisibility(View.VISIBLE);
   }
 
   private void onItemDeSelected(RelativeLayout selectedLay, TextView selectedTextView,
       View selectedView) {
     selectedLay.setBackgroundResource(R.drawable.role_default);
-    selectedTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.gray_75));
+    selectedTextView.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray_75));
     selectedView.setVisibility(View.GONE);
   }
 
@@ -333,6 +426,7 @@ public class RegisterPaymentFragment extends BaseFragment {
     paymentTypePos = 2;
     trackingNumLay.setVisibility(View.GONE);
     chequeDetailLay.setVisibility(View.VISIBLE);
+    scanner.setVisibility(View.VISIBLE);
     onItemSelected(chequeLay, chequeTv, chequeBottomLine);
     onItemDeSelected(cashLay, cashTv, cashBottomLine);
     onItemDeSelected(ePaymentLay, ePaymentTv, ePaymentBottomLine);
@@ -342,6 +436,7 @@ public class RegisterPaymentFragment extends BaseFragment {
     paymentTypePos = 0;
     trackingNumLay.setVisibility(View.GONE);
     chequeDetailLay.setVisibility(View.GONE);
+    scanner.setVisibility(View.GONE);
     onItemDeSelected(chequeLay, chequeTv, chequeBottomLine);
     onItemSelected(cashLay, cashTv, cashBottomLine);
     onItemDeSelected(ePaymentLay, ePaymentTv, ePaymentBottomLine);
@@ -351,6 +446,7 @@ public class RegisterPaymentFragment extends BaseFragment {
     paymentTypePos = 1;
     trackingNumLay.setVisibility(View.VISIBLE);
     chequeDetailLay.setVisibility(View.GONE);
+    scanner.setVisibility(View.GONE);
     onItemDeSelected(chequeLay, chequeTv, chequeBottomLine);
     onItemDeSelected(cashLay, cashTv, cashBottomLine);
     onItemSelected(ePaymentLay, ePaymentTv, ePaymentBottomLine);
@@ -386,41 +482,41 @@ public class RegisterPaymentFragment extends BaseFragment {
     }
 
     if (Empty.isEmpty(paymentPriceEdt.getText().toString())) {
-      ToastUtil.toastError(getActivity(), R.string.message_amount_is_required);
+      ToastUtil.toastError(mainActivity, R.string.message_amount_is_required);
       paymentPriceEdt.requestFocus();
       return false;
     }
 
     if (paymentTypePos == 1 && Empty
         .isEmpty(trackingNumEdt.getText().toString())) {
-      ToastUtil.toastError(getActivity(), R.string.message_tracking_no_is_required);
+      ToastUtil.toastError(mainActivity, R.string.message_tracking_no_is_required);
       trackingNumEdt.requestFocus();
       return false;
     }
 
     if (paymentTypePos == 2) {
       if (!dateModified) {
-        ToastUtil.toastError(getActivity(), R.string.message_cheque_date_is_required);
+        ToastUtil.toastError(mainActivity, R.string.message_cheque_date_is_required);
         chequeDateEdt.requestFocus();
         return false;
       }
       if (Empty.isEmpty(chequeNumEdt.getText().toString())) {
-        ToastUtil.toastError(getActivity(), R.string.message_cheque_number_is_required);
+        ToastUtil.toastError(mainActivity, R.string.message_cheque_number_is_required);
         chequeNumEdt.requestFocus();
         return false;
       }
       if (Empty.isEmpty(paymentPriceEdt.getText().toString())) {
-        ToastUtil.toastError(getActivity(), R.string.message_cheque_amount_is_required);
+        ToastUtil.toastError(mainActivity, R.string.message_cheque_amount_is_required);
         paymentPriceEdt.requestFocus();
         return false;
       }
       if (Empty.isEmpty(accountNumEdt.getText().toString())) {
-        ToastUtil.toastError(getActivity(), R.string.message_cheque_account_number_is_required);
+        ToastUtil.toastError(mainActivity, R.string.message_cheque_account_number_is_required);
         accountNumEdt.requestFocus();
         return false;
       }
       if (Empty.isEmpty(chequeOwnerEdt.getText().toString())) {
-        ToastUtil.toastError(getActivity(), R.string.message_cheque_account_owner_is_required);
+        ToastUtil.toastError(mainActivity, R.string.message_cheque_account_owner_is_required);
         chequeOwnerEdt.requestFocus();
         return false;
       }
@@ -467,18 +563,17 @@ public class RegisterPaymentFragment extends BaseFragment {
 
         visitService.saveVisitDetail(visitDetail);
 
-        ToastUtil.toastSuccess(getActivity(), R.string.message_payment_save_successfully);
+        ToastUtil.toastSuccess(mainActivity, R.string.message_payment_save_successfully);
         mainActivity.hideKeyboard();
         mainActivity.removeFragment(RegisterPaymentFragment.this);
       }
     } catch (BusinessException ex) {
-      Log.e(getFragmentTag(), ex.getMessage(), ex);
-      ToastUtil.toastError(getActivity(), ex);
+      Timber.e(ex);
+      ToastUtil.toastError(mainActivity, ex);
     } catch (Exception e) {
-      Logger.sendError("Data Storage Exception",
-          "Error in saving new payment " + e.getMessage());
-      Log.e(getFragmentTag(), e.getMessage(), e);
-      ToastUtil.toastError(getActivity(), new UnknownSystemException(e));
+      Logger.sendError("Data Storage Exception", "Error in saving new payment " + e.getMessage());
+      Timber.e(e);
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
     }
   }
 }

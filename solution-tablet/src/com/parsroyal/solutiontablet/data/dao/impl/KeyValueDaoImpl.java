@@ -55,6 +55,18 @@ public class KeyValueDaoImpl implements KeyValueDao {
   }
 
   @Override
+  public List<KeyValue> retrieveAll(String selection, String[] args, String groupBy, String having,
+      String orderBy) {
+    return null;
+  }
+
+  @Override
+  public List<KeyValue> retrieveAll(String selection, String[] args, String groupBy, String having,
+      String orderBy, String limit) {
+    return null;
+  }
+
+  @Override
   public void deleteAll() {
     throw new RuntimeException("Not implemented yet");
   }

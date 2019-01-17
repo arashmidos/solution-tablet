@@ -11,6 +11,7 @@ import com.parsroyal.solutiontablet.data.dao.impl.BaseInfoDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.CityDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.dao.impl.ProvinceDaoImpl;
+import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.City;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Province;
@@ -105,7 +106,13 @@ public class BaseInfoServiceImpl implements BaseInfoService {
   @Override
   public List<LabelValue> search(Long type, String constraint) {
     return baseInfoDao.search(type, constraint);
+  }
 
+  @Override
+  public List<BaseInfo> retrieveByTypeAndCode(Long type, String code) {
+    String selection = String.format("%s = ? AND %s = ?", BaseInfo.COL_TYPE, BaseInfo.COL_CODE);
+    String[] args = {String.valueOf(type),String.valueOf(code)};
+    return baseInfoDao.retrieveAll(selection, args, null, null, null, "1");
   }
 
   @Override

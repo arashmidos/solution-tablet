@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.PaymentServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PaymentAdapter;
+import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.List;
@@ -70,7 +72,7 @@ public class PaymentListFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
     View view = inflater.inflate(R.layout.fragment_payment_list, container, false);
@@ -150,6 +152,9 @@ public class PaymentListFragment extends BaseFragment {
 
   @OnClick(R.id.fab_add_Payment)
   public void onClick() {
+    if (!CameraManager.checkPermissions(mainActivity)) {
+      CameraManager.requestPermissions(mainActivity);
+    }
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);

@@ -1,6 +1,6 @@
 package com.parsroyal.solutiontablet.service;
 
-import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
+import com.parsroyal.solutiontablet.data.entity.BaseInfo;
 import com.parsroyal.solutiontablet.data.entity.City;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.entity.Province;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Mahyar on 6/14/2015.
  */
-public interface BaseInfoService extends BaseService{
+public interface BaseInfoService extends BaseService {
 
   KeyValue getKeyValue(String key);
 
@@ -33,4 +33,7 @@ public interface BaseInfoService extends BaseService{
   void deleteAllProvinces();
 
   List<LabelValue> search(Long activityType, String constraint);
+
+  List<BaseInfo> retrieveByTypeAndCode(Long type, String code);
+
 }

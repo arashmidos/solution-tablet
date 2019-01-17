@@ -48,6 +48,7 @@ import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+import com.parsroyal.solutiontablet.util.ValidationUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -401,7 +402,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     }
 
     String nationalCode = NumberUtil.digitsToEnglish(customer.getNationalCode());
-    if (!Empty.isEmpty(nationalCode) && (!isValidNationalCode(nationalCode))) {
+    if (!Empty.isEmpty(nationalCode) && (!ValidationUtil.isValidNationalCode(nationalCode))) {
       ToastUtil.toastError(getActivity(), R.string.message_national_code_is_not_valid);
       nationalCodeEdt.requestFocus();
       return false;
@@ -472,31 +473,6 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
         items);
     spinner.setAdapter(adapter);
     spinner.setSelection(adapter.getCount());
-  }
-
-  private boolean isValidNationalCode(String nationalCode) {
-    if (nationalCode.length() != 10) {
-      return false;
-    } else {
-      //Check for equal numbers
-//      String[] allDigitEqual = {"0000000000", "1111111111", "2222222222", "3333333333",
-//          "4444444444", "5555555555", "6666666666", "7777777777", "8888888888", "9999999999"};
-//      if (Arrays.asList(allDigitEqual).contains(nationalCode)) {
-//        return false;
-//      } else {
-        int sum = 0;
-        int lenght = 10;
-        for (int i = 0; i < lenght - 1; i++) {
-          sum += Integer.parseInt(String.valueOf(nationalCode.charAt(i))) * (lenght - i);
-        }
-
-        int r = Integer.parseInt(String.valueOf(nationalCode.charAt(9)));
-
-        int c = sum % 11;
-
-        return (((c < 2) && (r == c)) || ((c >= 2) && ((11 - c) == r)));
-//      }
-    }
   }
 
   /**

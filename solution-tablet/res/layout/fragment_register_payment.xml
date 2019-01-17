@@ -24,18 +24,15 @@
         android:layout_marginTop="19dp"
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:text="@string/choose_payment_methods"
         android:textColor="@color/black_21"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:orientation="horizontal"
         android:weightSum="29">
 
@@ -55,7 +52,7 @@
             android:gravity="center"
             android:text="@string/e_payment"
             android:textColor="@color/gray_75"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
           <View
             android:id="@+id/e_payment_bottom_line"
@@ -63,13 +60,13 @@
             android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:background="@color/payment_bottom_line"
-            android:visibility="gone"/>
+            android:visibility="gone" />
         </RelativeLayout>
 
         <View
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:layout_weight="1"/>
+          android:layout_weight="1" />
 
         <RelativeLayout
           android:id="@+id/cheque_lay"
@@ -87,7 +84,7 @@
             android:gravity="center"
             android:text="@string/cheque"
             android:textColor="@color/gray_75"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
           <View
             android:id="@+id/cheque_bottom_line"
@@ -95,13 +92,13 @@
             android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:background="@color/payment_bottom_line"
-            android:visibility="gone"/>
+            android:visibility="gone" />
         </RelativeLayout>
 
         <View
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:layout_weight="1"/>
+          android:layout_weight="1" />
 
         <RelativeLayout
           android:id="@+id/cash_lay"
@@ -119,7 +116,7 @@
             android:gravity="center"
             android:text="@string/cash"
             android:textColor="@color/gray_75"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
           <View
             android:id="@+id/cash_bottom_line"
@@ -127,9 +124,8 @@
             android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:background="@color/payment_bottom_line"
-            android:visibility="gone"/>
+            android:visibility="gone" />
         </RelativeLayout>
-
       </LinearLayout>
 
       <View
@@ -137,7 +133,17 @@
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="24dp"
-        android:background="@color/gray_e0"/>
+        android:background="@color/gray_e0" />
+
+      <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/scanner"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:zxing_preview_scaling_strategy="centerCrop"
+        app:zxing_use_texture_view="false" />
 
       <android.support.design.widget.TextInputLayout
         android:id="@+id/payment_price_lay"
@@ -146,8 +152,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:gravity="right"
         android:hint="@string/payment_price"
         android:textColorHint="@color/login_gray"
@@ -167,7 +171,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_x_large"
-          tools:text="10000000"/>
+          tools:text="10000000" />
 
       </android.support.design.widget.TextInputLayout>
 
@@ -179,8 +183,6 @@
         android:layout_marginTop="42dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:gravity="right"
         android:hint="@string/tracking_num"
         android:textColorHint="@color/login_gray"
@@ -201,7 +203,7 @@
           android:maxLines="1"
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
-          tools:text="422543526"/>
+          tools:text="422543526" />
 
       </android.support.design.widget.TextInputLayout>
 
@@ -225,7 +227,6 @@
             android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:gravity="right"
             android:hint="@string/cheque_number_payment"
             android:textColorHint="@color/login_gray"
@@ -245,7 +246,7 @@
               android:maxLines="1"
               android:textColor="@android:color/black"
               android:textSize="@dimen/text_normal"
-              tools:text="422543526"/>
+              tools:text="422543526" />
 
           </android.support.design.widget.TextInputLayout>
 
@@ -256,8 +257,6 @@
             android:layout_weight=".5"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:gravity="right"
             android:hint="@string/cheque_date_payment"
             android:textColorHint="@color/login_gray"
@@ -276,7 +275,7 @@
               android:maxLines="1"
               android:textColor="@android:color/black"
               android:textSize="@dimen/text_normal"
-              tools:text="422543526"/>
+              tools:text="422543526" />
           </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
@@ -288,8 +287,6 @@
           android:layout_marginTop="42dp"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
           android:gravity="right"
           android:hint="@string/cheque_owner"
           android:textColorHint="@color/login_gray"
@@ -309,7 +306,7 @@
             android:maxLines="1"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_normal"
-            tools:text="422543526"/>
+            tools:text="422543526" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -320,8 +317,6 @@
           android:layout_marginTop="42dp"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
           android:gravity="right"
           android:hint="@string/account_number"
           android:textColorHint="@color/login_gray"
@@ -337,11 +332,10 @@
             android:background="@drawable/edit_text_state_background"
             android:gravity="center_vertical"
             android:imeOptions="actionNext"
-            android:inputType="number"
             android:maxLines="1"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_normal"
-            tools:text="422543526"/>
+            tools:text="422543526" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -359,8 +353,6 @@
             android:layout_weight=".5"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:gravity="right"
             android:hint="@string/branch"
             android:textColorHint="@color/login_gray"
@@ -379,15 +371,14 @@
               android:maxLines="1"
               android:textColor="@android:color/black"
               android:textSize="@dimen/text_normal"
-              tools:text=" میدان توپخانه"/>
+              tools:text=" میدان توپخانه" />
           </android.support.design.widget.TextInputLayout>
 
           <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".5"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp">
+            android:layout_marginEnd="16dp">
 
             <Spinner
               android:id="@+id/spinner"
@@ -395,28 +386,25 @@
               android:layout_height="match_parent"
               android:background="@color/white"
               android:gravity="right"
-              android:prompt="@string/number"/>
+              android:prompt="@string/number" />
 
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
               android:layout_alignParentBottom="true"
-              android:background="@color/login_gray"/>
+              android:background="@color/login_gray" />
 
             <ImageView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_alignParentLeft="true"
               android:layout_alignParentStart="true"
               android:layout_centerVertical="true"
               android:src="@drawable/ic_arrow_drop_down"
-              android:tint="@color/login_gray"/>
+              android:tint="@color/login_gray" />
 
           </RelativeLayout>
-
         </LinearLayout>
       </LinearLayout>
-
     </LinearLayout>
   </ScrollView>
 
@@ -425,16 +413,11 @@
     style="@style/IranSans.Medium"
     android:layout_width="match_parent"
     android:layout_height="36dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_margin="16dp"
     android:background="@color/payment_bottom_line"
     android:gravity="center"
     android:text="@string/submit"
     android:textColor="@color/white"
-    android:textSize="14sp"/>
+    android:textSize="14sp" />
 
 </LinearLayout>

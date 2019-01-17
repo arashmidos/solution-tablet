@@ -21,6 +21,12 @@ public interface BaseDao<ENTITY extends BaseEntity, PK extends Serializable> {
 
   List<ENTITY> retrieveAll();
 
+  List<ENTITY> retrieveAll(String selection, String[] args, String groupBy, String having,
+      String orderBy);
+
+  List<ENTITY> retrieveAll(String selection, String[] args, String groupBy, String having,
+      String orderBy, String limit);
+
   void deleteAll();
 
   void deleteAll(String column, String condition);

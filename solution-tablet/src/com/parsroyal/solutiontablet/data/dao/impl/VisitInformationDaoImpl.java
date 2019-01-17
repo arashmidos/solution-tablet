@@ -219,7 +219,12 @@ public class VisitInformationDaoImpl extends AbstractDao<VisitInformation, Long>
     VisitInformationDto entity = new VisitInformationDto();
     entity.setId(cursor.getLong(0));
     entity.setCustomerBackendId(cursor.getLong(1));
-    entity.setVisitDate(cursor.getString(3));
+    String visitDate = cursor.getString(3);
+    //Hot patch
+    if (visitDate.contains("")) {
+
+    }
+    entity.setVisitDate(visitDate);
     entity.setStartTime(cursor.getString(5));
     entity.setEndTime(cursor.getString(6));
     entity.setxLocation(cursor.isNull(7) ? null : cursor.getDouble(7));

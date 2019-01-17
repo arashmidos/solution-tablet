@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -436,6 +435,9 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   }
 
   private void goToRegisterPaymentFragment() {
+    if (!CameraManager.checkPermissions(mainActivity)) {
+      CameraManager.requestPermissions(mainActivity);
+    }
     Bundle args = new Bundle();
     args.putLong(Constants.CUSTOMER_BACKEND_ID, customer.getBackendId());
     args.putLong(Constants.VISIT_ID, visitId);
