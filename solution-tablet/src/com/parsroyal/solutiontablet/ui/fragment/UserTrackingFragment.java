@@ -100,6 +100,7 @@ import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
@@ -612,13 +613,18 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
       case R.id.toDate:
         DatePicker.Builder builder = new DatePicker.Builder().id(2);
         builder.date(endDate.getDay(), endDate.getMonth(), endDate.getYear());
-        builder.future(false);
-        builder.build(UserTrackingFragment.this).show(getFragmentManager(), "");
+        builder.maxDate(GregorianCalendar.getInstance());
+        builder.setRetainInstance(true);
+        if (getFragmentManager() != null) {
+          builder.build(UserTrackingFragment.this).show(getFragmentManager(), "");
+        }
         break;
       case R.id.fromDate:
         DatePicker.Builder builder2 = new DatePicker.Builder().id(3);
-        builder2.future(false);
+        builder2.maxDate(GregorianCalendar.getInstance());
+        builder2.setRetainInstance(true);
         builder2.date(startDate.getDay(), startDate.getMonth(), startDate.getYear());
+        assert getFragmentManager() != null;
         builder2.build(UserTrackingFragment.this).show(getFragmentManager(), "");
         break;
       case R.id.filter:

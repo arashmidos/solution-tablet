@@ -276,8 +276,7 @@ public class OrderFragment extends BaseFragment {
         rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
 
         adapter = new GoodsAdapter(mainActivity, this, rejectedGoodsList.getGoodsDtoList(),
-            readOnly,
-            true);
+            readOnly, true, order);
         bottomBar.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
         bottomBarText.setText(R.string.reject_goods);
         goodsCartImage.setVisibility(View.GONE);
@@ -287,7 +286,7 @@ public class OrderFragment extends BaseFragment {
           goodsSo.setGoodsGroupBackendId(backendId);
         }
         adapter = new GoodsAdapter(mainActivity, this, goodsService.searchForGoodsList(goodsSo),
-            readOnly, false);
+            readOnly, false, order);
       }
       if (MultiScreenUtility.isTablet(mainActivity)) {
         RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
@@ -427,6 +426,7 @@ public class OrderFragment extends BaseFragment {
   public void getMessage(UpdateListEvent event) {
     order = saleOrderService.findOrderDtoById(orderId);
     orderCountTv.setText(NumberUtil.digitsToPersian(order.getOrderItems().size()));
+    adapter.updateOrder(order);
   }
 
   @OnClick({R.id.search_img, R.id.bottom_bar, R.id.cancel_bread_crumb_btn, R.id.close_search_img})
@@ -568,7 +568,7 @@ public class OrderFragment extends BaseFragment {
       if (goodsList.size() > 0) {
         showGoodsList();
         if (adapter == null) {
-          adapter = new GoodsAdapter(mainActivity, this, goodsList, readOnly, false);
+          adapter = new GoodsAdapter(mainActivity, this, goodsList, readOnly, false, order);
           recyclerView.setAdapter(adapter);
         }
         adapter.update(goodsList);
@@ -601,13 +601,14 @@ public class OrderFragment extends BaseFragment {
         selectedItem = createOrderItem(selectedGoods);
       }
 
-      saleOrderService
-          .updateOrderItemCount(selectedItem.getId(), count, selectedUnit, orderStatus, selectedGoods, discount);
+      saleOrderService.updateOrderItemCount(selectedItem.getId(), count, selectedUnit, orderStatus,
+          selectedGoods, discount);
       Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);
       orderCountTv.setText(NumberUtil.digitsToPersian(order.getOrderItems().size()));
       EventBus.getDefault().post(new SuccessEvent(StatusCodes.SUCCESS));
+      adapter.updateOrder(order);
     } catch (BusinessException ex) {
       Timber.e(ex);
       EventBus.getDefault().post(new ErrorEvent(getString(R.string.exceed_count_exception),

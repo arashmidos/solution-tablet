@@ -142,12 +142,16 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
       case R.id.toDate:
         DatePicker.Builder builder = new DatePicker.Builder().id(2);
         builder.date(endDate.getDay(), endDate.getMonth(), endDate.getYear());
-        builder.build(VisitLineFragment.this).show(getFragmentManager(), "");
+        if (getFragmentManager() != null) {
+          builder.build(VisitLineFragment.this).show(getFragmentManager(), "");
+        }
         break;
       case R.id.fromDate:
         DatePicker.Builder builder2 = new DatePicker.Builder().id(3);
         builder2.date(startDate.getDay(), startDate.getMonth(), startDate.getYear());
-        builder2.build(VisitLineFragment.this).show(getFragmentManager(), "");
+        if (getFragmentManager() != null) {
+          builder2.build(VisitLineFragment.this).show(getFragmentManager(), "");
+        }
         break;
     }
   }

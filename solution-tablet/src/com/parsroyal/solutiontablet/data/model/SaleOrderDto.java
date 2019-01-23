@@ -1,6 +1,7 @@
 package com.parsroyal.solutiontablet.data.model;
 
 import com.parsroyal.solutiontablet.data.entity.Customer;
+import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import java.util.Date;
 import java.util.List;
@@ -184,5 +185,19 @@ public class SaleOrderDto extends BaseModel {
 
   public void setVisitlineBackendId(long visitlineBackendId) {
     this.visitlineBackendId = visitlineBackendId;
+  }
+
+  public boolean contains(Goods good) {
+    if (orderItems != null) {
+      for (int i = 0; i < orderItems.size(); i++) {
+        SaleOrderItemDto itemDto = orderItems.get(i);
+        if (good.getBackendId().equals(itemDto.getGoods().getBackendId())) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+
   }
 }

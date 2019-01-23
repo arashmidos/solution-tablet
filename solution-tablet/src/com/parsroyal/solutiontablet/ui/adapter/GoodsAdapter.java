@@ -2,7 +2,9 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.entity.Goods;
+import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.util.Empty;
@@ -35,28 +38,31 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
   private final boolean readOnly;
   private final boolean isRejectedGoods;
   private final OrderFragment parent;
+  private SaleOrderDto order;
   private LayoutInflater inflater;
   private Context context;
   private List<Goods> goodsList;
 
   public GoodsAdapter(Context context, OrderFragment orderFragment, List<Goods> goodsList,
-      boolean readOnly, boolean isRejectedGoods) {
+      boolean readOnly, boolean isRejectedGoods, SaleOrderDto order) {
     this.context = context;
     this.goodsList = goodsList;
     this.readOnly = readOnly;
     this.isRejectedGoods = isRejectedGoods;
     this.parent = orderFragment;
+    this.order = order;
     inflater = LayoutInflater.from(context);
   }
 
+  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_goods_list, parent, false);
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     Goods good = goodsList.get(position);
     try {
       holder.setData(position, good);
@@ -81,6 +87,11 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
       return goodsList.get(pos);
     }
     return null;
+  }
+
+  public void updateOrder(SaleOrderDto order) {
+    this.order = order;
+    notifyDataSetChanged();
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
@@ -124,6 +135,12 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
 
     public void setData(int position, Goods good) {
       this.position = position;
+      if (order.contains(good)) {
+        mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.gift));
+      } else {
+        mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+      }
+
       this.good = good;
       Glide.with(context)
           .load(MediaUtil.getGoodImage(good.getCode()))

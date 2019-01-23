@@ -6,7 +6,6 @@
   android:layout_height="wrap_content"
   android:layout_marginTop="16dp"
   android:layout_marginStart="16dp"
-  android:layout_marginLeft="16dp"
   android:background="@color/white"
   card_view:cardCornerRadius="2dp"
   card_view:cardElevation="3dp">
@@ -21,8 +20,7 @@
       android:layout_width="62dp"
       android:layout_height="64dp"
       android:layout_margin="16dp"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true" />
+      android:layout_alignParentEnd="true" />
 
     <TextView
       android:id="@+id/good_name_tv"
@@ -31,7 +29,6 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="19dp"
       android:layout_marginStart="8dp"
-      android:layout_marginLeft="8dp"
       android:layout_toLeftOf="@id/good_img"
       android:textColor="@color/black_85"
       android:textSize="12sp"
@@ -70,7 +67,6 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
       android:layout_below="@+id/good_name_tv"
-      android:layout_toLeftOf="@id/divider"
       android:layout_toStartOf="@id/divider"
       android:singleLine="true"
       android:textColor="@color/gray_75"
@@ -83,10 +79,8 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="9dp"
       android:layout_marginBottom="16dp"
-      android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
       android:layout_below="@+id/good_box_tv"
-      android:layout_toLeftOf="@id/good_img"
       android:layout_toStartOf="@id/good_img"
       android:orientation="horizontal">
       <TextView
@@ -97,8 +91,6 @@
         android:layout_weight="1"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
         android:gravity="left"
         android:singleLine="true"
         android:textColor="@color/blue_19"
@@ -112,7 +104,6 @@
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/ic_cash_18_dp"
         android:drawablePadding="4dp"
-        android:drawableRight="@drawable/ic_cash_18_dp"
         android:gravity="center_vertical"
         android:textColor="@color/gray_75"
         android:textSize="10sp"
@@ -126,7 +117,6 @@
       android:layout_marginBottom="16dp"
       android:layout_marginLeft="16dp"
       android:layout_marginRight="4dp"
-      android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
       android:layout_below="@+id/price_layout"
       android:gravity="left"
@@ -169,7 +159,6 @@
       android:layout_alignBaseline="@+id/good_customer_price_tv"
       android:layout_alignBottom="@+id/good_customer_price_tv"
       android:layout_alignEnd="@+id/good_img"
-      android:layout_alignRight="@+id/good_img"
       android:ellipsize="end"
       android:maxLines="1"
       android:singleLine="true"
