@@ -7,6 +7,7 @@ import com.parsroyal.solutiontablet.data.model.CustomerDto;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionModel;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
+
 import java.util.List;
 
 /**
@@ -14,32 +15,34 @@ import java.util.List;
  */
 public interface CustomerDao extends BaseDao<Customer, Long> {
 
-  List<CustomerDto> retrieveAllNewCustomersForSend();
+    List<CustomerDto> retrieveAllNewCustomersForSend();
 
-  List<Customer> retrieveAllNewCustomers();
+    List<CustomerDto> retrieveAllNewUpdatedCustomersForSend();
 
-  List<CustomerLocationDto> retrieveAllUpdatedCustomerLocationDto();
+    List<Customer> retrieveAllNewCustomers();
 
-  CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId);
+    List<CustomerLocationDto> retrieveAllUpdatedCustomerLocationDto();
 
-  void deleteAllCustomersRelatedToVisitLines();
+    CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId);
 
-  List<Customer> retrieveAllCustomersByVisitLineBackendId(Long visitLineId);
+    void deleteAllCustomersRelatedToVisitLines();
 
-  Customer retrieveCustomerByVisitLineBackendId(Long customerBackendId, Long visitLineId);
+    List<Customer> retrieveAllCustomersByVisitLineBackendId(Long visitLineId);
 
-  List<CustomerListModel> getAllCustomersListModelByVisitLineWithConstraint(Long visitLineId,
-      String constraint, boolean showOnMap);
+    Customer retrieveCustomerByVisitLineBackendId(Long customerBackendId, Long visitLineId);
 
-  CustomerDto getCustomerDtoById(Long customerId);
+    List<CustomerListModel> getAllCustomersListModelByVisitLineWithConstraint(Long visitLineId,
+                                                                              String constraint, boolean showOnMap);
 
-  List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
+    CustomerDto getCustomerDtoById(Long customerId);
 
-  List<Customer> getCustomersVisitLineBackendId(Long backendId);
+    List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
 
-  Customer retrieveByBackendId(Long customerBackendId);
+    List<Customer> getCustomersVisitLineBackendId(Long backendId);
 
-  void updateAllSentCustomer();
+    Customer retrieveByBackendId(Long customerBackendId);
 
-  List<PositionModel> getAllCusromerPostionModel(NCustomerSO nCustomerSO);
+    void updateAllSentCustomer();
+
+    List<PositionModel> getAllCusromerPostionModel(NCustomerSO nCustomerSO);
 }

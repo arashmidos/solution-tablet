@@ -65,6 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
       } else {
         customer.setUpdateDateTime(
             DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+        customer.setStatus(CustomerStatus.UPDATED.getId());
         customerDao.update(customer);
         return customer.getId();
       }
@@ -87,6 +88,11 @@ public class CustomerServiceImpl implements CustomerService {
   @Override
   public List<CustomerDto> getAllNewCustomersForSend() {
     return customerDao.retrieveAllNewCustomersForSend();
+  }
+
+  @Override
+  public List<CustomerDto> getAllNewUpdatedCustomersForSend() {
+    return customerDao.retrieveAllNewUpdatedCustomersForSend();
   }
 
   @Override

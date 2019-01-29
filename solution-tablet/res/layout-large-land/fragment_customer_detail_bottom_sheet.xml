@@ -1,474 +1,530 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/root"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
-  <RelativeLayout
-    android:id="@+id/toolbar"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:background="@color/white"
-    android:elevation="3dp">
-    <ImageView
-      android:id="@+id/close_btn"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      android:layout_centerVertical="true"
-      android:paddingLeft="16dp"
-      android:paddingRight="16dp"
-      android:src="@drawable/ic_close_24dp"
-      android:tint="@color/black_55" />
-    <TextView
-      style="@style/IranSans.Medium"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:gravity="center_horizontal"
-      android:lineSpacingExtra="8sp"
-      android:textColor="@color/primary_dark"
-      android:textSize="16sp"
-      tools:text="مشتری" />
-  </RelativeLayout>
-  <ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1">
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical">
-      <RelativeLayout
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="56dp"
+        android:background="@color/white"
+        android:elevation="3dp">
 
         <ImageView
-          android:id="@+id/imageView3"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="18dp"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          android:layout_alignParentRight="true"
-          android:src="@drawable/ic_account_circle_black_24_dp" />
-        <TextView
-          android:id="@+id/customer_name_tv"
-          style="@style/IranSans.Medium"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignTop="@+id/imageView3"
-          android:layout_toLeftOf="@+id/imageView3"
-          android:layout_toStartOf="@+id/imageView3"
-          android:textColor="#dd000000"
-          android:textSize="14sp"
-          tools:text="محمدرضا گلزار" />
-        <TextView
-          android:id="@+id/distance_tv"
-          style="@style/IranSans.Medium"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginRight="16dp"
-          android:layout_alignTop="@+id/customer_name_tv"
-          android:layout_toStartOf="@+id/customer_name_tv"
-          android:textColor="@color/gray_75"
-          android:textSize="14sp"
-          tools:text="فاصله ۱۰۰ متر" />
-        <TextView
-          android:id="@+id/customer_shop_name_tv"
-          style="@style/IranSans.Medium"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="12dp"
-          android:layout_alignRight="@id/customer_name_tv"
-          android:layout_below="@id/customer_name_tv"
-          android:gravity="right"
-          android:textColor="#8a000000"
-          android:textSize="12sp"
-          tools:text="فروشگاه گلزاری و پسران به جز سارا" />
-        <TextView
-          android:id="@+id/customer_code_tv"
-          style="@style/IranSans.Medium"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="12dp"
-          android:layout_alignRight="@id/customer_name_tv"
-          android:layout_below="@id/customer_shop_name_tv"
-          android:gravity="right"
-          android:textColor="#8a000000"
-          android:textSize="12sp"
-          tools:text="فروشگاه گلزاری و پسران به جز سارا" />
-      </RelativeLayout>
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:background="@color/black_10" />
-      <RelativeLayout
-        android:id="@+id/credit_lay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingLeft="10dp">
-
-        <ImageView
-          android:id="@+id/minus_img"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="10sp"
-          android:layout_marginLeft="10dp"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true"
-          android:layout_centerVertical="true"
-          android:src="@drawable/ic_minus_box_18_dp"
-          android:visibility="gone" />
-        <TextView
-          android:id="@+id/credit_tv"
-          style="@style/IranSans"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="10dp"
-          android:layout_marginLeft="10dp"
-          android:layout_alignTop="@+id/credit_title_tv"
-          android:layout_toEndOf="@+id/minus_img"
-          android:layout_toRightOf="@+id/minus_img"
-          android:ellipsize="end"
-          android:gravity="left"
-          android:maxLines="1"
-          android:singleLine="true"
-          android:textColor="@color/green_return"
-          android:textSize="14sp"
-          tools:text="12000ریال" />
-        <TextView
-          android:id="@+id/credit_title_tv"
-          style="@style/IranSans"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="16dp"
-          android:layout_marginBottom="16dp"
-          android:layout_marginStart="8dp"
-          android:layout_marginEnd="56dp"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="56dp"
-          android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
-          android:layout_toEndOf="@id/credit_tv"
-          android:layout_toRightOf="@id/credit_tv"
-          android:ellipsize="end"
-          android:gravity="start"
-          android:maxLines="1"
-          android:singleLine="true"
-          android:text="@string/credit"
-          android:textColor="@color/black_85"
-          android:textSize="14sp" />
-      </RelativeLayout>
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:background="@color/black_10" />
-
-      <RelativeLayout
-        android:id="@+id/location_layout"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="?selectableItemBackground">
-        <ImageView
-          android:id="@+id/imageView4"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          android:src="@drawable/ic_location_on_black_24_px"
-          android:tint="@color/gray_75" />
-        <TextView
-          android:id="@+id/customer_address_tv"
-          style="@style/IranSans"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/imageView4"
-          android:layout_toStartOf="@+id/imageView4"
-          android:textColor="#dd000000"
-          android:textSize="14sp"
-          tools:text="تهران میدان هروی/گلستان پنجم پ127" />
-      </RelativeLayout>
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:background="@color/black_10" />
-      <RelativeLayout
-        android:id="@+id/phone_layout"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="?selectableItemBackground">
-
-        <ImageView
-          android:id="@+id/imageView5"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          android:src="@drawable/ic_phone_android_24dp"
-          android:tint="@color/gray_75" />
-        <TextView
-          android:id="@+id/customer_mobile_tv"
-          style="@style/IranSans"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/imageView5"
-          android:layout_toStartOf="@+id/imageView5"
-          android:textColor="#dd000000"
-          android:textSize="14sp"
-          tools:text="09123609446" />
-      </RelativeLayout>
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:background="@color/black_10" />
-      <RelativeLayout
-        android:id="@+id/call_layout"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="?selectableItemBackground">
-
-        <ImageView
-          android:id="@+id/imageView6"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          android:src="@drawable/ic_phone_24dp"
-          android:tint="@color/gray_75" />
-        <TextView
-          android:id="@+id/customer_phone_tv"
-          style="@style/IranSans"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/imageView6"
-          android:layout_toStartOf="@+id/imageView6"
-          android:textColor="#dd000000"
-          android:textSize="14sp"
-          tools:text="09123609446" />
-      </RelativeLayout>
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black_10" />
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/black_10" />
-      <RelativeLayout
-        android:id="@+id/customer_report_layout"
-        android:layout_width="match_parent"
-        android:layout_height="48dp">
-        <ImageView
-          android:id="@+id/imageView7"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          android:src="@drawable/ic_report_paper_green_24_dp" />
-        <TextView
-          android:id="@+id/customer_report_tv"
-          style="@style/IranSans"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/imageView7"
-          android:layout_toStartOf="@+id/imageView7"
-          android:text="@string/customer_report"
-          android:textColor="@color/primary_dark"
-          android:textSize="14sp" />
-        <ImageView
-          android:id="@+id/imageView8"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          android:layout_alignParentLeft="true"
-          android:layout_centerVertical="true"
-          android:src="@drawable/ic_arrow_left_24_dp"
-          android:tint="@color/gray_9e" />
-      </RelativeLayout>
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black_10" />
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/black_10" />
-      <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/gray_f5">
-        <ImageView
-          android:id="@+id/location_img"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          android:src="@drawable/ic_gps_24_dp" />
-        <TextView
-          android:id="@+id/has_location_tv"
-          style="@style/IranSans.Light"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/location_img"
-          android:layout_toStartOf="@+id/location_img"
-          android:text="@string/salesman_location"
-          android:textColor="@color/gray_75"
-          android:textSize="14sp" />
-      </RelativeLayout>
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:background="@color/black_10" />
-      <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/gray_f5">
-        <ImageView
-          android:id="@+id/visit_today_img"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          android:src="@drawable/ic_visible_on_24_dp" />
-        <TextView
-          android:id="@+id/customer_visit_tv"
-          style="@style/IranSans"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_toLeftOf="@+id/visit_today_img"
-          android:layout_toStartOf="@+id/visit_today_img"
-          android:text="@string/visit_or_none"
-          android:textColor="@color/gray_75"
-          android:textSize="14sp" />
-      </RelativeLayout>
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black_10" />
-      <RelativeLayout
-        android:id="@+id/activity_layout"
-        android:layout_width="match_parent"
-        android:layout_height="48dp">
+            android:id="@+id/close_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:src="@drawable/ic_close_24dp"
+            android:tint="@color/black_55" />
 
         <TextView
-          android:id="@+id/customer_activity_tv"
-          style="@style/IranSans"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="24dp"
-          android:layout_marginRight="16dp"
-          android:layout_alignParentRight="true"
-          android:text="@string/activities_done"
-          android:textColor="#89000000"
-          android:textSize="14sp" />
-      </RelativeLayout>
-      <View
+            style="@style/IranSans.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="8sp"
+            android:textColor="@color/primary_dark"
+            android:textSize="16sp"
+            tools:text="مشتری" />
+
+        <TextView
+            android:id="@+id/edit_customer_tv"
+            style="@style/IranSans.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/edit"
+            android:textColor="@color/black_21" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_account_circle_black_24_dp" />
+
+                <TextView
+                    android:id="@+id/customer_name_tv"
+                    style="@style/IranSans.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/imageView3"
+                    android:layout_toStartOf="@+id/imageView3"
+                    android:layout_toLeftOf="@+id/imageView3"
+                    android:textColor="#dd000000"
+                    android:textSize="14sp"
+                    tools:text="محمدرضا گلزار" />
+
+                <TextView
+                    android:id="@+id/distance_tv"
+                    style="@style/IranSans.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/customer_name_tv"
+                    android:layout_marginRight="16dp"
+                    android:layout_toStartOf="@+id/customer_name_tv"
+                    android:textColor="@color/gray_75"
+                    android:textSize="14sp"
+                    tools:text="فاصله ۱۰۰ متر" />
+
+                <TextView
+                    android:id="@+id/customer_shop_name_tv"
+                    style="@style/IranSans.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/customer_name_tv"
+                    android:layout_alignRight="@id/customer_name_tv"
+                    android:layout_marginTop="12dp"
+                    android:gravity="right"
+                    android:textColor="#8a000000"
+                    android:textSize="12sp"
+                    tools:text="فروشگاه گلزاری و پسران به جز سارا" />
+
+                <TextView
+                    android:id="@+id/customer_code_tv"
+                    style="@style/IranSans.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/customer_shop_name_tv"
+                    android:layout_alignRight="@id/customer_name_tv"
+                    android:layout_marginTop="12dp"
+                    android:gravity="right"
+                    android:textColor="#8a000000"
+                    android:textSize="12sp"
+                    tools:text="فروشگاه گلزاری و پسران به جز سارا" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="56dp"
+                android:layout_marginRight="56dp"
+                android:background="@color/black_10" />
+
+            <RelativeLayout
+                android:id="@+id/credit_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp">
+
+                <ImageView
+                    android:id="@+id/minus_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_minus_box_18_dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/credit_tv"
+                    style="@style/IranSans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/credit_title_tv"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toEndOf="@+id/minus_img"
+                    android:layout_toRightOf="@+id/minus_img"
+                    android:ellipsize="end"
+                    android:gravity="left"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/green_return"
+                    android:textSize="14sp"
+                    tools:text="12000ریال" />
+
+                <TextView
+                    android:id="@+id/credit_title_tv"
+                    style="@style/IranSans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="56dp"
+                    android:layout_marginRight="56dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_toEndOf="@id/credit_tv"
+                    android:layout_toRightOf="@id/credit_tv"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@string/credit"
+                    android:textColor="@color/black_85"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginEnd="56dp"
+                android:layout_marginRight="56dp"
+                android:background="@color/black_10" />
+
+            <RelativeLayout
+                android:id="@+id/location_layout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="?selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_location_on_black_24_px"
+                    android:tint="@color/gray_75" />
+
+                <TextView
+                    android:id="@+id/customer_address_tv"
+                    style="@style/IranSans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/imageView4"
+                    android:layout_toLeftOf="@+id/imageView4"
+                    android:textColor="#dd000000"
+                    android:textSize="14sp"
+                    tools:text="تهران میدان هروی/گلستان پنجم پ127" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginEnd="56dp"
+                android:layout_marginRight="56dp"
+                android:background="@color/black_10" />
+
+            <RelativeLayout
+                android:id="@+id/phone_layout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="?selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_phone_android_24dp"
+                    android:tint="@color/gray_75" />
+
+                <TextView
+                    android:id="@+id/customer_mobile_tv"
+                    style="@style/IranSans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/imageView5"
+                    android:layout_toLeftOf="@+id/imageView5"
+                    android:textColor="#dd000000"
+                    android:textSize="14sp"
+                    tools:text="09123609446" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginEnd="56dp"
+                android:layout_marginRight="56dp"
+                android:background="@color/black_10" />
+
+            <RelativeLayout
+                android:id="@+id/call_layout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="?selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_phone_24dp"
+                    android:tint="@color/gray_75" />
+
+                <TextView
+                    android:id="@+id/customer_phone_tv"
+                    style="@style/IranSans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/imageView6"
+                    android:layout_toLeftOf="@+id/imageView6"
+                    android:textColor="#dd000000"
+                    android:textSize="14sp"
+                    tools:text="09123609446" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black_10" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/black_10" />
+
+            <RelativeLayout
+                android:id="@+id/customer_report_layout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_report_paper_green_24_dp" />
+
+                <TextView
+                    android:id="@+id/customer_report_tv"
+                    style="@style/IranSans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/imageView7"
+                    android:layout_toLeftOf="@+id/imageView7"
+                    android:text="@string/customer_report"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_arrow_left_24_dp"
+                    android:tint="@color/gray_9e" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black_10" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/black_10" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/gray_f5">
+
+                <ImageView
+                    android:id="@+id/location_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_gps_24_dp" />
+
+                <TextView
+                    android:id="@+id/has_location_tv"
+                    style="@style/IranSans.Light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/location_img"
+                    android:layout_toLeftOf="@+id/location_img"
+                    android:text="@string/salesman_location"
+                    android:textColor="@color/gray_75"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginEnd="56dp"
+                android:layout_marginRight="56dp"
+                android:background="@color/black_10" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/gray_f5">
+
+                <ImageView
+                    android:id="@+id/visit_today_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_visible_on_24_dp" />
+
+                <TextView
+                    android:id="@+id/customer_visit_tv"
+                    style="@style/IranSans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/visit_today_img"
+                    android:layout_toLeftOf="@+id/visit_today_img"
+                    android:text="@string/visit_or_none"
+                    android:textColor="@color/gray_75"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black_10" />
+
+            <RelativeLayout
+                android:id="@+id/activity_layout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <TextView
+                    android:id="@+id/customer_activity_tv"
+                    style="@style/IranSans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/activities_done"
+                    android:textColor="#89000000"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black_10" />
+
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/list_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/gray_f5" />
+            </android.support.v4.widget.NestedScrollView>
+        </LinearLayout>
+    </ScrollView>
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/black_10" />
 
-      <android.support.v4.widget.NestedScrollView
-        android:id="@+id/list_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
-          android:id="@+id/list"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:background="@color/gray_f5" />
-      </android.support.v4.widget.NestedScrollView>
-    </LinearLayout>
-  </ScrollView>
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@color/black_10" />
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/no_visit_btn"
+            style="@style/IranSans.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/devider_bottom"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="21dp"
+            android:text="@string/not_visited"
+            android:textColor="@color/red"
+            android:textSize="14sp" />
 
-    <TextView
-      android:id="@+id/no_visit_btn"
-      style="@style/IranSans.Medium"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="21dp"
-      android:layout_marginLeft="28dp"
-      android:layout_alignParentLeft="true"
-      android:layout_below="@id/devider_bottom"
-      android:text="@string/not_visited"
-      android:textColor="@color/red"
-      android:textSize="14sp" />
+        <Button
+            android:id="@+id/enter_btn"
+            style="@style/IranSans.Medium"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/devider_bottom"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/get_data_background"
+            android:gravity="center"
+            android:text="@string/enter"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
-    <Button
-      android:id="@+id/enter_btn"
-      style="@style/IranSans.Medium"
-      android:layout_width="80dp"
-      android:layout_height="30dp"
-      android:layout_marginTop="16dp"
-      android:layout_marginBottom="16dp"
-      android:layout_marginLeft="8dp"
-      android:layout_marginRight="16dp"
-      android:layout_alignParentRight="true"
-      android:layout_below="@id/devider_bottom"
-      android:background="@drawable/get_data_background"
-      android:gravity="center"
-      android:text="@string/enter"
-      android:textColor="@color/white"
-      android:textSize="14sp" />
-
-    <Button
-      android:id="@+id/phone_visit_btn"
-      style="@style/IranSans.Medium"
-      android:layout_width="85dp"
-      android:layout_height="30dp"
-      android:layout_marginTop="16dp"
-      android:layout_marginBottom="16dp"
-      android:layout_below="@id/devider_bottom"
-      android:layout_toLeftOf="@id/enter_btn"
-      android:background="@drawable/send_data_background"
-      android:gravity="center"
-      android:text="@string/visit_by_phone"
-      android:textColor="@color/primary"
-      android:textSize="14sp" />
-  </RelativeLayout>
+        <Button
+            android:id="@+id/phone_visit_btn"
+            style="@style/IranSans.Medium"
+            android:layout_width="85dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/devider_bottom"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_toLeftOf="@id/enter_btn"
+            android:background="@drawable/send_data_background"
+            android:gravity="center"
+            android:text="@string/visit_by_phone"
+            android:textColor="@color/primary"
+            android:textSize="14sp" />
+    </RelativeLayout>
 </LinearLayout>
