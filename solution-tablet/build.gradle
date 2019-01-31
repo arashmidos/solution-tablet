@@ -12,7 +12,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.0'
         classpath 'io.fabric.tools:gradle:1.25.4'
     }
 }
@@ -34,8 +34,8 @@ android {
         minSdkVersion 17
         //noinspection ExpiringTargetSdkVersion
         targetSdkVersion 25
-        versionCode 136
-        versionName "2.19.13"
+        versionCode 137
+        versionName "2.19.14"
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled true

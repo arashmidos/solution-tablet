@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * Created by Arash on 16/02/2017.
@@ -67,7 +68,7 @@ public class Updater {
     } catch (Exception ex) {
       Crashlytics
           .log(Log.ERROR, "Service Generator", "can not create update service " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
       return;
     }
 
@@ -100,7 +101,7 @@ public class Updater {
 
       @Override
       public void onFailure(Call<UpdateResponse> call, Throwable t) {
-        Log.d("Updater", "Update failed");
+        Timber.d("Update failed");
         retry++;
         checkAppUpdate(context);
       }
@@ -173,7 +174,7 @@ public class Updater {
         if (downloadReference == reference) {
           DownloadManager downloadManager = (DownloadManager) context
               .getSystemService(Context.DOWNLOAD_SERVICE);
-          Log.d("Updater", "Downloading of the new app version complete");
+          Timber.d("Downloading of the new app version complete");
           //start the installation of the latest version
           PreferenceHelper.setLatestVersion(version);
           Uri uriForDownloadedFile = downloadManager.getUriForDownloadedFile(downloadReference);

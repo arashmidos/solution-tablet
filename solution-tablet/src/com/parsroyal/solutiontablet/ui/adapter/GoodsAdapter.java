@@ -135,7 +135,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
 
     public void setData(int position, Goods good) {
       this.position = position;
-      if (order.contains(good)) {
+      if (Empty.isNotEmpty(order) && order.contains(good)) {
         mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.gift));
       } else {
         mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
@@ -203,12 +203,14 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
           settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
           View view = ((MainActivity) context).getLayoutInflater()
               .inflate(R.layout.image_fullscreen_layout, null);
-          Glide.with(context)
-              .load(MediaUtil.getGoodImage(good.getCode()))
-              .error(Glide.with(context).load(R.drawable.goods_default))
-              .into((ImageView) view.findViewById(R.id.good_image));
-          settingsDialog.setContentView(view);
-          settingsDialog.show();
+          if (Empty.isNotEmpty(good)) {
+            Glide.with(context)
+                .load(MediaUtil.getGoodImage(good.getCode()))
+                .error(Glide.with(context).load(R.drawable.goods_default))
+                .into((ImageView) view.findViewById(R.id.good_image));
+            settingsDialog.setContentView(view);
+            settingsDialog.show();
+          }
           break;
         case R.id.main_lay:
           parent.showOrderDialog(good);

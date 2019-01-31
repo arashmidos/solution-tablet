@@ -57,6 +57,7 @@ public class GoodsDataTransferBizImpl {
       public void onResponse(Call<List<Goods>> call, Response<List<Goods>> response) {
         if (response.isSuccessful()) {
           List<Goods> list = response.body();
+
           if (Empty.isNotEmpty(list)) {
             goodsDao.deleteAll();
             goodsDao.bulkInsert(list);

@@ -348,7 +348,7 @@ public abstract class MainActivity extends AppCompatActivity {
     Intent installIntent = new Intent(Intent.ACTION_VIEW);
     installIntent.setDataAndType(Uri.parse(PreferenceHelper.getUpdateUri()),
         "application/vnd.android.package-archive");
-    installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
     try {
       startActivity(installIntent);
       if (PreferenceHelper.isForceExit()) {

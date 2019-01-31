@@ -493,7 +493,11 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     mainActivity.runOnUiThread(() -> {
 
       adapter.setCurrent(++currentPosition);
-      ToastUtil.toastMessage(root, getString(R.string.send_data_completed_successfully));
+      try {
+        ToastUtil.toastMessage(root, getString(R.string.send_data_completed_successfully));
+      } catch (Exception ignore) {
+
+      }
       transferFinished = true;
       transferSuccess = true;
       cancelBtn.setVisibility(View.GONE);

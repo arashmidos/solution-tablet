@@ -457,7 +457,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     map.setOnInfoWindowClickListener(marker -> {
       Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
       float distance;
-      if (Empty.isEmpty(position)) {
+      if (Empty.isEmpty(position) || Empty.isEmpty(clickedClusterItem)) {
         distance = 0.0f;
       } else {
         distance = LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),

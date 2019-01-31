@@ -189,6 +189,9 @@ public class OrderInfoFragment extends BaseFragment {
 
     if (Empty.isNotEmpty(args)) {
       orderId = args.getLong(Constants.ORDER_ID, -1);
+      if (orderId == -1) {
+        return inflater.inflate(R.layout.empty_view, container, false);
+      }
       pageStatus = args.getString(Constants.PAGE_STATUS);
       order = saleOrderService.findOrderDtoById(orderId);
       customer = customerService.getCustomerByBackendId(order.getCustomerBackendId());
