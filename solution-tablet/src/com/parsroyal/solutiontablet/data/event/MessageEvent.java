@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.data.event;
 
+import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.model.Message;
+
 import java.util.List;
 
 /**
@@ -9,17 +11,27 @@ import java.util.List;
 
 public class MessageEvent extends Event {
 
-  private List<Message> messages;
+    private List<Message> messages;
+    private boolean isCreateResponse;
 
-  public MessageEvent(List<Message> messages) {
-    this.messages = messages;
-  }
+    public MessageEvent(List<Message> messages, boolean isCreateResponse) {
+        this.messages = messages;
+        this.isCreateResponse = isCreateResponse;
+    }
 
-  public List<Message> getMessages() {
-    return messages;
-  }
+    public boolean isCreateResponse() {
+        return isCreateResponse;
+    }
 
-  public void setMessages(List<Message> messages) {
-    this.messages = messages;
-  }
+    public void setCreateResponse(boolean createResponse) {
+        isCreateResponse = createResponse;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
 }
