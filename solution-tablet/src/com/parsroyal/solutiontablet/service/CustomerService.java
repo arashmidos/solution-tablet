@@ -9,6 +9,7 @@ import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.PositionModel;
 import com.parsroyal.solutiontablet.data.searchobject.CustomerPictureSO;
 import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
+
 import java.util.List;
 
 /**
@@ -16,59 +17,61 @@ import java.util.List;
  */
 public interface CustomerService extends BaseService {
 
-  Customer getCustomerById(Long customerId);
+    Customer getCustomerById(Long customerId);
 
-  Customer getCustomerByBackendId(Long customerId);
+    Customer getCustomerByBackendId(Long customerId);
 
-  Long saveCustomer(Customer customer);
+    Long saveCustomer(Customer customer);
 
-  List<Customer> getAllNewCustomers();
+    List<Customer> getAllNewCustomers();
 
-  void deleteCustomer(Long id);
+    void deleteCustomer(Long id);
 
-  List<CustomerDto> getAllNewCustomersForSend();
+    List<CustomerDto> getAllNewCustomersForSend();
 
-  List<CustomerLocationDto> getAllUpdatedCustomerLocation();
+    List<CustomerDto> getAllNewUpdatedCustomersForSend();
 
-  CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId);
+    List<CustomerLocationDto> getAllUpdatedCustomerLocation();
 
-  List<Customer> getAllCustomersByVisitLineBackendId(Long visitLineId);
+    CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId);
 
-  List<CustomerListModel> getAllCustomersListModelByVisitLineBackendId(Long visitLineId);
+    List<Customer> getAllCustomersByVisitLineBackendId(Long visitLineId);
 
-  List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint,
-      boolean showOnMap);
+    List<CustomerListModel> getAllCustomersListModelByVisitLineBackendId(Long visitLineId);
 
-  CustomerDto getCustomerDtoById(Long customerId);
+    List<CustomerListModel> getFilteredCustomerList(Long visitLineId, String constraint,
+                                                    boolean showOnMap);
 
-  List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
+    CustomerDto getCustomerDtoById(Long customerId);
 
-  List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
+    List<NCustomerListModel> searchForNCustomers(NCustomerSO nCustomerSO);
 
-  long savePicture(CustomerPic customerPic);
+    List<PositionModel> getCustomerPositions(NCustomerSO nCustomerSO);
 
-  void savePicture(List<CustomerPic> customerPics, Long customerId);
+    long savePicture(CustomerPic customerPic);
 
-  List<CustomerPic> getAllPicturesByCustomerBackendId(long customerBackendId);
+    void savePicture(List<CustomerPic> customerPics, Long customerId);
 
-  List<CustomerPic> getAllPicturesByCustomerId(long customerId);
+    List<CustomerPic> getAllPicturesByCustomerBackendId(long customerBackendId);
 
-  List<String> getAllPicturesTitleByCustomerId(long customerId);
+    List<CustomerPic> getAllPicturesByCustomerId(long customerId);
 
-  List<CustomerPic> getAllCustomerPicForSend();
+    List<String> getAllPicturesTitleByCustomerId(long customerId);
 
-  List<CustomerPic> findCustomerPic(CustomerPictureSO pictureSO);
+    List<CustomerPic> getAllCustomerPicForSend();
 
-  List<CustomerPic> getAllCustomerPicForSendByCustomerId(Long customerId);
+    List<CustomerPic> findCustomerPic(CustomerPictureSO pictureSO);
 
-  void deleteCustomerPic(String title, long customerId);
+    List<CustomerPic> getAllCustomerPicForSendByCustomerId(Long customerId);
 
-  void deleteAllPics();
+    void deleteCustomerPic(String title, long customerId);
 
-  void updateCustomerPictures();
+    void deleteAllPics();
 
-  void updateCustomerPicForNewCustomers(Long id, Long backendId);
+    void updateCustomerPictures();
 
-  boolean addCustomer(Customer customer, Long visitlineBackendId);
+    void updateCustomerPicForNewCustomers(Long id, Long backendId);
+
+    boolean addCustomer(Customer customer, Long visitlineBackendId);
 
 }

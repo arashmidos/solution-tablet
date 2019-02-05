@@ -75,6 +75,7 @@
       android:id="@+id/delete_img_layout"
       android:layout_width="36dp"
       android:layout_height="36dp"
+
       android:layout_marginStart="7dp"
       android:layout_marginLeft="7dp"
       android:gravity="center">

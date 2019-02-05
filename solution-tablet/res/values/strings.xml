@@ -661,5 +661,8 @@
   <string name="inc">بدهکار:</string>
   <string name="dec">بستانکار:</string>
   <string name="scan_melli_card_barcode">بارکد پشت کارت ملی را اسکن کنید</string>
+    <string name="edit">ویرایش</string>
+    <string name="message_is_required">وارد کردن پیام الزامی است</string>
+    <string name="write_message_here">متن خود را اینجا بنویسید</string>
 
 </resources>

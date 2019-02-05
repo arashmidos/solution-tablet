@@ -201,7 +201,7 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   public void sendAllNewCustomers() {
-    List<CustomerDto> allNewCustomers = customerService.getAllNewCustomersForSend();
+    List<CustomerDto> allNewCustomers = customerService.getAllNewUpdatedCustomersForSend();
     if (Empty.isEmpty(allNewCustomers)) {
       EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
           R.string.message_found_no_new_customer_for_send), StatusCodes.NO_DATA_ERROR));
