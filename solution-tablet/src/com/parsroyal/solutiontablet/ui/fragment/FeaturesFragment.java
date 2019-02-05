@@ -20,6 +20,7 @@ import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.jetbrains.annotations.NotNull;
 
 public class FeaturesFragment extends BaseFragment {
 
@@ -39,7 +40,7 @@ public class FeaturesFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_features, container, false);

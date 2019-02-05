@@ -1,59 +1,59 @@
 package com.parsroyal.solutiontablet.data.model;
 
-import retrofit2.http.Field;
-
 public class CreateMessageRequest {
-    private long sender;
-    private int receiverType;
-    private int pushType;
-    private String pushData;
-    private int replyTo;
 
-    public CreateMessageRequest(long sender, int receiverType, int pushType, String pushData, int replyTo) {
-        this.sender = sender;
-        this.receiverType = receiverType;
-        this.pushType = pushType;
-        this.pushData = pushData;
-        this.replyTo = replyTo;
-    }
+  private long sender;
+  private int receiverType;
+  private int pushType;
+  private String pushData;
+  private int replyTo;
 
-    public long getSender() {
-        return sender;
-    }
+  public CreateMessageRequest(long sender, int receiverType, int pushType, String pushData,
+      int replyTo) {
+    this.sender = sender;
+    this.receiverType = receiverType;
+    this.pushType = pushType;
+    this.pushData = pushData;
+    this.replyTo = replyTo;
+  }
 
-    public void setSender(long sender) {
-        this.sender = sender;
-    }
+  public long getSender() {
+    return sender;
+  }
 
-    public int getReceiverType() {
-        return receiverType;
-    }
+  public void setSender(long sender) {
+    this.sender = sender;
+  }
 
-    public void setReceiverType(int receiverType) {
-        this.receiverType = receiverType;
-    }
+  public int getReceiverType() {
+    return receiverType;
+  }
 
-    public int getPushType() {
-        return pushType;
-    }
+  public void setReceiverType(int receiverType) {
+    this.receiverType = receiverType;
+  }
 
-    public void setPushType(int pushType) {
-        this.pushType = pushType;
-    }
+  public int getPushType() {
+    return pushType;
+  }
 
-    public String getPushData() {
-        return pushData;
-    }
+  public void setPushType(int pushType) {
+    this.pushType = pushType;
+  }
 
-    public void setPushData(String pushData) {
-        this.pushData = pushData;
-    }
+  public String getPushData() {
+    return pushData;
+  }
 
-    public int getReplyTo() {
-        return replyTo;
-    }
+  public void setPushData(String pushData) {
+    this.pushData = pushData;
+  }
 
-    public void setReplyTo(int replyTo) {
-        this.replyTo = replyTo;
-    }
+  public int getReplyTo() {
+    return replyTo;
+  }
+
+  public void setReplyTo(int replyTo) {
+    this.replyTo = replyTo;
+  }
 }

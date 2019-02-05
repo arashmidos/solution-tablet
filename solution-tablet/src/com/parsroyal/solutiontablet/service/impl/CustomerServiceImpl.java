@@ -22,8 +22,6 @@ import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.LocationUtil;
-import com.parsroyal.solutiontablet.util.MediaUtil;
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 

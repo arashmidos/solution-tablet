@@ -1,187 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.parsroyal.solutiontablet">
+  xmlns:tools="http://schemas.android.com/tools"
+  package="com.parsroyal.solutiontablet">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission
-        android:name="android.permission.ACCESS_MOCK_LOCATION"
-        tools:ignore="MockLocation" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.SEND_SMS" />
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.GET_TASKS" />
+  <uses-permission
+    android:name="android.permission.ACCESS_MOCK_LOCATION"
+    tools:ignore="MockLocation" />
 
-    <uses-permission android:name="com.parsroyal.solutionmobile.permission.C2D_MESSAGE" />
+  <uses-permission android:name="com.parsroyal.solutionmobile.permission.C2D_MESSAGE" />
 
-    <permission
-        android:name="com.parsroyal.solutionmobile.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
+  <permission
+    android:name="com.parsroyal.solutionmobile.permission.C2D_MESSAGE"
+    android:protectionLevel="signature" />
 
-    <!-- Optional permissions -->
-    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <!-- Optional permissions -->
+  <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature
-        android:name="android.hardware.location.gps"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.location.network"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.location"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.LOCATION"
-        android:required="false" />
+  <uses-feature android:name="android.hardware.camera" />
+  <uses-feature
+    android:name="android.hardware.location.gps"
+    android:required="false" />
+  <uses-feature
+    android:name="android.hardware.location.network"
+    android:required="false" />
+  <uses-feature
+    android:name="android.hardware.location"
+    android:required="false" />
+  <uses-feature
+    android:name="android.hardware.LOCATION"
+    android:required="false" />
 
-    <uses-sdk tools:overrideLibrary="co.ronash.pushe" />
-
-
-    <application
-        android:name=".SolutionTabletApplication"
-        android:allowBackup="true"
-        android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="false"
-        android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:supportsRtl">
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.parsroyal.solutionmobile"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
-        <service
-            android:name=".receiver.MyPushListener"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="co.ronash.pushe.RECEIVE" />
-            </intent-filter>
-        </service>
-
-        <activity
-            android:name=".ui.activity.SplashActivity"
-            android:theme="@style/NoActionBar"
-            android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.activity.LoginActivity"
-            android:theme="@style/NoActionBar"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".ui.activity.MobileMainActivity"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".ui.activity.TabletMainActivity"
-            android:label=""
-            android:screenOrientation="landscape"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".ui.activity.MobileReportListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".ui.activity.TabletReportListActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".ui.activity.MobileReportDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".ui.activity.TabletReportDetailActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/NoActionBar" />
-
-        <service
-            android:name=".service.LocationUpdatesService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".service.SendLocationService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".service.SaveLocationService"
-            android:enabled="true"
-            android:exported="false" />
-
-        <receiver android:name=".receiver.BootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".receiver.TrackerAlarmReceiver">
-            <intent-filter>
-                <action android:name="com.parsroyal.solutiontablet.TrackerAlarmReceiver" />
-            </intent-filter>
-        </receiver>
-
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/google_maps_key" />
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="bf939acb1b76ea3f52f26b54a1d8f266e5f6fea4" />
+  <uses-sdk tools:overrideLibrary="co.ronash.pushe" />
 
 
-        <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+  <application
+    android:allowBackup="true"
+    android:hardwareAccelerated="true"
+    android:icon="@drawable/ic_launcher"
+    android:label="@string/app_name"
+    android:name=".SolutionTabletApplication"
+    android:supportsRtl="false"
+    android:theme="@style/AppTheme"
+    tools:ignore="GoogleAppIndexingWarning"
+    tools:replace="android:supportsRtl">
+    <provider
+      android:authorities="com.parsroyal.solutionmobile"
+      android:exported="false"
+      android:grantUriPermissions="true"
+      android:name="android.support.v4.content.FileProvider">
+      <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/provider_paths" />
+    </provider>
+    <service
+      android:exported="false"
+      android:name=".receiver.MyPushListener">
+      <intent-filter>
+        <action android:name="co.ronash.pushe.RECEIVE" />
+      </intent-filter>
+    </service>
 
-                <data
-                    android:path="com.parsroyal.solutionmobile"
-                    android:scheme="package" />
-            </intent-filter>
-        </receiver>
+    <activity
+      android:name=".ui.activity.SplashActivity"
+      android:theme="@style/NoActionBar"
+      android:windowSoftInputMode="adjustPan">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <activity
+      android:name=".ui.activity.LoginActivity"
+      android:theme="@style/NoActionBar"
+      android:windowSoftInputMode="adjustNothing" />
+    <activity
+      android:label=""
+      android:name=".ui.activity.MobileMainActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/NoActionBar" />
+    <activity
+      android:label=""
+      android:name=".ui.activity.TabletMainActivity"
+      android:screenOrientation="landscape"
+      android:theme="@style/NoActionBar" />
+    <activity
+      android:name=".ui.activity.MobileReportListActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/NoActionBar" />
+    <activity
+      android:name=".ui.activity.TabletReportListActivity"
+      android:screenOrientation="landscape"
+      android:theme="@style/NoActionBar" />
+    <activity
+      android:name=".ui.activity.MobileReportDetailActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/NoActionBar" />
+    <activity
+      android:name=".ui.activity.TabletReportDetailActivity"
+      android:screenOrientation="landscape"
+      android:theme="@style/NoActionBar" />
 
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+    <service
+      android:enabled="true"
+      android:exported="false"
+      android:name=".service.LocationUpdatesService" />
+    <service
+      android:enabled="true"
+      android:exported="false"
+      android:name=".service.SendLocationService" />
+    <service
+      android:enabled="true"
+      android:exported="false"
+      android:name=".service.SaveLocationService" />
 
-                <category android:name="com.parsroyal.solutionmobile" />
-            </intent-filter>
-        </receiver>
+    <receiver android:name=".receiver.BootReceiver">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+      </intent-filter>
+    </receiver>
+    <receiver android:name=".receiver.TrackerAlarmReceiver">
+      <intent-filter>
+        <action android:name="com.parsroyal.solutiontablet.TrackerAlarmReceiver" />
+      </intent-filter>
+    </receiver>
 
-        <meta-data
-            android:name="co.ronash.pushe.token"
-            android:value="PUSHE_298558607809" />
-        <meta-data
-            android:name="co.ronash.pushe.cr"
-            android:value="Tm9uZQ==" />
+    <meta-data
+      android:name="com.google.android.maps.v2.API_KEY"
+      android:value="@string/google_maps_key" />
+    <meta-data
+      android:name="io.fabric.ApiKey"
+      android:value="bf939acb1b76ea3f52f26b54a1d8f266e5f6fea4" />
 
-        <service
-            android:name=".pushe.MyPushListener"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="co.ronash.pushe.RECEIVE" />
-            </intent-filter>
-        </service>
-    </application>
+
+    <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver">
+      <intent-filter>
+        <action android:name="android.intent.action.PACKAGE_REPLACED" />
+
+        <data
+          android:path="com.parsroyal.solutionmobile"
+          android:scheme="package" />
+      </intent-filter>
+    </receiver>
+
+    <receiver
+      android:exported="true"
+      android:name="com.google.android.gms.gcm.GcmReceiver"
+      android:permission="com.google.android.c2dm.permission.SEND">
+      <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+        <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+        <category android:name="com.parsroyal.solutionmobile" />
+      </intent-filter>
+    </receiver>
+
+    <meta-data
+      android:name="co.ronash.pushe.token"
+      android:value="PUSHE_298558607809" />
+    <meta-data
+      android:name="co.ronash.pushe.cr"
+      android:value="Tm9uZQ==" />
+
+    <service
+      android:exported="false"
+      android:name=".pushe.MyPushListener">
+      <intent-filter>
+        <action android:name="co.ronash.pushe.RECEIVE" />
+      </intent-filter>
+    </service>
+  </application>
 </manifest>
