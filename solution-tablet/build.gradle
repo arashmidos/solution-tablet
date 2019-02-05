@@ -34,8 +34,8 @@ android {
         minSdkVersion 17
         //noinspection ExpiringTargetSdkVersion
         targetSdkVersion 25
-        versionCode 137
-        versionName "2.19.14"
+        versionCode 138
+        versionName "2.19.15"
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled true
@@ -130,7 +130,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.gms:play-services-gcm:16.0.0'
     implementation 'com.google.android.gms:play-services-ads:16.0.0'
-    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.google.firebase:firebase-perf:16.2.3'
 
     implementation 'org.springframework.android:spring-android-rest-template:2.0.0.M1'
@@ -146,7 +146,6 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.github.matecode:Snacky:1.0.3'
     implementation 'me.relex:circleindicator:1.2.2@aar'
-    implementation 'co.ronash.android:pushe-base:1.4.0'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     //Calligraphy
     implementation 'io.github.inflationx:calligraphy3:3.0.0'

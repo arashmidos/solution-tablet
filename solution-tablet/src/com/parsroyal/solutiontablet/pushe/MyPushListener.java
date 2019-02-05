@@ -1,22 +1,24 @@
 package com.parsroyal.solutiontablet.pushe;
 
-import android.util.Log;
 import co.ronash.pushe.PusheListenerService;
-import org.json.JSONException;
+import com.parsroyal.solutiontablet.data.model.PushNotification;
+import com.parsroyal.solutiontablet.util.PushUtility;
 import org.json.JSONObject;
+import timber.log.Timber;
 
 public class MyPushListener extends PusheListenerService {
 
   @Override
   public void onMessageReceived(JSONObject customContent, JSONObject pushMessage) {
-    Log.i("Pushe", "Custom json Message: " + customContent.toString());
-    try {
-      String s1 = customContent.getString("title");
-      String s2 = pushMessage.getString("title");
-      Log.i("Pushe", "Message: " + s1);
-      Log.i("Pushe", "Message2: " + s2);
+    Timber.tag("Pushee").d("Custom jsonn Message: %s", customContent.toString());
 
-    } catch (JSONException e) {
+    try {
+
+      PushNotification push = PushUtility.deserializeJsonFromPushe(customContent);
+      if (push != null) {
+        //Do what you want
+      }
+    } catch (Exception e) {
       e.printStackTrace();
     }
 

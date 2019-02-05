@@ -65,13 +65,6 @@
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/provider_paths" />
     </provider>
-    <service
-      android:exported="false"
-      android:name=".receiver.MyPushListener">
-      <intent-filter>
-        <action android:name="co.ronash.pushe.RECEIVE" />
-      </intent-filter>
-    </service>
 
     <activity
       android:name=".ui.activity.SplashActivity"
@@ -113,7 +106,6 @@
       android:name=".ui.activity.TabletReportDetailActivity"
       android:screenOrientation="landscape"
       android:theme="@style/NoActionBar" />
-
     <service
       android:enabled="true"
       android:exported="false"
@@ -126,7 +118,6 @@
       android:enabled="true"
       android:exported="false"
       android:name=".service.SaveLocationService" />
-
     <receiver android:name=".receiver.BootReceiver">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -137,14 +128,12 @@
         <action android:name="com.parsroyal.solutiontablet.TrackerAlarmReceiver" />
       </intent-filter>
     </receiver>
-
     <meta-data
       android:name="com.google.android.maps.v2.API_KEY"
       android:value="@string/google_maps_key" />
     <meta-data
       android:name="io.fabric.ApiKey"
       android:value="bf939acb1b76ea3f52f26b54a1d8f266e5f6fea4" />
-
 
     <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver">
       <intent-filter>
@@ -155,7 +144,6 @@
           android:scheme="package" />
       </intent-filter>
     </receiver>
-
     <receiver
       android:exported="true"
       android:name="com.google.android.gms.gcm.GcmReceiver"

@@ -395,6 +395,37 @@
           android:textColor="@color/black_de"
           android:textSize="14sp" />
       </RelativeLayout>
+      <RelativeLayout
+        android:id="@+id/body_log_out_force"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="gone">
+
+        <ImageView
+          android:id="@+id/exit_icon_force"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_marginStart="32dp"
+          android:layout_alignParentEnd="true"
+          android:src="@drawable/ic_logout_24dp"
+          android:tint="@color/login_gray" />
+
+        <TextView
+          style="@style/IranSans"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:layout_toStartOf="@id/exit_icon_force"
+          android:gravity="center"
+          android:text="@string/log_out_force"
+          android:textColor="@color/black_de"
+          android:textSize="14sp" />
+      </RelativeLayout>
     </LinearLayout>
   </ScrollView>
 
@@ -403,16 +434,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="end"
-    android:weightSum="2"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:weightSum="2">
 
     <LinearLayout
       android:id="@+id/send_data_lay"
       android:layout_width="0dp"
-      android:layout_weight="1"
       android:layout_height="32dp"
-      android:layout_gravity="center"
+      android:layout_weight="1"
       android:layout_marginLeft="16dp"
+      android:layout_gravity="center"
       android:background="@drawable/send_data_background"
       android:gravity="center"
       android:orientation="horizontal">
@@ -438,8 +469,8 @@
     <LinearLayout
       android:id="@+id/get_data_lay"
       android:layout_width="0dp"
-      android:layout_weight="1"
       android:layout_height="32dp"
+      android:layout_weight="1"
       android:layout_margin="16dp"
       android:background="@drawable/get_data_background"
       android:gravity="center"

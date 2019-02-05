@@ -380,6 +380,7 @@
   <string name="map">نقشه</string>
   <string name="reports">گزارشات</string>
   <string name="log_out">خروج از حساب کاربری</string>
+  <string name="log_out_force">خروج فوری</string>
   <string name="name_version">Solution Tablet v%1$s</string>
   <string name="search_customers_hint">در نام و کد مشتریان جستجو کنید...</string>
   <string name="sort">مرتب سازی</string>
@@ -664,5 +665,6 @@
   <string name="edit">ویرایش</string>
   <string name="message_is_required">وارد کردن پیام الزامی است</string>
   <string name="write_message_here">متن خود را اینجا بنویسید</string>
+  <string name="message_have_unsent_data">شما اطلاعات ارسال نشده دارید که قبل از خروج می بایست ارسال شوند. آیا میخواهید آنها را ارسال کنید؟</string>
 
 </resources>

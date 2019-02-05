@@ -39,6 +39,8 @@ public class NavigationDrawerFragment extends BaseFragment {
   LinearLayout body;
   @BindView(R.id.body_log_out)
   RelativeLayout bodyLogOut;
+  @BindView(R.id.body_log_out_force)
+  RelativeLayout bodyLogOutForce;
   @BindView(R.id.footer)
   LinearLayout footer;
   @BindView(R.id.footer_log_out)
@@ -101,7 +103,7 @@ public class NavigationDrawerFragment extends BaseFragment {
   }
 
   @OnClick({R.id.features_list_lay, R.id.today_paths_lay, R.id.reports_lay,
-      R.id.customers_lay, R.id.map_lay, R.id.about_us, R.id.body_log_out,
+      R.id.customers_lay, R.id.map_lay, R.id.about_us, R.id.body_log_out, R.id.body_log_out_force,
       R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay, R.id.questionnaire_lay, R.id.header,
       R.id.refresh_icon, R.id.setting_lay, R.id.footer_log_out})
   public void onClick(View view) {
@@ -167,7 +169,10 @@ public class NavigationDrawerFragment extends BaseFragment {
         mainActivity.changeFragment(MainActivity.SETTING_FRAGMENT, true);
         break;
       case R.id.body_log_out:
-        doLogout();
+        doLogout(false);
+        break;
+      case R.id.body_log_out_force:
+        doLogout(true);
         break;
       case R.id.get_data_lay:
         checkForUnsentData();
@@ -201,14 +206,13 @@ public class NavigationDrawerFragment extends BaseFragment {
         });
   }
 
-  private void doLogout() {
-    if (dataTransferService.hasUnsentData()) {
+  private void doLogout(boolean forceLogout) {
+    if (!forceLogout && dataTransferService.hasUnsentData()) {
       DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
-          "شما اطلاعات ارسال نشده دارید که قبل از خروج می بایست ارسال شوند. آیا میخواهید آنها را ارسال کنید؟",
+          getString(R.string.message_have_unsent_data),
           getString(R.string.yes),
           (dialog, which) -> openDataTransferDialog(Constants.DATA_TRANSFER_SEND_DATA),
-          getString(R.string.no),
-          (dialog, which) -> dialog.dismiss(), Constants.ICON_WARNING);
+          getString(R.string.no), (dialog, which) -> dialog.dismiss(), Constants.ICON_WARNING);
     } else {
       settingService.clearAllSettings();
       dataTransferService.clearData();
@@ -266,6 +270,9 @@ public class NavigationDrawerFragment extends BaseFragment {
       dropImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.login_gray));
       body.setVisibility(View.GONE);
       bodyLogOut.setVisibility(View.VISIBLE);
+      if (BuildConfig.DEBUG) {
+        bodyLogOutForce.setVisibility(View.VISIBLE);
+      }
       footer.setVisibility(View.GONE);
       footerLogOut.setVisibility(View.VISIBLE);
     } else {
@@ -273,6 +280,7 @@ public class NavigationDrawerFragment extends BaseFragment {
       dropImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.login_gray));
       body.setVisibility(View.VISIBLE);
       bodyLogOut.setVisibility(View.GONE);
+      bodyLogOutForce.setVisibility(View.GONE);
       footer.setVisibility(View.VISIBLE);
       footerLogOut.setVisibility(View.GONE);
     }
