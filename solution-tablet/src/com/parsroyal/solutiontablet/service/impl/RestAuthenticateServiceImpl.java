@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * Created by Arash on 2017-08-30
@@ -45,7 +46,7 @@ public class RestAuthenticateServiceImpl {
     } catch (Exception ex) {
       Crashlytics
           .log(Log.ERROR, "Service Generator", "can not create update service " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
       return;
     }
 
@@ -108,7 +109,7 @@ public class RestAuthenticateServiceImpl {
     } catch (Exception ex) {
       Crashlytics
           .log(Log.ERROR, "Service Generator", "can not create update service " + ex.getMessage());
-      Log.e(TAG, ex.getMessage(), ex);
+      Timber.e(ex);
       return;
     }
 

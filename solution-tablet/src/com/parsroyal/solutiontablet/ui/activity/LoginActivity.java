@@ -13,8 +13,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,14 +22,12 @@ import com.parsroyal.solutiontablet.constants.SaleType;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.response.CompanyInfoResponse;
 import com.parsroyal.solutiontablet.data.response.SettingResponse;
-import com.parsroyal.solutiontablet.data.response.UserInfoResponse;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.RestAuthenticateServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
-import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
@@ -44,30 +40,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
   EditText companyCodeEdt;
   @BindView(R.id.user_name_edt)
   EditText userNameEdt;
-  @BindView(R.id.distributor_icon)
-  ImageView distributorIcon;
-  @BindView(R.id.distributor_tv)
-  TextView distributorTv;
-  @BindView(R.id.distributor_bottom_line)
-  View distributorBottomLine;
-  @BindView(R.id.distributor_lay)
-  RelativeLayout distributorLay;
-  @BindView(R.id.hot_icon)
-  ImageView hotIcon;
-  @BindView(R.id.hot_tv)
-  TextView hotTv;
-  @BindView(R.id.hot_bottom_line)
-  View hotBottomLine;
-  @BindView(R.id.hot_lay)
-  RelativeLayout hotLay;
-  @BindView(R.id.sales_man_icon)
-  ImageView salesManIcon;
-  @BindView(R.id.sales_man_tv)
-  TextView salesManTv;
-  @BindView(R.id.sales_man_bottom_line)
-  View salesManBottomLine;
-  @BindView(R.id.sales_man_lay)
-  RelativeLayout salesManLay;
   @BindView(R.id.company_code_icon)
   ImageView companyCodeIcon;
   @BindView(R.id.user_name_icon)
@@ -82,37 +54,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
   TextInputLayout passwordLay;
   @BindView(R.id.log_in_btn)
   CircularProgressButton logInBtn;
-  @BindView(R.id.agent_icon)
-  ImageView agentIcon;
-  @BindView(R.id.agent_tv)
-  TextView agentTv;
-  @BindView(R.id.agent_bottom_line)
-  View agentBottomLine;
-  @BindView(R.id.agent_lay)
-  RelativeLayout agentLay;
-  @BindView(R.id.merchandiser_icon)
-  ImageView merchandiserIcon;
-  @BindView(R.id.merchandiser_tv)
-  TextView merchandiserTv;
-  @BindView(R.id.merchandiser_bottom_line)
-  View merchandiserBottomLine;
-  @BindView(R.id.merchandiser_lay)
-  RelativeLayout merchandiserLay;
-  @BindView(R.id.collector_icon)
-  ImageView collectorIcon;
-  @BindView(R.id.collector_tv)
-  TextView collectorTv;
-  @BindView(R.id.collector_bottom_line)
-  View collectorBottomLine;
-  @BindView(R.id.collector_lay)
-  RelativeLayout collectorLay;
 
-  private SaleType selectedRole = SaleType.COLD;
   private SettingService settingService;
-  private RelativeLayout[] roleLayouts;
-  private ImageView[] roleIcons;
-  private TextView[] roleTitles;
-  private View[] roleLines;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -125,16 +68,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     setContentView(R.layout.activity_login);
     ButterKnife.bind(this);
 
-    roleLayouts = new RelativeLayout[]{distributorLay, hotLay, salesManLay, agentLay,
-        merchandiserLay, collectorLay};
-    roleIcons = new ImageView[]{distributorIcon, hotIcon, salesManIcon, agentIcon,
-        merchandiserIcon, collectorIcon};
-    roleTitles = new TextView[]{distributorTv, hotTv, salesManTv, agentTv, merchandiserTv,
-        collectorTv};
-    roleLines = new View[]{distributorBottomLine, hotBottomLine, salesManBottomLine,
-        agentBottomLine, merchandiserBottomLine, collectorBottomLine};
     onEditTextFocus();
-    onSalesManTapped();
 
     settingService = new SettingServiceImpl();
 
@@ -154,35 +88,15 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         });
   }
 
-  @OnClick({R.id.distributor_lay/*, R.id.hot_lay*/, R.id.sales_man_lay, R.id.log_in_btn/*, R.id.agent_lay,*/
-      /*R.id.merchandiser_lay, R.id.collector_lay*/})
+  @OnClick({R.id.log_in_btn})
   public void onClick(View view) {
-    deselectRole(selectedRole.getOrder());
     switch (view.getId()) {
-      case R.id.distributor_lay:
-        selectedRole = SaleType.DISTRIBUTOR;
-        break;
-      case R.id.hot_lay:
-        selectedRole = SaleType.HOT;
-        break;
-      case R.id.sales_man_lay:
-        selectedRole = SaleType.COLD;
-        break;
-      case R.id.agent_lay:
-        selectedRole = SaleType.AGENT;
-        break;
-      case R.id.merchandiser_lay:
-        selectedRole = SaleType.MERCHANDISER;
-        break;
-      case R.id.collector_lay:
-        selectedRole = SaleType.COLLECTOR;
-        break;
+
       case R.id.log_in_btn:
         if (validate()) {
           doLogin();
         }
     }
-    selectRole(selectedRole.getOrder());
   }
 
   private boolean validate() {
@@ -206,11 +120,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     return true;
   }
 
-  private void onSalesManTapped() {
-    selectedRole = SaleType.COLD;
-    selectRole(selectedRole.getOrder());
-  }
-
   private void onEditTextFocus() {
     userNameEdt.setOnFocusChangeListener((v, hasFocus) -> {
       if (hasFocus) {
@@ -226,20 +135,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         companyCodeIcon.setColorFilter(ContextCompat.getColor(this, R.color.login_gray));
       }
     });
-  }
-
-  private void selectRole(int order) {
-    roleLayouts[order].setBackgroundResource(R.drawable.role_selected);
-    roleIcons[order].setColorFilter(ContextCompat.getColor(this, R.color.primary));
-    roleTitles[order].setTextColor(ContextCompat.getColor(this, R.color.primary));
-    roleLines[order].setVisibility(View.VISIBLE);
-  }
-
-  private void deselectRole(int order) {
-    roleLayouts[order].setBackgroundResource(R.drawable.role_default);
-    roleIcons[order].setColorFilter(ContextCompat.getColor(this, R.color.login_gray));
-    roleTitles[order].setTextColor(ContextCompat.getColor(this, R.color.login_gray));
-    roleLines[order].setVisibility(View.GONE);
   }
 
   private void doLogin() {
@@ -270,7 +165,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
       CompanyInfoResponse companyInfo = (CompanyInfoResponse) response;
       settingService.saveSetting(companyInfo);
       RestAuthenticateServiceImpl.getCompanySetting(this, companyInfo.getBackendUri(),
-          userNameEdt.getText().toString(), passwordEdt.getText().toString(), selectedRole);
+          userNameEdt.getText().toString(), passwordEdt.getText().toString(),
+          SaleType.STORE_MANAGEMENT);
     } else if (response instanceof SettingResponse) {
 
       logInBtn.doneLoadingAnimation(ContextCompat.getColor(this, R.color.log_in_enter_bg),
@@ -278,8 +174,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
       settingService.saveSetting((SettingResponse) response);
 
-      settingService
-          .saveSetting(ApplicationKeys.SETTING_SALE_TYPE, String.valueOf(selectedRole.getValue()));
+      settingService.saveSetting(ApplicationKeys.SETTING_SALE_TYPE,
+          String.valueOf(SaleType.STORE_MANAGEMENT.getValue()));
       settingService
           .saveSetting(ApplicationKeys.SETTING_USERNAME, userNameEdt.getText().toString());
       settingService

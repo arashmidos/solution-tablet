@@ -103,7 +103,7 @@ public class NavigationDrawerFragment extends BaseFragment {
   }
 
   @OnClick({R.id.features_list_lay, R.id.today_paths_lay, R.id.reports_lay,
-      R.id.customers_lay, R.id.map_lay, R.id.about_us, R.id.body_log_out, R.id.body_log_out_force,
+      R.id.customers_lay, R.id.about_us, R.id.body_log_out, R.id.body_log_out_force,
       R.id.get_data_lay, R.id.send_data_lay, R.id.goods_lay, R.id.questionnaire_lay, R.id.header,
       R.id.refresh_icon, R.id.setting_lay, R.id.footer_log_out})
   public void onClick(View view) {
@@ -155,9 +155,6 @@ public class NavigationDrawerFragment extends BaseFragment {
           break;
         }
         mainActivity.changeFragment(MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID, true);
-        break;
-      case R.id.map_lay:
-        mainActivity.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
         break;
       case R.id.refresh_icon:
         refreshData();

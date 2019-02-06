@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.util;
 
-import android.util.Log;
 import com.google.gson.Gson;
 import com.parsroyal.solutiontablet.data.model.PushNotification;
 import org.json.JSONObject;

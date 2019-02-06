@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-  <string name="app_name">Solution-Mobile</string>
+  <string name="app_name">Store-Management</string>
 
   <string name="setting">تنظیمات</string>
   <string name="about_us">درباره ما</string>
@@ -381,7 +381,7 @@
   <string name="reports">گزارشات</string>
   <string name="log_out">خروج از حساب کاربری</string>
   <string name="log_out_force">خروج فوری</string>
-  <string name="name_version">Solution Tablet v%1$s</string>
+  <string name="name_version">Store Management v%1$s</string>
   <string name="search_customers_hint">در نام و کد مشتریان جستجو کنید...</string>
   <string name="sort">مرتب سازی</string>
   <string name="do_filter">اعمال</string>

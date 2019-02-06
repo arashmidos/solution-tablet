@@ -30,12 +30,12 @@ android {
     }
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.parsroyal.solutionmobile"
+        applicationId "com.parsroyal.storemanagement"
         minSdkVersion 17
         //noinspection ExpiringTargetSdkVersion
-        targetSdkVersion 25
-        versionCode 138
-        versionName "2.19.15"
+        targetSdkVersion 27
+        versionCode 1
+        versionName "0.1"
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled true
@@ -81,7 +81,7 @@ android {
 
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "Solution-Mobile-${variant.versionName}.apk"
+            outputFileName = "Store-Management-${variant.versionName}.apk"
         }
     }
 

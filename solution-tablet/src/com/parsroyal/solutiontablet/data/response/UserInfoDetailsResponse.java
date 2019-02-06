@@ -9,13 +9,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserInfoDetailsResponse {
 
-  @SerializedName(value = "salesmanId", alternate = "distributorId")
+  @SerializedName(value = "salesmanId", alternate = {"distributorId", "managementId"})
   @Expose
   private Integer salesmanId;
-  @SerializedName(value = "salesmanCode", alternate = "distributorCode")
+  @SerializedName(value = "salesmanCode", alternate = {"distributorCode", "managementCode"})
   @Expose
   private Integer salesmanCode;
-  @SerializedName(value = "salesmanName", alternate = "distributorName")
+  @SerializedName(value = "salesmanName", alternate = {"distributorName", "managementName"})
   @Expose
   private String salesmanName;
   @SerializedName("companyId")
@@ -24,6 +24,17 @@ public class UserInfoDetailsResponse {
   @SerializedName("companyName")
   @Expose
   private String companyName;
+  @SerializedName("stockSerial")
+  @Expose
+  private String stockSerial;
+
+  public String getStockSerial() {
+    return stockSerial;
+  }
+
+  public void setStockSerial(String stockSerial) {
+    this.stockSerial = stockSerial;
+  }
 
   public Integer getSalesmanId() {
     return salesmanId;

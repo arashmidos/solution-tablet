@@ -6,7 +6,6 @@ import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.response.CompanyInfoResponse;
-import com.parsroyal.solutiontablet.data.response.SettingDetailsResponse;
 import com.parsroyal.solutiontablet.data.response.SettingResponse;
 import com.parsroyal.solutiontablet.data.response.UserInfoDetailsResponse;
 import com.parsroyal.solutiontablet.data.response.UserInfoResponse;
@@ -54,38 +53,8 @@ public class SettingServiceImpl implements SettingService {
     saveUserInfo(NetworkUtil.extractUserInfo(token));
 
     keyValueBiz.save(new KeyValue(ApplicationKeys.TOKEN, token));
-    SettingDetailsResponse settingDetail = response.getSettings();
 
     PreferenceHelper.setAuthorities(response.getAuthorities());
-    keyValueBiz
-        .save(new KeyValue(ApplicationKeys.SETTING_STOCK_ID, settingDetail.getStockId()));
-    keyValueBiz
-        .save(new KeyValue(ApplicationKeys.SETTING_BRANCH_ID, settingDetail.getBranchId()));
-    keyValueBiz
-        .save(new KeyValue(ApplicationKeys.SETTING_ORDER_TYPE, settingDetail.getOrderType()));
-    keyValueBiz
-        .save(new KeyValue(ApplicationKeys.SETTING_INVOICE_TYPE, settingDetail.getFactorType()));
-    keyValueBiz
-        .save(new KeyValue(ApplicationKeys.SETTING_REJECT_TYPE, settingDetail.getRejectType()));
-    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_SALE_RATE_ENABLE,
-        String.valueOf(settingDetail.isUseSaleRate())));
-    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE,
-        String.valueOf(settingDetail.isCheckDistanceFromCustomer())));
-    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE,
-        String.valueOf(settingDetail.isCheckCustomerCredit())));
-    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_CHECK_SMS_CONFIRM_ENABLE,
-        String.valueOf(settingDetail.isCheckSmsConfirm())));
-    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_DISTANCE_CUSTOMER_VALUE,
-        String.valueOf(settingDetail.getCheckDistanceFromCustomerValue())));
-
-    try {
-      keyValueBiz
-          .save(new KeyValue(ApplicationKeys.SETTING_STOCK_CODE, settingDetail.getStockCode()));
-      keyValueBiz
-          .save(new KeyValue(ApplicationKeys.SETTING_BRANCH_CODE, settingDetail.getBranchCode()));
-    } catch (Exception ignore) {
-    }
-
   }
 
   @Override
@@ -96,11 +65,15 @@ public class SettingServiceImpl implements SettingService {
     keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_USER_CODE,
         String.valueOf(userInfoDetailsResponse.getSalesmanCode())));
     keyValueBiz.save(new KeyValue(ApplicationKeys.USER_FULL_NAME,
-        String.valueOf(userInfoDetailsResponse.getSalesmanName())));
+        String.valueOf(userInfoDetailsResponse.getSalesmanName()).trim()));
     keyValueBiz.save(new KeyValue(ApplicationKeys.USER_COMPANY_ID,
         String.valueOf(userInfoDetailsResponse.getCompanyId())));
-    keyValueBiz.save(new KeyValue(ApplicationKeys.USER_COMPANY_NAME,
-        String.valueOf(userInfoDetailsResponse.getCompanyName())));
+//    keyValueBiz.save(new KeyValue(ApplicationKeys.USER_COMPANY_NAME,
+//        String.valueOf(userInfoDetailsResponse.getCompanyName())));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_STOCK_ID,
+        String.valueOf(userInfoDetailsResponse.getStockSerial())));
+    keyValueBiz.save(new KeyValue(ApplicationKeys.SETTING_USER_ID,
+        String.valueOf(userInfo.getId())));//4155
     keyValueBiz
         .save(new KeyValue(ApplicationKeys.TOKEN_EXPIRE_DATE, String.valueOf(userInfo.getExp())));
   }

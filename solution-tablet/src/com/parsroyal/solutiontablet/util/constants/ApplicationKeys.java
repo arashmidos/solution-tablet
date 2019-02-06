@@ -9,6 +9,7 @@ public class ApplicationKeys {
   public static final String SETTING_USERNAME = "setting.username";
   public static final String SETTING_PASSWORD = "setting.password";
   public static final String SETTING_USER_CODE = "setting.user.code";
+  public static final String SETTING_USER_ID = "setting.user.id";
   public static final String SETTING_SALE_TYPE = "setting.sale.type";
   public static final String SETTING_CALCULATE_DISTANCE_ENABLE = "setting.distance.enable";
   public static final String SETTING_DISTANCE_CUSTOMER_VALUE = "setting.distance.value";

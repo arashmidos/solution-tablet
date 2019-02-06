@@ -16,6 +16,11 @@ public class SettingDto {
     this.saleType = saleType;
   }
 
+  public SettingDto(String username, String password) {
+    this.username = username;
+    this.password = password;
+  }
+
   public String getUsername() {
     return username;
   }
