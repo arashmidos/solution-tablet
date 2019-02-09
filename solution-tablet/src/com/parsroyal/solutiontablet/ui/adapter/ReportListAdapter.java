@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class ReportListAdapter extends Adapter<ViewHolder> {
 
@@ -40,14 +41,15 @@ public class ReportListAdapter extends Adapter<ViewHolder> {
     this.layoutInflater = LayoutInflater.from(context);
   }
 
+  @NotNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
     View view = layoutInflater.inflate(R.layout.item_report_list, parent, false);
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
     holder.setData(position);
   }
 

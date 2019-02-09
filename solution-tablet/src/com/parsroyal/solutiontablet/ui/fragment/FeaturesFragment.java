@@ -54,8 +54,8 @@ public class FeaturesFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    List<FeatureList> featureList = FeatureList.getFeatureList(getActivity());
-    featureList.get(0).setBadger(getVisitLineSize());
+    List<FeatureList> featureList = FeatureList.getFeatureList(mainActivity);
+//    featureList.get(0).setBadger(getVisitLineSize());
     adapter = new FeaturesAdapter(getActivity(), featureList);
     RtlGridLayoutManager gridLayoutManager;
     if (MultiScreenUtility.isTablet(mainActivity)) {
@@ -92,7 +92,7 @@ public class FeaturesFragment extends BaseFragment {
   @Subscribe
   public void getMessage(ActionEvent event) {
     if (event.getStatusCode() == StatusCodes.ACTION_REFRESH_DATA) {
-      List<FeatureList> featureList = FeatureList.getFeatureList(getActivity());
+      List<FeatureList> featureList = FeatureList.getFeatureList(mainActivity);
       featureList.get(0).setBadger(getVisitLineSize());
       adapter.update(featureList);
     }

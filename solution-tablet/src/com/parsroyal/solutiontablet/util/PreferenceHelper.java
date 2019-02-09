@@ -52,6 +52,15 @@ public class PreferenceHelper {
         .apply();
   }
 
+  public static Long getStockKey() {
+    String asnSerial = SolutionTabletApplication.getPreference()
+        .getString(ApplicationKeys.SETTING_STOCK_ID, "");
+    if (Empty.isEmpty(asnSerial) || "null".equals(asnSerial)) {
+      return null;
+    }
+    return Long.valueOf(asnSerial);
+  }
+
   public static KeyValue retrieveByKey(String settingKey) {
 
     String value = SolutionTabletApplication.getPreference().getString(settingKey, "");

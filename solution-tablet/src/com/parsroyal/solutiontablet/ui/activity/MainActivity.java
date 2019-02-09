@@ -243,7 +243,7 @@ public abstract class MainActivity extends AppCompatActivity {
       logUser();
     }
     loadPermission();
-    updatePushe();
+//    updatePushe();//TODO:LATER
   }
 
   private void updatePushe() {
@@ -828,7 +828,7 @@ public abstract class MainActivity extends AppCompatActivity {
     if (fragmentId == FEATURE_FRAGMENT_ID) {
       setNavigationToolbarIcon(R.drawable.ic_menu);
 //      setDrawerEnable(true);
-      displayNotifbutton(true);
+      displayNotifbutton(false);//TODO:LATER
     } else {
       setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
 //      setDrawerEnable(false);

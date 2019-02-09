@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.biz.impl.StoreRestServiceImpl;
 import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
@@ -69,56 +70,52 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     }
     holder.featureImg.setImageResource(feature.getImageId());
     holder.featureTitleTv.setText(feature.getTitle());
-    if (feature.getTitle().contains("پرسش") && !SolutionTabletApplication.getInstance()
-        .hasAccess(Authority.ADD_SUB_QUESTIONNAIRE)) {
+    if (position > 1) {
       holder.featureTitleTv.setTextColor(ContextCompat.getColor(context, R.color.gray));
     } else {
       holder.featureTitleTv.setTextColor(ContextCompat.getColor(context, R.color.primary_dark));
     }
     holder.featureLay.setOnClickListener(v -> {
-      if (baseInfoService.getAllProvinces().size() == 0) {
 
-        ToastUtil.toastError(context, R.string.error_message_no_data);
-        return;
-      }
       switch (position) {
         case 0://Paths
-          if (features.get(0).getBadger() == 0) {
-            ToastUtil.toastError(context, ApplicationKeys.SALE_DISTRIBUTER.equals(saleType)
-                ? R.string.error_no_request_line
-                : R.string.error_no_visitline);
-            return;
-          }
-          context.changeFragment(MainActivity.VISITLINE_FRAGMENT_ID, true);
+//          if (features.get(0).getBadger() == 0) {
+//            ToastUtil.toastError(context, ApplicationKeys.SALE_DISTRIBUTER.equals(saleType)
+//                ? R.string.error_no_request_line
+//                : R.string.error_no_visitline);
+//            return;
+//          }
+//          context.changeFragment(MainActivity.VISITLINE_FRAGMENT_ID, true);
+          new StoreRestServiceImpl().detectGood(context,"7610939002407");
           break;
         case 1://Customers
-          context.changeFragment(MainActivity.CUSTOMER_FRAGMENT, true);
+//          context.changeFragment(MainActivity.CUSTOMER_FRAGMENT, true);
           break;
         case 2://reports
-          context.changeFragment(MainActivity.REPORT_FRAGMENT, true);
+//          context.changeFragment(MainActivity.REPORT_FRAGMENT, true);
           break;
         case 3://Goods
-          Bundle args = new Bundle();
-          args.putBoolean(Constants.READ_ONLY, true);
-          context.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
+//          Bundle args = new Bundle();
+//          args.putBoolean(Constants.READ_ONLY, true);
+//          context.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
           break;
         case 4: //Map
-          context.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
+//          context.changeFragment(MainActivity.USER_TRACKING_FRAGMENT_ID, true);
           break;
         case 5://Questionnaire
-          if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_SUB_QUESTIONNAIRE)) {
-            context.changeFragment(MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID, true);
-          }
+//          if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_SUB_QUESTIONNAIRE)) {
+//            context.changeFragment(MainActivity.ANONYMOUS_QUESTIONNAIRE_FRAGMENT_ID, true);
+//          }
           break;
         case 6://Report
-          Intent intent = new Intent(context,
-              MultiScreenUtility.isTablet(context) ? TabletReportListActivity.class
-                  : MobileReportListActivity.class);
-          intent.putExtra(Constants.REPORT_TYPE, Constants.REPORT_SALESMAN);
-          context.startActivity(intent);
+//          Intent intent = new Intent(context,
+//              MultiScreenUtility.isTablet(context) ? TabletReportListActivity.class
+//                  : MobileReportListActivity.class);
+//          intent.putExtra(Constants.REPORT_TYPE, Constants.REPORT_SALESMAN);
+//          context.startActivity(intent);
           break;
         case 7://Settings
-          context.changeFragment(MainActivity.SETTING_FRAGMENT, true);
+//          context.changeFragment(MainActivity.SETTING_FRAGMENT, true);
 
           break;
       }

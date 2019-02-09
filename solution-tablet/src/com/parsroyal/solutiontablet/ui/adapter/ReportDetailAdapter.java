@@ -19,6 +19,7 @@ import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class ReportDetailAdapter extends Adapter<ViewHolder> {
 
@@ -26,7 +27,7 @@ public class ReportDetailAdapter extends Adapter<ViewHolder> {
 
   private KPIDetail kpi;
   private AppCompatActivity context;
-  private List<KPIDetail> list = new ArrayList<>();
+  private List<KPIDetail> list;
   private LayoutInflater layoutInflater;
 
   public ReportDetailAdapter(AppCompatActivity context, List<KPIDetail> list, String reportType,
@@ -38,15 +39,16 @@ public class ReportDetailAdapter extends Adapter<ViewHolder> {
     this.layoutInflater = LayoutInflater.from(context);
   }
 
+  @NotNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
     View view = layoutInflater.inflate(R.layout.layout_item_report_detail, parent, false);
 
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
     if (MultiScreenUtility.isTablet(context)) {
       holder.setTabletData(position);
     } else {

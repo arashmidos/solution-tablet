@@ -102,6 +102,8 @@
       android:name=".ui.activity.TabletReportDetailActivity"
       android:screenOrientation="landscape"
       android:theme="@style/NoActionBar" />
+    <activity android:name=".ui.activity.CodeRecognitionActivity" />
+
     <service
       android:enabled="true"
       android:exported="false"
@@ -114,6 +116,7 @@
       android:enabled="true"
       android:exported="false"
       android:name=".service.SaveLocationService" />
+
     <receiver android:name=".receiver.BootReceiver">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -124,6 +127,7 @@
         <action android:name="com.parsroyal.solutiontablet.TrackerAlarmReceiver" />
       </intent-filter>
     </receiver>
+
     <meta-data
       android:name="com.google.android.maps.v2.API_KEY"
       android:value="@string/google_maps_key" />
