@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -16,19 +15,12 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.SolutionTabletApplication;
-import com.parsroyal.solutiontablet.biz.impl.StoreRestServiceImpl;
-import com.parsroyal.solutiontablet.constants.Authority;
-import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.ui.activity.DetectGoodActivity;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
-import com.parsroyal.solutiontablet.ui.activity.MobileReportListActivity;
-import com.parsroyal.solutiontablet.ui.activity.TabletReportListActivity;
-import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
-import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
 
@@ -78,15 +70,8 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     holder.featureLay.setOnClickListener(v -> {
 
       switch (position) {
-        case 0://Paths
-//          if (features.get(0).getBadger() == 0) {
-//            ToastUtil.toastError(context, ApplicationKeys.SALE_DISTRIBUTER.equals(saleType)
-//                ? R.string.error_no_request_line
-//                : R.string.error_no_visitline);
-//            return;
-//          }
-//          context.changeFragment(MainActivity.VISITLINE_FRAGMENT_ID, true);
-          new StoreRestServiceImpl().detectGood(context,"7610939002407");
+        case 0://DetectGood
+          context.startActivity(new Intent(context, DetectGoodActivity.class));
           break;
         case 1://Customers
 //          context.changeFragment(MainActivity.CUSTOMER_FRAGMENT, true);

@@ -350,7 +350,7 @@
   <string name="launch_activity">اجرای برنامه</string>
   <string name="remove_location_updates">توقف موقعیت یاب</string>
   <string name="permission_rationale">مجوز دریافت موقعیت باید فعال باشد</string>
-  <string name="permission_rationale_storage_location">مجوز دریافت موقعیت و دسترسی به فایل برای ذخیره عکس باید فعال باشد</string>
+  <string name="permission_rationale_storage_location">مجوز دسترسی به فایل برای ذخیره عکس باید فعال باشد</string>
   <string name="permission_rationale_location">مجوز دریافت موقعیت باید فعال باشد</string>
   <string name="permission_rationale_storage">مجوز دسترسی به فایل برای ذخیره عکس باید فعال باشد</string>
   <string name="permission_rationale_camera_storage">مجوز استفاده از دوربین و دسترسی به فایل برای ذخیره عکس باید فعال باشد</string>
@@ -662,6 +662,7 @@
   <string name="inc">بدهکار:</string>
   <string name="dec">بستانکار:</string>
   <string name="scan_melli_card_barcode">بارکد پشت کارت ملی را اسکن کنید</string>
+  <string name="scan_good_barcode">بارکد کالا را اسکن کنید</string>
   <string name="edit">ویرایش</string>
   <string name="message_is_required">وارد کردن پیام الزامی است</string>
   <string name="write_message_here">متن خود را اینجا بنویسید</string>
@@ -672,5 +673,6 @@
   <string name="goods_receipt">رسید کالا</string>
   <string name="good_draft">حواله کالا</string>
   <string name="back_button">Back button</string>
+  <string name="good_code">بارکد کالا</string>
 
 </resources>

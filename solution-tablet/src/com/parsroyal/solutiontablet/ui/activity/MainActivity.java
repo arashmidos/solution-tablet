@@ -2,17 +2,11 @@ package com.parsroyal.solutiontablet.ui.activity;
 
 import android.Manifest.permission;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.BatteryManager;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,15 +36,9 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
-import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.DataTransferService;
-import com.parsroyal.solutiontablet.service.LocationUpdatesService;
-import com.parsroyal.solutiontablet.service.LocationUpdatesService.LocalBinder;
-import com.parsroyal.solutiontablet.service.PositionService;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl.GpsStatus;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.fragment.AboutUsFragment;
 import com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment;
@@ -80,7 +68,6 @@ import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.DataTransferDialo
 import com.parsroyal.solutiontablet.util.Analytics;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
-import com.parsroyal.solutiontablet.util.GPSUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
@@ -88,7 +75,6 @@ import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
-import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import timber.log.Timber;
@@ -109,6 +95,7 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int ORDER_INFO_FRAGMENT = 8;
   public static final int CUSTOMER_SEARCH_FRAGMENT = 9;
   public static final int DELIVERY_FRAGMENT_ID = 10;
+  public static final int DETECT_GOOD_ID = 11;
   public static final int USER_TRACKING_FRAGMENT_ID = 12;
   public static final int ABOUT_US_FRAGMENT_ID = 13;
   public static final int REPORT_FRAGMENT = 14;
@@ -132,34 +119,10 @@ public abstract class MainActivity extends AppCompatActivity {
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE_CAMERA_STORAGE = 35;
   private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 56;
 
-  private static final String TAG = MainActivity.class.getName();
-  public static int batteryLevel = -1;
-  public static String batteryStatusTitle;
   protected ProgressDialog progressDialog;
   protected BaseFragment currentFragment;
-  protected LocationUpdatesService gpsRecieverService = null;
   protected DataTransferService dataTransferService;
-  protected boolean boundToGpsService = false;
-  protected final ServiceConnection serviceConnection = new ServiceConnection() {
 
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-      LocalBinder binder = (LocalBinder) service;
-      gpsRecieverService = binder.getService();
-      boundToGpsService = true;
-      if (!checkPermissions()) {
-        requestPermissions();
-      } else {
-        gpsRecieverService.requestLocationUpdates();
-      }
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-      gpsRecieverService = null;
-      boundToGpsService = false;
-    }
-  };
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.toolbar_title)
@@ -182,48 +145,6 @@ public abstract class MainActivity extends AppCompatActivity {
   @BindView(R.id.chronometer)
   TextView chronometer;
 
-  private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context ctxt, Intent intent) {
-      batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-      int deviceStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-
-      if (deviceStatus == BatteryManager.BATTERY_STATUS_CHARGING) {
-        batteryStatusTitle = "Charging";
-      }
-
-      if (deviceStatus == BatteryManager.BATTERY_STATUS_DISCHARGING) {
-        batteryStatusTitle = "Discharging";
-      }
-
-      if (deviceStatus == BatteryManager.BATTERY_STATUS_FULL) {
-        batteryStatusTitle = "Battery Full";
-      }
-
-      if (deviceStatus == BatteryManager.BATTERY_STATUS_UNKNOWN) {
-        batteryStatusTitle = "Unknown";
-      }
-
-      if (deviceStatus == BatteryManager.BATTERY_STATUS_NOT_CHARGING) {
-        batteryStatusTitle = "Not Charging";
-      }
-    }
-  };
-  private PositionService positionService;
-  protected BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      if (intent.getAction() != null && intent.getAction()
-          .matches("android.location.PROVIDERS_CHANGED")) {
-        if (!GPSUtil.isGpsAvailable(context)) {
-          showGpsOffDialog();
-          positionService.sendGpsChangedPosition(GpsStatus.OFF);
-        } else {
-          positionService.sendGpsChangedPosition(GpsStatus.ON);
-        }
-      }
-    }
-  };
   private boolean phoneVisit;
 
   public void onCreate(Bundle savedInstanceState) {
@@ -237,7 +158,6 @@ public abstract class MainActivity extends AppCompatActivity {
     Pushe.initialize(this, true);
 
     dataTransferService = new DataTransferServiceImpl(this);
-    positionService = new PositionServiceImpl(this);
 
     if (!BuildConfig.DEBUG) {
       logUser();
@@ -280,10 +200,6 @@ public abstract class MainActivity extends AppCompatActivity {
   protected void onStart() {
     super.onStart();
     EventBus.getDefault().register(this);
-    // Bind to the service. If the service is in foreground mode, this signals to the service
-    // that since this activity is in the foreground, the service can exit foreground mode.
-    bindService(new Intent(this, LocationUpdatesService.class), serviceConnection,
-        Context.BIND_AUTO_CREATE);
 
     if (Updater.updateExist()) {
       PreferenceHelper.setForceExit(true);
@@ -306,8 +222,8 @@ public abstract class MainActivity extends AppCompatActivity {
         (dialog, which) ->
         {
           dialog.dismiss();
-          Intent intent = new Intent(this, LocationUpdatesService.class);
-          stopService(intent);
+//          Intent intent = new Intent(this, LocationUpdatesService.class);
+//          stopService(intent);
           finish();
         });
   }
@@ -363,10 +279,6 @@ public abstract class MainActivity extends AppCompatActivity {
     }
   }
 
-  public void startGpsService() {
-    gpsRecieverService.requestLocationUpdates();
-  }
-
   @Override
   protected void onResume() {
     super.onResume();
@@ -374,59 +286,17 @@ public abstract class MainActivity extends AppCompatActivity {
       requestPermissions();
     }
 
-    if (!GPSUtil.isGpsAvailable(this)) {
-      showGpsOffDialog();
-      positionService.sendGpsChangedPosition(GpsStatus.OFF);
-      Analytics.logCustom("GPS", new String[]{"GPS Status"}, "OFF");
-    }
-
-    registerReceiver(gpsStatusReceiver, new IntentFilter("android.location.PROVIDERS_CHANGED"));
-    registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-
-    new TrackerAlarmReceiver().setAlarm(this);
     navigationImg.setVisibility(View.VISIBLE);
-
-    /*List<String> fakeApps = GPSUtil.getListOfFakeLocationApps(this);
-    if (fakeApps.size() > 0 && !BuildConfig.DEBUG) {
-      showFakeGpsDetected(fakeApps);
-    }*///TODOO: Time consuming, do it in async
-    SolutionTabletApplication.getInstance().reSyncTrueTime();
-  }
-
-  private void showFakeGpsDetected(List<String> fakeApps) {
-
-    StringBuilder s = new StringBuilder("");
-    for (int i = 0; i < fakeApps.size(); i++) {
-      s.append("-").append(fakeApps.get(i)).append("\n");
-    }
-    String message = String.format(getString(R.string.error_fake_gps_detected), s.toString());
-
-    DialogUtil.showCustomDialog(this, getString(R.string.warning),
-        message, "تایید", (dialog, which) -> finish(), null, null, Constants.ICON_MESSAGE);
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-    try {
-      unregisterReceiver(gpsStatusReceiver);
-      unregisterReceiver(batteryInfoReceiver);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-
-    if (boundToGpsService) {
-      // Unbind from the service. This signals to the service that this activity is no longer
-      // in the foreground, and the service can respond by promoting itself to a foreground
-      // service.
-      unbindService(serviceConnection);
-      boundToGpsService = false;
-    }
 
     EventBus.getDefault().unregister(this);
   }
@@ -448,7 +318,6 @@ public abstract class MainActivity extends AppCompatActivity {
           && grantResults[1] == PackageManager.PERMISSION_GRANTED) || (grantResults.length == 1
           && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
         // Permission was granted.
-        gpsRecieverService.requestLocationUpdates();
       } else {
         ToastUtil.toastError(this, getString(R.string.permission_denied_explanation),
             view -> {
@@ -505,14 +374,6 @@ public abstract class MainActivity extends AppCompatActivity {
     }
   }
 
-  private void showGpsOffDialog() {
-    DialogUtil.showCustomDialog(this, getString(R.string.warning),
-        getString(R.string.error_gps_is_disabled), "", (dialog, which) -> {
-          Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-          startActivity(intent);
-        }, "", (dialog, which) -> finish(), Constants.ICON_MESSAGE);
-  }
-
   private void logUser() {
     SettingService settingService = new SettingServiceImpl();
     Crashlytics.setUserName(settingService.getSettingValue(ApplicationKeys.USER_FULL_NAME));
@@ -526,9 +387,6 @@ public abstract class MainActivity extends AppCompatActivity {
   }
 
   private void requestPermissions() {
-    boolean shouldProvideRationale =
-        ActivityCompat.shouldShowRequestPermissionRationale(this,
-            permission.ACCESS_FINE_LOCATION);
     boolean storageShouldProvideRationale =
         ActivityCompat.shouldShowRequestPermissionRationale(this,
             permission.WRITE_EXTERNAL_STORAGE);
@@ -538,29 +396,20 @@ public abstract class MainActivity extends AppCompatActivity {
 
     // Provide an additional rationale to the user. This would happen if the user denied the
     // request previously, but didn't check the "Don't ask again" checkbox.
-    if (shouldProvideRationale && storageShouldProvideRationale && stateShouldProvideRationale) {
+    if (storageShouldProvideRationale && stateShouldProvideRationale) {
       Timber.i("Displaying permission rationale to provide additional context.");
       try {
         ToastUtil.toastError(this, getString(R.string.permission_rationale_storage_location),
             view -> {
               // Request permission
               ActivityCompat.requestPermissions(MainActivity.this,
-                  new String[]{permission.ACCESS_FINE_LOCATION, permission.WRITE_EXTERNAL_STORAGE,
-                      permission.READ_PHONE_STATE}, REQUEST_PERMISSIONS_REQUEST_CODE);
+                  new String[]{permission.WRITE_EXTERNAL_STORAGE, permission.READ_PHONE_STATE},
+                  REQUEST_PERMISSIONS_REQUEST_CODE);
 
             });
       } catch (Exception e) {
         e.printStackTrace();
       }
-    } else if (shouldProvideRationale) {
-      Timber.i("Displaying permission rationale to provide additional context.");
-      ToastUtil.toastError(this, getString(R.string.permission_rationale_location),
-          view -> {
-            // Request permission
-            ActivityCompat.requestPermissions(this,
-                new String[]{permission.ACCESS_FINE_LOCATION},
-                REQUEST_PERMISSIONS_REQUEST_CODE);
-          });
     } else if (storageShouldProvideRationale) {
       Timber.i("Displaying permission rationale to provide additional context.");
       ToastUtil.toastError(this, getString(R.string.permission_rationale_storage),
@@ -576,8 +425,8 @@ public abstract class MainActivity extends AppCompatActivity {
       // sets the permission in a given state or the user denied the permission
       // previously and checked "Never ask again".
       ActivityCompat.requestPermissions(MainActivity.this,
-          new String[]{permission.ACCESS_FINE_LOCATION, permission.WRITE_EXTERNAL_STORAGE,
-              permission.READ_PHONE_STATE}, REQUEST_PERMISSIONS_REQUEST_CODE);
+          new String[]{permission.WRITE_EXTERNAL_STORAGE, permission.READ_PHONE_STATE},
+          REQUEST_PERMISSIONS_REQUEST_CODE);
     }
   }
 
@@ -585,12 +434,11 @@ public abstract class MainActivity extends AppCompatActivity {
    * Returns the current state of the permissions needed.
    */
   private boolean checkPermissions() {
-    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-        permission.ACCESS_FINE_LOCATION) &&
+    return
         PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
             permission.WRITE_EXTERNAL_STORAGE) &&
-        PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-            permission.READ_PHONE_STATE);
+            PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+                permission.READ_PHONE_STATE);
   }
 
   public void showFeaturesFragment() {
@@ -928,6 +776,9 @@ public abstract class MainActivity extends AppCompatActivity {
         fragment = AnonymousQuestionnaireFragment.newInstance();
         break;
       case VISITLINE_DETAIL_FRAGMENT_ID:
+        fragment = VisitLineDetailFragment.newInstance();
+        break;
+      case DETECT_GOOD_ID:
         fragment = VisitLineDetailFragment.newInstance();
         break;
     }

@@ -6,12 +6,10 @@
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.WAKE_LOCK" />
-  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
   <uses-permission android:name="android.permission.SEND_SMS" />
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.GET_TASKS" />
@@ -22,22 +20,9 @@
     android:name="com.parsroyal.solutionmobile.permission.C2D_MESSAGE"
     android:protectionLevel="signature" />
 
-  <!-- Optional permissions -->
-  <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
-  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
   <uses-feature android:name="android.hardware.camera" />
   <uses-feature
-    android:name="android.hardware.location.gps"
-    android:required="false" />
-  <uses-feature
     android:name="android.hardware.location.network"
-    android:required="false" />
-  <uses-feature
-    android:name="android.hardware.location"
-    android:required="false" />
-  <uses-feature
-    android:name="android.hardware.LOCATION"
     android:required="false" />
 
   <uses-sdk tools:overrideLibrary="co.ronash.pushe" />
@@ -102,31 +87,9 @@
       android:name=".ui.activity.TabletReportDetailActivity"
       android:screenOrientation="landscape"
       android:theme="@style/NoActionBar" />
-    <activity android:name=".ui.activity.CodeRecognitionActivity" />
-
-    <service
-      android:enabled="true"
-      android:exported="false"
-      android:name=".service.LocationUpdatesService" />
-    <service
-      android:enabled="true"
-      android:exported="false"
-      android:name=".service.SendLocationService" />
-    <service
-      android:enabled="true"
-      android:exported="false"
-      android:name=".service.SaveLocationService" />
-
-    <receiver android:name=".receiver.BootReceiver">
-      <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED" />
-      </intent-filter>
-    </receiver>
-    <receiver android:name=".receiver.TrackerAlarmReceiver">
-      <intent-filter>
-        <action android:name="com.parsroyal.solutiontablet.TrackerAlarmReceiver" />
-      </intent-filter>
-    </receiver>
+    <activity
+      android:name=".ui.activity.DetectGoodActivity"
+      android:theme="@style/NoActionBar" />
 
     <meta-data
       android:name="com.google.android.maps.v2.API_KEY"

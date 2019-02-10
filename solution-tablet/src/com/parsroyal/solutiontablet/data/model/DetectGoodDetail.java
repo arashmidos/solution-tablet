@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Arash on 9/20/16.
  */
-public class GoodDetectDetail extends BaseModel {
+public class DetectGoodDetail extends BaseModel {
 
   @SerializedName("Title")
   @Expose

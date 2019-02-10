@@ -99,8 +99,8 @@ public class Position extends BaseEntity<Long> {
         .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
     this.date = DateUtil
         .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN");
-    this.batteryLevel = MainActivity.batteryLevel;
-    this.batteryStatus = MainActivity.batteryStatusTitle;
+//    this.batteryLevel = MainActivity.batteryLevel;
+//    this.batteryStatus = MainActivity.batteryStatusTitle;
     this.rooted = GPSUtil.isDeviceRooted();
     Date trueTime = SolutionTabletApplication.getInstance().getTrueTime();
 

@@ -21,7 +21,6 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleType;
-import com.parsroyal.solutiontablet.service.LocationUpdatesService;
 import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.DataTransferServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
@@ -215,8 +214,8 @@ public class NavigationDrawerFragment extends BaseFragment {
       dataTransferService.clearData();
       SolutionTabletApplication.getInstance().clearAuthorities();
       startActivity(new Intent(mainActivity, LoginActivity.class));
-      Intent intent = new Intent(mainActivity, LocationUpdatesService.class);
-      mainActivity.stopService(intent);
+//      Intent intent = new Intent(mainActivity, LocationUpdatesService.class);
+//      mainActivity.stopService(intent);
       mainActivity.finish();
     }
   }
