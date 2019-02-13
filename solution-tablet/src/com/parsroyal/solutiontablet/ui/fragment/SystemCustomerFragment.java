@@ -1,12 +1,10 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -85,7 +83,8 @@ public class SystemCustomerFragment extends BaseFragment {
   private void checkPermissions() {
     if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_NEW_CUSTOMER)) {
       fabAddCustomer.setEnabled(false);
-      fabAddCustomer.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+      fabAddCustomer
+          .setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
     }
   }
 

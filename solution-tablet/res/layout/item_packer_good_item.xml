@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main_lay"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@color/white">
+
+  <ImageView
+    android:id="@+id/good_img"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:layout_margin="16dp"
+    android:layout_alignParentEnd="true"
+    android:src="@drawable/goods_default" />
+
+  <TextView
+    android:id="@+id/good_name_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="19dp"
+    android:layout_marginStart="8dp"
+    android:layout_toStartOf="@id/good_img"
+    android:text="گالف ضد يخ مکس کول 4 ليتري"
+    android:textColor="@color/black_85"
+    android:textSize="12sp"
+    tools:text="گالف ضد يخ مکس کول 4 ليتري" />
+  <TextView
+    android:id="@+id/good_code_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:layout_marginStart="8dp"
+    android:layout_below="@id/good_name_tv"
+    android:layout_toStartOf="@id/good_img"
+    android:text="کد کالا: ۱۲۳۴"
+    android:textColor="@color/black_85"
+    android:textSize="12sp"
+    tools:text="کد کالا: ۱۲۳۴" />
+  <TextView
+    android:id="@+id/total_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:layout_marginStart="8dp"
+    android:layout_below="@id/good_code_tv"
+    android:layout_toStartOf="@id/good_img"
+    android:text="مجموع:"
+    android:textColor="@color/black_85"
+    android:textSize="12sp" />
+  <TextView
+    android:id="@+id/total_value_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_alignBaseline="@id/total_tv"
+    android:layout_alignParentLeft="true"
+    android:text="۱۰ عدد"
+    android:textColor="@color/black_85"
+    android:textSize="12sp" />
+  <TextView
+    android:id="@+id/packed_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:layout_marginStart="8dp"
+    android:layout_below="@id/total_tv"
+    android:layout_toStartOf="@id/good_img"
+    android:text="جورشده:"
+    android:textColor="@color/green_return"
+    android:textSize="12sp" />
+  <TextView
+    android:id="@+id/packed_value_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:layout_marginStart="16dp"
+    android:layout_alignBaseline="@id/packed_tv"
+    android:layout_alignParentLeft="true"
+    android:text="۶ عدد"
+    android:textColor="@color/green_return"
+    android:textSize="12sp" />
+  <TextView
+    android:id="@+id/remained_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:layout_marginStart="8dp"
+    android:layout_below="@id/packed_tv"
+    android:layout_toStartOf="@id/good_img"
+    android:text="مانده:"
+    android:textColor="@color/red"
+    android:textSize="12sp" />
+  <TextView
+    android:id="@+id/remained_value_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_alignParentLeft="true"
+    android:layout_alignBaseline="@id/remained_tv"
+    android:text="۴ عدد"
+    android:textColor="@color/red"
+    android:textSize="12sp" />
+
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginTop="17dp"
+    android:layout_below="@id/remained_tv"
+    android:background="@color/gray_e0" />
+</RelativeLayout>

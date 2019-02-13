@@ -110,6 +110,8 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int VISITLINE_DETAIL_FRAGMENT_ID = 28;
   public static final int SYSTEM_CUSTOMER_FRAGMENT = 29;
   public static final int NEW_CUSTOMER_FRAGMENT_ID = 30;
+  public static final int PACKER_INFO_FRAGMENT_ID = 34;
+  public static final int PACKER_DETAIL_FRAGMENT_ID = 35;
   public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
   public static final int CUSTOMER_INFO_FRAGMENT = 32;
   public static final int SETTING_FRAGMENT = 33;

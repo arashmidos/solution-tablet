@@ -20,6 +20,7 @@ import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.DetectGoodActivity;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
+import com.parsroyal.solutiontablet.ui.activity.PackerActivity;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
@@ -73,8 +74,8 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
         case 0://DetectGood
           context.startActivity(new Intent(context, DetectGoodActivity.class));
           break;
-        case 1://Customers
-//          context.changeFragment(MainActivity.CUSTOMER_FRAGMENT, true);
+        case 1://Packers
+          context.startActivity(new Intent(context, PackerActivity.class));
           break;
         case 2://reports
 //          context.changeFragment(MainActivity.REPORT_FRAGMENT, true);

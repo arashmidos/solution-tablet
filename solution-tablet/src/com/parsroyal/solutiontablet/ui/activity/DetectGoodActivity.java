@@ -9,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -28,6 +29,7 @@ import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.model.DetectGoodDetail;
 import com.parsroyal.solutiontablet.ui.adapter.DetectGoodDetailAdapter;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
@@ -52,6 +54,8 @@ public class DetectGoodActivity extends AppCompatActivity {
   RecyclerView list;
   @BindView(R.id.list_layout)
   CardView listLayout;
+  @BindView(R.id.detect_good_submit)
+  Button detectGoodSubmit;
   private DetectGoodDetailAdapter listAdapter;
   private String reportType;
   private long customerBackendId;
@@ -72,6 +76,7 @@ public class DetectGoodActivity extends AppCompatActivity {
       goodBarcodeEdt.setText(NumberUtil.digitsToPersian(result.getText()));
 
       beepManager.playBeepSoundAndVibrate();
+      sendBarcode();
     }
 
     @Override
@@ -86,6 +91,9 @@ public class DetectGoodActivity extends AppCompatActivity {
     ButterKnife.bind(this);
     initScanner();
     setUpRecyclerView();
+
+    //TODO:REMOVE
+    goodBarcodeEdt.setText(NumberUtil.digitsToPersian("7610939002407"));
   }
 
   private void setUpRecyclerView() {
@@ -95,7 +103,15 @@ public class DetectGoodActivity extends AppCompatActivity {
     list.addItemDecoration(dividerItemDecoration);
     list.setLayoutManager(layoutManager);
 //    recyclerView.showShimmerAdapter();
-    new StoreRestServiceImpl().detectGood(this, "7610939002407");
+  }
+
+  private void sendBarcode() {
+    if (Empty.isNotEmpty(goodBarcodeEdt.getText().toString())) {
+
+      DialogUtil.showProgressDialog(this, R.string.message_please_wait);
+      new StoreRestServiceImpl()
+          .detectGood(this, NumberUtil.digitsToEnglish(goodBarcodeEdt.getText().toString()));
+    }
   }
 
   private void initScanner() {
@@ -119,6 +135,7 @@ public class DetectGoodActivity extends AppCompatActivity {
     super.onPause();
     EventBus.getDefault().unregister(this);
     scanner.pause();
+    DialogUtil.dismissProgressDialog();
   }
 
   @Override
@@ -130,6 +147,7 @@ public class DetectGoodActivity extends AppCompatActivity {
 
   @Subscribe
   public void getMessage(Event event) {
+    DialogUtil.dismissProgressDialog();
     if (event instanceof ErrorEvent) {
       switch (event.getStatusCode()) {
         case NO_NETWORK:
@@ -162,5 +180,10 @@ public class DetectGoodActivity extends AppCompatActivity {
   @Override
   protected void attachBaseContext(Context newBase) {
     super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
+  }
+
+  @OnClick(R.id.detect_good_submit)
+  public void onViewClicked() {
+    sendBarcode();
   }
 }

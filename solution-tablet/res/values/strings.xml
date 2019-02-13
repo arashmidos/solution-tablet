@@ -181,6 +181,7 @@
   <string name="title_order_detail">مشخصات سفارش</string>
   <string name="title_x_detail">"مشخصات %1$s"</string>
   <string name="title_order">سفارش</string>
+  <string name="title_request">درخواست</string>
   <string name="title_factor">فاکتور</string>
   <string name="title_reject">مرجوعی</string>
   <string name="title_order_items">آیتم های سفارش</string>
@@ -553,6 +554,8 @@
   <string name="total_reject_tv">مجموع مبلغ مرجوعی ها</string>
   <string name="total_order_sale_count_tv">مجموع تعداد سفارشات</string>
   <string name="total_visit_count_tv">مجموع تعداد بازدیدها</string>
+  <string name="total_packed_goods_tv">مجموع جور شده ها</string>
+  <string name="total_remaining_goods_tv">مجموع مانده ها</string>
   <string name="total_count1_item_tv">مجموع واحد۱</string>
   <string name="total_count2_item_tv">مجموع واحد۲</string>
   <string name="total_invoice_sale_count_tv">مجموع تعداد فاکتورها</string>
@@ -629,7 +632,6 @@
   <string name="no_sms_permission">دسترسی برای ارسال پیامک داده نشد</string>
   <string name="invalid_code">کد وارد شده معتبر نیست</string>
   <string name="reason">دلیل خود برای عدم وارد کردن کد را انتخاب کنید</string>
-  <string name="send">ارسال</string>
   <string name="default_order">پیشفرض</string>
   <string name="manual_visit_line">خارج از مسیر</string>
   <string name="no_customer_exist">بدون مشتری</string>
@@ -674,5 +676,7 @@
   <string name="good_draft">حواله کالا</string>
   <string name="back_button">Back button</string>
   <string name="good_code">بارکد کالا</string>
+  <string name="send">ارسال</string>
+  <string name="final_submit">ثبت نهایی</string>
 
 </resources>

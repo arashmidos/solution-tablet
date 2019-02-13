@@ -1,7 +1,9 @@
 package com.parsroyal.solutiontablet.service;
 
-import com.parsroyal.solutiontablet.data.model.DetectGoodRequest;
 import com.parsroyal.solutiontablet.data.model.DetectGoodDetail;
+import com.parsroyal.solutiontablet.data.model.DetectGoodRequest;
+import com.parsroyal.solutiontablet.data.model.Packer;
+import com.parsroyal.solutiontablet.data.model.SelectOrderRequest;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,6 +17,10 @@ public interface StoreRestService {
 
   @POST("store/detectGoods")
   Call<List<DetectGoodDetail>> detectGood(@Body DetectGoodRequest goodRequest);
+
+  @POST("store/packer/selectOrder")
+  Call<Packer> selectOrder(@Body SelectOrderRequest request);
+
 //
 //  @POST("saleorders/free")
 //  Call<String> sendFreeOrder(@Body SaleOrderDocument saleDocument);
