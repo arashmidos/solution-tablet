@@ -45,7 +45,7 @@ public class StoreRestServiceImpl {
 
           }
         } else {
-          EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_DATA_ERROR));
+          EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
         }
       }
 

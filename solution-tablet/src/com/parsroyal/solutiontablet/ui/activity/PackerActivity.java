@@ -7,10 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.OnTabSelectedListener;
 import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +25,7 @@ import com.parsroyal.solutiontablet.data.event.PackerEvent;
 import com.parsroyal.solutiontablet.data.model.Packer;
 import com.parsroyal.solutiontablet.data.model.SelectOrderRequest;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
+import com.parsroyal.solutiontablet.ui.fragment.CustomBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.PackerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PackerInfoFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
@@ -58,6 +56,8 @@ public class PackerActivity extends AppCompatActivity {
   LinearLayout bottomBar;
   @BindView(R.id.search_img)
   ImageView searchImg;
+  @BindView(R.id.barcode_img)
+  ImageView barcodeImg;
   private CustomerDetailViewPagerAdapter viewPagerAdapter;
   private PackerDetailFragment detailFragment;
   private PackerInfoFragment infoFragment;
@@ -86,10 +86,12 @@ public class PackerActivity extends AppCompatActivity {
         if (tab.getPosition() == 0) {
           fabSelectOrder.setVisibility(View.GONE);
           searchImg.setVisibility(View.GONE);
+          barcodeImg.setVisibility(View.VISIBLE);
 
         } else {
           fabSelectOrder.setVisibility(View.VISIBLE);
           searchImg.setVisibility(View.VISIBLE);
+          barcodeImg.setVisibility(View.GONE);
         }
       }
 
@@ -144,6 +146,9 @@ public class PackerActivity extends AppCompatActivity {
     if (detailFragment != null) {
       detailFragment.update(packer);
     }
+    if (infoFragment != null) {
+      infoFragment.update(packer);
+    }
 //      recyclerView.hideShimmerAdapter();
   }
 
@@ -153,7 +158,7 @@ public class PackerActivity extends AppCompatActivity {
   }
 
   @OnClick({R.id.back_img, R.id.fab_select_order, R.id.register_btn, R.id.filter_lay,
-      R.id.filter2_lay})
+      R.id.filter2_lay, R.id.search_img, R.id.barcode_img})
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.back_img:
@@ -171,11 +176,17 @@ public class PackerActivity extends AppCompatActivity {
       case R.id.filter2_lay:
         Toast.makeText(this, "قبلی", Toast.LENGTH_SHORT).show();
         break;
+      case R.id.search_img:
+        Toast.makeText(this, "جستجو", Toast.LENGTH_SHORT).show();
+        break;
+      case R.id.barcode_img:
+        Toast.makeText(this, "بارکد", Toast.LENGTH_SHORT).show();
+        break;
     }
   }
 
   private void showChooserDialog() {
-    Builder dialogBuilder = new Builder(this);
+    /*Builder dialogBuilder = new Builder(this);
     LayoutInflater inflater1 = getLayoutInflater();
     View dialogView = inflater1.inflate(R.layout.bottom_sheet_order_chooser, null);
     LinearLayout orderLayout = dialogView.findViewById(R.id.order_layout);
@@ -190,10 +201,23 @@ public class PackerActivity extends AppCompatActivity {
     requestLayout.setOnClickListener(v -> {
       Toast.makeText(this, "درخواست", Toast.LENGTH_SHORT).show();
       alertDialog.dismiss();
-    });
+    });*/
+    CustomBottomSheet bookingBottomSheet = CustomBottomSheet.getInstance();
+    bookingBottomSheet.show(getSupportFragmentManager(), "custom_bottom_sheet");
   }
 
   @OnClick(R.id.search_img)
   public void onViewClicked() {
+  }
+
+  public void selectOrder() {
+    DialogUtil.showProgressDialog(this,R.string.message_please_wait);
+    new StoreRestServiceImpl().selectOrder(PackerActivity.this, new SelectOrderRequest());
+
+  }
+
+  public void selectRequest() {
+    Toast.makeText(this, "درخواست", Toast.LENGTH_SHORT).show();
+
   }
 }

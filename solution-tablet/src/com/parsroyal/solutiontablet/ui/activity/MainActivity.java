@@ -678,7 +678,7 @@ public abstract class MainActivity extends AppCompatActivity {
     if (fragmentId == FEATURE_FRAGMENT_ID) {
       setNavigationToolbarIcon(R.drawable.ic_menu);
 //      setDrawerEnable(true);
-      displayNotifbutton(false);//TODO:LATER
+      displayNotifbutton(false);//ODO:LATER
     } else {
       setNavigationToolbarIcon(R.drawable.ic_arrow_forward);
 //      setDrawerEnable(false);

@@ -678,5 +678,8 @@
   <string name="good_code">بارکد کالا</string>
   <string name="send">ارسال</string>
   <string name="final_submit">ثبت نهایی</string>
+  <string name="radif_title">ردیف:</string>
+  <string name="aghlam_title">اقلام:</string>
+  <string name="description">توضیحات:</string>
 
 </resources>

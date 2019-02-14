@@ -73,7 +73,6 @@ public class PackerDetailFragment extends BaseFragment {
   //set up recycler view
 
   private void setUpRecyclerView() {
-    adapter = new PackerGoodsAdapter(activity, this, packer);
     if (MultiScreenUtility.isTablet(activity)) {
       RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(activity, 2);
       recyclerView.setLayoutManager(rtlGridLayoutManager);
@@ -81,7 +80,7 @@ public class PackerDetailFragment extends BaseFragment {
       LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
       recyclerView.setLayoutManager(linearLayoutManager);
     }
-    recyclerView.setAdapter(adapter);
+//    recyclerView.setAdapter(adapter);
   }
 
 
@@ -92,7 +91,10 @@ public class PackerDetailFragment extends BaseFragment {
 
   public void update(Packer packer) {
     this.packer = packer;
+
     updateTopCounters();
+    adapter = new PackerGoodsAdapter(activity, this, packer.getGoodDetails());
+    recyclerView.setAdapter(adapter);
   }
 
   private void updateTopCounters() {

@@ -61,6 +61,7 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="16dp"
       android:gravity="center"
+      android:textSize="16sp"
       android:text="@string/send" />
     <android.support.design.widget.TextInputLayout
       android:id="@+id/good_barcode_lay"
@@ -117,7 +118,7 @@
         android:layout_marginRight="16dp"
         android:gravity="right"
         android:textColor="@color/primary_dark"
-        android:textSize="16sp"
+        android:textSize="18sp"
         tools:text="عنوان سر ستون" />
 
       <android.support.v7.widget.RecyclerView

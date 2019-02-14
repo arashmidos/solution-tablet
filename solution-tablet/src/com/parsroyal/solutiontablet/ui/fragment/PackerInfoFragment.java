@@ -5,16 +5,35 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.Authority;
+import com.parsroyal.solutiontablet.data.model.Packer;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.activity.PackerActivity;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 
 public class PackerInfoFragment extends BaseFragment {
 
+  @BindView(R.id.customer_name_tv)
+  TextView customerNameTv;
+  @BindView(R.id.date_tv)
+  TextView dateTv;
+  @BindView(R.id.order_code_tv)
+  TextView orderCodeTv;
+  @BindView(R.id.radif_value_tv)
+  TextView radifValueTv;
+  @BindView(R.id.aghlam_value_tv)
+  TextView aghlamValueTv;
+  @BindView(R.id.description_value)
+  TextView descriptionValue;
   private PackerActivity activity;
+  private Packer packer;
+  private Unbinder unbinder;
 
   public PackerInfoFragment() {
     // Required empty public constructor
@@ -30,7 +49,7 @@ public class PackerInfoFragment extends BaseFragment {
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_packer_info, container, false);
-    ButterKnife.bind(this, view);
+    unbinder = ButterKnife.bind(this, view);
     activity = (PackerActivity) getActivity();
 
 //    checkPermissions();
@@ -42,32 +61,24 @@ public class PackerInfoFragment extends BaseFragment {
     }
   }
 
-  //set up recycler view
-//  private void setUpRecyclerView() {
-//    adapter = new NewCustomerAdapter(activity, isSend, getCustomersList());
-//    if (MultiScreenUtility.isTablet(activity)) {
-//      RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(activity, 2);
-//      recyclerView.setLayoutManager(rtlGridLayoutManager);
-//    } else {
-//      LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-//      recyclerView.setLayoutManager(linearLayoutManager);
-//    }
-//    recyclerView.setAdapter(adapter);
-//    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//      @Override
-//      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//        super.onScrolled(recyclerView, dx, dy);
-//        if (dy > 0) {
-//          fabAddCustomer.setVisibility(View.GONE);
-//        } else {
-//          fabAddCustomer.setVisibility(View.VISIBLE);
-//        }
-//      }
-//    });
-//  }
-
   @Override
   public int getFragmentId() {
     return MainActivity.PACKER_INFO_FRAGMENT_ID;
+  }
+
+  public void update(Packer packer) {
+    this.packer = packer;
+    customerNameTv.setText(packer.getNameCST());
+    orderCodeTv.setText(NumberUtil.digitsToPersian(packer.getCustomerCodeCST()));
+    dateTv.setText(NumberUtil.digitsToPersian(packer.getOrderDate()));
+    radifValueTv.setText(NumberUtil.digitsToPersian(packer.getRadif()));
+    aghlamValueTv.setText(NumberUtil.digitsToPersian(packer.getGhalam()));
+    descriptionValue.setText(NumberUtil.digitsToPersian(packer.getOtherDesc()));
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
   }
 }

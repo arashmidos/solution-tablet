@@ -29,6 +29,7 @@ import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.model.DetectGoodDetail;
 import com.parsroyal.solutiontablet.ui.adapter.DetectGoodDetailAdapter;
+import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NumberUtil;
@@ -94,6 +95,10 @@ public class DetectGoodActivity extends AppCompatActivity {
 
     //TODO:REMOVE
     goodBarcodeEdt.setText(NumberUtil.digitsToPersian("7610939002407"));
+
+    if (!CameraManager.checkPermissions(this)) {
+      CameraManager.requestPermissions(this);
+    }
   }
 
   private void setUpRecyclerView() {
@@ -168,7 +173,7 @@ public class DetectGoodActivity extends AppCompatActivity {
   }
 
   private void setData(List<DetectGoodDetail> detailList) {
-    DetectGoodDetail header = detailList.remove(0);
+    DetectGoodDetail header = detailList.remove(1);
     if (Empty.isNotEmpty(header.getColumn1())) {
       title.setText(NumberUtil.digitsToPersian(header.getColumn1()));
     }

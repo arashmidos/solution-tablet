@@ -31,7 +31,7 @@
           android:layout_marginLeft="16dp"
           android:layout_marginRight="16dp"
           android:gravity="end|center"
-          android:text="حسن آقا"
+          tools:text="حسن آقا"
           android:textColor="@color/black_85"
           android:textSize="14sp" />
 
@@ -98,7 +98,7 @@
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_marginEnd="8dp"
-          android:text="۹۷/۱۲/۱۲"
+          tools:text="۹۷/۱۲/۱۲"
           android:layout_toEndOf="@id/divider"
           android:layout_toStartOf="@id/date_title_tv"
           android:gravity="center|start"
@@ -124,7 +124,7 @@
           android:layout_height="match_parent"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="8dp"
-          android:text="۱۲۳۴"
+          tools:text="۱۲۳۴"
           android:layout_alignParentStart="true"
           android:layout_toStartOf="@id/order_code_title_tv"
           android:gravity="center|start"
@@ -147,10 +147,9 @@
           android:layout_marginEnd="16dp"
           android:layout_alignParentEnd="true"
           android:gravity="center"
-          android:text="ردیف:"
+          android:text="@string/radif_title"
           android:textColor="@color/login_gray"
-          android:textSize="12sp"
-          tools:text="تاریخ سفارش: " />
+          android:textSize="12sp"/>
 
         <View
           android:id="@+id/divider2"
@@ -171,7 +170,7 @@
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_marginEnd="8dp"
-          android:text="۴"
+          tools:text="۴"
           android:layout_toEndOf="@id/divider2"
           android:layout_toStartOf="@id/radif_tv"
           android:gravity="center|start"
@@ -185,10 +184,9 @@
           android:layout_height="match_parent"
           android:layout_toStartOf="@id/divider2"
           android:gravity="center"
-          android:text="اقلام:"
+          android:text="@string/aghlam_title"
           android:textColor="@color/login_gray"
-          android:textSize="12sp"
-          tools:text="کد سفارش :" />
+          android:textSize="12sp" />
 
         <TextView
           android:id="@+id/aghlam_value_tv"
@@ -196,7 +194,7 @@
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_marginStart="16dp"
-          android:text="۱۵"
+          tools:text="۱۵"
           android:layout_marginEnd="8dp"
           android:layout_alignParentStart="true"
           android:layout_toStartOf="@id/aghlam_title_tv"
@@ -218,10 +216,20 @@
         android:layout_marginEnd="16dp"
         android:gravity="right"
         android:layout_marginTop="16dp"
-        android:text="توضیحات:"
+        android:text="@string/description"
         android:textColor="@color/login_gray"
-        android:textSize="12sp"
-        tools:text="توضیحات سفارش: " />
+        android:textSize="12sp" />
+      <TextView
+        android:id="@+id/description_value"
+        style="@style/IranSans.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="right"
+        tools:text="@string/description"
+        android:textColor="@color/black_85"
+        android:textSize="12sp" />
 
     </LinearLayout>
   </ScrollView>
