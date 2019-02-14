@@ -383,7 +383,7 @@ public class DateUtil {
       return formatter.parse(date);
     } catch (Exception e) {
       e.printStackTrace();
-      return null;//TODO:
+      return null;
     }
   }
 

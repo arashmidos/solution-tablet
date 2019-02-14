@@ -401,7 +401,7 @@ public class VisitDetailFragment extends BaseFragment {
             .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
                 Constants.CUSTOMER_PICTURE_DIRECTORY_NAME, fileName));
 
-        if (!s.equals("")) {//TODO:NOT working
+        if (!s.equals("")) {
           File fdelete = new File(fileUri.getPath());
           if (fdelete.exists()) {
             fdelete.delete();
