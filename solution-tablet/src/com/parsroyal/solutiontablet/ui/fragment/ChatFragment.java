@@ -1,5 +1,8 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,23 +13,29 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.MessageEvent;
+import com.parsroyal.solutiontablet.data.event.UpdateBadgerEvent;
 import com.parsroyal.solutiontablet.data.model.Message;
 import com.parsroyal.solutiontablet.service.impl.MessageServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.ChatAdapter;
+import com.parsroyal.solutiontablet.util.BadgerHelper;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+
 import java.util.List;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -59,11 +68,27 @@ public class ChatFragment extends BaseFragment {
     View view = inflater.inflate(R.layout.fragment_chat, null);
     unbinder = ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
+    BadgerHelper.removeBadge(mainActivity);
+    dismissNotif();
     mainActivity.changeTitle(getString(R.string.messages));
     messageService = new MessageServiceImpl(mainActivity);
     messageService.getAllMessages();
     DialogUtil.showProgressDialog(getActivity(), getString(R.string.message_please_wait));
     return view;
+  }
+
+  private void dismissNotif() {
+    NotificationManager mNotificationManager =
+        (NotificationManager) mainActivity.getSystemService(Context.NOTIFICATION_SERVICE);
+    if (mNotificationManager != null) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        String id = "pars";
+        mNotificationManager.deleteNotificationChannel(id);
+      } else {
+        mNotificationManager.cancel(1);
+
+      }
+    }
   }
 
   @Override

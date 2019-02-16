@@ -44,7 +44,7 @@
           android:maxLines="1"
           android:text="@string/features_list"
           android:textColor="@color/white"
-          android:textSize="16sp" />
+          android:textSize="16sp"/>
 
         <ImageView
           android:id="@+id/navigation_img"
@@ -53,12 +53,13 @@
           android:layout_gravity="end|center"
           android:paddingLeft="16dp"
           android:paddingRight="16dp"
-          tools:src="@drawable/ic_arrow_forward" />
+          tools:src="@drawable/ic_arrow_forward"/>
 
         <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_gravity="start|center">
+
           <ImageView
             android:id="@+id/search_img"
             android:layout_width="wrap_content"
@@ -67,7 +68,8 @@
             android:paddingRight="16dp"
             android:src="@drawable/ic_search"
             android:tint="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"/>
+
           <ImageView
             android:id="@+id/filter_img"
             android:layout_width="wrap_content"
@@ -76,7 +78,7 @@
             android:paddingRight="16dp"
             android:src="@drawable/ic_filter_list_black_18dp"
             android:tint="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"/>
         </LinearLayout>
 
         <ImageView
@@ -87,7 +89,8 @@
           android:paddingLeft="16dp"
           android:paddingRight="16dp"
           android:src="@drawable/ic_save_24_dp"
-          android:visibility="gone" />
+          android:visibility="gone"/>
+
         <ImageView
           android:id="@+id/notif_img"
           android:layout_width="wrap_content"
@@ -95,7 +98,23 @@
           android:layout_margin="16dp"
           android:layout_gravity="start|center"
           android:src="@drawable/ic_message_24_dp"
-          android:visibility="gone" />
+          android:visibility="gone"/>
+
+        <TextView
+          android:id="@+id/badger_btn"
+          style="@style/IranSans.Medium"
+          android:layout_width="21dp"
+          android:layout_height="21dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginStart="32dp"
+          android:layout_marginLeft="32dp"
+          android:paddingTop="2dp"
+          android:background="@drawable/badger_background"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textSize="12sp"
+          android:visibility="gone"/>
+
         <TextView
           android:id="@+id/chronometer"
           android:layout_width="wrap_content"
@@ -109,7 +128,7 @@
           android:textSize="18sp"
           android:visibility="gone"
           tools:text="10:20"
-          tools:visibility="visible" />
+          tools:visibility="visible"/>
       </FrameLayout>
     </android.support.design.widget.AppBarLayout>
 
@@ -118,7 +137,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      tools:context="com.parsroyal.solutiontablet.ui.activity.MainActivity" />
+      tools:context="com.parsroyal.solutiontablet.ui.activity.MainActivity"/>
   </android.support.design.widget.CoordinatorLayout>
 
   <fragment
@@ -127,6 +146,6 @@
     android:layout_height="match_parent"
     android:layout_gravity="end"
     android:name="com.parsroyal.solutiontablet.ui.fragment.NavigationDrawerFragment"
-    app:layout="@layout/fragment_navigation_drawer" />
+    app:layout="@layout/fragment_navigation_drawer"/>
 </android.support.v4.widget.DrawerLayout>
 

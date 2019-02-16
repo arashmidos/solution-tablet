@@ -25,12 +25,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import co.ronash.pushe.Pushe;
+
 import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
@@ -87,10 +90,14 @@ import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.Updater;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+
 import java.util.List;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
 import timber.log.Timber;
 
 /**
@@ -181,6 +188,8 @@ public abstract class MainActivity extends AppCompatActivity {
   TextView detailTv;
   @BindView(R.id.chronometer)
   TextView chronometer;
+  @BindView(R.id.badger_btn)
+  TextView badgerTv;
 
   private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver() {
     @Override
@@ -210,6 +219,18 @@ public abstract class MainActivity extends AppCompatActivity {
     }
   };
   private PositionService positionService;
+
+  public void setBadgerVisibility(int visibility) {
+    if (visibility == View.VISIBLE) {
+      badgerTv.setText(NumberUtil.digitsToPersian(String.valueOf(PreferenceHelper.getBadger())));
+      if (badgerTv.getVisibility() != View.VISIBLE) {
+        badgerTv.setVisibility(View.VISIBLE);
+      }
+    } else {
+      badgerTv.setVisibility(View.GONE);
+    }
+  }
+
   protected BroadcastReceiver gpsStatusReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -937,6 +958,9 @@ public abstract class MainActivity extends AppCompatActivity {
 
   private void displayNotifbutton(boolean show) {
     notifImg.setVisibility(show ? View.VISIBLE : View.GONE);
+    if (!show) {
+      badgerTv.setVisibility(View.GONE);
+    }
   }
 
   protected abstract void setDrawerEnable(boolean isLock);

@@ -5,21 +5,30 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.ActionEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.event.UpdateBadgerEvent;
 import com.parsroyal.solutiontablet.data.model.FeatureList;
 import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.FeaturesAdapter;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
+
+import java.lang.ref.PhantomReference;
 import java.util.List;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
 public class FeaturesFragment extends BaseFragment {
@@ -52,6 +61,14 @@ public class FeaturesFragment extends BaseFragment {
     return view;
   }
 
+  private void badgerBtnVisibility() {
+    if (PreferenceHelper.getBadger() == 0) {
+      mainActivity.setBadgerVisibility(View.GONE);
+    } else {
+      mainActivity.setBadgerVisibility(View.VISIBLE);
+    }
+  }
+
   //set up recycler view
   private void setUpRecyclerView() {
     List<FeatureList> featureList = FeatureList.getFeatureList(getActivity());
@@ -81,6 +98,7 @@ public class FeaturesFragment extends BaseFragment {
     super.onResume();
     EventBus.getDefault().register(this);
     mainActivity.showMenu();
+    badgerBtnVisibility();
   }
 
   @Override
@@ -89,12 +107,17 @@ public class FeaturesFragment extends BaseFragment {
     EventBus.getDefault().unregister(this);
   }
 
-  @Subscribe
-  public void getMessage(ActionEvent event) {
-    if (event.getStatusCode() == StatusCodes.ACTION_REFRESH_DATA) {
-      List<FeatureList> featureList = FeatureList.getFeatureList(getActivity());
-      featureList.get(0).setBadger(getVisitLineSize());
-      adapter.update(featureList);
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void getMessage(Event event) {
+    if (event instanceof ActionEvent) {
+      if (event.getStatusCode() == StatusCodes.ACTION_REFRESH_DATA) {
+        List<FeatureList> featureList = FeatureList.getFeatureList(getActivity());
+        featureList.get(0).setBadger(getVisitLineSize());
+        adapter.update(featureList);
+      }
+    } else if (event instanceof UpdateBadgerEvent) {
+      badgerBtnVisibility();
     }
   }
 }
