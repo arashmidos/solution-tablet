@@ -28,8 +28,6 @@ public interface CustomerService extends BaseService {
 
   List<CustomerDto> getAllNewCustomersForSend();
 
-  List<CustomerDto> getAllNewUpdatedCustomersForSend();
-
   List<CustomerLocationDto> getAllUpdatedCustomerLocation();
 
   CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId);

@@ -88,7 +88,6 @@ public class ChatFragment extends BaseFragment {
         mNotificationManager.deleteNotificationChannel(id);
       } else {
         mNotificationManager.cancel(1);
-
       }
     }
   }

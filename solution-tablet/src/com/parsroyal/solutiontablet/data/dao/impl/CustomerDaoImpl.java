@@ -188,10 +188,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-    String selection =
-        " " + Customer.COL_STATUS + " = ? " + " AND (" + Customer.COL_BACKEND_ID + " is null or "
-            + Customer.COL_BACKEND_ID + " = 0)";
-    String[] args = {String.valueOf(CustomerStatus.NEW.getId())};
+    String selection = " " + Customer.COL_STATUS + " = ? " + " OR " + Customer.COL_STATUS + " = ? ";
+    String[] args = {String.valueOf(CustomerStatus.NEW.getId()),
+        String.valueOf(CustomerStatus.UPDATED.getId())};
 
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
     List<CustomerDto> list = new ArrayList<>();
@@ -201,36 +200,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     }
     cursor.close();
 
-    return list;
-  }
-
-  @Override
-  public List<CustomerDto> retrieveAllNewUpdatedCustomersForSend() {
-    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
-    SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    //new
-    String selection =
-        " " + Customer.COL_STATUS + " = ? " + " AND (" + Customer.COL_BACKEND_ID + " is null or "
-            + Customer.COL_BACKEND_ID + " = 0)";
-    String[] args = {String.valueOf(CustomerStatus.NEW.getId())};
-
-    Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, null);
-    List<CustomerDto> list = new ArrayList<>();
-
-    while (cursor.moveToNext()) {
-      list.add(createCustomerDtoFromCursor(cursor));
-    }
-    cursor.close();
-    //update
-    selection =
-        " " + Customer.COL_STATUS + " = ? ";
-    String[] argsUpdate = {String.valueOf(CustomerStatus.UPDATED.getId())};
-
-    cursor = db.query(getTableName(), getProjection(), selection, argsUpdate, null, null, null);
-
-    while (cursor.moveToNext()) {
-      list.add(createCustomerDtoFromCursor(cursor));
-    }
     return list;
   }
 
@@ -252,7 +221,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         Customer.COL_Y_LOCATION
     };
     String selection = Customer.COL_STATUS + " = ?";
-    String[] args = {String.valueOf(CustomerStatus.UPDATED.getId())};
+    String[] args = {String.valueOf(CustomerStatus.UPDATED_LOCATION.getId())};
     Cursor cursor = db.query(getTableName(), projection, selection, args, null, null, null);
     List<CustomerLocationDto> locationDtoList = new ArrayList<>();
     while (cursor.moveToNext()) {
@@ -274,7 +243,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         Customer.COL_Y_LOCATION
     };
     String selection = Customer.COL_STATUS + " = ? AND " + Customer.COL_BACKEND_ID + " = ? ";
-    String[] args = {String.valueOf(CustomerStatus.UPDATED.getId()),
+    String[] args = {String.valueOf(CustomerStatus.UPDATED_LOCATION.getId()),
         String.valueOf(customerBackendId)};
     Cursor cursor = db.query(getTableName(), projection, selection, args, null, null, null);
     CustomerLocationDto locationDto = null;
@@ -608,20 +577,6 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     }
     cursor.close();
     return entity;
-  }
-
-  @Override
-  public void updateAllSentCustomer() {
-    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
-    SQLiteDatabase db = databaseHelper.getWritableDatabase();
-    db.beginTransaction();
-    String whereClause = Customer.COL_STATUS + " = ?";
-    String[] args = {String.valueOf(CustomerStatus.UPDATED.getId())};
-    ContentValues contentValues = new ContentValues();
-    contentValues.put(Customer.COL_STATUS, CustomerStatus.SENT.getId());
-    db.update(getTableName(), contentValues, whereClause, args);
-    db.setTransactionSuccessful();
-    db.endTransaction();
   }
 
   @Override

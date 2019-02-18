@@ -297,7 +297,7 @@ public class DataTransferDialogFragment extends DialogFragment {
         t.start();
         break;
       case TransferSendOrder.ADDRESS:
-        Thread t2 = new Thread(() -> dataTransferService.sendAllUpdatedCustomers());
+        Thread t2 = new Thread(() -> dataTransferService.sendAllUpdatedCustomersLocation());
         t2.start();
         break;
       case TransferSendOrder.POSITION:

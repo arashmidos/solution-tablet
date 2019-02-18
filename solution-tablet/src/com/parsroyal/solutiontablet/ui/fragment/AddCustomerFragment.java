@@ -57,9 +57,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import timber.log.Timber;
 
 /**
@@ -143,6 +143,7 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     public void possibleResultPoints(List<ResultPoint> resultPoints) {
     }
   };
+  private boolean autoStart;
 
   public AddCustomerFragment() {
     // Required empty public constructor
@@ -218,6 +219,10 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     setData();
     setUpSpinners();
     setupRecycler();
+    if (!CameraManager.checkPermissions(mainActivity)) {
+      autoStart = false;
+      CameraManager.requestPermissions(mainActivity);
+    }
     initScanner();
     if (pageStatus != null && pageStatus == PageStatus.VIEW) {
       disableItems();
@@ -594,10 +599,11 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
         Bitmap bitmap = ImageUtil.decodeSampledBitmapFromUri(mainActivity, fileUri);
         bitmap = ImageUtil.getScaledBitmap(mainActivity, bitmap);
 
-        String s = ImageUtil.saveTempImage(bitmap, MediaUtil
-            .getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
-                Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-                "IMG_N_" + (new Date().getTime()) % 1000));
+        String fileName = UUID.randomUUID().toString();
+
+        String s = ImageUtil.saveTempImage(bitmap,
+            MediaUtil.getOutputMediaFile(MediaUtil.MEDIA_TYPE_IMAGE,
+                Constants.CUSTOMER_PICTURE_DIRECTORY_NAME, fileName));
 
         if (!s.equals("")) {
           File fdelete = new File(fileUri.getPath());
@@ -625,15 +631,19 @@ public class AddCustomerFragment extends BaseFragment implements View.OnFocusCha
     if (!CameraManager.checkPermissions(mainActivity)) {
       CameraManager.requestPermissions(mainActivity);
     } else {
+      autoStart = true;
       startCameraActivity();
     }
   }
 
   public void startCameraActivity() {
-    String postfix = String.valueOf((new Date().getTime()) % 1000);
+    if (!autoStart) {
+      return;
+    }
+    String fileName = UUID.randomUUID().toString();
+
     fileUri = MediaUtil.getOutputMediaFileUri(mainActivity, MediaUtil.MEDIA_TYPE_IMAGE,
-        Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-        "IMG_N_" + postfix); // create a file to save the image
+        Constants.CUSTOMER_PICTURE_DIRECTORY_NAME, fileName); // create a file to save the image
     CameraManager.startCameraActivity(mainActivity, fileUri, this);
   }
 }

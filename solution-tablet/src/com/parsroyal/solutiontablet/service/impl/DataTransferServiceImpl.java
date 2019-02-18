@@ -201,7 +201,7 @@ public class DataTransferServiceImpl implements DataTransferService {
   }
 
   public void sendAllNewCustomers() {
-    List<CustomerDto> allNewCustomers = customerService.getAllNewUpdatedCustomersForSend();
+    List<CustomerDto> allNewCustomers = customerService.getAllNewCustomersForSend();
     if (Empty.isEmpty(allNewCustomers)) {
       EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
           R.string.message_found_no_new_customer_for_send), StatusCodes.NO_DATA_ERROR));
@@ -239,9 +239,9 @@ public class DataTransferServiceImpl implements DataTransferService {
         dataTransferBiz.getSuccessfulMessage(), StatusCodes.SUCCESS));
   }
 
-  public void sendAllUpdatedCustomers() {
-    List<CustomerLocationDto> allUpdatedCustomerLocation = customerService
-        .getAllUpdatedCustomerLocation();
+  public void sendAllUpdatedCustomersLocation() {
+    List<CustomerLocationDto> allUpdatedCustomerLocation =
+        customerService.getAllUpdatedCustomerLocation();
     if (Empty.isEmpty(allUpdatedCustomerLocation)) {
       EventBus.getDefault().post(new DataTransferSuccessEvent(
           context.getString(R.string.message_found_no_new_customer_for_send),

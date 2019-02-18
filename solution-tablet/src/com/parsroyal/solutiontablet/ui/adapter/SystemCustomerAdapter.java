@@ -1,6 +1,5 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -48,7 +47,7 @@ public class SystemCustomerAdapter extends Adapter<ViewHolder> {
   private LayoutInflater inflater;
   private Context context;
   private List<CustomerListModel> customers;
-  private Activity mainActivity;
+  private MainActivity mainActivity;
 
   public SystemCustomerAdapter(Context context, List<CustomerListModel> customers) {
     this.context = context;
@@ -147,10 +146,9 @@ public class SystemCustomerAdapter extends Adapter<ViewHolder> {
       Bundle bundle = new Bundle();
       bundle.putSerializable(Constants.PAGE_STATUS, PageStatus.EDIT);
       bundle.putSerializable(Constants.CUSTOMER_ID, customer.getPrimaryKey());
-      if (mainActivity instanceof MainActivity) {
-        ((MainActivity) mainActivity)
-            .changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, bundle, true);
-      }
+
+      mainActivity.changeFragment(MainActivity.NEW_CUSTOMER_DETAIL_FRAGMENT_ID, bundle, true);
+
     }
 
     private int dpToPx(int dp, DisplayMetrics displayMetrics) {

@@ -203,7 +203,7 @@ public class SaveLocationFragment extends BaseFragment implements
       //Save customer location
       customer.setxLocation(currentLatlng.latitude);
       customer.setyLocation(currentLatlng.longitude);
-      customer.setStatus(CustomerStatus.UPDATED.getId());
+      customer.setStatus(CustomerStatus.UPDATED_LOCATION.getId());
       customerService.saveCustomer(customer);
 
       customerLat = currentLatlng.latitude;
@@ -217,7 +217,7 @@ public class SaveLocationFragment extends BaseFragment implements
           .position(temp).title(getString(R.string.location_set)).snippet("")
           .icon(BitmapDescriptorFactory
               .fromResource(R.drawable.ic_action_flag)));
-      ToastUtil.toastMessage(mainActivity,"ثبت موقعیت با موفقیت انجام شد!");
+      ToastUtil.toastMessage(mainActivity, R.string.message_location_submitted_successfully);
       m.setDraggable(true);
       markerLayout.setVisibility(View.GONE);
     });
