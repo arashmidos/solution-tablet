@@ -91,7 +91,7 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
         Goods.COL_CREATE_DATE_TIME,
         Goods.COL_UPDATE_DATE_TIME,
         Goods.COL_SUPPLIER,
-        Goods.COL_SUPPLIER
+        Goods.COL_ASSORTMENT
     };
   }
 

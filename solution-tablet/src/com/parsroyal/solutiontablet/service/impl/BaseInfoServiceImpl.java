@@ -64,6 +64,16 @@ public class BaseInfoServiceImpl implements BaseInfoService {
   }
 
   @Override
+  public List<LabelValue> getAllSupplier() {
+    return getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.SUPPLIER.getId());
+  }
+
+  @Override
+  public List<LabelValue> getAllAssortment() {
+    return getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.ASSORTMENT.getId());
+  }
+
+  @Override
   public LabelValue getBaseInfoByBackendId(Long typeId, Long backendId) {
     List<LabelValue> baseInfoList = baseInfoDao
         .getAllBaseInfosLabelValuesByTypeId(typeId, backendId);
@@ -111,7 +121,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
   @Override
   public List<BaseInfo> retrieveByTypeAndCode(Long type, String code) {
     String selection = String.format("%s = ? AND %s = ?", BaseInfo.COL_TYPE, BaseInfo.COL_CODE);
-    String[] args = {String.valueOf(type),String.valueOf(code)};
+    String[] args = {String.valueOf(type), String.valueOf(code)};
     return baseInfoDao.retrieveAll(selection, args, null, null, null, "1");
   }
 
