@@ -7,20 +7,14 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-
 import co.ronash.pushe.PusheListenerService;
-
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.data.event.UpdateBadgerEvent;
 import com.parsroyal.solutiontablet.data.model.PushNotification;
 import com.parsroyal.solutiontablet.ui.activity.SplashActivity;
 import com.parsroyal.solutiontablet.util.BadgerHelper;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.PushUtility;
-
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
-
 import timber.log.Timber;
 
 public class MyPushListener extends PusheListenerService {

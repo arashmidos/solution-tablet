@@ -14,6 +14,7 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.Message;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.ui.adapter.ChatAdapter.ViewHolder;
+import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
@@ -30,8 +31,7 @@ public class ChatAdapter extends Adapter<ViewHolder> {
   private List<Message> messages;
   private LayoutInflater inflater;
 
-  public ChatAdapter(Context context,
-      List<Message> messages) {
+  public ChatAdapter(Context context, List<Message> messages) {
     this.context = context;
     this.messages = messages;
     this.inflater = LayoutInflater.from(context);
@@ -95,7 +95,8 @@ public class ChatAdapter extends Adapter<ViewHolder> {
 
     public void setData(int position) {
       message = messages.get(position);
-      messageTv.setText(message.getPushData());
+      messageTv
+          .setText(NumberUtil.digitsToPersian(CharacterFixUtil.fixString(message.getPushData())));
       dateTv.setText(NumberUtil.digitsToPersian(DateUtil.getTime(message.getPushDate(), context)));
       if (position != 0) {
         if (DateUtil.isSameDay(message.getPushDate(), messages.get(position - 1).getPushDate())) {

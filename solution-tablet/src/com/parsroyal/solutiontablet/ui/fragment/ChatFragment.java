@@ -32,12 +32,14 @@ import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.ChatAdapter;
 import com.parsroyal.solutiontablet.util.BadgerHelper;
 import com.parsroyal.solutiontablet.util.DialogUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 
 import java.util.List;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by Arash on 8/4/2015.
@@ -63,7 +65,7 @@ public class ChatFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_chat, null);
     unbinder = ButterKnife.bind(this, view);
@@ -163,7 +165,8 @@ public class ChatFragment extends BaseFragment {
     if (!TextUtils.isEmpty(messageEdt.getText().toString().trim())) {
       sendImg.setVisibility(View.GONE);
       loadingProgress.setVisibility(View.VISIBLE);
-      messageService.sendMessages(messageEdt.getText().toString().trim());
+      String message = NumberUtil.digitsToEnglish(messageEdt.getText().toString().trim());
+      messageService.sendMessages(message);
     } else {
       ToastUtil.toastError(mainActivity, getString(R.string.message_is_required));
     }
