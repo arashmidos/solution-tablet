@@ -25,9 +25,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.biz.impl.GiftDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.InvoicedOrdersDataTransfer;
 import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
+import com.parsroyal.solutiontablet.constants.Authority;
 import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -83,7 +85,6 @@ import timber.log.Timber;
  */
 public class OrderInfoFragment extends BaseFragment {
 
-  private static final String TAG = OrderInfoFragment.class.getName();
   private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 56;
 
   @BindView(R.id.customer_name_tv)
@@ -204,10 +205,17 @@ public class OrderInfoFragment extends BaseFragment {
       isComplimentary = args.getBoolean(Constants.COMPLIMENTARY, false);
 
       setData();
-
+      setPermissions();
       return view;
     } else {
       return inflater.inflate(R.layout.empty_view, container, false);
+    }
+  }
+
+  private void setPermissions() {
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.REQUEST_GIFT)) {
+      orderGiftLayout.setVisibility(View.GONE);
+
     }
   }
 
@@ -336,6 +344,9 @@ public class OrderInfoFragment extends BaseFragment {
         break;
       case R.id.order_gift_layout:
       case R.id.register_gift_tv:
+        if (!SolutionTabletApplication.getInstance().hasAccess(Authority.REQUEST_GIFT)) {
+          return;
+        }
         if (giftRequestSent) {
           registerGiftTv.setText(R.string.getting_info);
           new GiftDataTransferBizImpl(mainActivity).exchangeData(orderBackendId,
