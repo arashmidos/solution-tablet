@@ -10,7 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -174,6 +173,8 @@ public class CustomerInfoDialogFragment extends DialogFragment {
       phoneVisitButton.setEnabled(false);
       phoneVisitButton.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
     }
+
+    phoneVisitButton.setVisibility(PreferenceHelper.isDistributor() ? View.GONE : View.VISIBLE);
   }
 
   private void initServices() {
@@ -269,9 +270,11 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     if (model.isVisited()) {
       if (model.isPhoneVisit()) {
         visitTodayImg.setImageResource(R.drawable.ic_call);
-        visitTodayImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
+        visitTodayImg
+            .setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
       } else {
-        visitTodayImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
+        visitTodayImg
+            .setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
       }
     } else {
       visitTodayImg.setColorFilter(ContextCompat.getColor(mainActivity, R.color.login_gray));
@@ -301,7 +304,6 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     }
   }
 
-
   @Override
   public void onDestroyView() {
     //workaround for this issue: https://code.google.com/p/android/issues/detail?id=17423 (unable to retain instance after configuration change)
@@ -311,7 +313,8 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     super.onDestroyView();
   }
 
-  @OnClick({R.id.close_btn, R.id.customer_report_tv, R.id.customer_report_layout, R.id.no_visit_btn,
+  @OnClick({R.id.close_btn, R.id.customer_report_tv, R.id.customer_report_layout,
+      R.id.no_visit_btn,
       R.id.enter_btn, R.id.phone_visit_btn, R.id.call_layout, R.id.phone_layout,
       R.id.location_layout, R.id.edit_customer_tv})
   public void onViewClicked(View view) {
@@ -357,7 +360,8 @@ public class CustomerInfoDialogFragment extends DialogFragment {
             && customer.getxLocation() != 0.0) {
           if ("google".equals(PreferenceHelper.getDefaultNavigator())) {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(
-                "google.navigation:q=" + customer.getxLocation() + "," + customer.getyLocation()));
+                "google.navigation:q=" + customer.getxLocation() + "," + customer
+                    .getyLocation()));
             i.setPackage("com.google.android.apps.maps");
             if (i.resolveActivity(getActivity().getPackageManager()) != null) {
               startActivity(i);
@@ -383,7 +387,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
 
   private void showDialog(String phoneNumber) {
     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mainActivity);
-    LayoutInflater inflater1 = ((AppCompatActivity) mainActivity).getLayoutInflater();
+    LayoutInflater inflater1 = mainActivity.getLayoutInflater();
     View dialogView = inflater1.inflate(R.layout.bottom_sheet_customer_contact, null);
     LinearLayout callLay = dialogView.findViewById(R.id.call_layout);
     LinearLayout smsLay = dialogView.findViewById(R.id.sms_layout);
@@ -497,7 +501,6 @@ public class CustomerInfoDialogFragment extends DialogFragment {
       return 0;
     }
   }
-
 
   protected void doEnter(boolean isPhoneVisit) {
     try {
