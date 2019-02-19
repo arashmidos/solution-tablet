@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+  <RadioButton
+    android:id="@+id/item_radio"
+    style="@style/IranSans"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:button="@null"
+    android:drawablePadding="16dp"
+    android:drawableRight="@drawable/customer_radio_blue"
+    android:gravity="right|center"
+    android:textColor="@color/black_de"
+    android:textSize="14sp"/>
+</android.support.constraint.ConstraintLayout>
