@@ -81,6 +81,7 @@ import com.parsroyal.solutiontablet.ui.fragment.VisitLineFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CustomerSearchDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.DataTransferDialogFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
+import com.parsroyal.solutiontablet.util.BarcodeUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
@@ -265,6 +266,7 @@ public abstract class MainActivity extends AppCompatActivity {
     }
     loadPermission();
     updatePushe();
+
   }
 
   private void updatePushe() {

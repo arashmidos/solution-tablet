@@ -132,7 +132,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="24dp"
         android:background="@color/gray_e0" />
 
       <com.journeyapps.barcodescanner.DecoratedBarcodeView
@@ -140,8 +139,7 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+
         app:zxing_preview_scaling_strategy="centerCrop"
         app:zxing_use_texture_view="false" />
 
