@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.event.GoodListEvent;
 import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import com.parsroyal.solutiontablet.data.model.LabelValue;
@@ -99,8 +100,7 @@ public class GoodsFilterDialogFragment extends DialogFragment {
       setStyle(DialogFragment.STYLE_NORMAL, R.style.myDialog);
       return R.layout.fragment_dialog_goods_filter;
     }
-    //TODO:change bottom sheet ui
-    return R.layout.fragment_add_order_bottom_sheet;
+    return R.layout.fragment_dialog_goods_filter_bottom_sheet;
   }
 
   @OnClick({R.id.close_iv, R.id.do_filter_tv, R.id.remove_assortment_tv, R.id.remove_supplier_tv})
@@ -149,8 +149,11 @@ public class GoodsFilterDialogFragment extends DialogFragment {
     if (selectedSupplierLV != null) {
       goodsSo.setSupplier(String.valueOf(selectedSupplierLV.getValue()));
     }
+    if (selectedAssortmentLV == null && selectedSupplierLV == null) {
+      goodsSo.setConstraint("");
+    }
     GoodsServiceImpl goodsService = new GoodsServiceImpl(mainActivity);
-    List<GoodsListModel> goodsListModels = goodsService.searchForGoods(goodsSo);
+    List<Goods> goodsListModels = goodsService.searchForGoodsList(goodsSo);
     EventBus.getDefault().post(new GoodListEvent(goodsListModels));
     dismiss();
   }

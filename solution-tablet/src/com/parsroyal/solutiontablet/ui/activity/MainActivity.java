@@ -717,7 +717,7 @@ public abstract class MainActivity extends AppCompatActivity {
             .findFragmentByTag(OrderFragment.class.getSimpleName());
         if (visitLine2 != null && visitLine2.isVisible()) {
           ((VisitLineFragment) visitLine2).showFilter();
-        }else if (orderFragment2 != null && orderFragment2.isVisible()) {
+        } else if (orderFragment2 != null && orderFragment2.isVisible()) {
           ((OrderFragment) orderFragment2).showFilterDialog();
         }
     }
@@ -879,6 +879,12 @@ public abstract class MainActivity extends AppCompatActivity {
     //hide save icon in question list fragment
     if (fragmentId != QUESTION_LIST_FRAGMENT_ID) {
       saveImg.setVisibility(View.GONE);
+    }
+    //message icon visibility
+    if (fragmentId == FEATURE_FRAGMENT_ID) {
+      notifImg.setVisibility(View.VISIBLE);
+    } else {
+      notifImg.setVisibility(View.GONE);
     }
 
     //hide timer in visit detail fragment

@@ -1,22 +1,23 @@
 package com.parsroyal.solutiontablet.data.event;
 
+import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import java.util.List;
 
 public class GoodListEvent extends Event {
 
-  private List<GoodsListModel> goodsListModels;
+  private List<Goods> goodsListModels;
 
-  public GoodListEvent(List<GoodsListModel> goodsListModels) {
+  public GoodListEvent(List<Goods> goodsListModels) {
     this.goodsListModels = goodsListModels;
   }
 
-  public List<GoodsListModel> getGoodsListModels() {
+  public List<Goods> getGoodsListModels() {
     return goodsListModels;
   }
 
   public void setGoodsListModels(
-      List<GoodsListModel> goodsListModels) {
+      List<Goods> goodsListModels) {
     this.goodsListModels = goodsListModels;
   }
 }

@@ -48,6 +48,7 @@ import com.parsroyal.solutiontablet.ui.adapter.GoodsAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsCategoryAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsExpandAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.AddOrderBottomSheet;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.GoodsFilterBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.GoodsFilterDialogFragment;
@@ -434,8 +435,7 @@ public class OrderFragment extends BaseFragment {
       adapter.updateOrder(order);
     } else if (event instanceof GoodListEvent) {
       if (((GoodListEvent) event).getGoodsListModels() != null) {
-        //TODO:
-//        adapter.update(((GoodListEvent) event).getGoodsListModels());
+        adapter.update(((GoodListEvent) event).getGoodsListModels());
       }
     }
   }
@@ -694,7 +694,12 @@ public class OrderFragment extends BaseFragment {
 
   public void showFilterDialog() {
     FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
-    GoodsFilterDialogFragment goodsFilterDialogFragment = GoodsFilterDialogFragment.newInstance();
+    GoodsFilterDialogFragment goodsFilterDialogFragment;
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      goodsFilterDialogFragment = GoodsFilterBottomSheet.newInstance();
+    } else {
+      goodsFilterDialogFragment = GoodsFilterDialogFragment.newInstance();
+    }
     goodsFilterDialogFragment.show(ft, "filter");
   }
 }
