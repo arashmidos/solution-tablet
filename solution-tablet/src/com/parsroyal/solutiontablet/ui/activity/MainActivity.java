@@ -713,8 +713,12 @@ public abstract class MainActivity extends AppCompatActivity {
       case R.id.filter_img:
         Fragment visitLine2 = getSupportFragmentManager()
             .findFragmentByTag(VisitLineFragment.class.getSimpleName());
+        Fragment orderFragment2 = getSupportFragmentManager()
+            .findFragmentByTag(OrderFragment.class.getSimpleName());
         if (visitLine2 != null && visitLine2.isVisible()) {
           ((VisitLineFragment) visitLine2).showFilter();
+        } else if (orderFragment2 != null && orderFragment2.isVisible()) {
+          ((OrderFragment) orderFragment2).showFilterDialog();
         }
     }
   }
@@ -876,6 +880,12 @@ public abstract class MainActivity extends AppCompatActivity {
     if (fragmentId != QUESTION_LIST_FRAGMENT_ID) {
       saveImg.setVisibility(View.GONE);
     }
+    //message icon visibility
+    if (fragmentId == FEATURE_FRAGMENT_ID) {
+      notifImg.setVisibility(View.VISIBLE);
+    } else {
+      notifImg.setVisibility(View.GONE);
+    }
 
     //hide timer in visit detail fragment
     if (fragmentId != VISIT_DETAIL_FRAGMENT_ID) {
@@ -954,6 +964,10 @@ public abstract class MainActivity extends AppCompatActivity {
     }
     Analytics.logContentView("Fragment " + String.valueOf(fragmentId));
     return fragment;
+  }
+
+  public void setFilterVisibility(int visibility) {
+    filterImg.setVisibility(visibility);
   }
 
   private void displayNotifbutton(boolean show) {
