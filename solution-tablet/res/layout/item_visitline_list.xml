@@ -22,6 +22,7 @@
       android:layout_marginTop="16dp"
       android:layout_marginLeft="16dp"
       android:layout_gravity="left|top"
+      tools:visibility="visible"
       android:src="@drawable/im_list_40_dp"
       android:visibility="gone" />
     <LinearLayout
