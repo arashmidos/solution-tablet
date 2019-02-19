@@ -222,6 +222,14 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
       argsList.add(goodsSo.getConstraint());
       argsList.add(goodsSo.getConstraint());
     }
+    if (Empty.isNotEmpty(goodsSo.getSupplier())) {
+      sql = sql.concat(" AND SUPPLIER like ? ");
+      argsList.add(goodsSo.getSupplier());
+    }
+    if (Empty.isNotEmpty(goodsSo.getAssortment())) {
+      sql = sql.concat(" AND ASSORTMENT like ? ");
+      argsList.add(goodsSo.getAssortment());
+    }
 
     String[] args = new String[argsList.size()];
     Cursor cursor = db.rawQuery(sql, argsList.toArray(args));
