@@ -1,7 +1,6 @@
 package com.parsroyal.solutiontablet.data.event;
 
 import com.parsroyal.solutiontablet.data.entity.Goods;
-import com.parsroyal.solutiontablet.data.listmodel.GoodsListModel;
 import java.util.List;
 
 public class GoodListEvent extends Event {

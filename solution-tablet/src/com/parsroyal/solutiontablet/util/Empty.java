@@ -88,4 +88,8 @@ public class Empty {
   public static boolean isNotEmptyCustom(String s, String... emptyValue) {
     return !isEmptyCustom(s, emptyValue);
   }
+
+  public static boolean isNullOrZero(Long packed) {
+    return isEmpty(packed) || packed == 0L;
+  }
 }

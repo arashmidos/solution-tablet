@@ -1,12 +1,10 @@
 package com.parsroyal.solutiontablet.util;
 
 import android.content.Context;
-
 import com.parsroyal.solutiontablet.data.event.UpdateBadgerEvent;
-
+import me.leolin.shortcutbadger.ShortcutBadger;
 import org.greenrobot.eventbus.EventBus;
 
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class BadgerHelper {
 

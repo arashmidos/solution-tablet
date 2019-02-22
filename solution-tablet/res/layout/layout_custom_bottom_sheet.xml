@@ -29,7 +29,7 @@
       android:layout_width="24dp"
       android:layout_height="24dp"
       android:layout_marginRight="16dp"
-      android:src="@drawable/ic_path_24_dp" />
+      android:src="@drawable/ic_cart_24_dp" />
   </LinearLayout>
   <LinearLayout
     android:id="@+id/select_request_layout"
@@ -55,7 +55,7 @@
       android:layout_width="24dp"
       android:layout_height="24dp"
       android:layout_marginRight="16dp"
-      android:src="@drawable/ic_path_24_dp" />
+      android:src="@drawable/ic_assignment_blue_24dp" />
   </LinearLayout>
 
 </LinearLayout>

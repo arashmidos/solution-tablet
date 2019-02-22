@@ -1,7 +1,5 @@
 package com.parsroyal.solutiontablet.data.model;
 
-import com.google.gson.annotations.Expose;
-
 import java.io.Serializable;
 import java.util.Date;
 
