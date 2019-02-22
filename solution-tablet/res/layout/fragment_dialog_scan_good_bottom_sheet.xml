@@ -2,9 +2,9 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/root"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:id="@+id/root"
   android:orientation="vertical">
   <RelativeLayout
     android:id="@+id/toolbar"
@@ -48,15 +48,28 @@
     android:layout_height="88dp"
     android:elevation="3dp">
     <Button
+      android:id="@+id/submit"
       style="@style/IranSans"
       android:layout_width="wrap_content"
       android:layout_height="56dp"
       android:layout_marginLeft="24dp"
       android:layout_marginRight="16dp"
       android:layout_gravity="center_vertical"
-      android:background="@color/primary"
+      android:background="@drawable/btn_bg_primary"
       android:text="ارسال"
       android:textColor="@color/white" />
+    <android.support.design.widget.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="24dp"
+      android:layout_gravity="center_vertical"
+      android:hint="بارکد کالا">
 
+      <android.support.design.widget.TextInputEditText
+        android:id="@+id/barcode_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    </android.support.design.widget.TextInputLayout>
   </LinearLayout>
 </LinearLayout>

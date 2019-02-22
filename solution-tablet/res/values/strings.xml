@@ -344,6 +344,7 @@
   <string name="error_sale_rate_not_correct">ضریب فروش این کالا باید %1$s %2$s‌ باشد</string>
   <string name="get_catalog">دریافت عکس کالاها</string>
   <string name="data_transfered_successfully">انتقال اطلاعات با موفقیت انجام شد</string>
+  <string name="delete_order_successfully">ثبت سفارش با موفقیت انجام شد</string>
   <string name="error_forbidden">دسترسی غیرمجاز</string>
   <string name="error_no_network">خطا در اتصال به اینترنت</string>
   <string name="message_exception_in_data_store">خطا در ذخیره سازی اطلاعات</string>
@@ -687,5 +688,6 @@
   <string name="description">توضیحات:</string>
   <string name="message_location_submitted_successfully">ثبت موقعیت با موفقیت انجام شد!</string>
   <string name="packer_scan_barcode">اسکن بارکد کالا</string>
+  <string name="msg_wrong_input_order_code">کد وارد شده صحیح نیست</string>
 
 </resources>

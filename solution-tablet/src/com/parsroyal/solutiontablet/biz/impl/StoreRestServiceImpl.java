@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.DetectGoodEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.PackerEvent;
@@ -71,7 +72,10 @@ public class StoreRestServiceImpl {
       public void onResponse(Call<Packer> call, Response<Packer> response) {
         if (response.isSuccessful()) {
           Packer result = response.body();
-          if (result != null) {
+          if (request.getMode() == 4) {
+            EventBus.getDefault().post(new ActionEvent(StatusCodes.DELETE_ORDER_SUCCESS));
+          }
+          if (result != null && result.getOrdr()!=0) {
             EventBus.getDefault().post(new PackerEvent(result));
           } else {
             EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_DATA_ERROR));

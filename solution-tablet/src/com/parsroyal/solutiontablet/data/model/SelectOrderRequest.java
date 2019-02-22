@@ -1,6 +1,12 @@
 package com.parsroyal.solutiontablet.data.model;
 
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
+
 public class SelectOrderRequest {
+  //1 new
+  //3 next
+  //4 delete
+  //5 select with order id
 
   private Integer mode;
   private Long asn;
@@ -9,6 +15,7 @@ public class SelectOrderRequest {
 
   public SelectOrderRequest() {
     mode = 1;
+    asn = PreferenceHelper.getStockKey();
   }
 
   public SelectOrderRequest(Integer mode) {
@@ -17,6 +24,12 @@ public class SelectOrderRequest {
 
   public SelectOrderRequest(Integer mode, Long classNo) {
     this.mode = mode;
+    this.classNo = classNo;
+  }
+
+  public SelectOrderRequest(Integer mode, Long asn, Long classNo) {
+    this.mode = mode;
+    this.asn = asn;
     this.classNo = classNo;
   }
 

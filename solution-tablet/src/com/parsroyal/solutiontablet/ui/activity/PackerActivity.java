@@ -23,24 +23,32 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.impl.StoreRestServiceImpl;
+import com.parsroyal.solutiontablet.constants.StatusCodes;
+import com.parsroyal.solutiontablet.data.event.ActionEvent;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.PackerEvent;
+import com.parsroyal.solutiontablet.data.model.GoodDetail;
 import com.parsroyal.solutiontablet.data.model.Packer;
 import com.parsroyal.solutiontablet.data.model.SelectOrderRequest;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.CustomBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.PackerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PackerInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.PackerAddGoodBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.PackerScanGoodBottomSheet;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PackerAddGoodDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PackerScanGoodDialogFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import timber.log.Timber;
 
 public class PackerActivity extends AppCompatActivity {
@@ -69,13 +77,16 @@ public class PackerActivity extends AppCompatActivity {
   private CustomerDetailViewPagerAdapter viewPagerAdapter;
   private PackerDetailFragment detailFragment;
   private PackerInfoFragment infoFragment;
+  private long orderBy = 0;
+  private StoreRestServiceImpl storeService;
+  private Packer packer;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_packer);
     ButterKnife.bind(this);
-
+    this.storeService = new StoreRestServiceImpl();
     tabs.setupWithViewPager(viewpager);
     setUpViewPager();
   }
@@ -128,7 +139,7 @@ public class PackerActivity extends AppCompatActivity {
     EventBus.getDefault().register(this);
   }
 
-  @Subscribe
+  @Subscribe(threadMode = ThreadMode.MAIN)
   public void getMessage(Event event) {
     DialogUtil.dismissProgressDialog();
     if (event instanceof ErrorEvent) {
@@ -143,12 +154,16 @@ public class PackerActivity extends AppCompatActivity {
           ToastUtil.toastError(this, getString(R.string.error_connecting_server));
       }
     } else if (event instanceof PackerEvent) {
-      Packer packer = ((PackerEvent) event).getDetailList();
-      setData(packer);
+      packer = ((PackerEvent) event).getDetailList();
+      setData();
+    } else if (event instanceof ActionEvent) {
+      if (event.getStatusCode() == StatusCodes.DELETE_ORDER_SUCCESS) {
+        ToastUtil.toastMessage(this, "سفارش با موفقیت ثبت شد");
+      }
     }
   }
 
-  private void setData(Packer packer) {
+  private void setData() {
     Timber.i(packer.toString());
 
     if (detailFragment != null) {
@@ -156,6 +171,10 @@ public class PackerActivity extends AppCompatActivity {
     }
     if (infoFragment != null) {
       infoFragment.update(packer);
+    }
+
+    if (Empty.isNotEmpty(packer.getGoodDetails())) {
+      this.orderBy = packer.getGoodDetails().get(0).getOrderBy();
     }
 //      recyclerView.hideShimmerAdapter();
   }
@@ -176,13 +195,13 @@ public class PackerActivity extends AppCompatActivity {
         showChooserDialog();
         break;
       case R.id.register_btn:
-        Toast.makeText(this, "ثبت سفارش", Toast.LENGTH_SHORT).show();
+        submitOrder();
         break;
       case R.id.filter_lay:
-        Toast.makeText(this, "بعدی", Toast.LENGTH_SHORT).show();
+        selectNextOrder();
         break;
       case R.id.filter2_lay:
-        Toast.makeText(this, "قبلی", Toast.LENGTH_SHORT).show();
+        selectPrevOrder();
         break;
       case R.id.search_img:
         openSearchialog();
@@ -193,29 +212,53 @@ public class PackerActivity extends AppCompatActivity {
     }
   }
 
+  private void selectPrevOrder() {
+    if (orderBy == 0) {
+      return;
+    }
+    DialogUtil.showProgressDialog(this, R.string.message_please_wait);
+    storeService.selectOrder(this, new SelectOrderRequest(3, orderBy - 1, null));
+  }
+
+  private void selectNextOrder() {
+    DialogUtil.showProgressDialog(this, R.string.message_please_wait);
+    storeService.selectOrder(this, new SelectOrderRequest(3, orderBy + 1, null));
+  }
+
+  private void submitOrder() {
+    DialogUtil.showConfirmDialog(this, "ثبت سفارش", "آیا مطمئن هستید؟", (dialog, which) -> {
+      dialog.cancel();
+      DialogUtil.showProgressDialog(PackerActivity.this, R.string.message_please_wait);
+
+      storeService
+          .selectOrder(PackerActivity.this, new SelectOrderRequest(4, orderBy, null));
+    });
+  }
+
   private void openSearchialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle("کد سفارش:");
 
 // Set up the input
     final EditText input = new EditText(this);
+
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
     input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_NORMAL);
     builder.setView(input);
 
 // Set up the buttons
-    builder.setPositiveButton("جستجو", (dialog, which) -> {
+    builder.setPositiveButton(getString(R.string.search), (dialog, which) -> {
       String orderString = input.getText().toString();
       try {
         Long order = Long.parseLong(orderString);
         if (Empty.isNotEmpty(orderString)) {
 
           DialogUtil.showProgressDialog(PackerActivity.this, R.string.message_please_wait);
-          new StoreRestServiceImpl()
-              .selectOrder(PackerActivity.this, new SelectOrderRequest(5, order));
+          storeService.selectOrder(PackerActivity.this,
+              new SelectOrderRequest(5, PreferenceHelper.getStockKey(), order));
         }
       } catch (NumberFormatException ex) {
-        ToastUtil.toastError(PackerActivity.this, "کد وارد شده صحیح نیست");
+        ToastUtil.toastError(PackerActivity.this, R.string.msg_wrong_input_order_code);
       }
     });
     builder.setNegativeButton("لغو", (dialog, which) -> dialog.cancel());
@@ -239,17 +282,37 @@ public class PackerActivity extends AppCompatActivity {
     bookingBottomSheet.show(getSupportFragmentManager(), "custom_bottom_sheet");
   }
 
-  @OnClick(R.id.search_img)
-  public void onViewClicked() {
-  }
-
   public void selectOrder() {
     DialogUtil.showProgressDialog(this, R.string.message_please_wait);
-    new StoreRestServiceImpl().selectOrder(PackerActivity.this, new SelectOrderRequest());
+    storeService.selectOrder(PackerActivity.this, new SelectOrderRequest());
 
   }
 
   public void selectRequest() {
     Toast.makeText(this, "درخواست", Toast.LENGTH_SHORT).show();
   }
+
+  public void findGoodsByBarcode(String barcode) {
+    boolean found = false;
+    List<GoodDetail> details = packer.getGoodDetails();
+    for (int i = 0; i < details.size(); i++) {
+      GoodDetail good = details.get(i);
+      if (barcode.equals(good.getBarCode())) {
+        found = true;
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        PackerAddGoodDialogFragment goodsFilterDialogFragment;
+        if (MultiScreenUtility.isTablet(this)) {
+          goodsFilterDialogFragment = PackerAddGoodBottomSheet.newInstance(good);
+        } else {
+          goodsFilterDialogFragment = PackerAddGoodDialogFragment.newInstance(good);
+        }
+        goodsFilterDialogFragment.show(ft, "add_good");
+        break;
+      }
+    }
+    if (!found) {
+      ToastUtil.toastMessage(this,"کالا موجود نیست");
+    }
+  }
 }
+

@@ -4,13 +4,13 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,6 +40,8 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
   DecoratedBarcodeView scanner;
   @BindView(R.id.root)
   LinearLayout root;
+  @BindView(R.id.barcode_et)
+  TextInputEditText barcodeEt;
   private BeepManager beepManager;
   private String lastText;
   private BarcodeCallback callback = new BarcodeCallback() {
@@ -53,7 +55,7 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
       lastText = result.getText();
 
       scanner.setStatusText("");
-
+      barcodeEt.setText(result.getText());
       beepManager.playBeepSoundAndVibrate();
       sendBarcode();
     }
@@ -64,6 +66,7 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
   };
   private PackerActivity packerActivity;
   private Unbinder unbinder;
+
   public PackerScanGoodDialogFragment() {
     // Required empty public constructor
   }
@@ -75,7 +78,8 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
   }
 
   private void sendBarcode() {
-    Toast.makeText(parent, "SEND BARCODE" + lastText, Toast.LENGTH_SHORT).show();
+    parent.findGoodsByBarcode(barcodeEt.getText().toString().trim());
+    dismiss();
   }
 
   @Override
@@ -139,12 +143,14 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
     return R.layout.fragment_dialog_scan_good_bottom_sheet;
   }
 
-  @OnClick({R.id.close_btn})
+  @OnClick({R.id.close_btn, R.id.submit})
   public void onViewClicked(View view) {
     switch (view.getId()) {
       case R.id.close_btn:
         dismiss();
         break;
+      case R.id.submit:
+        sendBarcode();
 
     }
   }

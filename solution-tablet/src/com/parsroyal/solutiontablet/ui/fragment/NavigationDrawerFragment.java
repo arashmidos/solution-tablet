@@ -133,20 +133,20 @@ public class NavigationDrawerFragment extends BaseFragment {
         mainActivity.changeFragment(MainActivity.CUSTOMER_FRAGMENT, true);
         break;
       case R.id.goods_lay:
-        if (!hasData) {
+ /*       if (!hasData) {
           ToastUtil.toastError(mainActivity, R.string.error_message_no_data);
           break;
         }
         Bundle args = new Bundle();
         args.putBoolean(Constants.READ_ONLY, true);
-        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
+        mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);*/
         break;
       case R.id.reports_lay:
-        if (!hasData) {
+        /*if (!hasData) {
           ToastUtil.toastError(mainActivity, R.string.error_message_no_data);
           break;
         }
-        mainActivity.changeFragment(MainActivity.REPORT_FRAGMENT, true);
+        mainActivity.changeFragment(MainActivity.REPORT_FRAGMENT, true);*/
         break;
       case R.id.questionnaire_lay:
         if (!hasData) {
@@ -162,7 +162,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         mainActivity.changeFragment(MainActivity.ABOUT_US_FRAGMENT_ID, true);
         break;
       case R.id.setting_lay:
-        mainActivity.changeFragment(MainActivity.SETTING_FRAGMENT, true);
+//        mainActivity.changeFragment(MainActivity.SETTING_FRAGMENT, true);
         break;
       case R.id.body_log_out:
         doLogout(false);
