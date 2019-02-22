@@ -1,7 +1,7 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
@@ -17,8 +17,12 @@ import butterknife.OnClick;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.model.GoodDetail;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
+import com.parsroyal.solutiontablet.ui.activity.PackerActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PackerGoodsAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.PackerDetailFragment;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.PackerAddGoodBottomSheet;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PackerAddGoodDialogFragment;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.List;
 
@@ -33,9 +37,9 @@ public class PackerGoodsAdapter extends Adapter<ViewHolder> {
   private List<GoodDetail> details;
   private SaleOrderDto order;
   private LayoutInflater inflater;
-  private Context context;
+  private PackerActivity context;
 
-  public PackerGoodsAdapter(Context context, PackerDetailFragment detailFragment,
+  public PackerGoodsAdapter(PackerActivity context, PackerDetailFragment detailFragment,
       List<GoodDetail> details) {
     this.context = context;
     this.parent = detailFragment;
@@ -83,6 +87,12 @@ public class PackerGoodsAdapter extends Adapter<ViewHolder> {
     }
     layout.setLayoutParams(parameter);
   }
+
+  public void update(List<GoodDetail> goodDetails) {
+    this.details = goodDetails;
+    notifyDataSetChanged();
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.good_img)
@@ -111,13 +121,19 @@ public class PackerGoodsAdapter extends Adapter<ViewHolder> {
 
     public void setData(int position, GoodDetail good) {
       this.position = position;
-      this.good=good;
+      this.good = good;
       goodNameTv.setText(NumberUtil.digitsToPersian(good.getGoodNameSGL()));
       goodCodeValueTv.setText(NumberUtil.digitsToPersian(good.getGoodCodeSGL()));
-      totalValueTv.setText(String.format("%s %s",NumberUtil.digitsToPersian(good.getQty()/1000),good.getuName()).trim());
-      remainedValueTv.setText(String.format("%s %s",NumberUtil.digitsToPersian(good.getQty()/1000),good.getuName()).trim());
-      packedValueTv.setText(String.format("%s %s",NumberUtil.digitsToPersian(0),good.getuName()).trim());
-      setMargin(position==details.size()-1,mainLay);
+      totalValueTv.setText(
+          String.format("%s %s", NumberUtil.digitsToPersian(good.getQty() / 1000), good.getuName())
+              .trim());
+      remainedValueTv.setText(String
+          .format("%s %s", NumberUtil.digitsToPersian(good.getRemain() / 1000), good.getuName())
+          .trim());
+      packedValueTv.setText(String
+          .format("%s %s", NumberUtil.digitsToPersian(good.getPacked() / 1000), good.getuName())
+          .trim());
+      setMargin(position == details.size() - 1, mainLay);
     }
 
     @OnClick({R.id.good_img, R.id.main_lay})
@@ -126,8 +142,20 @@ public class PackerGoodsAdapter extends Adapter<ViewHolder> {
         case R.id.good_img:
           break;
         case R.id.main_lay:
+          showAddDialog();
           break;
       }
+    }
+
+    public void showAddDialog() {
+      FragmentTransaction ft = context.getSupportFragmentManager().beginTransaction();
+      PackerAddGoodDialogFragment goodsFilterDialogFragment;
+      if (MultiScreenUtility.isTablet(context)) {
+        goodsFilterDialogFragment = PackerAddGoodBottomSheet.newInstance(good);
+      } else {
+        goodsFilterDialogFragment = PackerAddGoodDialogFragment.newInstance(good);
+      }
+      goodsFilterDialogFragment.show(ft, "add_good");
     }
   }
 }

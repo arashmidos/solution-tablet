@@ -29,6 +29,8 @@ import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.Event;
+import com.parsroyal.solutiontablet.data.event.GoodListEvent;
 import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
@@ -46,8 +48,10 @@ import com.parsroyal.solutiontablet.ui.adapter.GoodsAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsCategoryAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.GoodsExpandAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.AddOrderBottomSheet;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.GoodsFilterBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.GoodsFilterDialogFragment;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
@@ -270,6 +274,7 @@ public class OrderFragment extends BaseFragment {
   }
 
   public void setUpGoodsRecyclerView(long backendId) {
+    mainActivity.setFilterVisibility(View.VISIBLE);
     goodsSo = new GoodsSo();
     if (adapter == null) {
       if (isRejected()) {
@@ -423,10 +428,16 @@ public class OrderFragment extends BaseFragment {
   }
 
   @Subscribe
-  public void getMessage(UpdateListEvent event) {
-    order = saleOrderService.findOrderDtoById(orderId);
-    orderCountTv.setText(NumberUtil.digitsToPersian(order.getOrderItems().size()));
-    adapter.updateOrder(order);
+  public void getMessage(Event event) {
+    if (event instanceof UpdateListEvent) {
+      order = saleOrderService.findOrderDtoById(orderId);
+      orderCountTv.setText(NumberUtil.digitsToPersian(order.getOrderItems().size()));
+      adapter.updateOrder(order);
+    } else if (event instanceof GoodListEvent) {
+      if (((GoodListEvent) event).getGoodsListModels() != null) {
+        adapter.update(((GoodListEvent) event).getGoodsListModels());
+      }
+    }
   }
 
   @OnClick({R.id.search_img, R.id.bottom_bar, R.id.cancel_bread_crumb_btn, R.id.close_search_img})
@@ -647,6 +658,7 @@ public class OrderFragment extends BaseFragment {
           setUpCategoryRecyclerView(goodsService.getUpLevel(currentGoodGroupId));
         }
       } else if (recyclerView.getVisibility() == View.VISIBLE) {
+        mainActivity.setFilterVisibility(View.GONE);
         List<GoodsGroup> goodsGroups = goodsService.getCurrentLevel(currentGoodGroupId);
         if ((goodsGroups != null && goodsGroups.size() > 0 && goodsGroups.get(0).getLevel() < 3)
             || goodsGroups == null) {
@@ -657,10 +669,12 @@ public class OrderFragment extends BaseFragment {
       } else {
         mainActivity.onBackPressed();
         mainActivity.searchImageVisibility(View.GONE);
+        mainActivity.setFilterVisibility(View.GONE);
       }
     } catch (Exception e) {
       mainActivity.onBackPressed();
       mainActivity.searchImageVisibility(View.GONE);
+      mainActivity.setFilterVisibility(View.GONE);
     }
   }
 
@@ -676,5 +690,16 @@ public class OrderFragment extends BaseFragment {
     mainActivity.searchImageVisibility(View.VISIBLE);
     breadCrumbLay.setVisibility(View.VISIBLE);
     appBarLayout.setVisibility(View.GONE);
+  }
+
+  public void showFilterDialog() {
+    FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+    GoodsFilterDialogFragment goodsFilterDialogFragment;
+    if (MultiScreenUtility.isTablet(mainActivity)) {
+      goodsFilterDialogFragment = GoodsFilterBottomSheet.newInstance();
+    } else {
+      goodsFilterDialogFragment = GoodsFilterDialogFragment.newInstance();
+    }
+    goodsFilterDialogFragment.show(ft, "filter");
   }
 }

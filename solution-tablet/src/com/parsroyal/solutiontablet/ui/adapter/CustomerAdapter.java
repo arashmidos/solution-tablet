@@ -25,6 +25,7 @@ import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by ShakibIsTheBest on 09/01/2017.
@@ -48,14 +49,15 @@ public class CustomerAdapter extends Adapter<CustomerAdapter.ViewHolder> {
     this.inflater = LayoutInflater.from(context);
   }
 
+  @NotNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
     View view = inflater.inflate(R.layout.item_system_customer, parent, false);
     return new ViewHolder(view);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
     Customer customer = customers.get(position);
     holder.setData(customer, position);
   }
@@ -117,6 +119,8 @@ public class CustomerAdapter extends Adapter<CustomerAdapter.ViewHolder> {
     }
 
     public void setData(Customer customer, int position) {
+      customerNameTv.setMaxLines(3);
+      hasLocationImg.setVisibility(View.INVISIBLE);
       this.customer = customer;
       this.position = position;
       editLay.setVisibility(View.GONE);

@@ -6,9 +6,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.OnTabSelectedListener;
 import android.support.design.widget.TabLayout.Tab;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -28,7 +32,11 @@ import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.CustomBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.PackerDetailFragment;
 import com.parsroyal.solutiontablet.ui.fragment.PackerInfoFragment;
+import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.PackerScanGoodBottomSheet;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PackerScanGoodDialogFragment;
 import com.parsroyal.solutiontablet.util.DialogUtil;
+import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import org.greenrobot.eventbus.EventBus;
@@ -177,31 +185,56 @@ public class PackerActivity extends AppCompatActivity {
         Toast.makeText(this, "قبلی", Toast.LENGTH_SHORT).show();
         break;
       case R.id.search_img:
-        Toast.makeText(this, "جستجو", Toast.LENGTH_SHORT).show();
+        openSearchialog();
         break;
       case R.id.barcode_img:
-        Toast.makeText(this, "بارکد", Toast.LENGTH_SHORT).show();
+        showScannerDialog();
         break;
     }
   }
 
-  private void showChooserDialog() {
-    /*Builder dialogBuilder = new Builder(this);
-    LayoutInflater inflater1 = getLayoutInflater();
-    View dialogView = inflater1.inflate(R.layout.bottom_sheet_order_chooser, null);
-    LinearLayout orderLayout = dialogView.findViewById(R.id.order_layout);
-    LinearLayout requestLayout = dialogView.findViewById(R.id.request_layout);
-    dialogBuilder.setView(dialogView);
-    AlertDialog alertDialog = dialogBuilder.create();
-    alertDialog.show();
-    orderLayout.setOnClickListener(v -> {
-      new StoreRestServiceImpl().selectOrder(PackerActivity.this, new SelectOrderRequest());
-      alertDialog.dismiss();
+  private void openSearchialog() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle("کد سفارش:");
+
+// Set up the input
+    final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+    builder.setView(input);
+
+// Set up the buttons
+    builder.setPositiveButton("جستجو", (dialog, which) -> {
+      String orderString = input.getText().toString();
+      try {
+        Long order = Long.parseLong(orderString);
+        if (Empty.isNotEmpty(orderString)) {
+
+          DialogUtil.showProgressDialog(PackerActivity.this, R.string.message_please_wait);
+          new StoreRestServiceImpl()
+              .selectOrder(PackerActivity.this, new SelectOrderRequest(5, order));
+        }
+      } catch (NumberFormatException ex) {
+        ToastUtil.toastError(PackerActivity.this, "کد وارد شده صحیح نیست");
+      }
     });
-    requestLayout.setOnClickListener(v -> {
-      Toast.makeText(this, "درخواست", Toast.LENGTH_SHORT).show();
-      alertDialog.dismiss();
-    });*/
+    builder.setNegativeButton("لغو", (dialog, which) -> dialog.cancel());
+
+    builder.show();
+  }
+
+  public void showScannerDialog() {
+    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+    PackerScanGoodDialogFragment fragment;
+    if (MultiScreenUtility.isTablet(this)) {
+      fragment = PackerScanGoodBottomSheet.newInstance(this);
+    } else {
+      fragment = PackerScanGoodDialogFragment.newInstance(this);
+    }
+    fragment.show(ft, "scan_good");
+  }
+
+  private void showChooserDialog() {
     CustomBottomSheet bookingBottomSheet = CustomBottomSheet.getInstance();
     bookingBottomSheet.show(getSupportFragmentManager(), "custom_bottom_sheet");
   }
@@ -211,13 +244,12 @@ public class PackerActivity extends AppCompatActivity {
   }
 
   public void selectOrder() {
-    DialogUtil.showProgressDialog(this,R.string.message_please_wait);
+    DialogUtil.showProgressDialog(this, R.string.message_please_wait);
     new StoreRestServiceImpl().selectOrder(PackerActivity.this, new SelectOrderRequest());
 
   }
 
   public void selectRequest() {
     Toast.makeText(this, "درخواست", Toast.LENGTH_SHORT).show();
-
   }
 }

@@ -1,9 +1,11 @@
 package com.parsroyal.solutiontablet.util;
 
 import android.content.SharedPreferences;
+
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -14,6 +16,7 @@ public class PreferenceHelper {
   private static final String UPDATE_URI = "UPDATE_URI";
   private static final String AUTHORITIES = "setting.authorities";
   private static final String DEF_NAVIGATOR = "DEF_NAVIGATOR";
+  private static final String BADGER = "BADGER";
 
   public static int getLatestVersion() {
     return SolutionTabletApplication.getPreference().getInt(LATEST_VERSION, 0);
@@ -37,6 +40,14 @@ public class PreferenceHelper {
 
   public static void setForceExit(boolean forceExit) {
     SolutionTabletApplication.getPreference().edit().putBoolean(FORCE_EXIT, forceExit).apply();
+  }
+
+  public static int getBadger() {
+    return SolutionTabletApplication.getPreference().getInt(BADGER, 0);
+  }
+
+  public static void setBadger(int badger) {
+    SolutionTabletApplication.getPreference().edit().putInt(BADGER, badger).apply();
   }
 
   public static String getUpdateUri() {

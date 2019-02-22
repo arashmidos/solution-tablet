@@ -23,5 +23,4 @@ public class CharacterFixUtil {
     }
     return result;
   }
-
 }

@@ -1,5 +1,8 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,25 +13,33 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.MessageEvent;
+import com.parsroyal.solutiontablet.data.event.UpdateBadgerEvent;
 import com.parsroyal.solutiontablet.data.model.Message;
 import com.parsroyal.solutiontablet.service.impl.MessageServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.ChatAdapter;
+import com.parsroyal.solutiontablet.util.BadgerHelper;
 import com.parsroyal.solutiontablet.util.DialogUtil;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
+
 import java.util.List;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by Arash on 8/4/2015.
@@ -54,16 +65,31 @@ public class ChatFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_chat, null);
     unbinder = ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
+    BadgerHelper.removeBadge(mainActivity);
+    dismissNotif();
     mainActivity.changeTitle(getString(R.string.messages));
     messageService = new MessageServiceImpl(mainActivity);
     messageService.getAllMessages();
     DialogUtil.showProgressDialog(getActivity(), getString(R.string.message_please_wait));
     return view;
+  }
+
+  private void dismissNotif() {
+    NotificationManager mNotificationManager =
+        (NotificationManager) mainActivity.getSystemService(Context.NOTIFICATION_SERVICE);
+    if (mNotificationManager != null) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        String id = "pars";
+        mNotificationManager.deleteNotificationChannel(id);
+      } else {
+        mNotificationManager.cancel(1);
+      }
+    }
   }
 
   @Override
@@ -138,7 +164,8 @@ public class ChatFragment extends BaseFragment {
     if (!TextUtils.isEmpty(messageEdt.getText().toString().trim())) {
       sendImg.setVisibility(View.GONE);
       loadingProgress.setVisibility(View.VISIBLE);
-      messageService.sendMessages(messageEdt.getText().toString().trim());
+      String message = NumberUtil.digitsToEnglish(messageEdt.getText().toString().trim());
+      messageService.sendMessages(message);
     } else {
       ToastUtil.toastError(mainActivity, getString(R.string.message_is_required));
     }

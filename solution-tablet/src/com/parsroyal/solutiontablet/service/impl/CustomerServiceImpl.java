@@ -89,11 +89,6 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
-  public List<CustomerDto> getAllNewUpdatedCustomersForSend() {
-    return customerDao.retrieveAllNewUpdatedCustomersForSend();
-  }
-
-  @Override
   public List<CustomerLocationDto> getAllUpdatedCustomerLocation() {
     return customerDao.retrieveAllUpdatedCustomerLocationDto();
   }

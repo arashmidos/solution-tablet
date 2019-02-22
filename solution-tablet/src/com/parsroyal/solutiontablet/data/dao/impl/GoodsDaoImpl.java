@@ -91,7 +91,7 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
         Goods.COL_CREATE_DATE_TIME,
         Goods.COL_UPDATE_DATE_TIME,
         Goods.COL_SUPPLIER,
-        Goods.COL_SUPPLIER
+        Goods.COL_ASSORTMENT
     };
   }
 
@@ -221,6 +221,14 @@ public class GoodsDaoImpl extends AbstractDao<Goods, Long> implements GoodsDao {
       sql = sql.concat(" AND TITLE like ? OR CODE like ? ");
       argsList.add(goodsSo.getConstraint());
       argsList.add(goodsSo.getConstraint());
+    }
+    if (Empty.isNotEmpty(goodsSo.getSupplier())) {
+      sql = sql.concat(" AND SUPPLIER like ? ");
+      argsList.add(goodsSo.getSupplier());
+    }
+    if (Empty.isNotEmpty(goodsSo.getAssortment())) {
+      sql = sql.concat(" AND ASSORTMENT like ? ");
+      argsList.add(goodsSo.getAssortment());
     }
 
     String[] args = new String[argsList.size()];

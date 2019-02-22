@@ -15,6 +15,7 @@ public class GoodDetail extends BaseModel {
   private String barCode;
   private String goodNameSGL;
   private String uName;
+  private long packed = 0;
 
   public Long getGoodCodeSGL() {
     return goodCodeSGL;
@@ -110,5 +111,13 @@ public class GoodDetail extends BaseModel {
 
   public void setuName(String uName) {
     this.uName = uName;
+  }
+
+  public long getPacked() {
+    return packed;
+  }
+
+  public void setPacked(long packed) {
+    this.packed = packed;
   }
 }

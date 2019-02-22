@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
+import com.parsroyal.solutiontablet.constants.CustomerStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.dao.CustomerDao;
 import com.parsroyal.solutiontablet.data.dao.QAnswerDao;
@@ -71,6 +72,7 @@ public class NewCustomerDataTransferBizImpl extends AbstractDataTransferBizImpl<
           tempCustomer.setCode(persistedCustomer.getCode());
           tempCustomer.setUpdateDateTime(DateUtil
               .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
+          tempCustomer.setStatus(CustomerStatus.SENT.getId());
           customerDao.update(tempCustomer);
           customerService
               .updateCustomerPicForNewCustomers(tempCustomer.getId(), tempCustomer.getBackendId());

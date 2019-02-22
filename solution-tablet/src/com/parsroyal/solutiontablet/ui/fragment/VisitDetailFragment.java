@@ -557,10 +557,10 @@ public class VisitDetailFragment extends BaseFragment {
   }
 
   public void startCameraActivity() {
-    String postfix = String.valueOf((new Date().getTime()) % 1000);
+    String fileName = UUID.randomUUID().toString();
+
     fileUri = MediaUtil.getOutputMediaFileUri(mainActivity, MediaUtil.MEDIA_TYPE_IMAGE,
-        Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,
-        "IMG_" + customer.getBackendId() + "_" + postfix); // create a file to save the image
+        Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,fileName); // create a file to save the image
     CameraManager.startCameraActivity(mainActivity, fileUri, this);
   }
 

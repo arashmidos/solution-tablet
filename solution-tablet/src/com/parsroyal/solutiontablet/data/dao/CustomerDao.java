@@ -16,8 +16,6 @@ public interface CustomerDao extends BaseDao<Customer, Long> {
 
   List<CustomerDto> retrieveAllNewCustomersForSend();
 
-  List<CustomerDto> retrieveAllNewUpdatedCustomersForSend();
-
   List<Customer> retrieveAllNewCustomers();
 
   List<CustomerLocationDto> retrieveAllUpdatedCustomerLocationDto();
@@ -40,8 +38,6 @@ public interface CustomerDao extends BaseDao<Customer, Long> {
   List<Customer> getCustomersVisitLineBackendId(Long backendId);
 
   Customer retrieveByBackendId(Long customerBackendId);
-
-  void updateAllSentCustomer();
 
   List<PositionModel> getAllCusromerPostionModel(NCustomerSO nCustomerSO);
 }

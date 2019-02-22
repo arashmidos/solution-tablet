@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.service.impl;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.DataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
@@ -14,10 +15,13 @@ import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.greenrobot.eventbus.EventBus;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +37,7 @@ public class MessageServiceImpl {
   public void getAllMessages() {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
+      return;
     }
 
     MessageService messageService = ServiceGenerator.createService(MessageService.class);
@@ -69,6 +74,7 @@ public class MessageServiceImpl {
   public void sendMessages(String message) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
+      return;
     }
 
     MessageService messageService = ServiceGenerator.createService(MessageService.class);

@@ -14,6 +14,8 @@ import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.constants.Authority;
+import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
+import com.parsroyal.solutiontablet.data.model.GoodDetail;
 import com.parsroyal.solutiontablet.data.model.Packer;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.activity.PackerActivity;
@@ -21,6 +23,11 @@ import com.parsroyal.solutiontablet.ui.adapter.PackerGoodsAdapter;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
+import java.util.ArrayList;
+import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class PackerDetailFragment extends BaseFragment {
 
@@ -35,6 +42,7 @@ public class PackerDetailFragment extends BaseFragment {
   private PackerActivity packerActivity;
   private Packer packer;
   private PackerGoodsAdapter adapter;
+  private List<GoodDetail> goodDetails = new ArrayList<>();
 
   public PackerDetailFragment() {
     // Required empty public constructor
@@ -60,7 +68,7 @@ public class PackerDetailFragment extends BaseFragment {
     activity = (PackerActivity) getActivity();
 
 //    checkPermissions();
-    updateTopCounters();
+    clearTopCounters();
     setUpRecyclerView();
     return view;
   }
@@ -92,14 +100,47 @@ public class PackerDetailFragment extends BaseFragment {
   public void update(Packer packer) {
     this.packer = packer;
 
-    updateTopCounters();
-    adapter = new PackerGoodsAdapter(activity, this, packer.getGoodDetails());
+    goodDetails = packer.getGoodDetails();
+    adapter = new PackerGoodsAdapter(activity, this, goodDetails);
     recyclerView.setAdapter(adapter);
+    updateTopCounters();
+
   }
 
   private void updateTopCounters() {
 
-    totalPackedCount.setText(NumberUtil.digitsToPersian(120));
-    totalRemainedCount.setText(NumberUtil.digitsToPersian(50));
+    int total = 0;
+    int packed = 0;
+    for (int i = 0; i < goodDetails.size(); i++) {
+      GoodDetail goodDetail = goodDetails.get(i);
+      total += goodDetail.getQty() / 1000;
+      packed += goodDetail.getPacked() / 1000;
+    }
+    totalPackedCount.setText(NumberUtil.digitsToPersian(packed));
+    totalRemainedCount.setText(NumberUtil.digitsToPersian(total - packed));
+  }
+
+  private void clearTopCounters() {
+
+    totalPackedCount.setText(NumberUtil.digitsToPersian(0));
+    totalRemainedCount.setText(NumberUtil.digitsToPersian(0));
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void getMessage(UpdateListEvent event) {
+    updateTopCounters();
+    adapter.notifyDataSetChanged();
   }
 }

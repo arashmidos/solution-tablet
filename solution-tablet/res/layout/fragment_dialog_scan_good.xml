@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/root"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+  <RelativeLayout
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@color/primary"
+    android:elevation="3dp">
+    <ImageView
+      android:id="@+id/close_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:src="@drawable/ic_close_24dp"
+      android:tint="@color/white" />
+    <TextView
+      android:id="@+id/title_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="56dp"
+      android:layout_centerInParent="true"
+      android:paddingRight="32dp"
+      android:gravity="center"
+      android:text="@string/packer_scan_barcode"
+      android:textColor="@color/white"
+      android:textSize="18sp" />
+
+  </RelativeLayout>
+  <com.journeyapps.barcodescanner.DecoratedBarcodeView
+    android:id="@+id/scanner"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    app:zxing_preview_scaling_strategy="centerCrop"
+    app:zxing_use_texture_view="false" />
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    android:elevation="3dp">
+    <Button
+      style="@style/IranSans"
+      android:layout_width="wrap_content"
+      android:layout_height="56dp"
+      android:layout_marginLeft="24dp"
+      android:layout_marginRight="16dp"
+      android:layout_gravity="center_vertical"
+      android:background="@drawable/btn_bg_primary"
+      android:text="ارسال"
+      android:textColor="@color/white" />
+    <android.support.design.widget.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="24dp"
+      android:layout_gravity="center_vertical"
+      android:hint="بارکد کالا">
+
+      <android.support.design.widget.TextInputEditText
+        android:id="@+id/barcode_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    </android.support.design.widget.TextInputLayout>
+  </LinearLayout>
+</LinearLayout>
