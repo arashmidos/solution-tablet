@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,12 +20,12 @@ import com.parsroyal.solutiontablet.data.model.Packer;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.activity.PackerActivity;
 import com.parsroyal.solutiontablet.ui.adapter.PackerGoodsAdapter;
-import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.PackerAddGoodBottomSheet;
-import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.PackerAddGoodDialogFragment;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -104,10 +103,15 @@ public class PackerDetailFragment extends BaseFragment {
     this.packer = packer;
 
     goodDetails = packer.getGoodDetails();
+    sortByRemaining();
     adapter = new PackerGoodsAdapter(activity, this, goodDetails);
     recyclerView.setAdapter(adapter);
     updateTopCounters();
 
+  }
+
+  private void sortByRemaining() {
+    Collections.sort(goodDetails, (g1, g2) -> g2.getRemain().compareTo(g1.getRemain()));
   }
 
   private void updateTopCounters() {
@@ -144,6 +148,7 @@ public class PackerDetailFragment extends BaseFragment {
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void getMessage(UpdateListEvent event) {
     updateTopCounters();
+    sortByRemaining();
     adapter.notifyDataSetChanged();
   }
 }

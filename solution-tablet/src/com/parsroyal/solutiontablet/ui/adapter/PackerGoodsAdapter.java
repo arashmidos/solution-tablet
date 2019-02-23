@@ -2,6 +2,7 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
@@ -97,6 +98,8 @@ public class PackerGoodsAdapter extends Adapter<ViewHolder> {
 
     @BindView(R.id.good_img)
     ImageView goodImg;
+    @BindView(R.id.good_status)
+    ImageView goodStatus;
     @BindView(R.id.good_name_tv)
     TextView goodNameTv;
     @BindView(R.id.good_code_value)
@@ -107,6 +110,8 @@ public class PackerGoodsAdapter extends Adapter<ViewHolder> {
     TextView packedValueTv;
     @BindView(R.id.remained_value_tv)
     TextView remainedValueTv;
+    @BindView(R.id.remained_tv)
+    TextView remainedTv;
     @BindView(R.id.main_lay)
     RelativeLayout mainLay;
     private int position;
@@ -134,6 +139,13 @@ public class PackerGoodsAdapter extends Adapter<ViewHolder> {
           .format("%s %s", NumberUtil.digitsToPersian(good.getPacked() / 1000), good.getuName())
           .trim());
       setMargin(position == details.size() - 1, mainLay);
+      if (good.getRemain() / 1000 == 0) {
+        setGoodCompleted();
+      } else {
+
+        setGoodNormal();
+      }
+
     }
 
     @OnClick({R.id.good_img, R.id.main_lay})
@@ -156,6 +168,22 @@ public class PackerGoodsAdapter extends Adapter<ViewHolder> {
         goodsFilterDialogFragment = PackerAddGoodDialogFragment.newInstance(good);
       }
       goodsFilterDialogFragment.show(ft, "add_good");
+    }
+
+
+    private void setGoodCompleted() {
+      mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.gift));
+      remainedValueTv.setVisibility(View.INVISIBLE);
+      remainedTv.setVisibility(View.INVISIBLE);
+      goodStatus.setVisibility(View.VISIBLE);
+    }
+
+
+    private void setGoodNormal() {
+      mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+      remainedValueTv.setVisibility(View.VISIBLE);
+      remainedTv.setVisibility(View.VISIBLE);
+      goodStatus.setVisibility(View.INVISIBLE);
     }
   }
 }
