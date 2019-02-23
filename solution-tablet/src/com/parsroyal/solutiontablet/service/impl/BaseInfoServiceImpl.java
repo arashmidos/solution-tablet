@@ -119,7 +119,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
   }
 
   @Override
-  public List<BaseInfo> retrieveByTypeAndCode(Long type, String code) {
+  public List<BaseInfo> retrieveByTypeAndCode(Long type, Long code) {
     String selection = String.format("%s = ? AND %s = ?", BaseInfo.COL_TYPE, BaseInfo.COL_CODE);
     String[] args = {String.valueOf(type), String.valueOf(code)};
     return baseInfoDao.retrieveAll(selection, args, null, null, null, "1");

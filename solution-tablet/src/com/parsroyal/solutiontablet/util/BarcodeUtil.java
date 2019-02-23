@@ -1,15 +1,8 @@
 package com.parsroyal.solutiontablet.util;
 
-import android.widget.Toast;
-import com.parsroyal.solutiontablet.SolutionTabletApplication;
-import com.parsroyal.solutiontablet.constants.BaseInfoTypes;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.data.entity.BaseInfo;
-import com.parsroyal.solutiontablet.service.BaseInfoService;
-import com.parsroyal.solutiontablet.service.impl.BaseInfoServiceImpl;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import timber.log.Timber;
 
@@ -19,13 +12,12 @@ public class BarcodeUtil {
     if (Empty.isEmpty(result)) {
       return null;
     }
-    result = "1\n0492476691\nIR100700001000212112388002\n070_010\n7405970202891861";
     String[] split = result.split("\n");
 
     if (split.length != 4) {
       if (split.length == 5) {
         split = Arrays.copyOfRange(split, 1, 5);
-      }else {
+      } else {
         return null;
       }
     }
@@ -40,13 +32,6 @@ public class BarcodeUtil {
     data.put(Constants.BANK_CODE, bankDetails[0]);
     data.put(Constants.BANK_BRANCH_CODE, bankDetails[1]);
 
-    BaseInfoService service = new BaseInfoServiceImpl(SolutionTabletApplication.getInstance());
-    List<BaseInfo> bank = service
-        .retrieveByTypeAndCode(BaseInfoTypes.BANK_NAME_TYPE.getId(), bankDetails[0]);
-    if (bank.size() > 0) {
-//      Toast.makeText(SolutionTabletApplication.getInstance(), "BAnk:" + bank.get(0).getTitle(),
-//          Toast.LENGTH_SHORT).show();
-    }
     return data;
   }
 }

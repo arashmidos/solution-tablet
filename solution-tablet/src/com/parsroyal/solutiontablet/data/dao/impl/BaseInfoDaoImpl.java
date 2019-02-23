@@ -82,7 +82,7 @@ public class BaseInfoDaoImpl extends AbstractDao<BaseInfo, Long> implements Base
     Cursor cursor = db.query(getTableName(), getProjection(), selection, args, null, null, orderBy);
     List<LabelValue> entities = new ArrayList<>();
     while (cursor.moveToNext()) {
-      entities.add(new LabelValue(cursor.getLong(1), cursor.getString(3)));
+      entities.add(new LabelValue(cursor.getLong(1), cursor.getString(3), cursor.getString(2)));
     }
     cursor.close();
     return entities;

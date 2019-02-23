@@ -38,6 +38,6 @@ public interface BaseInfoService extends BaseService {
 
   List<LabelValue> search(Long activityType, String constraint);
 
-  List<BaseInfo> retrieveByTypeAndCode(Long type, String code);
+  List<BaseInfo> retrieveByTypeAndCode(Long type, Long code);
 
 }

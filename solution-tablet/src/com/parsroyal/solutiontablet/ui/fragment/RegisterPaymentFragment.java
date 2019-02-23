@@ -205,6 +205,18 @@ public class RegisterPaymentFragment extends BaseFragment {
     accountNumEdt.setText(extractedData.get(Constants.SHABA));
     chequeNumEdt.setText(NumberUtil.digitsToPersian(extractedData.get(Constants.CHECK_SERIAL)));
     branchEdt.setText(NumberUtil.digitsToPersian(extractedData.get(Constants.BANK_BRANCH_CODE)));
+    String bankCode = extractedData.get(Constants.BANK_CODE);
+    if (Empty.isNotEmpty(bankCode)) {
+      bankCode = bankCode.substring(1);
+    }
+    int position = 0;
+    for (LabelValue labelValue : bankList) {
+      if (labelValue.getCode().equals(bankCode)) {
+        bankSpinner.setSelection(position);
+        break;
+      }
+      position++;
+    }
 //    data.put(Constants.BANK_CODE, bankDetails[0]);
   }
 
@@ -356,6 +368,7 @@ public class RegisterPaymentFragment extends BaseFragment {
             }
             position++;
           }
+
           break;
         default:
           onCashSelected();
