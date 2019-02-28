@@ -5,7 +5,7 @@
   android:background="@color/white"
   android:layoutDirection="ltr"
   android:orientation="vertical"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.NavigationDrawerFragment"
+  tools:context="com.parsroyal.storemanagement.ui.fragment.NavigationDrawerFragment"
   tools:ignore="contentDescription">
 
   <ScrollView

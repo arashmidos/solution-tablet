@@ -5,7 +5,7 @@
   android:layout_height="match_parent"
   android:padding="16dp"
   android:background="@color/white"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.SettingFragment">
+  tools:context="com.parsroyal.storemanagement.ui.fragment.SettingFragment">
   <TextView
     android:id="@+id/default_nav_title"
     style="@style/IranSans.Bold"

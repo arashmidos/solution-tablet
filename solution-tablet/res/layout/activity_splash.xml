@@ -6,7 +6,7 @@
   android:background="@color/splash_background"
   android:gravity="center">
 
-  <com.parsroyal.solutiontablet.ui.component.GifView
+  <com.parsroyal.storemanagement.ui.component.GifView
     android:id="@+id/gif1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

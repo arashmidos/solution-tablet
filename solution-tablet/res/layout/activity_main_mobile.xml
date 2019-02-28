@@ -7,7 +7,7 @@
   android:layout_height="match_parent"
   android:background="@color/features_background"
   android:transitionName="transition"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.FeaturesFragment">
+  tools:context="com.parsroyal.storemanagement.ui.fragment.FeaturesFragment">
 
   <android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
@@ -137,7 +137,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      tools:context="com.parsroyal.solutiontablet.ui.activity.MainActivity"/>
+      tools:context="com.parsroyal.storemanagement.ui.activity.MainActivity"/>
   </android.support.design.widget.CoordinatorLayout>
 
   <fragment
@@ -145,7 +145,7 @@
     android:layout_width="304dp"
     android:layout_height="match_parent"
     android:layout_gravity="end"
-    android:name="com.parsroyal.solutiontablet.ui.fragment.NavigationDrawerFragment"
+    android:name="com.parsroyal.storemanagement.ui.fragment.NavigationDrawerFragment"
     app:layout="@layout/fragment_navigation_drawer"/>
 </android.support.v4.widget.DrawerLayout>
 

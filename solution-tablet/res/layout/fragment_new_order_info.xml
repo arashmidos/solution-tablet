@@ -5,7 +5,7 @@
   android:layout_height="match_parent"
   android:background="@color/white"
   android:orientation="vertical"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment">
+  tools:context="com.parsroyal.storemanagement.ui.fragment.OrderInfoFragment">
 
   <ScrollView
     android:layout_width="match_parent"

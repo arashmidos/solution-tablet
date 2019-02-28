@@ -3,7 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/gray_f5"
+  android:background="@color/white"
   android:orientation="vertical"
   tools:context=".ui.activity.LoginActivity">
 
@@ -36,182 +36,171 @@
     </FrameLayout>
   </android.support.design.widget.AppBarLayout>
 
-  <LinearLayout
+  <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="96dp"
-    android:layout_marginRight="96dp"
-    android:orientation="horizontal"
-    android:weightSum="2">
+    android:layout_height="wrap_content">
 
-    <ImageView
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
-      android:paddingRight="96dp"
-      android:scaleType="center"
-      android:src="@drawable/logo" />
+    <LinearLayout
+      android:paddingLeft="64dp"
+      android:paddingRight="64dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
 
-    <ScrollView
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
-      android:layout_marginTop="24dp"
-      android:background="@color/white"
-      android:elevation="3dp">
+      <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="39dp"
+        android:src="@drawable/im_logo" />
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="32dp"
-        android:paddingStart="48dp"
-        android:paddingEnd="48dp"
-        android:paddingLeft="48dp"
-        android:paddingRight="48dp"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal">
 
-
-        <LinearLayout
-          android:layout_width="match_parent"
+        <android.support.design.widget.TextInputLayout
+          android:id="@+id/company_code_lay"
+          style="@style/IranSans"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginTop="32dp"
-          android:orientation="horizontal">
+          android:layout_weight="1"
+          android:layout_marginStart="32dp"
+          android:gravity="right"
+          android:hint="@string/company_code"
+          android:textColorHint="@color/login_gray"
+          app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-          <android.support.design.widget.TextInputLayout
-            android:id="@+id/company_code_lay"
-            style="@style/IranSans"
-            android:layout_width="0dp"
+          <EditText
+            android:id="@+id/company_code_edt"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:hint="@string/company_code"
-            android:textColorHint="@color/login_gray"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+            android:gravity="right|center_vertical"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_normal"
+            tools:text="sunstar" />
 
-            <EditText
-              android:id="@+id/company_code_edt"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="right|center_vertical"
-              android:imeOptions="actionNext"
-              android:inputType="text"
-              android:maxLines="1"
-              android:textColor="@android:color/black"
-              android:textSize="@dimen/text_normal"
-              tools:text="sunstar" />
-          </android.support.design.widget.TextInputLayout>
+        </android.support.design.widget.TextInputLayout>
 
-          <ImageView
-            android:id="@+id/company_code_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="19dp"
-            android:src="@drawable/ic_business"
-            android:tint="@color/login_gray" />
-        </LinearLayout>
-
-        <LinearLayout
-          android:layout_width="match_parent"
+        <ImageView
+          android:id="@+id/company_code_icon"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="24dp"
-          android:orientation="horizontal">
-
-          <android.support.design.widget.TextInputLayout
-            android:id="@+id/user_name_lay"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:hint="@string/username"
-            android:textColorHint="@color/login_gray"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-            <EditText
-              android:id="@+id/user_name_edt"
-              style="@style/IranSans"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="right|center_vertical"
-              android:imeOptions="actionNext"
-              android:inputType="text"
-              android:maxLines="1"
-              android:textColor="@android:color/black"
-              android:textSize="14sp"
-              tools:text="آقا آٰرش" />
-
-          </android.support.design.widget.TextInputLayout>
-
-          <ImageView
-            android:id="@+id/user_name_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="19dp"
-            android:src="@drawable/ic_person"
-            android:tint="@color/login_gray" />
-        </LinearLayout>
-
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="24dp"
-          android:orientation="horizontal">
-
-          <android.support.design.widget.TextInputLayout
-            android:id="@+id/password_lay"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:hint="@string/password"
-            android:textColorHint="@color/login_gray"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-            <EditText
-              android:id="@+id/password_edt"
-              style="@style/IranSans"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="right|center_vertical"
-              android:imeOptions="actionDone"
-              android:inputType="textPassword"
-              android:maxLines="1"
-              android:textColor="@android:color/black"
-              android:textSize="14sp"
-              tools:text="123456" />
-
-          </android.support.design.widget.TextInputLayout>
-
-          <ImageView
-            android:id="@+id/password_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="19dp"
-            android:src="@drawable/ic_vpn_key_black_24dp"
-            android:tint="@color/login_gray" />
-        </LinearLayout>
-
-
-        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-          android:id="@+id/log_in_btn"
-          style="@style/IranSans.Medium"
-          android:layout_width="match_parent"
-          android:layout_height="41dp"
-          android:layout_marginTop="32dp"
-          android:layout_marginBottom="32dp"
-          android:background="@drawable/rec_green"
-          android:gravity="center"
-          android:text="@string/enter"
-          android:textColor="@color/log_in_enter"
-          android:textSize="14sp"
-          android:transitionName="transition"
-          app:spinning_bar_color="#FFF"
-          app:spinning_bar_padding="6dp"
-          app:spinning_bar_width="4dp" />
+          android:layout_marginTop="16dp"
+          android:layout_marginLeft="19dp"
+          android:layout_marginRight="34dp"
+          android:src="@drawable/ic_business"
+          android:tint="@color/login_gray" />
       </LinearLayout>
-    </ScrollView>
-  </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+          android:id="@+id/user_name_lay"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:layout_marginStart="32dp"
+          android:gravity="right"
+          android:hint="@string/username"
+          android:textColorHint="@color/login_gray"
+          app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+          <EditText
+            android:id="@+id/user_name_edt"
+            style="@style/IranSans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            tools:text="آقا آٰرش" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+          android:id="@+id/user_name_icon"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginLeft="19dp"
+          android:layout_marginRight="34dp"
+          android:src="@drawable/ic_person"
+          android:tint="@color/login_gray" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+          android:id="@+id/password_lay"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:layout_marginStart="32dp"
+          android:gravity="right"
+          android:hint="@string/password"
+          android:textColorHint="@color/login_gray"
+          app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+          <EditText
+            android:id="@+id/password_edt"
+            style="@style/IranSans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            tools:text="123456" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+          android:id="@+id/password_icon"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginLeft="19dp"
+          android:layout_marginRight="34dp"
+          android:src="@drawable/ic_vpn_key_black_24dp"
+          android:tint="@color/login_gray" />
+      </LinearLayout>
+
+      <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+        android:id="@+id/log_in_btn"
+        style="@style/IranSans.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:layout_margin="32dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/log_in_enter_bg"
+        android:gravity="center"
+        android:text="@string/enter"
+        android:textColor="@color/log_in_enter"
+        android:textSize="14sp"
+        android:transitionName="transition"
+        app:initialCornerAngle="2dp"
+        app:spinning_bar_color="#FFF"
+        app:spinning_bar_padding="6dp"
+        app:spinning_bar_width="4dp" />
+
+    </LinearLayout>
+  </ScrollView>
+
 </LinearLayout>

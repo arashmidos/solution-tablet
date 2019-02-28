@@ -105,7 +105,7 @@
           android:text="پاسخ:"/>
       </LinearLayout>
 
-      <com.parsroyal.solutiontablet.ui.component.FlowLayout
+      <com.parsroyal.storemanagement.ui.component.FlowLayout
         android:id="@+id/buttonAnswerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
         android:layout_marginRight="15dp"
         android:gravity="right|top">
 
-      </com.parsroyal.solutiontablet.ui.component.FlowLayout>
+      </com.parsroyal.storemanagement.ui.component.FlowLayout>
     </LinearLayout>
 
     <LinearLayout

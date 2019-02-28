@@ -5,7 +5,7 @@
   android:padding="@dimen/fragment_padding"
   android:background="@color/features_background"
   android:orientation="vertical"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.VisitLineDetailFragment">
+  tools:context="com.parsroyal.storemanagement.ui.fragment.VisitLineDetailFragment">
 
   <android.support.v7.widget.RecyclerView
     android:id="@+id/recycler_view"

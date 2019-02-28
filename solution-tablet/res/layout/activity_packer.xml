@@ -57,7 +57,7 @@
     android:layout_below="@+id/toolbar"
     android:layout_above="@id/bottom_bar"
     android:orientation="vertical"
-    tools:context="com.parsroyal.solutiontablet.ui.activity.PackerActivity">
+    tools:context="com.parsroyal.storemanagement.ui.activity.PackerActivity">
 
     <android.support.design.widget.TabLayout
       android:id="@+id/tabs"

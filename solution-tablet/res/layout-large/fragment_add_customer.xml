@@ -7,7 +7,7 @@
   android:background="@color/white"
   android:orientation="horizontal"
   android:weightSum="1"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.AddCustomerFragment"
+  tools:context="com.parsroyal.storemanagement.ui.fragment.AddCustomerFragment"
   tools:ignore="contentDescription">
   <View
     android:layout_width="0dp"

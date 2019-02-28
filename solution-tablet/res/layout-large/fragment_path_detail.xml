@@ -4,7 +4,7 @@
   android:layout_height="match_parent"
   android:background="@color/gray_f5"
   android:orientation="vertical"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.VisitLineDetailFragment">
+  tools:context="com.parsroyal.storemanagement.ui.fragment.VisitLineDetailFragment">
 
   <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"

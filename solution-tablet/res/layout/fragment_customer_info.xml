@@ -6,7 +6,7 @@
   android:layout_height="match_parent"
   android:background="@color/features_background"
   android:fillViewport="true"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.CustomerInfoFragment"
+  tools:context="com.parsroyal.storemanagement.ui.fragment.CustomerInfoFragment"
   tools:ignore="contentDescription">
 
   <LinearLayout

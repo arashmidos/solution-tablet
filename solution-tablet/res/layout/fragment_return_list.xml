@@ -4,7 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/white"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.OrderListFragment">
+  tools:context="com.parsroyal.storemanagement.ui.fragment.OrderListFragment">
 
   <android.support.v7.widget.RecyclerView
     android:id="@+id/recycler_view"

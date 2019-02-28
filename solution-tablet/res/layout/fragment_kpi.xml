@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <com.parsroyal.solutiontablet.ui.component.GaugeView
+        <com.parsroyal.storemanagement.ui.component.GaugeView
           android:id="@+id/gauge_view1"
           android:layout_width="220dp"
           android:layout_height="220dp"
@@ -56,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <com.parsroyal.solutiontablet.ui.component.GaugeView
+        <com.parsroyal.storemanagement.ui.component.GaugeView
           android:id="@+id/gauge_view2"
           android:layout_width="220dp"
           android:layout_height="220dp"

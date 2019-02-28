@@ -4,7 +4,7 @@
   android:layout_height="match_parent"
   android:background="@color/gray_f5"
   android:orientation="vertical"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.QuestionsListFragment">
+  tools:context="com.parsroyal.storemanagement.ui.fragment.QuestionsListFragment">
   <TextView
     android:id="@+id/title_tv"
     style="@style/IranSans"

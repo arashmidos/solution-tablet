@@ -6,7 +6,7 @@
   android:background="@color/white"
   android:orientation="horizontal"
   android:weightSum="10"
-  tools:context="com.parsroyal.solutiontablet.ui.fragment.RegisterPaymentFragment">
+  tools:context="com.parsroyal.storemanagement.ui.fragment.RegisterPaymentFragment">
   <View
     android:layout_width="0dp"
     android:layout_height="match_parent"
