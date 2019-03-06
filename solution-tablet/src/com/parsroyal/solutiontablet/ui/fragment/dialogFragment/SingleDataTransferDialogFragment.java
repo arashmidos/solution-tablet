@@ -64,7 +64,6 @@ import com.parsroyal.solutiontablet.ui.adapter.SingleDataTransferAdapter;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-import java.io.File;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -127,7 +126,7 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     View view = inflater.inflate(R.layout.fragment_single_data_transfer_dialog, container, false);
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
-
+    setCancelable(false);
     Bundle args = getArguments();
     if (Empty.isNotEmpty(args)) {
       visitId = args.getLong(Constants.VISIT_ID, -1);
@@ -541,4 +540,5 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
     }
     super.onDestroyView();
   }
+
 }

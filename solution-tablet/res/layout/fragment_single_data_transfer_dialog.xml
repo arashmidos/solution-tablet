@@ -37,15 +37,16 @@
         android:textColor="@color/primary"
         android:textSize="16sp" />
 
-      <Button
+
+      <ImageView
         android:id="@+id/close"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_gravity="center|end"
-        android:background="@drawable/ic_close_24dp"
-        android:backgroundTint="@color/login_gray" />
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:backgroundTint="@color/login_gray"
+        android:src="@drawable/ic_close_24dp"/>
     </FrameLayout>
   </android.support.design.widget.AppBarLayout>
 
