@@ -11,10 +11,9 @@ import com.parsroyal.solutiontablet.biz.impl.PositionDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
-import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import java.util.List;
 
 public class SendLocationService extends IntentService {
@@ -22,7 +21,6 @@ public class SendLocationService extends IntentService {
   public static final String TAG = SendLocationService.class.getSimpleName();
 
   private PositionService positionService;
-  private SettingService settingService;
 
   /**
    * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -30,7 +28,6 @@ public class SendLocationService extends IntentService {
   public SendLocationService() {
     super("Send Location Service");
     positionService = new PositionServiceImpl(this);
-    settingService = new SettingServiceImpl();
   }
 
   @Override
@@ -48,8 +45,8 @@ public class SendLocationService extends IntentService {
   protected void onHandleIntent(@Nullable Intent intent) {
 
     Log.i(TAG, "Send locations...");
-    String salesmanId = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
-    String saleType = settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+    Long salesmanId = PreferenceHelper.getSalesmanId();
+    String saleType = PreferenceHelper.getSaleType();
     if (Empty.isNotEmpty(salesmanId) && Empty.isNotEmpty(saleType) && NetworkUtil
         .isNetworkAvailable(this)) {
 
@@ -57,14 +54,13 @@ public class SendLocationService extends IntentService {
           .getAllPositionDtoByStatus(SendStatus.NEW.getId());
       if (Empty.isNotEmpty(positions)) {
 
-        PositionDataTransferBizImpl positionDataTransferBiz = new PositionDataTransferBizImpl(
-            this);
-        positionDataTransferBiz.setNoUpdate(true);
+        PositionDataTransferBizImpl transferBiz = new PositionDataTransferBizImpl(this);
+        transferBiz.setNoUpdate(true);
         for (int i = 0; i < positions.size(); i++) {
           PositionDto positionDto = positions.get(i);
 
-          positionDataTransferBiz.setPosition(positionDto);
-          positionDataTransferBiz.sendAllData();
+          transferBiz.setPosition(positionDto);
+          transferBiz.sendAllData();//TODO: Thread.sleep
         }
       }
     }

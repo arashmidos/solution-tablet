@@ -1,11 +1,9 @@
 package com.parsroyal.solutiontablet.util;
 
 import android.content.SharedPreferences;
-
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
-
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -103,5 +101,11 @@ public class PreferenceHelper {
   public static void setAuthorities(SortedSet<String> authorities) {
     SolutionTabletApplication.getPreference().edit().putStringSet(AUTHORITIES, authorities)
         .apply();
+  }
+
+  public static Long getSalesmanId() {
+    String salesmanId = SolutionTabletApplication.getPreference()
+        .getString(ApplicationKeys.SALESMAN_ID, "");
+    return Empty.isEmpty(salesmanId) ? null : Long.parseLong(salesmanId);
   }
 }

@@ -5,11 +5,8 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mahyar
- * Date: 2/26/15
- * Time: 05:00 PM
- * To change this template use File | Settings | File Templates.
+ * Created by IntelliJ IDEA. User: mahyar Date: 2/26/15 Time: 05:00 PM To change this template use
+ * File | Settings | File Templates.
  */
 public class Empty {
 
@@ -17,12 +14,16 @@ public class Empty {
     return o == null;
   }
 
+  public static boolean isEmptyOrZero(Long number) {
+    return Empty.isEmpty(number) || number == 0L;
+  }
+
   public static boolean isNotEmpty(Object o) {
     return o != null;
   }
 
   public static boolean isNotEmpty(Position p) {
-    return p!=null && p.getLatitude()!=null && p.getLongitude()!=null;
+    return p != null && p.getLatitude() != null && p.getLongitude() != null;
   }
 
   public static boolean isEmpty(String s) {

@@ -257,16 +257,15 @@ public class DataTransferServiceImpl implements DataTransferService {
   public void sendAllPositions() {
     List<PositionDto> positions = positionService.getAllPositionDtoByStatus(SendStatus.NEW.getId());
     if (Empty.isNotEmpty(positions)) {
-      PositionDataTransferBizImpl positionDataTransferBiz = new PositionDataTransferBizImpl(
-          context);
+      PositionDataTransferBizImpl transferBiz = new PositionDataTransferBizImpl(context);
 
       for (int i = 0; i < positions.size(); i++) {
         PositionDto positionDto = positions.get(i);
-        positionDataTransferBiz.setPosition(positionDto);
-        positionDataTransferBiz.sendAllData();
+        transferBiz.setPosition(positionDto);
+        transferBiz.sendAllData();
       }
       EventBus.getDefault().post(new DataTransferSuccessEvent(
-          positionDataTransferBiz.getSuccessfulMessage(), StatusCodes.SUCCESS));
+          transferBiz.getSuccessfulMessage(), StatusCodes.SUCCESS));
     } else {
       EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
           R.string.message_no_positions_for_sending), StatusCodes.NO_DATA_ERROR));

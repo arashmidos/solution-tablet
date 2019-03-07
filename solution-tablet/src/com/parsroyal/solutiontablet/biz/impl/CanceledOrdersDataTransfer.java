@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -29,7 +28,6 @@ import retrofit2.Response;
  */
 public class CanceledOrdersDataTransfer {
 
-  private static final String TAG = CanceledOrdersDataTransfer.class.getSimpleName();
   private final SaleOrderDao saleOrderDao;
   protected BaseSaleDocument order;
   protected VisitService visitService;
@@ -65,12 +63,14 @@ public class CanceledOrdersDataTransfer {
   public void exchangeData() {
     if (!NetworkUtil.isNetworkAvailable(context)) {
       EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.NO_NETWORK));
+      return;
     }
 
     PostDataRestService restService = ServiceGenerator.createService(PostDataRestService.class);
 
     SaleInvoiceDocument invoiceDocument = (SaleInvoiceDocument) this.order;
-    Call<String> call = restService.cancelOrders(invoiceDocument.getSaleOrderId(),invoiceDocument.getRejectType());
+    Call<String> call = restService
+        .cancelOrders(invoiceDocument.getSaleOrderId(), invoiceDocument.getRejectType());
 
     try {
       Response<String> response = call.execute();

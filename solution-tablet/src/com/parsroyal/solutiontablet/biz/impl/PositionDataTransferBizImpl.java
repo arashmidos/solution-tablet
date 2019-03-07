@@ -1,57 +1,79 @@
 package com.parsroyal.solutiontablet.biz.impl;
 
 import android.content.Context;
-import android.util.Log;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
-import com.parsroyal.solutiontablet.biz.AbstractDataTransferBizImpl;
 import com.parsroyal.solutiontablet.constants.SaleType;
 import com.parsroyal.solutiontablet.constants.SendStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.DataTransferSuccessEvent;
+import com.parsroyal.solutiontablet.data.event.PositionDataTransferErrorEvent;
 import com.parsroyal.solutiontablet.data.model.PositionDto;
 import com.parsroyal.solutiontablet.service.PositionService;
+import com.parsroyal.solutiontablet.service.PostDataRestService;
+import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.service.impl.PositionServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
-import com.parsroyal.solutiontablet.ui.observer.ResultObserver;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import retrofit2.Call;
+import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * Created by Arash on 2016-08-21
  */
-public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<String> {
+public class PositionDataTransferBizImpl {
 
-  public static final String TAG = PaymentsDataTransferBizImpl.class.getSimpleName();
   private final SettingServiceImpl settingService;
 
   private Context context;
   private PositionService positionService;
-  private ResultObserver observer;
   private PositionDto positionDto;
   private int success = 0;
   private int total = 0;
   private boolean noUpdate;
 
   public PositionDataTransferBizImpl(Context context) {
-    super(context);
     this.context = context;
     this.positionService = new PositionServiceImpl(context);
     this.settingService = new SettingServiceImpl();
   }
 
-  @Override
-  public void receiveData(String response) {
+  public void sendAllData() {
+    if (!NetworkUtil.isNetworkAvailable(context)) {
+      EventBus.getDefault().post(new PositionDataTransferErrorEvent(StatusCodes.NO_NETWORK));
+      return;
+    }
+
+    PostDataRestService restService = ServiceGenerator.createService(PostDataRestService.class);
+
+    Call<Response<Void>> call = restService.sendPosition(positionDto);
+
+    try {
+      Response<Response<Void>> response = call.execute();
+      if (response.isSuccessful()) {
+        updateData();
+      }
+      if (!noUpdate) {
+        EventBus.getDefault()
+            .post(new DataTransferSuccessEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
+      }
+    } catch (IOException e) {
+      Timber.d(e);
+      EventBus.getDefault().post(new PositionDataTransferErrorEvent(StatusCodes.NETWORK_ERROR));
+    }
+  }
+
+  public void updateData() {
     try {
       Position position = positionService.getPositionById(positionDto.getId());
       if (Empty.isNotEmpty(position)) {
@@ -62,12 +84,7 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
         success++;
       }
     } catch (Exception ex) {
-      Crashlytics
-          .log(Log.ERROR, "Data transfer", "Error in receiving PositionData " + ex.getMessage());
-    }
-    if (!noUpdate) {
-      EventBus.getDefault()
-          .post(new DataTransferSuccessEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
+      Timber.d(ex);
     }
   }
 
@@ -78,58 +95,23 @@ public class PositionDataTransferBizImpl extends AbstractDataTransferBizImpl<Str
             String.valueOf(total - success)));
   }
 
-  @Override
-  public void beforeTransfer() {
-  }
-
-  @Override
-  public ResultObserver getObserver() {
-    return observer;
-  }
-
-  @Override
   public String getMethod() {
     return "positions";
-  }
-
-  @Override
-  public Class getType() {
-    return String.class;
-  }
-
-  @Override
-  public HttpMethod getHttpMethod() {
-    return HttpMethod.POST;
-  }
-
-  @Override
-  protected MediaType getContentType() {
-    return MediaType.APPLICATION_JSON;
-  }
-
-  @Override
-  protected HttpEntity getHttpEntity(HttpHeaders headers) {
-    return new HttpEntity<>(positionDto, headers);
   }
 
   public void setPosition(PositionDto positionDto) {
     this.positionDto = positionDto;
     try {
-      if (Empty.isEmpty(positionDto.getPersonId()) || positionDto.getPersonId() == 0) {
+      if (Empty.isEmptyOrZero(positionDto.getPersonId())) {
         String settingValue = settingService.getSettingValue(ApplicationKeys.SALESMAN_ID);
         positionDto.setPersonId(Long.valueOf(settingValue));
       }
-      this.positionDto.setSaleType(SaleType.getByValue(
-          Long.parseLong(settingService.getSettingValue(ApplicationKeys.SETTING_SALE_TYPE))));
-
+      this.positionDto.setSaleType(
+          SaleType.getByValue(Long.parseLong(PreferenceHelper.getSaleType())));
     } catch (Exception ex) {
       positionDto.setSaleType(SaleType.COLD);
     }
-    this.total++;
-  }
-
-  public void sendAllData() {
-    exchangeData();
+    total++;
   }
 
   public void setNoUpdate(boolean noUpdate) {
