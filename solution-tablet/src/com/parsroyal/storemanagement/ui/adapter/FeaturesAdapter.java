@@ -21,6 +21,7 @@ import com.parsroyal.storemanagement.service.impl.SettingServiceImpl;
 import com.parsroyal.storemanagement.ui.activity.DetectGoodActivity;
 import com.parsroyal.storemanagement.ui.activity.MainActivity;
 import com.parsroyal.storemanagement.ui.activity.PackerActivity;
+import com.parsroyal.storemanagement.ui.activity.WarehouseHandling;
 import com.parsroyal.storemanagement.util.NumberUtil;
 import com.parsroyal.storemanagement.util.constants.ApplicationKeys;
 import java.util.List;
@@ -63,7 +64,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     }
     holder.featureImg.setImageResource(feature.getImageId());
     holder.featureTitleTv.setText(feature.getTitle());
-    if (position > 1) {
+    if (position > 2) {
       holder.featureTitleTv.setTextColor(ContextCompat.getColor(context, R.color.gray));
     } else {
       holder.featureTitleTv.setTextColor(ContextCompat.getColor(context, R.color.primary_dark));
@@ -77,8 +78,8 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
         case 1://Packers
           context.startActivity(new Intent(context, PackerActivity.class));
           break;
-        case 2://reports
-//          context.changeFragment(MainActivity.REPORT_FRAGMENT, true);
+        case 2://انبار گردانی
+          context.startActivity(new Intent(context, WarehouseHandling.class));
           break;
         case 3://Goods
 //          Bundle args = new Bundle();

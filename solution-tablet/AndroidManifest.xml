@@ -17,8 +17,8 @@
   <!--<uses-permission android:name="com.parsroyal.solutionmobile.permission.C2D_MESSAGE" />-->
 
   <!--<permission-->
-    <!--android:name="com.parsroyal.solutionmobile.permission.C2D_MESSAGE"-->
-    <!--android:protectionLevel="signature" />-->
+  <!--android:name="com.parsroyal.solutionmobile.permission.C2D_MESSAGE"-->
+  <!--android:protectionLevel="signature" />-->
 
   <uses-feature android:name="android.hardware.camera" />
   <uses-feature
@@ -49,8 +49,8 @@
 
     <activity
       android:name="com.parsroyal.storemanagement.ui.activity.SplashActivity"
-      android:theme="@style/NoActionBar"
       android:screenOrientation="portrait"
+      android:theme="@style/NoActionBar"
 
       android:windowSoftInputMode="adjustPan">
       <intent-filter>
@@ -61,8 +61,8 @@
     </activity>
     <activity
       android:name="com.parsroyal.storemanagement.ui.activity.LoginActivity"
-      android:theme="@style/NoActionBar"
       android:screenOrientation="portrait"
+      android:theme="@style/NoActionBar"
 
       android:windowSoftInputMode="adjustNothing" />
     <activity
@@ -99,6 +99,10 @@
       android:name="com.parsroyal.storemanagement.ui.activity.PackerActivity"
       android:screenOrientation="portrait"
       android:theme="@style/NoActionBar" />
+    <activity
+      android:name=".ui.activity.WarehouseHandling"
+      android:screenOrientation="portrait"
+      android:theme="@style/NoActionBar" />
 
     <meta-data
       android:name="com.google.android.maps.v2.API_KEY"
@@ -107,41 +111,41 @@
       android:name="io.fabric.ApiKey"
       android:value="bf939acb1b76ea3f52f26b54a1d8f266e5f6fea4" />
 
-   <!-- <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver">
-      <intent-filter>
-        <action android:name="android.intent.action.PACKAGE_REPLACED" />
+    <!-- <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver">
+       <intent-filter>
+         <action android:name="android.intent.action.PACKAGE_REPLACED" />
 
-        <data
-          android:path="com.parsroyal.solutionmobile"
-          android:scheme="package" />
-      </intent-filter>
-    </receiver>-->
+         <data
+           android:path="com.parsroyal.solutionmobile"
+           android:scheme="package" />
+       </intent-filter>
+     </receiver>-->
     <!--<receiver-->
-      <!--android:exported="true"-->
-      <!--android:name="com.google.android.gms.gcm.GcmReceiver"-->
-      <!--android:permission="com.google.android.c2dm.permission.SEND">-->
-      <!--<intent-filter>-->
-        <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+    <!--android:exported="true"-->
+    <!--android:name="com.google.android.gms.gcm.GcmReceiver"-->
+    <!--android:permission="com.google.android.c2dm.permission.SEND">-->
+    <!--<intent-filter>-->
+    <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
 
-        <!--<action android:name="com.google.android.c2dm.intent.REGISTRATION" />-->
+    <!--<action android:name="com.google.android.c2dm.intent.REGISTRATION" />-->
 
-        <!--<category android:name="com.parsroyal.solutionmobile" />-->
-      <!--</intent-filter>-->
+    <!--<category android:name="com.parsroyal.solutionmobile" />-->
+    <!--</intent-filter>-->
     <!--</receiver>-->
 
     <!--<meta-data-->
-      <!--android:name="co.ronash.pushe.token"-->
-      <!--android:value="PUSHE_298558607809" />-->
+    <!--android:name="co.ronash.pushe.token"-->
+    <!--android:value="PUSHE_298558607809" />-->
     <!--<meta-data-->
-      <!--android:name="co.ronash.pushe.cr"-->
-      <!--android:value="Tm9uZQ==" />-->
+    <!--android:name="co.ronash.pushe.cr"-->
+    <!--android:value="Tm9uZQ==" />-->
 
     <!--<service-->
-      <!--android:exported="false"-->
-      <!--android:name=".pushe.MyPushListener">-->
-      <!--<intent-filter>-->
-        <!--<action android:name="co.ronash.pushe.RECEIVE" />-->
-      <!--</intent-filter>-->
+    <!--android:exported="false"-->
+    <!--android:name=".pushe.MyPushListener">-->
+    <!--<intent-filter>-->
+    <!--<action android:name="co.ronash.pushe.RECEIVE" />-->
+    <!--</intent-filter>-->
     <!--</service>-->
   </application>
 </manifest>

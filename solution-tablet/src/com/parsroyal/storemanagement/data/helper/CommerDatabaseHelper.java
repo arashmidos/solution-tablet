@@ -23,6 +23,7 @@ import com.parsroyal.storemanagement.data.entity.VisitInformation;
 import com.parsroyal.storemanagement.data.entity.VisitInformationDetail;
 import com.parsroyal.storemanagement.data.entity.VisitLine;
 import com.parsroyal.storemanagement.data.entity.VisitLineDate;
+import com.parsroyal.storemanagement.data.model.StockGood;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -39,7 +40,7 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
   public static final String OUTPUT_PATH = Environment.getExternalStoragePublicDirectory(
       Environment.DIRECTORY_DOWNLOADS) + "/" + Constants.APPLICATION_NAME + "/Backup/";
   private static final String DATABASE_NAME = "Commer";
-  private static final Integer DATABASE_VERSION = 24;
+  private static final Integer DATABASE_VERSION = 25;
   private static final String SQL_ADD_COLUMN = "ALTER TABLE %s ADD COLUMN %s %s ";
   private static String DATABASE_PATH = "/data/data/com.parsroyal.storemanagement/databases/";
   private static CommerDatabaseHelper sInstance;
@@ -110,6 +111,7 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
     db.execSQL(Position.CREATE_TABLE_SCRIPT);
     db.execSQL(VisitInformationDetail.CREATE_TABLE_SQL);
     db.execSQL(VisitLineDate.CREATE_TABLE_SQL);
+    db.execSQL(StockGood.CREATE_TABLE_SQL);
     Timber.i("end of creating tables");
   }
 
@@ -224,6 +226,8 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
           Goods.COL_SUPPLIER, "TEXT"));
       db.execSQL(String.format(SQL_ADD_COLUMN, Goods.TABLE_NAME,
           Goods.COL_ASSORTMENT, "TEXT"));
+    }    if (oldVersion < 25) {
+      db.execSQL(StockGood.CREATE_TABLE_SQL);
     }
   }
 }

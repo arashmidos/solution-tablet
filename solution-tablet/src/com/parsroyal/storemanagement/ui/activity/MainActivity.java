@@ -140,6 +140,8 @@ public abstract class MainActivity extends AppCompatActivity {
   FrameLayout container;
   @BindView(R.id.navigation_img)
   ImageView navigationImg;
+  @BindView(R.id.setting_img)
+  ImageView settingImg;
   @Nullable
   @BindView(R.id.detail_tv)
   TextView detailTv;
@@ -509,11 +511,15 @@ public abstract class MainActivity extends AppCompatActivity {
 
   public abstract void onNavigationTapped();
 
-  @OnClick({R.id.navigation_img, R.id.search_img, R.id.save_img, R.id.notif_img, R.id.filter_img})
+  @OnClick({R.id.navigation_img, R.id.search_img, R.id.save_img, R.id.notif_img, R.id.filter_img,
+      R.id.setting_img})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.navigation_img:
         onNavigationTapped();
+        break;
+      case R.id.setting_img:
+        DialogUtil.showListDialog(this);
         break;
       case R.id.search_img:
         Fragment orderFragment = getSupportFragmentManager()
@@ -835,6 +841,10 @@ public abstract class MainActivity extends AppCompatActivity {
       hideTimer();
     }
     searchImg.setVisibility(visibility);
+  }
+
+  public void changeSettingImageVisibility(int visibility) {
+    settingImg.setVisibility(visibility);
   }
 
   public boolean isPhoneVisit() {

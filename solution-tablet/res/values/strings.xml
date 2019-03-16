@@ -689,5 +689,8 @@
   <string name="message_location_submitted_successfully">ثبت موقعیت با موفقیت انجام شد!</string>
   <string name="packer_scan_barcode">اسکن بارکد کالا</string>
   <string name="msg_wrong_input_order_code">کد وارد شده صحیح نیست</string>
+  <string name="stock_check_status">بررسی وضعیت انبار</string>
+  <string name="error_stock_not_active">امکان انبار گردانی برای این انبار وجود ندارد</string>
+  <string name="good_not_exist">کالا موجود نیست</string>
 
 </resources>

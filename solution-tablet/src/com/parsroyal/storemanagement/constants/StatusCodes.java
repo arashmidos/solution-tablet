@@ -11,6 +11,7 @@ import com.parsroyal.storemanagement.util.Empty;
 public enum StatusCodes {
   SUCCESS(200, R.string.data_transfered_successfully),
   FORBIDDEN(403, R.string.error_forbidden),
+  STOCK_CHECK_STATUS(600, R.string.stock_check_status),
   NO_NETWORK(1001, R.string.error_no_network),
   INVALID_DATA(1002, R.string.error_connecting_server),
   NETWORK_ERROR(1003,

@@ -52,9 +52,10 @@ public class SettingServiceImpl implements SettingService {
 
     saveUserInfo(NetworkUtil.extractUserInfo(token));
 
-    keyValueBiz.save(new KeyValue(ApplicationKeys.TOKEN, token));
-
+    PreferenceHelper.setToken(token);
     PreferenceHelper.setAuthorities(response.getAuthorities());
+    PreferenceHelper.saveStockList(response.getStocks());
+
   }
 
   @Override

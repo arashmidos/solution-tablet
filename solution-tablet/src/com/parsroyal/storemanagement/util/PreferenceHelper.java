@@ -1,11 +1,18 @@
 package com.parsroyal.storemanagement.util;
 
-import android.content.SharedPreferences;
+import static com.parsroyal.storemanagement.util.constants.ApplicationKeys.TOKEN;
 
+import android.content.SharedPreferences;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.parsroyal.storemanagement.SolutionTabletApplication;
 import com.parsroyal.storemanagement.data.entity.KeyValue;
+import com.parsroyal.storemanagement.data.entity.Stock;
 import com.parsroyal.storemanagement.util.constants.ApplicationKeys;
-
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -17,6 +24,8 @@ public class PreferenceHelper {
   private static final String AUTHORITIES = "setting.authorities";
   private static final String DEF_NAVIGATOR = "DEF_NAVIGATOR";
   private static final String BADGER = "BADGER";
+  private static final String STOCK_LIST = "STOCK_LIST";
+  private static final String SELECTED_STOCK = "SELECTED_STOCK";
 
   public static int getLatestVersion() {
     return SolutionTabletApplication.getPreference().getInt(LATEST_VERSION, 0);
@@ -112,5 +121,67 @@ public class PreferenceHelper {
   public static void setAuthorities(SortedSet<String> authorities) {
     SolutionTabletApplication.getPreference().edit().putStringSet(AUTHORITIES, authorities)
         .apply();
+  }
+
+  public static ArrayList<Stock> getStockList() {
+
+    ArrayList<Stock> stocks = null;
+    try {
+      Gson gson = new Gson();
+      String userToString = SolutionTabletApplication.getPreference().getString(STOCK_LIST, "");
+      Type listType = new TypeToken<ArrayList<Stock>>() {
+      }.getType();
+      stocks = new Gson().fromJson(userToString, listType);
+    } catch (JsonSyntaxException e) {
+      e.printStackTrace();
+      return null;
+    }
+    return stocks;
+  }
+
+
+  public static void saveStockList(List<Stock> stocks) {
+    if (Empty.isEmpty(stocks)) {
+      return;
+    }
+    Gson gson = new Gson();
+    String jsonQueue = gson.toJson(stocks);
+    SolutionTabletApplication.getPreference().edit().putString(STOCK_LIST, jsonQueue).apply();
+  }
+
+  public static String getToken() {
+    return SolutionTabletApplication.getPreference().getString(TOKEN, "");
+  }
+
+  public static void setToken(String token) {
+    SolutionTabletApplication.getPreference().edit().putString(TOKEN, token).apply();
+  }
+
+  public static int getSelectedStock() {
+    return SolutionTabletApplication.getPreference().getInt(SELECTED_STOCK, 0);
+  }
+
+  public static void setSelectedStock(int selectedStock) {
+    SolutionTabletApplication.getPreference().edit().putInt(SELECTED_STOCK, selectedStock).apply();
+  }
+
+  public static Long getSelectedStockAsn() {
+    ArrayList<Stock> stocksList = getStockList();
+    int selectedStock = getSelectedStock();
+    if (Empty.isEmpty(stocksList) || Empty.isEmpty(stocksList.get(selectedStock))) {
+      return null;
+    }
+
+    return stocksList.get(selectedStock).getAsn();
+  }
+
+  public static String getSelectedStockName() {
+    ArrayList<Stock> stocksList = getStockList();
+    int selectedStock = getSelectedStock();
+    if (Empty.isEmpty(stocksList) || Empty.isEmpty(stocksList.get(selectedStock))) {
+      return "<نامشخص>";
+    }
+
+    return stocksList.get(selectedStock).getNameSTK();
   }
 }

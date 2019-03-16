@@ -1,5 +1,6 @@
 package com.parsroyal.storemanagement.util;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,7 +16,9 @@ import android.widget.TextView;
 import com.parsroyal.storemanagement.BuildConfig;
 import com.parsroyal.storemanagement.R;
 import com.parsroyal.storemanagement.constants.Constants;
+import com.parsroyal.storemanagement.data.entity.Stock;
 import com.parsroyal.storemanagement.ui.fragment.NavigationDrawerFragment.OnLoginListener;
+import java.util.ArrayList;
 
 /**
  * Created by Arash on 6/23/2015.
@@ -125,5 +129,30 @@ public class DialogUtil {
     if (progressDialog != null) {
       progressDialog.dismiss();
     }
+  }
+
+  public static void showListDialog(Activity context) {
+
+    AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+    builderSingle.setTitle("انتخاب انبار:");
+
+    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context,
+        android.R.layout.select_dialog_singlechoice);
+
+    ArrayList<Stock> stockList = PreferenceHelper.getStockList();
+    for (int i = 0; i < stockList.size(); i++) {
+      arrayAdapter.add(stockList.get(i).getNameSTK());
+    }
+    builderSingle.setNegativeButton("لغو", (dialog, which) -> dialog.dismiss());
+
+    builderSingle.setSingleChoiceItems(arrayAdapter, PreferenceHelper.getSelectedStock(),
+        (dialog, which) -> {
+          dialog.dismiss();
+          ToastUtil
+              .toastMessage(context, String.format("انبار جاری: %s", arrayAdapter.getItem(which)));
+          PreferenceHelper.setSelectedStock(which);
+        });
+
+    builderSingle.show();
   }
 }
