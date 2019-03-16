@@ -13,16 +13,7 @@
     android:layout_margin="16dp"
     android:layout_alignParentEnd="true"
     android:src="@drawable/goods_default" />
-  <ImageView
-    android:id="@+id/good_status"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:layout_marginStart="8dp"
-    android:layout_below="@id/packed_tv"
-    android:layout_toStartOf="@id/good_img"
-    android:src="@drawable/ic_check_circle_24_dp"
-    android:visibility="invisible" />
+
   <TextView
     android:id="@+id/good_name_tv"
     style="@style/IranSans.Medium"
@@ -31,7 +22,6 @@
     android:layout_marginTop="19dp"
     android:layout_marginStart="8dp"
     android:layout_toStartOf="@id/good_img"
-    android:text="گالف ضد يخ مکس کول 4 ليتري"
     android:textColor="@color/black_85"
     android:textSize="16sp"
     tools:text="گالف ضد يخ مکس کول 4 ليتري" />
@@ -47,6 +37,7 @@
     android:text="کد کالا:"
     android:textColor="@color/black_85"
     android:textSize="14sp" />
+
   <TextView
     android:id="@+id/good_code_value"
     style="@style/IranSans.Light"
@@ -61,6 +52,31 @@
     android:textSize="14sp"
     tools:text="12345" />
   <TextView
+    android:id="@+id/cargo_number"
+    style="@style/IranSans.Light"
+    android:layout_width="48dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="8dp"
+    android:layout_alignParentStart="true"
+    android:layout_below="@id/good_name_tv"
+    android:textColor="@color/black_85"
+    android:textSize="14sp"
+    tools:text="12345" />
+  <TextView
+    android:id="@+id/cargo_number_tv"
+    style="@style/IranSans.Medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:layout_marginStart="8dp"
+    android:layout_below="@id/good_name_tv"
+    android:layout_toEndOf="@id/cargo_number"
+    android:text="محموله:"
+    android:textColor="@color/black_85"
+    android:textSize="14sp" />
+  <TextView
     android:id="@+id/total_tv"
     style="@style/IranSans.Medium"
     android:layout_width="wrap_content"
@@ -69,11 +85,12 @@
     android:layout_marginStart="8dp"
     android:layout_below="@id/good_code_tv"
     android:layout_toStartOf="@id/good_img"
-    android:text="مجموع:"
+    android:text="واحد:"
     android:textColor="@color/black_85"
-    android:textSize="14sp" />
+    android:textSize="14sp"
+    android:visibility="invisible" />
   <TextView
-    android:id="@+id/total_value_tv"
+    android:id="@+id/unit_title"
     style="@style/IranSans.Medium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -83,6 +100,7 @@
     android:gravity="left"
     android:textColor="@color/black_85"
     android:textSize="14sp"
+    android:visibility="invisible"
     tools:text="۱۰ عدد" />
   <TextView
     android:id="@+id/packed_tv"
@@ -93,11 +111,11 @@
     android:layout_marginStart="8dp"
     android:layout_below="@id/total_tv"
     android:layout_toStartOf="@id/good_img"
-    android:text="جورشده:"
+    android:text="شمارش شده:"
     android:textColor="@color/green_return"
     android:textSize="14sp" />
   <TextView
-    android:id="@+id/packed_value_tv"
+    android:id="@+id/counted_value_tv"
     style="@style/IranSans.Medium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -108,36 +126,11 @@
     android:textColor="@color/green_return"
     android:textSize="14sp"
     tools:text="۶ عدد" />
-  <TextView
-    android:id="@+id/remained_tv"
-    style="@style/IranSans.Medium"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:layout_marginStart="8dp"
-    android:layout_below="@id/packed_tv"
-    android:layout_toStartOf="@id/good_img"
-    android:text="مانده:"
-    android:textColor="@color/red"
-    android:textSize="14sp" />
-  <TextView
-    android:id="@+id/remained_value_tv"
-    style="@style/IranSans.Medium"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_alignBaseline="@id/remained_tv"
-    android:layout_alignParentLeft="true"
-    android:gravity="left"
-    android:textColor="@color/red"
-    android:textSize="14sp"
-    tools:text="۴ عدد" />
-
 
   <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:layout_marginTop="17dp"
-    android:layout_below="@id/remained_tv"
+    android:layout_below="@id/packed_tv"
     android:background="@color/gray_e0" />
 </RelativeLayout>

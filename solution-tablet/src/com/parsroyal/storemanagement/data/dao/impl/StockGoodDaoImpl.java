@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.parsroyal.storemanagement.data.helper.CommerDatabaseHelper;
 import com.parsroyal.storemanagement.data.model.StockGood;
+import com.parsroyal.storemanagement.util.CharacterFixUtil;
 import java.util.List;
 
 /**
@@ -137,6 +138,8 @@ public class StockGoodDaoImpl extends AbstractDao<StockGood, Long> {
     db.beginTransaction();
     try {
       for (StockGood stockGood : list) {
+        stockGood.setGoodNamGLS(CharacterFixUtil.fixString(stockGood.getGoodNamGLS()));
+
         db.insert(getTableName(), null, getContentValues(stockGood));
       }
       db.setTransactionSuccessful();

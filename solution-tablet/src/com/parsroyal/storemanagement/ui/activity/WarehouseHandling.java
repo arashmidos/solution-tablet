@@ -1,8 +1,6 @@
 package com.parsroyal.storemanagement.ui.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
@@ -96,7 +94,6 @@ public class WarehouseHandling extends AppCompatActivity {
   private void loadData() {
     goods = stockGoodDaoImpl.retrieveAll();
     if (Empty.isNotEmpty(goods)) {
-
       updateList();
     }
   }
@@ -194,7 +191,15 @@ public class WarehouseHandling extends AppCompatActivity {
 
   private void showNewCountingDialog() {
 
-    DialogUtil.showConfirmDialog(this, "", "", (dialog, which) -> receiveData()
+    if (Empty.isNotEmpty(goods)) {
+      DialogUtil.showConfirmDialog(this, "اخطار",
+          "با دریافت اطلاعات جدید، شمارش قبلی حذف خواهد شد. مطمئن هستید؟", (dialog, which) -> {
+            stockGoodDaoImpl.deleteAll();
+            receiveData();
+          });
+    } else {
+      receiveData();
+    }
   }
 
 

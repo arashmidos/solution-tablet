@@ -91,20 +91,16 @@ public class StockGoodsAdapter extends Adapter<ViewHolder> {
 
     @BindView(R.id.good_img)
     ImageView goodImg;
-    @BindView(R.id.good_status)
-    ImageView goodStatus;
     @BindView(R.id.good_name_tv)
     TextView goodNameTv;
     @BindView(R.id.good_code_value)
     TextView goodCodeValueTv;
-    @BindView(R.id.total_value_tv)
-    TextView totalValueTv;
-    @BindView(R.id.packed_value_tv)
-    TextView packedValueTv;
-    @BindView(R.id.remained_value_tv)
-    TextView remainedValueTv;
-    @BindView(R.id.remained_tv)
-    TextView remainedTv;
+    @BindView(R.id.counted_value_tv)
+    TextView countedValueTv;
+    @BindView(R.id.cargo_number)
+    TextView cargoNumberTv;
+    @BindView(R.id.unit_title)
+    TextView unitTitleTv;
     @BindView(R.id.main_lay)
     RelativeLayout mainLay;
     private int position;
@@ -122,7 +118,10 @@ public class StockGoodsAdapter extends Adapter<ViewHolder> {
       this.good = good;
       goodNameTv.setText(NumberUtil.digitsToPersian(good.getGoodNamGLS()));
       goodCodeValueTv.setText(NumberUtil.digitsToPersian(good.getGoodCdeGLS()));
-
+      cargoNumberTv.setText(NumberUtil.digitsToPersian(0));
+      unitTitleTv.setText(good.getuName());
+      countedValueTv.setText(
+          String.format("%s %s", NumberUtil.digitsToPersian(good.getCounted()), good.getuName()));
       setMargin(position == goods.size() - 1, mainLay);
       if (Empty.isNullOrZero(good.getCounted())) {
         setGoodNormal();
@@ -156,17 +155,11 @@ public class StockGoodsAdapter extends Adapter<ViewHolder> {
 
     private void setGoodCompleted() {
       mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.gift));
-      remainedValueTv.setVisibility(View.INVISIBLE);
-      remainedTv.setVisibility(View.INVISIBLE);
-      goodStatus.setVisibility(View.VISIBLE);
     }
 
 
     private void setGoodNormal() {
       mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-      remainedValueTv.setVisibility(View.VISIBLE);
-      remainedTv.setVisibility(View.VISIBLE);
-      goodStatus.setVisibility(View.INVISIBLE);
     }
   }
 }
