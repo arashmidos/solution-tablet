@@ -60,9 +60,9 @@ public class DataTransferAdapter extends Adapter<ViewHolder> {
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
     holder.setData(position);
-    if (!MultiScreenUtility.isTablet(context)) {
+//    if (!MultiScreenUtility.isTablet(context)) {
       lastItem(position == model.size() - 1, holder);
-    }
+//    }
     if (model.get(position).getId() == TransferGetOrder.GOODS_IMAGES) {
       holder.extraIcon.setVisibility(View.VISIBLE);
     } else {
