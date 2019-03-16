@@ -317,6 +317,10 @@ public class DataTransferServiceImpl implements DataTransferService {
 
       for (int i = 0; i < saleOrders.size(); i++) {
         BaseSaleDocument baseSaleDocument = saleOrders.get(i);
+        if (Empty.isEmpty(baseSaleDocument.getItems())) {
+          saleOrderService.deleteOrder(baseSaleDocument.getId());
+          continue;
+        }
         dataTransfer.setOrder(baseSaleDocument);
         dataTransfer.exchangeData();
       }
