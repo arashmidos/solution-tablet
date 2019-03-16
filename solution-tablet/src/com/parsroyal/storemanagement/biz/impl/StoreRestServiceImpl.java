@@ -2,6 +2,7 @@ package com.parsroyal.storemanagement.biz.impl;
 
 import android.content.Context;
 import com.parsroyal.storemanagement.constants.StatusCodes;
+import com.parsroyal.storemanagement.data.dao.impl.StockGoodDaoImpl;
 import com.parsroyal.storemanagement.data.event.ActionEvent;
 import com.parsroyal.storemanagement.data.event.DetectGoodEvent;
 import com.parsroyal.storemanagement.data.event.ErrorEvent;
@@ -144,6 +145,7 @@ public class StoreRestServiceImpl {
         if (response.isSuccessful()) {
           List<StockGood> result = response.body();
           if (Empty.isNotEmpty(result)) {
+            new StockGoodDaoImpl(context).bulkInsert(result);
             EventBus.getDefault().post(new StockGoodsEvent(StatusCodes.SUCCESS, result));
           } else {
             EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_DATA_ERROR));

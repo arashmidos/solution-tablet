@@ -1,6 +1,8 @@
 package com.parsroyal.storemanagement.ui.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
@@ -176,7 +178,7 @@ public class WarehouseHandling extends AppCompatActivity {
         onBackPressed();
         break;
       case R.id.fab_receive_data:
-        receiveData();
+        showNewCountingDialog();
         break;
       case R.id.register_btn:
         submitOrder();
@@ -188,6 +190,11 @@ public class WarehouseHandling extends AppCompatActivity {
         showScannerDialog();
         break;
     }
+  }
+
+  private void showNewCountingDialog() {
+
+    DialogUtil.showConfirmDialog(this, "", "", (dialog, which) -> receiveData()
   }
 
 
