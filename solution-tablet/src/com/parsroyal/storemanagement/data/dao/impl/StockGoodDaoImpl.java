@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import com.parsroyal.storemanagement.constants.SendStatus;
 import com.parsroyal.storemanagement.data.helper.CommerDatabaseHelper;
 import com.parsroyal.storemanagement.data.model.StockGood;
 import com.parsroyal.storemanagement.util.CharacterFixUtil;
+import com.parsroyal.storemanagement.util.PreferenceHelper;
 import java.util.List;
 
 /**
@@ -49,6 +51,7 @@ public class StockGoodDaoImpl extends AbstractDao<StockGood, Long> {
     contentValues.put(StockGood.COL_URATE_2GLS, entity.getuRate_2GLS());
     contentValues.put(StockGood.COL_BRATE_2GLS, entity.getbRate_2GLS());
     contentValues.put(StockGood.COL_COUNTED, entity.getCounted());//19
+    contentValues.put(StockGood.COL_STATUS, entity.getStatus());
 
     return contentValues;
   }
@@ -86,6 +89,7 @@ public class StockGoodDaoImpl extends AbstractDao<StockGood, Long> {
         StockGood.COL_URATE_2GLS,
         StockGood.COL_BRATE_2GLS,
         StockGood.COL_COUNTED,
+        StockGood.COL_STATUS//20
 
     };
   }
@@ -114,6 +118,7 @@ public class StockGoodDaoImpl extends AbstractDao<StockGood, Long> {
     StockGood.setuRate_2GLS(cursor.getLong(17));
     StockGood.setbRate_2GLS(cursor.getLong(18));
     StockGood.setCounted(cursor.getLong(19));
+    StockGood.setStatus(cursor.getLong(20));
     return StockGood;
   }
 
@@ -146,5 +151,15 @@ public class StockGoodDaoImpl extends AbstractDao<StockGood, Long> {
     } finally {
       db.endTransaction();
     }
+  }
+
+  public List<StockGood> getAllCountedGoods() {
+    String selection = String
+        .format("%s not null AND %s = ? AND %s = ?", StockGood.COL_COUNTED, StockGood.COL_STATUS,
+            StockGood.COL_ASN);
+    String[] args = {String.valueOf(SendStatus.NEW.getId()),
+        String.valueOf(PreferenceHelper.getSelectedStockAsn())};
+
+    return retrieveAll(selection, args, null, null, null);
   }
 }

@@ -36,7 +36,6 @@ import com.parsroyal.storemanagement.ui.fragment.CustomBottomSheet;
 import com.parsroyal.storemanagement.ui.fragment.PackerDetailFragment;
 import com.parsroyal.storemanagement.ui.fragment.PackerInfoFragment;
 import com.parsroyal.storemanagement.ui.fragment.bottomsheet.PackerAddGoodBottomSheet;
-import com.parsroyal.storemanagement.ui.fragment.bottomsheet.PackerScanGoodBottomSheet;
 import com.parsroyal.storemanagement.ui.fragment.dialogFragment.PackerAddGoodDialogFragment;
 import com.parsroyal.storemanagement.ui.fragment.dialogFragment.PackerScanGoodDialogFragment;
 import com.parsroyal.storemanagement.util.DialogUtil;
@@ -51,7 +50,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import timber.log.Timber;
 
-public class PackerActivity extends AppCompatActivity {
+public class PackerActivity extends AppCompatActivity implements
+    PackerScanGoodDialogFragment.OnGoodFoundListener {
 
 
   @BindView(R.id.toolbar_title_tv)
@@ -272,7 +272,7 @@ public class PackerActivity extends AppCompatActivity {
 //    if (MultiScreenUtility.isTablet(this)) {
 //      fragment = PackerScanGoodBottomSheet.newInstance(this);
 //    } else {
-      fragment = PackerScanGoodDialogFragment.newInstance(this);
+    fragment = PackerScanGoodDialogFragment.newInstance();
 //    }
     fragment.show(ft, "scan_good");
   }
@@ -292,7 +292,9 @@ public class PackerActivity extends AppCompatActivity {
     Toast.makeText(this, "درخواست", Toast.LENGTH_SHORT).show();
   }
 
-  public void findGoodsByBarcode(String barcode) {
+  @Override
+  public void found(String barcode) {
+
     boolean found = false;
     List<GoodDetail> details = packer.getGoodDetails();
     for (int i = 0; i < details.size(); i++) {
@@ -311,8 +313,9 @@ public class PackerActivity extends AppCompatActivity {
       }
     }
     if (!found) {
-      ToastUtil.toastMessage(this,"کالا موجود نیست");
+      ToastUtil.toastMessage(this, "کالا موجود نیست");
     }
   }
+
 }
 

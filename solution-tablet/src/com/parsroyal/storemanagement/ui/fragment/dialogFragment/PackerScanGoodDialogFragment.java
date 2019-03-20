@@ -1,6 +1,7 @@
 package com.parsroyal.storemanagement.ui.fragment.dialogFragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,7 +24,6 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.parsroyal.storemanagement.R;
-import com.parsroyal.storemanagement.ui.activity.PackerActivity;
 import com.parsroyal.storemanagement.util.DialogUtil;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
 
   public final String TAG = PackerScanGoodDialogFragment.class.getSimpleName();
 
-  protected PackerActivity parent;
+  protected OnGoodFoundListener parent;
   @BindView(R.id.close_btn)
   ImageView closeBtn;
   @BindView(R.id.scanner)
@@ -64,21 +64,19 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
     public void possibleResultPoints(List<ResultPoint> resultPoints) {
     }
   };
-  private PackerActivity packerActivity;
   private Unbinder unbinder;
 
   public PackerScanGoodDialogFragment() {
     // Required empty public constructor
   }
 
-  public static PackerScanGoodDialogFragment newInstance(PackerActivity parent) {
-    PackerScanGoodDialogFragment dialogFragment = new PackerScanGoodDialogFragment();
-    dialogFragment.parent = parent;
-    return dialogFragment;
+  public static PackerScanGoodDialogFragment newInstance() {
+
+    return new PackerScanGoodDialogFragment();
   }
 
   private void sendBarcode() {
-    parent.findGoodsByBarcode(barcodeEt.getText().toString().trim());
+    parent.found(barcodeEt.getText().toString().trim());
     dismiss();
   }
 
@@ -98,11 +96,11 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
   private void initScanner() {
     Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
     scanner.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
-    scanner.initializeFromIntent(parent.getIntent());
+    scanner.initializeFromIntent(getActivity().getIntent());
     scanner.decodeContinuous(callback);
     scanner.setStatusText(getString(R.string.scan_good_barcode));
 
-    beepManager = new BeepManager(parent);
+    beepManager = new BeepManager(getActivity());
   }
 
   @Override
@@ -125,7 +123,6 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(getLayout(), container, false);
     unbinder = ButterKnife.bind(this, view);
-    packerActivity = (PackerActivity) getActivity();
     initScanner();
     setData();
     return view;
@@ -163,4 +160,20 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
     super.onDestroyView();
     unbinder.unbind();
   }
+
+  @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+    try {
+      parent = (OnGoodFoundListener) context;
+    } catch (Exception ex) {
+      throw new IllegalArgumentException("You should implement OnGoodFoundListener");
+    }
+  }
+
+  public interface OnGoodFoundListener {
+
+    void found(String goodCode);
+  }
+
 }

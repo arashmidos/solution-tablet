@@ -19,6 +19,7 @@ import com.parsroyal.storemanagement.biz.impl.QAnswersDataTransferBizImpl;
 import com.parsroyal.storemanagement.biz.impl.QuestionnaireDataTransferBizImpl;
 import com.parsroyal.storemanagement.biz.impl.SaleOrderForDeliveryDataTaransferBizImpl;
 import com.parsroyal.storemanagement.biz.impl.SaleRejectsDataTransferBizImpl;
+import com.parsroyal.storemanagement.biz.impl.StockGoodDataTransfer;
 import com.parsroyal.storemanagement.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
 import com.parsroyal.storemanagement.biz.impl.VisitInformationDataTransfer;
 import com.parsroyal.storemanagement.biz.impl.VisitLineDataTransferBizImpl;
@@ -28,6 +29,7 @@ import com.parsroyal.storemanagement.constants.SendStatus;
 import com.parsroyal.storemanagement.constants.StatusCodes;
 import com.parsroyal.storemanagement.data.dao.impl.PaymentDaoImpl;
 import com.parsroyal.storemanagement.data.dao.impl.SaleOrderDaoImpl;
+import com.parsroyal.storemanagement.data.dao.impl.StockGoodDaoImpl;
 import com.parsroyal.storemanagement.data.entity.CustomerPic;
 import com.parsroyal.storemanagement.data.entity.Payment;
 import com.parsroyal.storemanagement.data.entity.SaleOrder;
@@ -39,6 +41,7 @@ import com.parsroyal.storemanagement.data.model.CustomerDto;
 import com.parsroyal.storemanagement.data.model.CustomerLocationDto;
 import com.parsroyal.storemanagement.data.model.PositionDto;
 import com.parsroyal.storemanagement.data.model.QAnswerDto;
+import com.parsroyal.storemanagement.data.model.StockGood;
 import com.parsroyal.storemanagement.data.model.VisitInformationDto;
 import com.parsroyal.storemanagement.service.CustomerService;
 import com.parsroyal.storemanagement.service.DataTransferService;
@@ -69,6 +72,7 @@ public class DataTransferServiceImpl implements DataTransferService {
   private PaymentService paymentService;
   private PositionService positionService;
   private VisitServiceImpl visitService;
+  private StockGoodDaoImpl stockService;
 
   public DataTransferServiceImpl(Context context) {
     this.context = context;
@@ -82,6 +86,7 @@ public class DataTransferServiceImpl implements DataTransferService {
     this.visitService = new VisitServiceImpl(context);
     this.goodsService = new GoodsServiceImpl(context);
     this.infoService = new BaseInfoServiceImpl(context);
+    this.stockService = new StockGoodDaoImpl(context);
   }
 
   @Override
@@ -493,5 +498,31 @@ public class DataTransferServiceImpl implements DataTransferService {
     GoodsServiceImpl goodsService = new GoodsServiceImpl(context);
     goodsService.deleteAll();
     goodsService.deleteAllGoodsGroup();
+  }
+
+  public void sendAllStockGoods() {
+    List<StockGood> goods = stockService.getAllCountedGoods();
+    if (Empty.isEmpty(goods)) {
+      EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
+          R.string.message_found_no_visit_information_for_send), StatusCodes.NO_DATA_ERROR));
+      return;
+    }
+    StockGoodDataTransfer dataTransfer = new StockGoodDataTransfer(context);
+
+    for (int i = 0; i < goods.size(); i++) {
+      StockGood stockGood = goods.get(i);
+
+      dataTransfer.setData(stockGood);
+      dataTransfer.exchangeData();
+    }
+
+    int success = dataTransfer.getSuccess();
+    int total = dataTransfer.getTotal();
+
+    if (total == success) {
+      sendSuccessResult(success, total);
+    } else {
+      sendCancelResult(success, total);
+    }
   }
 }

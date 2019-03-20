@@ -27,6 +27,7 @@ public class StockGood extends BaseEntity<Long> {
   public static final String COL_URATE_2GLS = "uRate_2GLS";
   public static final String COL_BRATE_2GLS = "bRate_2GLS";
   public static final String COL_COUNTED = "counted";
+  public static final String COL_STATUS = "status";
 
   public static final String CREATE_TABLE_SQL = "CREATE TABLE " + StockGood.TABLE_NAME + " ( "
       + StockGood.COL_GLS + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -48,7 +49,8 @@ public class StockGood extends BaseEntity<Long> {
       + StockGood.COL_BRATE_GLS + " INTEGER, "
       + StockGood.COL_URATE_2GLS + " INTEGER, "
       + StockGood.COL_BRATE_2GLS + " INTEGER, "
-      + StockGood.COL_COUNTED + " INTEGER "
+      + StockGood.COL_COUNTED + " INTEGER, "
+      + StockGood.COL_STATUS + " INTEGER "
 
       + " );";
   private Long gls;
@@ -71,6 +73,15 @@ public class StockGood extends BaseEntity<Long> {
   private Long uRate_2GLS;
   private Long bRate_2GLS;
   private Long counted;
+  private Long status;
+
+  public Long getStatus() {
+    return status;
+  }
+
+  public void setStatus(Long status) {
+    this.status = status;
+  }
 
   public Long getGls() {
     return gls;
@@ -94,6 +105,10 @@ public class StockGood extends BaseEntity<Long> {
 
   public void setGoodCdeGLS(Long goodCdeGLS) {
     this.goodCdeGLS = goodCdeGLS;
+  }
+
+  public String getGoodCdeGLSString() {
+    return goodCdeGLS == null ? "" : String.valueOf(goodCdeGLS);
   }
 
   public String getGoodNamGLS() {

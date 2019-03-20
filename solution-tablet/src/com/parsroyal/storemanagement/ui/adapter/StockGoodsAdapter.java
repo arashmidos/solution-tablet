@@ -19,8 +19,10 @@ import com.parsroyal.storemanagement.R;
 import com.parsroyal.storemanagement.data.model.StockGood;
 import com.parsroyal.storemanagement.ui.activity.WarehouseHandling;
 import com.parsroyal.storemanagement.ui.adapter.StockGoodsAdapter.ViewHolder;
-import com.parsroyal.storemanagement.ui.fragment.dialogFragment.PackerAddGoodDialogFragment;
+import com.parsroyal.storemanagement.ui.fragment.bottomsheet.StockGoodCountBottomSheet;
+import com.parsroyal.storemanagement.ui.fragment.dialogFragment.StockGoodCountDialogFragment;
 import com.parsroyal.storemanagement.util.Empty;
+import com.parsroyal.storemanagement.util.MultiScreenUtility;
 import com.parsroyal.storemanagement.util.NumberUtil;
 import java.util.List;
 
@@ -110,7 +112,6 @@ public class StockGoodsAdapter extends Adapter<ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-
     }
 
     public void setData(int position, StockGood good) {
@@ -120,10 +121,12 @@ public class StockGoodsAdapter extends Adapter<ViewHolder> {
       goodCodeValueTv.setText(NumberUtil.digitsToPersian(good.getGoodCdeGLS()));
       cargoNumberTv.setText(NumberUtil.digitsToPersian(0));
       unitTitleTv.setText(good.getuName());
-      countedValueTv.setText(
-          String.format("%s %s", NumberUtil.digitsToPersian(good.getCounted()), good.getuName()));
+      Long counted = good.getCounted();
+      countedValueTv.setText(String.format(
+          "%s %s", counted == null ? "--" : NumberUtil.digitsToPersian(counted / 1000),
+          good.getuName()));
       setMargin(position == goods.size() - 1, mainLay);
-      if (Empty.isNullOrZero(good.getCounted())) {
+      if (Empty.isNullOrZero(counted)) {
         setGoodNormal();
       } else {
         setGoodCompleted();
@@ -143,20 +146,18 @@ public class StockGoodsAdapter extends Adapter<ViewHolder> {
 
     public void showAddDialog() {
       FragmentTransaction ft = context.getSupportFragmentManager().beginTransaction();
-      PackerAddGoodDialogFragment goodsFilterDialogFragment;
-//      if (MultiScreenUtility.isTablet(context)) {
-//        goodsFilterDialogFragment = PackerAddGoodBottomSheet.newInstance(good);
-//      } else {
-//      goodsFilterDialogFragment = PackerAddGoodDialogFragment.newInstance(good);
-//      }
-//      goodsFilterDialogFragment.show(ft, "add_good");
+      StockGoodCountDialogFragment goodsFilterDialogFragment;
+      if (MultiScreenUtility.isTablet(context)) {
+        goodsFilterDialogFragment = StockGoodCountBottomSheet.newInstance(good);
+      } else {
+        goodsFilterDialogFragment = StockGoodCountDialogFragment.newInstance(good);
+      }
+      goodsFilterDialogFragment.show(ft, "add_stock_good");
     }
-
 
     private void setGoodCompleted() {
       mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.gift));
     }
-
 
     private void setGoodNormal() {
       mainLay.setBackgroundColor(ContextCompat.getColor(context, R.color.white));

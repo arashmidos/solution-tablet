@@ -4,13 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,22 +18,26 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.parsroyal.storemanagement.R;
 import com.parsroyal.storemanagement.biz.impl.StoreRestServiceImpl;
+import com.parsroyal.storemanagement.constants.SendStatus;
+import com.parsroyal.storemanagement.constants.StatusCodes;
 import com.parsroyal.storemanagement.data.dao.impl.StockGoodDaoImpl;
+import com.parsroyal.storemanagement.data.event.DataTransferErrorEvent;
+import com.parsroyal.storemanagement.data.event.DataTransferSuccessEvent;
 import com.parsroyal.storemanagement.data.event.ErrorEvent;
 import com.parsroyal.storemanagement.data.event.Event;
 import com.parsroyal.storemanagement.data.event.StockEvent;
 import com.parsroyal.storemanagement.data.event.StockGoodsEvent;
-import com.parsroyal.storemanagement.data.model.GoodDetail;
 import com.parsroyal.storemanagement.data.model.Packer;
-import com.parsroyal.storemanagement.data.model.SelectOrderRequest;
 import com.parsroyal.storemanagement.data.model.StockGood;
+import com.parsroyal.storemanagement.service.impl.DataTransferServiceImpl;
 import com.parsroyal.storemanagement.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.storemanagement.ui.adapter.StockGoodsAdapter;
 import com.parsroyal.storemanagement.ui.fragment.PackerDetailFragment;
 import com.parsroyal.storemanagement.ui.fragment.PackerInfoFragment;
-import com.parsroyal.storemanagement.ui.fragment.bottomsheet.PackerAddGoodBottomSheet;
-import com.parsroyal.storemanagement.ui.fragment.dialogFragment.PackerAddGoodDialogFragment;
+import com.parsroyal.storemanagement.ui.fragment.bottomsheet.PackerScanGoodBottomSheet;
+import com.parsroyal.storemanagement.ui.fragment.bottomsheet.StockGoodCountBottomSheet;
 import com.parsroyal.storemanagement.ui.fragment.dialogFragment.PackerScanGoodDialogFragment;
+import com.parsroyal.storemanagement.ui.fragment.dialogFragment.StockGoodCountDialogFragment;
 import com.parsroyal.storemanagement.util.DialogUtil;
 import com.parsroyal.storemanagement.util.Empty;
 import com.parsroyal.storemanagement.util.MultiScreenUtility;
@@ -43,12 +45,16 @@ import com.parsroyal.storemanagement.util.PreferenceHelper;
 import com.parsroyal.storemanagement.util.RtlGridLayoutManager;
 import com.parsroyal.storemanagement.util.ToastUtil;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+import java.util.Collections;
 import java.util.List;
+import org.apache.commons.lang3.ObjectUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class WarehouseHandling extends AppCompatActivity {
+public class WarehouseHandling extends AppCompatActivity implements
+    StockGoodCountDialogFragment.OnCountStockGoods,
+    PackerScanGoodDialogFragment.OnGoodFoundListener {
 
   @BindView(R.id.toolbar_title_tv)
   TextView toolbarTitleTv;
@@ -89,15 +95,19 @@ public class WarehouseHandling extends AppCompatActivity {
         PreferenceHelper.getSelectedStockName()));
     setUpRecyclerView();
     loadData();
+    fab.setVisibility(View.VISIBLE);
   }
 
   private void loadData() {
-    goods = stockGoodDaoImpl.retrieveAll();
+    String selection = StockGood.COL_ASN + "=?";
+    String[] args = {String.valueOf(PreferenceHelper.getSelectedStockAsn())};
+    goods = stockGoodDaoImpl.retrieveAll(selection, args, null, null, null);
     if (Empty.isNotEmpty(goods)) {
       updateList();
+      bottomBar.setVisibility(View.VISIBLE);
     }
-  }
 
+  }
 
   @Override
   protected void onPause() {
@@ -131,13 +141,45 @@ public class WarehouseHandling extends AppCompatActivity {
     } else if (event instanceof StockGoodsEvent) {
       this.goods = ((StockGoodsEvent) event).getGoods();
       updateList();
+    } else if (event instanceof DataTransferSuccessEvent) {
+      handleSuccess((DataTransferSuccessEvent) event);
+    } else if (event instanceof DataTransferErrorEvent) {
+      handleFailed((DataTransferErrorEvent) event);
     }
   }
 
+  private void handleFailed(DataTransferErrorEvent event) {
+    ToastUtil.toastError(this, event.getMessage());
+  }
+
+  private void handleSuccess(DataTransferSuccessEvent event) {
+    if (event.getStatusCode() == StatusCodes.SUCCESS) {
+      ToastUtil.toastMessage(this, R.string.data_transfered_successfully);
+    } else if (event.getStatusCode() == StatusCodes.UPDATE) {
+      //Show update
+    } else if (event.getStatusCode() == StatusCodes.NO_DATA_ERROR) {
+      ToastUtil.toastMessage(this, "هیچ اطلاعات ارسال نشده ای وجود ندارد");
+    }
+  }
+
+  @Override
+  public void update(StockGood good) {
+    good.setStatus(SendStatus.NEW.getId());
+    stockGoodDaoImpl.update(good);
+    loadData();
+  }
+
+  private void sortByCounted() {
+    Collections.sort(goods, (g1, g2) -> ObjectUtils.compare(g1.getCounted(), g2.getCounted()));
+  }
+
   private void updateList() {
+
+    sortByCounted();
     adapter = new StockGoodsAdapter(this, goods);
     list.setAdapter(adapter);
     list.setVisibility(View.VISIBLE);
+    bottomBar.setVisibility(View.VISIBLE);
   }
 
   private void setUpRecyclerView() {
@@ -148,6 +190,18 @@ public class WarehouseHandling extends AppCompatActivity {
       LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
       list.setLayoutManager(linearLayoutManager);
     }
+
+    list.addOnScrollListener(new OnScrollListener() {
+      @Override
+      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+        if (dy > 0) {
+          fab.setVisibility(View.GONE);
+        } else {
+          fab.setVisibility(View.VISIBLE);
+        }
+      }
+    });
   }
 
   private void handleStockEvent(StockEvent event) {
@@ -181,7 +235,7 @@ public class WarehouseHandling extends AppCompatActivity {
         submitOrder();
         break;
       case R.id.search_img:
-        openSearchialog();
+//        openSearchialog();
         break;
       case R.id.barcode_img:
         showScannerDialog();
@@ -192,67 +246,41 @@ public class WarehouseHandling extends AppCompatActivity {
   private void showNewCountingDialog() {
 
     if (Empty.isNotEmpty(goods)) {
-      DialogUtil.showConfirmDialog(this, "اخطار",
+      DialogUtil.showConfirmDialog(this, getString(R.string.warning),
           "با دریافت اطلاعات جدید، شمارش قبلی حذف خواهد شد. مطمئن هستید؟", (dialog, which) -> {
             stockGoodDaoImpl.deleteAll();
             receiveData();
           });
     } else {
+      stockGoodDaoImpl.deleteAll();
       receiveData();
     }
   }
 
 
   private void submitOrder() {
-    DialogUtil.showConfirmDialog(this, "ثبت سفارش", "آیا مطمئن هستید؟", (dialog, which) -> {
+    DialogUtil.showConfirmDialog(this, "ثبت شمارش", "آیا مطمئن هستید؟", (dialog, which) -> {
       dialog.cancel();
-      DialogUtil.showProgressDialog(WarehouseHandling.this, R.string.message_please_wait);
-
-      storeService
-          .selectOrder(WarehouseHandling.this, new SelectOrderRequest(4, orderBy, null));
+      startDataTransfer();
     });
   }
 
-  private void openSearchialog() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle("کد سفارش:");
-
-// Set up the input
-    final EditText input = new EditText(this);
-
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_NORMAL);
-    builder.setView(input);
-
-// Set up the buttons
-    builder.setPositiveButton(getString(R.string.search), (dialog, which) -> {
-      String orderString = input.getText().toString();
-      try {
-        Long order = Long.parseLong(orderString);
-        if (Empty.isNotEmpty(orderString)) {
-
-          DialogUtil.showProgressDialog(WarehouseHandling.this, R.string.message_please_wait);
-          storeService.selectOrder(WarehouseHandling.this,
-              new SelectOrderRequest(5, PreferenceHelper.getStockKey(), order));
-        }
-      } catch (NumberFormatException ex) {
-        ToastUtil.toastError(WarehouseHandling.this, R.string.msg_wrong_input_order_code);
-      }
-    });
-    builder.setNegativeButton("لغو", (dialog, which) -> dialog.cancel());
-
-    builder.show();
+  private void startDataTransfer() {
+    DialogUtil.showProgressDialog(this, R.string.message_please_wait);
+    Thread t = new Thread(
+        () -> new DataTransferServiceImpl(WarehouseHandling.this).sendAllStockGoods());
+    t.start();
   }
 
   public void showScannerDialog() {
     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
     PackerScanGoodDialogFragment fragment;
-//    if (MultiScreenUtility.isTablet(this)) {
-//      fragment = PackerScanGoodBottomSheet.newInstance(this);
-//    } else {
-//    fragment = PackerScanGoodDialogFragment.newInstance(this);
-//    }
-//    fragment.show(ft, "scan_good");
+    if (MultiScreenUtility.isTablet(this)) {
+      fragment = PackerScanGoodBottomSheet.newInstance();
+    } else {
+      fragment = PackerScanGoodDialogFragment.newInstance();
+    }
+    fragment.show(ft, "scan_good");
   }
 
   private void receiveData() {
@@ -260,26 +288,27 @@ public class WarehouseHandling extends AppCompatActivity {
     storeService.getStockGoods(this, PreferenceHelper.getSelectedStockAsn());
   }
 
-  public void findGoodsByBarcode(String barcode) {
+  @Override
+  public void found(String goodCode) {
+
     boolean found = false;
-    List<GoodDetail> details = packer.getGoodDetails();
-    for (int i = 0; i < details.size(); i++) {
-      GoodDetail good = details.get(i);
-      if (barcode.equals(good.getBarCode())) {
+    for (int i = 0; i < goods.size(); i++) {
+      StockGood good = goods.get(i);
+      if (goodCode.equals(good.getGoodCdeGLSString())) {
         found = true;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        PackerAddGoodDialogFragment goodsFilterDialogFragment;
+        StockGoodCountDialogFragment goodsFilterDialogFragment;
         if (MultiScreenUtility.isTablet(this)) {
-          goodsFilterDialogFragment = PackerAddGoodBottomSheet.newInstance(good);
+          goodsFilterDialogFragment = StockGoodCountBottomSheet.newInstance(good);
         } else {
-          goodsFilterDialogFragment = PackerAddGoodDialogFragment.newInstance(good);
+          goodsFilterDialogFragment = StockGoodCountDialogFragment.newInstance(good);
         }
-        goodsFilterDialogFragment.show(ft, "add_good");
+        goodsFilterDialogFragment.show(ft, "add_good_count");
         break;
       }
     }
     if (!found) {
-      ToastUtil.toastMessage(this, R.string.good_not_exist);
+      ToastUtil.toastMessage(this, "کالا موجود نیست");
     }
   }
 }

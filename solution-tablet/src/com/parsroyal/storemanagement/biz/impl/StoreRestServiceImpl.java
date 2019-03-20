@@ -114,8 +114,8 @@ public class StoreRestServiceImpl {
         if (response.isSuccessful()) {
           String result = response.body();
 
-          EventBus.getDefault()//TODO: CHANGE IT TO 1
-              .post(new StockEvent(StatusCodes.STOCK_CHECK_STATUS, "0".equals(result)));
+          EventBus.getDefault()
+              .post(new StockEvent(StatusCodes.STOCK_CHECK_STATUS, "1".equals(result)));
 
         } else {
           EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_DATA_ERROR));

@@ -147,6 +147,7 @@ public class PreferenceHelper {
     Gson gson = new Gson();
     String jsonQueue = gson.toJson(stocks);
     SolutionTabletApplication.getPreference().edit().putString(STOCK_LIST, jsonQueue).apply();
+
   }
 
   public static String getToken() {

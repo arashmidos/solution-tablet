@@ -692,5 +692,6 @@
   <string name="stock_check_status">بررسی وضعیت انبار</string>
   <string name="error_stock_not_active">امکان انبار گردانی برای این انبار وجود ندارد</string>
   <string name="good_not_exist">کالا موجود نیست</string>
+  <string name="error_wrong_number">عدد وارد شده صحیح نیست</string>
 
 </resources>

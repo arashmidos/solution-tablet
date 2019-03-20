@@ -5,6 +5,7 @@ import com.parsroyal.storemanagement.data.model.DetectGoodRequest;
 import com.parsroyal.storemanagement.data.model.Packer;
 import com.parsroyal.storemanagement.data.model.SelectOrderRequest;
 import com.parsroyal.storemanagement.data.model.StockGood;
+import com.parsroyal.storemanagement.data.model.StockGoodUpdateRequest;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -29,5 +30,8 @@ public interface StoreRestService {
 
   @GET("store/warehouse/getStockGoods")
   Call<List<StockGood>> getStockGoods(@Query("asn") Long asn);
+
+  @POST("store/warehouse/updateStockGoods")
+  Call<Long> updateStockGoods(@Body StockGoodUpdateRequest request);
 
 }
