@@ -343,10 +343,10 @@ public class LocationUpdatesService extends Service {
     if (isAccepted(location)) {
       Log.i(TAG, "location accepted");
 
-      Intent intent = new Intent(this, SaveLocationService.class);
-      intent.putExtra(EXTRA_LOCATION, location);
-
-      startService(intent);
+//      Intent intent = new Intent(this, SaveLocationService.class);
+//      intent.putExtra(EXTRA_LOCATION, location);
+//
+//      startService(intent);
     }
 
     // Update notification content if running as a foreground service.

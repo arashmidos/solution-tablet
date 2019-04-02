@@ -7,21 +7,23 @@
     android:id="@+id/search_bar"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:elevation="3dp"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:elevation="3dp">
     <ImageView
       android:id="@+id/close_btn"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="16dp"
+      android:layout_height="match_parent"
       android:layout_alignParentEnd="true"
       android:layout_centerVertical="true"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
       android:src="@drawable/ic_close_24dp"
       android:tint="@color/black_55" />
     <EditText
-      android:id="@+id/city_edt"
+      android:id="@+id/search_edt"
       style="@style/IranSans"
       android:layout_width="match_parent"
+      android:hint="@string/search_hint"
       android:layout_height="match_parent"
       android:layout_toStartOf="@id/close_btn"
       android:background="@color/transparent_white"
@@ -31,10 +33,11 @@
     <ImageView
       android:id="@+id/search_img"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="16dp"
+      android:layout_height="match_parent"
       android:layout_alignParentStart="true"
       android:layout_centerVertical="true"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
       android:src="@drawable/ic_search"
       android:tint="@color/black_55" />
 

@@ -15,7 +15,7 @@ public class StockGoodUpdateRequest extends BaseModel {
     this.exist = exist;
     this.glsSerial = glsSerial;
     batchNo = 0L;
-    stockNo = PreferenceHelper.getSelectedStockAsn();
+    stockNo = PreferenceHelper.getSelectedStock();
   }
 
   public Long getStockNo() {

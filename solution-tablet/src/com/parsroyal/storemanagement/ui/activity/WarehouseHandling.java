@@ -46,11 +46,13 @@ import com.parsroyal.storemanagement.util.RtlGridLayoutManager;
 import com.parsroyal.storemanagement.util.ToastUtil;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.apache.commons.lang3.ObjectUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.springframework.util.CollectionUtils;
 
 public class WarehouseHandling extends AppCompatActivity implements
     StockGoodCountDialogFragment.OnCountStockGoods,
@@ -90,7 +92,7 @@ public class WarehouseHandling extends AppCompatActivity implements
     this.storeService = new StoreRestServiceImpl();
     this.stockGoodDaoImpl = new StockGoodDaoImpl(this);
     DialogUtil.showProgressDialog(this, R.string.message_please_wait);
-    storeService.checkStockStatus(this, PreferenceHelper.getSelectedStockAsn());
+    storeService.checkStockStatus(this, PreferenceHelper.getSelectedStock());
     toolbarTitleTv.setText(String.format("%s : %s", getString(R.string.warehouse_handling),
         PreferenceHelper.getSelectedStockName()));
     setUpRecyclerView();
@@ -100,7 +102,7 @@ public class WarehouseHandling extends AppCompatActivity implements
 
   private void loadData() {
     String selection = StockGood.COL_ASN + "=?";
-    String[] args = {String.valueOf(PreferenceHelper.getSelectedStockAsn())};
+    String[] args = {String.valueOf(PreferenceHelper.getSelectedStock())};
     goods = stockGoodDaoImpl.retrieveAll(selection, args, null, null, null);
     if (Empty.isNotEmpty(goods)) {
       updateList();
@@ -285,7 +287,7 @@ public class WarehouseHandling extends AppCompatActivity implements
 
   private void receiveData() {
     DialogUtil.showProgressDialog(this, R.string.message_please_wait);
-    storeService.getStockGoods(this, PreferenceHelper.getSelectedStockAsn());
+    storeService.getStockGoods(this, PreferenceHelper.getSelectedStock());
   }
 
   @Override
@@ -294,7 +296,7 @@ public class WarehouseHandling extends AppCompatActivity implements
     boolean found = false;
     for (int i = 0; i < goods.size(); i++) {
       StockGood good = goods.get(i);
-      if (goodCode.equals(good.getGoodCdeGLSString())) {
+      if (goodCode.equals(good.getBarcode())) {
         found = true;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         StockGoodCountDialogFragment goodsFilterDialogFragment;

@@ -52,6 +52,7 @@ public class StockGoodDaoImpl extends AbstractDao<StockGood, Long> {
     contentValues.put(StockGood.COL_BRATE_2GLS, entity.getbRate_2GLS());
     contentValues.put(StockGood.COL_COUNTED, entity.getCounted());//19
     contentValues.put(StockGood.COL_STATUS, entity.getStatus());
+    contentValues.put(StockGood.COL_BARCODE, entity.getBarcode());
 
     return contentValues;
   }
@@ -89,8 +90,8 @@ public class StockGoodDaoImpl extends AbstractDao<StockGood, Long> {
         StockGood.COL_URATE_2GLS,
         StockGood.COL_BRATE_2GLS,
         StockGood.COL_COUNTED,
-        StockGood.COL_STATUS//20
-
+        StockGood.COL_STATUS,//20
+        StockGood.COL_BARCODE
     };
   }
 
@@ -119,6 +120,7 @@ public class StockGoodDaoImpl extends AbstractDao<StockGood, Long> {
     StockGood.setbRate_2GLS(cursor.getLong(18));
     StockGood.setCounted(cursor.getLong(19));
     StockGood.setStatus(cursor.getLong(20));
+    StockGood.setBarcode(cursor.getString(21));
     return StockGood;
   }
 
@@ -158,7 +160,7 @@ public class StockGoodDaoImpl extends AbstractDao<StockGood, Long> {
         .format("%s not null AND %s = ? AND %s = ?", StockGood.COL_COUNTED, StockGood.COL_STATUS,
             StockGood.COL_ASN);
     String[] args = {String.valueOf(SendStatus.NEW.getId()),
-        String.valueOf(PreferenceHelper.getSelectedStockAsn())};
+        String.valueOf(PreferenceHelper.getSelectedStock())};
 
     return retrieveAll(selection, args, null, null, null);
   }

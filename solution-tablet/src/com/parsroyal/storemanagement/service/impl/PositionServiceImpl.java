@@ -1,9 +1,6 @@
 package com.parsroyal.storemanagement.service.impl;
 
-import static com.parsroyal.storemanagement.service.LocationUpdatesService.EXTRA_POSITION;
-
 import android.content.Context;
-import android.content.Intent;
 import com.google.android.gms.maps.model.LatLng;
 import com.parsroyal.storemanagement.SolutionTabletApplication;
 import com.parsroyal.storemanagement.constants.SendStatus;
@@ -12,7 +9,6 @@ import com.parsroyal.storemanagement.data.dao.impl.PositionDaoImpl;
 import com.parsroyal.storemanagement.data.entity.Position;
 import com.parsroyal.storemanagement.data.model.PositionDto;
 import com.parsroyal.storemanagement.service.PositionService;
-import com.parsroyal.storemanagement.service.SaveLocationService;
 import com.parsroyal.storemanagement.util.DateUtil;
 import com.parsroyal.storemanagement.util.Empty;
 import java.util.Date;
@@ -95,10 +91,10 @@ public class PositionServiceImpl implements PositionService {
     position.setDate(
         DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
     position.setGpsOff(gpsStatus.equals(GpsStatus.OFF) ? 1 : 0);
-    Intent intent = new Intent(context, SaveLocationService.class);
-    intent.putExtra(EXTRA_POSITION, position);
-
-    context.startService(intent);
+//    Intent intent = new Intent(context, SaveLocationService.class);
+//    intent.putExtra(EXTRA_POSITION, position);
+//
+//    context.startService(intent);
   }
 
   @Override

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/white"
   android:id="@+id/root"
-  android:fillViewport="true">
-  <RelativeLayout
+  android:layout_height="match_parent"
+  android:background="@color/white">
+
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
     <RelativeLayout
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
@@ -40,48 +41,185 @@
         tools:text="گالف ۱۲۳۴" />
 
     </RelativeLayout>
-    <EditText
-      android:id="@+id/good_count"
-      style="@style/IranSans.Light"
-      android:layout_width="150dp"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="36dp"
-      android:layout_below="@id/toolbar"
-      android:layout_centerHorizontal="true"
-      android:gravity="center_horizontal"
-      android:inputType="numberDecimal"
-      android:textColor="#000000"
-      android:textSize="72sp"
-      tools:text="۴" />
-    <ImageView
-      android:id="@+id/minus"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="128dp"
-      android:layout_marginStart="37dp"
-      android:src="@drawable/im_remove" />
-    <ImageView
-      android:id="@+id/add"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="128dp"
-      android:layout_marginEnd="37dp"
-      android:layout_alignParentEnd="true"
-      android:src="@drawable/im_add" />
 
-    <TextView
-      android:id="@+id/confirm_btn"
-      style="@style/IranSans.Medium"
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:layout_marginTop="36dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      android:orientation="horizontal"
+      android:weightSum="1">
+
+      <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".5">
+
+        <Spinner
+          android:id="@+id/spinner"
+          style="@style/IranSans"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/white"
+          android:gravity="right"
+          android:prompt="@string/number" />
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_alignParentBottom="true"
+          android:background="@color/login_gray" />
+
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_arrow_drop_down"
+          android:tint="@color/login_gray" />
+
+      </RelativeLayout>
+      <ImageView
+        android:id="@+id/minus_img"
+        android:layout_width="28dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_gravity="center"
+        android:src="@drawable/im_minus_grey" />
+      <EditText
+        android:id="@+id/count_tv"
+        style="@style/IranSans"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".5"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:paddingBottom="6dp"
+        android:background="@drawable/edit_text_state_background"
+        android:digits="1234567890.۰۱۲۳۴۵۶۷۸۹"
+        android:gravity="bottom"
+        android:hint="@string/enter_count_amount"
+        android:inputType="numberDecimal"
+        android:maxLines="1"
+        android:textColor="@color/black_85"
+        android:textColorHint="@color/gray_9e"
+        android:textSize="16sp" />
+
+      <ImageView
+        android:id="@+id/add_img"
+        android:layout_width="28dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_gravity="center"
+        android:src="@drawable/im_add_to_cart_18_dp" />
+    </LinearLayout>
+
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:layout_alignParentBottom="true"
-      android:paddingTop="12dp"
-      android:paddingBottom="12dp"
-      android:background="@color/primary"
+      android:layout_marginTop="24dp"
+      android:layout_marginBottom="20dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:orientation="horizontal"
+      android:weightSum="1">
+
+      <LinearLayout
+        android:id="@+id/number_lay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".5"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+          android:id="@+id/unit1_count_tv"
+          style="@style/IranSans.Light"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/gray_75"
+          android:textSize="24sp"
+          tools:text="0" />
+
+        <TextView
+          android:id="@+id/unit1_title_tv"
+          style="@style/IranSans.Medium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:textColor="@color/gray_75"
+          android:textSize="12sp"
+          tools:text="@string/number" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/carton_lay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".5"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+          android:id="@+id/unit2_count_tv"
+          style="@style/IranSans.Light"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/gray_75"
+          android:textSize="24sp"
+          tools:text="0" />
+
+        <TextView
+          android:id="@+id/unit2_title_tv"
+          style="@style/IranSans.Medium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:text="@string/carton"
+          android:textColor="@color/gray_75"
+          android:textSize="12sp" />
+      </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+      android:id="@+id/cost_detail_lay"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="24dp"
+      android:layout_marginEnd="24dp"
+      android:layout_marginLeft="24dp"
+      android:layout_marginRight="24dp"
+      android:background="@drawable/tab_shape_focused_primary"
       android:gravity="center"
-      android:text="@string/submit"
-      android:textColor="@color/white"
-      android:textSize="14sp" />
-  </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/each_Carton_tv"
+        style="@style/IranSans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/primary"
+        android:textSize="12sp"
+        tools:text="هرکارتن = 5عدد" />
+    </LinearLayout>
+  </LinearLayout>
+  <TextView
+    android:id="@+id/confirm_btn"
+    style="@style/IranSans.Medium"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:background="@color/primary"
+    android:gravity="center"
+    android:text="@string/submit"
+    android:textColor="@color/white"
+    android:textSize="14sp" />
+</RelativeLayout>

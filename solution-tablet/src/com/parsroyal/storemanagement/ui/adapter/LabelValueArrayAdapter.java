@@ -31,7 +31,7 @@ public class LabelValueArrayAdapter extends BaseAdapter {
     if (convertView == null) {
       convertView = mLayoutInflater.inflate(R.layout.row_layout_label_value_spinner, null);
       holder = new LabelValueViewHolder();
-      holder.text = (TextView) convertView.findViewById(R.id.labelTxt);
+      holder.text = convertView.findViewById(R.id.labelTxt);
       convertView.setTag(holder);
     } else {
       holder = (LabelValueViewHolder) convertView.getTag();

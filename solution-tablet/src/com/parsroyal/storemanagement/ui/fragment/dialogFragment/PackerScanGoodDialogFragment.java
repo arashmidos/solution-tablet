@@ -25,6 +25,7 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.parsroyal.storemanagement.R;
 import com.parsroyal.storemanagement.util.DialogUtil;
+import com.parsroyal.storemanagement.util.Empty;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -76,8 +77,12 @@ public class PackerScanGoodDialogFragment extends DialogFragment {
   }
 
   private void sendBarcode() {
-    parent.found(barcodeEt.getText().toString().trim());
-    dismiss();
+
+    String code = barcodeEt.getText().toString().trim();
+    if (Empty.isNotEmpty(code)) {
+      parent.found(code);
+      dismiss();
+    }
   }
 
   @Override

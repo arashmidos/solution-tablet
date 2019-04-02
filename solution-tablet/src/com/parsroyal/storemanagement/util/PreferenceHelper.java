@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.parsroyal.storemanagement.SolutionTabletApplication;
 import com.parsroyal.storemanagement.data.entity.KeyValue;
 import com.parsroyal.storemanagement.data.entity.Stock;
+import com.parsroyal.storemanagement.data.model.LabelValue;
 import com.parsroyal.storemanagement.util.constants.ApplicationKeys;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -139,6 +140,25 @@ public class PreferenceHelper {
     return stocks;
   }
 
+  public static ArrayList<LabelValue> getStockListLabelValue() {
+
+    ArrayList<Stock> stocks = null;
+    ArrayList<LabelValue> labelValues = new ArrayList<>();
+    try {
+      Gson gson = new Gson();
+      String userToString = SolutionTabletApplication.getPreference().getString(STOCK_LIST, "");
+      Type listType = new TypeToken<ArrayList<Stock>>() {
+      }.getType();
+      stocks = new Gson().fromJson(userToString, listType);
+      for (Stock s : stocks) {
+        labelValues.add(new LabelValue(s.getAsn(), s.getNameSTK()));
+      }
+    } catch (JsonSyntaxException e) {
+      e.printStackTrace();
+    }
+    return labelValues;
+  }
+
 
   public static void saveStockList(List<Stock> stocks) {
     if (Empty.isEmpty(stocks)) {
@@ -158,31 +178,44 @@ public class PreferenceHelper {
     SolutionTabletApplication.getPreference().edit().putString(TOKEN, token).apply();
   }
 
-  public static int getSelectedStock() {
-    return SolutionTabletApplication.getPreference().getInt(SELECTED_STOCK, 0);
+  public static long getSelectedStock() {
+
+    long selectedStockAsn = SolutionTabletApplication.getPreference().getLong(SELECTED_STOCK, 0L);
+    if (selectedStockAsn == 0) {
+      ArrayList<Stock> list = getStockList();
+      if (list != null && list.get(0) != null) {
+        selectedStockAsn = list.get(0).getAsn();
+      }
+    }
+    return selectedStockAsn;
   }
 
-  public static void setSelectedStock(int selectedStock) {
-    SolutionTabletApplication.getPreference().edit().putInt(SELECTED_STOCK, selectedStock).apply();
+  public static void setSelectedStock(long selectedStock) {
+    SolutionTabletApplication.getPreference().edit().putLong(SELECTED_STOCK, selectedStock).apply();
   }
 
-  public static Long getSelectedStockAsn() {
-    ArrayList<Stock> stocksList = getStockList();
-    int selectedStock = getSelectedStock();
-    if (Empty.isEmpty(stocksList) || Empty.isEmpty(stocksList.get(selectedStock))) {
+
+  public static LabelValue getSelectedStockLabelValue() {
+    long selectedStock = getSelectedStock();
+    if (selectedStock == 0L) {
       return null;
     }
 
-    return stocksList.get(selectedStock).getAsn();
+    return new LabelValue(selectedStock, "");
   }
 
   public static String getSelectedStockName() {
     ArrayList<Stock> stocksList = getStockList();
-    int selectedStock = getSelectedStock();
-    if (Empty.isEmpty(stocksList) || Empty.isEmpty(stocksList.get(selectedStock))) {
+    long selectedStock = getSelectedStock();
+    if (Empty.isEmpty(stocksList)|| selectedStock == 0L) {
       return "<نامشخص>";
     }
 
-    return stocksList.get(selectedStock).getNameSTK();
+    for (Stock s : stocksList) {
+      if (selectedStock == s.getAsn()) {
+        return s.getNameSTK();
+      }
+    }
+    return "<نامشخص>";
   }
 }

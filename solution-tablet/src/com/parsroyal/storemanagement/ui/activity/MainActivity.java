@@ -65,6 +65,7 @@ import com.parsroyal.storemanagement.ui.fragment.VisitLineDetailFragment;
 import com.parsroyal.storemanagement.ui.fragment.VisitLineFragment;
 import com.parsroyal.storemanagement.ui.fragment.dialogFragment.CustomerSearchDialogFragment;
 import com.parsroyal.storemanagement.ui.fragment.dialogFragment.DataTransferDialogFragment;
+import com.parsroyal.storemanagement.ui.fragment.dialogFragment.SearchListDialogFragment;
 import com.parsroyal.storemanagement.util.Analytics;
 import com.parsroyal.storemanagement.util.DialogUtil;
 import com.parsroyal.storemanagement.util.Empty;
@@ -81,7 +82,8 @@ import timber.log.Timber;
 /**
  * Created by Arash 2017-09-16
  */
-public abstract class MainActivity extends AppCompatActivity {
+public abstract class MainActivity extends AppCompatActivity implements
+    SearchListDialogFragment.OnItemSelectedListener {
 
   public static final int FEATURE_FRAGMENT_ID = 0;
   public static final int PHONE_VISIT_DETAIL_FRAGMENT_ID = 1;
@@ -519,7 +521,11 @@ public abstract class MainActivity extends AppCompatActivity {
         onNavigationTapped();
         break;
       case R.id.setting_img:
-        DialogUtil.showListDialog(this);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        SearchListDialogFragment dialogFragment = SearchListDialogFragment
+            .newInstance(PreferenceHelper.getStockListLabelValue(),
+                PreferenceHelper.getSelectedStockLabelValue());
+        dialogFragment.show(ft, "search list");
         break;
       case R.id.search_img:
         Fragment orderFragment = getSupportFragmentManager()
@@ -529,10 +535,10 @@ public abstract class MainActivity extends AppCompatActivity {
         if (orderFragment != null && orderFragment.isVisible()) {
           ((OrderFragment) orderFragment).onSearchClicked();
         } else if (visitLine != null && visitLine.isVisible()) {
-          FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+          FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
           CustomerSearchDialogFragment customerSearchDialogFragment = CustomerSearchDialogFragment
               .newInstance();
-          customerSearchDialogFragment.show(ft, "customer search");
+          customerSearchDialogFragment.show(ft2, "customer search");
         } else {
           Bundle clickBundle = new Bundle();
           clickBundle.putBoolean(Constants.IS_CLICKABLE, false);
@@ -853,5 +859,11 @@ public abstract class MainActivity extends AppCompatActivity {
 
   public void setPhoneVisit(boolean phoneVisit) {
     this.phoneVisit = phoneVisit;
+  }
+
+  @Override
+  public void itemSelected(long selectedItem) {
+
+    PreferenceHelper.setSelectedStock(selectedItem);
   }
 }

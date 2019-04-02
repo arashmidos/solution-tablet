@@ -130,7 +130,7 @@ public class DialogUtil {
       progressDialog.dismiss();
     }
   }
-
+/*
   public static void showListDialog(Activity context) {
 
     AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
@@ -154,5 +154,5 @@ public class DialogUtil {
         });
 
     builderSingle.show();
-  }
+  }*/
 }

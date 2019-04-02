@@ -28,6 +28,7 @@ public class StockGood extends BaseEntity<Long> {
   public static final String COL_BRATE_2GLS = "bRate_2GLS";
   public static final String COL_COUNTED = "counted";
   public static final String COL_STATUS = "status";
+  public static final String COL_BARCODE = "barcode";
 
   public static final String CREATE_TABLE_SQL = "CREATE TABLE " + StockGood.TABLE_NAME + " ( "
       + StockGood.COL_GLS + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -50,8 +51,8 @@ public class StockGood extends BaseEntity<Long> {
       + StockGood.COL_URATE_2GLS + " INTEGER, "
       + StockGood.COL_BRATE_2GLS + " INTEGER, "
       + StockGood.COL_COUNTED + " INTEGER, "
-      + StockGood.COL_STATUS + " INTEGER "
-
+      + StockGood.COL_STATUS + " INTEGER, "
+      + StockGood.COL_BARCODE + " TEXT "
       + " );";
   private Long gls;
   private Long gsnGLS;
@@ -74,6 +75,7 @@ public class StockGood extends BaseEntity<Long> {
   private Long bRate_2GLS;
   private Long counted;
   private Long status;
+  private String barcode;
 
   public Long getStatus() {
     return status;
@@ -250,5 +252,18 @@ public class StockGood extends BaseEntity<Long> {
   @Override
   public Long getPrimaryKey() {
     return gls;
+  }
+
+  public String getBarcode() {
+    return barcode;
+  }
+
+  public void setBarcode(String barcode) {
+    this.barcode = barcode;
+  }
+
+  public StockGood withBarcode(String barcode) {
+    this.barcode = barcode;
+    return this;
   }
 }

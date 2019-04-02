@@ -7,12 +7,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.NestedScrollView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,10 +25,14 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.parsroyal.storemanagement.R;
 import com.parsroyal.storemanagement.data.dao.impl.StockGoodDaoImpl;
+import com.parsroyal.storemanagement.data.model.LabelValue;
 import com.parsroyal.storemanagement.data.model.StockGood;
+import com.parsroyal.storemanagement.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.storemanagement.util.Empty;
 import com.parsroyal.storemanagement.util.NumberUtil;
 import com.parsroyal.storemanagement.util.ToastUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StockGoodCountDialogFragment extends DialogFragment {
 
@@ -43,6 +52,32 @@ public class StockGoodCountDialogFragment extends DialogFragment {
   TextView confirmBtn;
   @BindView(R.id.root)
   NestedScrollView root;
+  @BindView(R.id.spinner)
+  Spinner spinner;
+  @BindView(R.id.unit1_count_tv)
+  TextView unit1CountTv;
+  @BindView(R.id.unit3_count_tv)
+  TextView unit3CountTv;
+  @BindView(R.id.unit1_title_tv)
+  TextView unit1TitleTv;
+  @BindView(R.id.unit3_title_tv)
+  TextView unit3TitleTv;
+  @BindView(R.id.unit1_lay)
+  LinearLayout unit1Lay;
+  @BindView(R.id.unit2_count_tv)
+  TextView unit2CountTv;
+  @BindView(R.id.unit2_title_tv)
+  TextView unit2TitleTv;
+  @BindView(R.id.unit2_lay)
+  LinearLayout unit2Lay;
+  @BindView(R.id.unit3_lay)
+  LinearLayout unit3Lay;
+  @BindView(R.id.unit21_tv)
+  TextView unit21Tv;
+  @BindView(R.id.unit31_tv)
+  TextView unit31Tv;
+  @BindView(R.id.convert_lay)
+  LinearLayout convertLay;
 
 
   private OnCountStockGoods parentActivity;
@@ -81,7 +116,102 @@ public class StockGoodCountDialogFragment extends DialogFragment {
     unbinder = ButterKnife.bind(this, view);
     stockDaoImpl = new StockGoodDaoImpl(getActivity());
     setData();
+    setupSpinner();
+    setListeners();
     return view;
+  }
+
+  protected void setupSpinner() {
+    List<LabelValue> unitsList = new ArrayList<>();
+    unitsList
+        .add(new LabelValue(good.getUsnSerialGLS(), NumberUtil.digitsToPersian(good.getuName())));
+    if (good.getUsnSerial2GLS() != 0L) {
+      unitsList.add(
+          new LabelValue(good.getUsnSerial2GLS(), NumberUtil.digitsToPersian(good.getuName1())));
+      showUnit12();
+      setUnit12();
+    }
+    if (good.getUsnSerial2_2GLS() != 0L) {
+      unitsList.add(
+          new LabelValue(good.getUsnSerial2_2GLS(), NumberUtil.digitsToPersian(good.getuName2())));
+      showUnit3();
+      setUnit3();
+    }
+    spinner.setAdapter(new LabelValueArrayAdapter(getActivity(), unitsList));
+
+    spinner.setSelection(0);
+  }
+
+  private void setUnit3() {
+    unit3CountTv.setText("۰");
+    unit3TitleTv.setText(good.getuName2());
+    unit31Tv.setText(String
+        .format("هر %s = %s %s", good.getuName2(), NumberUtil.digitsToPersian(good.getbRateGLS()),
+            good.getuName()));
+  }
+
+  private void setUnit12() {
+    unit1CountTv.setText("۰");
+    unit2CountTv.setText("۰");
+    unit1TitleTv.setText(good.getuName());
+    unit2TitleTv.setText(good.getuName1());
+    unit21Tv.setText(String
+        .format("هر %s = %s %s", good.getuName1(), NumberUtil.digitsToPersian(good.getbRateGLS()),
+            good.getuName()));
+  }
+
+  private void showUnit12() {
+    unit1Lay.setVisibility(View.VISIBLE);
+    unit2Lay.setVisibility(View.VISIBLE);
+    convertLay.setVisibility(View.VISIBLE);
+  }
+
+  private void showUnit3() {
+    unit3Lay.setVisibility(View.VISIBLE);
+    unit31Tv.setVisibility(View.VISIBLE);
+  }
+
+
+  private void setListeners() {
+    goodCount.addTextChangedListener(new TextWatcher() {
+      boolean _ignore = false;
+
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+      }
+
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
+        if (_ignore) {
+          return;
+        }
+
+        _ignore = true; // prevent infinite loop
+        goodCount.setText(NumberUtil.digitsToPersian(s.toString()));
+        refreshData();
+        _ignore = false; // release, so the TextWatcher start to listen again.
+        Log.i("EDIIIIITTTTT", "SALAMA");
+      }
+    });
+
+  }
+
+  private void refreshData() {
+    long count = Long.parseLong(NumberUtil.digitsToEnglish(goodCount.getText().toString()));
+    int unit = spinner.getSelectedItemPosition();
+    if (unit == 0) {
+//unit1CountTv.setText(NumberUtil.formatPersian3DecimalPlaces());
+    } else if (unit == 1) {
+
+    } else if (unit == 2) {
+
+    }
   }
 
   private void setData() {
@@ -91,6 +221,7 @@ public class StockGoodCountDialogFragment extends DialogFragment {
     } else {
       goodCount.setText(NumberUtil.digitsToPersian(good.getCounted() / 1000));
     }
+
   }
 
   protected int getLayout() {
