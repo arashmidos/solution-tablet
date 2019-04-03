@@ -10,10 +10,11 @@ import android.support.v4.widget.NestedScrollView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -115,8 +116,9 @@ public class StockGoodCountDialogFragment extends DialogFragment {
     View view = inflater.inflate(getLayout(), container, false);
     unbinder = ButterKnife.bind(this, view);
     stockDaoImpl = new StockGoodDaoImpl(getActivity());
-    setData();
     setupSpinner();
+
+    setData();
     setListeners();
     return view;
   }
@@ -146,8 +148,9 @@ public class StockGoodCountDialogFragment extends DialogFragment {
     unit3CountTv.setText("۰");
     unit3TitleTv.setText(good.getuName2());
     unit31Tv.setText(String
-        .format("هر %s = %s %s", good.getuName2(), NumberUtil.digitsToPersian(good.getbRateGLS()),
-            good.getuName()));
+        .format("هر %s %s = %s %s", NumberUtil.digitsToPersian(good.getuRate_2GLS()),
+            good.getuName2(),
+            NumberUtil.digitsToPersian(good.getbRate_2GLS()), good.getuName()));
   }
 
   private void setUnit12() {
@@ -156,8 +159,9 @@ public class StockGoodCountDialogFragment extends DialogFragment {
     unit1TitleTv.setText(good.getuName());
     unit2TitleTv.setText(good.getuName1());
     unit21Tv.setText(String
-        .format("هر %s = %s %s", good.getuName1(), NumberUtil.digitsToPersian(good.getbRateGLS()),
-            good.getuName()));
+        .format("هر %s %s = %s %s", NumberUtil.digitsToPersian(good.getuRateGLS()),
+            good.getuName1(),
+            NumberUtil.digitsToPersian(good.getbRateGLS()), good.getuName()));
   }
 
   private void showUnit12() {
@@ -194,23 +198,47 @@ public class StockGoodCountDialogFragment extends DialogFragment {
 
         _ignore = true; // prevent infinite loop
         goodCount.setText(NumberUtil.digitsToPersian(s.toString()));
+        goodCount.setSelection(goodCount.getText().length());
         refreshData();
         _ignore = false; // release, so the TextWatcher start to listen again.
-        Log.i("EDIIIIITTTTT", "SALAMA");
       }
     });
 
+    spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        refreshData();
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+      }
+    });
   }
 
   private void refreshData() {
-    long count = Long.parseLong(NumberUtil.digitsToEnglish(goodCount.getText().toString()));
+    double count = Double.parseDouble(NumberUtil.digitsToEnglish(goodCount.getText().toString()));
     int unit = spinner.getSelectedItemPosition();
+    double urate1 = good.getuRateGLS();
+    double brate1 = good.getbRateGLS();
+
+    double urate2 = good.getuRate_2GLS();
+    double brate2 = good.getbRate_2GLS();
+
     if (unit == 0) {
-//unit1CountTv.setText(NumberUtil.formatPersian3DecimalPlaces());
+      unit1CountTv.setText(NumberUtil.formatPersian3DecimalPlaces(count));
+      unit2CountTv.setText(NumberUtil.formatPersian3DecimalPlaces((count * urate1) / brate1));
+      unit3CountTv.setText(NumberUtil.formatPersian3DecimalPlaces((count * urate2) / brate2));
     } else if (unit == 1) {
-
+      unit2CountTv.setText(NumberUtil.formatPersian3DecimalPlaces(count));
+      double u21 = (count * brate1) / urate1;
+      unit1CountTv.setText(NumberUtil.formatPersian3DecimalPlaces(u21));
+      unit3CountTv.setText(NumberUtil.formatPersian3DecimalPlaces((u21 * urate2) / brate2));
     } else if (unit == 2) {
-
+      unit3CountTv.setText(NumberUtil.formatPersian3DecimalPlaces(count));
+      double u31 = (count * brate2 ) / urate2;
+      unit1CountTv.setText(NumberUtil.formatPersian3DecimalPlaces(u31));
+      unit2CountTv.setText(NumberUtil.formatPersian3DecimalPlaces((u31 * urate1) / brate1));
     }
   }
 
@@ -219,9 +247,9 @@ public class StockGoodCountDialogFragment extends DialogFragment {
     if (Empty.isNullOrZero(good.getCounted())) {
       goodCount.setText(NumberUtil.digitsToPersian(0));
     } else {
-      goodCount.setText(NumberUtil.digitsToPersian(good.getCounted() / 1000));
+      goodCount.setText(NumberUtil.digitsToPersian(good.getCounted() / 1000.0));
     }
-
+    refreshData();
   }
 
   protected int getLayout() {
@@ -253,9 +281,9 @@ public class StockGoodCountDialogFragment extends DialogFragment {
   private void submit() {
     if (validate()) {
       try {
-        String enteredNum = goodCount.getText().toString().trim();
-        long number = Long.parseLong(enteredNum);
-        good.setCounted(number * 1000);
+        String enteredNum = NumberUtil.digitsToEnglish(unit1CountTv.getText().toString().trim());
+        double number = Double.parseDouble(enteredNum);
+        good.setCounted((long) (number * 1000));
         parentActivity.update(good);
         dismiss();
       } catch (NumberFormatException ex) {
@@ -267,9 +295,9 @@ public class StockGoodCountDialogFragment extends DialogFragment {
   }
 
   private boolean validate() {
-    String enteredString = goodCount.getText().toString().trim();
+    String enteredString = NumberUtil.digitsToEnglish(unit1CountTv.getText().toString().trim());
     try {
-      long enteredNum = Long.parseLong(enteredString);
+      double enteredNum = Double.parseDouble(enteredString);
       if (enteredNum < 0) {
         return false;
       }
@@ -285,8 +313,8 @@ public class StockGoodCountDialogFragment extends DialogFragment {
         goodCount.setText(NumberUtil.digitsToPersian("1"));
       } else {
 //        minusImg.setImageResource(R.drawable.im_minus);
-        long enteredNum = Long
-            .parseLong(NumberUtil.digitsToEnglish(goodCount.getText().toString().trim()));
+        double enteredNum = Double
+            .parseDouble(NumberUtil.digitsToEnglish(goodCount.getText().toString().trim()));
 
         goodCount.setText(NumberUtil.digitsToPersian(enteredNum + 1));
       }
@@ -300,8 +328,8 @@ public class StockGoodCountDialogFragment extends DialogFragment {
       if (TextUtils.isEmpty(goodCount.getText().toString().trim())) {
         goodCount.setText(NumberUtil.digitsToPersian("0"));
       } else {
-        long enteredNum = Long
-            .parseLong(NumberUtil.digitsToEnglish(goodCount.getText().toString().trim()));
+        double enteredNum = Double
+            .parseDouble(NumberUtil.digitsToEnglish(goodCount.getText().toString().trim()));
         if (enteredNum == 1 || enteredNum == 0) {
 //          minusImg.setImageResource(R.drawable.im_minus_grey);
         } else {

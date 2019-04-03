@@ -177,7 +177,7 @@ public class WarehouseHandling extends AppCompatActivity implements
 
   private void updateList() {
 
-    sortByCounted();
+//    sortByCounted();//TODOOOOOOOOOOOO
     adapter = new StockGoodsAdapter(this, goods);
     list.setAdapter(adapter);
     list.setVisibility(View.VISIBLE);

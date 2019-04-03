@@ -123,7 +123,7 @@ public class StockGoodsAdapter extends Adapter<ViewHolder> {
       unitTitleTv.setText(good.getuName());
       Long counted = good.getCounted();
       countedValueTv.setText(String.format(
-          "%s %s", counted == null ? "--" : NumberUtil.digitsToPersian(counted / 1000),
+          "%s %s", counted == null ? "--" : NumberUtil.digitsToPersian(counted / 1000.0),
           good.getuName()));
       setMargin(position == goods.size() - 1, mainLay);
       if (Empty.isNullOrZero(counted)) {

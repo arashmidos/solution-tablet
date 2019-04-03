@@ -57,6 +57,7 @@ public class NumberUtil {
           , String.valueOf(i));
     }
 
+    input = input.replaceAll("٫", ".");
     return input;
   }
 
