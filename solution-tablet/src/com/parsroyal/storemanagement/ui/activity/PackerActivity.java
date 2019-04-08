@@ -255,7 +255,7 @@ public class PackerActivity extends AppCompatActivity implements
 
           DialogUtil.showProgressDialog(PackerActivity.this, R.string.message_please_wait);
           storeService.selectOrder(PackerActivity.this,
-              new SelectOrderRequest(5, PreferenceHelper.getStockKey(), order));
+              new SelectOrderRequest(5, PreferenceHelper.getSelectedStock(), order));
         }
       } catch (NumberFormatException ex) {
         ToastUtil.toastError(PackerActivity.this, R.string.msg_wrong_input_order_code);

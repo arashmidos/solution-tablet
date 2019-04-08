@@ -15,7 +15,7 @@ public class SelectOrderRequest {
 
   public SelectOrderRequest() {
     mode = 1;
-    asn = PreferenceHelper.getStockKey();
+    asn = PreferenceHelper.getSelectedStock();
   }
 
   public SelectOrderRequest(Integer mode) {

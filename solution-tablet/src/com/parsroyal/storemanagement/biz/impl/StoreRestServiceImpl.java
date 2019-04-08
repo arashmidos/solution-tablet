@@ -36,7 +36,7 @@ public class StoreRestServiceImpl {
     StoreRestService restService = ServiceGenerator.createService(StoreRestService.class);
 
     Call<List<DetectGoodDetail>> call = restService
-        .detectGood(new DetectGoodRequest(barcode, PreferenceHelper.getStockKey()));
+        .detectGood(new DetectGoodRequest(barcode, PreferenceHelper.getSelectedStock()));
 
     call.enqueue(new Callback<List<DetectGoodDetail>>() {
       @Override
