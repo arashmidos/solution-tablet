@@ -233,6 +233,29 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
   }
 
   @Override
+  public List<CustomerLocationDto> retrieveAllCustomersLocationDto(long visitlineBackendId) {
+    CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String[] projection = {
+        Customer.COL_BACKEND_ID,
+        Customer.COL_X_LOCATION,
+        Customer.COL_Y_LOCATION
+    };
+    String selection = Customer.COL_VISIT_LINE_BACKEND_ID + " = ? AND "
+        + Customer.COL_X_LOCATION + " is not null AND " + Customer.COL_X_LOCATION + " != 0";
+
+    String[] args = {String.valueOf(visitlineBackendId)};
+    Cursor cursor = db.query(getTableName(), projection, selection, args, null, null, null);
+    List<CustomerLocationDto> locationDtoList = new ArrayList<>();
+    while (cursor.moveToNext()) {
+      locationDtoList.add(new CustomerLocationDto(cursor.getLong(0), cursor.getDouble(1),
+          cursor.getDouble(2)));
+    }
+    cursor.close();
+    return locationDtoList;
+  }
+
+  @Override
   public CustomerLocationDto findCustomerLocationDtoByCustomerBackendId(Long customerBackendId) {
     CommerDatabaseHelper databaseHelper = CommerDatabaseHelper.getInstance(getContext());
     SQLiteDatabase db = databaseHelper.getReadableDatabase();

@@ -1,10 +1,13 @@
 package com.parsroyal.solutiontablet.service;
 
 import com.google.gson.JsonArray;
+import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.SaleInvoiceDocument;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
 import com.parsroyal.solutiontablet.data.model.UpdatePusheRequest;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
+import com.parsroyal.solutiontablet.vrp.model.OptimizedRouteResponse;
+import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -40,6 +43,12 @@ public interface RestService {
 
   @GET("goods/{customerId}/reject")
   Call<JsonArray> getAllRejectedData(@Path("customerId") Long customerBackendId);
+
+  @GET("vrp/testvalor")
+  Call<OptimizedRouteResponse> testValOR();
+
+  @POST("vrp/val/optimizeRoute")
+  Call<OptimizedRouteResponse> valOptimizedRoute(@Body List<CustomerLocationDto> customerList);
 
   @Multipart
   @POST("customers/images")

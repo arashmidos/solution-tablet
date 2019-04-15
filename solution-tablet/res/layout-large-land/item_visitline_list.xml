@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:card_view="http://schemas.android.com/apk/res-auto"
-  xmlns:map="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/visitline_lay"
   android:layout_width="match_parent"
@@ -24,6 +23,16 @@
       android:layout_gravity="left|top"
       android:src="@drawable/im_list_40_dp"
       android:visibility="gone" />
+    <ImageView
+      android:id="@+id/nav_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_gravity="left|top"
+      android:src="@drawable/ic_navigation"
+      android:visibility="gone"
+      tools:visibility="visible" />
     <LinearLayout
       android:id="@+id/visitline_layout"
       android:layout_width="0dp"
@@ -32,23 +41,6 @@
       android:background="@color/white"
       android:gravity="right"
       android:orientation="vertical">
-
-
-      <!-- MapView in lite mode. Note that it needs to be initialised
-       programmatically before it can be used. -->
-      <!--<com.google.android.gms.maps.MapView
-        android:id="@+id/map_item"
-        android:layout_width="match_parent"
-        android:layout_height="175dp"
-        android:clickable="false"
-        android:visibility="gone"
-        map:liteMode="true"
-        map:mapType="none" />-->
-      <!--
-            <View
-              android:layout_width="match_parent"
-              android:layout_height="1dp"
-              android:background="@color/navigation_drawer_divider" />-->
 
       <TextView
         android:id="@+id/visitline_name"

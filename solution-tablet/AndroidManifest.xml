@@ -3,6 +3,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.parsroyal.solutiontablet">
 
+  <uses-sdk tools:overrideLibrary="co.ronash.pushe" />
+
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,14 +20,11 @@
   <uses-permission
     android:name="android.permission.ACCESS_MOCK_LOCATION"
     tools:ignore="MockLocation" />
-
   <uses-permission android:name="com.parsroyal.solutionmobile.permission.C2D_MESSAGE" />
 
   <permission
     android:name="com.parsroyal.solutionmobile.permission.C2D_MESSAGE"
-    android:protectionLevel="signature" />
-
-  <!-- Optional permissions -->
+    android:protectionLevel="signature" /> <!-- Optional permissions -->
   <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
@@ -43,9 +42,6 @@
     android:name="android.hardware.LOCATION"
     android:required="false" />
 
-  <uses-sdk tools:overrideLibrary="co.ronash.pushe" />
-
-
   <application
     android:allowBackup="true"
     android:hardwareAccelerated="true"
@@ -56,6 +52,17 @@
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning"
     tools:replace="android:supportsRtl">
+    <activity android:name=".navigation.NavigateActivity"></activity>
+    <activity android:name=".ui.activity.TestActivity">
+
+      <!--
+          <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+            -->
+    </activity>
+
     <provider
       android:authorities="com.parsroyal.solutionmobile"
       android:exported="false"
@@ -106,6 +113,7 @@
       android:name=".ui.activity.TabletReportDetailActivity"
       android:screenOrientation="landscape"
       android:theme="@style/NoActionBar" />
+
     <service
       android:enabled="true"
       android:exported="false"
@@ -118,6 +126,7 @@
       android:enabled="true"
       android:exported="false"
       android:name=".service.SaveLocationService" />
+
     <receiver android:name=".receiver.BootReceiver">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -128,6 +137,7 @@
         <action android:name="com.parsroyal.solutiontablet.TrackerAlarmReceiver" />
       </intent-filter>
     </receiver>
+
     <meta-data
       android:name="com.google.android.maps.v2.API_KEY"
       android:value="@string/google_maps_key" />
@@ -150,7 +160,6 @@
       android:permission="com.google.android.c2dm.permission.SEND">
       <intent-filter>
         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
         <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
         <category android:name="com.parsroyal.solutionmobile" />
@@ -172,4 +181,5 @@
       </intent-filter>
     </service>
   </application>
+
 </manifest>

@@ -78,7 +78,6 @@ import com.parsroyal.solutiontablet.ui.fragment.VisitLineFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CustomerSearchDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.DataTransferDialogFragment;
 import com.parsroyal.solutiontablet.util.Analytics;
-import com.parsroyal.solutiontablet.util.BarcodeUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.GPSUtil;
@@ -127,6 +126,8 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
   public static final int CUSTOMER_INFO_FRAGMENT = 32;
   public static final int SETTING_FRAGMENT = 33;
+  public static final int NAVIGATE_LIST_FRAGMENT = 35;
+  public static final int NAVIGATE_MAP_FRAGMENT = 36;
   public static final int CHAT_FRAGMENT = 37;
 
   private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
