@@ -23,7 +23,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by Arash on 2017-02-16.
+ * Created by Arash on 2017-02-16
  * Generate different Retrofit services to call REST services
  */
 
