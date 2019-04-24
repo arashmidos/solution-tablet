@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import java.util.ArrayList;
 import java.util.Locale;
+import org.osmdroid.util.BoundingBox;
+import org.osmdroid.util.GeoPoint;
 
 public class MapUtil {
 
@@ -33,5 +36,36 @@ public class MapUtil {
         context.startActivity(intent);
       }
     }
+  }
+
+  public static BoundingBox computeArea(ArrayList<GeoPoint> points) {
+
+    double nord = 0, sud = 0, ovest = 0, est = 0;
+
+    for (int i = 0; i < points.size(); i++) {
+      if (points.get(i) == null) {
+        continue;
+      }
+
+      double lat = points.get(i).getLatitude();
+      double lon = points.get(i).getLongitude();
+
+      if ((i == 0) || (lat > nord)) {
+        nord = lat;
+      }
+      if ((i == 0) || (lat < sud)) {
+        sud = lat;
+      }
+      if ((i == 0) || (lon < ovest)) {
+        ovest = lon;
+      }
+      if ((i == 0) || (lon > est)) {
+        est = lon;
+      }
+
+    }
+
+    return new BoundingBox(nord, est, sud, ovest);
+
   }
 }

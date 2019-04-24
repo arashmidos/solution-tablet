@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:card_view="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/customer_lay"
+  android:layout_width="match_parent"
+  android:layout_height="75dp"
+  android:layout_marginTop="8dp"
+  android:layout_marginBottom="8dp"
+  android:layout_marginLeft="8dp"
+  card_view:cardCornerRadius="2dp"
+  card_view:cardElevation="3dp">
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <Button
+      android:id="@+id/customer_order"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_margin="16dp"
+      android:includeFontPadding="false"
+      android:layout_alignParentRight="true"
+      android:lineSpacingExtra="0dp"
+      android:background="@drawable/oval_ee"
+      android:gravity="center"
+      android:textColor="@color/primary_dark"
+      tools:text="1" />
+
+    <TextView
+      android:id="@+id/customer_name_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginBottom="12dp"
+      android:layout_marginLeft="8dp"
+      android:layout_alignParentTop="true"
+      android:layout_toLeftOf="@id/customer_order"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textColor="@color/black_85"
+      android:textSize="14sp"
+      tools:text="محمد رضا گلزار" />
+
+    <TextView
+      android:id="@+id/customer_id_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_alignParentLeft="true"
+      android:layout_below="@+id/customer_name_tv"
+      android:ellipsize="end"
+      android:gravity="right"
+      android:maxLines="1"
+      android:textColor="@color/login_gray"
+      android:textSize="12sp" />
+
+    <TextView
+      android:id="@+id/customer_shop_name_tv"
+      style="@style/IranSans.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:layout_marginLeft="8dp"
+      android:layout_below="@+id/customer_name_tv"
+      android:layout_toLeftOf="@id/customer_order"
+      android:layout_toRightOf="@+id/customer_id_tv"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textColor="@color/login_gray"
+      android:textSize="12sp" />
+
+    <ImageView
+      android:id="@+id/has_location_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+      android:src="@drawable/ic_gps_fixed_black_18dp" />
+
+    <ImageView
+      android:id="@+id/visit_today_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="14dp"
+      android:layout_toRightOf="@id/has_location_img"
+      android:src="@drawable/ic_visibility_black_18dp" />
+
+    <ImageView
+      android:id="@+id/has_order_img"
+      android:layout_width="18dp"
+      android:layout_height="18dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="14dp"
+      android:layout_toRightOf="@+id/visit_today_img"
+      android:visibility="gone" />
+    <ImageView
+      android:id="@+id/has_answer_img"
+      android:layout_width="18dp"
+      android:layout_height="18dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="14dp"
+      android:layout_toRightOf="@+id/has_order_img"
+      android:visibility="gone" />
+    <TextView
+      android:id="@+id/counter_img"
+      android:layout_width="18dp"
+      android:layout_height="18dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="14dp"
+      android:layout_toRightOf="@+id/has_answer_img"
+      android:background="@drawable/gray_border"
+      android:gravity="center"
+      android:textColor="#1976d2"
+      android:textSize="11sp"
+      android:tint="@color/blue_19"
+      android:visibility="gone"
+      tools:text="+۴" />
+  </RelativeLayout>
+
+</android.support.v7.widget.CardView>

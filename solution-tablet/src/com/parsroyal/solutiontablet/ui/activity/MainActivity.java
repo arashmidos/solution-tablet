@@ -42,6 +42,7 @@ import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
 import com.parsroyal.solutiontablet.data.event.UpdateEvent;
+import com.parsroyal.solutiontablet.navigation.NavigateBaseFragment;
 import com.parsroyal.solutiontablet.receiver.TrackerAlarmReceiver;
 import com.parsroyal.solutiontablet.service.DataTransferService;
 import com.parsroyal.solutiontablet.service.LocationUpdatesService;
@@ -126,6 +127,7 @@ public abstract class MainActivity extends AppCompatActivity {
   public static final int NAVIGATION_DRAWER_FRAGMENT = 31;
   public static final int CUSTOMER_INFO_FRAGMENT = 32;
   public static final int SETTING_FRAGMENT = 33;
+  public static final int NAVIGATE_BASE_FRAGMENT = 34;
   public static final int NAVIGATE_LIST_FRAGMENT = 35;
   public static final int NAVIGATE_MAP_FRAGMENT = 36;
   public static final int CHAT_FRAGMENT = 37;
@@ -954,6 +956,9 @@ public abstract class MainActivity extends AppCompatActivity {
         break;
       case VISITLINE_DETAIL_FRAGMENT_ID:
         fragment = VisitLineDetailFragment.newInstance();
+        break;
+      case NAVIGATE_BASE_FRAGMENT:
+        fragment = NavigateBaseFragment.newInstance();
         break;
     }
     Analytics.logContentView("Fragment " + String.valueOf(fragmentId));

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -21,6 +23,7 @@ public class OptimizedRouteResponse implements Serializable {
   @JsonProperty("trip")
   private TripResponse trip;
   private String error;
+  private Long visitlineBackendId;
 
   /**
    * No args constructor for use in serialization
@@ -37,6 +40,30 @@ public class OptimizedRouteResponse implements Serializable {
     super();
     this.id = id;
     this.trip = trip;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    OptimizedRouteResponse that = (OptimizedRouteResponse) o;
+
+    return new EqualsBuilder()
+        .append(visitlineBackendId, that.visitlineBackendId)
+        .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+        .append(visitlineBackendId)
+        .toHashCode();
   }
 
   @JsonProperty("id")
@@ -86,5 +113,13 @@ public class OptimizedRouteResponse implements Serializable {
 
   public void setError(String error) {
     this.error = error;
+  }
+
+  public Long getVisitlineBackendId() {
+    return visitlineBackendId;
+  }
+
+  public void setVisitlineBackendId(Long visitlineBackendId) {
+    this.visitlineBackendId = visitlineBackendId;
   }
 }

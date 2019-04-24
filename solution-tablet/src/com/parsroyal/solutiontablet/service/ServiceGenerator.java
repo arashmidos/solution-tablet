@@ -33,7 +33,7 @@ public class ServiceGenerator {
   private static OkHttpClient.Builder httpClient =
       new OkHttpClient.Builder()
           .readTimeout(300, TimeUnit.SECONDS)
-          .connectTimeout(120, TimeUnit.SECONDS);
+          .connectTimeout(60, TimeUnit.SECONDS);
   //Change different level of logging here
   private static HttpLoggingInterceptor logging =
       new HttpLoggingInterceptor()

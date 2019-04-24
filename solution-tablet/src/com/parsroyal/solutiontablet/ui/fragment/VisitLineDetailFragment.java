@@ -170,7 +170,7 @@ public class VisitLineDetailFragment extends BaseFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    adapter = new PathDetailAdapter(mainActivity, getCustomersList(), visitlineBackendId);
+    adapter = new PathDetailAdapter(mainActivity, getCustomersList(), visitlineBackendId, false);
     if (MultiScreenUtility.isTablet(mainActivity)) {
       RtlGridLayoutManager gridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
       recyclerView.setLayoutManager(gridLayoutManager);

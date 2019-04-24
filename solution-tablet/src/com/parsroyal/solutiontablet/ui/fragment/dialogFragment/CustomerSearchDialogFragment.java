@@ -88,7 +88,7 @@ public class CustomerSearchDialogFragment extends DialogFragment {
 
   //set up recycler view
   private void setUpRecyclerView() {
-    pathDetailAdapter = new PathDetailAdapter(mainActivity, new ArrayList<>(), null);
+    pathDetailAdapter = new PathDetailAdapter(mainActivity, new ArrayList<>(), null, false);
     pathDetailAdapter.setSearchCallback(this);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     recyclerView.setLayoutManager(linearLayoutManager);

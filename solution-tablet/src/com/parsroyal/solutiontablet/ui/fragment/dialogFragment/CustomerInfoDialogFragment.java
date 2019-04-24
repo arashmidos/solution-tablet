@@ -517,7 +517,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
       }
 
       orderService.deleteForAllCustomerOrdersByStatus(customer.getBackendId(),
-          SaleOrderStatus.DRAFT.getId());
+          SaleOrderStatus.DRAFT.getId());//TODO DO NOT DELETE DRAFTS
       Bundle args = new Bundle();
       args.putLong(Constants.VISIT_ID, visitInformationId);
       args.putLong(Constants.ORIGIN_VISIT_ID, visitInformationId);

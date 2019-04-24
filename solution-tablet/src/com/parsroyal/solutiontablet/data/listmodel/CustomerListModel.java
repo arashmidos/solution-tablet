@@ -44,6 +44,11 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
     this.visitlineBackendId = visitlineBackendId;
   }
 
+  public CustomerListModel withBackendId(Long backendId) {
+    this.backendId = backendId;
+    return this;
+  }
+
   public boolean isHasDelivery() {
     return hasDelivery;
   }
@@ -245,5 +250,26 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
 
   public void setHasFreeDelivery(boolean hasFreeDelivery) {
     this.hasFreeDelivery = hasFreeDelivery;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    CustomerListModel that = (CustomerListModel) o;
+
+    return backendId != null ? backendId.equals(that.backendId) : that.backendId == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = super.hashCode();
+    result = 31 * result + (backendId != null ? backendId.hashCode() : 0);
+    return result;
   }
 }

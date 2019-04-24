@@ -3,12 +3,14 @@ package com.parsroyal.solutiontablet.biz.impl;
 import android.content.Context;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
+import com.parsroyal.solutiontablet.data.event.NavigateErrorEvent;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.UpdatePusheRequest;
 import com.parsroyal.solutiontablet.service.RestService;
 import com.parsroyal.solutiontablet.service.ServiceGenerator;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.NetworkUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.vrp.model.OptimizedRouteResponse;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -82,9 +84,10 @@ public class RestServiceImpl {
     });
   }
 
-  public void valOptimizedRoute(Context context, List<CustomerLocationDto> list) {
+  public void valOptimizedRoute(Context context, long visitLineBackendId,
+      List<CustomerLocationDto> list) {
     if (!NetworkUtil.isNetworkAvailable(context)) {
-      EventBus.getDefault().post(new ErrorEvent(StatusCodes.NO_NETWORK));
+      EventBus.getDefault().post(new NavigateErrorEvent(StatusCodes.NO_NETWORK));
       return;
     }
 
@@ -99,16 +102,17 @@ public class RestServiceImpl {
         if (response.isSuccessful()) {
           OptimizedRouteResponse result = response.body();
           if (result != null && Empty.isEmpty(result.getError())) {
+            PreferenceHelper.setOptimizedRoute(visitLineBackendId, result);
             EventBus.getDefault().post(result);
           } else {
-            EventBus.getDefault().post(new ErrorEvent(StatusCodes.SERVER_ERROR));
+            EventBus.getDefault().post(new NavigateErrorEvent(StatusCodes.SERVER_ERROR));
           }
         }
       }
 
       @Override
       public void onFailure(Call<OptimizedRouteResponse> call, Throwable t) {
-        EventBus.getDefault().post(new ErrorEvent(StatusCodes.NETWORK_ERROR));
+        EventBus.getDefault().post(new NavigateErrorEvent(StatusCodes.NETWORK_ERROR));
       }
     });
   }

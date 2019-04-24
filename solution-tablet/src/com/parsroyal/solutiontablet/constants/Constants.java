@@ -81,6 +81,7 @@ public class Constants {
   public static final String BANK_CODE = "scanner.bank.code";
   public static final String BANK_BRANCH_CODE = "scanner.bank.branch.code";
   public static final String BANK_NAME = "scanner.bank.name";
+  public static final String VISITLINE_NAME = "visitline.name";
 
   public class TransferStatus {
 

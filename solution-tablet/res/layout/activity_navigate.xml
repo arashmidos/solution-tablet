@@ -1,26 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  tools:context="com.parsroyal.solutiontablet.navigation.NavigateActivity">
+  tools:context="com.parsroyal.solutiontablet.navigation.NavigateBaseFragment">
 
-  <android.support.design.widget.TabLayout
-    android:id="@+id/tabs"
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:background="@color/white"
-    android:elevation="3dp"
-    app:tabIndicatorColor="@color/primary"
-    app:tabMode="fixed"
-    app:tabSelectedTextColor="@color/black_85"
-    app:tabTextColor="@color/black_55" />
-
-  <android.support.v4.view.ViewPager
-    android:id="@+id/viewpager"
+  <LinearLayout
+    android:id="@+id/mapContainer"
     android:layout_width="match_parent"
     android:layout_height="0dp"
-    android:layout_weight="1" />
+    android:layout_weight="1"
+    android:orientation="vertical">
+    <org.osmdroid.views.MapView
+      android:id="@+id/map"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/listContainer"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:visibility="gone">
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/recycler_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+  </LinearLayout>
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="56dp">
+    <Button
+      android:id="@+id/listButton"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:background="@color/white"
+      android:minHeight="0dp"
+      android:minWidth="0dp"
+      android:text="@string/list" />
+    <Button
+      android:id="@+id/mapButton"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:background="@color/white"
+      android:minHeight="0dp"
+      android:minWidth="0dp"
+      android:text="@string/map" />
+  </LinearLayout>
 </LinearLayout>

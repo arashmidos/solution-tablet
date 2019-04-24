@@ -1,9 +1,14 @@
 package com.parsroyal.solutiontablet.util;
 
 import android.content.SharedPreferences;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import com.parsroyal.solutiontablet.vrp.model.OptimizedRouteResponse;
+import java.lang.reflect.Type;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -13,6 +18,7 @@ public class PreferenceHelper {
   private static final String LATEST_VERSION = "LATEST_VERSION";
   private static final String UPDATE_URI = "UPDATE_URI";
   private static final String AUTHORITIES = "setting.authorities";
+  private static final String OPTIMIZED_ROUTE = "OPTIMIZED_ROUTE";
   private static final String DEF_NAVIGATOR = "DEF_NAVIGATOR";
   private static final String BADGER = "BADGER";
 
@@ -107,5 +113,42 @@ public class PreferenceHelper {
     String salesmanId = SolutionTabletApplication.getPreference()
         .getString(ApplicationKeys.SALESMAN_ID, "");
     return Empty.isEmpty(salesmanId) ? null : Long.parseLong(salesmanId);
+  }
+
+  public static void setOptimizedRoute(long visitLineBackendId, OptimizedRouteResponse result) {
+
+    result.setVisitlineBackendId(visitLineBackendId);
+    Set<OptimizedRouteResponse> routeSet = getOptimizedRoutes();
+
+    routeSet.add(result);
+    Gson gson = new Gson();
+    String json = gson.toJson(routeSet);
+    SolutionTabletApplication.getPreference().edit().putString(OPTIMIZED_ROUTE, json).apply();
+  }
+
+  public static Set<OptimizedRouteResponse> getOptimizedRoutes() {
+
+    String json = SolutionTabletApplication.getPreference().getString(OPTIMIZED_ROUTE, "");
+
+    Type type = new TypeToken<Set<OptimizedRouteResponse>>() {
+    }.getType();
+    Gson gson = new Gson();
+
+    Set<OptimizedRouteResponse> routes = gson.fromJson(json, type);
+    return Empty.isEmpty(routes) ? new HashSet<>() : routes;
+  }
+
+  public static OptimizedRouteResponse getOptimizedRoute(long visitlineBackendId) {
+    Set<OptimizedRouteResponse> routes = getOptimizedRoutes();
+    for (OptimizedRouteResponse orr : routes) {
+      if (orr.getVisitlineBackendId() == visitlineBackendId) {
+        return orr;
+      }
+    }
+    return null;
+  }
+
+  public static void clearRoutes() {
+    SolutionTabletApplication.getPreference().edit().putString(OPTIMIZED_ROUTE, "").apply();
   }
 }

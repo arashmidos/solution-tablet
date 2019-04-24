@@ -2,14 +2,17 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -21,7 +24,6 @@ import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.exception.UnknownSystemException;
 import com.parsroyal.solutiontablet.service.CustomerService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
-import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.CustomerInfoBottomSheet;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CustomerInfoDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.CustomerSearchDialogFragment;
@@ -40,16 +42,18 @@ import java.util.Locale;
 public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.ViewHolder> {
 
   private final CustomerService customerService;
+  private final boolean hasOrder;
 
   private Long visitlineBackendId;
   private LayoutInflater inflater;
-  private MainActivity mainActivity;
+  private AppCompatActivity mainActivity;
   private List<CustomerListModel> customers;
   private CustomerSearchDialogFragment customerSearchDialogFragment;
 
   public PathDetailAdapter(Context mainActivity, List<CustomerListModel> customers,
-      Long visitLineBackendId) {
-    this.mainActivity = (MainActivity) mainActivity;
+      Long visitLineBackendId, boolean hasOrder) {
+    this.hasOrder = hasOrder;
+    this.mainActivity = (AppCompatActivity) mainActivity;
     this.customers = customers;
     inflater = LayoutInflater.from(mainActivity);
     customerService = new CustomerServiceImpl(mainActivity);
@@ -64,7 +68,9 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = inflater.inflate(R.layout.item_customers_list, parent, false);
+    View view = inflater
+        .inflate(hasOrder ? R.layout.item_customers_ordered_list : R.layout.item_customers_list,
+            parent, false);
     return new ViewHolder(view);
   }
 
@@ -156,6 +162,9 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
     ImageView hasAnswerImg;
     @BindView(R.id.customer_lay)
     CardView customerLay;
+    @Nullable
+    @BindView(R.id.customer_order)
+    Button customerOrder;
     private CustomerListModel model;
     private int position;
 
@@ -167,7 +176,8 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
     public void setData(CustomerListModel model, int position) {
       this.model = model;
       this.position = position;
-      customerShopNameTv.setText(model.getShopName());
+//      customerShopNameTv.setText(model.getShopName());//TODO: UNCOMMENT
+      customerShopNameTv.setText(model.getBackendId()+"");
       customerNameTv.setText(model.getTitle());
       customerIdTv.setText(String.format(mainActivity.getString(R.string.code_x),
           NumberUtil.digitsToPersian(model.getCode())));
@@ -185,7 +195,7 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
           visitTodayImg.setImageResource(R.drawable.ic_call);
           visitTodayImg
               .setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
-        }else {
+        } else {
           visitTodayImg
               .setColorFilter(ContextCompat.getColor(mainActivity, R.color.log_in_enter_bg));
         }
@@ -222,6 +232,10 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
             .setText(NumberUtil.digitsToPersian(String.format(Locale.US, "+%d", list.size() - 2)));
       } else {
         counterImg.setVisibility(View.GONE);
+      }
+
+      if (customerOrder != null) {
+        customerOrder.setText(NumberUtil.digitsToPersian((position + 1)));
       }
     }
 

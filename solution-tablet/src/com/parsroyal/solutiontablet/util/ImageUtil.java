@@ -2,10 +2,15 @@ package com.parsroyal.solutiontablet.util;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -13,9 +18,7 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Base64;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
-import com.crashlytics.android.Crashlytics;
 import com.parsroyal.solutiontablet.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,7 +42,7 @@ public class ImageUtil {
       out.close();
       return file.getAbsolutePath();
     } catch (Exception e) {
-      Logger.sendError( "Storage Exception", "Error in Bsaving temp image " + e.getMessage());
+      Logger.sendError("Storage Exception", "Error in Bsaving temp image " + e.getMessage());
       e.printStackTrace();
       return "";
     }
@@ -179,6 +182,89 @@ public class ImageUtil {
     Canvas canvas = new Canvas(bitmap);
     drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
     drawable.draw(canvas);
+
+    return bitmap;
+  }
+
+
+  public static Bitmap setMarkerDrawable(Context context, int number) {
+    int background = R.drawable.ic_pin_resting_86dp;
+
+    /* DO SOMETHING TO THE ICON BACKGROUND HERE IF NECESSARY */
+    /* (e.g. change its tint color if the number is over a certain threshold) */
+
+    return drawTextToBitmap(context, background, NumberUtil.digitsToPersian(number));
+  }
+
+  public static Bitmap setSelectedMarkerDrawable(Context context, int number) {
+    int background = R.drawable.ic_pin_selected_86dp;
+
+    return drawTextToSelectedBitmap(context, background, NumberUtil.digitsToPersian(number));
+  }//512da8
+
+  private static Bitmap drawTextToSelectedBitmap(Context context, int gResId, String gText) {
+    Resources resources = context.getResources();
+    float scale = resources.getDisplayMetrics().density;
+    Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
+    android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
+
+    if (bitmapConfig == null) {
+      bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+    }
+    bitmap = bitmap.copy(bitmapConfig, true);
+    Canvas canvas = new Canvas(bitmap);
+
+    Typeface plain = Typeface.createFromAsset(context.getAssets(), "fonts/IRANSansMobile_Medium.ttf");
+//    Typeface bold = Typeface.create(plain, Typeface.DEFAULT_BOLD);
+
+    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    paint.setTypeface(plain);
+    /* SET FONT COLOR (e.g. WHITE -> rgb(255,255,255)) */
+    paint.setColor(Color.parseColor("#512da8"));
+    /* SET FONT SIZE (e.g. 15) */
+    paint.setTextSize((int) (12 * scale));
+    /* SET SHADOW WIDTH, POSITION AND COLOR (e.g. BLACK) */
+//    paint.setShadowLayer(1f, 0f, 1f, Color.BLACK);
+
+    Rect bounds = new Rect();
+    paint.getTextBounds(gText, 0, gText.length(), bounds);
+    int x = (bitmap.getWidth() - bounds.width()) / 2;
+    int y = (bitmap.getHeight() + bounds.height()) /4;
+    canvas.drawText(gText, x, y, paint);
+
+    return bitmap;
+  }
+  private static Bitmap drawTextToBitmap(Context context, int gResId, String gText) {
+    Resources resources = context.getResources();
+    float scale = resources.getDisplayMetrics().density;
+    Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
+    android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
+
+    if (bitmapConfig == null) {
+      bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+    }
+    bitmap = bitmap.copy(bitmapConfig, true);
+    Canvas canvas = new Canvas(bitmap);
+
+    Typeface plain = Typeface.createFromAsset(context.getAssets(), "fonts/IRANSansMobile.ttf");
+//    Typeface bold = Typeface.create(plain, Typeface.DEFAULT_BOLD);
+
+    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    paint.setTypeface(plain);
+    /* SET FONT COLOR (e.g. WHITE -> rgb(255,255,255)) */
+    paint.setColor(Color.rgb(255, 255, 255));
+    /* SET FONT SIZE (e.g. 15) */
+    paint.setTextSize((int) (12 * scale));
+    /* SET SHADOW WIDTH, POSITION AND COLOR (e.g. BLACK) */
+    paint.setShadowLayer(1f, 0f, 1f, Color.BLACK);
+
+    Rect bounds = new Rect();
+    paint.getTextBounds(gText, 0, gText.length(), bounds);
+    int x = (bitmap.getWidth() - bounds.width()) / 2;
+    int y = (bitmap.getHeight() + bounds.height()) /5;
+    canvas.drawText(gText, x, y, paint);
 
     return bitmap;
   }

@@ -496,7 +496,6 @@ public class DateUtil {
   }
 
   public static String getMonthNumberForAndroid8(String date, SimpleDateFormat formatter) {
-    Timber.tag("Datee").i("Input %s", date);
     try {
       String[] month = formatter.getDateFormatSymbols().getShortMonths();
       String m = date.split("/")[1];
@@ -530,7 +529,6 @@ public class DateUtil {
     } catch (Exception ex) {
       ex.printStackTrace();
     }
-    Timber.tag("Datee").i("Output %s", date);
     return date;
   }
 

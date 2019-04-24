@@ -52,7 +52,7 @@
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning"
     tools:replace="android:supportsRtl">
-    <activity android:name=".navigation.NavigateActivity"></activity>
+
     <activity android:name=".ui.activity.TestActivity">
 
       <!--
