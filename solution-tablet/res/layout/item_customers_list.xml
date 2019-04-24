@@ -45,22 +45,6 @@
       android:maxLines="1"
       android:textColor="@color/login_gray"
       android:textSize="12sp" />
-    <TextView
-      android:id="@+id/visitline_tv"
-      style="@style/IranSans.Medium"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="16dp"
-      android:layout_marginRight="16dp"
-      android:layout_alignParentRight="true"
-      android:layout_below="@+id/customer_name_tv"
-      android:ellipsize="end"
-      android:gravity="right"
-      android:maxLines="1"
-      android:textColor="@color/login_gray"
-      android:textSize="12sp"
-      android:visibility="gone"
-      tools:text="خط ویزیت تهران شرق" />
 
     <TextView
       android:id="@+id/customer_shop_name_tv"

@@ -28,6 +28,7 @@
   <color name="light_gray">#ffdbdcde</color>
   <color name="gray_bd">#bdbdbd</color>
   <color name="white">#ffffff</color>
+  <color name="white70">#b3ffffff</color>
   <color name="white30">#deffffff</color>
   <color name="white_fa">#fafafa</color>
   <color name="red">#ffdf2c42</color>
@@ -35,6 +36,8 @@
   <color name="gray">#a0a0a0</color>
   <color name="violet">#8576ca</color>
   <color name="orange">#ffae22</color>
+  <color name="path">#2196f3</color>
+  <color name="path_border">#1565c0</color>
   <color name="blue">#00b4ea</color>
   <color name="colorPrimary">#3F51B5</color>
   <color name="gray_light_more">#dfdddd</color>
@@ -78,6 +81,8 @@
   <color name="black_10">#1a000000</color>
   <color name="black_21">#212121</color>
   <color name="black_61">#616161</color>
+  <color name="black">#000000</color>
+  <color name="blue_navigation">#6dbdff</color>
 
   <!-- visit detail-->
   <color name="register_order">#558b2f</color>
@@ -93,4 +98,6 @@
   <color name="free_order">#00897b</color>
   <color name="light_red">#FFEBEE</color>
   <color name="item_text_color">#000000</color>
+  <color name="navigation_card">#4a6572</color>
+  <color name="navigation_button_bg">#37474f</color>
 </resources>

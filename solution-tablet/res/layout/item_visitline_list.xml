@@ -6,6 +6,7 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:layout_marginTop="@dimen/fragment_padding"
+  android:layout_marginBottom="@dimen/fragment_padding"
   android:layout_marginLeft="@dimen/fragment_padding"
   android:layout_marginRight="@dimen/fragment_padding"
   card_view:cardCornerRadius="2dp"
@@ -14,32 +15,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
-    <ImageView
-      android:id="@+id/list_img"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:layout_marginLeft="16dp"
-      android:layout_gravity="left|top"
-      android:src="@drawable/im_list_40_dp"
-      android:visibility="gone"
-      tools:visibility="gone" />
-    <ImageView
-      android:id="@+id/nav_img"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:layout_marginLeft="16dp"
-      android:layout_gravity="left|top"
-      android:src="@drawable/ic_navigation"
-      android:visibility="gone"
-      tools:visibility="visible" />
+
     <LinearLayout
       android:id="@+id/visitline_layout"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:background="@color/white"
       android:gravity="right"
       android:orientation="vertical">
 
@@ -50,16 +31,16 @@
 
       <TextView
         android:id="@+id/visitline_name"
-        style="@style/IranSans.Medium"
+        style="@style/IranSans.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:lineSpacingExtra="6sp"
-        android:textColor="@color/primary_dark"
-        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         tools:text="مسیر پاسداران - هروی" />
 
       <RelativeLayout
@@ -70,15 +51,15 @@
 
         <TextView
           android:id="@+id/visitline_detail"
-          style="@style/IranSans"
+          style="@style/IranSans.Medium"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginBottom="20dp"
+          android:layout_marginBottom="10dp"
           android:layout_toLeftOf="@+id/divider"
           android:ellipsize="end"
           android:maxLines="1"
-          android:textColor="@color/black_55"
-          android:textSize="@dimen/text_small"
+          android:textColor="@color/gray_75"
+          android:textSize="14sp"
           tools:text="میدان هروی - پاسداران - ساقدوش" />
 
         <View
@@ -88,21 +69,54 @@
           android:layout_marginLeft="8dp"
           android:layout_marginRight="8dp"
           android:layout_toLeftOf="@+id/customer_count"
-          android:background="@color/black_10" />
+          android:background="@color/gray_75" />
 
         <TextView
           android:id="@+id/customer_count"
           style="@style/IranSans"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginBottom="20dp"
+          android:layout_marginBottom="10dp"
           android:layout_alignParentRight="true"
           android:maxLines="1"
-          android:textColor="@color/black_de"
-          android:textSize="@dimen/text_small"
+          android:textColor="@color/gray_75"
+          android:textSize="14sp"
           tools:text="9 مشتری" />
 
       </RelativeLayout>
+      <TextView
+        android:id="@+id/select_customer_btn"
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:background="@drawable/rectangle_radius_18"
+        android:textColor="@color/blue_navigation"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:text="انتخاب مشتری" />
+      <TextView
+        android:id="@+id/navigate_btn"
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:background="@drawable/rectangle_radius_18_white"
+        android:drawablePadding="4dp"
+        android:drawableRight="@drawable/ic_direction_18_dp"
+        android:textColor="@color/primary"
+        android:textSize="16sp"
+        android:text="مسیریابی" />
     </LinearLayout>
   </LinearLayout>
 </android.support.v7.widget.CardView>

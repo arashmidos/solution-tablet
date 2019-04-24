@@ -672,5 +672,6 @@
   <string name="message_have_unsent_data">شما اطلاعات ارسال نشده دارید که قبل از خروج می بایست ارسال شوند. آیا میخواهید آنها را ارسال کنید؟</string>
   <string name="message_location_submitted_successfully">ثبت موقعیت با موفقیت انجام شد!</string>
   <string name="list">لیست</string>
+  <string name="message_calculating_route">در حال بررسی مسیر...</string>
 
 </resources>
