@@ -187,11 +187,9 @@ public class ImageUtil {
   }
 
 
-  public static Bitmap setMarkerDrawable(Context context, int number) {
-    int background = R.drawable.ic_pin_resting_86dp;
-
-    /* DO SOMETHING TO THE ICON BACKGROUND HERE IF NECESSARY */
-    /* (e.g. change its tint color if the number is over a certain threshold) */
+  public static Bitmap setMarkerDrawable(Context context, int number, boolean visited) {
+    int background =
+        visited ? R.drawable.ic_marker_blue_empty_24dp : R.drawable.ic_pin_resting_86dp;
 
     return drawTextToBitmap(context, background, NumberUtil.digitsToPersian(number));
   }
@@ -200,12 +198,13 @@ public class ImageUtil {
     int background = R.drawable.ic_pin_selected_86dp;
 
     return drawTextToSelectedBitmap(context, background, NumberUtil.digitsToPersian(number));
-  }//512da8
+  }
 
   private static Bitmap drawTextToSelectedBitmap(Context context, int gResId, String gText) {
     Resources resources = context.getResources();
     float scale = resources.getDisplayMetrics().density;
     Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
+
     android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
 
     if (bitmapConfig == null) {
@@ -214,11 +213,11 @@ public class ImageUtil {
     bitmap = bitmap.copy(bitmapConfig, true);
     Canvas canvas = new Canvas(bitmap);
 
-    Typeface plain = Typeface.createFromAsset(context.getAssets(), "fonts/IRANSansMobile_Medium.ttf");
+    Typeface plain = Typeface
+        .createFromAsset(context.getAssets(), "fonts/IRANSansMobile_Medium.ttf");
 //    Typeface bold = Typeface.create(plain, Typeface.DEFAULT_BOLD);
 
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
     paint.setTypeface(plain);
     /* SET FONT COLOR (e.g. WHITE -> rgb(255,255,255)) */
     paint.setColor(Color.parseColor("#512da8"));
@@ -230,11 +229,12 @@ public class ImageUtil {
     Rect bounds = new Rect();
     paint.getTextBounds(gText, 0, gText.length(), bounds);
     int x = (bitmap.getWidth() - bounds.width()) / 2;
-    int y = (bitmap.getHeight() + bounds.height()) /4;
+    int y = (bitmap.getHeight() + bounds.height()) / 4;
     canvas.drawText(gText, x, y, paint);
 
     return bitmap;
   }
+
   private static Bitmap drawTextToBitmap(Context context, int gResId, String gText) {
     Resources resources = context.getResources();
     float scale = resources.getDisplayMetrics().density;
@@ -263,7 +263,7 @@ public class ImageUtil {
     Rect bounds = new Rect();
     paint.getTextBounds(gText, 0, gText.length(), bounds);
     int x = (bitmap.getWidth() - bounds.width()) / 2;
-    int y = (bitmap.getHeight() + bounds.height()) /5;
+    int y = (bitmap.getHeight() + bounds.height()) / 5;
     canvas.drawText(gText, x, y, paint);
 
     return bitmap;

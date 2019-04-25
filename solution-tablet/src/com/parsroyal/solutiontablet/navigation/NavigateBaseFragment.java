@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +22,13 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.biz.impl.RestServiceImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.event.NavigateErrorEvent;
@@ -129,7 +129,6 @@ public class NavigateBaseFragment extends BaseFragment {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    Log.i("LEARNING", "BaseFragment.onCreateView");
     View view = inflater.inflate(R.layout.activity_navigate, container, false);
     mainActivity = (MainActivity) getActivity();
 
@@ -211,6 +210,9 @@ public class NavigateBaseFragment extends BaseFragment {
       showList();
       drawMapRoute();
     } else {
+      Location locations = SolutionTabletApplication.getInstance().getLastKnownLocation();
+      customersLocation
+          .add(0, new CustomerLocationDto(0L, locations.getLatitude(), locations.getLongitude()));
       new RestServiceImpl().valOptimizedRoute(mainActivity, visitLineBackendId, customersLocation);
       DialogUtil.showProgressDialog(mainActivity, R.string.message_calculating_route);
     }
@@ -311,10 +313,6 @@ public class NavigateBaseFragment extends BaseFragment {
     mLocationOverlay.setDrawAccuracyEnabled(true);
     map.getOverlays().add(this.mLocationOverlay);
 
-//    Marker startMarker = new Marker(map);
-//    startMarker.setPosition(startPoint);
-//    startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-//    map.getOverlays().add(startMarker);
   }
 
   private void draw() {
@@ -338,38 +336,47 @@ public class NavigateBaseFragment extends BaseFragment {
 
     FolderOverlay locationsFolder = new FolderOverlay();
     locationsFolder.setName("locations");
+    PrsMarkerInfoWindow infoWindow = new PrsMarkerInfoWindow(R.layout.osm_info_window, map);
 
     for (int i = 0; i < geoPoints.size(); i++) {
       LocationResponse l = geoPoints.get(i);
       PrsMarker startMarker = new PrsMarker(map);
       startMarker.setPosition(new GeoPoint(l.getLat(), l.getLon()));
       startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-      startMarker.setSubDescription("Hello " + l.getName() + " index:" + l.getOriginal_index());
+//      startMarker.setSubDescription("Hello " + l.getName() + " index:" + l.getOriginal_index());
       startMarker.setLocation(l);
       startMarker.setIndex(i);
       if (i < legs.size()) {
         startMarker.setShape(PolylineEncoder.decode(legs.get(i).getShape(), 1, false));
       }
-
+      if (i > 0) {
+        CustomerListModel model = customerList.get(i - 1);
+        startMarker.setInfoWindow(infoWindow);
+        startMarker.setTitle(model.getTitle());
+        startMarker.setSnippet(model.getSnippet());
+        startMarker.setSubDescription(model.getCode());
+      }
       startMarker.setOnMarkerClickListener((marker, mapView) -> {
         changeLineColors(marker, mapView);
+        if (lastSelectedMarker != null) {
+//          lastSelectedMarker.closeInfoWindow();
+        }
         marker.showInfoWindow();
-        return false;
+        return true;
       });
 
-      startMarker
-          .setIcon(
-              new BitmapDrawable(getResources(), ImageUtil.setMarkerDrawable(mainActivity, i + 1)));
-//      }
+      if (i == 0) {
+        startMarker
+            .setIcon(mainActivity.getResources().getDrawable(R.drawable.ic_start_marker_36dp));
+      } else {
+        startMarker.setIcon(new BitmapDrawable(getResources(),
+            ImageUtil.setMarkerDrawable(mainActivity, i, customerList.get(i - 1).isVisited())));
+      }
 
-//      map.getOverlays().add(startMarker);
       locationsFolder.add(startMarker);
     }
     map.getOverlayManager().add(locationsFolder);
-//    IMapController mapController = map.getController();
-//    mapController.setZoom(14.0);
-//    mapController.setCenter(legsList.get(0));
-    Toast.makeText(mainActivity, "Route complete", Toast.LENGTH_SHORT).show();
+
     TripSummaryResponse summary = response.getTrip().getSummary();
     BoundingBox boundingBox = new BoundingBox(summary.getMax_lat(), summary.getMax_lon(),
         summary.getMin_lat(), summary.getMin_lon());
@@ -383,13 +390,13 @@ public class NavigateBaseFragment extends BaseFragment {
       FolderOverlay legsOverlay = (FolderOverlay) mapView.getOverlayManager().get(1);
       List<Overlay> items = legsOverlay.getItems();
 
-      if (lastSelectedMarkerIndex != -1&& lastSelectedMarkerIndex<items.size()) {
+      if (lastSelectedMarkerIndex != -1 && lastSelectedMarkerIndex < items.size()) {
         ((Polyline) items.get(lastSelectedMarkerIndex))
             .setColor(ContextCompat.getColor(mainActivity, colors[3]));
       }
       PrsMarker prsMarker = (PrsMarker) marker;
       lastSelectedMarkerIndex = prsMarker.getIndex();
-      if( lastSelectedMarkerIndex < items.size()) {
+      if (lastSelectedMarkerIndex < items.size()) {
         Polyline polyline = (Polyline) items.get(prsMarker.getIndex());
         polyline.setColor(ContextCompat.getColor(mainActivity, colors[0]));
       }

@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -469,7 +468,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
       }
 
       AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-      LayoutInflater inflater1 = ((AppCompatActivity) context).getLayoutInflater();
+      LayoutInflater inflater1 = context.getLayoutInflater();
       View dialogView = inflater1.inflate(R.layout.bottom_sheet_map_chooser, null);
       TextView navTv = dialogView.findViewById(R.id.navigation_tv);
       LinearLayout enterLay = dialogView.findViewById(R.id.enter_layout);
