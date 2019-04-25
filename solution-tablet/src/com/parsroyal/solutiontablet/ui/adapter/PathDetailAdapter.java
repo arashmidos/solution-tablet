@@ -176,8 +176,8 @@ public class PathDetailAdapter extends RecyclerView.Adapter<PathDetailAdapter.Vi
     public void setData(CustomerListModel model, int position) {
       this.model = model;
       this.position = position;
-//      customerShopNameTv.setText(model.getShopName());//TODO: UNCOMMENT
-      customerShopNameTv.setText(model.getBackendId()+"");
+      customerShopNameTv.setText(model.getShopName());
+//      customerShopNameTv.setText(model.getBackendId()+"");
       customerNameTv.setText(model.getTitle());
       customerIdTv.setText(String.format(mainActivity.getString(R.string.code_x),
           NumberUtil.digitsToPersian(model.getCode())));

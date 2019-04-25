@@ -35,23 +35,57 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="56dp">
-    <Button
-      android:id="@+id/listButton"
+
+    <RelativeLayout
+      android:id="@+id/list_lay"
       android:layout_width="0dp"
       android:layout_height="match_parent"
       android:layout_weight="1"
-      android:background="@color/white"
-      android:minHeight="0dp"
-      android:minWidth="0dp"
-      android:text="@string/list" />
-    <Button
-      android:id="@+id/mapButton"
+      android:background="@drawable/role_default">
+
+      <TextView
+        android:id="@+id/listButton"
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/list"
+        android:textColor="@color/login_gray"
+        android:textSize="12sp" />
+
+      <View
+        android:id="@+id/list_bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primary"
+        android:visibility="gone" />
+    </RelativeLayout>
+    <RelativeLayout
+      android:id="@+id/map_lay"
       android:layout_width="0dp"
       android:layout_height="match_parent"
       android:layout_weight="1"
-      android:background="@color/white"
-      android:minHeight="0dp"
-      android:minWidth="0dp"
-      android:text="@string/map" />
+      android:background="@drawable/role_default">
+
+      <TextView
+        android:id="@+id/mapButton"
+        style="@style/IranSans.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/map"
+        android:textColor="@color/login_gray"
+        android:textSize="12sp" />
+
+      <View
+        android:id="@+id/map_bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primary"
+        android:visibility="gone" />
+    </RelativeLayout>
+
   </LinearLayout>
 </LinearLayout>

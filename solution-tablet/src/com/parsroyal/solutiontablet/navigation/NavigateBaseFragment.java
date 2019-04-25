@@ -1,12 +1,16 @@
 package com.parsroyal.solutiontablet.navigation;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
+import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,8 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,7 +63,9 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -69,18 +77,26 @@ public class NavigateBaseFragment extends BaseFragment {
   @BindView(R.id.listContainer)
   LinearLayout listContainer;
   @BindView(R.id.listButton)
-  Button listButton;
+  TextView listButton;
   @BindView(R.id.mapButton)
-  Button mapButton;
+  TextView mapButton;
   @BindView(R.id.recycler_view)
   RecyclerView list;
   @BindView(R.id.map)
   MapView map;
+  @BindView(R.id.list_bottom_line)
+  View listBottomLine;
+  @BindView(R.id.list_lay)
+  RelativeLayout listLay;
+  @BindView(R.id.map_bottom_line)
+  View mapBottomLine;
+  @BindView(R.id.map_lay)
+  RelativeLayout mapLay;
   //
   private PathDetailAdapter adapter;
   private MyLocationNewOverlay mLocationOverlay;
   private OptimizedRouteResponse response;
-  private int[] colors = new int[]{R.color.green,
+  private int[] colors = new int[]{R.color.green_return,
       R.color.red,
       R.color.violet,
       R.color.path,
@@ -95,6 +111,8 @@ public class NavigateBaseFragment extends BaseFragment {
   private String visitLineName;
   private MainActivity mainActivity;
   private Unbinder unbinder;
+  private Marker lastSelectedMarker;
+  private int lastSelectedMarkerIndex = -1;
 
   public NavigateBaseFragment() {
     // Required empty public constructor
@@ -132,6 +150,7 @@ public class NavigateBaseFragment extends BaseFragment {
     initMap();
     setUpRecyclerView();
 
+    selectMapButton();
     return view;
   }
 
@@ -204,9 +223,8 @@ public class NavigateBaseFragment extends BaseFragment {
       orderListModel.add(new CustomerListModel().withBackendId(
           Long.valueOf(orderedList.get(i).getName())));
     }
-    Collections.sort(customerList,
-        (left, right) -> Integer
-            .compare(orderListModel.indexOf(left), orderListModel.indexOf(right)));
+    Collections.sort(customerList, (left, right) ->
+        Integer.compare(orderListModel.indexOf(left), orderListModel.indexOf(right)));
   }
 
   public List<CustomerListModel> getCustomerList() {
@@ -224,13 +242,13 @@ public class NavigateBaseFragment extends BaseFragment {
     unbinder.unbind();
   }
 
-  @OnClick({R.id.listButton, R.id.mapButton})
+  @OnClick({R.id.list_lay, R.id.map_lay})
   public void onViewClicked(View view) {
     switch (view.getId()) {
-      case R.id.listButton:
+      case R.id.list_lay:
         showListContainer();
         break;
-      case R.id.mapButton:
+      case R.id.map_lay:
         showMapContainer();
         break;
     }
@@ -239,11 +257,33 @@ public class NavigateBaseFragment extends BaseFragment {
   private void showMapContainer() {
     listContainer.setVisibility(View.GONE);
     mapContainer.setVisibility(View.VISIBLE);
+    selectMapButton();
+  }
+
+  private void selectMapButton() {
+    mapLay.setBackgroundResource(R.drawable.role_selected);
+    mapButton.setTextColor(ContextCompat.getColor(mainActivity, R.color.primary));
+    mapBottomLine.setVisibility(View.VISIBLE);
+    //
+    listLay.setBackgroundResource(R.drawable.role_default);
+    listButton.setTextColor(ContextCompat.getColor(mainActivity, R.color.login_gray));
+    listBottomLine.setVisibility(View.GONE);
   }
 
   private void showListContainer() {
     listContainer.setVisibility(View.VISIBLE);
     mapContainer.setVisibility(View.GONE);
+    selectListButton();
+  }
+
+  private void selectListButton() {
+    listLay.setBackgroundResource(R.drawable.role_selected);
+    listButton.setTextColor(ContextCompat.getColor(mainActivity, R.color.primary));
+    listBottomLine.setVisibility(View.VISIBLE);
+    //
+    mapLay.setBackgroundResource(R.drawable.role_default);
+    mapButton.setTextColor(ContextCompat.getColor(mainActivity, R.color.login_gray));
+    mapBottomLine.setVisibility(View.GONE);
   }
 
   //-----------------------------------------Map--------------------------------------------------
@@ -260,6 +300,15 @@ public class NavigateBaseFragment extends BaseFragment {
 
     this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(mainActivity), map);
     this.mLocationOverlay.enableMyLocation();
+//    mLocationOverlay.enableFollowLocation();
+    Drawable currentDraw = ResourcesCompat
+        .getDrawable(getResources(), R.drawable.ic_lens_blue, null);
+    Bitmap currentIcon = null;
+    if (currentDraw != null) {
+      currentIcon = ((BitmapDrawable) currentDraw).getBitmap();
+    }
+    mLocationOverlay.setDirectionArrow(currentIcon, currentIcon);
+    mLocationOverlay.setDrawAccuracyEnabled(true);
     map.getOverlays().add(this.mLocationOverlay);
 
 //    Marker startMarker = new Marker(map);
@@ -270,7 +319,8 @@ public class NavigateBaseFragment extends BaseFragment {
 
   private void draw() {
     List<Leg> legs = response.getTrip().getLegs();
-
+    FolderOverlay legsFolder = new FolderOverlay();
+    legsFolder.setName("legs");
     for (int i = 0; i < legs.size(); i++) {
 
       ArrayList<GeoPoint> legsList = PolylineEncoder
@@ -279,30 +329,43 @@ public class NavigateBaseFragment extends BaseFragment {
       polyline.setPoints(legsList);
       polyline.setColor(ContextCompat.getColor(mainActivity, colors[3]));
       polyline.setWidth(8);
-
-      map.getOverlayManager().add(polyline);
+      legsFolder.add(polyline);
+//      map.getOverlayManager().add(polyline);
     }
+    map.getOverlayManager().add(legsFolder);
+
     List<LocationResponse> geoPoints = response.getTrip().getLocations();
+
+    FolderOverlay locationsFolder = new FolderOverlay();
+    locationsFolder.setName("locations");
+
     for (int i = 0; i < geoPoints.size(); i++) {
       LocationResponse l = geoPoints.get(i);
-      Marker startMarker = new Marker(map);
+      PrsMarker startMarker = new PrsMarker(map);
       startMarker.setPosition(new GeoPoint(l.getLat(), l.getLon()));
       startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
       startMarker.setSubDescription("Hello " + l.getName() + " index:" + l.getOriginal_index());
-//      if (i == 15) {
-//        startMarker.setIcon(
-//            new BitmapDrawable(getResources(),
-//                ImageUtil.setSelectedMarkerDrawable(mainActivity, i)));
+      startMarker.setLocation(l);
+      startMarker.setIndex(i);
+      if (i < legs.size()) {
+        startMarker.setShape(PolylineEncoder.decode(legs.get(i).getShape(), 1, false));
+      }
 
-//        startMarker.setIcon(getResources().getDrawable(R.drawable.ic_marker_green_24dp));
-//      } else {
+      startMarker.setOnMarkerClickListener((marker, mapView) -> {
+        changeLineColors(marker, mapView);
+        marker.showInfoWindow();
+        return false;
+      });
+
       startMarker
           .setIcon(
-              new BitmapDrawable(getResources(), ImageUtil.setMarkerDrawable(mainActivity, i+1)));
+              new BitmapDrawable(getResources(), ImageUtil.setMarkerDrawable(mainActivity, i + 1)));
 //      }
 
-      map.getOverlays().add(startMarker);
+//      map.getOverlays().add(startMarker);
+      locationsFolder.add(startMarker);
     }
+    map.getOverlayManager().add(locationsFolder);
 //    IMapController mapController = map.getController();
 //    mapController.setZoom(14.0);
 //    mapController.setCenter(legsList.get(0));
@@ -313,19 +376,41 @@ public class NavigateBaseFragment extends BaseFragment {
     zoomToBounds(boundingBox);
   }
 
+  private void changeLineColors(Marker marker, MapView mapView) {
+    try {
+      lastSelectedMarker = marker;
+
+      FolderOverlay legsOverlay = (FolderOverlay) mapView.getOverlayManager().get(1);
+      List<Overlay> items = legsOverlay.getItems();
+
+      if (lastSelectedMarkerIndex != -1&& lastSelectedMarkerIndex<items.size()) {
+        ((Polyline) items.get(lastSelectedMarkerIndex))
+            .setColor(ContextCompat.getColor(mainActivity, colors[3]));
+      }
+      PrsMarker prsMarker = (PrsMarker) marker;
+      lastSelectedMarkerIndex = prsMarker.getIndex();
+      if( lastSelectedMarkerIndex < items.size()) {
+        Polyline polyline = (Polyline) items.get(prsMarker.getIndex());
+        polyline.setColor(ContextCompat.getColor(mainActivity, colors[0]));
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
   public void zoomToBounds(final BoundingBox box) {
     if (map.getHeight() > 0) {
       map.zoomToBoundingBox(box, true);
 
     } else {
       ViewTreeObserver vto = map.getViewTreeObserver();
-      vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+      vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
         @Override
         public void onGlobalLayout() {
           map.zoomToBoundingBox(box, true);
           ViewTreeObserver vto2 = map.getViewTreeObserver();
-          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+          if (VERSION.SDK_INT < VERSION_CODES.JELLY_BEAN) {
             vto2.removeGlobalOnLayoutListener(this);
           } else {
             vto2.removeOnGlobalLayoutListener(this);
