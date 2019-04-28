@@ -45,6 +45,9 @@ public class SettingDetailsResponse extends Response {
   @SerializedName("check.sms.confirm")
   @Expose
   private boolean checkSmsConfirm;
+  @SerializedName("check.distributor.phone.confirm")
+  @Expose
+  private boolean checkDistributorPhoneConfirm;
 
   public boolean isCheckSmsConfirm() {
     return checkSmsConfirm;
@@ -140,5 +143,13 @@ public class SettingDetailsResponse extends Response {
 
   public void setCheckDistanceFromCustomerValue(String checkDistanceFromCustomerValue) {
     this.checkDistanceFromCustomerValue = checkDistanceFromCustomerValue;
+  }
+
+  public boolean isCheckDistributorPhoneConfirm() {
+    return checkDistributorPhoneConfirm;
+  }
+
+  public void setCheckDistributorPhoneConfirm(boolean checkDistributorPhoneConfirm) {
+    this.checkDistributorPhoneConfirm = checkDistributorPhoneConfirm;
   }
 }

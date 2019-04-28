@@ -14,6 +14,7 @@ public class ApplicationKeys {
   public static final String SETTING_DISTANCE_CUSTOMER_VALUE = "setting.distance.value";
   public static final String SETTING_CHECK_CREDIT_ENABLE = "setting.check.credit";
   public static final String SETTING_CHECK_SMS_CONFIRM_ENABLE = "setting.check.sms.confirm";
+  public static final String SETTING_CHECK_DISTRIBUTOR_PHONE_CONFIRM_ENABLE = "setting.check.distributor.phone.confirm";
   public static final String SETTING_STOCK_ID = "setting.stock.id";
   public static final String SETTING_BRANCH_ID = "setting.branch.id";
   public static final String SETTING_BRANCH_CODE = "setting.branch.code";

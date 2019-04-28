@@ -148,9 +148,7 @@ public class OrderInfoFragment extends BaseFragment {
   private long rejectType;
   private boolean isCashOrder;
   private int rand;
-  private boolean smsConfirmEnabled;
   private Long typeId;
-  private boolean checkCreditEnabled;
   private Double creditRemained;
   private boolean isComplimentary;
 
@@ -176,15 +174,6 @@ public class OrderInfoFragment extends BaseFragment {
     ButterKnife.bind(this, view);
     mainActivity = (MainActivity) getActivity();
     initializeServices();
-    String smsEnabled = settingService
-        .getSettingValue(ApplicationKeys.SETTING_CHECK_SMS_CONFIRM_ENABLE);
-    smsConfirmEnabled = Empty.isEmpty(smsEnabled) || "null".equals(smsEnabled) ? false
-        : Boolean.valueOf(smsEnabled);
-
-    String checkCredit = settingService
-        .getSettingValue(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE);
-    checkCreditEnabled = Empty.isEmpty(checkCredit) || "null".equals(checkCredit) ? false
-        : Boolean.valueOf(checkCredit);
 
     Bundle args = getArguments();
 
@@ -527,7 +516,7 @@ public class OrderInfoFragment extends BaseFragment {
         visitService.saveVisitDetail(visitDetail);
       }
 
-      if (smsConfirmEnabled) {
+      if (PreferenceHelper.smsEnabled()) {
         calculateRand();
         checkForSmsPermission();
       } else {
@@ -588,7 +577,7 @@ public class OrderInfoFragment extends BaseFragment {
 
     Double total = Double.valueOf(order.getAmount());
 
-    if (checkCreditEnabled && creditRemained != null && creditRemained.compareTo(total) < 0
+    if (PreferenceHelper.isCreditEnabled() && creditRemained != null && creditRemained.compareTo(total) < 0
         && !selectedItem.getLabel().contains("نقد")) {
       DialogUtil.showCustomDialog(mainActivity, getString(R.string.warning),
           "اعتبار کافی نیست. ثبت این سفارش فقط با پرداخت نقدی امکان پذیر است", "تایید",

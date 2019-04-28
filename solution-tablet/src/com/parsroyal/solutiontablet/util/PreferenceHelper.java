@@ -3,7 +3,9 @@ package com.parsroyal.solutiontablet.util;
 import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.data.entity.KeyValue;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import com.parsroyal.solutiontablet.vrp.model.OptimizedRouteResponse;
@@ -150,5 +152,71 @@ public class PreferenceHelper {
 
   public static void clearRoutes() {
     SolutionTabletApplication.getPreference().edit().putString(OPTIMIZED_ROUTE, "").apply();
+  }
+
+  public static boolean distanceServiceEnabled() {
+    if (BuildConfig.DEBUG) {
+      return false;
+    }
+    KeyValue keyValue = retrieveByKey(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE);
+    if (keyValue == null) {
+      return false;
+    }
+    return Boolean.valueOf(keyValue.getValue());
+
+  }
+
+  public static float getAllowedDistance() {
+    String distance = SolutionTabletApplication.getPreference()
+        .getString(ApplicationKeys.SETTING_DISTANCE_CUSTOMER_VALUE, "");
+
+    try {
+      return
+          Empty.isEmpty(distance) || "null".equals(distance) ? Constants.MAX_DISTANCE
+              : Float.valueOf(distance);
+    } catch (NumberFormatException ex) {
+      ex.printStackTrace();
+      return Constants.MAX_DISTANCE;
+    }
+  }
+
+  public static boolean isDistributorPhoneConfirmEnabled() {
+    String result = SolutionTabletApplication.getPreference()
+        .getString(ApplicationKeys.SETTING_CHECK_DISTRIBUTOR_PHONE_CONFIRM_ENABLE, "");
+    if (Empty.isEmpty(result)) {
+      return false;
+    }
+    try {
+      return Boolean.valueOf(result);
+    } catch (Exception ex) {
+      return false;
+    }
+  }
+
+  public static boolean smsEnabled() {
+    String result = SolutionTabletApplication.getPreference()
+        .getString(ApplicationKeys.SETTING_CHECK_SMS_CONFIRM_ENABLE, "");
+    if (Empty.isEmpty(result)) {
+      return false;
+    }
+    try {
+      return Boolean.valueOf(result);
+    } catch (Exception ex) {
+      return false;
+    }
+  }
+
+  public static boolean isCreditEnabled() {
+
+    String result = SolutionTabletApplication.getPreference()
+        .getString(ApplicationKeys.SETTING_CHECK_CREDIT_ENABLE, "");
+    if (Empty.isEmpty(result)) {
+      return false;
+    }
+    try {
+      return Boolean.valueOf(result);
+    } catch (Exception ex) {
+      return false;
+    }
   }
 }
