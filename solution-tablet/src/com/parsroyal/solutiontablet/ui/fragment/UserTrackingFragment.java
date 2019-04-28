@@ -1,18 +1,14 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +20,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -85,7 +80,9 @@ import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.LabelValueArrayAdapter;
 import com.parsroyal.solutiontablet.util.Analytics;
+import com.parsroyal.solutiontablet.util.AndroidUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
+import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
 import com.parsroyal.solutiontablet.util.LocationUtil;
@@ -168,10 +165,8 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
   private Marker startMarker;
   private Marker endMarker;
   private List<Marker> waypoints = new ArrayList<>();
-  private boolean distanceServiceEnabled;
   private MainActivity context;
   private List<LatLng> lastRoute;
-  private float distanceAllowed;
   private LabelValue selectedVisitlines;
 
   @Override
@@ -194,19 +189,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
 
     setListeners();
     setSpinner();
-    distanceServiceEnabled = Boolean.valueOf(settingService
-        .getSettingValue(ApplicationKeys.SETTING_CALCULATE_DISTANCE_ENABLE));
-    if (BuildConfig.DEBUG) {
-      distanceServiceEnabled = false;
-    }
-    String distance = settingService
-        .getSettingValue(ApplicationKeys.SETTING_DISTANCE_CUSTOMER_VALUE);
-    try {
-      distanceAllowed = Empty.isEmpty(distance) || "null".equals(distance) ? Constants.MAX_DISTANCE
-          : Float.valueOf(distance);
-    } catch (NumberFormatException ex) {
-      ex.printStackTrace();
-    }
+
     loadCalendars();
 
     googleApiClient = new Builder(context)
@@ -462,57 +445,17 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
         distance = LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
             clickedClusterItem.getXlocation(), clickedClusterItem.getYlocation());
       }
-      if (distanceServiceEnabled && distance > distanceAllowed) {
+      if (PreferenceHelper.distanceServiceEnabled() && distance > PreferenceHelper.getAllowedDistance()) {
         ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
         return;
       }
 
-      AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-      LayoutInflater inflater1 = context.getLayoutInflater();
-      View dialogView = inflater1.inflate(R.layout.bottom_sheet_map_chooser, null);
-      TextView navTv = dialogView.findViewById(R.id.navigation_tv);
-      LinearLayout enterLay = dialogView.findViewById(R.id.enter_layout);
-      TextView distanceTv = dialogView.findViewById(R.id.distance_tv);
-      if (distance <= 0) {
-        distanceTv.setText(R.string.unknown_distance);
-      } else {
-        distanceTv.setText(NumberUtil.digitsToPersian(String.format(
-            getString(R.string.distance_to_customer), String.valueOf(distance))));
-      }
-      dialogBuilder.setView(dialogView);
-      AlertDialog alertDialog = dialogBuilder.create();
-      alertDialog.show();
-      enterLay.setOnClickListener(v -> {
+      DialogUtil.showOpenCustomerDialog(context, (int) distance, (dialog, which) -> {
         doEnter();
-        alertDialog.dismiss();
+      }, (dialog, which) -> {
+        AndroidUtil
+            .navigate(context, marker.getPosition().latitude, marker.getPosition().longitude);
       });
-      navTv.setOnClickListener(v -> {
-        if ("google".equals(PreferenceHelper.getDefaultNavigator())) {
-          Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(
-              "google.navigation:q=" + marker.getPosition().latitude + "," + marker
-                  .getPosition().longitude));
-          i.setPackage("com.google.android.apps.maps");
-          if (i.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivity(i);
-          } else {
-            ToastUtil.toastError(mainLay, getString(R.string.error_google_not_installed));
-          }
-        } else {
-          try {
-            Intent i = new Intent(Intent.ACTION_VIEW,
-                Uri.parse(String.format(Locale.UK, "waze://?ll=%s,%s&navigate=yes",
-                    marker.getPosition().latitude, marker.getPosition().longitude)));
-            startActivity(i);
-          } catch (ActivityNotFoundException ex) {
-            // If Waze is not installed, open it in Google Play:
-            Intent intent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("market://details?id=com.waze"));
-            startActivity(intent);
-          }
-        }
-        alertDialog.dismiss();
-      });
-
     });
     clusterManager.getMarkerCollection().setOnInfoWindowAdapter(new CustomerMarkerAdapter());
     clusterManager.setOnClusterClickListener(cluster -> {
@@ -540,7 +483,7 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
       }
 
       orderService.deleteForAllCustomerOrdersByStatus(clickedClusterItem.getBackendId(),
-          SaleOrderStatus.DRAFT.getId());
+          SaleOrderStatus.DRAFT.getId());//TODO: For draft
       Bundle args = new Bundle();
       args.putLong(Constants.VISIT_ID, visitInformationId);
       args.putLong(Constants.CUSTOMER_ID, clickedClusterItem.getPrimaryKey());

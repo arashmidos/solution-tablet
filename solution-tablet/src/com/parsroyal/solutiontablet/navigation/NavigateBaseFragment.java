@@ -31,18 +31,30 @@ import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.biz.impl.RestServiceImpl;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
+import com.parsroyal.solutiontablet.data.entity.Position;
 import com.parsroyal.solutiontablet.data.event.NavigateErrorEvent;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
+import com.parsroyal.solutiontablet.exception.BusinessException;
+import com.parsroyal.solutiontablet.exception.UnknownSystemException;
+import com.parsroyal.solutiontablet.navigation.PrsMarkerInfoWindow.OnInfoWindowClickListener;
 import com.parsroyal.solutiontablet.service.CustomerService;
+import com.parsroyal.solutiontablet.service.SaleOrderService;
+import com.parsroyal.solutiontablet.service.VisitService;
 import com.parsroyal.solutiontablet.service.impl.CustomerServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.SaleOrderServiceImpl;
+import com.parsroyal.solutiontablet.service.impl.VisitServiceImpl;
 import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.CustomerDetailViewPagerAdapter;
 import com.parsroyal.solutiontablet.ui.adapter.PathDetailAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;
+import com.parsroyal.solutiontablet.util.Analytics;
+import com.parsroyal.solutiontablet.util.AndroidUtil;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
+import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
@@ -59,18 +71,23 @@ import org.greenrobot.eventbus.Subscribe;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.utils.PolylineEncoder;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.FolderOverlay;
+import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.infowindow.InfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+import timber.log.Timber;
 
-public class NavigateBaseFragment extends BaseFragment {
+public class NavigateBaseFragment extends BaseFragment implements MapEventsReceiver,
+    OnInfoWindowClickListener {
 
   @BindView(R.id.mapContainer)
   LinearLayout mapContainer;
@@ -293,12 +310,27 @@ public class NavigateBaseFragment extends BaseFragment {
   private void initMap() {
     map.setTileSource(TileSourceFactory.MAPNIK);
 //    map.getZoomController().setVisibility(Visibility.ALWAYS);
+
+   /* map.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 18, 256, "",
+        new String[] { "http://basemap.nationalmap.gov/ArcGIS/rest/services/USGSTopo/MapServer/tile/" }) {
+      @Override
+      public String getTileURLString(long pMapTileIndex) {
+        return getBaseUrl()
+            + MapTileIndex.getZoom(pMapTileIndex)
+            + "/" + MapTileIndex.getY(pMapTileIndex)
+            + "/" + MapTileIndex.getX(pMapTileIndex)
+            + mImageFilenameEnding;
+      }
+    });*/
     map.setMultiTouchControls(true);
 
     IMapController mapController = map.getController();
     mapController.setZoom(9.5);
 //    GeoPoint startPoint = new GeoPoint(35.6892, 51.3890);
 //    mapController.setCenter(startPoint);
+
+    MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this);
+    map.getOverlays().add(0, mapEventsOverlay);
 
     this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(mainActivity), map);
     this.mLocationOverlay.enableMyLocation();
@@ -336,13 +368,13 @@ public class NavigateBaseFragment extends BaseFragment {
 
     FolderOverlay locationsFolder = new FolderOverlay();
     locationsFolder.setName("locations");
-    PrsMarkerInfoWindow infoWindow = new PrsMarkerInfoWindow(R.layout.osm_info_window, map);
+//    PrsMarkerInfoWindow infoWindow =
 
     for (int i = 0; i < geoPoints.size(); i++) {
       LocationResponse l = geoPoints.get(i);
       PrsMarker startMarker = new PrsMarker(map);
       startMarker.setPosition(new GeoPoint(l.getLat(), l.getLon()));
-      startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+      startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 //      startMarker.setSubDescription("Hello " + l.getName() + " index:" + l.getOriginal_index());
       startMarker.setLocation(l);
       startMarker.setIndex(i);
@@ -351,7 +383,8 @@ public class NavigateBaseFragment extends BaseFragment {
       }
       if (i > 0) {
         CustomerListModel model = customerList.get(i - 1);
-        startMarker.setInfoWindow(infoWindow);
+        startMarker
+            .setInfoWindow(new PrsMarkerInfoWindow(R.layout.osm_info_window, map, model, this));
         startMarker.setTitle(model.getTitle());
         startMarker.setSnippet(model.getSnippet());
         startMarker.setSubDescription(model.getCode());
@@ -361,6 +394,8 @@ public class NavigateBaseFragment extends BaseFragment {
         if (lastSelectedMarker != null) {
 //          lastSelectedMarker.closeInfoWindow();
         }
+        map.getController().animateTo(marker.getPosition());
+        InfoWindow.closeAllInfoWindowsOn(map);
         marker.showInfoWindow();
         return true;
       });
@@ -387,7 +422,7 @@ public class NavigateBaseFragment extends BaseFragment {
     try {
       lastSelectedMarker = marker;
 
-      FolderOverlay legsOverlay = (FolderOverlay) mapView.getOverlayManager().get(1);
+      FolderOverlay legsOverlay = (FolderOverlay) mapView.getOverlayManager().get(2);
       List<Overlay> items = legsOverlay.getItems();
 
       if (lastSelectedMarkerIndex != -1 && lastSelectedMarkerIndex < items.size()) {
@@ -446,4 +481,72 @@ public class NavigateBaseFragment extends BaseFragment {
     adapter = new PathDetailAdapter(mainActivity, getCustomerList(), visitLineBackendId, true);
     list.setAdapter(adapter);
   }
+
+  @Override
+  public boolean singleTapConfirmedHelper(GeoPoint p) {
+
+    InfoWindow.closeAllInfoWindowsOn(map);
+    return true;
+  }
+
+  @Override
+  public boolean longPressHelper(GeoPoint p) {
+    return false;
+  }
+
+  @Override
+  public void onClick(CustomerListModel model) {
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
+    float distance;
+    if (Empty.isEmpty(position)) {
+      distance = 0.0f;
+    } else {
+      distance = LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
+          model.getXlocation(), model.getYlocation());
+    }
+    if (PreferenceHelper.distanceServiceEnabled() && distance > PreferenceHelper
+        .getAllowedDistance()) {
+      ToastUtil.toastError(mainActivity, R.string.error_distance_too_far_for_action);
+      return;
+    }
+
+    DialogUtil.showOpenCustomerDialog(mainActivity, (int) distance,
+        (dialog, which) -> doEnter(model, (int) distance),
+        (dialog, which) -> AndroidUtil
+            .navigate(mainActivity, model.getXlocation(), model.getYlocation()));
+  }
+
+  public void doEnter(CustomerListModel model, int distance) {
+    VisitService visitService = new VisitServiceImpl(mainActivity);
+    SaleOrderService orderService = new SaleOrderServiceImpl(mainActivity);
+    try {
+      final Long visitInformationId = visitService.startVisiting(model.getBackendId(),
+          distance);
+
+      Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
+
+      if (Empty.isNotEmpty(position)) {
+        visitService.updateVisitLocation(visitInformationId, position);
+      }
+
+      orderService.deleteForAllCustomerOrdersByStatus(model.getBackendId(),
+          SaleOrderStatus.DRAFT.getId());//TODO: For draft
+      Bundle args = new Bundle();
+      args.putLong(Constants.VISIT_ID, visitInformationId);
+      args.putLong(Constants.CUSTOMER_ID, model.getPrimaryKey());
+      args.putLong(Constants.ORIGIN_VISIT_ID, visitInformationId);
+      Analytics.logContentView("Map Visit");
+      mainActivity.changeFragment(MainActivity.VISIT_DETAIL_FRAGMENT_ID, args, false);
+
+    } catch (BusinessException e) {
+      Timber.e(e);
+      ToastUtil.toastError(mainActivity, e);
+    } catch (Exception e) {
+      Timber.e(e);
+      ToastUtil.toastError(mainActivity, new UnknownSystemException(e));
+    }
+  }
+
+//  ---------------------------------------------------------------------------------------------
+
 }

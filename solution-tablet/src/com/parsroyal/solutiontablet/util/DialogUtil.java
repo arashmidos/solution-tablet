@@ -10,10 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
+import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.fragment.NavigationDrawerFragment.OnLoginListener;
 
 /**
@@ -125,5 +127,33 @@ public class DialogUtil {
     if (progressDialog != null) {
       progressDialog.dismiss();
     }
+  }
+
+  public static void showOpenCustomerDialog(MainActivity context, int distance,
+      DialogInterface.OnClickListener enter, DialogInterface.OnClickListener navigate) {
+    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+    LayoutInflater inflater1 = context.getLayoutInflater();
+    View dialogView = inflater1.inflate(R.layout.bottom_sheet_map_chooser, null);
+    TextView navTv = dialogView.findViewById(R.id.navigation_tv);
+    LinearLayout enterLay = dialogView.findViewById(R.id.enter_layout);
+    TextView distanceTv = dialogView.findViewById(R.id.distance_tv);
+    if (distance <= 0) {
+      distanceTv.setText(R.string.unknown_distance);
+    } else {
+      distanceTv.setText(NumberUtil.digitsToPersian(String.format(
+          context.getString(R.string.distance_to_customer), String.valueOf(distance))));
+    }
+    dialogBuilder.setView(dialogView);
+    AlertDialog alertDialog = dialogBuilder.create();
+    alertDialog.show();
+
+    enterLay.setOnClickListener(v -> {
+      enter.onClick(alertDialog, 0);
+      alertDialog.dismiss();
+    });
+    navTv.setOnClickListener(v -> {
+      navigate.onClick(alertDialog, 1);
+      alertDialog.dismiss();
+    });
   }
 }

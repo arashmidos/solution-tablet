@@ -189,7 +189,7 @@ public class ImageUtil {
 
   public static Bitmap setMarkerDrawable(Context context, int number, boolean visited) {
     int background =
-        visited ? R.drawable.ic_marker_blue_empty_24dp : R.drawable.ic_pin_resting_86dp;
+        visited ? R.drawable.ic_pin_green : R.drawable.ic_pin_purple;
 
     return drawTextToBitmap(context, background, NumberUtil.digitsToPersian(number));
   }
@@ -256,14 +256,14 @@ public class ImageUtil {
     /* SET FONT COLOR (e.g. WHITE -> rgb(255,255,255)) */
     paint.setColor(Color.rgb(255, 255, 255));
     /* SET FONT SIZE (e.g. 15) */
-    paint.setTextSize((int) (12 * scale));
+    paint.setTextSize((int) (13 * scale));
     /* SET SHADOW WIDTH, POSITION AND COLOR (e.g. BLACK) */
     paint.setShadowLayer(1f, 0f, 1f, Color.BLACK);
 
     Rect bounds = new Rect();
     paint.getTextBounds(gText, 0, gText.length(), bounds);
     int x = (bitmap.getWidth() - bounds.width()) / 2;
-    int y = (bitmap.getHeight() + bounds.height()) / 5;
+    int y = (bitmap.getHeight() + bounds.height()) / 3;
     canvas.drawText(gText, x, y, paint);
 
     return bitmap;

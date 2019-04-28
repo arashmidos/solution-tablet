@@ -2,7 +2,6 @@ package com.parsroyal.solutiontablet.navigation;
 
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.data.listmodel.CustomerListModel;
 import org.osmdroid.views.MapView;
@@ -10,6 +9,7 @@ import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
 public class PrsMarkerInfoWindow extends MarkerInfoWindow {
 
+  private OnInfoWindowClickListener listener;
   private CustomerListModel customerModel;
 
   /**
@@ -17,9 +17,10 @@ public class PrsMarkerInfoWindow extends MarkerInfoWindow {
    * bubble_subdescription, bubble_image
    */
   public PrsMarkerInfoWindow(int layoutResId, MapView mapView,
-      CustomerListModel customerListModel) {
+      CustomerListModel customerListModel, OnInfoWindowClickListener listener) {
     super(layoutResId, mapView);
     this.customerModel = customerListModel;
+    this.listener = listener;
   }
 
   /**
@@ -36,12 +37,17 @@ public class PrsMarkerInfoWindow extends MarkerInfoWindow {
     View root = mView.findViewById(R.id.root);
     root.setOnTouchListener((v, event) -> {
       if (event.getAction() == MotionEvent.ACTION_UP) {
-
-        Toast.makeText(mMapView.getContext(), "You liked ", Toast.LENGTH_SHORT).show();
+        listener.onClick(customerModel);
         close();
       }
       return true;
     });
 
+  }
+
+
+  public interface OnInfoWindowClickListener {
+
+    void onClick(CustomerListModel model);
   }
 }
