@@ -180,7 +180,7 @@ public class QuestionsListFragment extends BaseFragment {
         || parent == MainActivity.NEW_CUSTOMER_FRAGMENT_ID) {
       //It's anonymous questionaire or New customer
       //known bug, it he has not answered any quesiton, should remove the entire visit.
-      visitService.finishVisiting(visitId);
+      visitService.finishVisiting(visitId,0L);
     }
   }
 

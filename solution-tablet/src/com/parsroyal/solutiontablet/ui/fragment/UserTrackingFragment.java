@@ -53,7 +53,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
-import com.parsroyal.solutiontablet.BuildConfig;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.biz.KeyValueBiz;
@@ -437,25 +436,22 @@ public class UserTrackingFragment extends BaseFragment implements ConnectionCall
     map.setOnInfoWindowClickListener(clusterManager);
     map.setInfoWindowAdapter(clusterManager.getMarkerManager());
     map.setOnInfoWindowClickListener(marker -> {
-      Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
-      float distance;
-      if (Empty.isEmpty(position) || Empty.isEmpty(clickedClusterItem)) {
-        distance = 0.0f;
+      int distance;
+      if (Empty.isEmpty(clickedClusterItem)) {
+        distance = 0;
       } else {
-        distance = LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
+        distance = LocationUtil.distanceToCustomer(
             clickedClusterItem.getXlocation(), clickedClusterItem.getYlocation());
       }
-      if (PreferenceHelper.distanceServiceEnabled() && distance > PreferenceHelper.getAllowedDistance()) {
+      if (PreferenceHelper.distanceServiceEnabled() && distance > PreferenceHelper
+          .getAllowedDistance()) {
         ToastUtil.toastError(getActivity(), R.string.error_distance_too_far_for_action);
         return;
       }
 
-      DialogUtil.showOpenCustomerDialog(context, (int) distance, (dialog, which) -> {
-        doEnter();
-      }, (dialog, which) -> {
-        AndroidUtil
-            .navigate(context, marker.getPosition().latitude, marker.getPosition().longitude);
-      });
+      DialogUtil.showOpenCustomerDialog(context, distance, (dialog, which) -> doEnter(),
+          (dialog, which) -> AndroidUtil
+              .navigate(context, marker.getPosition().latitude, marker.getPosition().longitude));
     });
     clusterManager.getMarkerCollection().setOnInfoWindowAdapter(new CustomerMarkerAdapter());
     clusterManager.setOnClusterClickListener(cluster -> {

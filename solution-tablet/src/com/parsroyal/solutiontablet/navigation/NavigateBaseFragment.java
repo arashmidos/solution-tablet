@@ -228,6 +228,10 @@ public class NavigateBaseFragment extends BaseFragment implements MapEventsRecei
       drawMapRoute();
     } else {
       Location locations = SolutionTabletApplication.getInstance().getLastKnownLocation();
+      if (Empty.isEmpty(locations)) {
+        ToastUtil.toastError(mainActivity,"موقعیت شما مشخص نیست!");
+        return;
+      }
       customersLocation
           .add(0, new CustomerLocationDto(0L, locations.getLatitude(), locations.getLongitude()));
       new RestServiceImpl().valOptimizedRoute(mainActivity, visitLineBackendId, customersLocation);
@@ -496,22 +500,17 @@ public class NavigateBaseFragment extends BaseFragment implements MapEventsRecei
 
   @Override
   public void onClick(CustomerListModel model) {
-    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
-    float distance;
-    if (Empty.isEmpty(position)) {
-      distance = 0.0f;
-    } else {
-      distance = LocationUtil.distanceBetween(position.getLatitude(), position.getLongitude(),
-          model.getXlocation(), model.getYlocation());
-    }
+
+    int distance = LocationUtil.distanceToCustomer(model.getXlocation(), model.getYlocation());
+
     if (PreferenceHelper.distanceServiceEnabled() && distance > PreferenceHelper
         .getAllowedDistance()) {
       ToastUtil.toastError(mainActivity, R.string.error_distance_too_far_for_action);
       return;
     }
 
-    DialogUtil.showOpenCustomerDialog(mainActivity, (int) distance,
-        (dialog, which) -> doEnter(model, (int) distance),
+    DialogUtil.showOpenCustomerDialog(mainActivity, distance,
+        (dialog, which) -> doEnter(model, distance),
         (dialog, which) -> AndroidUtil
             .navigate(mainActivity, model.getXlocation(), model.getYlocation()));
   }

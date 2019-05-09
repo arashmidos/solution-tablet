@@ -54,6 +54,7 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
     if (Empty.isNotEmpty(response)) {
       try {
         String[] rows = response.split("[$]");
+        int failed = 0;
         for (int i = 0; i < rows.length; i++) {
           String row = rows[i];
           String[] columns = row.split("[&]");
@@ -66,12 +67,18 @@ public class UpdatedCustomerLocationDataTransferBizImpl extends
             customer.setUpdateDateTime(DateUtil
                 .convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
             customerDao.update(customer);
+          } else {
+            failed++;
           }
         }
+        if (failed == 0) {
+          EventBus.getDefault().post(new DataTransferSuccessEvent(
+              context.getString(R.string.updated_customers_data_transferred_successfully),
+              StatusCodes.SUCCESS));
+        } else {
+          EventBus.getDefault().post(new DataTransferErrorEvent(StatusCodes.DATA_STORE_ERROR));
 
-        EventBus.getDefault().post(new DataTransferSuccessEvent(
-            context.getString(R.string.updated_customers_data_transferred_successfully),
-            StatusCodes.SUCCESS));
+        }
       } catch (Exception ex) {
         Logger.sendError("Data transfer",
             "Error in receiving UpdatedCustomerLocationData " + ex.getMessage());

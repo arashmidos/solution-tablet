@@ -39,7 +39,7 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
   public static final String OUTPUT_PATH = Environment.getExternalStoragePublicDirectory(
       Environment.DIRECTORY_DOWNLOADS) + "/" + Constants.APPLICATION_NAME + "/Backup/";
   private static final String DATABASE_NAME = "Commer";
-  private static final Integer DATABASE_VERSION = 24;
+  private static final Integer DATABASE_VERSION = 25;
   private static final String SQL_ADD_COLUMN = "ALTER TABLE %s ADD COLUMN %s %s ";
   private static String DATABASE_PATH = "/data/data/com.parsroyal.solutionmobile/databases/";
   private static CommerDatabaseHelper sInstance;
@@ -224,6 +224,10 @@ public class CommerDatabaseHelper extends SQLiteOpenHelper {
           Goods.COL_SUPPLIER, "TEXT"));
       db.execSQL(String.format(SQL_ADD_COLUMN, Goods.TABLE_NAME,
           Goods.COL_ASSORTMENT, "TEXT"));
+    }
+    if (oldVersion < 25) {
+      db.execSQL(String.format(SQL_ADD_COLUMN, VisitInformation.TABLE_NAME,
+          VisitInformation.COL_END_DISTANCE, "INTEGER"));
     }
   }
 }

@@ -34,7 +34,7 @@ public interface VisitService extends BaseService {
 
   Long startVisitingNewCustomer(Long customerId);
 
-  void finishVisiting(Long visitId);
+  void finishVisiting(Long visitId, long endDistance);
 
   List<VisitInformation> getAllVisitInformationForSend();
 

@@ -155,12 +155,13 @@ public class VisitServiceImpl implements VisitService {
   }
 
   @Override
-  public void finishVisiting(Long visitId) {
+  public void finishVisiting(Long visitId, long endDistance) {
     VisitInformation visitInformation = visitInformationDao.retrieve(visitId);
     visitInformation.setEndTime(DateUtil.convertDate(new Date(), DateUtil.TIME_24, "EN"));
-
+    visitInformation.setEndDistance(endDistance);
     Date networkDate = SolutionTabletApplication.getInstance().getTrueTime();
-    visitInformation.setEndNetworkDate(networkDate == null ? new Date().getTime() : networkDate.getTime());
+    visitInformation
+        .setEndNetworkDate(networkDate == null ? new Date().getTime() : networkDate.getTime());
     saveVisit(visitInformation);
   }
 

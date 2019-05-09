@@ -450,7 +450,8 @@ public class CustomerInfoDialogFragment extends DialogFragment {
     VisitInformationDetail visitInformationDetail = new VisitInformationDetail(
         visitId, VisitInformationDetailType.NONE, 0);
     visitService.saveVisitDetail(visitInformationDetail);
-    visitService.finishVisiting(visitId);
+    visitService.finishVisiting(visitId,
+        LocationUtil.distanceToCustomer(model.getXlocation(), model.getYlocation()));
     ToastUtil.toastMessage(mainActivity, R.string.none_added_successfully);
     adapter.notifyItemHasRejection(position);
     dismiss();
@@ -482,24 +483,7 @@ public class CustomerInfoDialogFragment extends DialogFragment {
 
   private int getDistance() {
 
-    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
-    Float distance;
-
-    double lat2 = customer.getxLocation();
-    double long2 = customer.getyLocation();
-
-    if (lat2 == 0.0 || long2 == 0.0) {
-      //Location not set for customer
-      return 0;
-    }
-
-    if (Empty.isNotEmpty(position)) {
-      distance = LocationUtil
-          .distanceBetween(position.getLatitude(), position.getLongitude(), lat2, long2);
-      return distance.intValue();
-    } else {
-      return 0;
-    }
+    return LocationUtil.distanceToCustomer(customer.getxLocation(), customer.getyLocation());
   }
 
   protected void doEnter(boolean isPhoneVisit) {

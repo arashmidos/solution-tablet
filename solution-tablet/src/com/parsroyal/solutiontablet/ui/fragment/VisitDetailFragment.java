@@ -53,12 +53,12 @@ import com.parsroyal.solutiontablet.util.CameraManager;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.ImageUtil;
+import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -266,8 +266,9 @@ public class VisitDetailFragment extends BaseFragment {
 
   private void doFinishVisiting() {
     try {
-      visitService.finishVisiting(visitId);
-      Customer customer = customerService.getCustomerById(customerId);
+
+      visitService.finishVisiting(visitId,
+          LocationUtil.distanceToCustomer(customer.getxLocation(), customer.getyLocation()));
       saleOrderService.deleteForAllCustomerOrdersByStatus(customer.getBackendId(),
           SaleOrderStatus.DRAFT.getId());
       mainActivity.removeFragment(this);
@@ -301,7 +302,8 @@ public class VisitDetailFragment extends BaseFragment {
     DialogUtil.showCustomDialog(mainActivity, mainActivity.getString(R.string.send_data),
         getString(R.string.message_confirm_send_visit_data_instantly), "نمایش جزئیات ارسال",
         (dialog, which) -> {
-          visitService.finishVisiting(visitId);
+          visitService.finishVisiting(visitId,
+              LocationUtil.distanceToCustomer(customer.getxLocation(), customer.getyLocation()));
           FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
           Bundle args = new Bundle();
           args.putLong(Constants.VISIT_ID, visitId);
@@ -560,7 +562,7 @@ public class VisitDetailFragment extends BaseFragment {
     String fileName = UUID.randomUUID().toString();
 
     fileUri = MediaUtil.getOutputMediaFileUri(mainActivity, MediaUtil.MEDIA_TYPE_IMAGE,
-        Constants.CUSTOMER_PICTURE_DIRECTORY_NAME,fileName); // create a file to save the image
+        Constants.CUSTOMER_PICTURE_DIRECTORY_NAME, fileName); // create a file to save the image
     CameraManager.startCameraActivity(mainActivity, fileUri, this);
   }
 

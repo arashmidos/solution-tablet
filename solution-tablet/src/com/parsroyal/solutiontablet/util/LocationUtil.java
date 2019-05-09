@@ -1,6 +1,8 @@
 package com.parsroyal.solutiontablet.util;
 
 import android.location.Location;
+import com.parsroyal.solutiontablet.SolutionTabletApplication;
+import com.parsroyal.solutiontablet.data.entity.Position;
 
 /**
  * Created by Arashmidos on 2017-04-12.
@@ -43,5 +45,23 @@ public class LocationUtil {
     l2.setLongitude(long2);
 
     return distanceBetween(l1, l2);
+  }
+
+  public static int distanceToCustomer(double x, double y) {
+    if (x == 0.0 || y == 0.0) {
+      //Location not set for customer
+      return 0;
+    }
+
+    Position position = SolutionTabletApplication.getInstance().getLastSavedPosition();
+    Float distance;
+
+    if (Empty.isNotEmpty(position)) {
+      distance = LocationUtil
+          .distanceBetween(position.getLatitude(), position.getLongitude(), x, y);
+      return distance.intValue();
+    } else {
+      return 0;
+    }
   }
 }

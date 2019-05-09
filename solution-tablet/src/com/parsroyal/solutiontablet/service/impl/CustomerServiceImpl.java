@@ -63,7 +63,9 @@ public class CustomerServiceImpl implements CustomerService {
       } else {
         customer.setUpdateDateTime(
             DateUtil.convertDate(new Date(), DateUtil.FULL_FORMATTER_GREGORIAN_WITH_TIME, "EN"));
-        customer.setStatus(CustomerStatus.UPDATED.getId());
+        if (!customer.getStatus().equals(CustomerStatus.UPDATED_LOCATION.getId())) {
+          customer.setStatus(CustomerStatus.UPDATED.getId());
+        }
         customerDao.update(customer);
         return customer.getId();
       }

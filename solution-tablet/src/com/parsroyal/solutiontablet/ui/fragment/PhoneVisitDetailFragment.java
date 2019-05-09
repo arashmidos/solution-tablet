@@ -129,7 +129,7 @@ public class PhoneVisitDetailFragment extends BaseFragment {
 
   private void doFinishVisiting() {
     try {
-      visitService.finishVisiting(visitId);
+      visitService.finishVisiting(visitId, 0L);
       Customer customer = customerService.getCustomerById(customerId);
       saleOrderService.deleteForAllCustomerOrdersByStatus(customer.getBackendId(),
           SaleOrderStatus.DRAFT.getId());
@@ -153,7 +153,7 @@ public class PhoneVisitDetailFragment extends BaseFragment {
     DialogUtil.showCustomDialog(mainActivity, mainActivity.getString(R.string.send_data),
         getString(R.string.message_confirm_send_visit_data_instantly), "نمایش جزئیات ارسال",
         (dialog, which) -> {
-          visitService.finishVisiting(visitId);
+          visitService.finishVisiting(visitId, 0L);
           FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
           Bundle args = new Bundle();
           args.putLong(Constants.VISIT_ID, visitId);

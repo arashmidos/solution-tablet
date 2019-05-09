@@ -20,6 +20,8 @@ public class VisitInformation extends BaseEntity<Long> {
   public static final String COL_END_NETWORK_DATE = "END_NETWORK_DATE";
   public static final String COL_DISTANCE = "DISTANCE";
   public static final String COL_PHONE_VISIT = "PHONE_VISIT";
+  public static final String COL_END_DISTANCE = "END_DISTANCE";
+
 
   public static final String CREATE_TABLE_SQL =
       "CREATE TABLE " + VisitInformation.TABLE_NAME + " (" +
@@ -38,7 +40,8 @@ public class VisitInformation extends BaseEntity<Long> {
           " " + VisitInformation.COL_NETWORK_DATE + " INTEGER," +
           " " + VisitInformation.COL_END_NETWORK_DATE + " INTEGER," +
           " " + VisitInformation.COL_DISTANCE + " INTEGER," +//14
-          " " + VisitInformation.COL_PHONE_VISIT + " INTEGER" +//15
+          " " + VisitInformation.COL_PHONE_VISIT + " INTEGER," +//15
+          " " + VisitInformation.COL_END_DISTANCE + " INTEGER" +//16
           " );";
 
   private Long id;
@@ -54,6 +57,7 @@ public class VisitInformation extends BaseEntity<Long> {
   private Long networkDate;
   private Long endNetworkDate;
   private Long distance;
+  private Long endDistance;
   private boolean phoneVisit;
 
   public Long getEndNetworkDate() {
@@ -172,5 +176,13 @@ public class VisitInformation extends BaseEntity<Long> {
 
   public boolean getPhoneVisit() {
     return phoneVisit;
+  }
+
+  public Long getEndDistance() {
+    return endDistance;
+  }
+
+  public void setEndDistance(Long endDistance) {
+    this.endDistance = endDistance;
   }
 }
