@@ -100,4 +100,5 @@
   <color name="item_text_color">#000000</color>
   <color name="navigation_card">#4a6572</color>
   <color name="navigation_button_bg">#37474f</color>
+  <color name="incomplete_visit">#EF6C00</color>
 </resources>

@@ -324,8 +324,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         "c." + Customer.COL_BACKEND_ID,//11
         "c." + Customer.COL_SHOP_NAME,//12
         "c." + Customer.COL_VISIT_LINE_BACKEND_ID,//13
-        "vi." + VisitInformation.COL_PHONE_VISIT//14
-
+        "vi." + VisitInformation.COL_PHONE_VISIT,//14
+        "vi." + VisitInformation.COL_END_TIME//15
     };
 
     String table = getTableName() + " c " +
@@ -430,6 +430,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
         entitiesMap.get(primaryKey).setHasFreeDelivery(true);
         entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.DELIVER_FREE_ORDER);
       }
+      if (listModel.isIncompleteVisit()) {
+        entitiesMap.get(primaryKey).setIncompleteVisit(true);
+      }
     }
     cursor.close();
     ArrayList<CustomerListModel> customerListModels = new ArrayList<>(entitiesMap.values());
@@ -493,6 +496,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
     customerListModel.setShopName(cursor.getString(12));
     customerListModel.setVisitlineBackendId(cursor.getLong(13));
     customerListModel.setPhoneVisit(cursor.getInt(14) == 1);
+    customerListModel.setIncompleteVisit(Empty.isEmpty(cursor.getString(15)));
 
     return customerListModel;
   }

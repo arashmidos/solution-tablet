@@ -383,7 +383,7 @@ public class DateUtil {
       return formatter.parse(date);
     } catch (Exception e) {
       e.printStackTrace();
-      return null;//TODO:
+      return null;
     }
   }
 
@@ -524,7 +524,7 @@ public class DateUtil {
         date = date.replace("Nov", "11");
       }
       if (date.contains("Dec")) {
-        date = date.replace("Dec", "11");
+        date = date.replace("Dec", "12");
       }
     } catch (Exception ex) {
       ex.printStackTrace();

@@ -35,6 +35,7 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   private boolean hasNoOrder;
   private boolean phoneVisit;
   private boolean hasFreeDelivery;
+  private boolean isIncompleteVisit;
 
   public Long getVisitlineBackendId() {
     return visitlineBackendId;
@@ -271,5 +272,13 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
     int result = super.hashCode();
     result = 31 * result + (backendId != null ? backendId.hashCode() : 0);
     return result;
+  }
+
+  public boolean isIncompleteVisit() {
+    return isIncompleteVisit;
+  }
+
+  public void setIncompleteVisit(boolean incompleteVisit) {
+    isIncompleteVisit = incompleteVisit;
   }
 }
