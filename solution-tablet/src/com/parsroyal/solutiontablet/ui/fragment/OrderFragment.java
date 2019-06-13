@@ -30,11 +30,11 @@ import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
 import com.parsroyal.solutiontablet.data.entity.SaleOrderItem;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.event.Event;
-import com.parsroyal.solutiontablet.data.event.GoodListEvent;
 import com.parsroyal.solutiontablet.data.event.SuccessEvent;
 import com.parsroyal.solutiontablet.data.event.UpdateListEvent;
 import com.parsroyal.solutiontablet.data.model.GoodsDtoList;
 import com.parsroyal.solutiontablet.data.model.GoodsGroupExpand;
+import com.parsroyal.solutiontablet.data.model.LabelValue;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDto;
 import com.parsroyal.solutiontablet.data.searchobject.GoodsSo;
 import com.parsroyal.solutiontablet.exception.BusinessException;
@@ -52,6 +52,7 @@ import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.GoodsFilterBottomShe
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.FinalizeOrderDialogFragment;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.GoodsFilterDialogFragment;
+import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.GoodsFilterDialogFragment.OnFilterSelected;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
@@ -70,7 +71,7 @@ import timber.log.Timber;
 /**
  * @author Shakib
  */
-public class OrderFragment extends BaseFragment {
+public class OrderFragment extends BaseFragment implements OnFilterSelected {
 
   @BindView(R.id.search_img)
   ImageView searchImg;
@@ -126,6 +127,8 @@ public class OrderFragment extends BaseFragment {
   private boolean isComplimentary;
   private SaleOrderItem selectedItem;
   private Goods selectedGoods;
+  private LabelValue assortment;
+  private LabelValue supplier;
 
   public OrderFragment() {
     // Required empty public constructor
@@ -433,11 +436,11 @@ public class OrderFragment extends BaseFragment {
       order = saleOrderService.findOrderDtoById(orderId);
       orderCountTv.setText(NumberUtil.digitsToPersian(order.getOrderItems().size()));
       adapter.updateOrder(order);
-    } else if (event instanceof GoodListEvent) {
+    } /*else if (event instanceof GoodListEvent) {
       if (((GoodListEvent) event).getGoodsListModels() != null) {
         adapter.update(((GoodListEvent) event).getGoodsListModels());
       }
-    }
+    }*/
   }
 
   @OnClick({R.id.search_img, R.id.bottom_bar, R.id.cancel_bread_crumb_btn, R.id.close_search_img})
@@ -698,8 +701,36 @@ public class OrderFragment extends BaseFragment {
     if (MultiScreenUtility.isTablet(mainActivity)) {
       goodsFilterDialogFragment = GoodsFilterBottomSheet.newInstance();
     } else {
-      goodsFilterDialogFragment = GoodsFilterDialogFragment.newInstance();
+      goodsFilterDialogFragment = GoodsFilterDialogFragment.newInstance(assortment, supplier);
     }
+    goodsFilterDialogFragment.setTargetFragment(this, 0);
     goodsFilterDialogFragment.show(ft, "filter");
+  }
+
+  @Override
+  public void filterSelected(LabelValue assortment, LabelValue supplier) {
+
+    this.assortment = assortment;
+    this.supplier = supplier;
+
+    GoodsSo goodsSo = new GoodsSo();
+    if (assortment != null) {
+      goodsSo.setAssortment(String.valueOf(assortment.getValue()));
+    }
+    if (supplier != null) {
+      goodsSo.setSupplier(String.valueOf(supplier.getValue()));
+    }
+
+    GoodsServiceImpl goodsService = new GoodsServiceImpl(mainActivity);
+    List<Goods> goodsListModels = goodsService.searchForGoodsList(goodsSo);
+    adapter.update(goodsListModels);
+  }
+
+  public LabelValue getAssortment() {
+    return assortment;
+  }
+
+  public LabelValue getSupplier() {
+    return supplier;
   }
 }

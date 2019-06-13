@@ -61,6 +61,15 @@ public class AssortmentAdapter extends Adapter<ViewHolder> {
     notifyDataSetChanged();
   }
 
+  public void setSelected(LabelValue selectedAssortmentLV) {
+    this.selectedItem = selectedAssortmentLV;
+  }
+
+  public void update(List<LabelValue> list) {
+    this.assortments = list;
+    notifyDataSetChanged();
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.item_radio)
@@ -85,7 +94,7 @@ public class AssortmentAdapter extends Adapter<ViewHolder> {
 
     @OnClick(R.id.item_radio)
     public void onViewClicked() {
-      goodsFilterDialogFragment.removeSelectionVisibility(false);
+//      goodsFilterDialogFragment.removeSelectionVisibility(false);
       selectedItem = assortment;
       notifyDataSetChanged();
     }

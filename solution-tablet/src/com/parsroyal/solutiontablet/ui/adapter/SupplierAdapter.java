@@ -61,6 +61,15 @@ public class SupplierAdapter extends Adapter<ViewHolder> {
     notifyDataSetChanged();
   }
 
+  public void setSelected(LabelValue selectedSupplierLV) {
+    this.selectedItem = selectedSupplierLV;
+  }
+
+  public void update(List<LabelValue> allSupplier) {
+    this.suppliers = allSupplier;
+    notifyDataSetChanged();
+  }
+
   public class ViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.item_radio)
@@ -85,7 +94,7 @@ public class SupplierAdapter extends Adapter<ViewHolder> {
 
     @OnClick(R.id.item_radio)
     public void onViewClicked() {
-      goodsFilterDialogFragment.removeSelectionVisibility(true);
+//      goodsFilterDialogFragment.removeSelectionVisibility(true);
       selectedItem = supplier;
       notifyDataSetChanged();
     }

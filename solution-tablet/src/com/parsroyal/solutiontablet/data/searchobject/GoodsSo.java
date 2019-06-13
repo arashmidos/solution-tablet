@@ -9,6 +9,15 @@ public class GoodsSo extends BaseSO {
   private String supplier;
   private String assortment;
 
+  public GoodsSo(String assortment, String supplier) {
+    this.assortment = assortment;
+    this.supplier = supplier;
+  }
+
+  public GoodsSo() {
+
+  }
+
   public String getSupplier() {
     return supplier;
   }
@@ -24,6 +33,7 @@ public class GoodsSo extends BaseSO {
   public void setAssortment(String assortment) {
     this.assortment = assortment;
   }
+
 
   public Long getGoodsGroupBackendId() {
     return goodsGroupBackendId;
