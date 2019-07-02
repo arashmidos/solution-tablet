@@ -101,7 +101,7 @@ public class RestServiceImpl {
           Response<OptimizedRouteResponse> response) {
         if (response.isSuccessful()) {
           OptimizedRouteResponse result = response.body();
-          if (result != null && Empty.isEmpty(result.getError())) {
+          if (result != null && Empty.isEmpty(result.getError()) && result.getTrip() !=null) {
             PreferenceHelper.setOptimizedRoute(visitLineBackendId, result);
             EventBus.getDefault().post(result);
           } else {
