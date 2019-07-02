@@ -43,7 +43,9 @@
         android:textSize="20sp"
         tools:text="مسیر پاسداران - هروی" />
 
-      <RelativeLayout
+      <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="end"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -55,7 +57,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginBottom="10dp"
-          android:layout_toLeftOf="@+id/divider"
           android:ellipsize="end"
           android:maxLines="1"
           android:textColor="@color/gray_75"
@@ -68,7 +69,6 @@
           android:layout_height="18dp"
           android:layout_marginLeft="8dp"
           android:layout_marginRight="8dp"
-          android:layout_toLeftOf="@+id/customer_count"
           android:background="@color/gray_75" />
 
         <TextView
@@ -77,13 +77,11 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginBottom="10dp"
-          android:layout_alignParentRight="true"
-          android:maxLines="1"
           android:textColor="@color/gray_75"
           android:textSize="14sp"
-          tools:text="9 مشتری" />
+          tools:text="129 مشتری" />
 
-      </RelativeLayout>
+      </LinearLayout>
       <TextView
         android:id="@+id/select_customer_btn"
         style="@style/IranSans.Medium"

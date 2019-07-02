@@ -136,6 +136,7 @@ public class VisitLineAdapter extends Adapter<VisitLineAdapter.ViewHolder> {
           visitlineDetail.setVisibility(View.VISIBLE);
         }
       } else {
+        customerCount.setTextColor(ContextCompat.getColor(mainActivity,R.color.gray_75));
         customerList.setVisibility(View.GONE);
         root.setBackgroundColor(ContextCompat.getColor(mainActivity,R.color.white));
         visitlineName.setTextColor(ContextCompat.getColor(mainActivity,R.color.black));
