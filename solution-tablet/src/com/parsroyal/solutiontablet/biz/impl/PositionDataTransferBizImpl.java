@@ -67,8 +67,8 @@ public class PositionDataTransferBizImpl {
         EventBus.getDefault()
             .post(new DataTransferSuccessEvent(getSuccessfulMessage(), StatusCodes.UPDATE));
       }
-    } catch (IOException e) {
-      Timber.d(e);
+    } catch (Exception e) {
+      Timber.e(e);
       EventBus.getDefault().post(new PositionDataTransferErrorEvent(StatusCodes.NETWORK_ERROR));
     }
   }
