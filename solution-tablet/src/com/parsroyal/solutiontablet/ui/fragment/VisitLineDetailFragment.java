@@ -426,7 +426,6 @@ public class VisitLineDetailFragment extends BaseFragment {
       super.onPreExecute();
     }
 
-
     @Override
     protected List<CustomerListModel> doInBackground(String... params) {
       customerList = adapter.getFilteredData(params[0]);
