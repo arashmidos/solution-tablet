@@ -10,12 +10,10 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.GoodImageFragment;
-import com.parsroyal.solutiontablet.ui.fragment.bottomsheet.AddOrderBottomSheet;
-import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 import java.util.List;
 
 public class GoodImagePagerAdapter extends FragmentStatePagerAdapter {

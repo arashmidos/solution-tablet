@@ -2,8 +2,8 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -75,7 +75,7 @@ public class SmsDialogFragment extends DialogFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setStyle(android.support.v4.app.DialogFragment.STYLE_NORMAL, R.style.myDialog);
+    setStyle(androidx.fragment.app.DialogFragment.STYLE_NORMAL, R.style.myDialog);
     setRetainInstance(true);
   }
 

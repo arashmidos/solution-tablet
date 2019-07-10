@@ -2,8 +2,8 @@ package com.parsroyal.solutiontablet.util;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;

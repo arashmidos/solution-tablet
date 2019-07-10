@@ -19,7 +19,7 @@
       android:orientation="horizontal">
 
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/full_name_lay"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -44,7 +44,7 @@
           android:textSize="@dimen/text_normal"
           tools:text="sunstar" />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
       <ImageView
         android:id="@+id/company_code_icon"
@@ -57,7 +57,7 @@
         android:tint="@color/gray_75" />
     </LinearLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/national_code_lay"
       android:layout_width="match_parent"
       android:layout_height="40dp"
@@ -85,7 +85,7 @@
         android:textSize="@dimen/text_normal"
         tools:text="1234567890" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
       android:id="@+id/scanner"
@@ -103,7 +103,7 @@
       android:layout_marginTop="35dp"
       android:orientation="horizontal">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/shop_name_lay"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -128,7 +128,7 @@
           android:textSize="@dimen/text_normal"
           tools:text="sunstar" />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
       <ImageView
         android:id="@+id/shop_icon"
@@ -148,7 +148,7 @@
       android:orientation="horizontal">
 
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/phone_number_lay"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -174,7 +174,7 @@
           android:textSize="@dimen/text_normal"
           tools:text="1234567890" />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
       <ImageView
         android:id="@+id/phone_icon"
@@ -195,7 +195,7 @@
       android:orientation="horizontal">
 
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/mobile_lay"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -221,7 +221,7 @@
           android:textSize="@dimen/text_normal"
           tools:text="09123609446" />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
       <ImageView
         android:id="@+id/mobile_icon"
@@ -317,7 +317,7 @@
       android:layout_marginTop="35dp"
       android:orientation="horizontal">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/address_lay"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -342,7 +342,7 @@
           android:textSize="@dimen/text_normal"
           tools:text="sunstar" />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
       <ImageView
         android:id="@+id/address_icon"
@@ -362,7 +362,7 @@
       android:orientation="horizontal"
       android:weightSum="1">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/postal_code_lay"
         android:layout_width="0dp"
         android:layout_height="40dp"
@@ -391,9 +391,9 @@
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
           tools:text="422543526" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/regional_municipality_lay"
         android:layout_width="0dp"
         android:layout_height="40dp"
@@ -420,7 +420,7 @@
           android:textSize="@dimen/text_normal"
           tools:text="422543526" />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <View
@@ -549,7 +549,7 @@
       android:orientation="horizontal"
       android:weightSum="1">
 
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/store_meter_lay"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -578,7 +578,7 @@
           android:textColor="@android:color/black"
           android:textSize="@dimen/text_normal"
           tools:text="422543526" />
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
       <RelativeLayout
         android:layout_width="0dp"
@@ -614,7 +614,7 @@
       </RelativeLayout>
     </LinearLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/description_lay"
       android:layout_width="match_parent"
       android:layout_height="40dp"
@@ -639,7 +639,7 @@
         android:textSize="@dimen/text_normal"
         tools:text="@string/customer_description" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
     <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -668,7 +668,7 @@
         tools:text="1/10" />
 
     </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/photo_list"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

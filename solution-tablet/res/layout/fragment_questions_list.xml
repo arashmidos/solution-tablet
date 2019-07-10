@@ -34,7 +34,7 @@
     android:drawablePadding="8dp"
     android:drawableRight="@drawable/ic_list_shapes_18_dp"
     android:gravity="right" />
-  <android.support.v7.widget.RecyclerView
+  <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="0dp"
