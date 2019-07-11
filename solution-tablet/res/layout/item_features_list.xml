@@ -4,53 +4,57 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/feature_lay"
   android:layout_width="match_parent"
-  android:layout_height="123dp"
+  android:layout_height="125dp"
   android:layout_marginTop="16dp"
+  android:background="@color/gray_f5"
   android:layout_marginStart="16dp"
-  android:layout_marginLeft="16dp"
-  card_view:cardCornerRadius="2dp"
-  card_view:cardElevation="3dp">
+  card_view:cardElevation="0dp"
+  card_view:cardCornerRadius="4dp">
 
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/gray_f5">
 
     <TextView
       android:id="@+id/feature_title_tv"
-      style="@style/IranSans.Medium"
+      style="@style/IranSans"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="20dp"
+      android:layout_marginBottom="16dp"
       android:layout_alignParentBottom="true"
-      android:layout_centerHorizontal="true"
       android:gravity="center"
-      android:textColor="@color/primary_dark"
-      android:textSize="14sp"/>
+      android:textColor="@color/black"
+      android:textSize="16sp"
+      tools:text="@string/today_path_list" />
 
     <ImageView
       android:id="@+id/feature_img"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="28dp"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
+      android:layout_marginTop="16dp"
       android:layout_centerHorizontal="true"
-      tools:src="@drawable/ic_assignment_black_48dp"/>
-
+      tools:src="@drawable/im_near_me_64_dp" />
+    <View
+      android:id="@+id/view"
+      android:layout_width="1dp"
+      android:layout_height="1dp"
+      android:layout_marginLeft="-8dp"
+      android:layout_centerInParent="true" />
     <Button
       android:id="@+id/badger_btn"
       style="@style/IranSans.Medium"
-      android:layout_width="21dp"
-      android:layout_height="21dp"
-      android:layout_marginTop="14dp"
-      android:layout_marginEnd="14dp"
-      android:layout_marginRight="14dp"
-      android:layout_alignParentRight="true"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_marginTop="20dp"
       android:layout_alignParentTop="true"
-      android:background="@drawable/badger_background"
+      android:layout_toStartOf="@id/view"
       android:paddingTop="2dp"
+      android:background="@drawable/badger_background"
       android:gravity="center"
       android:textColor="@color/white"
       android:textSize="12sp"
-      android:visibility="gone"/>
+      android:visibility="gone"
+      tools:visibility="visible" />
   </RelativeLayout>
 </androidx.cardview.widget.CardView>

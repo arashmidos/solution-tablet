@@ -891,7 +891,7 @@ public abstract class MainActivity extends AppCompatActivity {
 //    customizeToolbar(fragmentId);
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
-        fragment = FeaturesFragment.newInstance();
+        fragment = FeaturesFragment.Companion.newInstance();
         break;
       case CHAT_FRAGMENT:
         fragment = ChatFragment.newInstance();

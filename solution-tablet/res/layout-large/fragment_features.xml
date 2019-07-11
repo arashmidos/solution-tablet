@@ -4,14 +4,13 @@
   android:orientation="vertical">
 
   <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recycler_view"
+    android:id="@+id/recyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="16dp"
+    android:paddingBottom="16dp"
     android:layout_marginStart="80dp"
-    android:layout_marginEnd="96dp"
-    android:layout_marginLeft="80dp"
-    android:layout_marginRight="96dp"
-    android:background="@color/features_background" />
+    android:layout_marginEnd="80dp"
+    android:paddingEnd="16dp"
+    android:background="@color/white" />
 </LinearLayout>
 
