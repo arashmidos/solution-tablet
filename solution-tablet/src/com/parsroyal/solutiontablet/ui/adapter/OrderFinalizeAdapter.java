@@ -362,7 +362,8 @@ public class OrderFinalizeAdapter extends Adapter<ViewHolder> {
       try {
 
         saleOrderService.updateOrderItemCount(
-            selectedItem.getId(), count, selectedUnit, order.getStatus(), selectedGoods, discount);
+            selectedItem.getId(), count, selectedUnit, order.getStatus(), selectedGoods, discount
+        );
         Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
         order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
         order.setAmount(orderAmount);

@@ -76,7 +76,7 @@ public class ReturnListFragment extends BaseFragment {
       visitId = args.getLong(Constants.VISIT_ID, -1);
     }
     if (parent == null) {
-      fabAddReturn.setVisibility(View.GONE);
+      fabAddReturn.hide();
     }
     setUpRecyclerView();
     return view;
@@ -94,9 +94,9 @@ public class ReturnListFragment extends BaseFragment {
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
           super.onScrolled(recyclerView, dx, dy);
           if (dy > 0) {
-            fabAddReturn.setVisibility(View.GONE);
+            fabAddReturn.hide();
           } else {
-            fabAddReturn.setVisibility(View.VISIBLE);
+            fabAddReturn.show();
           }
         }
       });

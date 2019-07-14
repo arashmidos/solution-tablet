@@ -2,18 +2,18 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,6 +38,7 @@ import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
+import com.parsroyal.solutiontablet.util.SaleUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -165,21 +166,12 @@ public class FinalizeOrderDialogFragment extends DialogFragment {
       submitTv.setText(R.string.title_deliver_sale_order);
     }
 
-    if (isRejected()) {
+    if (SaleUtil.isRejected(orderStatus) || SaleUtil.isRequestReject(orderStatus)) {
       toolbarTitle.setText(R.string.reject_goods);
       submitTv.setText(R.string.finalize_return);
       bottomLayout
           .setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
     }
-  }
-
-  /*
-  @return true if it's one of the REJECTED states
- */
-  protected boolean isRejected() {
-    return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
-        orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
-        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
   }
 
   public void updateList() {

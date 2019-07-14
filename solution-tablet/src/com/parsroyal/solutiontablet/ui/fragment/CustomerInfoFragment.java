@@ -2,9 +2,6 @@ package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -116,6 +116,10 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
   TextView addRejectTv;
   @BindView(R.id.register_return_lay)
   RelativeLayout registerReturnLay;
+  @BindView(R.id.add_request_reject_tv)
+  TextView addRequestRejectTv;
+  @BindView(R.id.register_request_return_lay)
+  RelativeLayout registerRequestReturnLay;
   @BindView(R.id.register_free_order_lay)
   RelativeLayout registerFreeOrderLay;
   @BindView(R.id.add_payment_tv)
@@ -221,6 +225,10 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
     if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_PICTURE)) {
       addPictureTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
       registerImageLay.setEnabled(false);
+    }
+    if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_REQUEST_REJECT)) {
+      addRequestRejectTv.setTextColor(ContextCompat.getColor(mainActivity, R.color.gray));
+      registerRequestReturnLay.setEnabled(false);
     }
 
     if (!SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_LOCATION)) {
@@ -329,11 +337,13 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       R.id.register_questionnaire_lay, R.id.register_image_lay, R.id.end_and_exit_visit_lay,
       R.id.no_activity_lay, R.id.register_location_btn, R.id.edit_map, R.id.fullscreen_map,
       R.id.register_return_lay, R.id.edit_map_layout, R.id.fullscreen_map_layout,
-      R.id.customer_report_lay, R.id.register_free_order_lay})
+      R.id.customer_report_lay, R.id.register_free_order_lay, R.id.register_request_return_lay})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.register_return_lay:
         parent.openOrderDetailFragment(SaleOrderStatus.REJECTED_DRAFT.getId(), false);
+        break;case R.id.register_request_return_lay:
+        parent.openOrderDetailFragment(SaleOrderStatus.REQUEST_REJECTED_DRAFT.getId(), false);
         break;
       case R.id.register_order_lay:
         if (checkCreditEnabled && creditRemained != null && creditRemained <= 0) {
@@ -464,6 +474,7 @@ public class CustomerInfoFragment extends BaseFragment implements OnMapReadyCall
       }
     } else if (event instanceof ErrorEvent) {
       DialogUtil.dismissProgressDialog();
+
       ToastUtil.toastError(mainActivity, getString(R.string.operation_not_permitted));
     }
   }

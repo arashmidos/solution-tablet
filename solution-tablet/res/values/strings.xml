@@ -206,8 +206,10 @@
   <string name="message_exception_in_sending_invoices">خطا در ارسال فاکتور ها</string>
   <string name="message_transferring_invoices">در حال انتقال اطلاعات فاکتور ها …</string>
   <string name="message_cannot_create_order_right_now">در حال حاضر امکان سفارش گیری وجود ندارد</string>
+  <string name="message_cannot_create_request_reject_right_now">در حال حاضر امکان ثبت مجوز برگشتی وجود ندارد</string>
   <string name="message_cannot_create_factor_right_now">در حال حاضر امکان ثبت فاکتور وجود ندارد</string>
   <string name="message_cannot_create_rejected_right_now">در حال حاضر امکان ارجاع کالا وجود ندارد</string>
+  <string name="message_cannot_create_free_order_right_now">در حال حاضر امکان ثبت اشانتیون وجود ندارد</string>
   <string name="title_goods_list">کالاها</string>
   <string name="title_x_list">"لیست "</string>
   <string name="message_goods_already_added_to_order">این کالا قبلا به سفارش اضافه شده است.</string>
@@ -508,8 +510,11 @@
   <string name="no_customer">متاسفانه مشتری مورد نظر یافت نشد!</string>
   <string name="no_location">موقعیت جغرافیایی کاربر ثبت نشده است!</string>
   <string name="register_return">ثبت مرجوعی</string>
+  <string name="register_request_return">ثبت مجوز برگشتی</string>
   <string name="register_location">ثبت موقعیت جغرافیایی</string>
   <string name="returns">مرجوعی ها</string>
+  <string name="request_returns">مجوزهای برگشتی</string>
+  <string name="request_return">مجوز برگشتی</string>
   <string name="return_order">سند مرجوعی</string>
   <string name="good_questionnaire">پرسشنامه کالایی</string>
   <string name="general_questionnaire">پرسشنامه عمومی</string>

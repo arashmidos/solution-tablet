@@ -906,7 +906,7 @@ public abstract class MainActivity extends AppCompatActivity {
         fragment = PhoneVisitDetailFragment.newInstance();
         break;
       case ORDER_INFO_FRAGMENT:
-        fragment = OrderInfoFragment.newInstance();
+        fragment = OrderInfoFragment.Companion.newInstance();
         break;
       case REGISTER_PAYMENT_FRAGMENT:
         fragment = RegisterPaymentFragment.newInstance();

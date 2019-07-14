@@ -2,8 +2,6 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,6 +24,7 @@ import com.parsroyal.solutiontablet.ui.activity.MainActivity;
 import com.parsroyal.solutiontablet.ui.adapter.SmsReasonAdapter;
 import com.parsroyal.solutiontablet.ui.fragment.OrderFragment;
 import com.parsroyal.solutiontablet.ui.fragment.OrderInfoFragment;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.List;
 
@@ -109,7 +110,7 @@ public class SmsDialogFragment extends DialogFragment {
     });
     smsTitleTv.setText(String
         .format("همکار گرامی! کد اعتبار سنجی ثبت سفارش، به شماره همراه %s ارسال گردید!",
-            phoneNum));
+            NumberUtil.digitsToPersian(phoneNum)));
     if (smsFailedMode) {
       smsFailed();
     }

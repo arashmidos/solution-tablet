@@ -13,6 +13,7 @@ public enum VisitInformationDetailType {
   DELIVER_FREE_ORDER(12L, R.string.free_order, R.drawable.ic_add_layer_24dp, R.string.free_order),
 
   CREATE_REJECT(20L, R.string.title_reject, R.drawable.ic_return_24_dp, R.string.title_reject),
+  CREATE_REQUEST_REJECT(21L, R.string.request_return, R.drawable.ic_return_permission_24dp, R.string.request_return),
   CREATE_INVOICE(30L, R.string.title_factor, R.drawable.ic_cart_24_dp,
       R.string.title_factor),// Later,Need update image
   TAKE_PICTURE(40L, R.string.images, R.drawable.ic_camera_24_dp, R.string.images),

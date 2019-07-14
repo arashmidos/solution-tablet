@@ -113,10 +113,10 @@ public class RejectAdapter extends Adapter<ViewHolder> {
   }
 
   private void setPageStatus(Long status, Bundle args) {
-    if (SaleOrderStatus.findById(status) == SaleOrderStatus.SENT
-        || SaleOrderStatus.findById(status) == SaleOrderStatus.CANCELED
-        || SaleOrderStatus.findById(status) == SaleOrderStatus.SENT_INVOICE
-        || SaleOrderStatus.findById(status) == SaleOrderStatus.REJECTED_SENT) {
+    if (SaleOrderStatus.Companion.findById(status) == SaleOrderStatus.SENT
+        || SaleOrderStatus.Companion.findById(status) == SaleOrderStatus.CANCELED
+        || SaleOrderStatus.Companion.findById(status) == SaleOrderStatus.SENT_INVOICE
+        || SaleOrderStatus.Companion.findById(status) == SaleOrderStatus.REJECTED_SENT) {
       args.putString(Constants.PAGE_STATUS, Constants.VIEW);
     } else {
       args.putString(Constants.PAGE_STATUS, Constants.EDIT);

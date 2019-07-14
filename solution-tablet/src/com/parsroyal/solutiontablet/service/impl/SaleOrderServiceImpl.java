@@ -31,7 +31,7 @@ import com.parsroyal.solutiontablet.service.SaleOrderService;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
-import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
+import com.parsroyal.solutiontablet.util.SaleUtil;
 import java.util.List;
 
 /**
@@ -100,7 +100,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
       for (Goods goods : goodsList) {
         if (goods.getBackendId().equals(saleOrderItemDto.getGoodsBackendId())
             && goods.getInvoiceBackendId().equals(saleOrderItemDto.getInvoiceBackendId())
-            ) {
+        ) {
           saleOrderItemDto.setGoods(goods);
           break;
         }
@@ -301,9 +301,11 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     itemAmount /= 1000L;
 
     if (count.longValue() > goods.getExisting() + orderItem.getGoodsCount()) {
-      if (!PreferenceHelper.isDistributor()
-          || !SolutionTabletApplication.getInstance().hasAccess(Authority.UNLIMITED_DISTRIBUTE)) {
-        throw new SaleOrderItemCountExceedExistingException();
+      if ((!PreferenceHelper.isDistributor()
+          || !SolutionTabletApplication.getInstance().hasAccess(Authority.UNLIMITED_DISTRIBUTE))) {
+        if (!SaleUtil.isRequestReject(orderStatus)) {
+          throw new SaleOrderItemCountExceedExistingException();
+        }
       }
     }
     goods.setExisting(goods.getExisting() + orderItem.getGoodsCount());
@@ -318,7 +320,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     saleOrderItemDao.update(orderItem);
 
     goods.setExisting(goods.getExisting() - count.longValue());
-    if (!orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId())) {
+    if (!orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) || !SaleUtil.isRequestReject(orderStatus)) {
       goodsDao.update(goods);
     }
   }

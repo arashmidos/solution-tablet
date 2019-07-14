@@ -133,7 +133,6 @@ public class AddOrderDialogFragment extends DialogFragment {
   protected Long saleRate;
   private long total;
   private Long discount;
-  private boolean isComplementary;
 
   public AddOrderDialogFragment() {
     // Required empty public constructor
@@ -174,7 +173,6 @@ public class AddOrderDialogFragment extends DialogFragment {
     count = arguments.getDouble(Constants.COUNT);
     selectedUnit = arguments.getLong(Constants.SELECTED_UNIT);
     discount = arguments.getLong(Constants.DISCOUNT);
-    isComplementary = arguments.getBoolean(Constants.COMPLIMENTARY);
 
     goodsService = new GoodsServiceImpl(mainActivity);
     settingService = new SettingServiceImpl();

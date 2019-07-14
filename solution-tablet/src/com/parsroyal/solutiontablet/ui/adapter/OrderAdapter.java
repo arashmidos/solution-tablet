@@ -234,11 +234,11 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     }
 
     private void setPageStatus(Bundle args) {
-      if (SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.FREE_ORDER_SENT
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.CANCELED
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT_INVOICE
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.REJECTED_SENT) {
+      if (SaleOrderStatus.Companion.findById(order.getStatus()) == SaleOrderStatus.SENT
+          || SaleOrderStatus.Companion.findById(order.getStatus()) == SaleOrderStatus.FREE_ORDER_SENT
+          || SaleOrderStatus.Companion.findById(order.getStatus()) == SaleOrderStatus.CANCELED
+          || SaleOrderStatus.Companion.findById(order.getStatus()) == SaleOrderStatus.SENT_INVOICE
+          || SaleOrderStatus.Companion.findById(order.getStatus()) == SaleOrderStatus.REJECTED_SENT) {
         args.putString(Constants.PAGE_STATUS, Constants.VIEW);
       } else {
         args.putString(Constants.PAGE_STATUS, Constants.EDIT);

@@ -1,13 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -18,9 +11,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.android.material.appbar.AppBarLayout;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
@@ -59,6 +59,7 @@ import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
+import com.parsroyal.solutiontablet.util.SaleUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,6 +130,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
   private Goods selectedGoods;
   private LabelValue assortment;
   private LabelValue supplier;
+  private boolean isRequestReject;
 
   public OrderFragment() {
     // Required empty public constructor
@@ -549,6 +551,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
     bundle.putLong(Constants.VISITLINE_BACKEND_ID, visitlineBackendId);
     bundle.putBoolean(Constants.CASH_ORDER, isCashOrder);
     bundle.putBoolean(Constants.COMPLIMENTARY, isComplimentary);
+    bundle.putBoolean(Constants.REQUEST_REJECT_ORDER, isRequestReject);
     dialogFragment.setArguments(bundle);
 
     dialogFragment.show(ft, "order");
@@ -606,7 +609,8 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
   private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, Long discount) {
     try {
       if (Empty.isEmpty(selectedItem)) {
-        if (count * 1000L > Double.valueOf(String.valueOf(selectedGoods.getExisting()))) {
+        if (!SaleUtil.isRequestReject(orderStatus) && count * 1000L > Double
+            .valueOf(String.valueOf(selectedGoods.getExisting()))) {
 //          ToastUtil.toastError(getActivity(), new SaleOrderItemCountExceedExistingException());
           EventBus.getDefault().post(new ErrorEvent(getString(R.string.exceed_count_exception),
               StatusCodes.DATA_STORE_ERROR));
@@ -615,8 +619,9 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
         selectedItem = createOrderItem(selectedGoods);
       }
 
-      saleOrderService.updateOrderItemCount(selectedItem.getId(), count, selectedUnit, orderStatus,
-          selectedGoods, discount);
+      saleOrderService.updateOrderItemCount(selectedItem.getId(), count, selectedUnit,
+          orderStatus, selectedGoods, discount);
+
       Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);
