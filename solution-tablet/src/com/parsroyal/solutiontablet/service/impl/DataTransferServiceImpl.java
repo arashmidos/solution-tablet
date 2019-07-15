@@ -91,6 +91,11 @@ public class DataTransferServiceImpl implements DataTransferService {
         SaleOrderStatus.READY_TO_SEND.getStringId()) > 0) {
       return true;
     }
+    if (saleOrderDaoImpl.count(SaleOrder.COL_STATUS,
+        SaleOrderStatus.REQUEST_REJECTED.getStringId()) > 0) {
+      return true;
+    }
+
     if (saleOrderDaoImpl.count(SaleOrder.COL_STATUS, SaleOrderStatus.DELIVERED.getStringId()) > 0) {
       return true;
     }
