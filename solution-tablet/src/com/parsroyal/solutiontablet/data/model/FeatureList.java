@@ -40,7 +40,7 @@ public class FeatureList {
         context.getString(R.string.title_goods_list)));
     featureList
         .add(new FeatureList(0, R.drawable.im_map_64_dp, context.getString(R.string.map)));
-    featureList.add(new FeatureList(0, R.drawable.im_reports_64_dp,
+    featureList.add(new FeatureList(0, R.drawable.im_survey_64_dp,
         context.getString(R.string.anonymous_questionnaire)));
     featureList.add(
         new FeatureList(0, R.drawable.im_my_reports_64_dp, context.getString(R.string.my_kpi)));

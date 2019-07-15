@@ -10,6 +10,6 @@
         android:layout_height="match_parent"
         android:paddingBottom="16dp"
         android:paddingEnd="16dp"
-        android:background="@color/white"/>
+        android:background="@color/gray_f5"/>
 </LinearLayout>
 
