@@ -2,11 +2,6 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -46,6 +46,7 @@ import java.util.Locale;
 public class RejectAdapter extends Adapter<ViewHolder> {
 
   private final SaleOrderServiceImpl saleOrderService;
+  private final Boolean isRequestReject;
   private LayoutInflater inflater;
   private Context context;
   private boolean isFromReport;
@@ -55,12 +56,13 @@ public class RejectAdapter extends Adapter<ViewHolder> {
   private int currentReject = -1;
 
   public RejectAdapter(Context context, List<SaleOrderListModel> orders, boolean isFromReport,
-      Long visitId) {
+      Long visitId, Boolean isRequestReject) {
     this.context = context;
     this.visitId = visitId == null ? 0 : visitId;
     this.orders = orders;
     this.mainActivity = (MainActivity) context;
     this.isFromReport = isFromReport;
+    this.isRequestReject = isRequestReject;
     inflater = LayoutInflater.from(context);
     saleOrderService = new SaleOrderServiceImpl(mainActivity);
   }
@@ -92,6 +94,11 @@ public class RejectAdapter extends Adapter<ViewHolder> {
 
   public void setRejectGoods(GoodsDtoList goodsDtoList) {
     DialogUtil.dismissProgressDialog();
+    //Double Check
+    if (isRequestReject) {
+      return;
+    }
+
     try {
       List<Goods> goodsList = goodsDtoList.getGoodsDtoList();
       if (currentReject != -1 && goodsList != null) {
@@ -116,6 +123,7 @@ public class RejectAdapter extends Adapter<ViewHolder> {
     if (SaleOrderStatus.Companion.findById(status) == SaleOrderStatus.SENT
         || SaleOrderStatus.Companion.findById(status) == SaleOrderStatus.CANCELED
         || SaleOrderStatus.Companion.findById(status) == SaleOrderStatus.SENT_INVOICE
+        || SaleOrderStatus.Companion.findById(status) == SaleOrderStatus.REQUEST_REJECTED_SENT
         || SaleOrderStatus.Companion.findById(status) == SaleOrderStatus.REJECTED_SENT) {
       args.putString(Constants.PAGE_STATUS, Constants.VIEW);
     } else {
@@ -225,7 +233,8 @@ public class RejectAdapter extends Adapter<ViewHolder> {
 
       switch (v.getId()) {
         case R.id.delete_img:
-          if (!order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId())) {
+          if (!order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId()) && !order.getStatus()
+              .equals(SaleOrderStatus.REQUEST_REJECTED_SENT.getId())) {
             deleteOrder();
           }
           break;
@@ -233,7 +242,16 @@ public class RejectAdapter extends Adapter<ViewHolder> {
         case R.id.return_main_lay:
         case R.id.main_lay_rel:
           currentReject = position;
-          invokeGetRejectedData();
+          if (isRequestReject) {
+            Bundle args = new Bundle();
+            args.putLong(Constants.ORDER_ID, order.getId());
+            args.putLong(Constants.VISIT_ID, order.getVisitId());
+            args.putBoolean(Constants.READ_ONLY, false);
+            setPageStatus(order.getStatus(), args);
+            mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, false);
+          } else {
+            invokeGetRejectedData();
+          }
           break;
       }
     }
@@ -241,6 +259,7 @@ public class RejectAdapter extends Adapter<ViewHolder> {
     private void invokeGetRejectedData() {
       DialogUtil
           .showProgressDialog(mainActivity, R.string.message_transferring_rejected_goods_data);
+
 
       new RejectedGoodsDataTransferBizImpl(mainActivity)
           .getAllRejectedData(order.getCustomerBackendId());

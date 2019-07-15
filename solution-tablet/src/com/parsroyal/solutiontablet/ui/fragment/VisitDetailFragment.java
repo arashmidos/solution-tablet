@@ -354,8 +354,8 @@ public class VisitDetailFragment extends BaseFragment {
       orderListFragment = OrderListFragment.newInstance(arguments, this);
       freeOrderListFragment = FreeOrderListFragment.newInstance(arguments, this);
     }
-    returnListFragment = ReturnListFragment.newInstance(arguments, this);
-    requestReturnListFragment = ReturnListFragment.newInstance(arguments, this);
+    returnListFragment = ReturnListFragment.Companion.newInstance(arguments, this,false);
+    requestReturnListFragment = ReturnListFragment.Companion.newInstance(arguments, this,true);
     customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
     allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(arguments);
   }

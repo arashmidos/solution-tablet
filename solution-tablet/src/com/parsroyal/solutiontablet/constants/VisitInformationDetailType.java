@@ -54,6 +54,10 @@ public enum VisitInformationDetailType {
     return value;
   }
 
+  public String getStringValue() {
+    return String.valueOf(value);
+  }
+
   public void setValue(long value) {
     this.value = value;
   }

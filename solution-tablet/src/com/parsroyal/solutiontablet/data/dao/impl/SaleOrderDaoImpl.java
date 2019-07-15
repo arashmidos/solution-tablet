@@ -306,6 +306,12 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
               " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
           argsList.add(String.valueOf(statusId));
           argsList.add(String.valueOf(SaleOrderStatus.REJECTED_SENT.getId()));
+        } else if (statusId.equals(SaleOrderStatus.REQUEST_REJECTED.getId())) {
+          argsList.add(VisitInformationDetailType.CREATE_REQUEST_REJECT.getStringValue());
+          sql = sql.concat(" ").concat(
+              " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
+          argsList.add(String.valueOf(statusId));
+          argsList.add(String.valueOf(SaleOrderStatus.REQUEST_REJECTED_SENT.getId()));
         } else {
           argsList.add("0");//DO NOT JOIN WITH VD
           sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_STATUS + " = ?");
@@ -319,10 +325,12 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       }
 
       if (saleOrderSO.isIgnoreDraft()) {
-        sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_STATUS + " != ?")
+        sql = sql.concat(" AND o." + SaleOrder.COL_STATUS + " != ?")
+            .concat(" AND o." + SaleOrder.COL_STATUS + " != ?")
             .concat(" AND o." + SaleOrder.COL_STATUS + " != ?");
         argsList.add(String.valueOf(SaleOrderStatus.DRAFT.getId()));
         argsList.add(String.valueOf(SaleOrderStatus.REJECTED_DRAFT.getId()));
+        argsList.add(String.valueOf(SaleOrderStatus.REQUEST_REJECTED_DRAFT.getId()));
       }
     }
 

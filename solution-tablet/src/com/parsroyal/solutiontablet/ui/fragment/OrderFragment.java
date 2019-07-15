@@ -23,7 +23,6 @@ import butterknife.OnClick;
 import com.google.android.material.appbar.AppBarLayout;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
@@ -167,6 +166,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
           return inflater.inflate(R.layout.empty_view, container, false);
         }
         orderStatus = order.getStatus();
+        isRequestReject = SaleUtil.isRequestReject(orderStatus);
         visitId = args.getLong(Constants.VISIT_ID, -1);
         pageStatus = args.getString(Constants.PAGE_STATUS, "");
         visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
@@ -282,14 +282,14 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
     mainActivity.setFilterVisibility(View.VISIBLE);
     goodsSo = new GoodsSo();
     if (adapter == null) {
-      if (isRejected()) {
+      if (SaleUtil.isRejected(orderStatus)) {
         rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
 
         adapter = new GoodsAdapter(mainActivity, this, rejectedGoodsList.getGoodsDtoList(),
             readOnly, true, order);
-        bottomBar.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
-        bottomBarText.setText(R.string.reject_goods);
-        goodsCartImage.setVisibility(View.GONE);
+        setRejectUI();
+      } else if (isRequestReject) {
+        setRejectUI();
       } else {
         goodsSo.setConstraint("");
         if (backendId != -1L) {
@@ -344,6 +344,12 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
     }
   }
 
+  private void setRejectUI() {
+    bottomBar.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
+    bottomBarText.setText(R.string.reject_goods);
+    goodsCartImage.setVisibility(View.GONE);
+  }
+
   //set up recycler view
   private void setData() {
     setUpExpandRecyclerView();
@@ -371,22 +377,13 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
    @return Proper title for which could be "Rejected", "Order" or "Invoice"
    */
   private String getProperTitle() {
-    if (isRejected()) {
+    if (SaleUtil.isRejected(orderStatus) || isRequestReject) {
       return getString(R.string.title_reject_list);
     } else if (PreferenceHelper.isVisitor()) {
       return getString(R.string.title_goods_list);
     } else {
       return getString(R.string.title_factor);
     }
-  }
-
-  /*
-  @return true if it's one of the REJECTED states
-   */
-  private boolean isRejected() {
-    return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
-        orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
-        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
   }
 
   private void addSearchListener() {
@@ -493,7 +490,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
       }
 
       Long invoiceBackendId = 0L;
-      if (isRejected()) {
+      if (SaleUtil.isRejected(orderStatus)) {
         invoiceBackendId = goods.getInvoiceBackendId();
       }
       final SaleOrderItem item = saleOrderService.findOrderItemByOrderIdAndGoodsBackendId(
@@ -559,7 +556,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
 
   private void updateGoodsDataTb() {
 
-    if (isRejected()) {
+    if (SaleUtil.isRejected(orderStatus)) {
       if (Empty.isNotEmpty(rejectedGoodsList)) {
         List<Goods> goodsList = rejectedGoodsList.getGoodsDtoList();
         List<Goods> filteredList = new ArrayList<>();
