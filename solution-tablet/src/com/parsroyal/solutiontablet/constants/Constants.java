@@ -127,5 +127,6 @@ public class Constants {
     public static final int INVOICES = 29;
     public static final int CUSTOMER_PICS = 30;
     public static final int CANCELED_INVOICES = 31;
+    public static final int REQUEST_RETURN_ORDER = 32;
   }
 }

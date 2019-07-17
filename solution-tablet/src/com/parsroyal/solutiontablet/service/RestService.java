@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.parsroyal.solutiontablet.data.model.CustomerLocationDto;
 import com.parsroyal.solutiontablet.data.model.SaleInvoiceDocument;
 import com.parsroyal.solutiontablet.data.model.SaleOrderDocument;
+import com.parsroyal.solutiontablet.data.model.SaleRejectDocument;
 import com.parsroyal.solutiontablet.data.model.UpdatePusheRequest;
 import com.parsroyal.solutiontablet.data.model.VisitInformationDto;
 import com.parsroyal.solutiontablet.vrp.model.OptimizedRouteResponse;
@@ -30,6 +31,9 @@ public interface RestService {
 
   @POST("saleorders/free")
   Call<String> sendFreeOrder(@Body SaleOrderDocument saleDocument);
+
+  @POST("salerejects/request")
+  Call<String> sendRequestRejectOrder(@Body SaleRejectDocument saleDocument);
 
   @POST("users/updatePusheId")
   Call<String> updatePusheId(@Body UpdatePusheRequest saleDocument);

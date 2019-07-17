@@ -22,7 +22,6 @@ import com.parsroyal.solutiontablet.util.ToastUtil
 import kotlinx.android.synthetic.main.fragment_return_list.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import org.jetbrains.annotations.NotNull
 
 class ReturnListFragment : BaseFragment() {
 
@@ -128,8 +127,8 @@ class ReturnListFragment : BaseFragment() {
 
   companion object {
 
-    fun newInstance(arguments: Bundle, visitDetailFragment: VisitDetailFragment,
-                    isRequestReject: Boolean): @NotNull ReturnListFragment {
+    fun newInstance(arguments: Bundle?, visitDetailFragment: VisitDetailFragment?,
+                    isRequestReject: Boolean): ReturnListFragment {
       val returnListFragment = ReturnListFragment()
       returnListFragment.parent = visitDetailFragment
       returnListFragment.arguments = arguments

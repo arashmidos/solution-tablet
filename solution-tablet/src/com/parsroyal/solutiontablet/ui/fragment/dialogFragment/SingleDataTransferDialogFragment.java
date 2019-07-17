@@ -2,16 +2,16 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -22,6 +22,7 @@ import com.parsroyal.solutiontablet.biz.impl.OrdersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PaymentsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.PictureDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.RequestRejectDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.VisitInformationDataTransfer;
@@ -234,6 +235,8 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
         break;
       case CREATE_REJECT:
         sendReject(visitDetail.getTypeId());
+      case CREATE_REQUEST_REJECT:
+        sendRequestReject(visitDetail.getTypeId());
       case CREATE_INVOICE:
         break;
       case TAKE_PICTURE:
@@ -265,6 +268,29 @@ public class SingleDataTransferDialogFragment extends DialogFragment {
       Thread dataTransfer = new Thread(() -> {
 
         SaleRejectsDataTransferBizImpl dataTransfer1 = new SaleRejectsDataTransferBizImpl(
+            mainActivity);
+        dataTransfer1.setOrder(saleOrder);
+        dataTransfer1.exchangeData();
+        if (dataTransfer1.getSuccess() == 1) {
+          sendNextDetail();
+        } else {
+          EventBus.getDefault().post(new ActionEvent(StatusCodes.ACTION_CANCEL_TRANSFER));
+        }
+      });
+      dataTransfer.start();
+    } else {
+      sendNextDetail();
+    }
+  }
+
+  private void sendRequestReject(long typeId) {
+    SaleOrderServiceImpl saleOrderService = new SaleOrderServiceImpl(mainActivity);
+    BaseSaleDocument saleOrder = saleOrderService.findOrderDocumentByOrderId(typeId);
+
+    if (Empty.isNotEmpty(saleOrder)) {
+      Thread dataTransfer = new Thread(() -> {
+
+        RequestRejectDataTransferBizImpl dataTransfer1 = new RequestRejectDataTransferBizImpl(
             mainActivity);
         dataTransfer1.setOrder(saleOrder);
         dataTransfer1.exchangeData();

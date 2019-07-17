@@ -288,8 +288,6 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
         adapter = new GoodsAdapter(mainActivity, this, rejectedGoodsList.getGoodsDtoList(),
             readOnly, true, order);
         setRejectUI();
-      } else if (isRequestReject) {
-        setRejectUI();
       } else {
         goodsSo.setConstraint("");
         if (backendId != -1L) {
@@ -297,6 +295,9 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
         }
         adapter = new GoodsAdapter(mainActivity, this, goodsService.searchForGoodsList(goodsSo),
             readOnly, false, order);
+        if (isRequestReject) {
+          setRejectUI();
+        }
       }
       if (MultiScreenUtility.isTablet(mainActivity)) {
         RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
@@ -370,6 +371,9 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
 
     if (!readOnly) {
       orderCountTv.setText(NumberUtil.digitsToPersian(order.getOrderItems().size()));
+    }
+    if (isRequestReject) {
+      setRejectUI();
     }
   }
 

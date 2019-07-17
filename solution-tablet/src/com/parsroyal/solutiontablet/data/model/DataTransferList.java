@@ -93,6 +93,8 @@ public class DataTransferList {
     }
     featureList.add(new DataTransferList(TransferSendOrder.RETURN_ORDER, R.drawable.ic_return_24_dp,
         context.getString(R.string.return_order)));
+    featureList.add(new DataTransferList(TransferSendOrder.REQUEST_RETURN_ORDER, R.drawable.ic_return_permission_24dp,
+        context.getString(R.string.request_return)));
     featureList.add(new DataTransferList(TransferSendOrder.PAYMENT, R.drawable.ic_currency_24_dp,
         context.getString(R.string.payment)));
     //////////

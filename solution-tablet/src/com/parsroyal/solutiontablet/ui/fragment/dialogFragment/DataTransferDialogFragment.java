@@ -2,10 +2,6 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +9,10 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -324,6 +324,10 @@ public class DataTransferDialogFragment extends DialogFragment {
       case TransferSendOrder.RETURN_ORDER:
         Thread t7 = new Thread(() -> dataTransferService.sendAllSaleRejects());
         t7.start();
+        break;
+      case TransferSendOrder.REQUEST_RETURN_ORDER:
+        Thread t17 = new Thread(() -> dataTransferService.sendAllSaleRequestRejects());
+        t17.start();
         break;
       case TransferSendOrder.VISIT_DETAIL:
         Thread t8 = new Thread(() -> dataTransferService.sendAllVisitInformation());

@@ -2,12 +2,6 @@ package com.parsroyal.solutiontablet.ui.fragment.dialogFragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,6 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -244,7 +244,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     return R.layout.fragment_add_order_bottom_sheet;
   }
 
-  protected void fillDetailPanel() {
+  private void fillDetailPanel() {
     String input = countTv.getText().toString();
     if (Empty.isNotEmpty(input)) {
       try {
@@ -367,7 +367,7 @@ public class AddOrderDialogFragment extends DialogFragment {
       costDetailLay.setVisibility(View.GONE);
     }
 
-    if (isRejected()) {
+    if (SaleUtil.isRejected(orderStatus) || SaleUtil.isRequestReject(orderStatus)) {
       toolbarText.setText(R.string.add_to_return_goods);
       addButtonText.setText(R.string.register_return);
       bottomLayout
@@ -381,15 +381,6 @@ public class AddOrderDialogFragment extends DialogFragment {
     } else {
       discountEdt.setText(discount != null && discount != 0 ? String.valueOf(discount) : "");
     }
-  }
-
-  /*
-  @return true if it's one of the REJECTED states
- */
-  protected boolean isRejected() {
-    return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
-        orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
-        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
   }
 
   protected Goods getGoodFromLocal() {

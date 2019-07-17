@@ -431,6 +431,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
       if (listModel.hasFreeDelivery()) {
         entitiesMap.get(primaryKey).setHasFreeDelivery(true);
         entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.DELIVER_FREE_ORDER);
+      }if (listModel.isRequestReject()) {
+        entitiesMap.get(primaryKey).setRequestReject(true);
+        entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.CREATE_REQUEST_REJECT);
       }
       if (listModel.isIncompleteVisit()) {
         entitiesMap.get(primaryKey).setIncompleteVisit(true);
@@ -491,6 +494,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
       customerListModel.setHasDelivery(true);
     } else if (type == VisitInformationDetailType.DELIVER_FREE_ORDER.getValue()) {
       customerListModel.setHasFreeDelivery(true);
+    }else if (type == VisitInformationDetailType.CREATE_REQUEST_REJECT.getValue()) {
+      customerListModel.setRequestReject(true);
     }
 
     customerListModel.setLastVisit(cursor.getString(10));
