@@ -466,7 +466,7 @@
           </RelativeLayout>
 
         </LinearLayout>
-        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
           android:id="@+id/log_in_btn"
           style="@style/IranSans.Medium"
           android:layout_width="match_parent"
