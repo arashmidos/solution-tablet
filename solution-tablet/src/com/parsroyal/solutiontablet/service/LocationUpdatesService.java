@@ -376,7 +376,7 @@ public class LocationUpdatesService extends Service {
       }
 
       if (BuildConfig.DEBUG) {
-        return true;
+        return false;//TODO:
       }
       //if it has low speed or low accuracy
       if (location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER

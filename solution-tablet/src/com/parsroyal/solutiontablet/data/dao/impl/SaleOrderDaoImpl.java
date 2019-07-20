@@ -422,11 +422,13 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? OR "
+        + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? )";
     String[] args = {String.valueOf(orderId),
         String.valueOf(SaleOrderStatus.READY_TO_SEND.getId()),
         String.valueOf(SaleOrderStatus.FREE_ORDER_DELIVERED.getId()),
         String.valueOf(SaleOrderStatus.REJECTED.getId()),
+        String.valueOf(SaleOrderStatus.REQUEST_REJECTED.getId()),
         String.valueOf(SaleOrderStatus.INVOICED.getId()),
         String.valueOf(SaleOrderStatus.DELIVERED.getId()),
         String.valueOf(SaleOrderStatus.CANCELED.getId()),

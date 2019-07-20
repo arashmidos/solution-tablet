@@ -206,7 +206,8 @@ public class RejectAdapter extends Adapter<ViewHolder> {
     }
 
     private void changeVisibility() {
-      if (order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId())) {
+      if (order.getStatus().equals(SaleOrderStatus.REJECTED_SENT.getId()) || order.getStatus()
+          .equals(SaleOrderStatus.REQUEST_REJECTED_SENT.getId())) {
         if (!MultiScreenUtility.isTablet(context)) {
           editImg.setVisibility(View.GONE);
           deleteImg.setVisibility(View.GONE);
@@ -259,7 +260,6 @@ public class RejectAdapter extends Adapter<ViewHolder> {
     private void invokeGetRejectedData() {
       DialogUtil
           .showProgressDialog(mainActivity, R.string.message_transferring_rejected_goods_data);
-
 
       new RejectedGoodsDataTransferBizImpl(mainActivity)
           .getAllRejectedData(order.getCustomerBackendId());

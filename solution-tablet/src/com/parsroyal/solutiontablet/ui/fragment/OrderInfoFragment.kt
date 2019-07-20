@@ -127,7 +127,7 @@ class OrderInfoFragment : BaseFragment() {
       baseInfoService!!.search(BaseInfoTypes.PAYMENT_TYPE.id, "نقد")
     } else {
       baseInfoService!!.getAllBaseInfosLabelValuesByTypeId(
-          if (isRejected || isRequestReject) BaseInfoTypes.REJECT_TYPE.id else BaseInfoTypes.PAYMENT_TYPE.id)
+          if (isRejected || isRequestReject) BaseInfoTypes.DELIVERY_RETURN_TYPE.id else BaseInfoTypes.PAYMENT_TYPE.id)
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -191,9 +191,8 @@ class OrderInfoFragment : BaseFragment() {
 
   private fun setData() {
     //Set Payment type
-    if (!isComplimentary || !isRequestReject) {
-      setPaymentType()
-    }
+    setSelectedOption()
+
 
     mainActivity!!.changeTitle(
         if (isRejected || isRequestReject) getString(R.string.return_info) else getString(R.string.payment_info))
@@ -230,23 +229,6 @@ class OrderInfoFragment : BaseFragment() {
       }
       description_lay.hint = getString(R.string.reject_description)
       order_gift_layout.visibility = View.GONE
-    } else if (selectedItem != null) {
-      setPaymentMethod(selectedItem)
-    } else {
-      if (!isComplimentary) {
-        val values: List<LabelValue>
-        if (isCashOrder) {
-          values = baseInfoService!!.search(BaseInfoTypes.PAYMENT_TYPE.id, "نقد")
-        } else {
-          values = baseInfoService!!
-              .getAllBaseInfosLabelValuesByTypeId(BaseInfoTypes.PAYMENT_TYPE.id)
-        }
-
-        if (Empty.isNotEmpty(values)) {
-          selectedItem = values[0]
-          setPaymentMethod(selectedItem)
-        }
-      }
     }
     if (pageStatus == Constants.VIEW) {
       submit_order_btn.text = getString(R.string.close)
@@ -277,16 +259,24 @@ class OrderInfoFragment : BaseFragment() {
     }
   }
 
-  private fun setPaymentType() {
+  private fun setSelectedOption() {
+    if (isComplimentary) {
+      return;
+    }
+
     if (selectedItem != null) {
-      payment_method_tv.text = NumberUtil.digitsToPersian(selectedItem!!.label)
+      setPaymentMethod(selectedItem)
     } else {
-      val paymentTypeBackendId = order!!.paymentTypeBackendId
+      val paymentTypeBackendId = if (isRequestReject|| isRejected ) order!!.rejectType else order!!.paymentTypeBackendId
       if (Empty.isNotEmpty(paymentTypeBackendId) && paymentTypeBackendId != 0L) {
         selectedItem = baseInfoService!!
-            .getBaseInfoByBackendId(BaseInfoTypes.PAYMENT_TYPE.id, paymentTypeBackendId)
+            .getBaseInfoByBackendId(if (isRequestReject|| isRejected ) BaseInfoTypes.DELIVERY_RETURN_TYPE.id else BaseInfoTypes.PAYMENT_TYPE.id, paymentTypeBackendId)
         payment_method_tv.text = NumberUtil.digitsToPersian(selectedItem!!.label)
-        setPaymentMethod(selectedItem)
+      }else {
+        if (Empty.isNotEmpty(model)) {
+          selectedItem = model[0]
+          setPaymentMethod(selectedItem)
+        }
       }
     }
   }
