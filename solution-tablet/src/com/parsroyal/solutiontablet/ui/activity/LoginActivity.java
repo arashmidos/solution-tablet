@@ -5,9 +5,10 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -15,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,14 +24,12 @@ import com.parsroyal.solutiontablet.constants.SaleType;
 import com.parsroyal.solutiontablet.data.event.ErrorEvent;
 import com.parsroyal.solutiontablet.data.response.CompanyInfoResponse;
 import com.parsroyal.solutiontablet.data.response.SettingResponse;
-import com.parsroyal.solutiontablet.data.response.UserInfoResponse;
 import com.parsroyal.solutiontablet.service.SettingService;
 import com.parsroyal.solutiontablet.service.impl.RestAuthenticateServiceImpl;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
 import com.parsroyal.solutiontablet.util.DialogUtil;
 import com.parsroyal.solutiontablet.util.Empty;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
-import com.parsroyal.solutiontablet.util.NetworkUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
@@ -243,7 +241,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
   }
 
   private void doLogin() {
-    logInBtn.startAnimation();
+//    logInBtn.run
     RestAuthenticateServiceImpl.getCompanyInfo(this, companyCodeEdt.getText().toString());
   }
 
@@ -273,8 +271,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
           userNameEdt.getText().toString(), passwordEdt.getText().toString(), selectedRole);
     } else if (response instanceof SettingResponse) {
 
-      logInBtn.doneLoadingAnimation(ContextCompat.getColor(this, R.color.log_in_enter_bg),
-          BitmapFactory.decodeResource(getResources(), R.drawable.ic_check_white_18_dp));
+//      logInBtn.doneLoadingAnimation(ContextCompat.getColor(this, R.color.log_in_enter_bg),
+//          BitmapFactory.decodeResource(getResources(), R.drawable.ic_check_white_18_dp));
 
       settingService.saveSetting((SettingResponse) response);
 
@@ -294,7 +292,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
       startActivity(intent);
       finish();
     } else if (response instanceof ErrorEvent) {
-      logInBtn.revertAnimation();
+//      logInBtn.stopAnimation();
 
       ErrorEvent errorEvent = (ErrorEvent) response;
       int message = R.string.error_connecting_server;
@@ -330,9 +328,4 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    logInBtn.dispose();
-  }
 }

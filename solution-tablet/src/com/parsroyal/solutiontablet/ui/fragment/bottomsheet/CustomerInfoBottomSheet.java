@@ -2,11 +2,11 @@ package com.parsroyal.solutiontablet.ui.fragment.bottomsheet;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.CoordinatorLayout;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +50,7 @@ public class CustomerInfoBottomSheet extends CustomerInfoDialogFragment {
     getDialog().setOnShowListener(dialog -> {
       BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog;
       FrameLayout bottomSheet = bottomSheetDialog
-          .findViewById(android.support.design.R.id.design_bottom_sheet);
+          .findViewById(com.google.android.material.R.id.design_bottom_sheet);
       CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) bottomSheet
           .getLayoutParams();
       DisplayMetrics displayMetrics = new DisplayMetrics();

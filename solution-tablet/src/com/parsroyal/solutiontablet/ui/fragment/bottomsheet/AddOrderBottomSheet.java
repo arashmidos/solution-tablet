@@ -1,24 +1,18 @@
 package com.parsroyal.solutiontablet.ui.fragment.bottomsheet;
 
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
-import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.AddOrderDialogFragment;
 
 public class AddOrderBottomSheet extends AddOrderDialogFragment {
@@ -46,7 +40,7 @@ public class AddOrderBottomSheet extends AddOrderDialogFragment {
     getDialog().setOnShowListener(dialog -> {
       BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog;
       FrameLayout bottomSheet = bottomSheetDialog
-          .findViewById(android.support.design.R.id.design_bottom_sheet);
+          .findViewById(com.google.android.material.R.id.design_bottom_sheet);
       CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) bottomSheet
           .getLayoutParams();
       DisplayMetrics displayMetrics = new DisplayMetrics();

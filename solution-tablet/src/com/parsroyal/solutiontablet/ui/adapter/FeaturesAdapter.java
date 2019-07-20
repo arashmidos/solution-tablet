@@ -3,10 +3,10 @@ package com.parsroyal.solutiontablet.ui.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +27,7 @@ import com.parsroyal.solutiontablet.ui.activity.MobileReportListActivity;
 import com.parsroyal.solutiontablet.ui.activity.TabletReportListActivity;
 import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.List;
@@ -48,7 +49,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
     this.features = features;
     inflater = LayoutInflater.from(context);
     baseInfoService = new BaseInfoServiceImpl(context);
-    saleType = new SettingServiceImpl().getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+    saleType = PreferenceHelper.getSaleType();
   }
 
   @NonNull
@@ -73,7 +74,7 @@ public class FeaturesAdapter extends RecyclerView.Adapter<FeaturesAdapter.ViewHo
         .hasAccess(Authority.ADD_SUB_QUESTIONNAIRE)) {
       holder.featureTitleTv.setTextColor(ContextCompat.getColor(context, R.color.gray));
     } else {
-      holder.featureTitleTv.setTextColor(ContextCompat.getColor(context, R.color.primary_dark));
+      holder.featureTitleTv.setTextColor(ContextCompat.getColor(context, R.color.black));
     }
     holder.featureLay.setOnClickListener(v -> {
       if (baseInfoService.getAllProvinces().size() == 0) {

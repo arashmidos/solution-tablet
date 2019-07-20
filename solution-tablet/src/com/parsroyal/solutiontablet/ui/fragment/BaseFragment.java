@@ -1,7 +1,7 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.app.ProgressDialog;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import com.parsroyal.solutiontablet.R;

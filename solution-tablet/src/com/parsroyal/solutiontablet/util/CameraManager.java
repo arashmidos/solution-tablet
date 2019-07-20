@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.ui.fragment.BaseFragment;

@@ -1,14 +1,13 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
@@ -136,6 +135,7 @@ public class VisitLineAdapter extends Adapter<VisitLineAdapter.ViewHolder> {
           visitlineDetail.setVisibility(View.VISIBLE);
         }
       } else {
+        customerCount.setTextColor(ContextCompat.getColor(mainActivity,R.color.gray_75));
         customerList.setVisibility(View.GONE);
         root.setBackgroundColor(ContextCompat.getColor(mainActivity,R.color.white));
         visitlineName.setTextColor(ContextCompat.getColor(mainActivity,R.color.black));

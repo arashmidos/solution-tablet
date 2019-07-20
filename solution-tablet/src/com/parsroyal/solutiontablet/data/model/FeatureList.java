@@ -4,6 +4,7 @@ package com.parsroyal.solutiontablet.data.model;
 import android.content.Context;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.service.impl.SettingServiceImpl;
+import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.constants.ApplicationKeys;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,34 +18,34 @@ public class FeatureList {
   private int imageId;
   private String title;
 
-  public FeatureList(int badger, int imageId, String title) {
+  private FeatureList(int badger, int imageId, String title) {
     this.badger = badger;
     this.imageId = imageId;
     this.title = title;
   }
 
   public static List<FeatureList> getFeatureList(Context context) {
-    String saleType = new SettingServiceImpl()
-        .getSettingValue(ApplicationKeys.SETTING_SALE_TYPE);
+
+    String saleType = PreferenceHelper.getSaleType();
 
     List<FeatureList> featureList = new ArrayList<>();
-    featureList.add(new FeatureList(0, R.drawable.ic_near_me_black_48dp,
+    featureList.add(new FeatureList(0, R.drawable.im_near_me_64_dp,
         ApplicationKeys.SALE_DISTRIBUTER.equals(saleType) ? context.getString(R.string.today_request_line)
             : context.getString(R.string.today_paths)));
     featureList.add(
-        new FeatureList(0, R.drawable.ic_group_black_48dp, context.getString(R.string.customers)));
-    featureList.add(new FeatureList(0, R.drawable.ic_assignment_black_48dp,
+        new FeatureList(0, R.drawable.im_customers_64_dp, context.getString(R.string.customers)));
+    featureList.add(new FeatureList(0, R.drawable.im_reports_64_dp,
         context.getString(R.string.reports)));
-    featureList.add(new FeatureList(0, R.drawable.ic_products_48_dp,
+    featureList.add(new FeatureList(0, R.drawable.im_product_64_dp,
         context.getString(R.string.title_goods_list)));
     featureList
-        .add(new FeatureList(0, R.drawable.ic_map_black_48dp, context.getString(R.string.map)));
-    featureList.add(new FeatureList(0, R.drawable.ic_questionnaires_48_dp,
+        .add(new FeatureList(0, R.drawable.im_map_64_dp, context.getString(R.string.map)));
+    featureList.add(new FeatureList(0, R.drawable.im_survey_64_dp,
         context.getString(R.string.anonymous_questionnaire)));
     featureList.add(
-        new FeatureList(0, R.drawable.im_reports_48_dp, context.getString(R.string.my_kpi)));
+        new FeatureList(0, R.drawable.im_my_reports_64_dp, context.getString(R.string.my_kpi)));
     featureList.add(
-        new FeatureList(0, R.drawable.ic_settings_black_48dp, context.getString(R.string.setting)));
+        new FeatureList(0, R.drawable.im_setting_64_dp, context.getString(R.string.setting)));
 
     return featureList;
   }

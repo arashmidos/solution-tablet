@@ -1,9 +1,9 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,6 @@ import com.parsroyal.solutiontablet.constants.Constants.TransferStatus;
 import com.parsroyal.solutiontablet.data.model.DataTransferList;
 import com.parsroyal.solutiontablet.ui.adapter.DataTransferAdapter.ViewHolder;
 import com.parsroyal.solutiontablet.ui.fragment.dialogFragment.DataTransferDialogFragment;
-import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.List;
 

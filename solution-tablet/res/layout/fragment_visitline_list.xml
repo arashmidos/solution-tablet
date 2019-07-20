@@ -6,7 +6,7 @@
   android:orientation="vertical"
   tools:context="com.parsroyal.solutiontablet.ui.fragment.VisitLineDetailFragment">
 
-  <android.support.v7.widget.RecyclerView
+  <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
@@ -30,63 +30,72 @@
 
       <EditText
         android:id="@+id/toDate"
+        style="@style/IranSans"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:focusable="false"
-        android:gravity="center"
+        android:gravity="center|bottom"
         android:hint="--" />
 
       <TextView
         android:id="@+id/textView49"
-        style="@style/TextView.Caption"
+        style="@style/IranSans.Medium"
         android:layout_width="wrap_content"
+        android:textColor="@color/primary"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text="تا:"
+        android:text="@string/to"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
       <EditText
         android:id="@+id/fromDate"
+        style="@style/IranSans"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:focusable="false"
-        android:gravity="center"
+        android:gravity="center|bottom"
         android:hint="--" />
 
       <TextView
         android:id="@+id/textView42"
-        style="@style/TextView.Caption"
+        style="@style/IranSans.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/primary"
         android:layout_gravity="bottom"
-        android:text="از:"
+        android:text="@string/from"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
     <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:layout_marginBottom="16dp"
-      android:gravity="center"
+      android:layout_height="62dp"
+
+      android:gravity="end|center_vertical"
       android:orientation="horizontal">
       <Button
         android:id="@+id/cancel_btn"
+        style="@style/IranSans.Medium"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="@string/cancel_btn" />
+        android:layout_height="30dp"
+        android:background="@drawable/send_data_background"
+        android:text="@string/cancel_btn"
+        android:textColor="@color/primary"
+        android:textSize="14sp" />
 
       <Button
         android:id="@+id/filter_btn"
+        style="@style/IranSans.Medium"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="@string/filter" />
+        android:layout_height="30dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/get_data_background"
+        android:text="@string/filter"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
     </LinearLayout>
   </LinearLayout>
 </FrameLayout>

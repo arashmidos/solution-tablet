@@ -70,6 +70,7 @@ public class Constants {
   public static final String REPORT_CUSTOMER_ID = "REPORT_CUSTOMER_ID";
   public static final String REJECT_TYPE_ID = "REJECT_TYPE_ID";
   public static final String CASH_ORDER = "CASH_ORDER";
+  public static final String REQUEST_REJECT_ORDER = "REQUEST_REJECT_ORDER";
   public static final String DISCOUNT = "DISCOUNT";
   public static final String PHONE_VISIT = "PHONE_VISIT";
   public static final String debugUsername = "royal";
@@ -126,5 +127,6 @@ public class Constants {
     public static final int INVOICES = 29;
     public static final int CUSTOMER_PICS = 30;
     public static final int CANCELED_INVOICES = 31;
+    public static final int REQUEST_RETURN_ORDER = 32;
   }
 }

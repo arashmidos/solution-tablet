@@ -1,10 +1,10 @@
 package com.parsroyal.solutiontablet.ui.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.fragment.app.Fragment;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.parsroyal.solutiontablet.R;

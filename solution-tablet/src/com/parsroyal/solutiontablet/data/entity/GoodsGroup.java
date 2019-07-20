@@ -1,8 +1,6 @@
 package com.parsroyal.solutiontablet.data.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by Mahyar on 7/23/2015.

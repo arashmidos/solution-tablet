@@ -4,12 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +11,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.material.tabs.TabLayout;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.biz.impl.RejectedGoodsDataTransferBizImpl;
@@ -57,6 +58,7 @@ import com.parsroyal.solutiontablet.util.LocationUtil;
 import com.parsroyal.solutiontablet.util.Logger;
 import com.parsroyal.solutiontablet.util.MediaUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
+import com.parsroyal.solutiontablet.util.SaleUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.io.File;
 import java.util.List;
@@ -100,6 +102,7 @@ public class VisitDetailFragment extends BaseFragment {
   private SaleOrderDto orderDto;
   private Timer timer;
   private int seconds = 0, minutes = 0, hours = 0;
+  private ReturnListFragment requestReturnListFragment;
 
   public VisitDetailFragment() {
     // Required empty public constructor
@@ -351,7 +354,8 @@ public class VisitDetailFragment extends BaseFragment {
       orderListFragment = OrderListFragment.newInstance(arguments, this);
       freeOrderListFragment = FreeOrderListFragment.newInstance(arguments, this);
     }
-    returnListFragment = ReturnListFragment.newInstance(arguments, this);
+    returnListFragment = ReturnListFragment.Companion.newInstance(arguments, this,false);
+    requestReturnListFragment = ReturnListFragment.Companion.newInstance(arguments, this,true);
     customerInfoFragment = CustomerInfoFragment.newInstance(arguments, this);
     allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(arguments);
   }
@@ -369,6 +373,9 @@ public class VisitDetailFragment extends BaseFragment {
     }
     if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_REJECT)) {
       viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
+    }
+    if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_REQUEST_REJECT)) {
+      viewPagerAdapter.add(requestReturnListFragment, getString(R.string.request_returns));
     }
     if (PreferenceHelper.isDistributor()) {
       if (SolutionTabletApplication.getInstance().hasAccess(Authority.ADD_DELIVERY)) {
@@ -428,7 +435,7 @@ public class VisitDetailFragment extends BaseFragment {
    * @param statusID Could be DRAFT for both AddInvoice/AddOrder or REJECTED_DRAFT for
    * ReturnedOrder
    */
-  public void openOrderDetailFragment(Long statusID, boolean isCashOrder) {
+  void openOrderDetailFragment(Long statusID, boolean isCashOrder) {
 
     orderDto = saleOrderService
         .findOrderDtoByCustomerBackendIdAndStatus(customer.getBackendId(), statusID);
@@ -446,6 +453,7 @@ public class VisitDetailFragment extends BaseFragment {
         args.putBoolean(Constants.READ_ONLY, false);
         args.putString(Constants.PAGE_STATUS, Constants.NEW);
         args.putBoolean(Constants.CASH_ORDER, isCashOrder);
+        args.putBoolean(Constants.REQUEST_REJECT_ORDER, SaleUtil.isRequestReject(statusID));
         mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
       }
 
@@ -454,11 +462,14 @@ public class VisitDetailFragment extends BaseFragment {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_rejected_right_now);
       } else if (statusID.equals(SaleOrderStatus.DRAFT.getId()) && PreferenceHelper.isVisitor()) {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_order_right_now);
+      } else if (statusID.equals(SaleOrderStatus.REQUEST_REJECTED_DRAFT.getId())) {
+        ToastUtil.toastError(mainActivity, R.string.message_cannot_create_request_reject_right_now);
       } else {
         ToastUtil.toastError(mainActivity, R.string.message_cannot_create_factor_right_now);
       }
     }
   }
+
 
   public void openFreeOrderDetailFragment() {
 
@@ -478,7 +489,7 @@ public class VisitDetailFragment extends BaseFragment {
       mainActivity.changeFragment(MainActivity.GOODS_LIST_FRAGMENT_ID, args, true);
 
     } else {
-      ToastUtil.toastError(mainActivity, R.string.message_cannot_create_rejected_right_now);
+      ToastUtil.toastError(mainActivity, R.string.message_cannot_create_request_reject_right_now);
     }
   }
 
@@ -533,9 +544,13 @@ public class VisitDetailFragment extends BaseFragment {
 
   @Subscribe
   public void getMessage(ErrorEvent errorEvent) {
+    DialogUtil.dismissProgressDialog();
     if (!errorEvent.getMessage().equals("reject")) {
-      DialogUtil.dismissProgressDialog();
-      ToastUtil.toastError(mainActivity, getString(R.string.error_unknown_system_exception));
+      if (errorEvent.getStatusCode().equals(StatusCodes.NETWORK_ERROR)) {
+        Toast.makeText(mainActivity, "خطا در شبکه", Toast.LENGTH_LONG).show();
+      } else {
+        ToastUtil.toastError(mainActivity, getString(R.string.error_unknown_system_exception));
+      }
     }
   }
 

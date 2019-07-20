@@ -1,13 +1,6 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -18,12 +11,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.android.material.appbar.AppBarLayout;
 import com.parsroyal.solutiontablet.R;
 import com.parsroyal.solutiontablet.constants.Constants;
-import com.parsroyal.solutiontablet.constants.SaleOrderStatus;
 import com.parsroyal.solutiontablet.constants.StatusCodes;
 import com.parsroyal.solutiontablet.data.entity.Goods;
 import com.parsroyal.solutiontablet.data.entity.GoodsGroup;
@@ -59,6 +58,7 @@ import com.parsroyal.solutiontablet.util.MultiScreenUtility;
 import com.parsroyal.solutiontablet.util.NumberUtil;
 import com.parsroyal.solutiontablet.util.PreferenceHelper;
 import com.parsroyal.solutiontablet.util.RtlGridLayoutManager;
+import com.parsroyal.solutiontablet.util.SaleUtil;
 import com.parsroyal.solutiontablet.util.ToastUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,6 +129,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
   private Goods selectedGoods;
   private LabelValue assortment;
   private LabelValue supplier;
+  private boolean isRequestReject;
 
   public OrderFragment() {
     // Required empty public constructor
@@ -165,6 +166,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
           return inflater.inflate(R.layout.empty_view, container, false);
         }
         orderStatus = order.getStatus();
+        isRequestReject = SaleUtil.isRequestReject(orderStatus);
         visitId = args.getLong(Constants.VISIT_ID, -1);
         pageStatus = args.getString(Constants.PAGE_STATUS, "");
         visitlineBackendId = args.getLong(Constants.VISITLINE_BACKEND_ID);
@@ -280,14 +282,12 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
     mainActivity.setFilterVisibility(View.VISIBLE);
     goodsSo = new GoodsSo();
     if (adapter == null) {
-      if (isRejected()) {
+      if (SaleUtil.isRejected(orderStatus)) {
         rejectedGoodsList = (GoodsDtoList) getArguments().getSerializable(Constants.REJECTED_LIST);
 
         adapter = new GoodsAdapter(mainActivity, this, rejectedGoodsList.getGoodsDtoList(),
             readOnly, true, order);
-        bottomBar.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
-        bottomBarText.setText(R.string.reject_goods);
-        goodsCartImage.setVisibility(View.GONE);
+        setRejectUI();
       } else {
         goodsSo.setConstraint("");
         if (backendId != -1L) {
@@ -295,6 +295,9 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
         }
         adapter = new GoodsAdapter(mainActivity, this, goodsService.searchForGoodsList(goodsSo),
             readOnly, false, order);
+        if (isRequestReject) {
+          setRejectUI();
+        }
       }
       if (MultiScreenUtility.isTablet(mainActivity)) {
         RtlGridLayoutManager rtlGridLayoutManager = new RtlGridLayoutManager(mainActivity, 2);
@@ -342,6 +345,12 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
     }
   }
 
+  private void setRejectUI() {
+    bottomBar.setBackgroundColor(ContextCompat.getColor(mainActivity, R.color.register_return));
+    bottomBarText.setText(R.string.reject_goods);
+    goodsCartImage.setVisibility(View.GONE);
+  }
+
   //set up recycler view
   private void setData() {
     setUpExpandRecyclerView();
@@ -363,28 +372,22 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
     if (!readOnly) {
       orderCountTv.setText(NumberUtil.digitsToPersian(order.getOrderItems().size()));
     }
+    if (isRequestReject) {
+      setRejectUI();
+    }
   }
 
   /*
    @return Proper title for which could be "Rejected", "Order" or "Invoice"
    */
   private String getProperTitle() {
-    if (isRejected()) {
+    if (SaleUtil.isRejected(orderStatus) || isRequestReject) {
       return getString(R.string.title_reject_list);
     } else if (PreferenceHelper.isVisitor()) {
       return getString(R.string.title_goods_list);
     } else {
       return getString(R.string.title_factor);
     }
-  }
-
-  /*
-  @return true if it's one of the REJECTED states
-   */
-  private boolean isRejected() {
-    return (orderStatus.equals(SaleOrderStatus.REJECTED_DRAFT.getId()) ||
-        orderStatus.equals(SaleOrderStatus.REJECTED.getId()) ||
-        orderStatus.equals(SaleOrderStatus.REJECTED_SENT.getId()));
   }
 
   private void addSearchListener() {
@@ -491,7 +494,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
       }
 
       Long invoiceBackendId = 0L;
-      if (isRejected()) {
+      if (SaleUtil.isRejected(orderStatus)) {
         invoiceBackendId = goods.getInvoiceBackendId();
       }
       final SaleOrderItem item = saleOrderService.findOrderItemByOrderIdAndGoodsBackendId(
@@ -549,6 +552,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
     bundle.putLong(Constants.VISITLINE_BACKEND_ID, visitlineBackendId);
     bundle.putBoolean(Constants.CASH_ORDER, isCashOrder);
     bundle.putBoolean(Constants.COMPLIMENTARY, isComplimentary);
+    bundle.putBoolean(Constants.REQUEST_REJECT_ORDER, isRequestReject);
     dialogFragment.setArguments(bundle);
 
     dialogFragment.show(ft, "order");
@@ -556,7 +560,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
 
   private void updateGoodsDataTb() {
 
-    if (isRejected()) {
+    if (SaleUtil.isRejected(orderStatus)) {
       if (Empty.isNotEmpty(rejectedGoodsList)) {
         List<Goods> goodsList = rejectedGoodsList.getGoodsDtoList();
         List<Goods> filteredList = new ArrayList<>();
@@ -606,7 +610,8 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
   private void handleGoodsDialogConfirmBtn(Double count, Long selectedUnit, Long discount) {
     try {
       if (Empty.isEmpty(selectedItem)) {
-        if (count * 1000L > Double.valueOf(String.valueOf(selectedGoods.getExisting()))) {
+        if (!SaleUtil.isRequestReject(orderStatus) && count * 1000L > Double
+            .valueOf(String.valueOf(selectedGoods.getExisting()))) {
 //          ToastUtil.toastError(getActivity(), new SaleOrderItemCountExceedExistingException());
           EventBus.getDefault().post(new ErrorEvent(getString(R.string.exceed_count_exception),
               StatusCodes.DATA_STORE_ERROR));
@@ -615,8 +620,9 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
         selectedItem = createOrderItem(selectedGoods);
       }
 
-      saleOrderService.updateOrderItemCount(selectedItem.getId(), count, selectedUnit, orderStatus,
-          selectedGoods, discount);
+      saleOrderService.updateOrderItemCount(selectedItem.getId(), count, selectedUnit,
+          orderStatus, selectedGoods, discount);
+
       Long orderAmount = saleOrderService.updateOrderAmount(order.getId());
       order.setOrderItems(saleOrderService.getOrderItemDtoList(order.getId()));
       order.setAmount(orderAmount);
@@ -699,7 +705,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
     FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
     GoodsFilterDialogFragment goodsFilterDialogFragment;
     if (MultiScreenUtility.isTablet(mainActivity)) {
-      goodsFilterDialogFragment = GoodsFilterBottomSheet.newInstance();
+      goodsFilterDialogFragment = GoodsFilterBottomSheet.newInstance(assortment, supplier);
     } else {
       goodsFilterDialogFragment = GoodsFilterDialogFragment.newInstance(assortment, supplier);
     }

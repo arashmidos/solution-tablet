@@ -1,6 +1,6 @@
 package com.parsroyal.solutiontablet.data.listmodel;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by Mahyar on 8/25/2015.

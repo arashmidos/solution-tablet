@@ -219,7 +219,7 @@
           android:layout_below="@id/drop_down_img"
           android:background="@color/navigation_drawer_divider" />
       </RelativeLayout>
-      <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/description_lay"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -245,7 +245,7 @@
           android:textSize="@dimen/text_normal"
           tools:text="@string/order_description" />
 
-      </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
       <LinearLayout
         android:id="@+id/order_gift_layout"

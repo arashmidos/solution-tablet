@@ -7,7 +7,7 @@
   android:orientation="vertical"
   tools:context=".ui.activity.LoginActivity">
 
-  <android.support.design.widget.AppBarLayout
+  <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -16,14 +16,14 @@
       android:layout_width="match_parent"
       android:layout_height="56dp">
 
-      <android.support.v7.widget.Toolbar
+      <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primary"
         app:titleTextColor="@color/white">
 
-      </android.support.v7.widget.Toolbar>
+      </androidx.appcompat.widget.Toolbar>
 
       <TextView
         style="@style/IranSans.Medium"
@@ -34,7 +34,7 @@
         android:textColor="@color/white"
         android:textSize="16sp" />
     </FrameLayout>
-  </android.support.design.widget.AppBarLayout>
+  </com.google.android.material.appbar.AppBarLayout>
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -78,7 +78,7 @@
           android:layout_marginTop="32dp"
           android:orientation="horizontal">
 
-          <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/company_code_lay"
             style="@style/IranSans"
             android:layout_width="0dp"
@@ -100,7 +100,7 @@
               android:textColor="@android:color/black"
               android:textSize="@dimen/text_normal"
               tools:text="sunstar" />
-          </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
           <ImageView
             android:id="@+id/company_code_icon"
@@ -118,7 +118,7 @@
           android:layout_marginTop="24dp"
           android:orientation="horizontal">
 
-          <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/user_name_lay"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
               android:textSize="14sp"
               tools:text="آقا آٰرش" />
 
-          </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
           <ImageView
             android:id="@+id/user_name_icon"
@@ -159,7 +159,7 @@
           android:layout_marginTop="24dp"
           android:orientation="horizontal">
 
-          <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password_lay"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
               android:textSize="14sp"
               tools:text="123456" />
 
-          </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
           <ImageView
             android:id="@+id/password_icon"
@@ -466,7 +466,8 @@
           </RelativeLayout>
 
         </LinearLayout>
-        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
           android:id="@+id/log_in_btn"
           style="@style/IranSans.Medium"
           android:layout_width="match_parent"

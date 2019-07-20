@@ -169,12 +169,12 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       ((SaleInvoiceDocument) saleOrder).setVisitlineBackendId(cursor.getLong(14));
       ((SaleInvoiceDocument) saleOrder).setInvoiceBackendId(cursor.getLong(10));
 
-    } else if (SaleOrderStatus.REJECTED.getId().equals(statusId)) {
+    } else if (SaleOrderStatus.REJECTED.getId().equals(statusId)||SaleOrderStatus.REQUEST_REJECTED.getId().equals(statusId)) {
       saleOrder = new SaleRejectDocument();
 
       String settingValue = settingService.getSettingValue(ApplicationKeys.SETTING_REJECT_TYPE);
       saleOrder.setType(Empty.isEmpty(settingValue) || "null".equals(settingValue) ? 0 :
-          Integer.valueOf(settingValue));
+          Integer.valueOf(settingValue));//TODO:Refactor
       ((SaleRejectDocument) saleOrder).setSaleOrderId(cursor.getLong(10));
       ((SaleRejectDocument) saleOrder).setRejectType(cursor.getLong(13));
       ((SaleRejectDocument) saleOrder).setVisitlineBackendId(cursor.getLong(14));
@@ -306,6 +306,12 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
               " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
           argsList.add(String.valueOf(statusId));
           argsList.add(String.valueOf(SaleOrderStatus.REJECTED_SENT.getId()));
+        } else if (statusId.equals(SaleOrderStatus.REQUEST_REJECTED.getId())) {
+          argsList.add(VisitInformationDetailType.CREATE_REQUEST_REJECT.getStringValue());
+          sql = sql.concat(" ").concat(
+              " AND ( o." + SaleOrder.COL_STATUS + " = ? OR o." + SaleOrder.COL_STATUS + " = ? ) ");
+          argsList.add(String.valueOf(statusId));
+          argsList.add(String.valueOf(SaleOrderStatus.REQUEST_REJECTED_SENT.getId()));
         } else {
           argsList.add("0");//DO NOT JOIN WITH VD
           sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_STATUS + " = ?");
@@ -319,10 +325,12 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
       }
 
       if (saleOrderSO.isIgnoreDraft()) {
-        sql = sql.concat(" ").concat(" AND o." + SaleOrder.COL_STATUS + " != ?")
+        sql = sql.concat(" AND o." + SaleOrder.COL_STATUS + " != ?")
+            .concat(" AND o." + SaleOrder.COL_STATUS + " != ?")
             .concat(" AND o." + SaleOrder.COL_STATUS + " != ?");
         argsList.add(String.valueOf(SaleOrderStatus.DRAFT.getId()));
         argsList.add(String.valueOf(SaleOrderStatus.REJECTED_DRAFT.getId()));
+        argsList.add(String.valueOf(SaleOrderStatus.REQUEST_REJECTED_DRAFT.getId()));
       }
     }
 
@@ -414,11 +422,13 @@ public class SaleOrderDaoImpl extends AbstractDao<SaleOrder, Long> implements Sa
         + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? OR "
+        + SaleOrder.COL_STATUS + " = ? OR "
         + SaleOrder.COL_STATUS + " = ? )";
     String[] args = {String.valueOf(orderId),
         String.valueOf(SaleOrderStatus.READY_TO_SEND.getId()),
         String.valueOf(SaleOrderStatus.FREE_ORDER_DELIVERED.getId()),
         String.valueOf(SaleOrderStatus.REJECTED.getId()),
+        String.valueOf(SaleOrderStatus.REQUEST_REJECTED.getId()),
         String.valueOf(SaleOrderStatus.INVOICED.getId()),
         String.valueOf(SaleOrderStatus.DELIVERED.getId()),
         String.valueOf(SaleOrderStatus.CANCELED.getId()),

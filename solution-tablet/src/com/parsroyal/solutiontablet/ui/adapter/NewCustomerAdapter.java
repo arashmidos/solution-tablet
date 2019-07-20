@@ -1,9 +1,9 @@
 package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;

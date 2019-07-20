@@ -17,6 +17,7 @@ import com.parsroyal.solutiontablet.biz.impl.PositionDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.ProvinceDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QAnswersDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.QuestionnaireDataTransferBizImpl;
+import com.parsroyal.solutiontablet.biz.impl.RequestRejectDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleOrderForDeliveryDataTaransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.SaleRejectsDataTransferBizImpl;
 import com.parsroyal.solutiontablet.biz.impl.UpdatedCustomerLocationDataTransferBizImpl;
@@ -91,6 +92,11 @@ public class DataTransferServiceImpl implements DataTransferService {
         SaleOrderStatus.READY_TO_SEND.getStringId()) > 0) {
       return true;
     }
+    if (saleOrderDaoImpl.count(SaleOrder.COL_STATUS,
+        SaleOrderStatus.REQUEST_REJECTED.getStringId()) > 0) {
+      return true;
+    }
+
     if (saleOrderDaoImpl.count(SaleOrder.COL_STATUS, SaleOrderStatus.DELIVERED.getStringId()) > 0) {
       return true;
     }
@@ -399,6 +405,26 @@ public class DataTransferServiceImpl implements DataTransferService {
     } else {
       EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
           R.string.message_no_sale_reject_for_sending), StatusCodes.NO_DATA_ERROR));
+    }
+  }
+
+  public void sendAllSaleRequestRejects() {
+    List<BaseSaleDocument> saleOrders = saleOrderService
+        .findOrderDocumentByStatus(SaleOrderStatus.REQUEST_REJECTED.getId());
+    if (Empty.isNotEmpty(saleOrders)) {
+      RequestRejectDataTransferBizImpl dataTransfer = new RequestRejectDataTransferBizImpl(context);
+
+      for (int i = 0; i < saleOrders.size(); i++) {
+        BaseSaleDocument baseSaleDocument = saleOrders.get(i);
+        dataTransfer.setOrder(baseSaleDocument);
+        dataTransfer.exchangeData();
+      }
+      EventBus.getDefault().post(new DataTransferSuccessEvent(
+          dataTransfer.getSuccessfulMessage(), StatusCodes.SUCCESS));
+
+    } else {
+      EventBus.getDefault().post(new DataTransferSuccessEvent(context.getString(
+          R.string.message_no_sale_request_reject_for_sending), StatusCodes.NO_DATA_ERROR));
     }
   }
 

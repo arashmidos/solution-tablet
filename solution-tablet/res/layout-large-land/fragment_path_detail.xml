@@ -6,7 +6,7 @@
   android:orientation="vertical"
   tools:context="com.parsroyal.solutiontablet.ui.fragment.VisitLineDetailFragment">
 
-  <android.support.design.widget.AppBarLayout
+  <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="3dp">
@@ -42,7 +42,7 @@
         android:textSize="14sp" />
 
     </LinearLayout>
-  </android.support.design.widget.AppBarLayout>
+  </com.google.android.material.appbar.AppBarLayout>
   <!-- MapFragment with lite mode enabled -->
   <!--<fragment
     android:id="@+id/map"
@@ -200,7 +200,7 @@
 
   </LinearLayout>
 
-  <android.support.v7.widget.RecyclerView
+  <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="0dp"
@@ -210,7 +210,7 @@
     android:layout_marginLeft="82dp"
     android:layout_marginRight="82dp">
 
-  </android.support.v7.widget.RecyclerView>
+  </androidx.recyclerview.widget.RecyclerView>
   <LinearLayout
     android:id="@+id/no_customer_lay"
     android:layout_width="match_parent"

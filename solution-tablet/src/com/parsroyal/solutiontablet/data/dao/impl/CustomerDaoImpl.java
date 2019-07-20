@@ -20,6 +20,7 @@ import com.parsroyal.solutiontablet.data.searchobject.NCustomerSO;
 import com.parsroyal.solutiontablet.util.CharacterFixUtil;
 import com.parsroyal.solutiontablet.util.DateUtil;
 import com.parsroyal.solutiontablet.util.Empty;
+import com.parsroyal.solutiontablet.util.NumberUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -362,7 +363,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
           + " like ? or " +
           "c." + Customer.COL_PHONE_NUMBER + " like ? or c." + Customer.COL_CELL_PHONE
           + " like ? or c." + Customer.COL_CODE + " like ? )";
-      constraint = "%" + constraint + "%";
+      constraint = NumberUtil.digitsToEnglish(constraint);
+          constraint = "%" + constraint + "%";
       String[] args2 = {constraint, constraint, constraint, constraint, constraint};
       args.addAll(Arrays.asList(args2));
 //      cursor = db.query(table, projection, selection, args, null, null, orderBy);
@@ -429,6 +431,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
       if (listModel.hasFreeDelivery()) {
         entitiesMap.get(primaryKey).setHasFreeDelivery(true);
         entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.DELIVER_FREE_ORDER);
+      }if (listModel.isRequestReject()) {
+        entitiesMap.get(primaryKey).setRequestReject(true);
+        entitiesMap.get(primaryKey).addDetail(VisitInformationDetailType.CREATE_REQUEST_REJECT);
       }
       if (listModel.isIncompleteVisit()) {
         entitiesMap.get(primaryKey).setIncompleteVisit(true);
@@ -489,6 +494,8 @@ public class CustomerDaoImpl extends AbstractDao<Customer, Long> implements Cust
       customerListModel.setHasDelivery(true);
     } else if (type == VisitInformationDetailType.DELIVER_FREE_ORDER.getValue()) {
       customerListModel.setHasFreeDelivery(true);
+    }else if (type == VisitInformationDetailType.CREATE_REQUEST_REJECT.getValue()) {
+      customerListModel.setRequestReject(true);
     }
 
     customerListModel.setLastVisit(cursor.getString(10));

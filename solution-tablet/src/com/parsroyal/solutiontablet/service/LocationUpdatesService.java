@@ -19,9 +19,9 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
 import android.util.Log;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -376,7 +376,7 @@ public class LocationUpdatesService extends Service {
       }
 
       if (BuildConfig.DEBUG) {
-        return true;
+        return false;//TODO:
       }
       //if it has low speed or low accuracy
       if (location.getAccuracy() > MAX_ACCEPTED_ACCURACY_IN_METER

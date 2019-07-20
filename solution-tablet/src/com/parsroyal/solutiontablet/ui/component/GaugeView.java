@@ -736,7 +736,7 @@ public class GaugeView extends View {
   }
 
   private void drawScale(final Canvas canvas) {
-    canvas.save(Canvas.MATRIX_SAVE_FLAG);
+//    canvas.save(Canvas.MATRIX_SAVE_FLAG);
     // On canvas, North is 0 degrees, East is 90 degrees, South is 180 etc.
     // We start the scale somewhere South-West so we need to first rotate the canvas.
     canvas.rotate(mScaleRotation, 0.5f, 0.5f);
@@ -801,7 +801,7 @@ public class GaugeView extends View {
     if (mNeedleInitialized) {
       final float angle = getAngleForValue(mCurrentValue);
 
-      canvas.save(Canvas.MATRIX_SAVE_FLAG);
+//      canvas.save(Canvas.MATRIX_SAVE_FLAG);
       canvas.rotate(angle, 0.5f, 0.5f);
 
       setNeedleShadowPosition(angle);

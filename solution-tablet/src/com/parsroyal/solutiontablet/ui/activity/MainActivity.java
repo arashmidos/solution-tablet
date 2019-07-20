@@ -14,15 +14,15 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentManager.BackStackEntry;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentManager.BackStackEntry;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
@@ -891,7 +891,7 @@ public abstract class MainActivity extends AppCompatActivity {
 //    customizeToolbar(fragmentId);
     switch (fragmentId) {
       case FEATURE_FRAGMENT_ID:
-        fragment = FeaturesFragment.newInstance();
+        fragment = FeaturesFragment.Companion.newInstance();
         break;
       case CHAT_FRAGMENT:
         fragment = ChatFragment.newInstance();
@@ -906,7 +906,7 @@ public abstract class MainActivity extends AppCompatActivity {
         fragment = PhoneVisitDetailFragment.newInstance();
         break;
       case ORDER_INFO_FRAGMENT:
-        fragment = OrderInfoFragment.newInstance();
+        fragment = OrderInfoFragment.Companion.newInstance();
         break;
       case REGISTER_PAYMENT_FRAGMENT:
         fragment = RegisterPaymentFragment.newInstance();

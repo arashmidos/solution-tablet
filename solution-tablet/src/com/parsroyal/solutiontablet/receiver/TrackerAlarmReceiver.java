@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-import android.support.v4.content.WakefulBroadcastReceiver;
+import androidx.legacy.content.WakefulBroadcastReceiver;
 import android.util.Log;
 import com.parsroyal.solutiontablet.constants.Constants;
 import com.parsroyal.solutiontablet.service.SendLocationService;

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.parsroyal.solutiontablet.SolutionTabletApplication;
 import com.parsroyal.solutiontablet.data.dao.KeyValueDao;
 import com.parsroyal.solutiontablet.data.dao.impl.KeyValueDaoImpl;

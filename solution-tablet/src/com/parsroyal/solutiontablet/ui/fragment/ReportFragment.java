@@ -1,9 +1,9 @@
 package com.parsroyal.solutiontablet.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +26,7 @@ public class ReportFragment extends BaseFragment {
   private PaymentListFragment paymentListFragment;
   private OrderListFragment orderListFragment;
   private ReturnListFragment returnListFragment;
+  private ReturnListFragment requestReturnListFragment;
   private AllQuestionnaireListFragment allQuestionnaireListFragment;
   private DeliveryListFragment deliveryListFragment;
   private VisitListFragment visitListFragment;
@@ -61,6 +62,7 @@ public class ReportFragment extends BaseFragment {
     viewPagerAdapter.add(allQuestionnaireListFragment, getString(R.string.questionnaire));
     viewPagerAdapter.add(paymentListFragment, getString(R.string.payments));
     viewPagerAdapter.add(returnListFragment, getString(R.string.returns));
+    viewPagerAdapter.add(requestReturnListFragment, getString(R.string.request_returns));
     if (PreferenceHelper.isDistributor()) {
       viewPagerAdapter.add(deliveryListFragment, getString(R.string.delivered_orders));
     } else {
@@ -78,7 +80,8 @@ public class ReportFragment extends BaseFragment {
       orderListFragment = OrderListFragment.newInstance(null, null);
       freeOrderListFragment = FreeOrderListFragment.newInstance(null, null);
     }
-    returnListFragment = ReturnListFragment.newInstance(null, null);
+    returnListFragment = ReturnListFragment.Companion.newInstance(null, null, false);
+    requestReturnListFragment = ReturnListFragment.Companion.newInstance(null, null, true);
     allQuestionnaireListFragment = AllQuestionnaireListFragment.newInstance(null);
     visitListFragment = VisitListFragment.newInstance(null);
   }

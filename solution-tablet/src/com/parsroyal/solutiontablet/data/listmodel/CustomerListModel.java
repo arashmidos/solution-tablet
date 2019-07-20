@@ -35,6 +35,7 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
   private boolean hasNoOrder;
   private boolean phoneVisit;
   private boolean hasFreeDelivery;
+  private boolean requestReject;
   private boolean isIncompleteVisit;
 
   public Long getVisitlineBackendId() {
@@ -280,5 +281,13 @@ public class CustomerListModel extends BaseListModel implements ClusterItem {
 
   public void setIncompleteVisit(boolean incompleteVisit) {
     isIncompleteVisit = incompleteVisit;
+  }
+
+  public boolean isRequestReject() {
+    return requestReject;
+  }
+
+  public void setRequestReject(boolean requestReject) {
+    this.requestReject = requestReject;
   }
 }

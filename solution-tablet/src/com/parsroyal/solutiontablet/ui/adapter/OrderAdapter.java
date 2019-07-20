@@ -2,11 +2,11 @@ package com.parsroyal.solutiontablet.ui.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -234,11 +234,11 @@ public class OrderAdapter extends Adapter<ViewHolder> {
     }
 
     private void setPageStatus(Bundle args) {
-      if (SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.FREE_ORDER_SENT
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.CANCELED
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.SENT_INVOICE
-          || SaleOrderStatus.findById(order.getStatus()) == SaleOrderStatus.REJECTED_SENT) {
+      if (SaleOrderStatus.Companion.findById(order.getStatus()) == SaleOrderStatus.SENT
+          || SaleOrderStatus.Companion.findById(order.getStatus()) == SaleOrderStatus.FREE_ORDER_SENT
+          || SaleOrderStatus.Companion.findById(order.getStatus()) == SaleOrderStatus.CANCELED
+          || SaleOrderStatus.Companion.findById(order.getStatus()) == SaleOrderStatus.SENT_INVOICE
+          || SaleOrderStatus.Companion.findById(order.getStatus()) == SaleOrderStatus.REJECTED_SENT) {
         args.putString(Constants.PAGE_STATUS, Constants.VIEW);
       } else {
         args.putString(Constants.PAGE_STATUS, Constants.EDIT);

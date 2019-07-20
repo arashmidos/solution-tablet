@@ -8,7 +8,7 @@
   android:background="@color/features_background"
   android:orientation="vertical">
 
-  <android.support.design.widget.AppBarLayout
+  <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="3dp">
@@ -30,7 +30,7 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
-      <android.support.v7.widget.Toolbar
+      <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -38,7 +38,7 @@
         app:title=""
         app:titleTextColor="@color/white">
 
-      </android.support.v7.widget.Toolbar>
+      </androidx.appcompat.widget.Toolbar>
 
       <TextView
         android:id="@+id/toolbar_title"
@@ -59,7 +59,7 @@
         android:background="@drawable/ic_close_24dp"
         android:backgroundTint="@color/login_gray" />
     </FrameLayout>
-  </android.support.design.widget.AppBarLayout>
+  </com.google.android.material.appbar.AppBarLayout>
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="0dp"
@@ -137,10 +137,10 @@
         </LinearLayout>
 
       </LinearLayout>
-      <android.support.v4.widget.NestedScrollView
+      <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/recycler_view"
           android:layout_width="match_parent"
           android:layout_height="0dp"
@@ -149,7 +149,7 @@
           android:paddingEnd="96dp"
           android:paddingLeft="96dp"
           android:paddingRight="96dp" />
-      </android.support.v4.widget.NestedScrollView>
+      </androidx.core.widget.NestedScrollView>
     </LinearLayout>
   </ScrollView>
   <View
