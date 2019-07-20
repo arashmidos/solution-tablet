@@ -680,5 +680,7 @@
   <string name="message_location_submitted_successfully">ثبت موقعیت با موفقیت انجام شد!</string>
   <string name="list">لیست</string>
   <string name="message_calculating_route">در حال بررسی مسیر...</string>
+  <string name="from">از:</string>
+  <string name="to">تا:</string>
 
 </resources>
