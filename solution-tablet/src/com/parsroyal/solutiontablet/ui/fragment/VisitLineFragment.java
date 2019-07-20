@@ -63,6 +63,8 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
   private MainActivity mainActivity;
   private VisitService visitService;
   private String saleType;
+  private Date from;
+  private Date to;
 
   public static VisitLineFragment newInstance() {
     return new VisitLineFragment();
@@ -83,12 +85,30 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
     if (!ApplicationKeys.SALE_DISTRIBUTER.equals(saleType)) {
       setCurrentDate();
     }
+
+    if (Empty.isNotEmpty(from) && Empty.isNotEmpty(to) && adapter != null) {
+      List<VisitLineListModel> filteredList = visitService.getAllVisitLinesListModel(from, to);
+      adapter.update(filteredList);
+    }
     return view;
   }
 
   private void setCurrentDate() {
-    startDate.setDate(new JDF(new GregorianCalendar()));
-    endDate.setDate(new JDF(new GregorianCalendar()));
+    if (from != null) {
+      GregorianCalendar calendar = new GregorianCalendar();
+      calendar.setTime(from);
+      startDate.setDate(new JDF(calendar));
+    } else {
+      startDate.setDate(new JDF(new GregorianCalendar()));
+    }
+    if (to != null) {
+
+      GregorianCalendar calendar = new GregorianCalendar();
+      calendar.setTime(to);
+      endDate.setDate(new JDF(calendar));
+    } else {
+      endDate.setDate(new JDF(new GregorianCalendar()));
+    }
 
     fromDateEt.setHint(NumberUtil.digitsToPersian(
         startDate.getYear() % 100 + "/" + startDate.getMonth() + "/" + startDate.getDay()));
@@ -179,8 +199,8 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
     Calendar c2 = endDate.getCalendar();
     if (validate(c1, c2)) {
 
-      Date from = DateUtil.startOfDay(c1);
-      Date to = DateUtil.endOfDay(c2);
+      from = DateUtil.startOfDay(c1);
+      to = DateUtil.endOfDay(c2);
 
       List<VisitLineListModel> filteredList = visitService.getAllVisitLinesListModel(from, to);
       adapter.update(filteredList);
@@ -191,6 +211,13 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
         filterLayout2.setVisibility(View.GONE);
       }
     }
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+//    bundle = new Bundle();
+//    bundle.put
   }
 
   private boolean validate(Calendar c1, Calendar c2) {
