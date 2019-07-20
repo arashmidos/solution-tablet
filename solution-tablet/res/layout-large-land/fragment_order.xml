@@ -49,9 +49,9 @@
         android:id="@+id/close_search_img"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:layout_gravity="center"
         android:src="@drawable/ic_close_circle_24_dp" />
 
     </LinearLayout>
@@ -89,8 +89,6 @@
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1"
-    android:layout_marginRight="16dp"
-    android:layout_marginEnd="16dp"
     android:visibility="gone" />
 
   <androidx.recyclerview.widget.RecyclerView
@@ -98,6 +96,8 @@
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1"
+    android:layout_marginRight="16dp"
+    android:layout_marginEnd="16dp"
     android:background="@color/gray_f5"
     android:visibility="gone" />
 

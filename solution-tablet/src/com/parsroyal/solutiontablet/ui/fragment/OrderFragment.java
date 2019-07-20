@@ -705,7 +705,7 @@ public class OrderFragment extends BaseFragment implements OnFilterSelected {
     FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
     GoodsFilterDialogFragment goodsFilterDialogFragment;
     if (MultiScreenUtility.isTablet(mainActivity)) {
-      goodsFilterDialogFragment = GoodsFilterBottomSheet.newInstance();
+      goodsFilterDialogFragment = GoodsFilterBottomSheet.newInstance(assortment, supplier);
     } else {
       goodsFilterDialogFragment = GoodsFilterDialogFragment.newInstance(assortment, supplier);
     }
