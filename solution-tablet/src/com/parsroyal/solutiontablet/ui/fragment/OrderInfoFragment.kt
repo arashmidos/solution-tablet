@@ -140,6 +140,7 @@ class OrderInfoFragment : BaseFragment() {
     super.onViewCreated(view, savedInstanceState)
     setData()
     setClickListeners()
+    setPermissions()
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -168,7 +169,6 @@ class OrderInfoFragment : BaseFragment() {
       isCashOrder = args.getBoolean(Constants.CASH_ORDER, false)
       isComplimentary = args.getBoolean(Constants.COMPLIMENTARY, false)
 
-      setPermissions()
       return view
     } else {
       return inflater.inflate(R.layout.empty_view, container, false)
