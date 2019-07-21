@@ -682,5 +682,6 @@
   <string name="message_calculating_route">در حال بررسی مسیر...</string>
   <string name="from">از:</string>
   <string name="to">تا:</string>
+  <string name="album_mode">Album Mode</string>
 
 </resources>

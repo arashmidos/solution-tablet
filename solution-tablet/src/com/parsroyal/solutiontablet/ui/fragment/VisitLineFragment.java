@@ -58,7 +58,6 @@ public class VisitLineFragment extends BaseFragment implements DateSetListener {
 
   private SunDate startDate = new SunDate();
   private SunDate endDate = new SunDate();
-
   private VisitLineAdapter adapter;
   private MainActivity mainActivity;
   private VisitService visitService;

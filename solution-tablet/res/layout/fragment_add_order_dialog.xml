@@ -39,12 +39,21 @@
         android:textColor="@color/primary"
         android:textSize="16sp" />
 
+      <ImageView
+        android:id="@+id/albumMode"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_gravity="start"
+        android:src="@drawable/ic_album_mode_24_dp"
+
+        android:layout_height="match_parent"
+        android:contentDescription="@string/album_mode" />
       <Button
         android:id="@+id/close"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_gravity="center|end"
         android:background="@drawable/ic_close_24dp"
         android:backgroundTint="@color/login_gray" />

@@ -104,6 +104,8 @@ public class AddOrderDialogFragment extends DialogFragment {
   protected RelativeLayout bottomLayout;
   @BindView(R.id.register_order_image)
   protected ImageView registerButtonImage;
+  @BindView(R.id.albumMode)
+  protected ImageView albumMode;
   @BindView(R.id.order_count_tv)
   protected TextView orderCountTv;
   @BindView(R.id.minus_img)
@@ -133,6 +135,7 @@ public class AddOrderDialogFragment extends DialogFragment {
   protected Long saleRate;
   private long total;
   private Long discount;
+  private boolean albumModeEnabled;
 
   public AddOrderDialogFragment() {
     // Required empty public constructor
@@ -188,6 +191,7 @@ public class AddOrderDialogFragment extends DialogFragment {
       selectedGoods = goodsService.getGoodsByBackendId(goodsBackendId);
     }
 
+    albumModeEnabled = true;//TODO:
     unit1Count = selectedGoods.getUnit1Count();
     unit1Title = selectedGoods.getUnit1Title();
     unit2Title = selectedGoods.getUnit2Title();
@@ -198,6 +202,7 @@ public class AddOrderDialogFragment extends DialogFragment {
     setListeners();
     setUpSpinner();
     fillDetailPanel();
+
     return view;
   }
 
@@ -474,7 +479,8 @@ public class AddOrderDialogFragment extends DialogFragment {
     return true;
   }
 
-  @OnClick({R.id.close, R.id.minus_img, R.id.add_img, R.id.register_order_btn, R.id.bottom_bar})
+  @OnClick({R.id.close, R.id.minus_img, R.id.add_img, R.id.register_order_btn, R.id.bottom_bar,
+      R.id.albumMode})
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.close:
@@ -501,7 +507,17 @@ public class AddOrderDialogFragment extends DialogFragment {
           onClickListener.onConfirmBtnClicked(count1, selectedUnit1, discount);
         }
         break;
+      case R.id.albumMode:
+        flipAlbumMode();
     }
+  }
+
+  private void flipAlbumMode() {
+    albumModeEnabled = !albumModeEnabled;
+
+    albumMode.setImageResource(
+        albumModeEnabled ? R.drawable.ic_album_mode_24_dp : R.drawable.ic_album_mode_off_24_dp);
+
   }
 
   private void increaseCount() {
